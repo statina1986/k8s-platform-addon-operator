@@ -22,7 +22,7 @@ EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0"
 DOCKER_NAME = 'k8s-platform-addon-operator'
 CHART_NAME = 'k8s-platform-addon-operator'
 ARTIFACTORY_URL = 'artifactory.qvantel.net'
-DOCKER_REPOSITORY = "${DOCKER_REGISTRY}/${DOCKER_NAME}"
+DOCKER_REPOSITORY = "${ARTIFACTORY_URL}/${DOCKER_NAME}"
 PROJECT_NAME = 'baseline'
  
 // Other configuration options on "jenkins" branch in pipeline.config file
