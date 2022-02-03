@@ -59,6 +59,10 @@ def createPackage() {
   }
 }
 
+def shortCommit() {
+  return env.GIT_COMMIT_SHA1[0..8]
+}
+
 def imageVersion() {
   return "${VERSION}.${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}"
 }
