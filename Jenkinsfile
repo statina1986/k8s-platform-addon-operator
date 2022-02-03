@@ -52,7 +52,7 @@ def createPackage() {
         curl -sSf -u "${ARTIFACTORY_USERNAME}:${ARTIFACTORY_PASSWORD}" \
         -X PUT \
         -T ${CHART_NAME}-${VERSION}.tgz \
-        https://${ARTIFACTORY_URL}/artifactory/helm-packages/${CHART_NAME}/${chartName()})
+        https://${ARTIFACTORY_URL}/artifactory/helm-packages/${CHART_NAME}/${chartName()}
       """
     }
   }
