@@ -16,7 +16,7 @@ DELIVERY_BRANCHES = ["master"]
 CVE_FAIL_BUILD_ON_NEW = false
 
 // The Docker image used as execution environment (contains tools needed in path) 
-EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:1.0.30"
+EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0"
 
 // custom variables
 DOCKER_NAME = 'k8s-platform-addon-operator'
