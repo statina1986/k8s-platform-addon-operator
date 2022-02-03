@@ -1,8 +1,9 @@
 ---
-global: ""
-vaultConfigurationEnabled: "true"
-auroraMysqlDbEnabled: "true"
-auroraMysqlDb: |
-    import-data: true
-    endpoint: mmlyle-devint-1-mysql.cluster-cqymmwsbl6uh.eu-central-1.rds.amazonaws.com
-    endpoint2: mmlyle-devint-1-mysql.cluster-cqymmwsbl6uh.eu-central-1.rds.amazonaws.com
+logLevel: info
+modulesConfig:    
+    vaultConfigurationEnabled: "true"
+    auroraMysqlDbEnabled: "true"
+    auroraMysqlDb:
+        import-data: true
+        endpoint: mmlyle-devint-1-mysql.cluster-cqymmwsbl6uh.eu-central-1.rds.amazonaws.com
+        endpoint2: mmlyle-devint-1-mysql.cluster-cqymmwsbl6uh.eu-central-1.rds.amazonaws.com

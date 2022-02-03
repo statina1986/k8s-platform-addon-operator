@@ -14,7 +14,7 @@ hook::trigger() {
 
   
   kubectl exec -n platform vault-0 -- /bin/sh -c "vault login -no-print $token && \
-    vault write database/config/aurora-my-sql-database \
+    vault write database/config/x-aurora-mysql-database \
         plugin_name=mysql-aurora-database-plugin \
         connection_url='{{username}}:{{password}}@tcp($endpoint:3306)/' \
         allowed_roles='*' \

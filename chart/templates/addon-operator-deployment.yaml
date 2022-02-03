@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: addon-operator
-        image: sashaozz/addon-operator:latest
+        image: artifactory.qvantel.net/k8s-platform-addon-operator:{{ .Chart.AppVersion }}
         imagePullPolicy: Always
         env:
           - name: ADDON_OPERATOR_NAMESPACE
@@ -27,7 +27,7 @@ spec:
                 apiVersion: v1
                 fieldPath: metadata.namespace
           - name: LOG_LEVEL
-            value: debug
+            value: {{ .Values.logLevel}}
           - name: HELM_IGNORE_RELEASE
             value: postgres-operator
         livenessProbe:

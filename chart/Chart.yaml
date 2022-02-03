@@ -1,3 +1,4 @@
 apiVersion: v2
 name: k8s-platform-addon-operator
-version: 0.1.0
+version: 0.1.0 # will be overwritten from Jenkinsfile
+appVersion: "${VERSION}.${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}" # will be overwritten from Jenkinsfile

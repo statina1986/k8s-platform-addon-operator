@@ -1,0 +1,31 @@
+kafkaPlatform:
+  partitions: 5
+  kafka:
+    resources:
+      limits:
+        cpu: "4"
+        memory: 16Gi
+      requests:
+        cpu: "1"
+        memory: 8Gi
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+      - name: external
+        port: 9094
+        type: loadbalancer
+        tls: false
+    config:
+      partitions: 3
+      autoCreateTopics: "true"
+    storage:
+      size: 100Gi
+  zookeeper:
+    storage:
+      size: 100Gi

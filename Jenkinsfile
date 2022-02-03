@@ -46,7 +46,7 @@ def createPackage() {
     sh "docker push ${imageName()}"    
     pipelineBase.addCreatedImage(imageName())
 
-    sh "helm package --version ${VERSION} ./chart"
+    sh "helm package --version ${VERSION} --app-version ${imageVersion()} ./chart"
 
     withCredentials([usernamePassword(credentialsId: 'jenkins-artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USERNAME')]) {
       sh """      
