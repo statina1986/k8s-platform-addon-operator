@@ -39,7 +39,6 @@ def createPackage() {
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
     sh """
       docker build \
-        -f docker/base/Dockerfile \
         -t ${imageName()} \
         .
     """
