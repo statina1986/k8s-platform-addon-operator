@@ -56,6 +56,7 @@ def createPackage() {
         https://${ARTIFACTORY_URL}/artifactory/helm-packages/${CHART_NAME}/${chartName()})
       """
     }
+  }
 }
 
 def imageVersion() {
