@@ -1,5 +1,5 @@
 //This sould be SemVer and it goes both to docker image and helm chart
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 // Type of CI job
 TYPE = "generic"
