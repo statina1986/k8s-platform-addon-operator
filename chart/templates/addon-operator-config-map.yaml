@@ -5,7 +5,7 @@ metadata:
   name: addon-operator
   namespace: {{ .Release.Namespace }}
 data:
-  global: {{ print "|\n" (.Values.modulesConfig.global | toYaml | indent 4)  }}
-  vaultConfigurationEnabled: {{ .Values.modulesConfig.vaultConfigurationEnabled}}
-  auroraMysqlDbEnabled: {{ .Values.modulesConfig.auroraMysqlDbEnabled}}
-  auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4)  }}
+  global: {{ print "|\n" (.Values.globalConfig | toYaml | indent 4) }}
+  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled}}"
+  auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled}}"
+  auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
