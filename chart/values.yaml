@@ -2,7 +2,7 @@
 logLevel: info
 globalConfig:
   someGlobalValue: "put your value"
-addonOperatorConfig:  
+modulesConfig:  
   auroraMysqlDbEnabled: "false"
   externalDnsEnabled: "false"
   kafkaPlatformEnabled: "false"
