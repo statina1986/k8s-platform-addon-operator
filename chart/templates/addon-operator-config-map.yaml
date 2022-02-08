@@ -6,6 +6,11 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   global: {{ print "|\n" (.Values.globalConfig | toYaml | indent 4) }}
-  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
   auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
+  externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
+  kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
+  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
+  externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
+  kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
+  vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}

@@ -8,4 +8,11 @@ modulesConfig:
   kafkaPlatformEnabled: "false"
   vaultConfigurationEnabled: "false"
   auroraMysqlDb:
-    endpoint: endpoint.of.your.aurora.db
+    configurationRequired: "check module documentation for configuration options"
+  externalDns:
+    configurationRequired: "check module documentation for configuration options"
+  kafkaPlatform:
+    configurationRequired: "check module documentation for configuration options"
+  vaultConfiguration:
+    configurationRequired: "check module documentation for configuration options"
+
