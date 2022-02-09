@@ -22,14 +22,11 @@ spec:
         imagePullPolicy: Always
         env:
           - name: ADDON_OPERATOR_NAMESPACE
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.namespace
+            value: {{ .Values.addonOperatorNamespace}}
           - name: LOG_LEVEL
             value: {{ .Values.logLevel}}
           - name: HELM_IGNORE_RELEASE
-            value: postgres-operator
+            value:  {{ .Values.helmIgnoreRelease}}
         livenessProbe:
           httpGet:
             path: /healthz

@@ -1,13 +1,18 @@
 ---
 logLevel: info
+addonOperatorNamespace: "platform-modules"
+helmIgnoreRelease: ""
 globalConfig:
   someGlobalValue: "put your value"
 modulesConfig:  
   auroraMysqlDbEnabled: "false"
+  cassandraPlatformEnabled: "false"
   externalDnsEnabled: "false"
   kafkaPlatformEnabled: "false"
   vaultConfigurationEnabled: "false"
   auroraMysqlDb:
+    configurationRequired: "check module documentation for configuration options"
+  cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"
   externalDns:
     configurationRequired: "check module documentation for configuration options"
