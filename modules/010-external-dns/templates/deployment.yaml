@@ -19,7 +19,10 @@ spec:
       - name: external-dns
         image: k8s.gcr.io/external-dns/external-dns:v0.7.6
         args:
-        - --debug
+        - --log-level={{ .Values.externalDns.logLevel }}
+        - --dry-run={{ .Values.externalDns.dryRun }}
+        - --interval={{ .Values.externalDns.pollInterval }}
+        - --events
         - --source=service
         - --source=ingress
         - --source=istio-gateway
