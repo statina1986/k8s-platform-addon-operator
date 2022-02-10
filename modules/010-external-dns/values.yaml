@@ -4,5 +4,5 @@ externalDns:
   route53ZonId: ""
   annotationFilter: platform.qvantel.com/exclude-from-external-dns notin (true)
   pollInterval: "10m"
-  dryRun: "true"
+  dryRun: "1"
   logLevel: "debug"
