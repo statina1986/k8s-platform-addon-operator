@@ -7,7 +7,7 @@ hook::config() {
 }
 
 hook::trigger() {
-  helm dependency update
+  helm dependency update "${0%/*}/../Chart.yaml"
 }
 
 common::run_hook "$@"
