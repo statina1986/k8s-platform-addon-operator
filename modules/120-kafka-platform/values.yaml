@@ -1,5 +1,4 @@
 kafkaPlatform:
-  partitions: 5
   kafka:
     resources:
       limits:

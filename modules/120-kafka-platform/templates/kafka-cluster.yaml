@@ -7,8 +7,8 @@ spec:
   kafka:
     version: 2.8.1
     replicas: 3
-    resources: {{- toYaml .Values.kafka.resources | nindent 6 }}
-    listeners: {{- toYaml .Values.kafka.listeners | nindent 6 }}
+    resources: {{- toYaml .Values.kafkaPlatform.kafka.resources | nindent 6 }}
+    listeners: {{- toYaml .Values.kafkaPlatform.kafka.listeners | nindent 6 }}
     readinessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
@@ -16,17 +16,17 @@ spec:
       initialDelaySeconds: 15
       timeoutSeconds: 5
     config:
-      auto.create.topics.enable: {{ .Values.kafka.config.autoCreateTopics }}
+      auto.create.topics.enable: {{ .Values.kafkaPlatform.kafka.config.autoCreateTopics }}
       default.replication.factor: 3
       log.message.format.version: '2.8'
-      num.partitions: {{ .Values.kafka.config.partitions }}
+      num.partitions: {{ .Values.kafkaPlatform.kafka.config.partitions }}
       offsets.topic.replication.factor: 3
       transaction.state.log.min.isr: 2
       transaction.state.log.replication.factor: 3
       min.insync.replicas: 2
     storage:
       type: persistent-claim
-      size: {{ .Values.kafka.storage.size }}
+      size: {{ .Values.kafkaPlatform.kafka.storage.size }}
       deleteClaim: false
     metricsConfig:
       type: jmxPrometheusExporter
@@ -44,7 +44,7 @@ spec:
       timeoutSeconds: 5
     storage:
       type: persistent-claim
-      size: {{ .Values.zookeeper.storage.size }}
+      size: {{ .Values.kafkaPlatform.zookeeper.storage.size }}
       deleteClaim: false
     metricsConfig:
       type: jmxPrometheusExporter
