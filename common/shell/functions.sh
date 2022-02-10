@@ -6,6 +6,14 @@ function common::run_hook() {
   fi
 }
 
+function helm::run_helm_dependency_update_hook() {
+  if [[ $1 == "--config" ]] ; then
+    echo '{"configVersion":"v1", "beforeHelm": 1}'
+  else
+    helm dependency update "${0%/*}/../"
+  fi
+}
+
 function kubectl::replace_or_create() {
   object=$(cat)
 
