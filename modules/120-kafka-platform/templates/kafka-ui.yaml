@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:  
   name: kafka-ui
-  namespace: platform
+  namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
   replicas: 1  
@@ -17,7 +17,7 @@ spec:
       containers:
       - env:
         - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
-          value: kafka-cluster-kafka-bootstrap.platform.svc.cluster.local:9092
+          value: kafka-cluster-kafka-bootstrap.{{ .Release.Namespace }}.svc.cluster.local:9092
         - name: KAFKA_CLUSTERS_0_NAME
           value: kafka
         image: provectuslabs/kafka-ui:latest
