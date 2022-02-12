@@ -2,6 +2,5 @@ apiVersion: v2
 name: kafka-platform
 version: 0.0.1
 dependencies:
-  - name: strimzi-kafka-operator
-    version: ~0.27.1
-    repository: https://strimzi.io/charts/
+  - name: kafkaPlatform
+    version: 0.0.1

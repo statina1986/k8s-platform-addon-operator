@@ -10,7 +10,8 @@ function helm::run_helm_dependency_update_hook() {
   if [[ $1 == "--config" ]] ; then
     echo '{"configVersion":"v1", "beforeHelm": 1}'
   else
-    helm dependency update "${0%/*}/../"
+    dirs=(${0%/*}/../charts/*)
+    helm dependency update "${dirs[0]}"
   fi
 }
 

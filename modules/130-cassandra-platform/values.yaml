@@ -1,108 +1,109 @@
-k8ssandra:
-  cassandra:
-    # Version of Apache Cassandra to deploy
-    version: "3.11.11"
-    clusterName: "cluster1"
-    auth:
-      # -- Enables or disables authentication and authorization. This also
-      # enables/disables JMX authentication. Note that if Reaper is enabled JMX
-      # authentication will still be enabled even if auth is disabled here. This
-      # is because Reaper requires remote JMX access.
-      enabled: true
-      # -- Configures the default Cassandra superuser when authentication is
-      # enabled. If neither `superuser.secret` nor `superuser.username` are set,
-      # then a user and a secret with the user's credentials will be created. The
-      # username and secret name will be of the form {clusterName}-superuser. The
-      # password will be a random 20 character password. If `superuser.secret` is
-      # set, then the Cassandra user will be created from the contents of the
-      # secret. If `superuser.secret` is not set and if `superuser.username` is
-      # set, a secret will be generated using the specified username. The
-      # password will be generated as previously described.
-      #
-      # JMX credentials will also be created for the superuser. The same
-      # username/password that is used here will be used for JMX. If you change
-      # the Cassandra superuser credentials through cqlsh for example, the JMX
-      # credentials will not be updated. You need to update the credentials via
-      # helm upgrade in order for the change to propagate to JMX. This will be
-      # fixed in https://github.com/k8ssandra/k8ssandra/issues/323.
-      #superuser:
-        #secret: "cluster-superuser"
-    # Configuration for the /var/lib/cassandra mount point
-    cassandraLibDirVolume:
-      # AWS provides this storage class on EKS clusters out of the box. Note we
-      # are using `gps` here as it has `volumeBindingMode: WaitForFirstConsumer`
-      # which is important during scheduling.
-      storageClass: gp2
+cassandraPlatform: 
+  k8ssandra:
+    cassandra:
+      # Version of Apache Cassandra to deploy
+      version: "3.11.11"
+      clusterName: "cluster"
+      auth:
+        # -- Enables or disables authentication and authorization. This also
+        # enables/disables JMX authentication. Note that if Reaper is enabled JMX
+        # authentication will still be enabled even if auth is disabled here. This
+        # is because Reaper requires remote JMX access.
+        enabled: true
+        # -- Configures the default Cassandra superuser when authentication is
+        # enabled. If neither `superuser.secret` nor `superuser.username` are set,
+        # then a user and a secret with the user's credentials will be created. The
+        # username and secret name will be of the form {clusterName}-superuser. The
+        # password will be a random 20 character password. If `superuser.secret` is
+        # set, then the Cassandra user will be created from the contents of the
+        # secret. If `superuser.secret` is not set and if `superuser.username` is
+        # set, a secret will be generated using the specified username. The
+        # password will be generated as previously described.
+        #
+        # JMX credentials will also be created for the superuser. The same
+        # username/password that is used here will be used for JMX. If you change
+        # the Cassandra superuser credentials through cqlsh for example, the JMX
+        # credentials will not be updated. You need to update the credentials via
+        # helm upgrade in order for the change to propagate to JMX. This will be
+        # fixed in https://github.com/k8ssandra/k8ssandra/issues/323.
+        #superuser:
+          #secret: "cluster-superuser"
+      # Configuration for the /var/lib/cassandra mount point
+      cassandraLibDirVolume:
+        # AWS provides this storage class on EKS clusters out of the box. Note we
+        # are using `gps` here as it has `volumeBindingMode: WaitForFirstConsumer`
+        # which is important during scheduling.
+        storageClass: gp2
 
-      # The recommended live data size is 1 - 1.5 TB. A 2 TB volume supports this
-      # much data along with room for compactions. Consider increasing this value
-      # as the number of provisioned IOPs is directly related to the volume size.
-      size: 100Gi
+        # The recommended live data size is 1 - 1.5 TB. A 2 TB volume supports this
+        # much data along with room for compactions. Consider increasing this value
+        # as the number of provisioned IOPs is directly related to the volume size.
+        size: 100Gi
 
-    heap:
-    size: 2G
-    newGenSize: 2G
+      heap:
+      size: 2G
+      newGenSize: 2G
 
-    resources:
-      requests:
-        cpu: 1000m
-        memory: 4Gi
-      limits:
-        cpu: 1000m
-        memory: 4Gi
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 4Gi
+        limits:
+          cpu: 1000m
+          memory: 4Gi
 
-    # This key defines the logical topology of your cluster. The rack names and
-    # labels should be updated to reflect the Availability Zones where your EKS
-    # cluster is deployed.
-    datacenters:
-    - name: dc1
-      size: 3
-      num_tokens: 8
-      racks:
-      - name: default
+      # This key defines the logical topology of your cluster. The rack names and
+      # labels should be updated to reflect the Availability Zones where your EKS
+      # cluster is deployed.
+      datacenters:
+      - name: dc1
+        size: 3
+        num_tokens: 8
+        racks:
+        - name: default
 
-  kube-prometheus-stack:
-    # -- Controls whether the kube-prometheus-stack chart is used at all.
-    # Disabling this parameter prevents all monitoring components from being
-    # installed.
-    enabled: false
-    # Disable default 
-
-  grafana:
-      # -- Provisions an instance of Grafana and wires it up with a DataSource
-      # referencing this Prometheus installation
+    kube-prometheus-stack:
+      # -- Controls whether the kube-prometheus-stack chart is used at all.
+      # Disabling this parameter prevents all monitoring components from being
+      # installed.
       enabled: false
-      
-  monitoring:
+      # Disable default 
+
     grafana:
-      # -- Enables the creation of configmaps containing Grafana dashboards. If
-      # leveraging the kube-prometheus-stack subchart this value should be
-      # `true`. See
-      # https://helm.sh/docs/chart_template_guide/subcharts_and_globals/ for
-      # background on subcharts.
-      provision_dashboards: false
-    prometheus:
-      # -- Enables the creation of Prometheus Operator ServiceMonitor custom
-      # resources. If you are not using the kube-prometheus-stack subchart or do
-      # not have the ServiceMonitor CRD installed on your cluster, set this value
-      # to `false`.
-      provision_service_monitors: false
+        # -- Provisions an instance of Grafana and wires it up with a DataSource
+        # referencing this Prometheus installation
+        enabled: false
+        
+    monitoring:
+      grafana:
+        # -- Enables the creation of configmaps containing Grafana dashboards. If
+        # leveraging the kube-prometheus-stack subchart this value should be
+        # `true`. See
+        # https://helm.sh/docs/chart_template_guide/subcharts_and_globals/ for
+        # background on subcharts.
+        provision_dashboards: false
+      prometheus:
+        # -- Enables the creation of Prometheus Operator ServiceMonitor custom
+        # resources. If you are not using the kube-prometheus-stack subchart or do
+        # not have the ServiceMonitor CRD installed on your cluster, set this value
+        # to `false`.
+        provision_service_monitors: false
 
 
 
-  stargate:
-    enabled: true
-    replicas: 3
-    heapMB: 1024
-    cpuReqMillicores: 500
-    cpuLimMillicores: 500
+    stargate:
+      enabled: false
+      replicas: 3
+      heapMB: 1024
+      cpuReqMillicores: 500
+      cpuLimMillicores: 500
 
-  medusa:
-    enabled: false
-    storage: s3
+    medusa:
+      enabled: false
+      storage: s3
 
-    # Reference the Terraform output for the correct bucket name to use here.
-    bucketName: prod-k8ssandra-s3-bucket
+      # Reference the Terraform output for the correct bucket name to use here.
+      bucketName: prod-k8ssandra-s3-bucket
 
-    # The secret here must align with the value used in the previous section.
-    storageSecret: prod-k8ssandra-medusa-key
+      # The secret here must align with the value used in the previous section.
+      storageSecret: prod-k8ssandra-medusa-key
