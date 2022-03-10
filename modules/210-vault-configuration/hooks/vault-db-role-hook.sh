@@ -45,9 +45,9 @@ hook::trigger() {
       kubectl exec -n platform vault-0 -- /bin/sh -c "vault login -no-print $token && \
         vault write database/roles/$role_name \
           db_name=$db_name \
-          creation_statements="$creation_statement" \
-          default_ttl="$default_ttl" \
-          max_ttl="$max_ttl""
+          creation_statements=\"$creation_statement\" \
+          default_ttl=$default_ttl \
+          max_ttl=$max_ttl"
     fi
   fi
 }

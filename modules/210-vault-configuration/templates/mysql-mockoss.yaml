@@ -1,0 +1,11 @@
+apiVersion: platform.qvantel.com/v1
+kind: VaultDbRole
+metadata:
+  name: mysql-mockoss
+  namespace: platform
+spec:
+  creation-statement: "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}'; GRANT ALL PRIVILEGES ON mockoss.* TO '{{name}}'@'%' WITH GRANT OPTION;"  
+  db-name: x-aurora-mysql-database
+  default-ttl: 1h
+  max-ttl: 24h
+  role-name: mysql_mockoss
