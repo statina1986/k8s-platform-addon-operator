@@ -1,0 +1,31 @@
+[
+    {
+      "binding": "kubernetes",
+      "type": "Event",
+      "watchEvent": "Added",
+      "object": {
+        "apiVersion": "platform.qvantel.com/v1",
+        "kind": "QInstaller",
+        "metadata": {
+            "annotations": {
+                "objectset.rio.cattle.io/applied": "H4sIAAAAAAAA/3yQQWsbMRCF/8oyl1ysjYUVe3dvJYg2YLzUNe3RjEazjVqttJEUUwj+70U0hp5yHBi+9733Bri475yyiwEGWDyWKaa5fblgKOxbivP9RcIKfrtgYYCvTyEX9J4TrGDmghYLwvAGGEIsWFwMuZ7R/GIqmUubXGwJS/HcunjvKoSkJCXXk9hNm51QPU6i6ySJzmwUb+Wa+t0DXFfg0bD/EPeM+RkGMEoqKx/kmjbrqbNq6sgYo4xEY9V2a2lD1Mm+r9CAM9emMZefibPA1xQTipgspyzMMgfBf5heS6wV63dekPi/cSolL0xVzBqxpHhxdT+RXzwM8E3v9eOpuXs86k8n3RzHvW6sOf8LONeA8y2gOYz78fPT4a758UUfdXMYT42GVaVmpsRFvNu+S96k4Xr9GwAA//+GaqCNuQEAAA",
+                "objectset.rio.cattle.io/id": "c11c410f-7f37-49af-881c-8b34e610c975"
+            },
+            "creationTimestamp": "2022-03-14T14:35:35Z",
+            "generation": 1,
+            "labels": {
+                "objectset.rio.cattle.io/hash": "b414d1510c30f8d4f8cbbb4b1abd466dc3cc8199"
+            },
+            "name": "postgres-aurora-orders-bpmn-executor",
+            "namespace": "platform",
+            "resourceVersion": "92973064",
+            "uid": "7e1aa65f-61db-478c-85f4-bc64749cb258"
+        },
+        "spec": {
+            "db-provision-sql": "SELECT 'CREATE ROLE db_orders_bpmn_executor NOLOGIN' WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'db_orders_bpmn_executor')\\gexec ;\nGRANT db_orders_bpmn_executor TO postgres ;\nSELECT 'CREATE DATABASE orders_bpmn_executor WITH OWNER db_orders_bpmn_executor' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'orders_bpmn_executor')\\gexec ;\n",
+            "db-secret-name": "aurora-postgres",
+            "db-url": "mmlyle-preprod-postgresql.cluster-cqymmwsbl6uh.eu-central-1.rds.amazonaws.com:5432/postgres"
+        }        
+      }
+    }
+]

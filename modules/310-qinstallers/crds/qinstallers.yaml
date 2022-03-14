@@ -1,0 +1,41 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+namespace: platform
+metadata:
+  name: qinstallers.platform.qvantel.com
+spec:
+  group: platform.qvantel.com
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: qinstallers
+    # singular name to be used as an alias on the CLI and for display
+    singular: qinstaller
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: QInstaller
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - qinsts
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: QInstaller
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The type of QInstaller
+                db-provision-sql:
+                  type: string
+                db-secret-name:
+                  type: string
+                db-url:
+                  type: string
