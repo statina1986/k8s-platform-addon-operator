@@ -11,6 +11,7 @@ data:
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
+  qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
   cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.cassandraPlatform | toYaml | indent 4) }}
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
