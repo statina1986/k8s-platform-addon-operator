@@ -1,0 +1,100 @@
+vaultPlatformNamespace: vault
+vaultPlatform:
+  vault:
+    global:
+      enabled: true
+    injector:
+      enabled: false
+    server:
+      # For HA configuration and because we need to manually init the vault,
+      # we need to define custom readiness/liveness Probe settings
+      readinessProbe:
+        enabled: true
+        path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
+      livenessProbe:
+        enabled: true
+        path: "/v1/sys/health?standbyok=true"
+        initialDelaySeconds: 60
+        # extraEnvironmentVars is a list of extra environment variables to set with the stateful set. These could be
+        # used to include variables required for auto-unseal.
+      extraEnvironmentVars:
+        VAULT_CACERT: /vault/userconfig/vault-root-ca/ca.crt
+
+      # extraVolumes is a list of extra volumes to mount. These will be exposed
+      # to Vault in the path `/vault/userconfig/<name>/`.
+      extraVolumes:
+        - type: secret
+          name: vault-server-tls
+        - type: secret
+          name: vault-root-ca
+      serviceAccount:
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::386844351831:role/eksctl-platform-gitops-sit-addon-iamservicea-Role1-M314GVKTRB5M
+      # Run Vault in "HA" mode.
+      ha:
+        enabled: true
+        replicas: 3
+        raft:
+          enabled: true
+          setNodeId: true
+          config: |
+            ui = true
+            listener "tcp" {
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
+              tls_disable = "true"
+              # tls_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+              # tls_key_file = "/vault/userconfig/vault-server-tls/tls.key"
+              # tls_ca_cert_file = "/vault/userconfig/vault-root-ca/ca.crt"
+            }
+
+            storage "raft" {
+              path = "/vault/data"
+                retry_join {
+                leader_api_addr = "http://vault-platform-0.vault-platform-internal:8200"
+                # leader_ca_cert_file = "/vault/userconfig/vault-root-ca/ca.crt"
+                # leader_client_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+                # leader_client_key_file = "/vault/userconfig/vault-server-tls/tls.key"
+              }
+              retry_join {
+                leader_api_addr = "http://vault-platform-1.vault-platform-internal:8200"
+                # leader_ca_cert_file = "/vault/userconfig/vault-root-ca/ca.crt"
+                # leader_client_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+                # leader_client_key_file = "/vault/userconfig/vault-server-tls/tls.key"
+              }
+              retry_join {
+                leader_api_addr = "http://vault-platform-2.vault-platform-internal:8200"
+                # leader_ca_cert_file = "/vault/userconfig/vault-root-ca/ca.crt"
+                # leader_client_cert_file = "/vault/userconfig/vault-server-tls/tls.crt"
+                # leader_client_key_file = "/vault/userconfig/vault-server-tls/tls.key"
+              }
+
+              autopilot {
+                cleanup_dead_servers = "true"
+                last_contact_threshold = "200ms"
+                last_contact_failure_threshold = "10m"
+                max_trailing_logs = 250000
+                min_quorum = 5
+                server_stabilization_time = "10s"
+              }
+
+            }
+
+            service_registration "kubernetes" {}
+
+            seal "awskms" {
+              region     = "eu-central-1"
+              kms_key_id = "arn:aws:kms:eu-central-1:386844351831:key/mrk-a123090215d7415ab37eb27d76f4f35d"
+            }
+
+    # Vault UI
+    ui:
+      enabled: true
+      serviceType: "LoadBalancer"
+      serviceNodePort: null
+      externalPort: 8200
+
+      # For Added Security, edit the below
+      #loadBalancerSourceRanges:
+      #   - < Your IP RANGE Ex. 10.0.0.0/16 >
+      #   - < YOUR SINGLE IP Ex. 1.78.23.3/32 >

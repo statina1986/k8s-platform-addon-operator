@@ -1,24 +1,61 @@
 ---
 logLevel: info
 addonOperatorNamespace: "platform-modules"
+imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
 helmIgnoreRelease: ""
 globalConfig:
   someGlobalValue: "put your value"
-modulesConfig:  
+modulesConfig:
   auroraMysqlDbEnabled: "false"
-  cassandraPlatformEnabled: "false"
-  externalDnsEnabled: "false"
-  kafkaPlatformEnabled: "false"
-  vaultConfigurationEnabled: "false"
-  qinstallersEnabled: "false"
   auroraMysqlDb:
     configurationRequired: "check module documentation for configuration options"
+
+  cassandraPlatformEnabled: "false"
   cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"
+
+  certPlatformEnabled: "false"
+  certPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  consulPlatformEnabled: "false"
+  consulPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  externalDnsEnabled: "false"
   externalDns:
     configurationRequired: "check module documentation for configuration options"
+
+  istioIngressEnabled: "false"
+  istioIngress:
+    configurationRequired: "check module documentation for configuration options"
+
+  istioPlatformEnabled: "false"
+  istioPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  kafkaPlatformEnabled: "false"
   kafkaPlatform:
     configurationRequired: "check module documentation for configuration options"
+
+  qinstallersEnabled: "false"
+  
+  vaultConfigurationEnabled: "false"
   vaultConfiguration:
     configurationRequired: "check module documentation for configuration options"
+
+  vaultPlatformEnabled: "false"
+  vaultPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
 

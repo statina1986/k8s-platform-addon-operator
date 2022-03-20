@@ -15,6 +15,17 @@ function helm::run_helm_dependency_update_hook() {
   fi
 }
 
+function common::ensure_resources() {
+  if [[ $1 == "--config" ]] ; then
+    echo '{"configVersion":"v1", "beforeHelm": 1}'
+  else
+    yamls=(${0%/*}/../resources/*)
+    for val in ${yamls[@]}; do
+      kubectl apply -f $val
+    done
+  fi
+}
+
 function kubectl::replace_or_create() {
   object=$(cat)
 

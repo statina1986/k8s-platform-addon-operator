@@ -1,0 +1,7 @@
+consulPlatform:
+  consul:
+    syncCatalog:
+      enabled: true
+      toK8S: false
+      k8sPrefix: null
+      nodePortSyncType: InternalOnly

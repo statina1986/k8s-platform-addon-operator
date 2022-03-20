@@ -1,0 +1,3 @@
+istioPlatformNamespace: istio-system
+istioPlatform:
+  base:

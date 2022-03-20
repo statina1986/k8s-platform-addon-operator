@@ -20,6 +20,7 @@ EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0.2022020
 
 // custom variables
 DOCKER_NAME = 'k8s-platform-addon-operator'
+DOCKER_TOOLS_NAME = 'k8s-platform-tools'
 CHART_NAME = 'k8s-platform-addon-operator'
 ARTIFACTORY_URL = 'artifactory.qvantel.net'
 DOCKER_REPOSITORY = "${ARTIFACTORY_URL}/${DOCKER_NAME}"
@@ -37,13 +38,20 @@ qPipeline jenkinsfile:this
 def createPackage() {
 
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
-    sh """
-      docker build \
-        -t ${imageName()} \
-        .
-    """
-    sh "docker push ${imageName()}"    
+    
+    sh "docker build -t ${imageName()} ."
+
+    sh "docker build -t ${imageToolsName()} -t ${ARTIFACTORY_URL}/${DOCKER_TOOLS_NAME}:latest ./platform-tools-image"
+
+    sh "docker push ${imageName()}"
+
+    sh "docker push ${imageToolsName()}"
+
+    sh "docker push ${ARTIFACTORY_URL}/${DOCKER_TOOLS_NAME}:latest"
+
     pipelineBase.addCreatedImage(imageName())
+
+    pipelineBase.addCreatedImage(imageToolsName())
 
     sh "helm package --version ${VERSION} --app-version ${imageVersion()} ./chart"
 
@@ -68,6 +76,10 @@ def imageVersion() {
 
 def imageName() {
   return "${DOCKER_REPOSITORY}:${imageVersion()}"
+}
+
+def imageToolsName() {
+  return "${ARTIFACTORY_URL}/${DOCKER_TOOLS_NAME}:${VERSION}"
 }
 
 def chartName() {

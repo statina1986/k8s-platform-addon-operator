@@ -6,14 +6,39 @@ metadata:
   namespace: {{ .Values.addonOperatorNamespace }}
 data:
   global: {{ print "|\n" (.Values.globalConfig | toYaml | indent 4) }}
+
   auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
-  cassandraPlatformEnabled: "{{ .Values.modulesConfig.cassandraPlatformEnabled }}"
-  externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
-  kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
-  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
-  qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
+
+  cassandraPlatformEnabled: "{{ .Values.modulesConfig.cassandraPlatformEnabled }}"
   cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.cassandraPlatform | toYaml | indent 4) }}
+
+  certPlatformEnabled: "{{ .Values.modulesConfig.certPlatformEnabled }}"
+  certPlatform: {{ print "|\n" (.Values.modulesConfig.certPlatform | toYaml | indent 4) }}
+
+  consulPlatformEnabled: "{{ .Values.modulesConfig.consulPlatformEnabled }}"
+  consulPlatform: {{ print "|\n" (.Values.modulesConfig.consulPlatform | toYaml | indent 4) }}
+
+  externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
+
+  istioIngressEnabled: "{{ .Values.modulesConfig.istioIngressEnabled }}"
+  istioIngress: {{ print "|\n" (.Values.modulesConfig.istioIngress | toYaml | indent 4) }}
+
+  istioPlatformEnabled: "{{ .Values.modulesConfig.istioPlatformEnabled }}"
+  istioPlatform: {{ print "|\n" (.Values.modulesConfig.istioPlatform | toYaml | indent 4) }}
+
+  kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
+
+  qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
+  
+  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
   vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}
+  
+  vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
+  vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
+
+
+  
+  

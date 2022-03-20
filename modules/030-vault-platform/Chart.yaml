@@ -1,0 +1,6 @@
+apiVersion: v2
+name: vault-platform
+version: 0.0.1
+dependencies:
+  - name: vaultPlatform
+    version: 0.0.1

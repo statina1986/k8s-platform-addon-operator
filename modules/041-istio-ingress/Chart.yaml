@@ -1,0 +1,6 @@
+apiVersion: v2
+name: istio-ingress
+version: 0.0.1
+dependencies:
+  - name: istioIngress
+    version: 0.0.1
