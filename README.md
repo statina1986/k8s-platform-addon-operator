@@ -9,8 +9,8 @@ This repo conatins implementation of **K8S Platform Services** based on the [add
 
 ## Available Modules
 
-- [cert-platform](/modules/001-cert-platform/README.md) for certificate management with **cert-manager**
-- [vault-platform](/modules/030-vault-platform/README.md) for **vault** deployment
+- [cert-platform](modules/001-cert-platform/README.md) for certificate management with **cert-manager**
+- [vault-platform](modules/030-vault-platform/README.md) for **vault** deployment
 
 ## Testing the platform
 It is easy to start with this platform both on local and cloud k8s cluster.
