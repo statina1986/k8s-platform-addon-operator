@@ -46,8 +46,9 @@ modulesConfig:
   certPlatformEnabled: "true"
   vaultPlatformEnabled: "true"
 ```
-Of course kubectl/helm should point to correct cluster (e.g. local minikube or some cloud k8s)
+> Of course kubectl/helm should point to correct cluster (e.g. local minikube or some cloud k8s)
 
+> When using local k8s cluster like *minikube* please be aware that most of Qvantel platform modules require at least 3 nodes (e.g. consul, vault, etc). Also some modules depends on cloud services (e.g. external-dns module) and will not be working as intendent on local cluster. 
 
 
 ## Dependencies subcharts
