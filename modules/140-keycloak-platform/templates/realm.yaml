@@ -1,0 +1,14 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: qvantel
+  labels:
+    realm: qvantel
+spec:
+  realm:
+    realm: "qvantel"
+    enabled: True
+    displayName: "Qvantel Realm"
+  instanceSelector:
+    matchLabels:
+      app: qvaa

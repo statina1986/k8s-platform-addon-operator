@@ -2,7 +2,7 @@
 logLevel: info
 addonOperatorNamespace: "platform-modules"
 imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
-helmIgnoreRelease: ""
+helmIgnoreRelease: "k8s-platform"
 globalConfig:
   someGlobalValue: "put your value"
 modulesConfig:
@@ -36,6 +36,10 @@ modulesConfig:
 
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
+    configurationRequired: "check module documentation for configuration options"
+  
+  keycloakPlatformEnabled: "false"
+  keycloakPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   qinstallersEnabled: "false"

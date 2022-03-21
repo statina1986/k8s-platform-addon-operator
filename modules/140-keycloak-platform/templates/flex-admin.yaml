@@ -1,0 +1,14 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: flex-admin
+  labels:
+    client: flex-admin
+spec:
+  realmSelector:
+    matchLabels:
+      realm: qvantel
+  client:
+    clientId: flex-admin
+    protocol: openid-connect
+    rootUrl: https://www.keycloak.org/app/
