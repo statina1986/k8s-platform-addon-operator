@@ -17,19 +17,19 @@ match(handle_hook()):
   "configVersion":"v1",
   "kubernetes":[{
     "name": "Monitor Vault Policies",
-    "kind": "VaultPolicy",
+    "kind": "AclPolicy",
     "executeHookOnEvent":["Added","Modified","Deleted"]
   }]
 }
 """)
     case EventHook(eventName, context):
-        policy_name = context[0]['object']['spec']['policy-name']
+        policy_name = context[0]['object']['metadata']['name']
 
-        secret = v1.read_namespaced_secret("vault-dev-keys", "platform").data
+        secret = v1.read_namespaced_secret("vault-keys", "vault").data
         token = base64.b64decode(
-            secret["vault-dev-root-token"]).decode('utf-8')
+            secret["root_token"]).decode('utf-8')
         vault_client = hvac.Client(
-            url='http://vault.platform.svc.cluster.local:8200', token=token)
+            url='http://vault-platform.vault.svc.cluster.local:8200', token=token)
 
         if eventName == "Deleted":
             # exec_vault_command(v1, "vault policy delete " + policy_name)
@@ -38,7 +38,5 @@ match(handle_hook()):
             policy_hcl = context[0]['object']['spec']['policy-hcl']
             vault_client.sys.create_or_update_policy(
                 name=policy_name, policy=policy_hcl)
-            # exec_vault_command(v1, "vault policy write " +
-            #                    policy_name + ' - ' + policy_hcl)
     case _:
         print("Unknown hook data")

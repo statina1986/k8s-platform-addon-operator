@@ -10,6 +10,10 @@ modulesConfig:
   auroraMysqlDb:
     configurationRequired: "check module documentation for configuration options"
 
+  dbManagementEnabled: "false"
+  dbManagement:
+    configurationRequired: "check module documentation for configuration options"
+
   cassandraPlatformEnabled: "false"
   cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"

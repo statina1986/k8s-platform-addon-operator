@@ -1,0 +1,32 @@
+[
+    {
+        "binding": "kubernetes",
+        "type": "Event",
+        "watchEvent": "Added",
+        "object": {
+            "apiVersion": "platform-vault.qvantel.com/v1",
+            "kind": "DbRole",
+            "metadata": {
+                "annotations": {
+                    "objectset.rio.cattle.io/applied": "H4sIAAAAAAAA/3zQzQ6bMAwH8FdBvvRCKDDK161aOUyatArW7tKLSczKGpI0SZkmxLtPdJq004625Z/+9gJoxitZN2oFNRiJftB2YjO+pI+eMypPMuJ62s8JhPAYlYAaTn2rJUEIE3kU6BHqBVAp7dGPWrmt1P0P4t6Rj+yoI47eS4pGvR83IK0ykRZVzPL00LMsKT+w8lDlTAw5T9MhzirksIYgsSf5X+6O7g418CqpCurLnA8Ck6w4UJ4MJXFeFCLO+iwuEl6WothQhRNBDWiMY88ZkT3oF5caH/Bn5gxy+ucZ244zxLcY3NL7ROY8eppIeQc1fGyb49cmuHRNG9xgWTZlXW8QdJdz077b52PXffvSnoLdshh07qe2Yl13wfX4+dMpuEAIomd/k72stsiMdv67JQfr+jsAAP//CNpEe6cBAAA",
+                    "objectset.rio.cattle.io/id": "294d2790-625b-4183-8596-df6c22f049ac"
+                },
+                "creationTimestamp": "2022-03-26T18:47:36Z",
+                "generation": 6,
+                "labels": {
+                    "objectset.rio.cattle.io/hash": "c9197eb86cfda1475e61f8ecc77d04b4071c88d7"
+                },
+                "name": "apps-qvaa-keycloak",
+                "namespace": "platform",
+                "resourceVersion": "36326070",
+                "uid": "5b844cc1-6cfb-4425-a7b0-2b9b8128364c"
+            },
+            "spec": {
+                "creation-statements": "CREATE USER \"{{name}}\" SUPERUSER PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';ALTER ROLE \"{{name}}\" SET role \"keycloak\"; GRANT qvantel TO \"{{name}}\"",
+                "db-name": "aurora-postgres",
+                "default-ttl": "0",
+                "max-ttl": "0"
+            }
+        }
+    }
+]

@@ -1,0 +1,52 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: kubernetesauthroles.platform-vault.qvantel.com
+spec:
+  group: platform-vault.qvantel.com
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: kubernetesauthroles
+    # singular name to be used as an alias on the CLI and for display
+    singular: kubernetesauthrole
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: KubernetesAuthRole
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - kar
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: Vault Database Role definition
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              properties:
+                bound_service_account_names:
+                  type: array
+                  description: List of service account names able to access this role. If set to "*" all names are allowed.
+                  items:
+                    type: string
+                bound_service_account_namespaces:
+                  type: array
+                  description: List of namespaces allowed to access this role. If set to "*" all namespaces are allowed.
+                  items:
+                    type: string
+                token_ttl:
+                  type: string
+                  description: The incremental lifetime for generated tokens. This current value of this will be referenced at renewal time.
+                token_max_ttl:
+                  type: string
+                  description: The maximum lifetime for generated tokens. This current value of this will be referenced at renewal time.
+                token_policies:
+                  type: array
+                  description: List of policies to encode onto generated tokens. Depending on the auth method, this list may be supplemented by user/group/other values.
+                  items:
+                    type: string

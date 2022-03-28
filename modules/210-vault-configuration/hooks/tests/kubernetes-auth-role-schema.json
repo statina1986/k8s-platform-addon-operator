@@ -1,0 +1,34 @@
+[
+    {
+        "binding": "kubernetes",
+        "type": "Event",
+        "watchEvent": "Added",
+        "object": {
+            "apiVersion": "platform-vault.qvantel.com/v1",
+            "kind": "KubernetesAuthRole",
+            "metadata": {
+                "annotations": {
+                    "objectset.rio.cattle.io/applied": "H4sIAAAAAAAA/3yQMW+DMBCF/8vNmMQUQszWuVuHLlUUne2z4sbYBB9IVcR/r5x26JTxdO99evrugJP/oDn7FGGAKSC7NI9ixSVwfVsxMoXapHG3Sqjg6qOFAd4WTXMkpvy68OU9BYIKRmK0yAjDHTDGxMg+xVzOpL/IcCauZ59qg8yBap92vsCsPr64Xmlh5V6JVh20wE5poWyndNugbVoJWwUBNYWnuAvmCwywx74jSW1HrjdNb1snO9m5Rh6dMU6T1Id9o5q2QCOOBAPgNGVxWxHFlb5NSHiF31+e0NA/MaWTJzJlhk5LtOdM8+oNndGYtEQ+P1owfIIlVyTCqXqWLPxH/M81nLbtJwAA//+3ssIElQEAAA",
+                    "objectset.rio.cattle.io/id": "db83f79b-d109-496b-a59b-9d59b42ad241"
+                },
+                "creationTimestamp": "2022-03-25T11:47:56Z",
+                "generation": 2,
+                "labels": {
+                    "objectset.rio.cattle.io/hash": "0a75e1e45ef7c27d4f1515f218fccfbe1b602924"
+                },
+                "name": "apps-qvaa-keycloak",
+                "namespace": "platform",
+                "resourceVersion": "35681254",
+                "uid": "2a83369e-1e4f-46d4-a996-d3caf85880df"
+            },
+            "spec": {
+                "bound_service_account_names": [
+                    "default"
+                ],
+                "bound_service_account_namespaces": [
+                    "qvantel"
+                ]
+            }
+        }
+    }
+]

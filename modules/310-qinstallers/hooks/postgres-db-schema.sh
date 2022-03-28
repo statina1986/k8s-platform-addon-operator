@@ -4,14 +4,11 @@ source "${0%/*}/../../../common/shell/functions.sh"
 
 hook::config() {
   cat <<EOF
-{
-  "configVersion":"v1",
-  "kubernetes":[{
-    "name": "Provision postgres schemas",
-    "kind": "QInstaller",
-    "executeHookOnEvent":["Added","Modified","Deleted"]
-  }]
-}
+configVersion: v1
+kubernetes:
+- name: "Monitor SqlInstallers"
+  kind: SqlInstallers  
+  executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
 EOF
 }
 
@@ -23,7 +20,6 @@ hook::trigger() {
 
   elif [[ $type == "Event" ]] ; then
     event=$(jq -r '.[0].watchEvent' ${BINDING_CONTEXT_PATH})
-
     name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
     db_provision_sql=$(jq -r '.[0].object.spec."db-provision-sql"' ${BINDING_CONTEXT_PATH})
     secret=$(jq -r '.[0].object.spec."db-secret-name"' ${BINDING_CONTEXT_PATH})

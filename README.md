@@ -50,9 +50,15 @@ modulesConfig:
   vaultPlatformEnabled: "true"
 ```
 
+## Common Tasks
 
+### Ensure required resources before module deployments
+Sometimes some resources should be created before module deployment with helm. Most common things are **namespaces** and **CRDs**, which are not very well handled with current helm deployemnts. Yes, helm can deploy CRDs from /crds folder utomatically, but if you have *kubernetes* hooks which reference those CRDs, they will not work. 
 
-## Dependencies subcharts
+For that platform have common ```common::ensure_resources()``` function which will deploy all resources from *resources* folder on hook execution.
+You can check the hook example here [modules/001-cert-platform/hooks/ensureResources.sh](modules/001-cert-platform/hooks/ensureResources.sh)
+
+### Dependencies subcharts
 **addon-operator** has one significant limitation - it is hard to use external helm charts as dependencies (see https://github.com/flant/addon-operator/issues/153). Main issue is that values files in **addon-operator**  has special structure which is not compatible with subcharts values convention in Helm.
 
 In order to overcome this it ispossible to introduce empty subchart named as module name in camelCase  as first dependency of the module. All external dependencies should be placed as subcharts of that empty subchart.
@@ -68,3 +74,8 @@ my-super-module/
     |--Chart.yaml (has single dependency - "mySuperModule")
     |--values.yaml (now structure of values yaml is alligned with addon-operator)
 ```
+### Download helm dependencies
+
+If you are using dependecies subcharts in a module, then usually you want to have them outside of this repo. So they need to be downloded before helm deployment of the module.
+
+For that platform have common ```helm::run_helm_dependency_update_hook()``` function which will download all dependencies fron */charts* folder, e.g. see  [modules/001-cert-platform/hooks/helm-update-dependencies.sh](modules/001-cert-platform/hooks/helm-update-dependencies.sh)
