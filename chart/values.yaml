@@ -1,11 +1,12 @@
 ---
 logLevel: info
-addonOperatorNamespace: "platform-modules"
+addonOperatorNamespace: "platform"
 imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
 helmIgnoreRelease: "k8s-platform"
 globalConfig:
   someGlobalValue: "put your value"
 modulesConfig:
+
   auroraMysqlDbEnabled: "false"
   auroraMysqlDb:
     configurationRequired: "check module documentation for configuration options"
@@ -44,6 +45,14 @@ modulesConfig:
   
   keycloakPlatformEnabled: "false"
   keycloakPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  mariadbPlatformEnabled: "false"
+  mariadbPlatform:
+    configurationRequired: "check module documentation for configuration options"
+  
+  postgresPlatformEnabled: "false"
+  postgresPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   qinstallersEnabled: "false"

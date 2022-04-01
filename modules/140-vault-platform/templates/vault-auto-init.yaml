@@ -1,0 +1,67 @@
+apiVersion: v1
+data:
+  init.sh: |
+    #!/bin/sh
+    
+    CURL_OPT="-sk --connect-timeout 10"
+    VAULT_ADDR="http://localhost:8200"
+    KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token 2>/dev/null)
+    CURL_RESULT="tmp/curl.result"
+
+    # Kubernetes configuration, possibility to override via env
+    [ -z "${KUBE_API}" ] && KUBE_API=https://${KUBERNETES_PORT_443_TCP_ADDR}:${KUBERNETES_PORT_443_TCP_PORT}
+    [ -z "${KUBE_NS}" ] && KUBE_NS=platform
+    [ -z "${KUBE_SECRETS_KEY}" ] && KUBE_SECRETS_KEY=vault-keys
+    [ -z "${VAULT_INIT_NODE}" ] && VAULT_INIT_NODE="vault-platform-0"
+
+    qlog () {
+        echo "$(date -Iseconds) [vault-init] ${@}"
+    }
+
+    if [[ ${VAULT_K8S_POD_NAME} == ${VAULT_INIT_NODE} ]] ; then
+        
+        HEALTH_STATUS="$(curl ${CURL_OPT} -w '%{http_code}' -o ${CURL_RESULT} ${VAULT_ADDR}/v1/sys/health)"
+
+        while [[ ${HEALTH_STATUS} == 000 ]]; do 
+            qlog "Current vault response: ${HEALTH_STATUS}. waiting 5 sec"; 
+            sleep 5; 
+            HEALTH_STATUS="$(curl ${CURL_OPT} -w '%{http_code}' -o ${CURL_RESULT} ${VAULT_ADDR}/v1/sys/health)"
+        done
+        
+        HEALTH=$(cat ${CURL_RESULT})
+        INITIALIZED=$(echo ${HEALTH} | jq -r '.initialized')
+
+        if [ "${INITIALIZED}" = "false" ]; then
+            qlog "Vault is not initialized."
+            
+            INIT_STATUS="$(curl ${CURL_OPT} --request POST -w '%{http_code}' -o ${CURL_RESULT} --data '{"secret_shares": 1, "secret_threshold": 1, "recovery_shares": 1, "recovery_threshold": 1}' ${VAULT_ADDR}/v1/sys/init)"
+            qlog "Initialized vault with status code: ${INIT_STATUS} $(cat ${CURL_RESULT})"
+
+            if [ "${INIT_STATUS}" = "200" ]; then
+                RECOVERY_KEY="$(jq -r '.keys[0] // empty' ${CURL_RESULT})"
+                ROOT_TOKEN="$(jq -r '.root_token // empty' ${CURL_RESULT})"
+                RECOVERY_OUTPUT="$(echo ${CURL_RESULT} | base64 )"
+
+                kubectl create secret generic "$KUBE_SECRETS_KEY" -n "$KUBE_NS" \
+                    --from-literal=recovery_output="$RECOVERY_OUTPUT"   \
+                    --from-literal=root_token="$ROOT_TOKEN"      
+            else
+                qlog "Unexpected vault status : ${INIT_STATUS}. Aborting"
+                exit 1
+            fi            
+        elif [ "${INITIALIZED}" = "true" ]; then
+            qlog "Vault is already initialized. Status : ${HEALTH}"
+        else
+            qlog "Unknown vault status : ${HEALTH}. Aborting"
+            exit 1
+        fi
+    else
+        qlog "This (${VAULT_K8S_POD_NAME}) is not Vault initialization node. Skipping Vault initialization."
+    fi
+    
+    while true; do qlog "sleeping"; sleep infinity; done
+
+kind: ConfigMap
+metadata:
+  name: vault-auto-init-config
+  namespace: platform

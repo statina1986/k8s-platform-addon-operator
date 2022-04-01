@@ -1,0 +1,4 @@
+mariadbPlatform:
+  mariadb:
+    auth:
+      rootPassword: ZAHWOBpKb8

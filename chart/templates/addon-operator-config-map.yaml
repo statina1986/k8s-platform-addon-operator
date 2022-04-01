@@ -37,6 +37,12 @@ data:
   keycloakPlatformEnabled: "{{ .Values.modulesConfig.keycloakPlatformEnabled }}"
   keycloakPlatform: {{ print "|\n" (.Values.modulesConfig.keycloakPlatform | toYaml | indent 4) }}
 
+  mariadbPlatformEnabled: "{{ .Values.modulesConfig.mariadbPlatformEnabled }}"
+  mariadbPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbPlatform | toYaml | indent 4) }}
+  
+  postgresPlatformEnabled: "{{ .Values.modulesConfig.postgresPlatformEnabled }}"
+  postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
+
   qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
   
   vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"

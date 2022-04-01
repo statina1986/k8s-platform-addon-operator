@@ -1,0 +1,8 @@
+# istioPlatformNamespace: istio-system
+istioPlatform:
+  base:
+    global:
+      istioNamespace: platform
+  istiod:
+    global:
+      istioNamespace: platform

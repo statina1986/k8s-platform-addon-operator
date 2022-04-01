@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:  
+  name: kafka-ui
+  namespace: {{ .Release.Namespace }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: kafka-ui  
+  template:
+    metadata:
+      labels:
+        app: kafka-ui
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+          value: kafka-cluster-kafka-bootstrap.{{ .Release.Namespace }}.svc.cluster.local:9092
+        - name: KAFKA_CLUSTERS_0_NAME
+          value: kafka
+        image: provectuslabs/kafka-ui:latest
+        imagePullPolicy: Always
+        name: kafka-ui
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512M
+          requests:
+            cpu: 500m    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-ui
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: http-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: kafka-ui
+  sessionAffinity: None
+  type: ClusterIP

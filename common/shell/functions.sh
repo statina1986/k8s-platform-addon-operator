@@ -1,27 +1,44 @@
-function qlog () {
-  echo "$(date -Iseconds) [k8s-platform] ${@}"
+
+declare -A levels=([debug]=0 [info]=1 [warn]=2 [error]=3)
+
+function qlog_level() {
+  local log_message=$2
+  local log_priority=$1
+
+  [[ ${levels[$log_priority]} ]] || return 1
+
+  [[ $levels[$log_priority] < $levels[${LOG_LEVEL:-info}] ]] && return 2
+
+  echo "$log_message"
 }
 
-function rand () {
+function qlog_debug() {
+  qlog_level "debug" "$@"
+}
+function qlog() {
+  qlog_level "info" "$@"
+}
+
+function rand() {
   echo "$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c ${1-5})"
 }
 
 function curl::execute() {
-  curl_result="/tmp/curl.result-$(rand)"
-  curl_debug="/tmp/curl.debug-$(rand)"
-  query="curl -vs -w '%{http_code}' -o $curl_result $1 2>$curl_debug" 
-  qlog "Executing curl query: $query"
-  status=$(eval $query)
-  qlog "$(cat $curl_debug)"
-  qlog "Response: $(cat $curl_result)"
-  if [[ ! $2 == $status ]] ; then
-    qlog "Unexpected status: $status. Expected $2"
+  CURL_RESULT="/tmp/curl.result-$(rand)"
+  CURL_DEBUG="/tmp/curl.debug-$(rand)"
+  local query="curl -vs -w '%{http_code}' -o $CURL_RESULT $1 2>$CURL_DEBUG" 
+  qlog_debug "Executing curl query: $query"
+  CURL_STATUS=$(eval $query)    
+  if [[ -n $2 && $2 != $CURL_STATUS ]] ; then
+    qlog "Unexpected status: $CURL_STATUS. Expected $2"
+    qlog "$(cat $CURL_DEBUG)"    
+    qlog "Response: $(cat $CURL_RESULT)"
     exit 1
   fi
 }
 
 function curl::post_data() {
-  curl_data="/tmp/curl.data-$(rand)"
+  local curl_data="/tmp/curl.data-$(rand)"
   echo "$1" > $curl_data
   curl::execute "--request POST --data-binary '@$curl_data' $2" $3
 }
@@ -73,5 +90,5 @@ function kubectl::get_secret_opaque_kv() {
 }
 
 function vault::get_vault_token() {
-  echo "$( kubectl get secret -n vault vault-keys --template='{{ index .data "root_token" }}' | base64 -d )"
+  echo "$( kubectl get secret -n platform vault-keys --template='{{ index .data "root_token" }}' | base64 -d )"
 }

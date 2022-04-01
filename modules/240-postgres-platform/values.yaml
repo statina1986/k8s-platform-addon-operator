@@ -1,0 +1,10 @@
+postgresPlatform:
+  postgres-operator:
+  postgres-operator-ui:
+    envs:
+      operatorApiUrl: "http://postgres-platform-postgres-operator:8080"
+      operatorClusterNameLabel: "cluster-name"
+      resourcesVisible: "False"
+      targetNamespace: "platform"
+      teams:
+        - "qvt"

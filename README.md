@@ -7,10 +7,22 @@ This repo conatins implementation of **K8S Platform Services** based on the [add
 > Please check [addon-operator](https://github.com/flant/addon-operator) documentation first
 > 
 
+
 ## Available Modules
 
-- [cert-platform](modules/001-cert-platform/README.md) for certificate management with **cert-manager**
-- [vault-platform](modules/030-vault-platform/README.md) for **vault** deployment
+- [cert-platform](modules/110-cert-platform/README.md) for certificate management with **cert-manager**
+- [vault-platform](modules/140-vault-platform/README.md) for **vault** deployment
+
+## Modules Order
+
+Modules are ordered alphanumerically based on their folder names. This is the order of the deployment.
+Current conventions for naming:
+
+* 000-099 - reserverd
+* 100-199 - Core platform modules like *Vault* or *Consul*. Later modules ussually depends on those.
+* 200-299 - Data Bases engines and persistent storages like *Postgres*, *Cassandra*, *Redis*
+* 300-399 - Platform Configuration Enablers like *qinstallers* or *vault-configuration*. Usually provide additional management capabilities for services defined on previous levels
+* 400-999 those are not well-defined yet and can be used freely
 
 ## Testing the platform
 It is easy to start with this platform both on local and cloud k8s cluster.
@@ -56,7 +68,7 @@ modulesConfig:
 Sometimes some resources should be created before module deployment with helm. Most common things are **namespaces** and **CRDs**, which are not very well handled with current helm deployemnts. Yes, helm can deploy CRDs from /crds folder utomatically, but if you have *kubernetes* hooks which reference those CRDs, they will not work. 
 
 For that platform have common ```common::ensure_resources()``` function which will deploy all resources from *resources* folder on hook execution.
-You can check the hook example here [modules/001-cert-platform/hooks/ensureResources.sh](modules/001-cert-platform/hooks/ensureResources.sh)
+You can check the hook example here [modules/001-cert-platform/hooks/ensureResources.sh](modules/110-cert-platform/hooks/ensureResources.sh)
 
 ### Dependencies subcharts
 **addon-operator** has one significant limitation - it is hard to use external helm charts as dependencies (see https://github.com/flant/addon-operator/issues/153). Main issue is that values files in **addon-operator**  has special structure which is not compatible with subcharts values convention in Helm.
@@ -78,4 +90,4 @@ my-super-module/
 
 If you are using dependecies subcharts in a module, then usually you want to have them outside of this repo. So they need to be downloded before helm deployment of the module.
 
-For that platform have common ```helm::run_helm_dependency_update_hook()``` function which will download all dependencies fron */charts* folder, e.g. see  [modules/001-cert-platform/hooks/helm-update-dependencies.sh](modules/001-cert-platform/hooks/helm-update-dependencies.sh)
+For that platform have common ```helm::run_helm_dependency_update_hook()``` function which will download all dependencies fron */charts* folder, e.g. see  [modules/001-cert-platform/hooks/helm-update-dependencies.sh](modules/110-cert-platform/hooks/helm-update-dependencies.sh)
