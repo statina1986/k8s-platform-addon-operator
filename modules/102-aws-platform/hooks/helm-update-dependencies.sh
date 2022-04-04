@@ -2,4 +2,4 @@
 
 source "${0%/*}/../../../common/shell/functions.sh"
 
-common::ensure_resources "$@"
+helm::run_helm_dependency_update_hook "$@"

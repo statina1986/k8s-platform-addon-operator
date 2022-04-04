@@ -9,7 +9,8 @@ This repo conatins implementation of **K8S Platform Services** based on the [add
 
 
 ## Available Modules
-
+- [platform-core](modules/101-platform-core/README.md) for core parts of platform
+- [aws-platform](modules/102-aws-platform/README.md) configures needed plugins and services to manage Qvantel K8S Platfrom on AWS Cloud
 - [cert-platform](modules/110-cert-platform/README.md) for certificate management with **cert-manager**
 - [vault-platform](modules/140-vault-platform/README.md) for **vault** deployment
 

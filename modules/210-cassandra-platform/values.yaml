@@ -34,16 +34,13 @@ cassandraPlatform:
         # are using `gps` here as it has `volumeBindingMode: WaitForFirstConsumer`
         # which is important during scheduling.
         storageClass: gp2
-
         # The recommended live data size is 1 - 1.5 TB. A 2 TB volume supports this
         # much data along with room for compactions. Consider increasing this value
         # as the number of provisioned IOPs is directly related to the volume size.
         size: 100Gi
-
       heap:
       size: 2G
       newGenSize: 2G
-
       resources:
         requests:
           cpu: 1000m
@@ -51,7 +48,6 @@ cassandraPlatform:
         limits:
           cpu: 1000m
           memory: 12Gi
-
       # This key defines the logical topology of your cluster. The rack names and
       # labels should be updated to reflect the Availability Zones where your EKS
       # cluster is deployed.
@@ -61,19 +57,16 @@ cassandraPlatform:
         num_tokens: 8
         racks:
         - name: default
-
     kube-prometheus-stack:
       # -- Controls whether the kube-prometheus-stack chart is used at all.
       # Disabling this parameter prevents all monitoring components from being
       # installed.
       enabled: false
       # Disable default 
-
     grafana:
         # -- Provisions an instance of Grafana and wires it up with a DataSource
         # referencing this Prometheus installation
-        enabled: false
-        
+        enabled: false       
     monitoring:
       grafana:
         # -- Enables the creation of configmaps containing Grafana dashboards. If
@@ -88,22 +81,16 @@ cassandraPlatform:
         # not have the ServiceMonitor CRD installed on your cluster, set this value
         # to `false`.
         provision_service_monitors: false
-
-
-
     stargate:
       enabled: false
       replicas: 3
       heapMB: 1024
       cpuReqMillicores: 500
       cpuLimMillicores: 500
-
     medusa:
       enabled: false
       storage: s3
-
       # Reference the Terraform output for the correct bucket name to use here.
       bucketName: prod-k8ssandra-s3-bucket
-
       # The secret here must align with the value used in the previous section.
       storageSecret: prod-k8ssandra-medusa-key

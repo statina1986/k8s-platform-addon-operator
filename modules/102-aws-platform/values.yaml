@@ -1,0 +1,6 @@
+awsPlatform:
+  aws-load-balancer-controller:
+    clusterName: cluster-name
+    serviceAccount:
+      name: platform
+      create: false
