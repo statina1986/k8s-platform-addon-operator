@@ -12,7 +12,9 @@ This repo conatins implementation of **K8S Platform Services** based on the [add
 - [platform-core](modules/101-platform-core/README.md) for core parts of platform
 - [aws-platform](modules/102-aws-platform/README.md) configures needed plugins and services to manage Qvantel K8S Platfrom on AWS Cloud
 - [cert-platform](modules/110-cert-platform/README.md) for certificate management with **cert-manager**
+- [consul-platform](modules/130-consul-platform/README.md) for **consul** deployment
 - [vault-platform](modules/140-vault-platform/README.md) for **vault** deployment
+- [vault-configuration](modules/340-vault-configuration/) for **vault** configuration via CRDs
 
 ## Modules Order
 
@@ -50,7 +52,7 @@ docker build -t "sashaozz/addon-operator:$timestamp" ~/qvantel/CP/k8s-platform-a
 docker push sashaozz/addon-operator:$timestamp
 
 # Here we deploy platform helm chart with custom configuration from  myvalues.yaml
-helm upgrade --install --create-namespace k8s-platform -n platform-modules ~/qvantel/CP/k8s-platform-addon-operator/chart -f myvalues.yaml --set imageVersion=$timestamp
+helm upgrade --install --create-namespace platform -n platform ~/qvantel/CP/k8s-platform-addon-operator/chart -f myvalues.yaml --set imageVersion=$timestamp
 ```
 Of course kubectl/helm should point to correct cluster (e.g. local minikube or some cloud k8s)
 

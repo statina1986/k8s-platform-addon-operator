@@ -4,9 +4,26 @@ This module is responsible for deployment of [vault](https://www.vaultproject.io
 Depends on modules:
 - [cert-platform](/modules/110-cert-platform/README.md) which is needed to established vault certificates
 
+Provides:
+- Vault deployment
+- Auto-Initialization
+- Auto-Unsealing
+- Default secrets engines:
+  - KV (v1) engine at path *secret*
+  - Database engine at path *database*
+- Vault UI
+
+Vault is available at:
+- vault-platform.platform.svc
+- vault-platform-active.platform.svc (current vault leader)
+
+
+Vault UI is available at:
+- vault-platform-ui.platform.svc
+
 ### Auto initialization
-Module is deployed with auto-initialization feature whichis capable to aut-initialize **vault**.
-If auto-useal deature is not used, Shamir keys will be stored in k8s secret.
+Module is deployed with auto-initialization feature which is capable to aut-initialize **vault**.
+If auto-unseal feature is not used, Shamir keys will be stored in k8s secret.
 
 ### Auto-unsealing
 It is possible to configure module to use auto-unsealing feature with external secrets service:

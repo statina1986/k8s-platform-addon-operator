@@ -1,0 +1,20 @@
+# consul-platform module
+This module is responsible for deployment of [consul](https://www.consul.io/) in the cluster
+
+Depends on modules:
+- no dependencies
+
+Provides:
+- Consul deployment
+- Consul DNS service resolution
+- Consul catalog synchronization with K8S services
+- Consul UI
+
+Consul is available at:
+- consul.service.consul
+- consul-platform-consul-server.platform.svc
+
+Consul UI is available at:
+- consul-platform-consul-ui.platform.svc
+
+ 
