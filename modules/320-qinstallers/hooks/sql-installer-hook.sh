@@ -27,21 +27,23 @@ hook::trigger() {
     db_url=$(jq -r '.[0].object.spec."db-url"' ${BINDING_CONTEXT_PATH})
     db_type=$(jq -r '.[0].object.spec."type"' ${BINDING_CONTEXT_PATH})
     rand=`head -c 5 /dev/random | md5sum | head -c 5`
-    username="$(kubectl::get_secret_opaque_kv $secret 'username' 'platform')"
-    password="$(kubectl::get_secret_opaque_kv $secret 'password' 'platform')"
     echo "${db_provision_sql}" > db_provision.sql
     
     if [[ $db_type == "postgresql" ]] ; then
+      username="$(kubectl::get_secret_opaque_kv $secret 'username' 'platform')"
+      password="$(kubectl::get_secret_opaque_kv $secret 'password' 'platform')"
       kubectl run -n platform "postgre-db-provision-$rand" --image=artifactory.qvantel.net/k8s-platform-tools --command -- /bin/sh -c "tail -f /dev/null"
       kubectl wait --for=condition=ready --timeout=30s pod/"postgre-db-provision-$rand" -n platform
       kubectl cp db_provision.sql "platform/postgre-db-provision-$rand":/
       kubectl exec -n platform "postgre-db-provision-$rand" -- psql "postgresql://${username}:${password}@${db_url}" -a -f /db_provision.sql
       kubectl delete pod -n platform "postgre-db-provision-$rand"
     elif [[ $db_type == "mariadb" ]] ; then
+      username="root"
+      password="$(kubectl::get_secret_opaque_kv $secret 'mariadb-root-password' 'platform')"
       kubectl run -n platform "mariadb-db-provision-$rand" --image=artifactory.qvantel.net/k8s-platform-tools --command -- /bin/sh -c "tail -f /dev/null"
       kubectl wait --for=condition=ready --timeout=30s pod/"mariadb-db-provision-$rand" -n platform
       kubectl cp db_provision.sql "platform/mariadb-db-provision-$rand":/
-      kubectl exec -n platform "mariadb-db-provision-$rand" -- mysql -u $username -p$password --host=$db_url < /db_provision.sql
+      kubectl exec -n platform "mariadb-db-provision-$rand" -- /bin/sh -c "mysql -u $username -p$password --host=$db_url < /db_provision.sql"
       kubectl delete pod -n platform "mariadb-db-provision-$rand"
     fi
   fi

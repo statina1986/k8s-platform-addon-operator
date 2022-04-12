@@ -86,7 +86,7 @@ function kubectl::replace_or_create() {
 }
 
 function kubectl::get_secret_opaque_kv() {
-  echo "$( kubectl get secret -n $3 $1 --template='{{ index .data.'$2' }}' | base64 -d )"
+  echo "$( kubectl get secret -n $3 $1 -o jsonpath='{ .data.'$2' }' | base64 -d )"
 }
 
 function vault::get_vault_token() {
