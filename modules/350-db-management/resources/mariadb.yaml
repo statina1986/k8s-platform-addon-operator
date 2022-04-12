@@ -14,7 +14,7 @@ spec:
     kind: MariaDb
     # shortNames allow shorter string to match your resource on the CLI
     shortNames:
-    - apg
+    - mardb
   versions:
     - name: v1
       served: true
