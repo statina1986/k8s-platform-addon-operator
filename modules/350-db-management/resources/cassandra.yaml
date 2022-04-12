@@ -1,20 +1,20 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: sqlinstallers.platform-qinstallers.qvantel.com
+  name: cassandras.platform-dbs.qvantel.com
 spec:
-  group: platform-qinstallers.qvantel.com
+  group: platform-dbs.qvantel.com
   scope: Namespaced
   names:
     # plural name to be used in the URL: /apis/<group>/<version>/<plural>
-    plural: sqlinstallers
+    plural: cassandras
     # singular name to be used as an alias on the CLI and for display
-    singular: sqlinstaller
+    singular: cassandra
     # kind is normally the CamelCased singular type. Your resource manifests use this.
-    kind: SqlInstaller
+    kind: Cassandras
     # shortNames allow shorter string to match your resource on the CLI
     shortNames:
-    - sqlinsts
+    - apg
   versions:
     - name: v1
       served: true
@@ -22,22 +22,16 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
-          description: SQL QInstaller for provisioning of sql database
+          description: Vault Database Role definition
           required:
             - spec
           properties:
             spec:
               type: object
               properties:
-                type:
+                hosts:
                   type: string
-                  description: The type of database to provision
-                  enum:
-                    - postgresql
-                    - mariadb
-                db-provision-sql:
+                  description: Database Hosts.
+                credentials_secret:
                   type: string
-                db-secret-name:
-                  type: string
-                db-url:
-                  type: string
+                  description: Secret holding initial admin credentials

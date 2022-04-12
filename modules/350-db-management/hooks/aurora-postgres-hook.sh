@@ -9,6 +9,7 @@ kubernetes:
 - name: "Monitor AuroraPostgres"
   kind: AuroraPostgres  
   executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
+  queue: AuroraPostgresQueue
 EOF
 }
 

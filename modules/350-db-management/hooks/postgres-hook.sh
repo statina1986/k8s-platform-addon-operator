@@ -6,10 +6,10 @@ hook::config() {
   cat <<EOF
 configVersion: v1
 kubernetes:
-- name: "Monitor AuroraMysql"
-  kind: AuroraMysql  
+- name: "Monitor Postgres"
+  kind: Postgres  
   executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
-  queue: AuroraMysqlQueue
+  queue: PostgresQueue
 EOF
 }
 
@@ -45,8 +45,8 @@ hook::trigger() {
       
       curl::execute "--request POST \
         --header 'X-Vault-Token: ${token}' \
-        --data '{\"plugin_name\": \"mysql-aurora-database-plugin\", \
-          \"connection_url\":\"{{username}}:{{password}}@tcp($endpoint:3306)/\", \
+        --data '{\"plugin_name\": \"postgresql-database-plugin\", \
+          \"connection_url\":\"postgresql://{{username}}:{{password}}@$endpoint\", \
           \"allowed_roles\":\"*\", \
           \"username\": \"$username\", \
           \"password\": \"$password\"}' \

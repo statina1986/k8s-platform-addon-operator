@@ -6,10 +6,10 @@ hook::config() {
   cat <<EOF
 configVersion: v1
 kubernetes:
-- name: "Monitor AuroraMysql"
-  kind: AuroraMysql  
+- name: "Monitor Cassandras"
+  kind: Cassandra  
   executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
-  queue: AuroraMysqlQueue
+  queue: CassandraQueue
 EOF
 }
 
@@ -36,7 +36,7 @@ hook::trigger() {
 
     else
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-      endpoint=$(jq -r '.[0].object.spec."endpoint"' ${BINDING_CONTEXT_PATH})
+      hosts=$(jq -r '.[0].object.spec."hosts"' ${BINDING_CONTEXT_PATH})
       credentials_secret=$(jq -r '.[0].object.spec."credentials_secret"' ${BINDING_CONTEXT_PATH})
       username="$(kubectl::get_secret_opaque_kv $credentials_secret 'username' 'platform')"
       password="$(kubectl::get_secret_opaque_kv $credentials_secret 'password' 'platform')"
@@ -45,8 +45,8 @@ hook::trigger() {
       
       curl::execute "--request POST \
         --header 'X-Vault-Token: ${token}' \
-        --data '{\"plugin_name\": \"mysql-aurora-database-plugin\", \
-          \"connection_url\":\"{{username}}:{{password}}@tcp($endpoint:3306)/\", \
+        --data '{\"plugin_name\": \"cassandra-database-plugin\", \
+          \"hosts\":\"$hosts\", \
           \"allowed_roles\":\"*\", \
           \"username\": \"$username\", \
           \"password\": \"$password\"}' \

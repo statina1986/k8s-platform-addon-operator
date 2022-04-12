@@ -6,10 +6,10 @@ hook::config() {
   cat <<EOF
 configVersion: v1
 kubernetes:
-- name: "Monitor AuroraMysql"
-  kind: AuroraMysql  
+- name: "Monitor MariaDb"
+  kind: MariaDb  
   executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
-  queue: AuroraMysqlQueue
+  queue: MariaDbQueue
 EOF
 }
 
@@ -45,7 +45,7 @@ hook::trigger() {
       
       curl::execute "--request POST \
         --header 'X-Vault-Token: ${token}' \
-        --data '{\"plugin_name\": \"mysql-aurora-database-plugin\", \
+        --data '{\"plugin_name\": \"mysql-database-plugin\", \
           \"connection_url\":\"{{username}}:{{password}}@tcp($endpoint:3306)/\", \
           \"allowed_roles\":\"*\", \
           \"username\": \"$username\", \

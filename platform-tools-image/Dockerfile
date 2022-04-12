@@ -1,5 +1,5 @@
-FROM alpine:latest
-RUN apk --update --no-cache add bash curl jq
+FROM alpine:3.15
+RUN apk --update --no-cache add bash curl jq postgresql-client mysql-client
 
 RUN wget https://storage.googleapis.com/kubernetes-release/release/v1.19.11/bin/linux/amd64/kubectl -O /bin/kubectl && \
     chmod +x /bin/kubectl && \

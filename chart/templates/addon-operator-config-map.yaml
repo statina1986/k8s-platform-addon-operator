@@ -10,8 +10,8 @@ data:
   platformCoreEnabled: "true"
   platformCore: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
 
-  awsPlatformEnabled: "true"
-  awsPlatform: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
+  awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
+  awsPlatform: {{ print "|\n" (.Values.modulesConfig.awsPlatform | toYaml | indent 4) }}
 
   auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
