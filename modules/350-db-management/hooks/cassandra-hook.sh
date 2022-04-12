@@ -38,6 +38,7 @@ hook::trigger() {
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
       hosts=$(jq -r '.[0].object.spec."hosts"' ${BINDING_CONTEXT_PATH})
       credentials_secret=$(jq -r '.[0].object.spec."credentials_secret"' ${BINDING_CONTEXT_PATH})
+      protocol_version=$(jq -r '.[0].object.spec."protocol_version"' ${BINDING_CONTEXT_PATH})
       username="$(kubectl::get_secret_opaque_kv $credentials_secret 'username' 'platform')"
       password="$(kubectl::get_secret_opaque_kv $credentials_secret 'password' 'platform')"
 
@@ -48,6 +49,7 @@ hook::trigger() {
         --data '{\"plugin_name\": \"cassandra-database-plugin\", \
           \"hosts\":\"$hosts\", \
           \"allowed_roles\":\"*\", \
+          \"protocol_version\":\"$protocol_version\", \
           \"username\": \"$username\", \
           \"password\": \"$password\"}' \
         '${VAULT_ADDR}/v1/database/config/$name'" 200

@@ -29,6 +29,9 @@ spec:
             spec:
               type: object
               properties:
+                protocol_version:
+                  type: string
+                  description: protocol version 
                 hosts:
                   type: string
                   description: Database Hosts.
