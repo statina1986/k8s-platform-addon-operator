@@ -16,7 +16,7 @@ EOF
 }
 
 hook::trigger() {
-  VAULT_ADDR=${VAULT_ADDR-"http://vault-platform.vault.svc.cluster.local:8200"}
+  VAULT_ADDR=${VAULT_ADDR-"http://vault-platform.platform.svc.cluster.local:8200"}
 
   type=$(jq -r '.[0].type' ${BINDING_CONTEXT_PATH})
 

@@ -29,7 +29,7 @@ match(handle_hook()):
         token = base64.b64decode(
             secret["root_token"]).decode('utf-8')
         vault_client = hvac.Client(
-            url='http://vault-platform.vault.svc.cluster.local:8200', token=token)
+            url='http://vault-platform.platform.svc.cluster.local:8200', token=token)
 
         if eventName == "Deleted":
             # exec_vault_command(v1, "vault policy delete " + policy_name)

@@ -14,7 +14,7 @@ spec:
     kind: AuroraMysql
     # shortNames allow shorter string to match your resource on the CLI
     shortNames:
-    - apg
+    - amysql
   versions:
     - name: v1
       served: true
