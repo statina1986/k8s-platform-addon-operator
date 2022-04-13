@@ -25,32 +25,23 @@ hook::trigger() {
 
   elif [[ $type == "Event" ]] ; then
     event=$(jq -r '.[0].watchEvent' ${BINDING_CONTEXT_PATH})
+    name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
+    role_name=$(jq -r '.[0].object.spec."role_name"' ${BINDING_CONTEXT_PATH})
+    token="$(vault::get_vault_token)"
 
     if [[ $event == "Deleted" ]] ; then
-      name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH}) 
-      token="$(vault::get_vault_token)"
-      curl::delete "'${VAULT_ADDR}/v1/auth/kubernetes/role/$name'"
-
-    else
-      name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-      bound_service_account_names=$(jq -r '.[0].object.spec."bound_service_account_names"' ${BINDING_CONTEXT_PATH})
+      curl::delete "'${VAULT_ADDR}/v1/auth/kubernetes/role/${role_name:-$name}'"
+    else      
       bound_service_account_namespaces=$(jq -r '.[0].object.spec."bound_service_account_namespaces"' ${BINDING_CONTEXT_PATH})
       token_ttl=$(jq -r '.[0].object.spec."token_ttl"' ${BINDING_CONTEXT_PATH})
       token_max_ttl=$(jq -r '.[0].object.spec."token_max_ttl"' ${BINDING_CONTEXT_PATH})
       token_policies=$(jq -r '.[0].object.spec."token_policies"' ${BINDING_CONTEXT_PATH})
 
-      token="$(vault::get_vault_token)"
-
-      # STATUS="$(curl ${CURL_OPT} -w '%{http_code}' -o ${CURL_RESULT} \
-      #   --request POST \
-      #   --header "X-Vault-Token: ${token}" \
-      #   --data \"{\"bound_service_account_names\": $bound_service_account_names, \"bound_service_account_namespaces\": "$bound_service_account_namespaces", \"token_policies\": "$token_policies"}\" \
-      #   '${VAULT_ADDR}/auth/kubernetes/role/$name')"
       STATUS=$(curl ${CURL_OPT} -w '%{http_code}' -o ${CURL_RESULT} \
         --request POST \
         --header "X-Vault-Token: ${token}" \
         --data "{\"bound_service_account_names\": $bound_service_account_names, \"bound_service_account_namespaces\": $bound_service_account_namespaces, \"token_policies\": $token_policies}" \
-        ${VAULT_ADDR}/v1/auth/kubernetes/role/$name)
+        ${VAULT_ADDR}/v1/auth/kubernetes/role/${role_name:-$name})
     fi
   fi
 }

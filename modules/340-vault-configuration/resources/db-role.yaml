@@ -29,6 +29,9 @@ spec:
             spec:
               type: object
               properties:
+                role-name:
+                  type: string
+                  description: The name of the role to provision to Vault.
                 db-name:
                   type: string
                   description: The name of the database connection to use for this role.

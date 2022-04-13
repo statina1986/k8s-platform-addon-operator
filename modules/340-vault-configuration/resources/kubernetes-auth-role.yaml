@@ -29,6 +29,9 @@ spec:
             spec:
               type: object
               properties:
+                role_name:
+                  type: string
+                  description: The name of the role to provision to Vault.
                 bound_service_account_names:
                   type: array
                   description: List of service account names able to access this role. If set to "*" all names are allowed.

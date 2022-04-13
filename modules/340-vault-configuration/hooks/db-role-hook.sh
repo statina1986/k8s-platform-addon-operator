@@ -23,26 +23,23 @@ hook::trigger() {
 
   elif [[ $type == "Event" ]] ; then
     event=$(jq -r '.[0].watchEvent' ${BINDING_CONTEXT_PATH})
+    name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
+    role_name=$(jq -r '.[0].object.spec."role-name"' ${BINDING_CONTEXT_PATH})
+    token="$(vault::get_vault_token)"
 
     if [[ $event == "Deleted" ]] ; then
-      name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-      token="$(vault::get_vault_token)"
-      curl::delete "'${VAULT_ADDR}/v1/database/roles/$name'"
-
+      curl::delete "'${VAULT_ADDR}/v1/database/roles/${role_name:-$name}'"
     else
-      name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
       db_name=$(jq -r '.[0].object.spec."db-name"|@json' ${BINDING_CONTEXT_PATH})
       max_ttl=$(jq -r '.[0].object.spec."max-ttl"|@json' ${BINDING_CONTEXT_PATH})
       default_ttl=$(jq -r '.[0].object.spec."default-ttl"|@json' ${BINDING_CONTEXT_PATH})
       creation_statements=$(jq -r '.[0].object.spec."creation-statements"|@json' ${BINDING_CONTEXT_PATH})
 
-      token="$(vault::get_vault_token)"
-
       curl::post_data "{\"db_name\": $db_name, \
           \"creation_statements\":$creation_statements, \
           \"default_ttl\": $default_ttl, \
           \"max_ttl\": $max_ttl}" \
-          "--header 'X-Vault-Token: ${token}' '${VAULT_ADDR}/v1/database/roles/$name'" \
+          "--header 'X-Vault-Token: ${token}' '${VAULT_ADDR}/v1/database/roles/${role_name:-$name}'" \
           204
     fi
   fi

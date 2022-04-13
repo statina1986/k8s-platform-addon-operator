@@ -29,6 +29,9 @@ spec:
             spec:
               type: object
               properties:
+                policy-name:
+                  type: string
+                  description: Name of the policy to provision to vault.
                 policy-hcl:
                   type: string
                   description: Policy Definition.

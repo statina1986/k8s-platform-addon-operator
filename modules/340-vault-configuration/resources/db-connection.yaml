@@ -29,6 +29,9 @@ spec:
             spec:
               type: object
               properties:
+                connection_name:
+                  type: string
+                  description: The name of the connection to provision to Vault.
                 connection_url:
                   type: string
                   description: The name of the database connection to use for this role.
