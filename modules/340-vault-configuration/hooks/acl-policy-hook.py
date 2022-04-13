@@ -22,7 +22,7 @@ kubernetes:
 """)
     case EventHook(eventName, context):
         name = context[0]['object']['metadata']['name']
-        policy_name = context[0]['object']['spec']['policy-name']
+        policy_name = context[0].get('object',{}).get('spec',{}).get('policy-name')
 
         secret = v1.read_namespaced_secret("vault-keys", "platform").data
         token = base64.b64decode(secret["root_token"]).decode('utf-8')

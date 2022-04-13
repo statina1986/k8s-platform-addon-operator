@@ -24,7 +24,7 @@ hook::trigger() {
   elif [[ $type == "Event" ]] ; then
     event=$(jq -r '.[0].watchEvent' ${BINDING_CONTEXT_PATH})
     name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-    role_name=$(jq -r '.[0].object.spec."role-name"' ${BINDING_CONTEXT_PATH})
+    role_name=$(jq -r '.[0].object.spec."role-name" // empty' ${BINDING_CONTEXT_PATH})
     token="$(vault::get_vault_token)"
 
     if [[ $event == "Deleted" ]] ; then
