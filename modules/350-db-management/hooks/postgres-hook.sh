@@ -28,11 +28,7 @@ hook::trigger() {
 
     if [[ $event == "Deleted" ]] ; then
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-      role_name=$(jq -r '.[0].object.spec."role-name"' ${BINDING_CONTEXT_PATH}) 
-      token="$(vault::get_vault_token)"
-
-      kubectl exec -n platform vault-0 -- /bin/sh -c "vault login -no-print $token && \
-        vault delete auth/kubernetes/roles/$role_name"
+      curl::delete "'${VAULT_ADDR}/v1/database/config/$name'"
 
     else
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
