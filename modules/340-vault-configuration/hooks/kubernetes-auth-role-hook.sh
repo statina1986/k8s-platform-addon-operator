@@ -9,6 +9,7 @@ kubernetes:
 - name: "Monitor Vault Kubernetes Auth Rolesr"
   kind: KubernetesAuthRole  
   executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
+  queue: KubernetesAuthRoleQueue
 EOF
 }
 
@@ -26,12 +27,9 @@ hook::trigger() {
     event=$(jq -r '.[0].watchEvent' ${BINDING_CONTEXT_PATH})
 
     if [[ $event == "Deleted" ]] ; then
-      name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-      role_name=$(jq -r '.[0].object.spec."role-name"' ${BINDING_CONTEXT_PATH}) 
+      name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH}) 
       token="$(vault::get_vault_token)"
-
-      kubectl exec -n platform vault-0 -- /bin/sh -c "vault login -no-print $token && \
-        vault delete auth/kubernetes/roles/$role_name"
+      curl::delete "'${VAULT_ADDR}/v1/auth/kubernetes/role/$name'"
 
     else
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})

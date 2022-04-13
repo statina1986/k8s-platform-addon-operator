@@ -43,6 +43,10 @@ function curl::post_data() {
   curl::execute "--request POST --data-binary '@$curl_data' $2" $3
 }
 
+function curl::delete() {
+  curl::execute "--request DELETE $1" $2
+}
+
 function common::run_hook() {
   if [[ $1 == "--config" ]] ; then
     hook::config

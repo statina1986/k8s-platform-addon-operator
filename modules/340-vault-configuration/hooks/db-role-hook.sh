@@ -4,14 +4,12 @@ source "${0%/*}/../../../common/shell/functions.sh"
 
 hook::config() {
   cat <<EOF
-{
-  "configVersion":"v1",
-  "kubernetes":[{
-    "name": "Monitor Vault DB Roles",
-    "kind": "DbRole",
-    "executeHookOnEvent":["Added","Modified","Deleted"]
-  }]
-}
+configVersion: v1
+kubernetes:
+- name: "Monitor Vault DbRole"
+  kind: DbRole  
+  executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
+  queue: DbRoleQueue
 EOF
 }
 
@@ -28,11 +26,8 @@ hook::trigger() {
 
     if [[ $event == "Deleted" ]] ; then
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
-      role_name=$(jq -r '.[0].object.spec."role-name"' ${BINDING_CONTEXT_PATH}) 
       token="$(vault::get_vault_token)"
-
-      kubectl exec -n platform vault-0 -- /bin/sh -c "vault login -no-print $token && \
-        vault delete database/roles/$role_name"
+      curl::delete "'${VAULT_ADDR}/v1/database/roles/$name'"
 
     else
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
