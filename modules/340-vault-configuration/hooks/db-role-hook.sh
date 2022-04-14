@@ -28,7 +28,7 @@ hook::trigger() {
     token="$(vault::get_vault_token)"
 
     if [[ $event == "Deleted" ]] ; then
-      curl::delete "'${VAULT_ADDR}/v1/database/roles/${role_name:-$name}'"
+      curl::delete "--header 'X-Vault-Token: ${token}' '${VAULT_ADDR}/v1/database/roles/${role_name:-$name}'"
     else
       db_name=$(jq -r '.[0].object.spec."db-name"|@json' ${BINDING_CONTEXT_PATH})
       max_ttl=$(jq -r '.[0].object.spec."max-ttl"|@json' ${BINDING_CONTEXT_PATH})

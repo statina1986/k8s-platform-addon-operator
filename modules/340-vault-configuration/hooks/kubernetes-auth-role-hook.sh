@@ -30,7 +30,7 @@ hook::trigger() {
     token="$(vault::get_vault_token)"
 
     if [[ $event == "Deleted" ]] ; then
-      curl::delete "'${VAULT_ADDR}/v1/auth/kubernetes/role/${role_name:-$name}'"
+      curl::delete "--header 'X-Vault-Token: ${token}' '${VAULT_ADDR}/v1/auth/kubernetes/role/${role_name:-$name}'"
     else      
       bound_service_account_names=$(jq -r '.[0].object.spec."bound_service_account_names"|@json' ${BINDING_CONTEXT_PATH})
       bound_service_account_namespaces=$(jq -r '.[0].object.spec."bound_service_account_namespaces"|@json' ${BINDING_CONTEXT_PATH})
