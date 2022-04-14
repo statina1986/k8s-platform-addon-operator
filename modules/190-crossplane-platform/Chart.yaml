@@ -1,0 +1,6 @@
+apiVersion: v2
+name: crossplane-platform
+version: 0.0.1
+dependencies:
+  - name: crossplanePlatform
+    version: 0.0.1

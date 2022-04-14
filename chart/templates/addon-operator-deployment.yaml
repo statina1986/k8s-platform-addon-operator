@@ -19,7 +19,7 @@ spec:
       containers:
       - name: addon-operator
         image: {{ .Values.imageBase }}:{{ .Values.imageVersion | default .Chart.AppVersion }}
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: ADDON_OPERATOR_NAMESPACE
             value: {{ .Values.addonOperatorNamespace}}

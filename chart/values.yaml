@@ -34,6 +34,10 @@ modulesConfig:
   consulPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  crossplanePlatformEnabled: "false"
+  crossplanePlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   externalDnsEnabled: "false"
   externalDns:
     configurationRequired: "check module documentation for configuration options"

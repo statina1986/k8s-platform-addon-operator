@@ -45,20 +45,19 @@ Here is the deployment script which can be used to deploy platform from local ma
 #!/usr/bin/env bash
 timestamp=$(date +%Y%m%d%H%M%S)
 
-# Here we build the platform docker image localy as "sashaozz/addon-operator:$timestamp"
-docker build -t "sashaozz/addon-operator:$timestamp" ~/qvantel/CP/k8s-platform-addon-operator
+# Here we build the platform docker image locally as "local/addon-operator:$timestamp"
+docker build -t "local/addon-operator:$timestamp" ~/qvantel/CP/k8s-platform-addon-operator
 
-# Here we push builded image to dockerhub registry
-docker push sashaozz/addon-operator:$timestamp
+# Here we push builded image to minikube
+minikube image load local/addon-operator:$timestamp
 
-# Here we deploy platform helm chart with custom configuration from  myvalues.yaml
-helm upgrade --install --create-namespace platform -n platform ~/qvantel/CP/k8s-platform-addon-operator/chart -f myvalues.yaml --set imageVersion=$timestamp
+# Here we deploy platform helm chart with custom configuration from myvalues.yaml and also instruct it to use our locally built image
+helm upgrade --install k8s-platform -n platform ~/qvantel/CP/k8s-platform-addon-operator/chart -f myvalues.yaml --set imageVersion=$timestamp,imageBase="local/addon-operator"
 ```
 Of course kubectl/helm should point to correct cluster (e.g. local minikube or some cloud k8s)
 
 Example myvalues.yaml file:
 ```
-imageBase: "sashaozz/addon-operator"
 logLevel: "debug"
 modulesConfig:
   certPlatformEnabled: "true"

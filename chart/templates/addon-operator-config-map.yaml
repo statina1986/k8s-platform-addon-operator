@@ -28,6 +28,9 @@ data:
   consulPlatformEnabled: "{{ .Values.modulesConfig.consulPlatformEnabled }}"
   consulPlatform: {{ print "|\n" (.Values.modulesConfig.consulPlatform | toYaml | indent 4) }}
 
+  crossplanePlatformEnabled: "{{ .Values.modulesConfig.crossplanePlatformEnabled }}"
+  crossplanePlatform: {{ print "|\n" (.Values.modulesConfig.crossplanePlatform | toYaml | indent 4) }}
+
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
 
