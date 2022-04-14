@@ -1,0 +1,43 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch-elastic
+  namespace: platform
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "4"
+spec:
+  version: 7.16.2
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+  - name: elasticsearch
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.store.allow_mmap: false
+    volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 25Gi
+    podTemplate:
+      spec:
+        containers:
+          - name: elasticsearch
+            image: artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2
+            resources:
+              requests:
+                memory: 1Gi
+                cpu: 0.5
+              limits:
+                memory: 2Gi
+                cpu: 1
+    count: 1

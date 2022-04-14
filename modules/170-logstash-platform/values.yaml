@@ -1,0 +1,137 @@
+logstashPlatform:
+  logstash: 
+    replicas: 1
+    logstashPipeline:
+      logstash.conf: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+        filter {
+        if ([kubernetes][namespace] == "qvantel") {
+          json {
+            source => "message"
+          }
+        }
+        }
+        output {
+            if ([message] =~"audit"
+                or[message] =~"AUDIT") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "auditalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "audit_policy"
+                }
+            }
+            if ([kubernetes][namespace] == "platform"
+                or[kubernetes][namespace] == "elastic-system"
+                or[kubernetes][namespace] == "kube-system") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "platformalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "platform_policy"
+                }
+            }
+            else if ([kubernetes][namespace] == "qvantel") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "applicationalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "application_policy"
+                }
+            }
+            else if ([kubernetes][namespace] == "pomerium"
+                or[kubernetes][namespace] == "istio-system") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "ingressalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "ingress_policy"
+                }
+            }
+            if ("rbs" in [tags]) {
+                    elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "applicationalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "application_policy"
+                }
+            }
+            else {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "undecidedalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "undecided_policy"
+                }
+            }
+        }
+    extraEnvs:
+    #  - name: "ELASTICSEARCH_USERNAME"
+    #    valueFrom:
+    #      secretKeyRef:
+    #        name: elasticsearch-elastic-es-elastic-user
+    #        key: elastic
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: elasticsearch-elastic-es-elastic-user
+            key: elastic
+      - name: ELASTICSEARCH_HOST
+        value: elasticsearch-elastic-es-http.platform.svc.cluster.local
+      - name: ELASTICSEARCH_PORT
+        value: "9200"
+    image: "artifactory.qvantel.net/helm-k8s-logstash"
+    imageTag: "7.16.2"
+    imagePullPolicy: "IfNotPresent"
+    logstashJavaOpts: "-Xmx1g -Xms1g"
+    resources:
+      limits:
+        cpu: "1"
+        memory: 1Gi
+      requests:
+        cpu: "0.5"
+        memory: 0.5Gi
+    httpPort: 9600
+    volumeClaimTemplate:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+    rbac:
+      create: true
+      serviceAccountName: logstash-logstash
+    persistence:
+      enabled: true
+    extraPorts:
+      - name: beats
+        containerPort: 5044
+        protocol: TCP
+    service:
+      type: ClusterIP
+      ports:
+        - name: beats
+          port: 5044
+          protocol: TCP
+          targetPort: 5044

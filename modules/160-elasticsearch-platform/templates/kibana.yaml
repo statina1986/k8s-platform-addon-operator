@@ -1,0 +1,33 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "5"
+  name: kibana
+  namespace: platform
+spec:
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  version: 7.16.2
+  count: 1
+  elasticsearchRef:
+    name: elasticsearch-elastic
+  podTemplate:
+    metadata:
+      labels:
+        foo: bar
+    spec:
+      containers:
+        - name: kibana
+          image: artifactory.qvantel.net/helm-k8s-kibana:7.16.2
+          resources:
+            requests:
+              memory: 0.5Gi
+              cpu: 0.1
+            limits:
+              memory: 1Gi
+              cpu: 0.5

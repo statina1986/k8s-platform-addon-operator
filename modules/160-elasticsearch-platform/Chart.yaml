@@ -1,0 +1,6 @@
+apiVersion: v2
+name: elasticsearch
+version: 0.0.1
+dependencies:
+  - name: elasticsearchPlatform
+    version: 0.0.1

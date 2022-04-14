@@ -1,0 +1,7 @@
+apiVersion: v2
+name: elasticsearchPlatform
+version: 0.0.1
+dependencies:
+  - name: eck-operator
+    version: 1.9.1
+    repository: https://helm.elastic.co
