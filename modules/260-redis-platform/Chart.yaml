@@ -1,0 +1,6 @@
+apiVersion: v2
+name: redis-platform
+version: 0.0.1
+dependencies:
+  - name: redisPlatform
+    version: 0.0.1

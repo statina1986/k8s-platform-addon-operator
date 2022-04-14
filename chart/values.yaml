@@ -76,6 +76,10 @@ modulesConfig:
   vaultPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  redisPlatformEnabled: "true"
+  redisPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
 
 
   
