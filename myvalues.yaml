@@ -1,0 +1,6 @@
+imageBase: "kissa555/platform"
+logLevel: "debug"
+modulesConfig:
+  elasticsearchPlatformEnabled: "false"
+  logstashPlatformEnabled: "true"
+  filebeatPlatformEnabled: "false"
