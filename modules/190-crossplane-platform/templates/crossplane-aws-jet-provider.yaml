@@ -1,0 +1,31 @@
+{{- template "crossplanePlatform.jetAwsProviderEnabled" . -}}
+{{- if .jetAwsProviderEnabled -}}
+
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: crossplane-provider-jet-aws
+spec:
+  ignoreCrossplaneConstraints: false
+  package: crossplane/provider-jet-aws:v0.4.2
+  packagePullPolicy: IfNotPresent
+  revisionActivationPolicy: Automatic
+  revisionHistoryLimit: 1
+  skipDependencyResolution: false
+
+
+{{- range .Values.crossplanePlatform.jetAwsProvider.providers }}
+---
+apiVersion: aws.jet.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: {{ .name }}
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: platform
+      name: {{ .secret }}
+      key: credentials
+{{- end }}  
+{{- end }}

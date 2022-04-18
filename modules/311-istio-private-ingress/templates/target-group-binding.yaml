@@ -1,0 +1,20 @@
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: istio-private-ingress-80
+spec:
+  serviceRef:
+    name: istio-private-ingress
+    port: 80
+  targetGroupARN: <arn-to-targetGroup>
+
+---
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: istio-private-ingress-443
+spec:
+  serviceRef:
+    name: istio-private-ingress
+    port: 443
+  targetGroupARN: <arn-to-targetGroup>

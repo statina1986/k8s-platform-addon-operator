@@ -1,0 +1,39 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xprivateingresses.platform-networks.qvantel.com
+spec:
+  group: platform-networks.qvantel.com
+  names:
+    kind: XPrivateIngress
+    plural: xprivateingresses
+  claimNames:
+    kind: PrivateIngress
+    plural: privateingresses
+  connectionSecretKeys:
+  - hostname
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              parameters:
+                type: object
+                properties:
+                  name:
+                    type: string
+          status:
+            properties:
+              privateTargetGroup80Arn:
+                description: Address of this MySQL server.
+                type: string
+              privateTargetGroup443Arn:
+                description: Address of this MySQL server.
+                type: string
+            type: object  

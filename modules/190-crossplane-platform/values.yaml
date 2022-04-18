@@ -1,3 +1,10 @@
 # certPlatformNamespace: cert-manager
 crossplanePlatform:
   crossplane:
+  jetAwsProvider:
+    enabled: "true"
+    providers:
+      - name: millicom-network-uat
+        secret: colombia-network-aws-account-creds
+      - name: millicom-non-prod-uat
+        secret: colombia-non-prod-aws-account-creds

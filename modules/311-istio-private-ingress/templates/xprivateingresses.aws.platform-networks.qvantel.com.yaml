@@ -1,0 +1,221 @@
+{{- template "istioPrivateIngress.awsEnabled" . -}}
+{{- if .awsEnabled -}}
+
+
+apiVersion: apiextensions.crossplane.io/v1  
+kind: Composition
+metadata:
+  name: xprivateingresses.aws.platform-networks.qvantel.com
+  labels:
+    provider: aws
+spec:
+  writeConnectionSecretsToNamespace: platform
+  compositeTypeRef:
+    apiVersion: platform-networks.qvantel.com/v1alpha1
+    kind: XPrivateIngress
+  resources:
+    - name: public_lb_logs_bucket
+      base:
+        apiVersion: s3.aws.jet.crossplane.io/v1alpha2
+        kind: Bucket
+        spec:
+          forProvider:
+            region: {{ .Values.istioPrivateIngress.aws.public.region }}
+            acl: private
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.public.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-lb-logs-bucket"
+    - name: public_lb
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LB
+        spec:
+          forProvider:
+            accessLogs:
+              - bucketSelector:
+                  matchControllerRef: true
+                enabled: true        
+            loadBalancerType: network
+            region: {{ .Values.istioPrivateIngress.aws.public.region }}
+            subnets: {{ .Values.istioPrivateIngress.aws.public.subnets}}
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.public.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-lb"
+    - name: public_lb_target_group
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LBTargetGroup
+        spec:
+          forProvider:
+            targetType: ip
+            region: {{ .Values.istioPrivateIngress.aws.public.region }}
+            protocol: TCP
+            port: 443
+            vpcId: {{ .Values.istioPrivateIngress.aws.public.vpcId }}
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.public.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-tg"
+    - name: public_lb_listener
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LBListener
+        spec:
+          forProvider:
+            port: 443
+            protocol: TCP
+            region: {{ .Values.istioPrivateIngress.aws.public.region }}
+            defaultAction:
+              - type: forward
+                targetGroupArnSelector:
+                  matchControllerRef: true
+            loadBalancerArnSelector:
+              matchControllerRef: true
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.public.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-listener"
+    - name: public_lb_tga
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LBTargetGroupAttachment
+        spec:
+          forProvider:
+            port: 443
+            targetId: "10.35.17.46"
+            region: {{ .Values.istioPrivateIngress.aws.public.region }}
+            availabilityZone: all
+            targetGroupArnSelector:
+              matchControllerRef: true
+            loadBalancerArnSelector:
+              matchControllerRef: true
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.public.provider }}
+    - name: private_lb_logs_bucket
+      base:
+        apiVersion: s3.aws.jet.crossplane.io/v1alpha2
+        kind: Bucket
+        spec:
+          forProvider:
+            region: {{ .Values.istioPrivateIngress.aws.private.region }}
+            acl: private
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.private.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-lb-logs-bucket"
+    - name: private_lb
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LB
+        spec:
+          forProvider:
+            accessLogs:
+              - bucketSelector:
+                  matchControllerRef: true
+                enabled: false        
+            loadBalancerType: network
+            internal: true
+            region: {{ .Values.istioPrivateIngress.aws.private.region }}
+            subnets: {{ .Values.istioPrivateIngress.aws.private.subnets }}
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.private.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-lb"
+    - name: private_lb_target_group
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LBTargetGroup
+        spec:
+          forProvider:
+            targetType: ip
+            region: {{ .Values.istioPrivateIngress.aws.private.region }}
+            protocol: TCP
+            port: 443
+            vpcId: {{ .Values.istioPrivateIngress.aws.private.vpcId }}
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.private.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-tg"
+      connectionDetails:
+        - name: hostname
+          fromConnectionSecretKey: hostname
+    - name: private_lb_listener
+      base:
+        apiVersion: elbv2.aws.jet.crossplane.io/v1alpha2
+        kind: LBListener
+        spec:
+          forProvider:
+            port: 443
+            protocol: TCP
+            region: {{ .Values.istioPrivateIngress.aws.private.region }}
+            defaultAction:
+              - type: forward
+                targetGroupArnSelector:
+                  matchControllerRef: true
+            loadBalancerArnSelector:
+              matchControllerRef: true
+          providerConfigRef:
+            name: {{ .Values.istioPrivateIngress.aws.private.provider }}
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-listener"
+    - name: private_lb_target_group_binding_443
+      base:
+        apiVersion: elbv2.k8s.aws/v1beta1
+        kind: TargetGroupBinding
+        metadata:
+          name: istio-private-ingress-443
+        spec:
+          serviceRef:
+            name: istio-private-ingress
+            port: 443
+          targetGroupARN: <arn-to-targetGroup>
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.serviceRef.targetGroupARN"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-listener"
+{{- end }}

@@ -1,4 +1,3 @@
-# istioIngressNamespace: istio-ingress
 istioIngress:
   gateway:
     service:

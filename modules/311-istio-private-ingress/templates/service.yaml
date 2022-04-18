@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    istio: ingress
+  name: istio-private-ingress
+  namespace: platform
+spec:
+  clusterIP: None
+  ports:
+  - name: status-port
+    nodePort: 32197
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+  - name: http2
+    nodePort: 30197
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    nodePort: 31245
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: istio-private-ingress
+    istio: ingress
