@@ -1,10 +1,37 @@
 istioIngress:
   gateway:
+    name: 
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+  virtualServices:
+    annotations:
+      # external-dns.alpha.kubernetes.io/target: my-global-load-balancer
+    dnsBase: qvantel-finland.qvantel.systems
+    instances:
+      - name: vault-ui
+        http:
+        - route:
+          - destination:
+              host: vault-platform-ui.platform.svc.cluster.local
+              port:
+                number: 8200
+      - name: consul-ui
+        http:
+        - route:
+          - destination:
+              host: consul-platform-consul-ui.platform.svc.cluster.local
+              port:
+                number: 80
+      - name: kafka-ui
+        http:
+        - route:
+          - destination:
+              host: kafka-ui.platform.svc.cluster.local
+              port:
+                number: 8080
 
 
