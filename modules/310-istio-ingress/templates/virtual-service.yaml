@@ -1,22 +1,23 @@
-{{- range .Values.istioIngress.virtualServices.instances }}
+{{- range keys .Values.istioIngress.virtualServices.instances  }}
+{{- $current := get $.Values.istioIngress.virtualServices.instances . }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   {{- $empty := dict}}
   {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.annotations | deepCopy)}}
-  {{- $serviceAnnotations := (default $empty .annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
   {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
   {{- if $joinedAnnotations }}
   annotations:
     {{- toYaml $joinedAnnotations | nindent 4 }}
   {{- end }}
-  name: {{ .name }}
+  name: {{ . }}
   namespace: platform
 spec:
   gateways:
   - ingress-gateway
   hosts: 
-   - {{ .name }}-{{ $.Values.istioIngress.virtualServices.dnsBase }}
-  http: {{ print "\n" (.http | toYaml | indent 2) }}
+   - {{ . }}-{{ $.Values.istioIngress.virtualServices.dnsBase }}
+  http: {{ print "\n" ($current.http | toYaml | indent 2) }}  
 {{- end }}  

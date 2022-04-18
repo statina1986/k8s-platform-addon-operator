@@ -1,0 +1,18 @@
+istioIngress:
+  virtualServices:
+    instances:
+      vault-ui:
+      # - name: consul-ui
+      #   http:
+      #   - route:
+      #     - destination:
+      #         host: consul-platform-consul-ui.platform.svc.cluster.local
+      #         port:
+      #           number: 80
+      zzzkafka-ui:
+        http:
+        - route:
+          - destination:
+              host: kafka-ui.platform.svc.cluster.local
+              port:
+                number: 8080
