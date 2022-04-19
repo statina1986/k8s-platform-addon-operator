@@ -1,8 +1,7 @@
 istioIngress:
   publicIngressEnabled: true
   publicIngress:
-    labels:
-      gateway: public-ingress
+    name: public-ingress
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -11,18 +10,16 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
   privateIngressEnabled: true
   privateIngress:
+    name: private-ingress
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-    labels:
-      gateway: private-ingress
   integrationsIngressEnabled: true
   integrationsIngress:
-    labels:
-      gateway: integrations-ingress
+    name: integrations-ingress
   virtualServices:
     public:
       annotations:
