@@ -1,11 +1,12 @@
-{{- range keys .Values.istioIngress.virtualServices.instances  }}
-{{- $current := get $.Values.istioIngress.virtualServices.instances . }}
+{{- if .Values.istioIngress.virtualServices.public.instances }}
+{{- range keys .Values.istioIngress.virtualServices.public.instances  }}
+{{- $current := get $.Values.istioIngress.virtualServices.public.instances . }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   {{- $empty := dict}}
-  {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.annotations | deepCopy)}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.public.annotations | deepCopy)}}
   {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
   {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
   {{- if $joinedAnnotations }}
@@ -16,8 +17,61 @@ metadata:
   namespace: platform
 spec:
   gateways:
-  - ingress-gateway
+  - public-ingress
   hosts: 
-   - {{ . }}-{{ $.Values.istioIngress.virtualServices.dnsBase }}
+  - {{ . }}-{{ $.Values.istioIngress.virtualServices.public.dnsBase }}
+  http: {{ print "\n" ($current.http | toYaml | indent 2) }}  
+{{- end }}
+{{- end }}
+
+{{- if .Values.istioIngress.virtualServices.private.instances }}
+{{- range keys .Values.istioIngress.virtualServices.private.instances  }}
+{{- $current := get $.Values.istioIngress.virtualServices.private.instances . }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  {{- $empty := dict}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.private.annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
+  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
+  {{- if $joinedAnnotations }}
+  annotations:
+    {{- toYaml $joinedAnnotations | nindent 4 }}
+  {{- end }}
+  name: {{ . }}
+  namespace: platform
+spec:
+  gateways:
+  - private-ingress
+  hosts: 
+  - {{ . }}-{{ $.Values.istioIngress.virtualServices.private.dnsBase }}
   http: {{ print "\n" ($current.http | toYaml | indent 2) }}  
 {{- end }}  
+{{- end }}
+
+{{- if .Values.istioIngress.virtualServices.integrations.instances }}
+{{- range keys .Values.istioIngress.virtualServices.integrations.instances  }}
+{{- $current := get $.Values.istioIngress.virtualServices.integrations.instances . }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  {{- $empty := dict}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.integrations.annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
+  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
+  {{- if $joinedAnnotations }}
+  annotations:
+    {{- toYaml $joinedAnnotations | nindent 4 }}
+  {{- end }}
+  name: {{ . }}
+  namespace: platform
+spec:
+  gateways:
+  - integrations-ingress
+  hosts: 
+  - {{ . }}-{{ $.Values.istioIngress.virtualServices.integrations.dnsBase }}
+  http: {{ print "\n" ($current.http | toYaml | indent 2) }}  
+{{- end }}  
+{{- end }}

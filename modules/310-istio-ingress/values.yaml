@@ -1,37 +1,61 @@
 istioIngress:
-  gateway:
-    name:
+  publicIngress:
+    enabled: true
+    labels:
+      gateway: public-ingress
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+  privateIngress:
+    enabled: true
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: "external"
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+    labels:
+      gateway: private-ingress
+  integrationsIngress:
+    enabled: false
+    labels:
+      gateway: integrations-ingress
   virtualServices:
-    annotations:
-      # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
-    dnsBase: qvantel-finland.qvantel.systems
-    instances:
-      vault-ui:
-        http:
-          - route:
-              - destination:
-                  host: vault-platform-ui.platform.svc.cluster.local
-                  port:
-                    number: 8200
-      consul-ui:
-        disabled:
-        http:
-          - route:
-              - destination:
-                  host: consul-platform-consul-ui.platform.svc.cluster.local
-                  port:
-                    number: 80
-      kafka-ui:
-        disabled:
-        http:
-          - route:
-              - destination:
-                  host: kafka-ui.platform.svc.cluster.local
-                  port:
-                    number: 8080
+    public:
+      annotations:
+        # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
+      dnsBase: pbl-qvantel-finland.qvantel.systems
+      instances:        
+    private:
+      dnsBase: prv-qvantel-finland.qvantel.systems
+      instances: 
+        vault-ui:
+          gateway:
+          http:
+            - route:
+                - destination:
+                    host: vault-platform-ui.platform.svc.cluster.local
+                    port:
+                      number: 8200
+        consul-ui:
+          disabled:
+          http:
+            - route:
+                - destination:
+                    host: consul-platform-consul-ui.platform.svc.cluster.local
+                    port:
+                      number: 80
+        kafka-ui:
+          disabled:
+          http:
+            - route:
+                - destination:
+                    host: kafka-ui.platform.svc.cluster.local
+                    port:
+                      number: 8080
+    integrations:
+      dnsBase: int-qvantel-finland.qvantel.systems
+      instances: 
