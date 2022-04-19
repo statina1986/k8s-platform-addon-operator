@@ -40,7 +40,7 @@ istioIngress:
           http:
             - route:
                 - destination:
-                    host: vault-platform-ui.platform.svc.cluster.local
+                    host: vault-platform.platform.svc.cluster.local
                     port:
                       number: 8200
         consul-ui:
@@ -59,6 +59,14 @@ istioIngress:
                     host: kafka-ui.platform.svc.cluster.local
                     port:
                       number: 8080
+        kibana:
+          disabled:
+          http:
+            - route:
+                - destination:
+                    host: kibana-kb-http.platform.svc.cluster.local
+                    port:
+                      number: 5601
     integrations:
       dnsBase: int-qvantel-finland.qvantel.systems
       instances: 
