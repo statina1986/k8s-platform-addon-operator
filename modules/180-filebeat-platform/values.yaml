@@ -10,7 +10,7 @@ filebeatPlatform:
       #     name: config-secret
       extraEnvs:
       - name: LOGSTASH_HOST
-        value: logstash-logstash.platform.svc.cluster.local
+        value: logstash-platform-logstash.platform.svc.cluster.local
       - name: LOGSTASH_PORT
         value: "5044"
       hostNetworking: true
@@ -35,7 +35,7 @@ filebeatPlatform:
           output.logstash:
             loadbalance: false
             bulk_max_size: 1024
-            hosts: ['${LOGSTASH_HOST:logstash-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']
+            hosts: ['${LOGSTASH_HOST:logstash-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']
       resources:
         requests:
           cpu: "100m"
