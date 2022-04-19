@@ -50,6 +50,18 @@ modulesConfig:
   istioPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  elasticsearchPlatformEnabled: "false"
+  elasticsearchPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  logstashPlatformEnabled: "false"
+  logstashPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  filebeatPlatformEnabled: "false"
+  filebeatPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
     configurationRequired: "check module documentation for configuration options"

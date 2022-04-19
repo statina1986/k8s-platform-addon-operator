@@ -40,6 +40,15 @@ data:
   istioPlatformEnabled: "{{ .Values.modulesConfig.istioPlatformEnabled }}"
   istioPlatform: {{ print "|\n" (.Values.modulesConfig.istioPlatform | toYaml | indent 4) }}
 
+  elasticsearchPlatformEnabled: "{{ .Values.modulesConfig.elasticsearchPlatformEnabled }}"
+  elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}
+
+  logstashPlatformEnabled: "{{ .Values.modulesConfig.logstashPlatformEnabled }}"
+  logstashPlatform: {{ print "|\n" (.Values.modulesConfig.logstashPlatform | toYaml | indent 4) }}
+
+  filebeatPlatformEnabled: "{{ .Values.modulesConfig.filebeatPlatformEnabled }}"
+  filebeatPlatform: {{ print "|\n" (.Values.modulesConfig.filebeatPlatform | toYaml | indent 4) }}
+
   kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
 

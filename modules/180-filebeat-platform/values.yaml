@@ -1,0 +1,78 @@
+filebeatPlatform:
+  filebeat: 
+    daemonset:
+      # additionals labels
+      labels:
+        k8s-app: filebeat
+      # Include the daemonset
+      enabled: true
+      # - configMapRef:
+      #     name: config-secret
+      extraEnvs:
+      - name: LOGSTASH_HOST
+        value: logstash-logstash.platform.svc.cluster.local
+      - name: LOGSTASH_PORT
+        value: "5044"
+      hostNetworking: true
+      # Allows you to add any config files in /usr/share/filebeat
+      # such as filebeat.yml for daemonset
+      filebeatConfig:
+        filebeat.yml: |
+          filebeat.inputs:
+          - type: container
+            paths:
+              - /var/log/containers/*.log
+            processors:
+              - add_kubernetes_metadata:
+                  host: ${NODE_NAME}
+                  matchers:
+                  - logs_path:
+                      logs_path: "/var/log/containers/"
+
+          processors:
+            - add_cloud_metadata:
+            - add_host_metadata:
+          output.logstash:
+            loadbalance: false
+            bulk_max_size: 1024
+            hosts: ['${LOGSTASH_HOST:logstash-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "200Mi"
+        limits:
+          cpu: "1000m"
+          memory: "1200Mi"
+      tolerations: []
+    image: "artifactory.qvantel.net/helm-k8s-filebeat"
+    imageTag: "7.16.2"
+    imagePullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+    livenessProbe:
+      exec:
+        command:
+          - sh
+          - -c
+          - |
+            #!/usr/bin/env bash -e
+            curl --fail 127.0.0.1:5066
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      exec:
+        command:
+          - sh
+          - -c
+          - |
+            #!/usr/bin/env bash -e
+            filebeat test output
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+    # Whether this chart should self-manage its service account, role, and associated role binding.
+    managedServiceAccount: true
+    # Custom service account override that the pod will use
+    serviceAccount: "filebeat"
