@@ -121,7 +121,7 @@ logstashPlatform:
           storage: 10Gi
     rbac:
       create: true
-      serviceAccountName: logstash-logstash
+      serviceAccountName: logstash-platform-logstash
     persistence:
       enabled: true
     extraPorts:
