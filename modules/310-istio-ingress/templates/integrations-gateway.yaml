@@ -4,8 +4,7 @@ metadata:
   name: integrations-ingress
 spec:
   selector:
-    gateway: integrations-ingress
-    istio: ingress
+    istio: integrations-ingress
   servers:
     - hosts:
       - '*'

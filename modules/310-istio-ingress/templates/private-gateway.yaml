@@ -4,8 +4,7 @@ metadata:
   name: private-ingress
 spec:
   selector:
-    gateway: private-ingress
-    istio: ingress
+    istio: private-ingress
   servers:
     - hosts:
       - '*'
