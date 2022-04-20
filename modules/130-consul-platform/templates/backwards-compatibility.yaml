@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    'consul.hashicorp.com/service-port': 'http'
   labels:
     app: consul
     chart: consul-helm
