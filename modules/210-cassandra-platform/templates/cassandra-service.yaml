@@ -12,22 +12,6 @@ spec:
     port: 9042
     protocol: TCP
     targetPort: 9042
-  - name: tls-native
-    port: 9142
-    protocol: TCP
-    targetPort: 9142
-  - name: mgmt-api
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  - name: prometheus
-    port: 9103
-    protocol: TCP
-    targetPort: 9103
-  - name: thrift
-    port: 9160
-    protocol: TCP
-    targetPort: 9160
   selector:
     cassandra.datastax.com/cluster: cassandra
     cassandra.datastax.com/datacenter: dc1

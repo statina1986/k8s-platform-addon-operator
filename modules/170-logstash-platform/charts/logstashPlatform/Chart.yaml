@@ -1,4 +1,4 @@
-apiVersion: V2
+apiVersion: v2
 name: logstashPlatform
 version: 0.0.1
 dependencies:
