@@ -21,8 +21,8 @@ kubernetes:
   queue: AclPolicyQueue
 """)
     case EventHook(eventName, context):
-        name = context[0]['object']['metadata']['name']
-        policy_name = context[0].get('object',{}).get('spec',{}).get('policy-name')
+        name = context['object']['metadata']['name']
+        policy_name = context.get('object',{}).get('spec',{}).get('policy-name')
 
         secret = v1.read_namespaced_secret("vault-keys", "platform").data
         token = base64.b64decode(secret["root_token"]).decode('utf-8')
@@ -32,7 +32,7 @@ kubernetes:
         if eventName == "Deleted":
             vault_client.sys.delete_policy(name=(policy_name or name))
         else:
-            policy_hcl = context[0]['object']['spec']['policy-hcl']
+            policy_hcl = context['object']['spec']['policy-hcl']
             vault_client.sys.create_or_update_policy(
                 name=(policy_name or name), policy=policy_hcl)
     case _:

@@ -51,7 +51,11 @@ function common::run_hook() {
   if [[ $1 == "--config" ]] ; then
     hook::config
   else
-    hook::trigger
+    for row in $(jq -r '.[] | @base64' $BINDING_CONTEXT_PATH); do 
+      data=$(echo ${row} | base64 -d)
+      echo "[$data]" > $BINDING_CONTEXT_PATH    
+      hook::trigger
+    done
   fi
 }
 

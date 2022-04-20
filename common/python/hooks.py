@@ -30,12 +30,13 @@ def handle_hook():
         bcp = os.environ['BINDING_CONTEXT_PATH']
         file = open(bcp)
         bcp_json = json.load(file)
-        binding = bcp_json[0]['binding']
-        type = bcp_json[0]['type']
-        if binding == "onStartup":
-            return StartupHook()
-        elif type == "Synchronization":
-            return SynchronizationHook(bcp_json)
-        elif type == "Event":
-            event_type = bcp_json[0]['watchEvent']
-            return EventHook(event_type, bcp_json)
+        for val in bcp_json:
+            binding = val['binding']
+            type = val['type']
+            if binding == "onStartup":
+                return StartupHook()
+            elif type == "Synchronization":
+                return SynchronizationHook(bcp_json)
+            elif type == "Event":
+                event_type = val['watchEvent']
+                return EventHook(event_type, val)
