@@ -5,3 +5,4 @@ consulPlatform:
       toK8S: false
       k8sPrefix: null
       nodePortSyncType: InternalOnly
+      addK8SNamespaceSuffix: false
