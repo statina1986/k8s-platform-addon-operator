@@ -5,7 +5,7 @@ metadata:
     cassandra.datastax.com/cluster: cassandra
     cassandra.datastax.com/datacenter: dc1
     annotations:
-      'consul.hashicorp.com/service-port': 'native'
+      consul.hashicorp.com/service-ports: native
   name: cassandra
   namespace: platform
 spec:
