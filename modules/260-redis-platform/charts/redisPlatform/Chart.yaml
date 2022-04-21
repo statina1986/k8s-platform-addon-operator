@@ -3,5 +3,5 @@ name: redisPlatform
 version: 0.0.1
 dependencies:
   - name: redis-operator
-    version: 3.1.4
-    repository: https://spotahome.github.io/redis-operator
+    version: 0.10.2
+    repository: https://ot-container-kit.github.io/helm-charts/

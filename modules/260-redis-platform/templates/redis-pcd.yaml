@@ -1,0 +1,35 @@
+## Taken from: https://github.com/OT-CONTAINER-KIT/redis-operator ###
+apiVersion: redis.redis.opstreelabs.in/v1beta1
+kind: RedisCluster
+metadata:
+  name: redis-pcd
+  namespace: platform
+spec:
+  clusterSize: 3
+  kubernetesConfig:
+    image: quay.io/opstree/redis:v6.2.5
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 101m
+        memory: 128Mi
+      limits:
+        cpu: 101m
+        memory: 128Mi
+#    redisSecret:
+#      name: redis-secret
+#      key: password
+  # disablePersistence: false
+  # storage:
+  #   keepAfterDeletion: true
+  #   persistentVolumeClaim:
+  #     metadata:
+  #       name: redis-pcd
+  #     spec:
+  #       accessModes:
+  #       - ReadWriteOnce
+  #       resources:
+  #         requests:
+  #           storage: 10Gi
+  #       storageClassName: gp2
+  #       volumeMode: Filesystem
