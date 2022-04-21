@@ -4,6 +4,8 @@ metadata:
   labels:
     cassandra.datastax.com/cluster: cassandra
     cassandra.datastax.com/datacenter: dc1
+    annotations:
+      'consul.hashicorp.com/service-port': 'native'
   name: cassandra
   namespace: platform
 spec:
