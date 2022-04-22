@@ -45,7 +45,7 @@ cassandraPlatform:
       # labels should be updated to reflect the Availability Zones where your EKS
       # cluster is deployed.
       datacenters:
-      - name: dc1
+      - name: datacenter1
         size: 3
         num_tokens: 8
         racks:
