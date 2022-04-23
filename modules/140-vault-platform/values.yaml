@@ -6,6 +6,8 @@ vaultPlatform:
     injector:
       enabled: false
     server:        
+      image:
+        tag: "1.9.3"
       readinessProbe:
         enabled: true
         path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"

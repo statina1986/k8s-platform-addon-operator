@@ -1,5 +1,15 @@
 consulPlatform:
   consul:
+    server:
+      resources:
+        requests:
+          memory: "100Mi"
+          cpu: "100m"
+        limits:
+          memory: "1Gi"
+          cpu: "100m"
+    client:
+      enabled: false
     syncCatalog:
       enabled: true
       toK8S: false
