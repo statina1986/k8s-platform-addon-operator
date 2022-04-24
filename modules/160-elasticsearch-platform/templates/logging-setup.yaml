@@ -17,7 +17,7 @@ data:
     /bin/sh /tmp/elastic.sh
 
   kibanausers.sh: |
-    curl -u elastic:PW_REPLACE -XPOST http://elasticsearch-elastic-es-http.platform.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
         "cluster":[],
         "indices":[{"names":["*"],"privileges":["read","read_cross_cluster"],
@@ -25,7 +25,7 @@ data:
         "applications":[{"application":"kibana-.kibana","privileges":["feature_discover.all","feature_visualize.all","feature_dashboard.all"],"resources":["*"]}],
         "run_as":[],"metadata":{},"transient_metadata":{"enabled":true}
     }'
-    curl -u elastic:PW_REPLACE -XPOST http://elasticsearch-elastic-es-http.platform.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "password" : "kibana",
       "roles" : [ "CP_ROLE" ]
@@ -70,7 +70,7 @@ data:
 
   elastic.sh: |
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_template/application_template <<EOF
+        http://logsearch-es-http.platform.svc:9200/_template/application_template <<EOF
     {
       "index_patterns": ["application*"],
       "order": -1,
@@ -82,7 +82,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_template/platform_template <<EOF
+        http://logsearch-es-http.platform.svc:9200/_template/platform_template <<EOF
     {
       "index_patterns": ["platform*"],
       "order": -1,
@@ -94,7 +94,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_template/audit_template <<EOF
+        http://logsearch-es-http.platform.svc:9200/_template/audit_template <<EOF
     {
       "index_patterns": ["audit*"],
       "order": -1,
@@ -106,7 +106,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_template/ingress_template <<EOF
+        http://logsearch-es-http.platform.svc:9200/_template/ingress_template <<EOF
     {
       "index_patterns": ["ingress*"],
       "order": -1,
@@ -118,7 +118,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_template/undecided_template <<EOF
+        http://logsearch-es-http.platform.svc:9200/_template/undecided_template <<EOF
     {
       "index_patterns": ["undecided*"],
       "order": -1,
@@ -129,7 +129,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_ilm/policy/application_policy <<EOF
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/application_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -151,7 +151,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_ilm/policy/platform_policy <<EOF
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/platform_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -173,7 +173,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_ilm/policy/ingress_policy <<EOF
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/ingress_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -195,7 +195,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_ilm/policy/audit_policy <<EOF
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/audit_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -217,7 +217,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://elasticsearch-elastic-es-http.platform.svc:9200/_ilm/policy/undecided_policy <<EOF
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/undecided_policy <<EOF
     {
       "policy": {
         "phases": {

@@ -20,4 +20,3 @@ spec:
   ipFamilies:
     - IPv4
   ipFamilyPolicy: SingleStack
-  internalTrafficPolicy: Cluster
