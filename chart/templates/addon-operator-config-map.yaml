@@ -16,9 +16,6 @@ data:
   auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
 
-  dbManagementEnabled: "{{ .Values.modulesConfig.dbManagementEnabled }}"
-  dbManagement: {{ print "|\n" (.Values.modulesConfig.dbManagement | toYaml | indent 4) }}
-
   cassandraPlatformEnabled: "{{ .Values.modulesConfig.cassandraPlatformEnabled }}"
   cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.cassandraPlatform | toYaml | indent 4) }}
 
@@ -31,32 +28,38 @@ data:
   crossplanePlatformEnabled: "{{ .Values.modulesConfig.crossplanePlatformEnabled }}"
   crossplanePlatform: {{ print "|\n" (.Values.modulesConfig.crossplanePlatform | toYaml | indent 4) }}
 
+  dbManagementEnabled: "{{ .Values.modulesConfig.dbManagementEnabled }}"
+  dbManagement: {{ print "|\n" (.Values.modulesConfig.dbManagement | toYaml | indent 4) }}
+
+  elasticsearchPlatformEnabled: "{{ .Values.modulesConfig.elasticsearchPlatformEnabled }}"
+  elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}
+
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
+
+  filebeatPlatformEnabled: "{{ .Values.modulesConfig.filebeatPlatformEnabled }}"
+  filebeatPlatform: {{ print "|\n" (.Values.modulesConfig.filebeatPlatform | toYaml | indent 4) }}
 
   istioIngressEnabled: "{{ .Values.modulesConfig.istioIngressEnabled }}"
   istioIngress: {{ print "|\n" (.Values.modulesConfig.istioIngress | toYaml | indent 4) }}
 
   istioPlatformEnabled: "{{ .Values.modulesConfig.istioPlatformEnabled }}"
   istioPlatform: {{ print "|\n" (.Values.modulesConfig.istioPlatform | toYaml | indent 4) }}
-
-  elasticsearchPlatformEnabled: "{{ .Values.modulesConfig.elasticsearchPlatformEnabled }}"
-  elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}
-
-  logstashPlatformEnabled: "{{ .Values.modulesConfig.logstashPlatformEnabled }}"
-  logstashPlatform: {{ print "|\n" (.Values.modulesConfig.logstashPlatform | toYaml | indent 4) }}
-
-  filebeatPlatformEnabled: "{{ .Values.modulesConfig.filebeatPlatformEnabled }}"
-  filebeatPlatform: {{ print "|\n" (.Values.modulesConfig.filebeatPlatform | toYaml | indent 4) }}
-
+  
   kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
 
   keycloakPlatformEnabled: "{{ .Values.modulesConfig.keycloakPlatformEnabled }}"
   keycloakPlatform: {{ print "|\n" (.Values.modulesConfig.keycloakPlatform | toYaml | indent 4) }}
 
+  logstashPlatformEnabled: "{{ .Values.modulesConfig.logstashPlatformEnabled }}"
+  logstashPlatform: {{ print "|\n" (.Values.modulesConfig.logstashPlatform | toYaml | indent 4) }}
+
   mariadbPlatformEnabled: "{{ .Values.modulesConfig.mariadbPlatformEnabled }}"
   mariadbPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbPlatform | toYaml | indent 4) }}
+
+  monitoringPlatformEnabled: "{{ .Values.modulesConfig.monitoringPlatformEnabled }}"
+  monitoringPlatform: {{ print "|\n" (.Values.modulesConfig.monitoringPlatform | toYaml | indent 4) }}
 
   postgresPlatformEnabled: "{{ .Values.modulesConfig.postgresPlatformEnabled }}"
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}

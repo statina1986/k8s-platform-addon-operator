@@ -1,17 +1,17 @@
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: vault-selfsigned-ca
-  namespace: platform
-spec:
-  isCA: true
-  commonName: vault.platform.qvantel.com
-  secretName: vault-root-ca
-  privateKey:
-    algorithm: ECDSA
-    size: 256
-  issuerRef:
-    name: platform-selfsigned-issuer
-    kind: ClusterIssuer
-    group: cert-manager.io
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: vault-selfsigned-ca
+#   namespace: platform
+# spec:
+#   isCA: true
+#   commonName: vault.platform.qvantel.com
+#   secretName: vault-root-ca
+#   privateKey:
+#     algorithm: ECDSA
+#     size: 256
+#   issuerRef:
+#     name: platform-selfsigned-issuer
+#     kind: ClusterIssuer
+#     group: cert-manager.io

@@ -5,3 +5,9 @@ dependencies:
   - name: eck-operator
     version: 1.9.1
     repository: https://helm.elastic.co
+  - name: logstash
+    version: 7.16.2
+    repository: https://helm.elastic.co
+  - name: filebeat
+    version: 7.16.2
+    repository: https://helm.elastic.co

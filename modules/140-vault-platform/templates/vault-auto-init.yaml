@@ -40,7 +40,7 @@ data:
             if [ "${INIT_STATUS}" = "200" ]; then
                 RECOVERY_KEY="$(jq -r '.keys[0] // empty' ${CURL_RESULT})"
                 ROOT_TOKEN="$(jq -r '.root_token // empty' ${CURL_RESULT})"
-                RECOVERY_OUTPUT="$(echo ${CURL_RESULT} | base64 )"
+                RECOVERY_OUTPUT="$(cat ${CURL_RESULT} | base64 )"
 
                 kubectl create secret generic "$KUBE_SECRETS_KEY" -n "$KUBE_NS" \
                     --from-literal=recovery_output="$RECOVERY_OUTPUT"   \

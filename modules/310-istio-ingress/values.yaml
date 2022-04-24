@@ -31,20 +31,66 @@ istioIngress:
       annotations:
         # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
       dnsBase: pbl-qvantel-finland.qvantel.systems
-      instances:        
+      instances:
+        auth:
+          http:
+          - match:
+            - uri:
+                prefix: /auth/realms/qvantel/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: qvaa-proxy-80.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - match:
+            - uri:
+                prefix: /auth/realms/consumers/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: qvaa-proxy-80.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - match:
+            - uri:
+                prefix: /auth/resources/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: qvaa-proxy-80.qvantel.svc.cluster.local
+                port:
+                  number: 80
     private:
       dnsBase: prv-qvantel-finland.qvantel.systems
       instances: 
+        address-manager:
+          http:
+            - route:
+                - destination:
+                    host: addresses.qvantel.svc.cluster.local
+                    port:
+                      number: 8000
+        bssapi:
+          http:
+          - retries:
+              attempts: 0
+            route:
+            - destination:
+                host: bssapi-aggregator.qvantel.svc.cluster.local
+                port:
+                  number: 8080
         vault-ui:
-          gateway:
           http:
             - route:
                 - destination:
                     host: vault-platform.platform.svc.cluster.local
                     port:
                       number: 8200
-        consul-ui:
-          disabled:
+        consul-ui:          
           http:
             - route:
                 - destination:
@@ -52,7 +98,6 @@ istioIngress:
                     port:
                       number: 80
         kafka-ui:
-          disabled:
           http:
             - route:
                 - destination:
@@ -60,13 +105,38 @@ istioIngress:
                     port:
                       number: 8080
         kibana:
-          disabled:
           http:
             - route:
                 - destination:
                     host: kibana-kb-http.platform.svc.cluster.local
                     port:
                       number: 5601
+        grafana:
+          http:
+            - route:
+                - destination:
+                    host: monitoring-platform-grafana.platform.svc.cluster.local
+                    port:
+                      number: 3000
+        sct:
+          http:
+          - match:
+            - uri:
+                prefix: /images/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - retries:
+              attempts: 0
+            route:
+            - destination:
+                host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
+                port:
+                  number: 9000
     integrations:
       dnsBase: int-qvantel-finland.qvantel.systems
       instances: 

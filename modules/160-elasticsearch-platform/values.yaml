@@ -1,5 +1,6 @@
 elasticsearchPlatform:
   eck-operator:
+    installCRDs: false
     elasticsearch:
       image:
         # repository is the container image prefixed by the registry name.
@@ -8,3 +9,220 @@ elasticsearchPlatform:
         pullPolicy: IfNotPresent
         # tag is the container image tag. If not defined, defaults to chart appVersion.
         tag: 1.9.1
+  smartsearch:
+    enabled: true
+  logsearch:
+    enabled: true
+  logstash: 
+    replicas: 1
+    logstashPipeline:
+      logstash.conf: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+        filter {
+        if ([kubernetes][namespace] == "qvantel") {
+          json {
+            source => "message"
+          }
+        }
+        }
+        output {
+            if ([message] =~"audit"
+                or[message] =~"AUDIT") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "auditalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "audit_policy"
+                }
+            }
+            if ([kubernetes][namespace] == "platform"
+                or[kubernetes][namespace] == "elastic-system"
+                or[kubernetes][namespace] == "kube-system") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "platformalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "platform_policy"
+                }
+            }
+            else if ([kubernetes][namespace] == "qvantel") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "applicationalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "application_policy"
+                }
+            }
+            else if ([kubernetes][namespace] == "pomerium"
+                or[kubernetes][namespace] == "istio-system") {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "ingressalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "ingress_policy"
+                }
+            }
+            if ("rbs" in [tags]) {
+                    elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "applicationalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "application_policy"
+                }
+            }
+            else {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "undecidedalias"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "undecided_policy"
+                }
+            }
+        }
+    extraEnvs:
+    #  - name: "ELASTICSEARCH_USERNAME"
+    #    valueFrom:
+    #      secretKeyRef:
+    #        name: elasticsearch-elastic-es-elastic-user
+    #        key: elastic
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: logsearch-es-elastic-user
+            key: elastic
+      - name: ELASTICSEARCH_HOST
+        value: logsearch-es-http.platform.svc.cluster.local
+      - name: ELASTICSEARCH_PORT
+        value: "9200"
+    image: "artifactory.qvantel.net/helm-k8s-logstash"
+    imageTag: "7.16.2"
+    imagePullPolicy: "IfNotPresent"
+    logstashJavaOpts: "-Xmx1g -Xms1g"
+    resources:
+      limits:
+        cpu: "1"
+        memory: 1Gi
+      requests:
+        cpu: "0.5"
+        memory: 0.5Gi
+    httpPort: 9600
+    volumeClaimTemplate:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+    rbac:
+      create: true
+      serviceAccountName: elasticsearch-platform-logstash
+    persistence:
+      enabled: true
+    extraPorts:
+      - name: beats
+        containerPort: 5044
+        protocol: TCP
+    service:
+      type: ClusterIP
+      ports:
+        - name: beats
+          port: 5044
+          protocol: TCP
+          targetPort: 5044
+  filebeat: 
+    daemonset:
+      # additionals labels
+      labels:
+        k8s-app: filebeat
+      # Include the daemonset
+      enabled: true
+      # - configMapRef:
+      #     name: config-secret
+      extraEnvs:
+      - name: LOGSTASH_HOST
+        value: elasticsearch-platform-logstash.platform.svc.cluster.local
+      - name: LOGSTASH_PORT
+        value: "5044"
+      hostNetworking: true
+      # Allows you to add any config files in /usr/share/filebeat
+      # such as filebeat.yml for daemonset
+      filebeatConfig:
+        filebeat.yml: |
+          filebeat.inputs:
+          - type: container
+            paths:
+              - /var/log/containers/*.log
+            processors:
+              - add_kubernetes_metadata:
+                  host: ${NODE_NAME}
+                  matchers:
+                  - logs_path:
+                      logs_path: "/var/log/containers/"
+
+          processors:
+            - add_cloud_metadata:
+            - add_host_metadata:
+          output.logstash:
+            loadbalance: false
+            bulk_max_size: 1024
+            hosts: ['${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "200Mi"
+        limits:
+          cpu: "1000m"
+          memory: "1200Mi"
+      tolerations: []
+    image: "artifactory.qvantel.net/helm-k8s-filebeat"
+    imageTag: "7.16.2"
+    imagePullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+    livenessProbe:
+      exec:
+        command:
+          - sh
+          - -c
+          - |
+            #!/usr/bin/env bash -e
+            curl --fail 127.0.0.1:5066
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      exec:
+        command:
+          - sh
+          - -c
+          - |
+            #!/usr/bin/env bash -e
+            filebeat test output
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+    # Whether this chart should self-manage its service account, role, and associated role binding.
+    managedServiceAccount: true
+    # Custom service account override that the pod will use
+    serviceAccount: "filebeat"

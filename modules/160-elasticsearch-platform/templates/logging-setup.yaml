@@ -255,7 +255,6 @@ metadata:
   name: logging-setup
   namespace: platform
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "5"
 spec:
@@ -277,6 +276,6 @@ spec:
         - name: ELPASSWORD
           valueFrom:
             secretKeyRef:
-              name: elasticsearch-elastic-es-elastic-user
+              name: logsearch-es-elastic-user
               key: elastic
       restartPolicy: Never

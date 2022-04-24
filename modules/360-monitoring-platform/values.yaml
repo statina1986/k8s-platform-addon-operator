@@ -1,0 +1,15 @@
+monitoringPlatform:
+  grafana:
+    enabled: true
+    sidecar:
+      datasources:
+        enabled: true
+        maxLines: 1000
+  loki:
+    enabled: true
+  promtail:
+    enabled: true
+    config:
+      lokiAddress: http://monitoring-platform-loki.platform.svc:3100/loki/api/v1/push
+  prometheus:
+    enabled: false

@@ -18,10 +18,6 @@ modulesConfig:
   auroraMysqlDb:
     configurationRequired: "check module documentation for configuration options"
 
-  dbManagementEnabled: "false"
-  dbManagement:
-    configurationRequired: "check module documentation for configuration options"
-
   cassandraPlatformEnabled: "false"
   cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -38,8 +34,20 @@ modulesConfig:
   crossplanePlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  dbManagementEnabled: "false"
+  dbManagement:
+    configurationRequired: "check module documentation for configuration options"
+
+  elasticsearchPlatformEnabled: "false"
+  elasticsearchPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   externalDnsEnabled: "false"
   externalDns:
+    configurationRequired: "check module documentation for configuration options"
+
+  filebeatPlatformEnabled: "false"
+  filebeatPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   istioIngressEnabled: "false"
@@ -50,16 +58,8 @@ modulesConfig:
   istioPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  elasticsearchPlatformEnabled: "false"
-  elasticsearchPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
   logstashPlatformEnabled: "false"
   logstashPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
-  filebeatPlatformEnabled: "false"
-  filebeatPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   kafkaPlatformEnabled: "false"
@@ -72,6 +72,10 @@ modulesConfig:
 
   mariadbPlatformEnabled: "false"
   mariadbPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  monitoringPlatformEnabled: "false"
+  monitoringPlatform:
     configurationRequired: "check module documentation for configuration options"
   
   postgresPlatformEnabled: "false"
