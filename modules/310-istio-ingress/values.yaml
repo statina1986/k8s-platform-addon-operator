@@ -83,6 +83,24 @@ istioIngress:
                 host: bssapi-aggregator.qvantel.svc.cluster.local
                 port:
                   number: 8080
+        bssapi-docs:
+          http:
+          - retries:
+              attempts: 0
+            route:
+            - destination:
+                host: bssapi-documentation-service.qvantel.svc.cluster.local
+                port:
+                  number: 8010
+        flex-admin:
+          http:
+          - retries:
+              attempts: 0
+            route:
+            - destination:
+                host: flex-admin.qvantel.svc.cluster.local
+                port:
+                  number: 21080
         vault-ui:
           http:
             - route:
