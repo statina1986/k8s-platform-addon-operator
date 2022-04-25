@@ -7,7 +7,7 @@ metadata:
 data:
   global: {{ print "|\n" (.Values.globalConfig | toYaml | indent 4) }}
 
-  platformCoreEnabled: "true"
+  platformCoreEnabled: "false"
   platformCore: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
 
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
@@ -71,6 +71,9 @@ data:
   
   vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
   vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
+
+  redisPlatformEnabled: "{{ .Values.modulesConfig.redisPlatformEnabled }}"
+  redisPlatform: {{ print "|\n" (.Values.modulesConfig.redisPlatform | toYaml | indent 4) }}
 
 
   
