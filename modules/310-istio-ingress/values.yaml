@@ -135,7 +135,7 @@ istioIngress:
                 - destination:
                     host: monitoring-platform-grafana.platform.svc.cluster.local
                     port:
-                      number: 3000
+                      number: 80
         sct:
           http:
           - match:
