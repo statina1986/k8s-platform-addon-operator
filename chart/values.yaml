@@ -96,15 +96,15 @@ modulesConfig:
   redisPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  redisPcdPlatformEnabled: "true"
+  redisPcdPlatformEnabled: "false"
   redisPcdPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  redisCbsMasterPlatformEnabled: "true"
+  redisCbsMasterPlatformEnabled: "false"
   redisCbsMasterPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  redisCbsControllerPlatformEnabled: "true"
+  redisCbsControllerPlatformEnabled: "false"
   redisCbsControllerPlatform:
     configurationRequired: "check module documentation for configuration options"
 
