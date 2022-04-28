@@ -1,4 +1,4 @@
-redisPlatform:
+redisCbsMasterPlatform:
   redis:
     global:
       imageRegistry: ""
@@ -8,7 +8,7 @@ redisPlatform:
         password: "test"
     kubeVersion: ""
     nameOverride: ""
-    fullnameOverride: "redis"
+    fullnameOverride: "redis-cluster-redis-mastercbs"
     commonLabels: {}
     commonAnnotations: {}
     secretAnnotations: {}
@@ -260,7 +260,7 @@ redisPlatform:
         targetCPU: ""
         targetMemory: ""
     sentinel:
-      enabled: false
+      enabled: true
       image:
         registry: docker.io
         repository: bitnami/redis-sentinel
