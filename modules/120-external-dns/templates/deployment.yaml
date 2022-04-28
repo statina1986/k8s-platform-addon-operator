@@ -31,6 +31,7 @@ spec:
         - --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization
         - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both)
         - --registry=txt
+        - --txt-prefix=extdns.
         - --txt-owner-id={{ .Values.externalDns.route53ZonId }}
         - --aws-assume-role={{ .Values.externalDns.awsAssumeRole }}
         - --annotation-filter={{ .Values.externalDns.annotationFilter }}
