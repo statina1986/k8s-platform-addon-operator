@@ -1,18 +1,56 @@
 istioIngress:
+  publicIngress:
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+      dnsBase: mcom-prv-col-uat.qvantel.systems
+  privateIngress:
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+  integrationsIngressEnabled: true
+  integrationsIngress:
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
   virtualServices:
-    instances:
-      vault-ui:
-      # - name: consul-ui
-      #   http:
-      #   - route:
-      #     - destination:
-      #         host: consul-platform-consul-ui.platform.svc.cluster.local
-      #         port:
-      #           number: 80
-      zzzkafka-ui:
-        http:
-        - route:
-          - destination:
-              host: kafka-ui.platform.svc.cluster.local
-              port:
-                number: 8080
+    public:
+      instances:
+        auth:
+    private:
+      annotations:
+        external-dns.alpha.kubernetes.io/target: public-ingress-colombia-uat-b5380c972f521dbb.elb.us-east-1.amazonaws.com
+      dnsBase: micco-uat.qvantel.systems
+      instances:
+        auth:
+          http:
+          - match:
+            - uri:
+                prefix: /auth/realms/qvantel/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: qvaa-proxy-80.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - match:
+            - uri:
+                prefix: /auth/realms/consumers/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: qvaa-proxy-80.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - match:
+            - uri:
+                prefix: /auth/resources/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: qvaa-proxy-80.qvantel.svc.cluster.local
+                port:
+                  number: 80
