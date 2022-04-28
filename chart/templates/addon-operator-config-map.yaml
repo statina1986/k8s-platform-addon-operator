@@ -45,7 +45,7 @@ data:
 
   istioPlatformEnabled: "{{ .Values.modulesConfig.istioPlatformEnabled }}"
   istioPlatform: {{ print "|\n" (.Values.modulesConfig.istioPlatform | toYaml | indent 4) }}
-  
+
   kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
 
@@ -65,16 +65,21 @@ data:
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
 
   qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
-  
+
   vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
   vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}
-  
+
   vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
   vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
 
   redisPlatformEnabled: "{{ .Values.modulesConfig.redisPlatformEnabled }}"
   redisPlatform: {{ print "|\n" (.Values.modulesConfig.redisPlatform | toYaml | indent 4) }}
 
+  redisPcdPlatformEnabled: "{{ .Values.modulesConfig.redisPcdPlatformEnabled }}"
+  redisPcdPlatform: {{ print "|\n" (.Values.modulesConfig.redisPcdPlatform | toYaml | indent 4) }}
 
-  
-  
+  redisCbsMasterPlatformEnabled: "{{ .Values.modulesConfig.redisCbsMasterPlatformEnabled }}"
+  redisCbsMasterPlatform: {{ print "|\n" (.Values.modulesConfig.redisCbsMasterPlatform | toYaml | indent 4) }}
+
+  redisCbsControllerPlatformEnabled: "{{ .Values.modulesConfig.redisCbsControllerPlatformEnabled }}"
+  redisCbsControllerPlatform: {{ print "|\n" (.Values.modulesConfig.redisCbsControllerPlatform | toYaml | indent 4) }}

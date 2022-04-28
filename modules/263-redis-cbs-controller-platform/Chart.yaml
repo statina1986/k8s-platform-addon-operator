@@ -1,0 +1,6 @@
+apiVersion: v2
+name: redis-cbs-controller-platform
+version: 0.0.1
+dependencies:
+  - name: redisCbsControllerPlatform
+    version: 0.0.1
