@@ -5,7 +5,9 @@ metadata:
 spec:
   clusterIP: None # <= Don't forget!!
   selector:
-    app: redis-cluster-redis-controlcbs
+    app.kubernetes.io/component: node
+    app.kubernetes.io/instance: redis-cbs-controller-platform
+    app.kubernetes.io/name: redis
   ports:
     - protocol: TCP
       port: 26379
@@ -17,7 +19,9 @@ metadata:
   name: redis-sentinel-redis-controlcbs
 spec:
   selector:
-    app: redis-sentinel-redis-controlcbs
+    app.kubernetes.io/component: node
+    app.kubernetes.io/instance: redis-cbs-controller-platform
+    app.kubernetes.io/name: redis
   ports:
     - protocol: TCP
       port: 26379

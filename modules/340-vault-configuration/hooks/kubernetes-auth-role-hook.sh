@@ -14,9 +14,7 @@ EOF
 }
 
 hook::trigger() {
-  CURL_OPT="-ks --connect-timeout 10"
-  VAULT_ADDR="http://vault-platform.platform.svc.cluster.local:8200"
-  CURL_RESULT="curl.result"
+  VAULT_ADDR=${VAULT_ADDR-"http://vault-platform.platform.svc.cluster.local:8200"}
 
   type=$(jq -r '.[0].type' ${BINDING_CONTEXT_PATH})
 
