@@ -83,3 +83,6 @@ data:
 
   redisCbsControllerPlatformEnabled: "{{ .Values.modulesConfig.redisCbsControllerPlatformEnabled }}"
   redisCbsControllerPlatform: {{ print "|\n" (.Values.modulesConfig.redisCbsControllerPlatform | toYaml | indent 4) }}
+
+  rabbitmqPlatformEnabled: "{{ .Values.modulesConfig.rabbitmqPlatformEnabled }}"
+  rabbitmqPlatform: {{ print "|\n" (.Values.modulesConfig.rabbitmqPlatform | toYaml | indent 4) }}
