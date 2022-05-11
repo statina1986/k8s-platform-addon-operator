@@ -30,7 +30,7 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 500Gi
+              storage: 250Gi
     podTemplate:
       spec:
         containers:

@@ -108,7 +108,7 @@ modulesConfig:
   redisCbsControllerPlatform:
     configurationRequired: "check module documentation for configuration options"
     
-  rabbitmqPlatformEnabled: "true"
+  rabbitmqPlatformEnabled: "false"
   rabbitmqPlatform:
     configurationRequired: "check module documentation for configuration options"
 
