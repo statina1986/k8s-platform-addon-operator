@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  app.kubernetes.io/component: node
+    app.kubernetes.io/component: node
     app.kubernetes.io/instance: redis-cbs-pcd-platform
     app.kubernetes.io/name: redis
 spec:
