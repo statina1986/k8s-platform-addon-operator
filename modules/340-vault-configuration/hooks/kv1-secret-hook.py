@@ -25,6 +25,9 @@ kubernetes:
             name = val['object']['metadata']['name']
             eventName = val['watchEvent']
             path = val['object']['spec']['path'] 
+            # compatibility with qdeployer 3.80.0
+            if path.startswith("secret/"):
+                path = path.replace("secret/", "", 1)
 
             secret = v1.read_namespaced_secret("vault-keys", "platform").data
             token = base64.b64decode(secret["root_token"]).decode('utf-8')
