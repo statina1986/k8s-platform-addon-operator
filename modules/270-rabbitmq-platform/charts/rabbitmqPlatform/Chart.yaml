@@ -1,0 +1,8 @@
+apiVersion: v2
+name: rabbitmqPlatform
+version: 0.0.1
+dependencies:
+  - name: rabbitmq
+    version: 9.0.3
+    repository: https://charts.bitnami.com/bitnami
+
