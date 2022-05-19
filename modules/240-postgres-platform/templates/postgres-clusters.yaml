@@ -1,0 +1,12 @@
+{{- if .Values.postgresPlatform.clusters }}
+{{- range .Values.postgresPlatform.clusters  }}
+---
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: {{ .name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}

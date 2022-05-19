@@ -8,3 +8,19 @@ postgresPlatform:
       targetNamespace: "platform"
       teams:
         - "qvt"
+  clusters:
+    - name: qvt-postgredb
+      spec:
+        teamId: "qvt"
+        volume:
+          size: 150Gi
+        numberOfInstances: 2
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 6Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        postgresql:
+          version: "13"
