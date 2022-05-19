@@ -33,7 +33,7 @@ spec:
           imagePullPolicy: {{ .Values.sftp.image.pullPolicy }}
           args: {{ print "\n" (.Values.sftp.users | toYaml | indent 12) }}  
           volumeMounts:
-          - name: upload
+          - name: data
             mountPath: "/home"
           ports:
             - name: ssh
@@ -45,7 +45,6 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: pvc-sftp-data
-            mode: 0755 
       {{- with .Values.sftp.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-sftp-upload
+  name: pvc-sftp-data
 spec:
   accessModes:
     {{- range .Values.sftp.persistence.accessModes }}
