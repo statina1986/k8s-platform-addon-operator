@@ -7,7 +7,7 @@ metadata:
 data:
   global: {{ print "|\n" (.Values.globalConfig | toYaml | indent 4) }}
 
-  platformCoreEnabled: "false"
+  platformCoreEnabled: "true"
   platformCore: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
 
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
@@ -66,11 +66,8 @@ data:
 
   qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
 
-  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
-  vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}
-
-  vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
-  vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
+  rabbitmqPlatformEnabled: "{{ .Values.modulesConfig.rabbitmqPlatformEnabled }}"
+  rabbitmqPlatform: {{ print "|\n" (.Values.modulesConfig.rabbitmqPlatform | toYaml | indent 4) }}
 
   redisPlatformEnabled: "{{ .Values.modulesConfig.redisPlatformEnabled }}"
   redisPlatform: {{ print "|\n" (.Values.modulesConfig.redisPlatform | toYaml | indent 4) }}
@@ -84,5 +81,13 @@ data:
   redisCbsControllerPlatformEnabled: "{{ .Values.modulesConfig.redisCbsControllerPlatformEnabled }}"
   redisCbsControllerPlatform: {{ print "|\n" (.Values.modulesConfig.redisCbsControllerPlatform | toYaml | indent 4) }}
 
-  rabbitmqPlatformEnabled: "{{ .Values.modulesConfig.rabbitmqPlatformEnabled }}"
-  rabbitmqPlatform: {{ print "|\n" (.Values.modulesConfig.rabbitmqPlatform | toYaml | indent 4) }}
+  sftpEnabled: "{{ .Values.modulesConfig.sftpEnabled }}"
+  sftp: {{ print "|\n" (.Values.modulesConfig.sftp | toYaml | indent 4) }}
+
+  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
+  vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}
+
+  vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
+  vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
+
+

@@ -13,7 +13,12 @@ dependencies:
     version: "1.13.2"
     repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
-    alias: integrationsIngress
-    condition: integrationsIngressEnabled
+    alias: integrationsHttpIngress
+    condition: integrationsHttpIngressEnabled
+    version: "1.13.2"
+    repository: https://istio-release.storage.googleapis.com/charts
+  - name: gateway
+    alias: integrationsNonHttpIngress
+    condition: integrationsNonHttpIngressEnabled
     version: "1.13.2"
     repository: https://istio-release.storage.googleapis.com/charts

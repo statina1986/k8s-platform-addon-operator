@@ -83,13 +83,9 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
 
   qinstallersEnabled: "false"
-  
-  vaultConfigurationEnabled: "false"
-  vaultConfiguration:
-    configurationRequired: "check module documentation for configuration options"
 
-  vaultPlatformEnabled: "false"
-  vaultPlatform:
+  rabbitmqPlatformEnabled: "false"
+  rabbitmqPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   redisPlatformEnabled: "false"
@@ -107,10 +103,19 @@ modulesConfig:
   redisCbsControllerPlatformEnabled: "false"
   redisCbsControllerPlatform:
     configurationRequired: "check module documentation for configuration options"
-    
-  rabbitmqPlatformEnabled: "false"
-  rabbitmqPlatform:
+  
+  sftpEnabled: "false"
+  sftp:
     configurationRequired: "check module documentation for configuration options"
+
+  vaultConfigurationEnabled: "false"
+  vaultConfiguration:
+    configurationRequired: "check module documentation for configuration options"
+
+  vaultPlatformEnabled: "false"
+  vaultPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
 
 
 

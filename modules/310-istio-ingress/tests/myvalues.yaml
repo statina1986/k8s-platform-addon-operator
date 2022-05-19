@@ -14,43 +14,13 @@ istioIngress:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
   virtualServices:
-    public:
-      instances:
-        auth:
-    private:
-      annotations:
-        external-dns.alpha.kubernetes.io/target: public-ingress-colombia-uat-b5380c972f521dbb.elb.us-east-1.amazonaws.com
-      dnsBase: micco-uat.qvantel.systems
-      instances:
-        auth:
-          http:
-          - match:
-            - uri:
-                prefix: /auth/realms/qvantel/
-            retries:
-              attempts: 0
-            route:
-            - destination:
-                host: qvaa-proxy-80.qvantel.svc.cluster.local
-                port:
-                  number: 80
-          - match:
-            - uri:
-                prefix: /auth/realms/consumers/
-            retries:
-              attempts: 0
-            route:
-            - destination:
-                host: qvaa-proxy-80.qvantel.svc.cluster.local
-                port:
-                  number: 80
-          - match:
-            - uri:
-                prefix: /auth/resources/
-            retries:
-              attempts: 0
-            route:
-            - destination:
-                host: qvaa-proxy-80.qvantel.svc.cluster.local
-                port:
-                  number: 80
+    annotations:
+      external-dns.alpha.kubernetes.io/target: ingress-colombia-uat-b5380c972f521dbb.elb.us-east-1.amazonaws.com
+    dnsBase: micco-uat.qvantel.systems
+    instances:
+      auth:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: public-ingress-colombia-uat-b5380c972f521dbb.elb.us-east-1.amazonaws.com
+        gateways:
+          - public-ingress
+          - private-ingress

@@ -1,5 +1,5 @@
 istioIngress:
-  publicIngressEnabled: true
+  publicIngressEnabled: false
   publicIngress:
     name: public-ingress
     service:
@@ -9,7 +9,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-  privateIngressEnabled: true
+  privateIngressEnabled: false
   privateIngress:
     name: private-ingress
     service:
@@ -19,9 +19,9 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-  integrationsIngressEnabled: false
-  integrationsIngress:
-    name: integrations-ingress
+  integrationsHttpIngressEnabled: false
+  integrationsHttpIngress:
+    name: integrations-http-ingress
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -29,407 +29,505 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-  virtualServices:
-    public:
+  integrationsNonHttpIngressEnabled: false
+  integrationsNonHttpIngress:
+    name: integrations-non-http-ingress
+    service:
       annotations:
-      # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
-      dnsBase: pbl-qvantel-finland.qvantel.systems
-      instances:
-        auth:
-          http:
-            - match:
-                - uri:
-                    prefix: /auth/realms/qvantel/
-              retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: qvaa-proxy-80.qvantel.svc.cluster.local
-                    port:
-                      number: 80
-            - match:
-                - uri:
-                    prefix: /auth/realms/consumers/
-              retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: qvaa-proxy-80.qvantel.svc.cluster.local
-                    port:
-                      number: 80
-            - match:
-                - uri:
-                    prefix: /auth/resources/
-              retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: qvaa-proxy-80.qvantel.svc.cluster.local
-                    port:
-                      number: 80
-    private:
-      dnsBase: prv-qvantel-finland.qvantel.systems
-      instances:
-        address-manager:
-          http:
-            - route:
-                - destination:
-                    host: addresses.qvantel.svc.cluster.local
-                    port:
-                      number: 8000
-        bssapi:
-          http:
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: bssapi-aggregator.qvantel.svc.cluster.local
-                    port:
-                      number: 8080
-        bssapi-docs:
-          http:
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: bssapi-documentation-service.qvantel.svc.cluster.local
-                    port:
-                      number: 8010
-        case-management:
-          http:
-            - match:
-                - uri:
-                    exact: /
-              redirect:
-                uri: /casemanager/sa/
-              retries:
-                attempts: 0
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: case-manager.qvantel.svc.cluster.local
-                    port:
-                      number: 8092
-        catalog-deployer:
-          http:
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: catalog-qflow-catalog-deployer.qvantel.svc.cluster.local
-                    port:
-                      number: 8080
-        catalog-designer:
-          http:
-            - match:
-                - uri:
-                    prefix: /websockets
-              retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: catalog-qflow-product-catalog-designer-9005.qvantel.svc.cluster.local
-                    port:
-                      number: 9005
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: catalog-qflow-product-catalog-designer-9003.qvantel.svc.cluster.local
-                    port:
-                      number: 9003
-        cdt:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: cdt-frontend.qvantel.svc.cluster.local
-                port:
-                  number: 3001
-        document-manager:
-          http:
+        service.beta.kubernetes.io/aws-load-balancer-type: "external"
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+      ports:
+        - name: status-port
+          port: 15021
+          protocol: TCP
+          targetPort: 15021
+        - name: sftp
+          port: 22
+          protocol: TCP
+          targetPort: 22
+  virtualServices:
+    annotations:
+    # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
+    dnsBase: qvantel-finland.qvantel.systems
+    instances:
+      auth:
+        enabled: false
+        gateways:
+          - public-ingress
+        http:
           - match:
-            - uri:
-                prefix: /api/documents/render-template
+              - uri:
+                  prefix: /auth/realms/qvantel/
             retries:
               attempts: 0
             route:
-            - destination:
-                host: documents-doc-manager-dynamic-template.qvantel.svc.cluster.local
-                port:
-                  number: 5001
+              - destination:
+                  host: qvaa-proxy-80.qvantel.svc.cluster.local
+                  port:
+                    number: 80
           - match:
-            - uri:
-                prefix: /api/documents/
+              - uri:
+                  prefix: /auth/realms/consumers/
             retries:
               attempts: 0
             route:
-            - destination:
-                host: documents-doc-manager-backend.qvantel.svc.cluster.local
-                port:
-                  number: 8080
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: documents-doc-manager-frontend.qvantel.svc.cluster.local
-                port:
-                  number: 5000
-        document-storage:
-          http:
+              - destination:
+                  host: qvaa-proxy-80.qvantel.svc.cluster.local
+                  port:
+                    number: 80
           - match:
-            - uri:
-                prefix: /api/
+              - uri:
+                  prefix: /auth/resources/
             retries:
               attempts: 0
             route:
-            - destination:
-                host: documents-doc-storage-backend.qvantel.svc.cluster.local
-                port:
-                  number: 8080
+              - destination:
+                  host: qvaa-proxy-80.qvantel.svc.cluster.local
+                  port:
+                    number: 80
+      address-manager:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: addresses.qvantel.svc.cluster.local
+                  port:
+                    number: 8000
+      bssapi:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: bssapi-aggregator.qvantel.svc.cluster.local
+                  port:
+                    number: 8080
+      bssapi-docs:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: bssapi-documentation-service.qvantel.svc.cluster.local
+                  port:
+                    number: 8010
+      case-management:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
           - match:
-            - uri:
-                prefix: /file/
-            retries:
-              attempts: 0
-            route:
-            - destination:
-                host: documents-doc-storage-backend.qvantel.svc.cluster.local
-                port:
-                  number: 8080
-          - match:
-            - uri:
-                prefix: /external-documents/
-            retries:
-              attempts: 0
-            route:
-            - destination:
-                host: documents-doc-storage-backend.qvantel.svc.cluster.local
-                port:
-                  number: 8080
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: documents-doc-storage-frontend.qvantel.svc.cluster.local
-                port:
-                  number: 8080                  
-        flex-admin:
-          http:
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: flex-admin.qvantel.svc.cluster.local
-                    port:
-                      number: 21080
-        flex-app-store:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: flex-app-store.qvantel.svc.cluster.local
-                port:
-                  number: 21090
-        graphql:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: graphql-graphql-bssapi.qvantel.svc.cluster.local
-                port:
-                  number: 8180
-        keycloak:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: qvaa-proxy-80.qvantel.svc.cluster.local
-                port:
-                  number: 80
-        knowledge:
-          http:
-          - match:
-            - uri:
-                exact: /
+              - uri:
+                  exact: /
             redirect:
-              uri: /knowledge_wiki/
+              uri: /casemanager/sa/
             retries:
               attempts: 0
           - retries:
               attempts: 0
             route:
-            - destination:
-                host: knowledge-wiki.qvantel.svc.cluster.local
-                port:
-                  number: 8080
-        message-manager:
-          http:
+              - destination:
+                  host: case-manager.qvantel.svc.cluster.local
+                  port:
+                    number: 8092
+      catalog-deployer:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
           - retries:
               attempts: 0
             route:
-            - destination:
-                host: message-manager-wui.qvantel.svc.cluster.local
-                port:
-                  number: 3003
-        mockbank:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: omnichannel-bank.qvantel.svc.cluster.local
-                port:
-                  number: 3500
-        mockoss:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: mockoss.qvantel.svc.cluster.local
-                port:
-                  number: 8000
-        pcb:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: pcb.qvantel.svc.cluster.local
-                port:
-                  number: 8095
-        pos:
-          http:
+              - destination:
+                  host: catalog-qflow-catalog-deployer.qvantel.svc.cluster.local
+                  port:
+                    number: 8080
+      catalog-designer:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
           - match:
-            - uri:
-                prefix: /images/
+              - uri:
+                  prefix: /websockets
             retries:
               attempts: 0
             route:
-            - destination:
-                host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
-                port:
-                  number: 80
+              - destination:
+                  host: catalog-qflow-product-catalog-designer-9005.qvantel.svc.cluster.local
+                  port:
+                    number: 9005
           - retries:
               attempts: 0
             route:
-            - destination:
-                host: omnichannel-pos.qvantel.svc.cluster.local
-                port:
-                  number: 5010
-        recharge-manager:
-          http:
+              - destination:
+                  host: catalog-qflow-product-catalog-designer-9003.qvantel.svc.cluster.local
+                  port:
+                    number: 9003
+      cdt:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: cdt-frontend.qvantel.svc.cluster.local
+              port:
+                number: 3001
+      document-manager:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - match:
+          - uri:
+              prefix: /api/documents/render-template
+          retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-manager-dynamic-template.qvantel.svc.cluster.local
+              port:
+                number: 5001
+        - match:
+          - uri:
+              prefix: /api/documents/
+          retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-manager-backend.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-manager-frontend.qvantel.svc.cluster.local
+              port:
+                number: 5000
+      document-storage:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - match:
+          - uri:
+              prefix: /api/
+          retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-storage-backend.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - uri:
+              prefix: /file/
+          retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-storage-backend.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - uri:
+              prefix: /external-documents/
+          retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-storage-backend.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: documents-doc-storage-frontend.qvantel.svc.cluster.local
+              port:
+                number: 8080                  
+      flex-admin:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
           - retries:
               attempts: 0
             route:
-            - destination:
-                host: recharge-manager-frontend.qvantel.svc.cluster.local
-                port:
-                  number: 7890
-        rim:
-          http:
+              - destination:
+                  host: flex-admin.qvantel.svc.cluster.local
+                  port:
+                    number: 21080
+      flex-app-store:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: flex-app-store.qvantel.svc.cluster.local
+              port:
+                number: 21090
+      graphql:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: graphql-graphql-bssapi.qvantel.svc.cluster.local
+              port:
+                number: 8180
+      keycloak:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+      knowledge:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - match:
+          - uri:
+              exact: /
+          redirect:
+            uri: /knowledge_wiki/
+          retries:
+            attempts: 0
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: knowledge-wiki.qvantel.svc.cluster.local
+              port:
+                number: 8080
+      message-manager:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: message-manager-wui.qvantel.svc.cluster.local
+              port:
+                number: 3003
+      mockbank:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: omnichannel-bank.qvantel.svc.cluster.local
+              port:
+                number: 3500
+      mockoss:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: mockoss.qvantel.svc.cluster.local
+              port:
+                number: 8000
+      pcb:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: pcb.qvantel.svc.cluster.local
+              port:
+                number: 8095
+      pos:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - match:
+          - uri:
+              prefix: /images/
+          retries:
+            attempts: 0
+          route:
+          - destination:
+              host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: omnichannel-pos.qvantel.svc.cluster.local
+              port:
+                number: 5010
+      recharge-manager:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: recharge-manager-frontend.qvantel.svc.cluster.local
+              port:
+                number: 7890
+      rim:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - match:
+          - uri:
+              prefix: /loader/
+          retries:
+            attempts: 0
+          rewrite:
+            uri: /
+          route:
+          - destination:
+              host: resource-inventory-backend-management.qvantel.svc.cluster.local
+              port:
+                number: 23000
+        - match:
+          - uri:
+              prefix: /rim-api/
+          retries:
+            attempts: 0
+          rewrite:
+            uri: /
+          route:
+          - destination:
+              host: rim-wui-frontback.qvantel.svc.cluster.local
+              port:
+                number: 9000
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: rim-wui-frontend.qvantel.svc.cluster.local
+              port:
+                number: 8081
+      sct:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
           - match:
-            - uri:
-                prefix: /loader/
+              - uri:
+                  prefix: /images/
             retries:
               attempts: 0
-            rewrite:
-              uri: /
             route:
-            - destination:
-                host: resource-inventory-backend-management.qvantel.svc.cluster.local
-                port:
-                  number: 23000
-          - match:
-            - uri:
-                prefix: /rim-api/
-            retries:
-              attempts: 0
-            rewrite:
-              uri: /
-            route:
-            - destination:
-                host: rim-wui-frontback.qvantel.svc.cluster.local
-                port:
-                  number: 9000
+              - destination:
+                  host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+                  port:
+                    number: 80
           - retries:
               attempts: 0
             route:
-            - destination:
-                host: rim-wui-frontend.qvantel.svc.cluster.local
-                port:
-                  number: 8081
-        sct:
-          http:
-            - match:
-                - uri:
-                    prefix: /images/
-              retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
-                    port:
-                      number: 80
-            - retries:
-                attempts: 0
-              route:
-                - destination:
-                    host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
-                    port:
-                      number: 9000
-        tnt:
-          http:
-          - retries:
-              attempts: 0
-            route:
-            - destination:
-                host: tnt-web-tnt-web.qvantel.svc.cluster.local
-                port:
-                  number: 9001
+              - destination:
+                  host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
+                  port:
+                    number: 9000
+      tnt:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+        - retries:
+            attempts: 0
+          route:
+          - destination:
+              host: tnt-web-tnt-web.qvantel.svc.cluster.local
+              port:
+                number: 9001
 
 
-        consul-ui:
-          http:
-            - route:
-                - destination:
-                    host: consul-platform-consul-ui.platform.svc.cluster.local
-                    port:
-                      number: 80
-        grafana:
-          http:
-            - route:
-                - destination:
-                    host: monitoring-platform-grafana.platform.svc.cluster.local
-                    port:
-                      number: 80
-        kafka-ui:
-          http:
-            - route:
-                - destination:
-                    host: kafka-ui.platform.svc.cluster.local
-                    port:
-                      number: 8080
-        kibana:
-          http:
-            - route:
-                - destination:
-                    host: kibana-kb-http.platform.svc.cluster.local
-                    port:
-                      number: 5601
-        vault-ui:
-          http:
-            - route:
-                - destination:
-                    host: vault-platform.platform.svc.cluster.local
-                    port:
-                      number: 8200
-    integrations:
-      dnsBase: int-qvantel-finland.qvantel.systems
-      instances:
+      consul-ui:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: consul-platform-consul-ui.platform.svc.cluster.local
+                  port:
+                    number: 80
+      grafana:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: monitoring-platform-grafana.platform.svc.cluster.local
+                  port:
+                    number: 80
+      kafka-ui:
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: kafka-ui.platform.svc.cluster.local
+                  port:
+                    number: 8080
+      kibana:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: kibana-kb-http.platform.svc.cluster.local
+                  port:
+                    number: 5601
+      vault-ui:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: vault-platform.platform.svc.cluster.local
+                  port:
+                    number: 8200

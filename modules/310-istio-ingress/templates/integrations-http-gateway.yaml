@@ -1,10 +1,10 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: integrations-ingress
+  name: integrations-http-ingress
 spec:
   selector:
-    istio: integrations-ingress
+    istio: integrations-http-ingress
   servers:
     - hosts:
       - '*'

@@ -37,7 +37,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: integrations-ingress-proxy-protocol
+  name: integrations-http-ingress-proxy-protocol
   namespace: {{ .Release.Namespace }}
 spec:
   configPatches:
@@ -50,4 +50,4 @@ spec:
         - name: envoy.filters.listener.tls_inspector
   workloadSelector:
     labels:
-      istio: integrations-ingress
+      istio: integrations-http-ingress
