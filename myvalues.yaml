@@ -1,4 +1,0 @@
-logLevel: "debug"
-modulesConfig:
-  monitoringPlatformEnabled: "true"
-  redisPlatformEnabled: "false"

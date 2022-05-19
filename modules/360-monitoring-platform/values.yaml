@@ -96,7 +96,6 @@ monitoringPlatform:
            editable: true
            options:
              path: /var/lib/grafana/dashboards/rid
-
     dashboardsConfigMaps:
       cluster: "grafana-dashboards-cluster"
       bssapi: "grafana-dashboards-bssapi"
@@ -108,7 +107,6 @@ monitoringPlatform:
       persistent-volumes: "grafana-dashboards-persistent-volumes"
       orders-overview: "grafana-dashboards-orders-overview"
       rid: "grafana-dashboards-rid"
-
   loki:
     enabled: true
   promtail:
@@ -117,3 +115,29 @@ monitoringPlatform:
       lokiAddress: http://monitoring-platform-loki.platform.svc:3100/loki/api/v1/push
   prometheus:
     enabled: true
+    server:
+# mount alerts at `/etc/config/alerts`
+      extraConfigmapMounts:
+        - name: prometheus-alerts
+          mountPath: /etc/config/alerts
+          configMap: prometheus-alerts
+          readOnly: true
+    serverFiles:
+# configure Prometheus-server to look at `/etc/config/alerts` for alert files
+      prometheus.yml:
+        rule_files:
+          - /etc/config/rules/*.yaml
+          - /etc/config/alerts/*.yml
+# configmap-reload container to mount the prometheus-alerts configmap also and to trigger hot reload of alerts
+    configmapReload:
+      prometheus:
+        enabled: true
+        name: configmap-reload
+        extraConfigmapMounts:
+            - name: prometheus-alerts
+              mountPath: /etc/alerts.d
+              subPath: ""
+              configMap: prometheus-alerts
+              readOnly: true
+        extraVolumeDirs:
+          - /etc/alerts.d
