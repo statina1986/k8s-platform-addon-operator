@@ -1,11 +1,12 @@
 {{- if .Values.postgresPlatform.clusters }}
+{{- $relnamespace := .Release.Namespace -}}
 {{- range .Values.postgresPlatform.clusters  }}
 ---
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
   name: {{ .name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $relnamespace }}
 spec:
   {{- toYaml .spec | nindent 2 }}
 {{- end }}
