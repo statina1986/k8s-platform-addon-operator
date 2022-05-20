@@ -1,0 +1,2613 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: grafana-dashboards-jvm-monitoring
+  namespace: platform
+  labels:
+    grafana_dashboard: '1'
+data:
+  jvm-monitoring.json: |-        
+        {
+          "annotations": {
+            "list": [
+              {
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+              }
+            ]
+          },
+          "description": "JVM monitoring with Prometheus and cAdvisor",
+          "editable": true,
+          "gnetId": 193,
+          "graphTooltip": 1,
+          "id": 26,
+          "iteration": 1652258226300,
+          "links": [],
+          "panels": [
+            {
+              "aliasColors": {},
+              "breakPoint": "50%",
+              "cacheTimeout": null,
+              "combine": {
+                "label": "Others",
+                "threshold": 0
+              },
+              "datasource": "$source",
+              "description": "",
+              "fontSize": "80%",
+              "format": "short",
+              "gridPos": {
+                "h": 8,
+                "w": 5,
+                "x": 0,
+                "y": 0
+              },
+              "id": 41,
+              "interval": null,
+              "legend": {
+                "show": true,
+                "values": true
+              },
+              "legendType": "Under graph",
+              "links": [],
+              "maxDataPoints": 3,
+              "nullPointMode": "connected",
+              "pieType": "pie",
+              "strokeWidth": 1,
+              "targets": [
+                {
+                  "expr": "sum by (instance) (increase( http_server_requests_total{instance=~\"$instance\"}[$__range] ))>0",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Request Distribution",
+              "type": "grafana-piechart-panel",
+              "valueName": "current"
+            },
+            {
+              "aliasColors": {},
+              "breakPoint": "50%",
+              "cacheTimeout": null,
+              "combine": {
+                "label": "Others",
+                "threshold": 0
+              },
+              "datasource": "$source",
+              "description": "",
+              "fontSize": "80%",
+              "format": "short",
+              "gridPos": {
+                "h": 8,
+                "w": 5,
+                "x": 5,
+                "y": 0
+              },
+              "id": 42,
+              "interval": null,
+              "legend": {
+                "show": true,
+                "values": true
+              },
+              "legendType": "Under graph",
+              "links": [],
+              "maxDataPoints": 3,
+              "nullPointMode": "connected",
+              "pieType": "pie",
+              "strokeWidth": 1,
+              "targets": [
+                {
+                  "expr": "sum by (instance) (increase( http_server_requests_total{http_status_code=\"4xx\", instance=~\"$instance\"}[$__range] ))>0",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Http 4xx Response Distribution",
+              "type": "grafana-piechart-panel",
+              "valueName": "current"
+            },
+            {
+              "aliasColors": {},
+              "breakPoint": "50%",
+              "cacheTimeout": null,
+              "combine": {
+                "label": "Others",
+                "threshold": 0
+              },
+              "datasource": "$source",
+              "description": "",
+              "fontSize": "80%",
+              "format": "short",
+              "gridPos": {
+                "h": 8,
+                "w": 5,
+                "x": 10,
+                "y": 0
+              },
+              "id": 43,
+              "interval": null,
+              "legend": {
+                "show": true,
+                "values": true
+              },
+              "legendType": "Under graph",
+              "links": [],
+              "maxDataPoints": 3,
+              "nullPointMode": "connected",
+              "pieType": "pie",
+              "strokeWidth": 1,
+              "targets": [
+                {
+                  "expr": "sum by (instance) (increase( http_server_requests_total{http_status_code=\"5xx\", instance=~\"$instance\"}[$__range] ))>0",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Http 5xx Response Distribution",
+              "type": "grafana-piechart-panel",
+              "valueName": "current"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "Tracks the number amount of bytes allocated",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 8
+              },
+              "hiddenSeries": false,
+              "id": 23,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "jvm_memory_committed_bytes{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM Mem ",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "decbytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 15
+              },
+              "hiddenSeries": false,
+              "id": 27,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate(jvm_memory_used_bytes_sum{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m]) / rate( jvm_memory_used_bytes_count{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m])",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM Mem  (Heap)",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "decbytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 22
+              },
+              "hiddenSeries": false,
+              "id": 29,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( jvm_memory_free_bytes_sum{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_memory_free_bytes_count{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM Free Mem  (Heap) ",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "decbytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 29
+              },
+              "hiddenSeries": false,
+              "id": 28,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( jvm_memory_used_bytes_sum{region=\"non-heap\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_memory_used_bytes_count{region=\"non-heap\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM Mem  (Non-Heap)",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "decbytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "cards": {
+                "cardPadding": null,
+                "cardRound": null
+              },
+              "color": {
+                "cardColor": "#b4ff00",
+                "colorScale": "sqrt",
+                "colorScheme": "interpolateRdYlGn",
+                "exponent": 0.5,
+                "mode": "spectrum"
+              },
+              "dataFormat": "tsbuckets",
+              "datasource": "$source",
+              "description": "",
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 36
+              },
+              "heatmap": {},
+              "hideZeroBuckets": true,
+              "highlightCards": true,
+              "id": 45,
+              "interval": "1h",
+              "legend": {
+                "show": true
+              },
+              "reverseYBuckets": false,
+              "targets": [
+                {
+                  "expr": "sum( increase( jvm_gc_seconds_bucket{job=\"$job\",instance=~\"$instance\",collector=\"g1-young\",generation=\"young\"}[10m] )) by (le)    ",
+                  "format": "heatmap",
+                  "interval": "",
+                  "legendFormat": "{{ "{{le}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "JVM GC Time Heatmap",
+              "tooltip": {
+                "show": true,
+                "showHistogram": false
+              },
+              "tooltipDecimals": 0,
+              "type": "heatmap",
+              "xAxis": {
+                "show": true
+              },
+              "xBucketNumber": null,
+              "xBucketSize": null,
+              "yAxis": {
+                "decimals": 0,
+                "format": "s",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true,
+                "splitFactor": null
+              },
+              "yBucketBound": "auto",
+              "yBucketNumber": null,
+              "yBucketSize": null
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 44
+              },
+              "hiddenSeries": false,
+              "id": 24,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [
+                {
+                  "alias": "GC Count tnt-collector-metrics-ds-bss-m-2-3-da-08.w3cp.windtre.it",
+                  "yaxis": 2
+                },
+                {
+                  "alias": "GC Count tnt-collector-metrics-ds-bss-m-3-2-da-12.w3cp.windtre.it",
+                  "yaxis": 2
+                },
+                {
+                  "alias": "GC Count tnt-collector-metrics-ds-bss-m-2-5-da-10.w3cp.windtre.it",
+                  "yaxis": 2
+                },
+                {
+                  "alias": "GC Count tnt-collector-metrics-ds-bss-m-1-2-da-02.w3cp.windtre.it",
+                  "yaxis": 2
+                },
+                {
+                  "alias": "GC Count tnt-collector-metrics-ds-bss-m-4-1-da-16.w3cp.windtre.it",
+                  "yaxis": 2
+                }
+              ],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( jvm_gc_seconds_sum{generation=\"young\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_gc_seconds_count{generation=\"young\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}} Collector {{collector}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "delta(jvm_gc_seconds_count{generation=\"young\",job=~\"$job\",instance=~\"$instance\"}[2m])",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "GC Count {{job}}-{{instance}}" }}",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM GC  (Young)",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "s",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 51
+              },
+              "hiddenSeries": false,
+              "id": 25,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( jvm_gc_seconds_sum{generation=\"old\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_gc_seconds_count{generation=\"old\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM GC  (Old)",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "s",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 58
+              },
+              "hiddenSeries": false,
+              "id": 33,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max_over_time( jvm_threads_total{job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max( max_over_time( jvm_threads_total{job=~\"$job\",instance=~\"$instance\"}[1m] ) )",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total Count (max)",
+                  "refId": "B"
+                },
+                {
+                  "expr": "avg( max_over_time( jvm_threads_total{job=~\"$job\",instance=~\"$instance\"}[1m] ) )",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total Count (avg)",
+                  "refId": "C"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "JVM Threads",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {
+                "Total 40x": "orange",
+                "Total 50x": "red"
+              },
+              "bars": true,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "decimals": 0,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 65
+              },
+              "hiddenSeries": false,
+              "id": 36,
+              "legend": {
+                "alignAsTable": true,
+                "avg": true,
+                "current": false,
+                "hideEmpty": true,
+                "hideZero": true,
+                "max": true,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": true,
+                "values": true
+              },
+              "lines": false,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [
+                {
+                  "alias": "orders-api-metrics-ds-bss-m-1-2-da-02.w3cp.windtre.it-8088",
+                  "yaxis": 1
+                },
+                {
+                  "alias": "Total 50x",
+                  "yaxis": 2
+                },
+                {
+                  "alias": "Total 40x",
+                  "yaxis": 2
+                }
+              ],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum(increase( http_server_requests_total{job=~\"$job\",instance=~\"$instance\"}[10m] ) )  ",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total traffic",
+                  "refId": "D"
+                },
+                {
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"4xx\",job=~\"$job\",instance=~\"$instance\"}[10m] ) ) ",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total 40x",
+                  "refId": "E"
+                },
+                {
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"5xx\",job=~\"$job\",instance=~\"$instance\"}[10m] ) ) ",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total 50x",
+                  "refId": "C"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Traffic vs Errors",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "decimals": 0,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 73
+              },
+              "hiddenSeries": false,
+              "id": 30,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "hideEmpty": true,
+                "hideZero": true,
+                "max": true,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": true,
+                "values": true
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [
+                {
+                  "alias": "orders-api-metrics-ds-bss-m-1-2-da-02.w3cp.windtre.it-8088",
+                  "yaxis": 1
+                }
+              ],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "increase( http_server_requests_total{http_status_code=\"5xx\",job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"5xx\",job=~\"$job\",instance=~\"$instance\"}[1m] ) ) ",
+                  "format": "time_series",
+                  "hide": true,
+                  "intervalFactor": 1,
+                  "legendFormat": "Total",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP 5xx Errors",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 80
+              },
+              "hiddenSeries": false,
+              "id": 31,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "increase( http_server_requests_total{http_status_code=\"4xx\",job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"4xx\",job=~\"$job\",instance=~\"$instance\"}[1m] ) ) ",
+                  "format": "time_series",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP 4xx Errors",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 87
+              },
+              "hiddenSeries": false,
+              "id": 32,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "increase( http_server_requests_total{http_status_code=\"2xx\",job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum(increase( http_server_requests_total{http_status_code=\"2xx\",job=~\"$job\",instance=~\"$instance\"}[1m] ) )  ",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "Total ",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP 2xx Success",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "Number of requests being processed simultaneously at any point in time",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 94
+              },
+              "hiddenSeries": false,
+              "id": 26,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( http_server_request_active_sum{port=\"8081\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(http_server_request_active_count{port=\"8081\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP Active Simultaneous Requests",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "cards": {
+                "cardPadding": null,
+                "cardRound": null
+              },
+              "color": {
+                "cardColor": "#b4ff00",
+                "colorScale": "sqrt",
+                "colorScheme": "interpolateRdYlGn",
+                "exponent": 0.5,
+                "mode": "spectrum"
+              },
+              "dataFormat": "tsbuckets",
+              "datasource": "$source",
+              "description": "",
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 101
+              },
+              "heatmap": {},
+              "hideZeroBuckets": true,
+              "highlightCards": true,
+              "id": 46,
+              "interval": "1h",
+              "legend": {
+                "show": true
+              },
+              "reverseYBuckets": false,
+              "targets": [
+                {
+                  "expr": "sum( increase( http_server_connection_lifetime_seconds_bucket{job=\"$job\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
+                  "format": "heatmap",
+                  "interval": "",
+                  "legendFormat": "{{ "{{le}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "HTTP Connection Lifetime PORT=8080",
+              "tooltip": {
+                "show": true,
+                "showHistogram": false
+              },
+              "tooltipDecimals": 0,
+              "type": "heatmap",
+              "xAxis": {
+                "show": true
+              },
+              "xBucketNumber": null,
+              "xBucketSize": null,
+              "yAxis": {
+                "decimals": 0,
+                "format": "s",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true,
+                "splitFactor": null
+              },
+              "yBucketBound": "auto",
+              "yBucketNumber": null,
+              "yBucketSize": null
+            },
+            {
+              "cards": {
+                "cardPadding": null,
+                "cardRound": null
+              },
+              "color": {
+                "cardColor": "#b4ff00",
+                "colorScale": "sqrt",
+                "colorScheme": "interpolateRdYlGn",
+                "exponent": 0.5,
+                "mode": "spectrum"
+              },
+              "dataFormat": "tsbuckets",
+              "datasource": "$source",
+              "description": "",
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 109
+              },
+              "heatmap": {},
+              "hideZeroBuckets": true,
+              "highlightCards": true,
+              "id": 50,
+              "interval": "1h",
+              "legend": {
+                "show": true
+              },
+              "reverseYBuckets": false,
+              "targets": [
+                {
+                  "expr": "sum( increase( http_server_connection_open_bucket{customer=\"$customer\",datacenter=\"$datacenter\",environment=\"$environment\",job=\"$job\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
+                  "format": "heatmap",
+                  "interval": "",
+                  "legendFormat": "{{ "{{le}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "HTTP Connection Open PORT=8080",
+              "tooltip": {
+                "show": true,
+                "showHistogram": false
+              },
+              "tooltipDecimals": 0,
+              "type": "heatmap",
+              "xAxis": {
+                "show": true
+              },
+              "xBucketNumber": null,
+              "xBucketSize": null,
+              "yAxis": {
+                "decimals": 0,
+                "format": "short",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true,
+                "splitFactor": null
+              },
+              "yBucketBound": "auto",
+              "yBucketNumber": null,
+              "yBucketSize": null
+            },
+            {
+              "cards": {
+                "cardPadding": null,
+                "cardRound": null
+              },
+              "color": {
+                "cardColor": "#b4ff00",
+                "colorScale": "sqrt",
+                "colorScheme": "interpolateRdYlGn",
+                "exponent": 0.5,
+                "mode": "spectrum"
+              },
+              "dataFormat": "tsbuckets",
+              "datasource": "$source",
+              "description": "",
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 117
+              },
+              "heatmap": {},
+              "hideZeroBuckets": true,
+              "highlightCards": true,
+              "id": 49,
+              "interval": "1h",
+              "legend": {
+                "show": true
+              },
+              "reverseYBuckets": false,
+              "targets": [
+                {
+                  "expr": "sum( increase( http_server_response_size_bytes_bucket{job=\"$job\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
+                  "format": "heatmap",
+                  "interval": "",
+                  "legendFormat": "{{ "{{le}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "HTTP Response Size",
+              "tooltip": {
+                "show": true,
+                "showHistogram": false
+              },
+              "tooltipDecimals": 0,
+              "type": "heatmap",
+              "xAxis": {
+                "show": true
+              },
+              "xBucketNumber": null,
+              "xBucketSize": null,
+              "yAxis": {
+                "decimals": 0,
+                "format": "bytes",
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true,
+                "splitFactor": null
+              },
+              "yBucketBound": "auto",
+              "yBucketNumber": null,
+              "yBucketSize": null
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "MAX Response size",
+              "fill": 0,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 125
+              },
+              "hiddenSeries": false,
+              "id": 34,
+              "interval": "5m",
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "max_over_time( http_server_response_size_max_bytes{job=~\"$job\",instance=~\"$instance\", port=\"8080\"}[5m] ) ",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}} 8080" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "max_over_time( http_server_response_size_max_bytes{job=~\"$job\",instance=~\"$instance\", port=\"8081\"}[5m] ) ",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}} 8081" }}",
+                  "refId": "B"
+                },
+                {
+                  "expr": "max( max_over_time( http_server_response_size_max_bytes{job=~\"$job\", port=\"8080\"}[5m] ) )",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}} 8080" }}",
+                  "refId": "C"
+                },
+                {
+                  "expr": "max( max_over_time( http_server_response_size_max_bytes{job=~\"$job\", port=\"8081\"}[5m] ) )",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}} 8081" }}",
+                  "refId": "D"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP MAX Response Size Port=8080 & 8081",
+              "tooltip": {
+                "shared": true,
+                "sort": 2,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": 0,
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "Response size",
+              "fill": 0,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 10,
+                "w": 24,
+                "x": 0,
+                "y": 134
+              },
+              "hiddenSeries": false,
+              "id": 48,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( http_server_response_size_bytes_sum{job=~\"$job\",instance=~\"$instance\", port=\"8080\"}[2m] ) / rate(http_server_response_size_bytes_count{job=~\"$job\",instance=~\"$instance\", port=\"8080\"}[2m] )  ",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP AVG Response Size Port=8080",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": 0,
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "Response size",
+              "fill": 0,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 10,
+                "w": 24,
+                "x": 0,
+                "y": 144
+              },
+              "hiddenSeries": false,
+              "id": 47,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( http_server_response_size_bytes_sum{job=~\"$job\",instance=~\"$instance\", port=\"8081\"}[2m] ) / rate(http_server_response_size_bytes_count{job=~\"$job\",instance=~\"$instance\", port=\"8081\"}[2m] )  ",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "HTTP AVG Response Size Port=8081",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": 0,
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "Tracks if there has been any Thread Starvation Failures the last 24 hours",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 154
+              },
+              "hiddenSeries": false,
+              "id": 35,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "hideEmpty": true,
+                "hideZero": true,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "increase(thread_starvation_detector_executions_total{success=\"false\",job=~\"$job\",instance=~\"$instance\"}[10m]) > 0",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}-{{system}}" }}",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Thread Starvation Failures",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": 0,
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "decimals": 1,
+              "description": "",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 11,
+                "w": 24,
+                "x": 0,
+                "y": 162
+              },
+              "hiddenSeries": false,
+              "id": 37,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": true,
+                "min": false,
+                "show": true,
+                "total": true,
+                "values": true
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "sum by (job) (delta( cassandra_driver_session_cancelled_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Cancelled {{job}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "(delta( cassandra_driver_session_cancelled_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Cancelled {{job}}-{{instance}}" }}",
+                  "refId": "B"
+                },
+                {
+                  "expr": "sum by (job) (delta( cassandra_driver_session_retries_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Retries {{job}}" }}",
+                  "refId": "C"
+                },
+                {
+                  "expr": "(delta( cassandra_driver_session_retries_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Retries {{job}}-{{instance}}" }}",
+                  "refId": "D"
+                },
+                {
+                  "expr": "sum by (job) (delta( cassandra_driver_session_timeouts_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Timeouts {{job}}" }}",
+                  "refId": "E"
+                },
+                {
+                  "expr": "(delta( cassandra_driver_session_timeouts_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Timeouts {{job}}-{{instance}}" }}",
+                  "refId": "F"
+                },
+                {
+                  "expr": "sum by (job) (delta( cassandra_driver_session_connections_trashed_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Trashed {{job}}" }}",
+                  "refId": "G"
+                },
+                {
+                  "expr": "(delta( cassandra_driver_session_connections_trashed_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Trashed {{job}}-{{instance}}" }}",
+                  "refId": "H"
+                },
+                {
+                  "expr": "sum by (job) (delta( cassandra_driver_session_errors_total{source=\"server\",job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Server Errors {{job}}" }}",
+                  "refId": "I"
+                },
+                {
+                  "expr": "sum by (job) (delta( cassandra_driver_session_errors_total{source=\"client\",job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Client Errors {{job}}" }}",
+                  "refId": "J"
+                },
+                {
+                  "expr": "(delta( cassandra_driver_session_errors_total{source=\"server\", job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Server Errors {{job}}-{{instance}}" }}",
+                  "refId": "K"
+                },
+                {
+                  "expr": "(delta( cassandra_driver_session_errors_total{source=\"client\", job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Client Errors {{job}}-{{instance}}" }}",
+                  "refId": "L"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Cassandra Session Problems",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 173
+              },
+              "hiddenSeries": false,
+              "id": 38,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "delta( cassandra_driver_session_connections_open_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / delta(cassandra_driver_session_connections_open_count{job=~\"$job\",instance=~\"$instance\"}[10m] )",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum by (job) ( delta( cassandra_driver_session_connections_open_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / delta(cassandra_driver_session_connections_open_count{job=~\"$job\",instance=~\"$instance\"}[10m] ) )",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Total {{job}}" }}",
+                  "refId": "B"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Cassandra OPEN Connections",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": 0,
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "Prometheus",
+              "description": "",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 11,
+                "w": 24,
+                "x": 0,
+                "y": 182
+              },
+              "hiddenSeries": false,
+              "id": 39,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "links": [],
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "rate( cassandra_driver_session_in_flight_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / rate(cassandra_driver_session_in_flight_count{job=~\"$job\",instance=~\"$instance\"}[10m] )",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum by (job) ( rate( cassandra_driver_session_in_flight_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / rate(cassandra_driver_session_in_flight_count{job=~\"$job\",instance=~\"$instance\"}[10m] ) )",
+                  "format": "time_series",
+                  "hide": true,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "Total {{job}}" }}",
+                  "refId": "B"
+                },
+                {
+                  "expr": "rate( cassandra_driver_session_in_flight_sum{job=~\"$job\",instance=~\"$instance\"}[1m] ) ",
+                  "format": "time_series",
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "refId": "C"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Cassandra In-Flight Requests",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "decimals": 0,
+                  "format": "short",
+                  "label": "",
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            }
+          ],
+          "refresh": "",
+          "schemaVersion": 22,
+          "style": "dark",
+          "tags": [
+            "docker"
+          ],
+          "templating": {
+            "list": [
+              {
+                "current": {
+                  "selected": false,
+                  "text": "Prometheus",
+                  "value": "Prometheus"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": "Prometheus",
+                "multi": false,
+                "name": "source",
+                "options": [],
+                "query": "prometheus",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "type": "datasource"
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "selected": false,
+                  "text": "batch-starting-tool-metrics",
+                  "value": "batch-starting-tool-metrics"
+                },
+                "datasource": "$source",
+                "definition": "label_values(jvm_threads_total, job)",
+                "hide": 0,
+                "includeAll": false,
+                "index": -1,
+                "label": "job",
+                "multi": true,
+                "name": "job",
+                "options": [],
+                "query": "label_values(jvm_threads_total, job)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "text": "All",
+                  "value": [
+                    "$__all"
+                  ]
+                },
+                "datasource": "$source",
+                "definition": "label_values(jvm_threads_total, node)",
+                "hide": 0,
+                "includeAll": true,
+                "index": -1,
+                "label": "Node",
+                "multi": true,
+                "name": "node",
+                "options": [],
+                "query": "label_values(jvm_threads_total, node)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              },
+              {
+                "allValue": null,
+                "current": {
+                  "text": "All",
+                  "value": [
+                    "$__all"
+                  ]
+                },
+                "datasource": "$source",
+                "definition": "label_values(jvm_threads_total, instance)",
+                "hide": 0,
+                "includeAll": true,
+                "index": -1,
+                "label": "instance",
+                "multi": true,
+                "name": "instance",
+                "options": [],
+                "query": "label_values(jvm_threads_total, instance)",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+              }
+            ]
+          },
+          "time": {
+            "from": "now-12h",
+            "to": "now"
+          },
+          "timepicker": {
+            "refresh_intervals": [
+              "5s",
+              "10s",
+              "30s",
+              "1m",
+              "5m",
+              "15m",
+              "30m",
+              "1h",
+              "2h",
+              "1d"
+            ],
+            "time_options": [
+              "5m",
+              "15m",
+              "1h",
+              "6h",
+              "12h",
+              "24h",
+              "2d",
+              "7d",
+              "30d"
+            ]
+          },
+          "timezone": "browser",
+          "title": "JVM Monitoring",
+          "uid": "8jlA8etGG",
+          "variables": {
+            "list": []
+          },
+          "version": 5
+        }
