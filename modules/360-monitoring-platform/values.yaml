@@ -128,6 +128,74 @@ monitoringPlatform:
         rule_files:
           - /etc/config/rules/*.yaml
           - /etc/config/alerts/*.yml
+        scrape_configs:
+          - job_name: consul_dummy
+            honor_timestamps: true
+            scrape_interval: 30s
+            scrape_timeout: 20s
+            metrics_path: /metrics
+            scheme: http
+            consul_sd_configs:
+            - server: consul.service.consul:8500
+              tag_separator: ','
+              scheme: http
+              allow_stale: true
+              refresh_interval: 30s
+            relabel_configs:
+            - source_labels: [__meta_consul_tags]
+              separator: ;
+              regex: .*metrics,.*
+              replacement: $1
+              action: keep
+            - source_labels: [__meta_consul_service]
+              separator: ;
+              regex: (.*)
+              target_label: job
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_consul_node]
+              separator: ;
+              regex: (.*)
+              target_label: node
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_consul_tags]
+              separator: ;
+              regex: .node-metrics,.*
+              target_label: job
+              replacement: node
+              action: replace
+          - job_name: 'kubernetes-pods'
+            kubernetes_sd_configs:
+            - role: pod
+            relabel_configs:  # If first two labels are present, pod should be scraped  by the istio-secure job.
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+            # Keep target if there's no sidecar or if prometheus.io/scheme is explicitly set to "http"
+            - source_labels: [__meta_kubernetes_pod_annotation_sidecar_istio_io_status, __meta_kubernetes_pod_annotation_prometheus_io_scheme]
+              action: keep
+              regex: ((;.*)|(.*;http))
+            - source_labels: [__meta_kubernetes_pod_annotation_istio_mtls]
+              action: drop
+              regex: (true)
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+              action: replace
+              target_label: __metrics_path__
+              regex: (.+)
+            - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+              action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $1:$2
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: namespace
+            - source_labels: [__meta_kubernetes_pod_name]
+              action: replace
+              target_label: pod_name
 # configmap-reload container to mount the prometheus-alerts configmap also and to trigger hot reload of alerts
     configmapReload:
       prometheus:
