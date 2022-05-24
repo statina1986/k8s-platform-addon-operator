@@ -14,6 +14,10 @@ modulesConfig:
   awsPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  efsPlatformEnabled: "false"
+  efsPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   auroraMysqlDbEnabled: "false"
   auroraMysqlDb:
     configurationRequired: "check module documentation for configuration options"
@@ -46,20 +50,12 @@ modulesConfig:
   externalDns:
     configurationRequired: "check module documentation for configuration options"
 
-  filebeatPlatformEnabled: "false"
-  filebeatPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
   istioIngressEnabled: "false"
   istioIngress:
     configurationRequired: "check module documentation for configuration options"
 
   istioPlatformEnabled: "false"
   istioPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
-  logstashPlatformEnabled: "false"
-  logstashPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   kafkaPlatformEnabled: "false"
