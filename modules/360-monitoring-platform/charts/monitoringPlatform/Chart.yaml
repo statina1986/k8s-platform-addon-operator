@@ -18,3 +18,7 @@ dependencies:
     condition: prometheus.enabled
     version: "~15.8.5"
     repository:  "https://prometheus-community.github.io/helm-charts"
+  - name: instana-agent
+    condition: instana-agent.enabled
+    version: "1.2.35"
+    repository: "https://agents.instana.io/helm"
