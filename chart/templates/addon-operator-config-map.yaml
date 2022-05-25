@@ -13,9 +13,6 @@ data:
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
   awsPlatform: {{ print "|\n" (.Values.modulesConfig.awsPlatform | toYaml | indent 4) }}
 
-  efsPlatformEnabled: "{{ .Values.modulesConfig.efsPlatformEnabled }}"
-  efsPlatform: {{ print "|\n" (.Values.modulesConfig.efsPlatform | toYaml | indent 4) }}
-
   auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
 

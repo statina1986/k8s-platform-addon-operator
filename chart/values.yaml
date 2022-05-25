@@ -14,10 +14,6 @@ modulesConfig:
   awsPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  efsPlatformEnabled: "false"
-  efsPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
   auroraMysqlDbEnabled: "false"
   auroraMysqlDb:
     configurationRequired: "check module documentation for configuration options"
