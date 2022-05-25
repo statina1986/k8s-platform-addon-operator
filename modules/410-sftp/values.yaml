@@ -19,6 +19,8 @@ sftp:
     accessModes:
       - ReadWriteOnce
     size: 1Gi
+    
+  storageClassName: efs
 
   podAnnotations: {}
 
