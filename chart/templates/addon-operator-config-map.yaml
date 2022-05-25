@@ -13,6 +13,9 @@ data:
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
   awsPlatform: {{ print "|\n" (.Values.modulesConfig.awsPlatform | toYaml | indent 4) }}
 
+  efsPlatformEnabled: "{{ .Values.modulesConfig.efsPlatformEnabled }}"
+  efsPlatform: {{ print "|\n" (.Values.modulesConfig.efsPlatform | toYaml | indent 4) }}
+
   auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
   auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
 
@@ -37,9 +40,6 @@ data:
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
 
-  filebeatPlatformEnabled: "{{ .Values.modulesConfig.filebeatPlatformEnabled }}"
-  filebeatPlatform: {{ print "|\n" (.Values.modulesConfig.filebeatPlatform | toYaml | indent 4) }}
-
   istioIngressEnabled: "{{ .Values.modulesConfig.istioIngressEnabled }}"
   istioIngress: {{ print "|\n" (.Values.modulesConfig.istioIngress | toYaml | indent 4) }}
 
@@ -51,9 +51,6 @@ data:
 
   keycloakPlatformEnabled: "{{ .Values.modulesConfig.keycloakPlatformEnabled }}"
   keycloakPlatform: {{ print "|\n" (.Values.modulesConfig.keycloakPlatform | toYaml | indent 4) }}
-
-  logstashPlatformEnabled: "{{ .Values.modulesConfig.logstashPlatformEnabled }}"
-  logstashPlatform: {{ print "|\n" (.Values.modulesConfig.logstashPlatform | toYaml | indent 4) }}
 
   mariadbPlatformEnabled: "{{ .Values.modulesConfig.mariadbPlatformEnabled }}"
   mariadbPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbPlatform | toYaml | indent 4) }}
