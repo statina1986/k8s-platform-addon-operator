@@ -10,4 +10,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.sftp.persistence.size | quote }}
-  storageClassName: {{ .Values.sftp.storageClassName }}
+  storageClassName: {{ .Values.sftp.storageClassName | quote }}
