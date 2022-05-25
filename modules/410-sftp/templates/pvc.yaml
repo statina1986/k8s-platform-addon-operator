@@ -10,3 +10,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.sftp.persistence.size | quote }}
+  storageClassName: "efs"
