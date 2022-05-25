@@ -136,8 +136,8 @@ awsPlatform:
           provisioningMode: efs-ap
           fileSystemId: SYSTEM_EFS_VALUE_HERE
           directoryPerms: "700"
-          gidRangeStart: "1000"
-          gidRangeEnd: "2000"
+          # gidRangeStart: "1000"
+          # gidRangeEnd: "2000"
           uid: "0"
           gid: "0"
           basePath: "/dynamic_provisioning"
