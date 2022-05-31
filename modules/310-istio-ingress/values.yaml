@@ -502,6 +502,16 @@ istioIngress:
                   host: monitoring-platform-grafana.platform.svc.cluster.local
                   port:
                     number: 80
+      prometheus:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: monitoring-platform-prometheus-server.platform.svc.cluster.local
+                  port:
+                    number: 80
       kafka-ui:
         gateways:
           - private-ingress
