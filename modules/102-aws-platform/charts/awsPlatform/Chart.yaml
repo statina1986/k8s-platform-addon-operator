@@ -6,6 +6,6 @@ dependencies:
     version: "1.4.1"
     repository: https://aws.github.io/eks-charts
   - name: aws-efs-csi-driver
-    condition: aws-efs.enabled
+    condition: aws-efs-csi-driver.enabled
     version: 2.2.6
     repository: https://kubernetes-sigs.github.io/aws-efs-csi-driver/
