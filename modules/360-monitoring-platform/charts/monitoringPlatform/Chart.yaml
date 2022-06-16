@@ -2,10 +2,6 @@ apiVersion: v2
 name: monitoringPlatform
 version: 0.0.1
 dependencies:
-  - name: grafana
-    condition: grafana.enabled
-    version: ~6.24.1
-    repository: https://grafana.github.io/helm-charts
   - name: promtail
     condition: promtail.enabled
     repository: "https://grafana.github.io/helm-charts"
@@ -14,11 +10,19 @@ dependencies:
     condition: loki.enabled
     version: ^2.10.1
     repository: https://grafana.github.io/helm-charts
-  - name: prometheus
-    condition: prometheus.enabled
-    version: "~15.8.5"
-    repository:  "https://prometheus-community.github.io/helm-charts"
+  - name: kube-prometheus-stack
+    condition: kube-prometheus-stack.enabled
+    version: "~35.5.1"
+    repository: "https://prometheus-community.github.io/helm-charts"
   - name: instana-agent
     condition: instana-agent.enabled
     version: "1.2.35"
     repository: "https://agents.instana.io/helm"
+  - name: prometheus-blackbox-exporter
+    condition: prometheus-blackbox-exporter.enabled
+    version: "5.8.1"
+    repository: "https://prometheus-community.github.io/helm-charts"
+  - name: prometheus-consul-exporter
+    condition: prometheus-consul-exporter.enabled
+    version: "0.5.0"
+    repository: "https://prometheus-community.github.io/helm-charts"
