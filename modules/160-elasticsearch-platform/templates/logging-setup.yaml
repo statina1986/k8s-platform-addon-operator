@@ -3,9 +3,6 @@ kind: ConfigMap
 metadata:
   name: logging-configurator
   namespace: platform
-  annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-weight: "5"
 data:
   run: |
     cp /logging_setup/* /tmp
@@ -254,9 +251,6 @@ kind: Job
 metadata:
   name: logging-setup
   namespace: platform
-  annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-weight: "5"
 spec:
   template:
     spec:
