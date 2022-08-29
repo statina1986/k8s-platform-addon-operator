@@ -17,9 +17,6 @@ spec:
   elasticsearchRef:
     name: logsearch
   podTemplate:
-    metadata:
-      labels:
-        foo: bar
     spec:
       containers:
         - name: kibana
