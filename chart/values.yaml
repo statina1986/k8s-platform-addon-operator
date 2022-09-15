@@ -66,6 +66,10 @@ modulesConfig:
   mariadbPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  mongodbPlatformEnabled: "false"
+  mongodbPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     configurationRequired: "check module documentation for configuration options"

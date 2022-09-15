@@ -1,0 +1,3 @@
+mongodbPlatform:
+  mongodb:
+    architecture: replicaset
