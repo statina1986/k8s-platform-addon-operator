@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mongodb-platform
+version: 0.0.1
+dependencies:
+  - name: mongodbPlatform
+    version: 0.0.1
