@@ -9,5 +9,5 @@ Compute if the smartseacrh is enabled.
 Compute if the logsearch is enabled.
 */}}
 {{- define "elasticsearchPlatform.logsearchEnabled" -}}
-{{- $_ := set . "logsearchEnabled" (eq (.Values.elasticsearchPlatform.smartsearch.enabled | toString) "true") -}}
+{{- $_ := set . "logsearchEnabled" (eq (.Values.elasticsearchPlatform.logsearch.enabled | toString) "true") -}}
 {{- end -}}
