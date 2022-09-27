@@ -9,16 +9,16 @@ hook::config() {
 hook::trigger() {
   PORT=5601
   URL="http://kibana-kb-http:$PORT"
-  SECRET="$(kubectl get secret -n platform logsearch-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 -d)"
-  status_code=$(curl -u elastic:$SECRET --write-out %{http_code} --silent --output /dev/null "$URL"/status -I)
+  status_code=0
   while [ "200" != $status_code  ]
   do
-    echo "Unable to contact Kibana on port $PORT."
-    echo "Waiting for connection on $URL"
+    SECRET="$(kubectl get secret -n platform logsearch-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 -d)"
     echo "Sleeping for 50 seconds..."
     sleep 50
+    echo "Trying to contact Kibana at $URL"
     status_code=$(curl -u elastic:$SECRET --write-out %{http_code} --silent --output /dev/null "$URL"/status -I)
+    echo "status code $status_code"
   done
-  kubectl apply -f "${0%/*}/../templates/logging-setup.yaml"
+  kubectl apply -f "${0%/*}/../logging-setup.yaml"
 }
 common::run_hook "$@"
