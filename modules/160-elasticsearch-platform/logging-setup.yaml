@@ -5,82 +5,69 @@ metadata:
   namespace: platform
 data:
   run: |
-    cp /logging_setup/setup.sh /tmp/
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/setup.sh
-    /bin/sh -e /tmp/setup.sh
+    cp /logging_setup/* /tmp
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibanausers.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibana.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/elastic.sh
+    /bin/sh /tmp/kibanausers.sh
+    /bin/sh /tmp/kibana.sh
+    /bin/sh /tmp/elastic.sh
 
-  setup.sh: |
-    CURL='curl -s -w HTTP_CODE%{http_code}'
-    TMP=`mktemp`
-
-    check_curl() {
-      if ! egrep -q "HTTP_CODE$1" $TMP
-      then
-        echo "request failed"
-        cat $TMP
-        rm -f $TMP
-        exit 1
-      fi
-    }
-    $CURL -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+  kibanausers.sh: |
+    curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
         "cluster":[],
         "indices":[{"names":["*"],"privileges":["read","read_cross_cluster"],
         "allow_restricted_indices":false}],
         "applications":[{"application":"kibana-.kibana","privileges":["feature_discover.all","feature_visualize.all","feature_dashboard.all"],"resources":["*"]}],
         "run_as":[],"metadata":{},"transient_metadata":{"enabled":true}
-    }' > $TMP
-    check_curl 200
-    $CURL -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "password" : "kibana",
       "roles" : [ "CP_ROLE" ]
-    }' > $TMP
-    check_curl 200
+    }'
 
-    $CURL -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/application* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+  kibana.sh: |
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/application* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "application*",
             "timeFieldName": "@timestamp"
       }
-    }' > $TMP
-    check_curl 200
-    $CURL -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/platform* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/platform* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "platform*",
             "timeFieldName": "@timestamp"
       }
-    }' > $TMP
-    check_curl 200
-    $CURL -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/audit-* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/audit-* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "audit*",
             "timeFieldName": "@timestamp"
       }
-    }' > $TMP
-    check_curl 200
-    $CURL -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/undecided* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/undecided* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "undecided*",
             "timeFieldName": "@timestamp"
       }
-    }' > $TMP
-    check_curl 200
-    $CURL -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/ingress* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/ingress* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "ingress*",
             "timeFieldName": "@timestamp"
       }
-    }' > $TMP
-    check_curl 200
+    }'
 
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_template/application_template <<EOF > $TMP
+  elastic.sh: |
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/application_template <<EOF
     {
       "index_patterns": ["application*"],
       "order": -1,
@@ -91,9 +78,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_template/platform_template <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/platform_template <<EOF
     {
       "index_patterns": ["platform*"],
       "order": -1,
@@ -104,9 +90,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_template/audit_template <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/audit_template <<EOF
     {
       "index_patterns": ["audit*"],
       "order": -1,
@@ -117,9 +102,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_template/ingress_template <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/ingress_template <<EOF
     {
       "index_patterns": ["ingress*"],
       "order": -1,
@@ -130,9 +114,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_template/undecided_template <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/undecided_template <<EOF
     {
       "index_patterns": ["undecided*"],
       "order": -1,
@@ -142,9 +125,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_ilm/policy/application_policy <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/application_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -165,9 +147,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_ilm/policy/platform_policy <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/platform_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -188,9 +169,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_ilm/policy/ingress_policy <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/ingress_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -211,9 +191,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_ilm/policy/audit_policy <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/audit_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -234,9 +213,8 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
-    $CURL -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.platform.svc:9200/_ilm/policy/undecided_policy <<EOF > $TMP
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/undecided_policy <<EOF
     {
       "policy": {
         "phases": {
@@ -257,7 +235,6 @@ data:
       }
     }
     EOF
-    check_curl '200|409'
 
 ---
 apiVersion: v1
