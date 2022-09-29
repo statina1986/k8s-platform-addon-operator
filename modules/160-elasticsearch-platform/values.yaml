@@ -36,7 +36,8 @@ elasticsearchPlatform:
         }
         output {
             if ([message] =~"audit"
-                or[message] =~"AUDIT") {
+                or[message] =~"AUDIT"
+                or [message] =~ "(operationType=)|(type=LOG(IN|OUT))" ) {
                 elasticsearch {
                     user => "elastic"
                     password => "${ELASTICSEARCH_PASSWORD}"
