@@ -1,0 +1,7 @@
+apiVersion: v2
+name: k8ssandraPlatform
+version: 0.0.1
+dependencies:
+  - name: helm search repo k8ssandra-operator
+    version: 0.38.2
+    repository: https://helm.k8ssandra.io
