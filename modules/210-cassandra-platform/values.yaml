@@ -1,5 +1,5 @@
 cassandraPlatform: 
-  k8ssandra:
+  cassandra:
     cassandra:
       # Version of Apache Cassandra to deploy
       version: "3.11.11"
