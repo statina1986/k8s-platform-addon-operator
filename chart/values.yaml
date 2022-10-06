@@ -22,8 +22,8 @@ modulesConfig:
   cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  k8ssandraPlatformEnabled: "false"
-  k8ssandraPlatform:
+  kasopePlatformEnabled: "true"
+  kasopePlatform:
     configurationRequired: "check module documentation for configuration options"
 
   certPlatformEnabled: "false"

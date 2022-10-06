@@ -1,5 +1,5 @@
 apiVersion: v2
-name: k8ssandraPlatform
+name: kasopePlatform
 version: 0.0.1
 dependencies:
   - name: k8ssandra-operator

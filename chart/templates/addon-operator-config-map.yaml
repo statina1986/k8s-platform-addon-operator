@@ -19,8 +19,8 @@ data:
   cassandraPlatformEnabled: "{{ .Values.modulesConfig.cassandraPlatformEnabled }}"
   cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.cassandraPlatform | toYaml | indent 4) }}
 
-  cassandraPlatformEnabled: "{{ .Values.modulesConfig.k8ssandraPlatformEnabled }}"
-  cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.k8ssandraPlatform | toYaml | indent 4) }}
+  kasopePlatformEnabled: "{{ .Values.modulesConfig.kasopePlatformEnabled }}"
+  kasopePlatform: {{ print "|\n" (.Values.modulesConfig.kasopePlatform | toYaml | indent 4) }}
 
   certPlatformEnabled: "{{ .Values.modulesConfig.certPlatformEnabled }}"
   certPlatform: {{ print "|\n" (.Values.modulesConfig.certPlatform | toYaml | indent 4) }}
