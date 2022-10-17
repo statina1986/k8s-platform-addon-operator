@@ -88,7 +88,7 @@ data:
               "steppedLine": true,
               "targets": [
                 {
-                  "expr": "sum(rate(order_orchestrate_total{status=\"ok\"}[1m])) by (op)",
+                  "expr": "sum(rate(order_orchestrate_total{status=\"ok\",app=\"orders-manager\"}[1m])) by (op)",
                   "format": "time_series",
                   "intervalFactor": 1,
                   "legendFormat": "{{ "{{op}}" }}",
@@ -182,7 +182,7 @@ data:
               "steppedLine": true,
               "targets": [
                 {
-                  "expr": "sum(idelta(order_orchestrate_duration_sum{status=\"ok\"}[1m])/idelta(order_orchestrate_duration_count{status=\"ok\"}[1m])) by (op)",
+                  "expr": "sum(idelta(order_orchestrate_duration_sum{status=\"ok\",app=\"orders-manager\"}[1m])/idelta(order_orchestrate_duration_count{status=\"ok\",app=\"orders-manager\"}[1m])) by (op)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "",

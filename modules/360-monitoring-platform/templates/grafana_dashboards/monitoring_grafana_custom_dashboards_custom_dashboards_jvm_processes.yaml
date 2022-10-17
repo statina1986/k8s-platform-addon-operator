@@ -214,11 +214,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "jvm_memory_committed_bytes{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "jvm_memory_committed_bytes{region=\"heap\",app=~\"$app\",instance=~\"$instance\"}",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 }
               ],
@@ -305,12 +305,12 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate(jvm_memory_used_bytes_sum{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m]) / rate( jvm_memory_used_bytes_count{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m])",
+                  "expr": "rate(jvm_memory_used_bytes_sum{region=\"heap\",app=~\"$app\",instance=~\"$instance\"}[2m]) / rate( jvm_memory_used_bytes_count{region=\"heap\",app=~\"$app\",instance=~\"$instance\"}[2m])",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "B"
                 }
               ],
@@ -397,11 +397,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( jvm_memory_free_bytes_sum{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_memory_free_bytes_count{region=\"heap\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "expr": "rate( jvm_memory_free_bytes_sum{region=\"heap\",app=~\"$app\",instance=~\"$instance\"}[2m] ) / rate(jvm_memory_free_bytes_count{region=\"heap\",app=~\"$app\",instance=~\"$instance\"}[2m] )  ",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 }
               ],
@@ -488,11 +488,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( jvm_memory_used_bytes_sum{region=\"non-heap\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_memory_used_bytes_count{region=\"non-heap\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "expr": "rate( jvm_memory_used_bytes_sum{region=\"non-heap\",app=~\"$app\",instance=~\"$instance\"}[2m] ) / rate(jvm_memory_used_bytes_count{region=\"non-heap\",app=~\"$app\",instance=~\"$instance\"}[2m] )  ",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 }
               ],
@@ -569,7 +569,7 @@ data:
               "reverseYBuckets": false,
               "targets": [
                 {
-                  "expr": "sum( increase( jvm_gc_seconds_bucket{job=\"$job\",instance=~\"$instance\",collector=\"g1-young\",generation=\"young\"}[10m] )) by (le)    ",
+                  "expr": "sum( increase( jvm_gc_seconds_bucket{app=\"$app\",instance=~\"$instance\",collector=\"g1-young\",generation=\"young\"}[10m] )) by (le)    ",
                   "format": "heatmap",
                   "interval": "",
                   "legendFormat": "{{ "{{le}}" }}",
@@ -666,21 +666,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( jvm_gc_seconds_sum{generation=\"young\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_gc_seconds_count{generation=\"young\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "expr": "rate( jvm_gc_seconds_sum{generation=\"young\",app=~\"$app\",instance=~\"$instance\"}[2m] ) / rate(jvm_gc_seconds_count{generation=\"young\",app=~\"$app\",instance=~\"$instance\"}[2m] )  ",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}} Collector {{collector}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}} Collector {{collector}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "delta(jvm_gc_seconds_count{generation=\"young\",job=~\"$job\",instance=~\"$instance\"}[2m])",
+                  "expr": "delta(jvm_gc_seconds_count{generation=\"young\",app=~\"$app\",instance=~\"$instance\"}[2m])",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "GC Count {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "GC Count {{app}}-{{instance}}" }}",
                   "refId": "B"
                 }
               ],
@@ -767,11 +767,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( jvm_gc_seconds_sum{generation=\"old\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(jvm_gc_seconds_count{generation=\"old\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "expr": "rate( jvm_gc_seconds_sum{generation=\"old\",app=~\"$app\",instance=~\"$instance\"}[2m] ) / rate(jvm_gc_seconds_count{generation=\"old\",app=~\"$app\",instance=~\"$instance\"}[2m] )  ",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 }
               ],
@@ -858,16 +858,16 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "max_over_time( jvm_threads_total{job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "expr": "max_over_time( jvm_threads_total{app=~\"$app\",instance=~\"$instance\"}[1m] )",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "max( max_over_time( jvm_threads_total{job=~\"$job\",instance=~\"$instance\"}[1m] ) )",
+                  "expr": "max( max_over_time( jvm_threads_total{app=~\"$app\",instance=~\"$instance\"}[1m] ) )",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
@@ -876,7 +876,7 @@ data:
                   "refId": "B"
                 },
                 {
-                  "expr": "avg( max_over_time( jvm_threads_total{job=~\"$job\",instance=~\"$instance\"}[1m] ) )",
+                  "expr": "avg( max_over_time( jvm_threads_total{app=~\"$app\",instance=~\"$instance\"}[1m] ) )",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
@@ -989,7 +989,7 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "sum(increase( http_server_requests_total{job=~\"$job\",instance=~\"$instance\"}[10m] ) )  ",
+                  "expr": "sum(increase( http_server_requests_total{app=~\"$app\",instance=~\"$instance\"}[10m] ) )  ",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
@@ -997,7 +997,7 @@ data:
                   "refId": "D"
                 },
                 {
-                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"4xx\",job=~\"$job\",instance=~\"$instance\"}[10m] ) ) ",
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"4xx\",app=~\"$app\",instance=~\"$instance\"}[10m] ) ) ",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
@@ -1006,7 +1006,7 @@ data:
                   "refId": "E"
                 },
                 {
-                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"5xx\",job=~\"$job\",instance=~\"$instance\"}[10m] ) ) ",
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"5xx\",app=~\"$app\",instance=~\"$instance\"}[10m] ) ) ",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
@@ -1108,16 +1108,16 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "increase( http_server_requests_total{http_status_code=\"5xx\",job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "expr": "increase( http_server_requests_total{http_status_code=\"5xx\",app=~\"$app\",instance=~\"$instance\"}[1m] )",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"5xx\",job=~\"$job\",instance=~\"$instance\"}[1m] ) ) ",
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"5xx\",app=~\"$app\",instance=~\"$instance\"}[1m] ) ) ",
                   "format": "time_series",
                   "hide": true,
                   "intervalFactor": 1,
@@ -1208,16 +1208,16 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "increase( http_server_requests_total{http_status_code=\"4xx\",job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "expr": "increase( http_server_requests_total{http_status_code=\"4xx\",app=~\"$app\",instance=~\"$instance\"}[1m] )",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"4xx\",job=~\"$job\",instance=~\"$instance\"}[1m] ) ) ",
+                  "expr": "sum( increase( http_server_requests_total{http_status_code=\"4xx\",app=~\"$app\",instance=~\"$instance\"}[1m] ) ) ",
                   "format": "time_series",
                   "intervalFactor": 1,
                   "legendFormat": "Total",
@@ -1307,16 +1307,16 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "increase( http_server_requests_total{http_status_code=\"2xx\",job=~\"$job\",instance=~\"$instance\"}[1m] )",
+                  "expr": "increase( http_server_requests_total{http_status_code=\"2xx\",app=~\"$app\",instance=~\"$instance\"}[1m] )",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "sum(increase( http_server_requests_total{http_status_code=\"2xx\",job=~\"$job\",instance=~\"$instance\"}[1m] ) )  ",
+                  "expr": "sum(increase( http_server_requests_total{http_status_code=\"2xx\",app=~\"$app\",instance=~\"$instance\"}[1m] ) )  ",
                   "format": "time_series",
                   "instant": false,
                   "interval": "",
@@ -1409,11 +1409,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( http_server_request_active_sum{port=\"8081\",job=~\"$job\",instance=~\"$instance\"}[2m] ) / rate(http_server_request_active_count{port=\"8081\",job=~\"$job\",instance=~\"$instance\"}[2m] )  ",
+                  "expr": "rate( http_server_request_active_sum{port=\"8081\",app=~\"$app\",instance=~\"$instance\"}[2m] ) / rate(http_server_request_active_count{port=\"8081\",app=~\"$app\",instance=~\"$instance\"}[2m] )  ",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 }
               ],
@@ -1490,7 +1490,7 @@ data:
               "reverseYBuckets": false,
               "targets": [
                 {
-                  "expr": "sum( increase( http_server_connection_lifetime_seconds_bucket{job=\"$job\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
+                  "expr": "sum( increase( http_server_connection_lifetime_seconds_bucket{app=\"$app\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
                   "format": "heatmap",
                   "interval": "",
                   "legendFormat": "{{ "{{le}}" }}",
@@ -1556,7 +1556,7 @@ data:
               "reverseYBuckets": false,
               "targets": [
                 {
-                  "expr": "sum( increase( http_server_connection_open_bucket{customer=\"$customer\",datacenter=\"$datacenter\",environment=\"$environment\",job=\"$job\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
+                  "expr": "sum( increase( http_server_connection_open_bucket{customer=\"$customer\",datacenter=\"$datacenter\",environment=\"$environment\",app=\"$app\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
                   "format": "heatmap",
                   "interval": "",
                   "legendFormat": "{{ "{{le}}" }}",
@@ -1622,7 +1622,7 @@ data:
               "reverseYBuckets": false,
               "targets": [
                 {
-                  "expr": "sum( increase( http_server_response_size_bytes_bucket{job=\"$job\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
+                  "expr": "sum( increase( http_server_response_size_bytes_bucket{app=\"$app\",instance=~\"$instance\",port=\"8080\"}[10m] )) by (le)    ",
                   "format": "heatmap",
                   "interval": "",
                   "legendFormat": "{{ "{{le}}" }}",
@@ -1700,39 +1700,39 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "max_over_time( http_server_response_size_max_bytes{job=~\"$job\",instance=~\"$instance\", port=\"8080\"}[5m] ) ",
+                  "expr": "max_over_time( http_server_response_size_max_bytes{app=~\"$app\",instance=~\"$instance\", port=\"8080\"}[5m] ) ",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}} 8080" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}} 8080" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "max_over_time( http_server_response_size_max_bytes{job=~\"$job\",instance=~\"$instance\", port=\"8081\"}[5m] ) ",
+                  "expr": "max_over_time( http_server_response_size_max_bytes{app=~\"$app\",instance=~\"$instance\", port=\"8081\"}[5m] ) ",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}} 8081" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}} 8081" }}",
                   "refId": "B"
                 },
                 {
-                  "expr": "max( max_over_time( http_server_response_size_max_bytes{job=~\"$job\", port=\"8080\"}[5m] ) )",
+                  "expr": "max( max_over_time( http_server_response_size_max_bytes{app=~\"$app\", port=\"8080\"}[5m] ) )",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}} 8080" }}",
+                  "legendFormat": "{{ "{{app}} 8080" }}",
                   "refId": "C"
                 },
                 {
-                  "expr": "max( max_over_time( http_server_response_size_max_bytes{job=~\"$job\", port=\"8081\"}[5m] ) )",
+                  "expr": "max( max_over_time( http_server_response_size_max_bytes{app=~\"$app\", port=\"8081\"}[5m] ) )",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}} 8081" }}",
+                  "legendFormat": "{{ "{{app}} 8081" }}",
                   "refId": "D"
                 }
               ],
@@ -1821,12 +1821,12 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( http_server_response_size_bytes_sum{job=~\"$job\",instance=~\"$instance\", port=\"8080\"}[2m] ) / rate(http_server_response_size_bytes_count{job=~\"$job\",instance=~\"$instance\", port=\"8080\"}[2m] )  ",
+                  "expr": "rate( http_server_response_size_bytes_sum{app=~\"$app\",instance=~\"$instance\", port=\"8080\"}[2m] ) / rate(http_server_response_size_bytes_count{app=~\"$app\",instance=~\"$instance\", port=\"8080\"}[2m] )  ",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 }
               ],
@@ -1915,12 +1915,12 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( http_server_response_size_bytes_sum{job=~\"$job\",instance=~\"$instance\", port=\"8081\"}[2m] ) / rate(http_server_response_size_bytes_count{job=~\"$job\",instance=~\"$instance\", port=\"8081\"}[2m] )  ",
+                  "expr": "rate( http_server_response_size_bytes_sum{app=~\"$app\",instance=~\"$instance\", port=\"8081\"}[2m] ) / rate(http_server_response_size_bytes_count{app=~\"$app\",instance=~\"$instance\", port=\"8081\"}[2m] )  ",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "B"
                 }
               ],
@@ -2011,11 +2011,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "increase(thread_starvation_detector_executions_total{success=\"false\",job=~\"$job\",instance=~\"$instance\"}[10m]) > 0",
+                  "expr": "increase(thread_starvation_detector_executions_total{success=\"false\",app=~\"$app\",instance=~\"$instance\"}[10m]) > 0",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}-{{system}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}-{{system}}" }}",
                   "refId": "A"
                 }
               ],
@@ -2106,106 +2106,106 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "sum by (job) (delta( cassandra_driver_session_cancelled_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "sum by (app) (delta( cassandra_driver_session_cancelled_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Cancelled {{job}}" }}",
+                  "legendFormat": "{{ "Cancelled {{app}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "(delta( cassandra_driver_session_cancelled_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "(delta( cassandra_driver_session_cancelled_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Cancelled {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "Cancelled {{app}}-{{instance}}" }}",
                   "refId": "B"
                 },
                 {
-                  "expr": "sum by (job) (delta( cassandra_driver_session_retries_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "sum by (app) (delta( cassandra_driver_session_retries_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Retries {{job}}" }}",
+                  "legendFormat": "{{ "Retries {{app}}" }}",
                   "refId": "C"
                 },
                 {
-                  "expr": "(delta( cassandra_driver_session_retries_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "(delta( cassandra_driver_session_retries_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Retries {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "Retries {{app}}-{{instance}}" }}",
                   "refId": "D"
                 },
                 {
-                  "expr": "sum by (job) (delta( cassandra_driver_session_timeouts_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "sum by (app) (delta( cassandra_driver_session_timeouts_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": false,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Timeouts {{job}}" }}",
+                  "legendFormat": "{{ "Timeouts {{app}}" }}",
                   "refId": "E"
                 },
                 {
-                  "expr": "(delta( cassandra_driver_session_timeouts_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "(delta( cassandra_driver_session_timeouts_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Timeouts {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "Timeouts {{app}}-{{instance}}" }}",
                   "refId": "F"
                 },
                 {
-                  "expr": "sum by (job) (delta( cassandra_driver_session_connections_trashed_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "sum by (app) (delta( cassandra_driver_session_connections_trashed_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Trashed {{job}}" }}",
+                  "legendFormat": "{{ "Trashed {{app}}" }}",
                   "refId": "G"
                 },
                 {
-                  "expr": "(delta( cassandra_driver_session_connections_trashed_total{job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "(delta( cassandra_driver_session_connections_trashed_total{app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Trashed {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "Trashed {{app}}-{{instance}}" }}",
                   "refId": "H"
                 },
                 {
-                  "expr": "sum by (job) (delta( cassandra_driver_session_errors_total{source=\"server\",job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "sum by (app) (delta( cassandra_driver_session_errors_total{source=\"server\",app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Server Errors {{job}}" }}",
+                  "legendFormat": "{{ "Server Errors {{app}}" }}",
                   "refId": "I"
                 },
                 {
-                  "expr": "sum by (job) (delta( cassandra_driver_session_errors_total{source=\"client\",job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "sum by (app) (delta( cassandra_driver_session_errors_total{source=\"client\",app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Client Errors {{job}}" }}",
+                  "legendFormat": "{{ "Client Errors {{app}}" }}",
                   "refId": "J"
                 },
                 {
-                  "expr": "(delta( cassandra_driver_session_errors_total{source=\"server\", job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "(delta( cassandra_driver_session_errors_total{source=\"server\", app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Server Errors {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "Server Errors {{app}}-{{instance}}" }}",
                   "refId": "K"
                 },
                 {
-                  "expr": "(delta( cassandra_driver_session_errors_total{source=\"client\", job=~\"$job\", instance=~\"$instance\"}[10m] ))",
+                  "expr": "(delta( cassandra_driver_session_errors_total{source=\"client\", app=~\"$app\", instance=~\"$instance\"}[10m] ))",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Client Errors {{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "Client Errors {{app}}-{{instance}}" }}",
                   "refId": "L"
                 }
               ],
@@ -2293,19 +2293,19 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "delta( cassandra_driver_session_connections_open_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / delta(cassandra_driver_session_connections_open_count{job=~\"$job\",instance=~\"$instance\"}[10m] )",
+                  "expr": "delta( cassandra_driver_session_connections_open_sum{app=~\"$app\",instance=~\"$instance\"}[10m] ) / delta(cassandra_driver_session_connections_open_count{app=~\"$app\",instance=~\"$instance\"}[10m] )",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "sum by (job) ( delta( cassandra_driver_session_connections_open_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / delta(cassandra_driver_session_connections_open_count{job=~\"$job\",instance=~\"$instance\"}[10m] ) )",
+                  "expr": "sum by (app) ( delta( cassandra_driver_session_connections_open_sum{app=~\"$app\",instance=~\"$instance\"}[10m] ) / delta(cassandra_driver_session_connections_open_count{app=~\"$app\",instance=~\"$instance\"}[10m] ) )",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Total {{job}}" }}",
+                  "legendFormat": "{{ "Total {{app}}" }}",
                   "refId": "B"
                 }
               ],
@@ -2394,29 +2394,29 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "rate( cassandra_driver_session_in_flight_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / rate(cassandra_driver_session_in_flight_count{job=~\"$job\",instance=~\"$instance\"}[10m] )",
+                  "expr": "rate( cassandra_driver_session_in_flight_sum{app=~\"$app\",instance=~\"$instance\"}[10m] ) / rate(cassandra_driver_session_in_flight_count{app=~\"$app\",instance=~\"$instance\"}[10m] )",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "A"
                 },
                 {
-                  "expr": "sum by (job) ( rate( cassandra_driver_session_in_flight_sum{job=~\"$job\",instance=~\"$instance\"}[10m] ) / rate(cassandra_driver_session_in_flight_count{job=~\"$job\",instance=~\"$instance\"}[10m] ) )",
+                  "expr": "sum by (app) ( rate( cassandra_driver_session_in_flight_sum{app=~\"$app\",instance=~\"$instance\"}[10m] ) / rate(cassandra_driver_session_in_flight_count{app=~\"$app\",instance=~\"$instance\"}[10m] ) )",
                   "format": "time_series",
                   "hide": true,
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "Total {{job}}" }}",
+                  "legendFormat": "{{ "Total {{app}}" }}",
                   "refId": "B"
                 },
                 {
-                  "expr": "rate( cassandra_driver_session_in_flight_sum{job=~\"$job\",instance=~\"$instance\"}[1m] ) ",
+                  "expr": "rate( cassandra_driver_session_in_flight_sum{app=~\"$app\",instance=~\"$instance\"}[1m] ) ",
                   "format": "time_series",
                   "interval": "",
                   "intervalFactor": 1,
-                  "legendFormat": "{{ "{{job}}-{{instance}}" }}",
+                  "legendFormat": "{{ "{{app}}-{{instance}}" }}",
                   "refId": "C"
                 }
               ],
@@ -2497,15 +2497,15 @@ data:
                   "value": "batch-starting-tool-metrics"
                 },
                 "datasource": "$source",
-                "definition": "label_values(jvm_threads_total, job)",
+                "definition": "label_values(jvm_threads_total, app)",
                 "hide": 0,
                 "includeAll": false,
                 "index": -1,
-                "label": "job",
+                "label": "app",
                 "multi": true,
-                "name": "job",
+                "name": "app",
                 "options": [],
-                "query": "label_values(jvm_threads_total, job)",
+                "query": "label_values(jvm_threads_total, app)",
                 "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,

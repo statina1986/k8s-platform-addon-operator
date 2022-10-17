@@ -35,27 +35,46 @@ monitoringPlatform:
     zone:
       name: to-be-filled
   prometheus-blackbox-exporter:
-    enabled: true
+    enabled: false
   prometheus-consul-exporter:
-    enabled: true
+    enabled: false
     serviceMonitor:
       enabled: true
       namespace: platform
       interval: 30s
       telemetryPath: /metrics
   loki:
-    enabled: true
+    enabled: false
   promtail:
-    enabled: true
+    enabled: false
     config:
       lokiAddress: http://monitoring-platform-loki.platform.svc:3100/loki/api/v1/push
   kube-prometheus-stack:
     enabled: true
+    kube-state-metrics:
+      enabled: false
+    alertmanager:
+      enabled: false
+    kubeStateMetrics:
+      enabled: false
+    nodeExporter:
+      enabled: false
+    prometheusOperator:
+      enabled: false
+    kube-state-metrics:
+      enabled: false
+    prometheus-node-exporter:
+      enabled: false
     grafana:
       enabled: true
       adminPassword: Q4nt3l321
+      additionalDataSources:
+        - name: Prometheus
+          type: prometheus
+          url: http://monitor-prometheus-operato-prometheus:9090/
       plugins:
         - grafana-piechart-panel
+        - yesoreyeram-infinity-datasource
       grafana.ini:
         auth.anonymous:
           enabled: true
@@ -63,103 +82,14 @@ monitoringPlatform:
       sidecar:
         datasources:
           enabled: true
+          defaultDatasourceEnabled: false
           maxLines: 1000
       dashboardProviders:
         dashboardproviders.yaml:
           apiVersion: 1
           providers:
-           - name: 'cluster'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/cluster
-           - name: 'bssapi'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/bssapi
-           - name: 'summary'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/summary
-           - name: 'capacity'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/capacity
-           - name: 'flex-bpmn-processes'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/flex-bpmn-processes
-           - name: 'flex-bpmn-processes-overview'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/flex-bpmn-processes-overview
-           - name: 'jvm-monitoring'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/jvm-monitoring
-           - name: 'persistent-volumes'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/persistent-volumes
-           - name: 'orders-overview'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/orders-overview
-           - name: 'rid'
-             orgId: 1
-             folder: ''
-             type: file
-             disableDeletion: false
-             editable: true
-             options:
-               path: /var/lib/grafana/dashboards/rid
-      dashboardsConfigMaps:
-        cluster: "grafana-dashboards-cluster"
-        bssapi: "grafana-dashboards-bssapi"
-        summary: "grafana-dashboards-summary"
-        capacity: "grafana-dashboards-capacity"
-        flex-bpmn-processes: "grafana-dashboards-flex-bpmn-processes"
-        flex-bpmn-processes-overview: "grafana-dashboards-flex-bpmn-processes-overview"
-        jvm-monitoring: "grafana-dashboards-jvm-monitoring"
-        persistent-volumes: "grafana-dashboards-persistent-volumes"
-        orders-overview: "grafana-dashboards-orders-overview"
-        rid: "grafana-dashboards-rid"
     prometheus:
+      enable: false
       prometheusSpec:
         retention: 12d
         externalLabels:
