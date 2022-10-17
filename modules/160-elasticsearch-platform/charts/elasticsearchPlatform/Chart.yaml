@@ -3,7 +3,7 @@ name: elasticsearchPlatform
 version: 0.0.1
 dependencies:
   - name: eck-operator
-    version: 1.9.1
+    version: 2.2.0
     repository: https://helm.elastic.co
   - name: logstash
     version: 7.16.2
