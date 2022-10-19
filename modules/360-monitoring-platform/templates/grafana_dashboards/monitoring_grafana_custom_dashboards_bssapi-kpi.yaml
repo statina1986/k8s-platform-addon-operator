@@ -1140,7 +1140,7 @@ data:
             "steppedLine": false,
             "targets": [
               {
-                "expr": "sum(increase(akka_system_processed_messages_total{job=~\".+aggregator.+\"} [$interval]))",
+                "expr": "sum(increase(akka_system_processed_messages_total{pod_name=~\".+aggregator.+\"} [$interval]))",
                 "format": "time_series",
                 "interval": "",
                 "intervalFactor": 1,
