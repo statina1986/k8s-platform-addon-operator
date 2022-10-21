@@ -2,8 +2,7 @@ apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
-    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook: post-install,post-upgrade,pre-delete
     helm.sh/hook-weight: "5"
   name: kibana
   namespace: platform
@@ -12,19 +11,22 @@ spec:
     tls:
       selfSignedCertificate:
         disabled: true
-  version: 7.16.2
-  count: 1
+  version: {{ .Values.elasticsearchPlatform.kibana.image.tag }}
+  count: {{ .Values.elasticsearchPlatform.kibana.count }}
   elasticsearchRef:
     name: logsearch
   podTemplate:
     spec:
       containers:
         - name: kibana
-          image: artifactory.qvantel.net/helm-k8s-kibana:7.16.2
+          image: "{{ .Values.elasticsearchPlatform.kibana.image.repository }}:{{ .Values.elasticsearchPlatform.kibana.image.tag }}"
           resources:
             requests:
-              memory: 0.5Gi
-              cpu: 0.1
+              memory: {{ .Values.elasticsearchPlatform.kibana.resources.requests.memory }}
+              cpu: {{ .Values.elasticsearchPlatform.kibana.resources.requests.cpu }}
             limits:
-              memory: 1Gi
-              cpu: 0.5
+              memory: {{ .Values.elasticsearchPlatform.kibana.resources.limits.memory }}
+              cpu: {{ .Values.elasticsearchPlatform.kibana.resources.limits.cpu }}
+{{- if eq .Values.elasticsearchPlatform.kibana.zoneAffinity "true"  }}
+{{  .Values.elasticsearchPlatform.kibana.affinityRules | indent 6  }}
+{{- end }}

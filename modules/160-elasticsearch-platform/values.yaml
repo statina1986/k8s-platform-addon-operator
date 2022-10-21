@@ -1,5 +1,6 @@
 elasticsearchPlatform:
   eck-operator:
+    # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false
     image:
       # repository is the container image prefixed by the registry name.
@@ -7,11 +8,76 @@ elasticsearchPlatform:
       # pullPolicy is the container image pull policy.
       pullPolicy: IfNotPresent
       # tag is the container image tag. If not defined, defaults to chart appVersion.
-      tag: 1.9.1
+      tag: 2.2.0
   smartsearch:
     enabled: true
   logsearch:
     enabled: true
+    count: 3
+    # volumePolicy is used to define if the PVC/PV is deleted when the elastic cluster is upgraded 
+    # or only when the cluster is scaled down with, DeleteOnScaledownOnly or DeleteOnScaledownAndClusterDeletion values.
+    volumePolicy: DeleteOnScaledownAndClusterDeletion
+    logLevel: info
+    image:
+      repository: artifactory.qvantel.net/helm-k8s-elasticsearch
+      tag: 7.16.2
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1000Mi"
+      limits:
+        cpu: "1000m"
+        memory: "2000Mi"
+      storage: 500Gi
+    initContainers: |-
+      initContainers:
+        - name: sysctl
+          securityContext:
+            privileged: true
+            runAsUser: 0
+          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+    # zoneConf and topologySpreadConstraints are used when zoneAffinity is set to true.
+    zoneAffinity: "false"
+    zoneConf: |-
+      env:
+      - name: ZONE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+    topologySpreadConstraints: |-
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              elasticsearch.k8s.elastic.co/cluster-name: logsearch
+              elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
+  kibana:
+    count: 3
+    image:
+      repository: artifactory.qvantel.net/helm-k8s-kibana
+      tag: 7.16.2
+    resources:
+      requests:
+        cpu: 0.1
+        memory: 0.5Gi
+      limits:
+        cpu: 1
+        memory: 2Gi
+    # Enables AffinityRules
+    zoneAffinity: "false"
+    affinityRules: |
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: kibana.k8s.elastic.co/name
+                    operator: In
+                    values:
+                      - kibana
+              topologyKey: "kubernetes.io/zone"
   logstash:
     replicas: 1
     logstashConfig: 
@@ -20,6 +86,7 @@ elasticsearchPlatform:
         xpack.monitoring.elasticsearch.hosts: ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
         xpack.monitoring.elasticsearch.username: 'elastic'
         xpack.monitoring.elasticsearch.password: '${ELASTICSEARCH_PASSWORD}'
+        pipeline.ecs_compatibility: disabled
     logstashPipeline:
       logstash.conf: |
         input {
@@ -192,6 +259,7 @@ elasticsearchPlatform:
             loadbalance: false
             bulk_max_size: 1024
             hosts: ['${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']
+            logging.level: info
       resources:
         requests:
           cpu: "100m"
