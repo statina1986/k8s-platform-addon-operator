@@ -1,0 +1,34 @@
+kasopePlatform:
+  k8ssandra-operator:
+  clusters:
+    - name: cluster
+      spec:
+        cassandra:
+          serverVersion: "3.11.11"
+          config:
+            cassandraYaml:     
+              num_tokens: 8
+              allocate_tokens_for_local_replication_factor: 3
+            jvmOptions:
+              heapSize: 4Gi
+          storageConfig:
+            cassandraDataVolumeClaimSpec:
+              storageClassName: standard
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 100Gi
+          resources:
+            requests:
+              memory: 8Gi
+          datacenters:
+            - metadata:
+                name: dc1
+              size: 3
+          telemetry:
+            prometheus:
+              enabled: true
+        reaper:
+          autoScheduling:
+            enabled: true

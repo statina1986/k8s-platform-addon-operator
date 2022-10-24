@@ -1,0 +1,13 @@
+{{- if .Values.kasopePlatform.clusters }}
+{{- $relnamespace := .Release.Namespace -}}
+{{- range .Values.kasopePlatform.clusters  }}
+---
+apiVersion: k8ssandra.io/v1alpha1
+kind: K8ssandraCluster
+metadata:
+  name: {{ .name }}
+  namespace: {{ $relnamespace }}
+spec:
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}
