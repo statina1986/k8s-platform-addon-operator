@@ -1,34 +1,13 @@
+{{- if .Values.kasopePlatform.clusters }}
+{{- $relnamespace := .Release.Namespace -}}
+{{- range .Values.kasopePlatform.clusters  }}
+---
 apiVersion: k8ssandra.io/v1alpha1
 kind: K8ssandraCluster
 metadata:
-  name: cluster
+  name: {{ .name }}
+  namespace: {{ $relnamespace }}
 spec:
-  cassandra:
-    serverVersion: "3.11.11"
-    config:
-      cassandraYaml:     
-        num_tokens: 8
-        allocate_tokens_for_local_replication_factor: 3
-      jvmOptions:
-        heapSize: 4Gi
-    storageConfig:
-      cassandraDataVolumeClaimSpec:
-        storageClassName: gp2
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 100Gi
-    resources:
-      requests:
-        memory: 8Gi
-    datacenters:
-      - metadata:
-          name: dc1
-        size: 3
-    telemetry:
-      prometheus:
-        enabled: true
-  reaper:
-    autoScheduling:
-      enabled: true
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}
