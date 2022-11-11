@@ -10,7 +10,7 @@ elasticsearchPlatform:
       # tag is the container image tag. If not defined, defaults to chart appVersion.
       tag: 2.2.0
   smartsearch:
-    enabled: true
+    enabled: false
   logsearch:
     enabled: true
     count: 3
@@ -28,16 +28,50 @@ elasticsearchPlatform:
       limits:
         cpu: "1000m"
         memory: "2000Mi"
-      storage: 500Gi
+      storage: 100Gi
     initContainers: |-
       initContainers:
-        - name: sysctl
-          securityContext:
-            privileged: true
-            runAsUser: 0
-          command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+      - name: sysctl
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+      - name: install-plugins
+        command:
+        - sh
+        - -c
+        - |
+          bin/elasticsearch-plugin remove repository-s3
+          bin/elasticsearch-plugin install --batch repository-s3
+        env:
+        - name: ZONE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+      - name: add-access-keys
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: elastic-keys
+              key: access-key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: elastic-keys
+              key: secret-key
+        - name: ZONE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+        command:
+        - sh
+        - -c
+        - |
+          echo $AWS_ACCESS_KEY_ID | bin/elasticsearch-keystore add --stdin --force s3.client.default.access_key
+          echo $AWS_SECRET_ACCESS_KEY | bin/elasticsearch-keystore add --stdin --force s3.client.default.secret_key
     # zoneConf and topologySpreadConstraints are used when zoneAffinity is set to true.
-    zoneAffinity: "false"
+    zoneAffinity: "true"
     zoneConf: |-
       env:
       - name: ZONE
@@ -66,7 +100,7 @@ elasticsearchPlatform:
         cpu: 1
         memory: 2Gi
     # Enables AffinityRules
-    zoneAffinity: "false"
+    zoneAffinity: "true"
     affinityRules: |
       affinity:
         podAntiAffinity:
