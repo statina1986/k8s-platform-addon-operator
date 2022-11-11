@@ -141,7 +141,7 @@ data:
             }
           },
           "warm": {
-            "min_age": "2d",
+            "min_age":"2d",
             "actions": {
               "forcemerge": {
                 "max_num_segments": 1
@@ -160,7 +160,7 @@ data:
             }
           },
           "cold": {
-            "min_age": "7d",
+            "min_age":"7d",
             "actions": {
               "set_priority": {
                 "priority": 0
@@ -175,7 +175,7 @@ data:
             }
           },
           "delete": {
-            "min_age": "14d",
+            "min_age":"14d",
             "actions": {
               "wait_for_snapshot" : {
                 "policy": "monthly-snapshots"
@@ -203,7 +203,7 @@ data:
             }
           },
           "warm": {
-            "min_age": "2d",
+            "min_age":"2d",
             "actions": {
               "forcemerge": {
                 "max_num_segments": 1
@@ -222,7 +222,7 @@ data:
             }
           },
           "cold": {
-            "min_age": "7d",
+            "min_age":"7d",
             "actions": {
               "set_priority": {
                 "priority": 0
@@ -237,7 +237,7 @@ data:
             }
           },
           "delete": {
-            "min_age": "14d",
+            "min_age":"14d",
             "actions": {
               "wait_for_snapshot" : {
                 "policy": "monthly-snapshots"
@@ -265,7 +265,7 @@ data:
             }
           },
           "warm": {
-            "min_age": "2d",
+            "min_age":"2d",
             "actions": {
               "forcemerge": {
                 "max_num_segments": 1
@@ -284,7 +284,7 @@ data:
             }
           },
           "cold": {
-            "min_age": "7d",
+            "min_age":"7d",
             "actions": {
               "set_priority": {
                 "priority": 0
@@ -299,7 +299,7 @@ data:
             }
           },
           "delete": {
-            "min_age": "20d",
+            "min_age":"20d",
             "actions": {
               "wait_for_snapshot" : {
                 "policy": "monthly-snapshots"
@@ -327,7 +327,7 @@ data:
             }
           },
           "warm": {
-            "min_age": "2d",
+            "min_age":"2d",
             "actions": {
               "forcemerge": {
                 "max_num_segments": 1
@@ -346,7 +346,7 @@ data:
             }
           },
           "cold": {
-            "min_age": "7d",
+            "min_age":"7d",
             "actions": {
               "set_priority": {
                 "priority": 0
@@ -361,7 +361,7 @@ data:
             }
           },
           "delete": {
-            "min_age": "20d",
+            "min_age":"20d",
             "actions": {
               "wait_for_snapshot" : {
                 "policy": "monthly-snapshots"
@@ -408,7 +408,7 @@ data:
             }
           },
           "cold": {
-            "min_age": "7d",
+            "min_age":"7d",
             "actions": {
               "set_priority": {
                 "priority": 0
@@ -423,7 +423,7 @@ data:
             }
           },
           "delete": {
-            "min_age": "14d",
+            "min_age":"14d",
             "actions": {
               "wait_for_snapshot" : {
                 "policy": "monthly-snapshots"
