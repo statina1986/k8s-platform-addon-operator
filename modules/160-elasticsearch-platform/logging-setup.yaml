@@ -133,13 +133,53 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "20GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age": "7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"7d",
+            "min_age": "14d",
             "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
               "delete": {}
             }
           }
@@ -155,13 +195,53 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "10GB"
+                "max_size":"10GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age": "7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"7d",
+            "min_age": "14d",
             "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
               "delete": {}
             }
           }
@@ -177,13 +257,53 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "20GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age": "7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"14d",
+            "min_age": "20d",
             "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
               "delete": {}
             }
           }
@@ -199,13 +319,53 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "25GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age": "7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"365d",
+            "min_age": "20d",
             "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
               "delete": {}
             }
           }
@@ -221,13 +381,53 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "25GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age": "7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"7d",
+            "min_age": "14d",
             "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
               "delete": {}
             }
           }

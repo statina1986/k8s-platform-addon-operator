@@ -20,5 +20,6 @@ hook::trigger() {
     echo "status code $status_code"
   done
   kubectl apply -f "${0%/*}/../logging-setup.yaml"
+  kubectl apply -f "${0%/*}/../snapshots.yaml"
 }
 common::run_hook "$@"
