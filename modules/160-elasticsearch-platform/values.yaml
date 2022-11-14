@@ -10,7 +10,7 @@ elasticsearchPlatform:
       # tag is the container image tag. If not defined, defaults to chart appVersion.
       tag: 2.2.0
   smartsearch:
-    enabled: false
+    enabled: true
   logsearch:
     enabled: true
     count: 3
@@ -28,7 +28,7 @@ elasticsearchPlatform:
       limits:
         cpu: "1000m"
         memory: "2000Mi"
-      storage: 100Gi
+      storage: 500Gi
     initContainers: |-
       initContainers:
       - name: sysctl
