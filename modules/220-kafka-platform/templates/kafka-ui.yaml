@@ -20,6 +20,8 @@ spec:
           value: kafka-cluster-kafka-bootstrap.{{ .Release.Namespace }}.svc.cluster.local:9092
         - name: KAFKA_CLUSTERS_0_NAME
           value: kafka
+        - name: LOGGING_LEVEL_COM_PROVECTUS
+          value: info
         image: provectuslabs/kafka-ui:latest
         imagePullPolicy: Always
         name: kafka-ui
