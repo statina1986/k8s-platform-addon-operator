@@ -13,7 +13,7 @@ kasopePlatform:
               heapSize: 4Gi
           storageConfig:
             cassandraDataVolumeClaimSpec:
-              storageClassName: standard
+              storageClassName: gp3
               accessModes:
                 - ReadWriteOnce
               resources:
