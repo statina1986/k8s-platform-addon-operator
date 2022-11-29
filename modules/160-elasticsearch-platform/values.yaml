@@ -104,6 +104,7 @@ elasticsearchPlatform:
         output {
             if ([message] =~"audit"
                 or[message] =~"AUDIT"
+                or [log_type] = "AUDIT
                 or [message] =~ "(operationType=)|(type=LOG(IN|OUT))" ) {
                 elasticsearch {
                     user => "elastic"
