@@ -7,26 +7,6 @@ metadata:
   name: kibana
   namespace: platform
 spec:
-  http:
-    tls:
-      selfSignedCertificate:
-        disabled: true
-  version: {{ .Values.elasticsearchPlatform.kibana.image.tag }}
-  count: {{ .Values.elasticsearchPlatform.kibana.count }}
-  elasticsearchRef:
-    name: logsearch
-  podTemplate:
-    spec:
-      containers:
-        - name: kibana
-          image: "{{ .Values.elasticsearchPlatform.kibana.image.repository }}:{{ .Values.elasticsearchPlatform.kibana.image.tag }}"
-          resources:
-            requests:
-              memory: {{ .Values.elasticsearchPlatform.kibana.resources.requests.memory }}
-              cpu: {{ .Values.elasticsearchPlatform.kibana.resources.requests.cpu }}
-            limits:
-              memory: {{ .Values.elasticsearchPlatform.kibana.resources.limits.memory }}
-              cpu: {{ .Values.elasticsearchPlatform.kibana.resources.limits.cpu }}
-{{- if eq .Values.elasticsearchPlatform.kibana.zoneAffinity "true"  }}
-{{  .Values.elasticsearchPlatform.kibana.affinityRules | indent 6  }}
-{{- end }}
+  {{- range .Values.elasticsearchPlatform.configKibana }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
