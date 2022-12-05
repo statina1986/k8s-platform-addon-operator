@@ -1,0 +1,5 @@
+# metrics-platform module
+This module is responsible for deployment of [metrics-server](https://github.com/kubernetes-sigs/metrics-server/) in the cluster
+
+Depends on modules:
+- no dependencies
