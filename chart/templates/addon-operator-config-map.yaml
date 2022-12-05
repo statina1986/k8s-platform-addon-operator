@@ -48,6 +48,9 @@ data:
 
   kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
+  
+  kasopePlatformEnabled: "{{ .Values.modulesConfig.kasopePlatformEnabled }}"
+  kasopePlatform: {{ print "|\n" (.Values.modulesConfig.kasopePlatform | toYaml | indent 4) }}
 
   keycloakPlatformEnabled: "{{ .Values.modulesConfig.keycloakPlatformEnabled }}"
   keycloakPlatform: {{ print "|\n" (.Values.modulesConfig.keycloakPlatform | toYaml | indent 4) }}
