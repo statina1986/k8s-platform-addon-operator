@@ -15,7 +15,6 @@ EOF
 
 hook::trigger() {
   CURL_OPT="-k --connect-timeout 10"
-  VAULT_ADDR="http://vault-platform.platform.svc.cluster.local:8200"
   CURL_RESULT="curl.result"
 
   type=$(jq -r '.[0].type' ${BINDING_CONTEXT_PATH})
@@ -34,8 +33,8 @@ hook::trigger() {
       name=$(jq -r '.[0].object.metadata.name' ${BINDING_CONTEXT_PATH})
       endpoint=$(jq -r '.[0].object.spec."endpoint"' ${BINDING_CONTEXT_PATH})
       credentials_secret=$(jq -r '.[0].object.spec."credentials_secret"' ${BINDING_CONTEXT_PATH})
-      # username="$(kubectl::get_secret_opaque_kv $credentials_secret 'username' 'platform')"
-      password="$(kubectl::get_secret_opaque_kv $credentials_secret 'mariadb-root-password' 'platform')"
+      username="$(kubectl::get_secret_opaque_kv $credentials_secret 'username' 'platform')"
+      password="$(kubectl::get_secret_opaque_kv $credentials_secret 'password' 'platform')"
 
       token="$(vault::get_vault_token)"
       
@@ -44,7 +43,7 @@ hook::trigger() {
         --data '{\"plugin_name\": \"mysql-database-plugin\", \
           \"connection_url\":\"{{username}}:{{password}}@tcp($endpoint:3306)/\", \
           \"allowed_roles\":\"*\", \
-          \"username\": \"root\", \
+          \"username\": \"$username\", \
           \"password\": \"$password\"}' \
         '${VAULT_ADDR}/v1/database/config/$name'" 200
     fi

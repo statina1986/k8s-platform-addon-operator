@@ -27,6 +27,10 @@ spec:
             value: {{ .Values.logLevel}}
           - name: HELM_IGNORE_RELEASE
             value:  {{ .Values.helmIgnoreRelease}}
+          {{- range .Values.additionalEnvironmentVars }}
+          - name: {{ .name }}
+            value: {{ .value }}
+          {{- end }}
         livenessProbe:
           httpGet:
             path: /healthz

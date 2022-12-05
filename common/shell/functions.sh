@@ -1,4 +1,3 @@
-
 declare -A levels=([debug]=0 [info]=1 [warn]=2 [error]=3)
 
 function qlog_level() {
@@ -18,6 +17,10 @@ function qlog_debug() {
 function qlog() {
   qlog_level "info" "$@"
 }
+
+MYDIR="$(dirname "$(readlink -f "$BASH_SOURCE")")"
+VARIABLES_FILE=${VARIABLES_FILE:-"variables.sh"}
+source "$MYDIR/$VARIABLES_FILE"
 
 function rand() {
   echo "$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c ${1-5})"
@@ -98,5 +101,5 @@ function kubectl::get_secret_opaque_kv() {
 }
 
 function vault::get_vault_token() {
-  echo "$( kubectl get secret -n platform vault-keys --template='{{ index .data "root_token" }}' | base64 -d )"
+  echo "$( kubectl get secret -n  $VAULT_SECRET_NAMESPACE $VAULT_SECRET_NAME --template="{{ index .data \"$VAULT_SECRET_ROOT_TOKEN\" }}" | base64 -d )"
 }
