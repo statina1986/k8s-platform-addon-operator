@@ -1,3 +1,5 @@
+{{- template "elasticsearchPlatform.logsearchBackupEnabled" . -}}
+{{- if .logsearchBackupEnabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -74,3 +76,4 @@ spec:
               name: logsearch-es-elastic-user
               key: elastic
       restartPolicy: Never
+{{- end }}

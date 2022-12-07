@@ -11,3 +11,8 @@ Compute if the logsearch is enabled.
 {{- define "elasticsearchPlatform.logsearchEnabled" -}}
 {{- $_ := set . "logsearchEnabled" (eq (.Values.elasticsearchPlatform.logsearch.enabled | toString) "true") -}}
 {{- end -}}
+Compute if the snapshot is enabled.
+*/}}
+{{- define "elasticsearchPlatform.logsearchBackupEnabled" -}}
+{{- $_ := set . "logsearchBackupEnabled" (eq (.Values.elasticsearchPlatform.logsearchBackup.enabled | toString) "true") -}}
+{{- end -}}

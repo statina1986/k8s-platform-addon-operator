@@ -14,3 +14,19 @@ spec:
     {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}
+{{- template "elasticsearchPlatform.logsearchBackupEnabled" . -}}
+{{- if .logsearchBackupEnabled -}}
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: logsearch
+  namespace: platform
+  annotations:
+    helm.sh/hook: post-install,post-upgrade,pre-delete
+    helm.sh/hook-weight: "4"
+    eck.k8s.elastic.co/downward-node-labels: "topology.kubernetes.io/zone"
+spec:
+  {{- range .Values.elasticsearchPlatform.configElasticBackup }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}

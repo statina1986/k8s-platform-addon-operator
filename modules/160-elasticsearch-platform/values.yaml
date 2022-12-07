@@ -11,11 +11,15 @@ elasticsearchPlatform:
       tag: 2.2.0
   smartsearch:
     enabled: true
+  # Enable only one of the logsearch or logsearchBackup options.
   logsearch:
     enabled: true
-    count: 3
+  logsearchBackup:
+    enabled: false
+
     # volumePolicy is used to define if the PVC/PV is deleted when the elastic cluster is upgraded 
     # or only when the cluster is scaled down with, DeleteOnScaledownOnly or DeleteOnScaledownAndClusterDeletion values.
+
   configElastic:
     definitions:
       version: 7.16.2
@@ -32,7 +36,117 @@ elasticsearchPlatform:
           cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
           node.attr.data: warm
           node.attr.type: warm
-          node.roles: '["master", "data", "ingest", "data_hot", "data_warm"]'
+          node.roles: ["master", "data", "ingest", "data_hot", "data_warm"]
+          node.store.allow_mmap: false
+          logger.org.elasticsearch: info
+        volumeClaimTemplates:
+          - metadata:
+              name: elasticsearch-data
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 500Gi
+        podTemplate:
+          spec:
+            initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+            containers:
+              - name: elasticsearch
+                image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.17.7"
+                resources:
+                  requests:
+                    memory: 2000Mi
+                    cpu: "1"
+                env:
+                - name: ZONE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+            topologySpreadConstraints:
+              - maxSkew: 1
+                topologyKey: topology.kubernetes.io/zone
+                whenUnsatisfiable: DoNotSchedule
+                labelSelector:
+                  matchLabels:
+                    elasticsearch.k8s.elastic.co/cluster-name: logsearch
+                    elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
+      - name: logsearch-cold
+        count: 1
+        config:
+          node.attr.zone: ${ZONE}
+          cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
+          node.attr.data: cold
+          node.attr.type: cold
+          node.roles: ["data_cold", "data_content"]
+          node.store.allow_mmap: false
+          logger.org.elasticsearch: info
+        volumeClaimTemplates:
+          - metadata:
+              name: elasticsearch-data
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 500Gi
+        podTemplate:
+          spec:
+            initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+            containers:
+              - name: elasticsearch
+                image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.17.7"
+                resources:
+                  requests:
+                    memory: 2000Mi
+                    cpu: "1"
+                env:
+                - name: ZONE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+            topologySpreadConstraints:
+              - maxSkew: 1
+                topologyKey: topology.kubernetes.io/zone
+                whenUnsatisfiable: DoNotSchedule
+                labelSelector:
+                  matchLabels:
+                    elasticsearch.k8s.elastic.co/cluster-name: logsearch
+                    elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
+      podDisruptionBudget:
+        spec:
+          minAvailable: 1
+          selector:
+            matchLabels:
+              elasticsearch.k8s.elastic.co/cluster-name: logsearch
+
+  configElasticBackup:
+    definitions:
+      version: 7.16.2
+      volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
+      http:
+        tls:
+          selfSignedCertificate:
+            disabled: true
+      nodeSets:
+      - name: logsearch
+        count: 3
+        config:
+          node.attr.zone: ${ZONE}
+          cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
+          node.attr.data: warm
+          node.attr.type: warm
+          node.roles: ["master", "data", "ingest", "data_hot", "data_warm"]
           node.store.allow_mmap: false
           logger.org.elasticsearch: info
         volumeClaimTemplates:
@@ -91,8 +205,8 @@ elasticsearchPlatform:
                 image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
                 resources:
                   requests:
-                    memory: 1000Mi
-                    cpu: 500m
+                    memory: 2000Mi
+                    cpu: "1"
                 env:
                 - name: ZONE
                   valueFrom:
@@ -113,7 +227,7 @@ elasticsearchPlatform:
           cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
           node.attr.data: cold
           node.attr.type: cold
-          node.roles: '["data_cold", "data_content"]'
+          node.roles: ["data_cold", "data_content"]
           node.store.allow_mmap: false
           logger.org.elasticsearch: info
         volumeClaimTemplates:
@@ -126,7 +240,7 @@ elasticsearchPlatform:
                 requests:
                   storage: 500Gi
         podTemplate:
-          spec: 
+          spec:
             initContainers:
             - name: sysctl
               securityContext:
@@ -172,8 +286,8 @@ elasticsearchPlatform:
                 image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
                 resources:
                   requests:
-                    memory: 1000Mi
-                    cpu: 500m
+                    memory: 2000Mi
+                    cpu: "1"
                 env:
                 - name: ZONE
                   valueFrom:
@@ -204,11 +318,12 @@ elasticsearchPlatform:
       count: 3
       elasticsearchRef:
         name: logsearch
+        namespace: platform
       podTemplate:
         spec:
           containers:
             - name: kibana
-              image: "artifactory.qvantel.net/helm-k8s-kibana:7.16.2"
+              image: "artifactory.qvantel.net/helm-k8s-kibana:7.17.7"
               resources:
                 requests:
                   memory: 0.5Gi
@@ -308,7 +423,15 @@ elasticsearchPlatform:
                     ilm_policy => "application_policy"
                 }
             }
-            else {
+            else if ([kubernetes][namespace] not in "platform"
+                and[kubernetes][namespace] not in "istio-system"
+                and[kubernetes][namespace] not in "pomerium"
+                and[kubernetes][namespace] not in "qvantel"
+                and[kubernetes][namespace] not in "kube-system"
+                and[kubernetes][namespace] not in "elastic-system"
+                and[message] !~"audit"
+                and[message] !~"AUDIT"
+                and[message] !~ "(operationType=)|(type=LOG(IN|OUT))") {
                 elasticsearch {
                     user => "elastic"
                     password => "${ELASTICSEARCH_PASSWORD}"
@@ -365,6 +488,13 @@ elasticsearchPlatform:
           port: 5044
           protocol: TCP
           targetPort: 5044
+    securityContext:
+      capabilities:
+        drop:
+          - ALL
+      # readOnlyRootFilesystem: true
+      runAsNonRoot: false
+      runAsUser: 0
   filebeat: 
     daemonset:
       # additionals labels
