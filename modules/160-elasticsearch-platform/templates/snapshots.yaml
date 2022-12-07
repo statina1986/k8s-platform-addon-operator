@@ -1,0 +1,79 @@
+{{- template "elasticsearchPlatform.logsearchBackupEnabled" . -}}
+{{- if .logsearchBackupEnabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: snapshot-configurator
+  namespace: platform
+data:
+  run: |
+    cp /snapshot_setup/* /tmp
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/elastic.sh
+    /bin/sh /tmp/elastic.sh
+
+  elastic.sh: |
+    PORT=5601
+    URL="http://kibana-kb-http:$PORT"
+    status_code=0
+    while [ "200" != $status_code  ]
+    do
+      echo "Sleeping for 50 seconds..."
+      sleep 50
+      echo "Trying to contact Kibana at $URL"
+      status_code=$(curl -u elastic:PW_REPLACE --write-out %{http_code} --silent --output /dev/null "$URL"/status -I)
+      echo "status code $status_code"
+    done
+
+    curl -u elastic:PW_REPLACE -X PUT "http://logsearch-es-http.platform.svc:9200/_snapshot/default?pretty" -H 'Content-Type: application/json' -d'
+    {
+      "type": "s3",
+      "settings": {
+        "bucket": "platform-elastic-snaps",
+        "client": "default"
+      }
+    }'
+    curl -u elastic:PW_REPLACE -X PUT "http://logsearch-es-http.platform.svc:9200/_slm/policy/monthly-snapshots?pretty" -H 'Content-Type: application/json' -d'
+    {
+      "schedule": "0 0 3 1 * ?",
+      "name": "<monthly-snap-{now/m}>",
+      "repository": "default",
+      "config": {
+        "indices": "*",
+        "include_global_state": false
+      },
+      "retention": {
+        "expire_after": "400d",
+        "min_count": 6,
+        "max_count": 14
+      }
+    }'
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: snapshot-configurator
+  namespace: platform
+spec:
+  template:
+    spec:
+      volumes:
+      - name: config-volume
+        configMap:
+          name: snapshot-configurator
+      containers:
+      - name: snapshot-setup
+        image: centos
+        command: ["/bin/sh"]
+        args: ["/snapshot_setup/run" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /snapshot_setup
+        env:
+        - name: ELPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: logsearch-es-elastic-user
+              key: elastic
+      restartPolicy: Never
+{{- end }}

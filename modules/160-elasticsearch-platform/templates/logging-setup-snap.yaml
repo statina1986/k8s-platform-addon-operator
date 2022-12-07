@@ -1,0 +1,490 @@
+{{- template "elasticsearchPlatform.logsearchBackupEnabled" . -}}
+{{- if .logsearchBackupEnabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logging-configurator
+  namespace: platform
+data:
+  run: |
+    cp /logging_setup/* /tmp
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibanausers.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibana.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/elastic.sh
+    /bin/sh /tmp/kibanausers.sh
+    /bin/sh /tmp/kibana.sh
+    /bin/sh /tmp/elastic.sh
+
+  kibanausers.sh: |
+    PORT=5601
+    URL="http://kibana-kb-http:$PORT"
+    status_code=0
+    while [ "200" != $status_code  ]
+    do
+      echo "Sleeping for 50 seconds..."
+      sleep 50
+      echo "Trying to contact Kibana at $URL"
+      status_code=$(curl -u elastic:PW_REPLACE --write-out %{http_code} --silent --output /dev/null "$URL"/status -I)
+      echo "status code $status_code"
+    done
+
+    curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+        "cluster":[],
+        "indices":[{"names":["*"],"privileges":["read","read_cross_cluster"],
+        "allow_restricted_indices":false}],
+        "applications":[{"application":"kibana-.kibana","privileges":["feature_discover.all","feature_visualize.all","feature_dashboard.all"],"resources":["*"]}],
+        "run_as":[],"metadata":{},"transient_metadata":{"enabled":true}
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "password" : "kibana",
+      "roles" : [ "CP_ROLE" ]
+    }'
+
+  kibana.sh: |
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/application* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "application*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/platform* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "platform*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/audit-* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "audit*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/undecided* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "undecided*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.platform.svc:5601/api/saved_objects/index-pattern/ingress* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "ingress*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+
+  elastic.sh: |
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/application_template <<EOF
+    {
+      "index_patterns": ["application*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "application_policy",
+        "index.lifecycle.rollover_alias": "applicationalias",
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/platform_template <<EOF
+    {
+      "index_patterns": ["platform*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "platform_policy",
+        "index.lifecycle.rollover_alias": "platformalias",
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/audit_template <<EOF
+    {
+      "index_patterns": ["audit*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "audit_policy",
+        "index.lifecycle.rollover_alias": "auditalias",
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/ingress_template <<EOF
+    {
+      "index_patterns": ["ingress*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "ingress_policy",
+        "index.lifecycle.rollover_alias": "ingressalias",
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_template/undecided_template <<EOF
+    {
+      "index_patterns": ["undecided*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "undecided_policy",
+        "index.lifecycle.rollover_alias": "undecidedalias"
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/application_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
+              }
+            }
+          },
+          "delete": {
+            "min_age":"14d",
+            "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/platform_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size":"10GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
+              }
+            }
+          },
+          "delete": {
+            "min_age":"14d",
+            "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/ingress_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
+              }
+            }
+          },
+          "delete": {
+            "min_age":"20d",
+            "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/audit_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
+              }
+            }
+          },
+          "delete": {
+            "min_age":"20d",
+            "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.platform.svc:9200/_ilm/policy/undecided_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
+              }
+            }
+          },
+          "delete": {
+            "min_age":"14d",
+            "actions": {
+              "wait_for_snapshot" : {
+                "policy": "monthly-snapshots"
+              },
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+
+---
+apiVersion: v1
+data:
+  kibana_token: cmVhZG9ubHk6a2liYW5h
+kind: Secret
+metadata:
+  name: kibana-token
+  namespace: platform
+type: Opaque
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: logging-setup
+  namespace: platform
+spec:
+  template:
+    spec:
+      volumes:
+      - name: config-volume
+        configMap:
+          name: logging-configurator
+      containers:
+      - name: logging-setup
+        image: centos
+        command: ["/bin/sh"]
+        args: ["/logging_setup/run" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /logging_setup
+        env:
+        - name: ELPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: logsearch-es-elastic-user
+              key: elastic
+      restartPolicy: Never
+{{- end }}

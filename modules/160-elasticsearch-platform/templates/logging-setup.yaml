@@ -1,3 +1,5 @@
+{{- template "elasticsearchPlatform.logsearchEnabled" . -}}
+{{- if .logsearchEnabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,6 +16,18 @@ data:
     /bin/sh /tmp/elastic.sh
 
   kibanausers.sh: |
+    PORT=5601
+    URL="http://kibana-kb-http:$PORT"
+    status_code=0
+    while [ "200" != $status_code  ]
+    do
+      echo "Sleeping for 50 seconds..."
+      sleep 50
+      echo "Trying to contact Kibana at $URL"
+      status_code=$(curl -u elastic:PW_REPLACE --write-out %{http_code} --silent --output /dev/null "$URL"/status -I)
+      echo "status code $status_code"
+    done
+
     curl -u elastic:PW_REPLACE -XPOST http://logsearch-es-http.platform.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
         "cluster":[],
@@ -133,12 +147,49 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "20GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"7d",
+            "min_age":"14d",
             "actions": {
               "delete": {}
             }
@@ -155,12 +206,49 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "10GB"
+                "max_size":"10GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"7d",
+            "min_age":"14d",
             "actions": {
               "delete": {}
             }
@@ -177,12 +265,49 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "20GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"14d",
+            "min_age":"20d",
             "actions": {
               "delete": {}
             }
@@ -199,12 +324,49 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "25GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age":"2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"365d",
+            "min_age":"20d",
             "actions": {
               "delete": {}
             }
@@ -221,12 +383,49 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size": "25GB"
+                "max_size":"20GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "warm": {
+            "min_age": "2d",
+            "actions": {
+              "forcemerge": {
+                "max_num_segments": 1
+              },
+              "shrink": {
+                "number_of_shards": 1
+              },
+              "allocate": {
+                "require": {
+                  "data": "warm"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            }
+          },
+          "cold": {
+            "min_age":"7d",
+            "actions": {
+              "set_priority": {
+                "priority": 0
+              },
+              "freeze": {},
+              "allocate": {
+                "number_of_replicas": 0,
+                "require": {
+                  "data": "cold"
+                }
               }
             }
           },
           "delete": {
-            "min_age":"7d",
+            "min_age":"14d",
             "actions": {
               "delete": {}
             }
@@ -273,3 +472,4 @@ spec:
               name: logsearch-es-elastic-user
               key: elastic
       restartPolicy: Never
+{{- end }}
