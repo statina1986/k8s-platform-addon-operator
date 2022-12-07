@@ -1,21 +1,9 @@
-from kubernetes import client
-from kubernetes.stream import stream
 import base64
+import hvac
+from common.python.variables import *
+from common.python.k8s import *
 
 
-def exec_vault_command(v1: client.CoreV1Api, command):
-    secret = v1.read_namespaced_secret("vault-dev-keys", "platform").data
-    token = base64.b64decode(secret["vault-dev-root-token"]).decode('utf-8')
-
-    exec_command = [
-        '/bin/sh',
-        '-c',
-        'vault login -no-print ' + token + ' && ',
-        command]
-    resp = stream(v1.connect_get_namespaced_pod_exec,
-                  'vault-0',
-                  'platform',
-                  command=exec_command,
-                  stderr=True, stdin=False,
-                  stdout=True, tty=False)
-    print("Vault Result: " + resp)
+secret = k8s.read_namespaced_secret(VAULT_SECRET_NAME, VAULT_SECRET_NAMESPACE).data
+token = base64.b64decode(secret[VAULT_SECRET_ROOT_TOKEN]).decode('utf-8')
+vault_client = hvac.Client(url=VAULT_ADDR, token=token)

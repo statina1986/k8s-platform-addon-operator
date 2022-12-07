@@ -36,8 +36,33 @@ spec:
                     - postgresql
                     - mariadb
                 db-provision-sql:
-                  type: string
+                  type: array
+                  items:
+                    type: string
                 db-secret-name:
                   type: string
                 db-url:
                   type: string
+                db-username:
+                  type: string
+                db-password:
+                  type: string
+                computed-values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
+                post-actions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
+                      

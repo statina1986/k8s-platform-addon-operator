@@ -17,14 +17,13 @@ function qlog_debug() {
 function qlog() {
   qlog_level "info" "$@"
 }
+function rand() {
+  echo "$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c ${1-5})"
+}
 
 MYDIR="$(dirname "$(readlink -f "$BASH_SOURCE")")"
 VARIABLES_FILE=${VARIABLES_FILE:-"variables.sh"}
 source "$MYDIR/$VARIABLES_FILE"
-
-function rand() {
-  echo "$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c ${1-5})"
-}
 
 function curl::execute() {
   CURL_RESULT="/tmp/curl.result-$(rand)"
@@ -103,3 +102,25 @@ function kubectl::get_secret_opaque_kv() {
 function vault::get_vault_token() {
   echo "$( kubectl get secret -n  $VAULT_SECRET_NAMESPACE $VAULT_SECRET_NAME --template="{{ index .data \"$VAULT_SECRET_ROOT_TOKEN\" }}" | base64 -d )"
 }
+
+function inline::get_computed_values() {
+  local -n computed_values_arr=$1   
+  _jq() {
+    echo ${row} | base64 --decode | jq -r ${1}
+  }    
+  for row in $(echo $2 | jq -r '.[] | @base64'); do
+    computed_value_name=$(_jq '.name')
+    computed_values_arr[$computed_value_name]=$($(_jq '.expression'))    
+  done
+}
+
+function inline::process_computed_values() {
+  local -n computed_values_arr=$1
+  local -n result=$2  
+  for i in "${!computed_values_arr[@]}"
+  do
+     result="${result/"{$i}"/"${computed_values_arr[$i]}"}"
+  done
+}
+
+source "$MYDIR/inline-functions.sh"

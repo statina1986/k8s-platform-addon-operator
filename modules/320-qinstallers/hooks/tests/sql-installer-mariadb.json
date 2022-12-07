@@ -1,0 +1,61 @@
+[
+    {
+        "binding": "kubernetes",
+        "type": "Event",
+        "watchEvent": "Added",
+        "object": {
+            "apiVersion": "platform.qvantel.com/v1",
+            "kind": "QInstaller",
+            "metadata": {
+                "annotations": {
+                    "objectset.rio.cattle.io/applied": "H4sIAAAAAAAA/3yQQWsbMRCF/8oyl1ysjYUVe3dvJYg2YLzUNe3RjEazjVqttJEUUwj+70U0hp5yHBi+9733Bri475yyiwEGWDyWKaa5fblgKOxbivP9RcIKfrtgYYCvTyEX9J4TrGDmghYLwvAGGEIsWFwMuZ7R/GIqmUubXGwJS/HcunjvKoSkJCXXk9hNm51QPU6i6ySJzmwUb+Wa+t0DXFfg0bD/EPeM+RkGMEoqKx/kmjbrqbNq6sgYo4xEY9V2a2lD1Mm+r9CAM9emMZefibPA1xQTipgspyzMMgfBf5heS6wV63dekPi/cSolL0xVzBqxpHhxdT+RXzwM8E3v9eOpuXs86k8n3RzHvW6sOf8LONeA8y2gOYz78fPT4a758UUfdXMYT42GVaVmpsRFvNu+S96k4Xr9GwAA//+GaqCNuQEAAA",
+                    "objectset.rio.cattle.io/id": "c11c410f-7f37-49af-881c-8b34e610c975"
+                },
+                "creationTimestamp": "2022-03-14T14:35:35Z",
+                "generation": 1,
+                "labels": {
+                    "objectset.rio.cattle.io/hash": "b414d1510c30f8d4f8cbbb4b1abd466dc3cc8199"
+                },
+                "name": "postgres-aurora-orders-bpmn-executor",
+                "namespace": "platform",
+                "resourceVersion": "92973064",
+                "uid": "7e1aa65f-61db-478c-85f4-bc64749cb258"
+            },
+            "spec": {
+                "db-provision-sql": [
+                    "CREATE DATABASE IF NOT EXISTS keycloak DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_unicode_ci;",
+                    "CREATE USER IF NOT EXISTS '{qvaa-username}'@'%' IDENTIFIED BY '{qvaa-password}';",
+                    "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, CREATE VIEW, SHOW VIEW ON keycloak.* TO '{qvaa-username}'@'%' WITH GRANT OPTION;"
+                ],
+                "type": "mariadb",
+                "db-username": "root",
+                "db-password": "{password}",
+                "db-url": "172.17.0.2",
+                "computed-values": [
+                    {
+                        "name": "password",
+                        "expression": "aws_get_secret_value('mmlyle-preprod-mariadb0-db-master-password')['SecretString']"
+                    },
+                    {
+                        "name": "qvaa-username",
+                        "expression": "'qvaa'"
+                    },
+                    {
+                        "name": "qvaa-password",
+                        "expression": "get_random_string(8)"
+                    }
+                ],
+                "post-actions": [
+                    {
+                        "name": "store username in vault",
+                        "expression": "vault_store_secret('data/apps/qvaa/keycloak','mariadb-rds-username', 'qvaa')"
+                    },
+                    {
+                        "name": "store password in vault",
+                        "expression": "vault_store_secret('data/apps/qvaa/keycloak','mariadb-rds-password', '{qvaa-password}')"
+                    }
+                ]
+            }
+        }
+    }
+]
