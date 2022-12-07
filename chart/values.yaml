@@ -71,6 +71,10 @@ modulesConfig:
   mariadbPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  metricsPlatformEnabled: "false"
+  metricsPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   mongodbPlatformEnabled: "false"
   mongodbPlatform:
     configurationRequired: "check module documentation for configuration options"
