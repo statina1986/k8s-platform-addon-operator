@@ -488,13 +488,6 @@ elasticsearchPlatform:
           port: 5044
           protocol: TCP
           targetPort: 5044
-    securityContext:
-      capabilities:
-        drop:
-          - ALL
-      # readOnlyRootFilesystem: true
-      runAsNonRoot: false
-      runAsUser: 0
   filebeat: 
     daemonset:
       # additionals labels
