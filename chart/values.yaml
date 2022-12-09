@@ -3,6 +3,7 @@ logLevel: info
 addonOperatorNamespace: "platform"
 additionalEnvironmentVars: []
 imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
+platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 globalConfig:
   someGlobalValue: "put your value"
