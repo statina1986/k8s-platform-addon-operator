@@ -467,6 +467,9 @@ elasticsearchPlatform:
       requests:
         cpu: "1"
         memory: 0.5Gi
+      limits:
+        cpu: "100"
+        memory: 100Gi
     httpPort: 9600
     volumeClaimTemplate:
       accessModes: ["ReadWriteOnce"]
@@ -531,6 +534,9 @@ elasticsearchPlatform:
         requests:
           cpu: "100m"
           memory: "200Mi"
+        limits:
+          cpu: "100"
+          memory: "100Gi"
       tolerations: []
     image: "artifactory.qvantel.net/helm-k8s-filebeat"
     imageTag: "7.16.2"
