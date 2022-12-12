@@ -34,7 +34,7 @@ You need on machine:
 * Docker
 * Kubectl
 * Helm
-* (Optional) Local k8s cluster, e.g. *minikube*.
+* (Optional) Local k8s cluster, e.g. *minikube*,*k3d*,*Rancher Desktop*.
 
 > When using local k8s cluster like *minikube* please be aware that most of Qvantel platform modules require at least 3 nodes (e.g. consul, vault, etc). Also some modules depends on cloud services (e.g. external-dns module) and will not be working as intendent on local cluster. 
 
@@ -50,6 +50,9 @@ docker build -t "local/addon-operator:$timestamp" ~/qvantel/CP/k8s-platform-addo
 
 # Here we push builded image to minikube
 minikube image load local/addon-operator:$timestamp
+
+# This can be used to import builded image to k3d
+# k3d image import -m direct local/addon-operator:$timestamp -c <your-cluster-name>
 
 # Here we deploy platform helm chart with custom configuration from myvalues.yaml and also instruct it to use our locally built image
 helm upgrade --install k8s-platform -n platform ~/qvantel/CP/k8s-platform-addon-operator/chart -f myvalues.yaml --set imageVersion=$timestamp,imageBase="local/addon-operator"
