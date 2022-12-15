@@ -466,7 +466,7 @@ elasticsearchPlatform:
     resources:
       requests:
         cpu: "1"
-        memory: 0.5Gi
+        memory: 2Gi
       limits:
         cpu: "100"
         memory: 4Gi
