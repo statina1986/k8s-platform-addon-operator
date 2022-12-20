@@ -12,6 +12,10 @@ def aws_get_secret_value(secretId):
     response = client.get_secret_value(SecretId=secretId)
     return response
 
+def k8s_get_secret_value(secretName, secretNamespace, key):
+    secret = k8s.read_namespaced_secret(secretName, secretNamespace).data
+    value = base64.b64decode(secret[key]).decode('utf-8')
+    return value
 
 def vault_store_secret(path, key, value):
     try:
