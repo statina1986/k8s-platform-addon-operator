@@ -4,7 +4,7 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: smartsearch
-  namespace: platform
+  namespace: {{.Release.Namespace}}
 spec:
   version: 7.16.2
   http:
