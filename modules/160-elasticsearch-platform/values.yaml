@@ -9,7 +9,11 @@ elasticsearchPlatform:
       pullPolicy: IfNotPresent
       # tag is the container image tag. If not defined, defaults to chart appVersion.
       tag: 2.2.0
+    nameOverride: "elastic-operator"
+    fullnameOverride: "elastic-operator"
     managedNamespaces: []
+    createClusterScopedResources: true
+
   smartsearch:
     enabled: true
   # Enable only one of the logsearch or logsearchBackup options.
