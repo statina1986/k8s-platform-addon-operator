@@ -105,8 +105,7 @@ rabbitmqPlatform:
 
     extraContainerPorts:
       - name: rabbitmq_web_stomp
-        port: 15674
-        targetPort: 15674
+        containerPort: 15674
 
     configuration: |-
       default_user = {{ .Values.auth.username }}
