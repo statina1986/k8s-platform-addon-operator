@@ -72,7 +72,7 @@ rabbitmqPlatform:
 
     communityPlugins: ""
 
-    extraPlugins: "rabbitmq_auth_backend_ldap"
+    extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_web_stomp"
 
     clustering:
       enabled: true
@@ -103,7 +103,11 @@ rabbitmqPlatform:
       metrics: 9419
       stomp: 61613
 
-    extraContainerPorts: []
+    extraContainerPorts:
+      - name: rabbitmq_web_stomp
+        port: 15674
+        targetPort: 15674
+
     configuration: |-
       default_user = {{ .Values.auth.username }}
       default_pass = CHANGEME
@@ -296,7 +300,10 @@ rabbitmqPlatform:
         manager: ""
         epmd: ""
         metrics: ""
-      extraPorts: []
+      extraPorts: 
+        - name: web-stomp
+          port: 15674
+          targetPort: 15674
       loadBalancerSourceRanges: []
       externalIPs: []
       externalTrafficPolicy: Cluster
