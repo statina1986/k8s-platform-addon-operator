@@ -104,7 +104,7 @@ rabbitmqPlatform:
       stomp: 61613
 
     extraContainerPorts:
-      - name: rabbitmq_web_stomp
+      - name: web-stomp
         containerPort: 15674
 
     configuration: |-
