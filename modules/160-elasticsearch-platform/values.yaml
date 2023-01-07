@@ -9,6 +9,11 @@ elasticsearchPlatform:
       pullPolicy: IfNotPresent
       # tag is the container image tag. If not defined, defaults to chart appVersion.
       tag: 2.2.0
+    nameOverride: "elastic-operator"
+    fullnameOverride: "elastic-operator"
+    managedNamespaces: []
+    createClusterScopedResources: true
+
   smartsearch:
     enabled: true
   # Enable only one of the logsearch or logsearchBackup options.
@@ -466,7 +471,10 @@ elasticsearchPlatform:
     resources:
       requests:
         cpu: "1"
-        memory: 0.5Gi
+        memory: 2Gi
+      limits:
+        cpu: "100"
+        memory: 4Gi
     httpPort: 9600
     volumeClaimTemplate:
       accessModes: ["ReadWriteOnce"]
@@ -531,6 +539,9 @@ elasticsearchPlatform:
         requests:
           cpu: "100m"
           memory: "200Mi"
+        limits:
+          cpu: "100"
+          memory: 1Gi
       tolerations: []
     image: "artifactory.qvantel.net/helm-k8s-filebeat"
     imageTag: "7.16.2"

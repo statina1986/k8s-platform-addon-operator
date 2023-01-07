@@ -3,5 +3,5 @@ name: redisPlatform
 version: 0.0.1
 dependencies:
   - name: redis
-    version: 16.8.7
+    version: 17.3.17
     repository: https://charts.bitnami.com/bitnami

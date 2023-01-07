@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: snapshot-configurator
-  namespace: platform
+  namespace: {{.Release.Namespace}}
 data:
   run: |
     cp /snapshot_setup/* /tmp
@@ -24,7 +24,7 @@ data:
       echo "status code $status_code"
     done
 
-    curl -u elastic:PW_REPLACE -X PUT "http://logsearch-es-http.platform.svc:9200/_snapshot/default?pretty" -H 'Content-Type: application/json' -d'
+    curl -u elastic:PW_REPLACE -X PUT "http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_snapshot/default?pretty" -H 'Content-Type: application/json' -d'
     {
       "type": "s3",
       "settings": {
@@ -32,7 +32,7 @@ data:
         "client": "default"
       }
     }'
-    curl -u elastic:PW_REPLACE -X PUT "http://logsearch-es-http.platform.svc:9200/_slm/policy/monthly-snapshots?pretty" -H 'Content-Type: application/json' -d'
+    curl -u elastic:PW_REPLACE -X PUT "http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_slm/policy/monthly-snapshots?pretty" -H 'Content-Type: application/json' -d'
     {
       "schedule": "0 0 3 1 * ?",
       "name": "<monthly-snap-{now/m}>",
@@ -53,7 +53,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: snapshot-configurator
-  namespace: platform
+  namespace: {{.Release.Namespace}}
 spec:
   template:
     spec:

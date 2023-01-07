@@ -3,6 +3,6 @@ name: rabbitmqPlatform
 version: 0.0.1
 dependencies:
   - name: rabbitmq
-    version: 9.0.3
+    version: 11.2.2
     repository: https://charts.bitnami.com/bitnami
 

@@ -27,7 +27,8 @@ kubernetes:
             eventName = event['watchEvent']
 
             if eventName == "Deleted":
-                vault_client.sys.delete_policy(name=(policy_name or name))
+                # there are no "unprovision" statements in the spec currently
+                pass
             else:
                 db_provision_sql = event['object']['spec']['db-provision-sql']
                 db_secret = event['object']['spec'].get('db-secret-name', '')

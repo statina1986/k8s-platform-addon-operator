@@ -4,7 +4,7 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: logsearch
-  namespace: platform
+  namespace: {{.Release.Namespace}}
   annotations:
     helm.sh/hook: post-install,post-upgrade,pre-delete
     helm.sh/hook-weight: "4"
@@ -20,7 +20,7 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: logsearch
-  namespace: platform
+  namespace: {{.Release.Namespace}}
   annotations:
     helm.sh/hook: post-install,post-upgrade,pre-delete
     helm.sh/hook-weight: "4"
