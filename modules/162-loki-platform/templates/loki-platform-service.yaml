@@ -1,0 +1,21 @@
+#this is needed for single-binary deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-platform
+  namespace: platform  
+spec:
+  ports:
+  - name: http-metrics
+    port: 3100
+    protocol: TCP
+    targetPort: http-metrics
+  - name: grpc
+    port: 9095
+    protocol: TCP
+    targetPort: grpc
+  selector:
+    app.kubernetes.io/component: single-binary
+    app.kubernetes.io/instance: loki-platform
+    app.kubernetes.io/name: loki
+  type: ClusterIP

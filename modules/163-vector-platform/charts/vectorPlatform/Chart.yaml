@@ -1,0 +1,14 @@
+apiVersion: v2
+name: vectorPlatform
+version: 0.0.1
+dependencies:
+  - name: vector
+    alias: agent
+    condition: agent.enabled
+    repository: "https://helm.vector.dev"
+    version: "^0.18.0"
+  - name: vector
+    alias: aggregator
+    condition: aggregator.enabled
+    repository: "https://helm.vector.dev"
+    version: "^0.18.0"

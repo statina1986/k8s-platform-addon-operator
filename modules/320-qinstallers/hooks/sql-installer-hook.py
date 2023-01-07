@@ -18,6 +18,9 @@ kubernetes:
   queue: SqlInstallersQueue
 """)
     case EventHook(eventName, context):
+        k8s = get_k8s_client()
+        vault_client = get_vault_client()
+
         for event in context:
 
             name = event['object']['metadata']['name']

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: vector-platform
+version: 0.0.1
+dependencies:
+  - name: vectorPlatform
+    version: 0.0.1

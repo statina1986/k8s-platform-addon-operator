@@ -24,12 +24,12 @@ modulesConfig:
   cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  kasopePlatformEnabled: "false"
-  kasopePlatform:
-    configurationRequired: "check module documentation for configuration options"
-
   certPlatformEnabled: "false"
   certPlatform:
+    configurationRequired: "check module documentation for configuration options"
+  
+  ciliumPlatformEnabled: "false"
+  ciliumPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   consulPlatformEnabled: "false"
@@ -52,6 +52,10 @@ modulesConfig:
   externalDns:
     configurationRequired: "check module documentation for configuration options"
 
+  grafanaPlatformEnabled: "false"
+  grafanaPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   istioIngressEnabled: "false"
   istioIngress:
     configurationRequired: "check module documentation for configuration options"
@@ -62,6 +66,14 @@ modulesConfig:
 
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
+    configurationRequired: "check module documentation for configuration options"
+  
+  kasopePlatformEnabled: "false"
+  kasopePlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  lokiPlatformEnabled: "false"
+  lokiPlatform:
     configurationRequired: "check module documentation for configuration options"
   
   keycloakPlatformEnabled: "false"
@@ -114,12 +126,20 @@ modulesConfig:
   sftp:
     configurationRequired: "check module documentation for configuration options"
 
+  traefikIngressEnabled: "false"
+  traefikIngress:
+    configurationRequired: "check module documentation for configuration options"
+
   vaultConfigurationEnabled: "false"
   vaultConfiguration:
     configurationRequired: "check module documentation for configuration options"
 
   vaultPlatformEnabled: "false"
   vaultPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  vectorPlatformEnabled: "false"
+  vectorPlatform:
     configurationRequired: "check module documentation for configuration options"
 
 

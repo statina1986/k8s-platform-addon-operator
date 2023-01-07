@@ -1,6 +1,10 @@
 import secrets
 import boto3
 from common.python.vault import *
+from common.python.k8s import *
+
+k8s = get_k8s_client()
+vault_client = get_vault_client()
 
 
 def get_random_string(length):
@@ -12,6 +16,10 @@ def aws_get_secret_value(secretId):
     response = client.get_secret_value(SecretId=secretId)
     return response
 
+def k8s_get_secret_value(secretName, secretNamespace, key):
+    secret = k8s.read_namespaced_secret(secretName, secretNamespace).data
+    value = base64.b64decode(secret[key]).decode('utf-8')
+    return value
 
 def vault_store_secret(path, key, value):
     try:

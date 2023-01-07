@@ -4,15 +4,6 @@ istioIngress:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
       dnsBase: mcom-prv-col-uat.qvantel.systems
-  privateIngress:
-    service:
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-  integrationsIngressEnabled: true
-  integrationsIngress:
-    service:
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
   virtualServices:
     annotations:
       external-dns.alpha.kubernetes.io/target: ingress-colombia-uat-b5380c972f521dbb.elb.us-east-1.amazonaws.com

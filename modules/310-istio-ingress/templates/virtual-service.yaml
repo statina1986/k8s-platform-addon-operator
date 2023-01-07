@@ -17,9 +17,16 @@ metadata:
   name: {{ . }}
   namespace: platform
 spec:
-  gateways: {{ print "\n" ($current.gateways | toYaml | indent 2) }}  
+  gateways: {{ print "\n" ($current.gateways | toYaml | indent 2) }} 
+  {{- if $current.hosts }}
+  {{- with $current.hosts }}
+  hosts: 
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- else }}
   hosts: 
   - {{ . }}-{{ $.Values.istioIngress.virtualServices.dnsBase }}
+  {{- end }}
   {{- with $current.http }}
   http: 
     {{- toYaml . | nindent 2 }}
@@ -31,59 +38,3 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
-
-{{- /*
-
-{{- if .Values.istioIngress.virtualServices.private.instances }}
-{{- range keys .Values.istioIngress.virtualServices.private.instances  }}
-{{- $current := get $.Values.istioIngress.virtualServices.private.instances . }}
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  {{- $empty := dict}}
-  {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.private.annotations | deepCopy)}}
-  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
-  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
-  {{- if $joinedAnnotations }}
-  annotations:
-    {{- toYaml $joinedAnnotations | nindent 4 }}
-  {{- end }}
-  name: {{ . }}
-  namespace: platform
-spec:
-  gateways:
-  - private-ingress
-  hosts: 
-  - {{ . }}-{{ $.Values.istioIngress.virtualServices.private.dnsBase }}
-  http: {{ print "\n" ($current.http | toYaml | indent 2) }}  
-{{- end }}  
-{{- end }}
-
-{{- if .Values.istioIngress.virtualServices.integrations.instances }}
-{{- range keys .Values.istioIngress.virtualServices.integrations.instances  }}
-{{- $current := get $.Values.istioIngress.virtualServices.integrations.instances . }}
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  {{- $empty := dict}}
-  {{- $commonAnnotations := (default $empty $.Values.istioIngress.virtualServices.integrations.annotations | deepCopy)}}
-  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
-  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
-  {{- if $joinedAnnotations }}
-  annotations:
-    {{- toYaml $joinedAnnotations | nindent 4 }}
-  {{- end }}
-  name: {{ . }}
-  namespace: platform
-spec:
-  gateways:
-  - integrations-ingress
-  hosts: 
-  - {{ . }}-{{ $.Values.istioIngress.virtualServices.integrations.dnsBase }}
-  http: {{ print "\n" ($current.http | toYaml | indent 2) }}  
-{{- end }}  
-{{- end }}
-
-*/}}

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: loki-platform
+version: 0.0.1
+dependencies:
+  - name: lokiPlatform
+    version: 0.0.1

@@ -1,3 +1,5 @@
+
+{{- if .Values.istioIngress.publicIngressProxyProtocolEnabled }}
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -15,6 +17,9 @@ spec:
   workloadSelector:
     labels:
       istio: public-ingress
+{{- end }}
+
+{{- if .Values.istioIngress.privateIngressProxyProtocolEnabled }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -33,6 +38,9 @@ spec:
   workloadSelector:
     labels:
       istio: private-ingress
+{{- end }}
+
+{{- if .Values.istioIngress.integrationsHttpIngressProxyProtocolEnabled }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -51,3 +59,25 @@ spec:
   workloadSelector:
     labels:
       istio: integrations-http-ingress
+{{- end }}
+
+{{- if .Values.istioIngress.integrationsNonHttpIngressProxyProtocolEnabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: integrations-non-http-ingress-proxy-protocol
+  namespace: {{ .Release.Namespace }}
+spec:
+  configPatches:
+  - applyTo: LISTENER
+    patch:
+      operation: MERGE
+      value:
+        listener_filters:
+        - name: envoy.filters.listener.proxy_protocol
+        - name: envoy.filters.listener.tls_inspector
+  workloadSelector:
+    labels:
+      istio: integrations-non-http-ingress
+{{- end }}

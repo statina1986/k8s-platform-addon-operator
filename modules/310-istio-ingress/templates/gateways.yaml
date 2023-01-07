@@ -1,0 +1,47 @@
+{{- if .Values.istioIngress.publicIngressEnabled }}
+{{- range .Values.istioIngress.publicIngressGateways  }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+spec: 
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.istioIngress.privateIngressEnabled }}
+{{- range .Values.istioIngress.privateIngressGateways  }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+spec: 
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.istioIngress.integrationsHttpIngressEnabled }}
+{{- range .Values.istioIngress.integrationsHttpIngressGateways  }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+spec: 
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.istioIngress.integrationsNonHttpIngressEnabled }}
+{{- range .Values.istioIngress.integrationsNonHttpIngressGateways  }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+spec: 
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}

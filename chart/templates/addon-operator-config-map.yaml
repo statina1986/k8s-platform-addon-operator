@@ -19,9 +19,6 @@ data:
   cassandraPlatformEnabled: "{{ .Values.modulesConfig.cassandraPlatformEnabled }}"
   cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.cassandraPlatform | toYaml | indent 4) }}
 
-  kasopePlatformEnabled: "{{ .Values.modulesConfig.kasopePlatformEnabled }}"
-  kasopePlatform: {{ print "|\n" (.Values.modulesConfig.kasopePlatform | toYaml | indent 4) }}
-
   certPlatformEnabled: "{{ .Values.modulesConfig.certPlatformEnabled }}"
   certPlatform: {{ print "|\n" (.Values.modulesConfig.certPlatform | toYaml | indent 4) }}
 
@@ -40,6 +37,9 @@ data:
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
 
+  grafanaPlatformEnabled: "{{ .Values.modulesConfig.grafanaPlatformEnabled }}"
+  grafanaPlatform: {{ print "|\n" (.Values.modulesConfig.grafanaPlatform | toYaml | indent 4) }}
+
   istioIngressEnabled: "{{ .Values.modulesConfig.istioIngressEnabled }}"
   istioIngress: {{ print "|\n" (.Values.modulesConfig.istioIngress | toYaml | indent 4) }}
 
@@ -54,6 +54,9 @@ data:
 
   keycloakPlatformEnabled: "{{ .Values.modulesConfig.keycloakPlatformEnabled }}"
   keycloakPlatform: {{ print "|\n" (.Values.modulesConfig.keycloakPlatform | toYaml | indent 4) }}
+
+  lokiPlatformEnabled: "{{ .Values.modulesConfig.lokiPlatformEnabled }}"
+  lokiPlatform: {{ print "|\n" (.Values.modulesConfig.lokiPlatform | toYaml | indent 4) }}
 
   mariadbPlatformEnabled: "{{ .Values.modulesConfig.mariadbPlatformEnabled }}"
   mariadbPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbPlatform | toYaml | indent 4) }}
@@ -95,5 +98,8 @@ data:
 
   vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
   vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
+
+  vectorPlatformEnabled: "{{ .Values.modulesConfig.vectorPlatformEnabled }}"
+  vectorPlatform: {{ print "|\n" (.Values.modulesConfig.vectorPlatform | toYaml | indent 4) }}
 
 

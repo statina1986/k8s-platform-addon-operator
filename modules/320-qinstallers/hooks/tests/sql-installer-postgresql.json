@@ -32,30 +32,19 @@
                 "type": "postgresql",
                 "db-username": "root",
                 "db-password": "{password}",
-                "db-url": "postgresql://postgres:{password}@172.17.0.3:5432",
+                "db-url": "postgresql://{username}:{password}@172.17.0.3:5432",
                 "computed-values": [
                     {
+                        "name": "username",
+                        "expression": "k8s_get_secret_value('postgres.qvt-postgredb.credentials.postgresql.acid.zalan.do','platform','username')"
+                    },
+                    {
                         "name": "password",
-                        "expression": "'mysecretpassword'"
-                    },
-                    {
-                        "name": "flex-sct-username",
-                        "expression": "'flex_sct'"
-                    },
-                    {
-                        "name": "flex-sct-password",
-                        "expression": "get_random_string(8)"
+                        "expression": "k8s_get_secret_value('postgres.qvt-postgredb.credentials.postgresql.acid.zalan.do','platform','password')"
                     }
                 ],
                 "post-actions":[
-                    {
-                        "name": "store username in vault",
-                        "expression": "'vault_store_secret('data/apps/sales-and-care/bpmn-executor','postgres-rds-username', 'flex_sct')'"
-                    },
-                    {
-                        "name": "store password in vault",
-                        "expression": "vault_store_secret('data/apps/sales-and-care/bpmn-executor','postgres-rds-password', '{flex-sct-password}')"
-                    }
+                    
                 ]
             }
         }

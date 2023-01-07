@@ -1,7 +1,10 @@
 istioIngress:
+# Public Ingress
   publicIngressEnabled: false
+  publicIngressProxyProtocolEnabled: false
   publicIngress:
     name: public-ingress
+    proxyProtocolEnabled: false
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -9,7 +12,30 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+  publicIngressGateways:
+    - name: public-ingress
+      spec: 
+        selector:
+          istio: public-ingress
+        servers:
+          - hosts:
+            - '*'
+            port:
+              name: http
+              number: 80
+              protocol: HTTP
+          - hosts:
+            - '*'
+            port:
+              name: https
+              number: 443
+              protocol: HTTPS
+            tls:
+              mode: SIMPLE
+              credentialName: qvantel-wildcard              
+# Private Ingress
   privateIngressEnabled: false
+  privateIngressProxyProtocolEnabled: false
   privateIngress:
     name: private-ingress
     service:
@@ -19,9 +45,33 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+  privateIngressGateways:
+    - name: private-ingress
+      spec: 
+        selector:
+          istio: private-ingress
+        servers:
+          - hosts:
+            - '*'
+            port:
+              name: http
+              number: 80
+              protocol: HTTP
+          - hosts:
+            - '*'
+            port:
+              name: https
+              number: 443
+              protocol: HTTPS
+            tls:
+              mode: SIMPLE
+              credentialName: qvantel-wildcard
+# IntegrationsHttp Ingress
   integrationsHttpIngressEnabled: false
+  integrationsHttpIngressProxyProtocolEnabled: false
   integrationsHttpIngress:
     name: integrations-http-ingress
+    proxyProtocolEnabled: false
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -29,7 +79,30 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+  integrationsHttpIngressGateways:
+  - name: integrations-http-ingress
+    spec: 
+      selector:
+        istio: integrations-http-ingress
+      servers:
+        - hosts:
+          - '*'
+          port:
+            name: http
+            number: 80
+            protocol: HTTP
+        - hosts:
+          - '*'
+          port:
+            name: https
+            number: 443
+            protocol: HTTPS
+          tls:
+            mode: SIMPLE
+            credentialName: qvantel-wildcard
+# IntegrationsNonHttp Ingress
   integrationsNonHttpIngressEnabled: false
+  integrationsNonHttpIngressProxyProtocolEnabled: false
   integrationsNonHttpIngress:
     name: integrations-non-http-ingress
     service:
@@ -48,6 +121,18 @@ istioIngress:
           port: 22
           protocol: TCP
           targetPort: 22
+  integrationsNonHttpIngressGateways:
+    - name: integrations-non-http-ingress
+      spec: 
+        selector:
+          istio: integrations-non-http-ingress
+        servers:
+          - hosts:
+            - '*'
+            port:
+              name: sftp
+              number: 22
+              protocol: TCP
   virtualServices:
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
@@ -480,8 +565,6 @@ istioIngress:
               host: tnt-web-tnt-web.qvantel.svc.cluster.local
               port:
                 number: 9001
-
-
       consul-ui:
         enabled: false
         gateways:

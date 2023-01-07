@@ -1,0 +1,12 @@
+grafanaPlatform:
+  grafana:
+    image:
+      # we use enterprise license which is free-to-use to avoid AGPL3 in grafana-oss
+      repository: grafana/grafana-enterprise
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          url: http://loki-platform.platform.svc:3100

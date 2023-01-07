@@ -1,0 +1,30 @@
+vectorPlatform:
+  agent:
+    role: "Agent"
+    enabled: true
+    customConfig:
+      data_dir: /vector-data-dir
+      api:
+        enabled: true
+        address: 0.0.0.0:8686
+        playground: false
+      sources:
+        kubernetes:
+          type: kubernetes_logs
+      sinks:
+        loki:
+          type: loki
+          inputs:
+            - kubernetes
+          endpoint: http://loki-platform.platform.svc:3100
+          labels:
+            forwarder: vector
+          acknowledgements: null
+          compression: snappy
+          encoding:
+            codec: json
+          healthcheck: null
+  aggregator:
+    enabled: false
+    role: "Aggregator"  
+          
