@@ -4,7 +4,7 @@ version: 0.0.1
 dependencies:
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
-    version: "~42.1.1"
+    version: "~43.0.0"
     repository: "https://prometheus-community.github.io/helm-charts"
   - name: instana-agent
     condition: instana-agent.enabled

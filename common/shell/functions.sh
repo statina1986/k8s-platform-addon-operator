@@ -75,7 +75,7 @@ function common::ensure_resources() {
   if [[ $1 == "--config" ]] ; then
     yamls=(${0%/*}/../resources/*)
     for val in ${yamls[@]}; do
-      kubectl apply -f $val &> ensure_resources.log || { 
+      kubectl apply --server-side --force-conflicts=true -f $val &> ensure_resources.log || { 
           cat ensure_resources.log && exit 1 
       }
     done

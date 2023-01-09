@@ -35,9 +35,9 @@ monitoringPlatform:
     zone:
       name: to-be-filled
   prometheus-blackbox-exporter:
-    enabled: enabled
+    enabled: true
   prometheus-consul-exporter:
-    enabled: enabled
+    enabled: true
     serviceMonitor:
       enabled: true
       namespace: platform
