@@ -2,14 +2,6 @@ apiVersion: v2
 name: monitoringPlatform
 version: 0.0.1
 dependencies:
-  - name: promtail
-    condition: promtail.enabled
-    repository: "https://grafana.github.io/helm-charts"
-    version: "^3.11.0"
-  - name: loki
-    condition: loki.enabled
-    version: ^2.10.1
-    repository: https://grafana.github.io/helm-charts
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
     version: "~41.4.0"

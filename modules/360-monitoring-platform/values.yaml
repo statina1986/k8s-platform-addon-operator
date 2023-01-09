@@ -43,35 +43,21 @@ monitoringPlatform:
       namespace: platform
       interval: 30s
       telemetryPath: /metrics
-  loki:
-    enabled: false
-  promtail:
-    enabled: false
-    config:
-      lokiAddress: http://monitoring-platform-loki.platform.svc:3100/loki/api/v1/push
   kube-prometheus-stack:
     enabled: true
-    kube-state-metrics:
-      enabled: false
-    alertmanager:
-      enabled: false
-    kubeStateMetrics:
-      enabled: false
-    nodeExporter:
-      enabled: false
-    prometheusOperator:
-      enabled: false
-    kube-state-metrics:
-      enabled: false
-    prometheus-node-exporter:
-      enabled: false
     grafana:
       enabled: true
+      image:
+        # we use enterprise license which is free-to-use to avoid AGPL3 in grafana-oss
+        repository: grafana/grafana-enterprise
       adminPassword: Q4nt3l321
-      additionalDataSources:
-        - name: Prometheus
-          type: prometheus
-          url: http://monitor-prometheus-operato-prometheus:9090/
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+          - name: Loki
+            type: loki
+            url: http://loki-platform.platform.svc:3100
       plugins:
         - grafana-piechart-panel
         - yesoreyeram-infinity-datasource
@@ -82,7 +68,7 @@ monitoringPlatform:
       sidecar:
         datasources:
           enabled: true
-          defaultDatasourceEnabled: false
+          defaultDatasourceEnabled: true
           maxLines: 1000
       dashboardProviders:
         dashboardproviders.yaml:
@@ -100,11 +86,9 @@ monitoringPlatform:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: gp2
-              accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
-                  storage: 50Gi
+                  storage: 10Gi
         additionalScrapeConfigs: |
           - job_name: consul_dummy
             honor_timestamps: true
@@ -143,7 +127,7 @@ monitoringPlatform:
               replacement: node
               action: replace
     additionalPrometheusRulesMap:
-#common QV alerts
+      #common QV alerts
       rule-name:
         groups:
           - name: bssapi-alerts
@@ -275,7 +259,7 @@ monitoringPlatform:
                 labels:
                   severity: info
                   level: application
-#          monitoring_application-behavior.alerts.yml: |-
+          #monitoring_application-behavior.alerts.yml: |-
           - name: application-behavior.alerts
             rules:
               - alert: ThreadStarvationDetected
@@ -290,7 +274,7 @@ monitoringPlatform:
                       A failing threadpool test is an indicator that the pool is exhausted and not being able to execute jobs efficiently.
                       There are many potential reasons for this but recurring alerts and/or prolonged issues can lead to loss of traffic or failed health responses resulting in application death.
                       The team responsible for the application needs to be notified
-#      monitoring_container_alerts.yml: |-
+          #monitoring_container_alerts.yml: |-
           - name: container.alerts
             rules:
             - alert: TemporaryContainerRunning
@@ -327,7 +311,7 @@ monitoringPlatform:
               labels:
                 level: application
                 severity: warning
-#      monitoring_pod.alerts.yml: |-
+          #monitoring_pod.alerts.yml: |-
           - name: pod.alerts
             rules:
             - alert: FailingPods
