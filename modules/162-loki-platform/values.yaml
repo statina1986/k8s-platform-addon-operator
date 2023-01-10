@@ -14,6 +14,15 @@ lokiPlatform:
         replication_factor: 1
       storage:
         type: 'filesystem'
+      schema_config: {}
+      rulerConfig: {}
+      storage_config:
+        hedging:
+          at: "250ms"
+          max_per_second: 20
+          up_to: 3
+    serviceAccount:
+      create: true
   promtail:
     enabled: false
     config:
