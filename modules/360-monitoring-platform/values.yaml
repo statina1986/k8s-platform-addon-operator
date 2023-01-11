@@ -47,6 +47,12 @@ monitoringPlatform:
     enabled: true
     grafana:
       enabled: true
+      persistence:
+        type: pvc
+        enabled: true
+        size: 30Gi
+        finalizers:
+          - kubernetes.io/pvc-protection      
       image:
         # we use enterprise license which is free-to-use to avoid AGPL3 in grafana-oss
         repository: grafana/grafana-enterprise
