@@ -40,7 +40,6 @@ monitoringPlatform:
     enabled: true
     serviceMonitor:
       enabled: true
-      namespace: platform
       interval: 30s
       telemetryPath: /metrics
   kube-prometheus-stack:
