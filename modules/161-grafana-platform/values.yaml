@@ -10,3 +10,13 @@ grafanaPlatform:
         - name: Loki
           type: loki
           url: http://loki-platform.platform.svc:3100
+    serviceAccount:
+      create: true
+      name:
+      nameTest:
+      ## ServiceAccount labels.
+      labels: {}
+    ## Service account annotations. Can be templated.
+    #  annotations:
+    #    eks.amazonaws.com/role-arn: arn:aws:iam::123456789000:role/iam-role-name-here
+      autoMount: true
