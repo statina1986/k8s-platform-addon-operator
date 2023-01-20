@@ -1,0 +1,52 @@
+{{- if $.Values.monitoringPlatform.OnePointZero }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-containers.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: container.alerts
+    rules:
+    - alert: TemporaryContainerRunning
+      annotations:
+        brief: "A temporary container with the name {{` {{ $labels.container }} `}} has been running for {{` {{ $value|humanizeDuration }} `}} on pod {{` {{ $labels.pod }} `}}. Since it's a temporary container and it's been running for this long, it's very likely that someone forgot to stop it and in that case, it would be wasting resources."
+        procedure: "If a username is present in \"{{` {{ $labels.container }} `}}\", reach out to them and ask if they are still using it. If there isn't a username in the container name nor a warning asking people to not stop it, stop the container with \"docker stop {{` {{ $labels.name }} `}}\""
+      expr: (time() - container_start_time_seconds{name=~"(exciting|strange|busy|beautiful|nice|intelligent|funny|interesting|great|admiring|adoring|affectionate|agitated|amazing|angry|awesome|blissful|bold|boring|brave|charming|clever|cocky|cool|compassionate|competent|condescending|confident|cranky|crazy|dazzling|determined|distracted|dreamy|eager|ecstatic|elastic|elated|elegant|eloquent|epic|fervent|festive|flamboyant|focused|friendly|frosty|gallant|gifted|goofy|gracious|happy|hardcore|heuristic|hopeful|hungry|infallible|inspiring|jolly|jovial|keen|kind|laughing|loving|lucid|magical|mystifying|modest|musing|naughty|nervous|nifty|nostalgic|objective|optimistic|peaceful|pedantic|pensive|practical|priceless|quirky|quizzical|recursing|relaxed|reverent|romantic|sad|serene|sharp|silly|sleepy|stoic|stupefied|suspicious|sweet|tender|thirsty|trusting|unruffled|upbeat|vibrant|vigilant|vigorous|wizardly|wonderful|xenodochial|youthful|zealous|zen)_.+|.*nodetool.*|.*cqlsh.*|.*tools.*|.*-cli.*|.*impala.*shell.*|.*drolex.*|.*tibemsadmin.*|.*mysql-.*|.*robot.*docker.*test.*|keytool-.*", image!~"(.*exporter.*)" }) > 3600
+      for: 5m
+      labels:
+        level: application
+        severity: info
+    - alert: AppOccasionalDeaths
+      annotations:
+        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h, this behaviour could be affecting service availability."
+        escalation: "Escalate to L2 following the established procedure and taking into account the severity of this alert (warning)."
+      expr: 3 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{service!~"(cp_.+|.*dump.*)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace) < 10
+      labels:
+        level: application
+        severity: warning
+    - alert: AppFrequentDeaths
+      annotations:
+        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h (it's a bloodbath!), this behaviour could be affecting service availability."
+        escalation: "Escalate to L2 following the established procedure and taking into account the severity of this alert (critical)."
+      expr: 10 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{service!="", service!~"(cp_.+|.*dump.*)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace)
+      labels:
+        level: application
+        severity: critical
+    - alert: ContainerHighMemoryUsage
+      annotations:
+        brief: "The {{` {{ $labels.container }} `}} container on pod {{` {{ $labels.pod }} `}} is using {{` {{ $value|humanize }} `}}% of the memory assigned to it. This means that the container could be close to running out of memory which could mean outage or degradation of the service that it's providing."
+        procedure: "Check that the {{` {{ $labels.container }} `}} container on node {{` {{ $labels.node }} `}} is not a temporary container and check if it is crashing. If it's not a temporary container and it is crashing, then escalate to L2 so they can investigate it as soon as possible. If it isn't crashing but it's not a temporary container, treat this as a warning and escalate to L2 for investigation during business hours."
+      expr: container_memory_rss{image!~"(.*docker-ems-tools.*|.*docker-cassandra-tools.*|.*kafkacat.*|.*drolex.*)", name!~"(exciting|strange|busy|beautiful|nice|intelligent|funny|interesting|great|admiring|adoring|affectionate|agitated|amazing|angry|awesome|blissful|bold|boring|brave|charming|clever|cocky|cool|compassionate|competent|condescending|confident|cranky|crazy|dazzling|determined|distracted|dreamy|eager|ecstatic|elastic|elated|elegant|eloquent|epic|fervent|festive|flamboyant|focused|friendly|frosty|gallant|gifted|goofy|gracious|happy|hardcore|heuristic|hopeful|hungry|infallible|inspiring|jolly|jovial|keen|kind|laughing|loving|lucid|magical|mystifying|modest|musing|naughty|nervous|nifty|nostalgic|objective|optimistic|peaceful|pedantic|pensive|practical|priceless|quirky|quizzical|recursing|relaxed|reverent|romantic|sad|serene|sharp|silly|sleepy|stoic|stupefied|suspicious|sweet|tender|thirsty|trusting|unruffled|upbeat|vibrant|vigilant|vigorous|wizardly|wonderful|xenodochial|youthful|zealous|zen)_.+|^kafka-tools.+|.*-cli.*|^impala-shell.*|.*mysql.*|.*robot.*docker.*test.*|keytool-.*"} / container_spec_memory_limit_bytes * 100 >= 95 and container_spec_memory_limit_bytes != 0
+      for: 5m
+      labels:
+        level: application
+        severity: warning
+{{- end }}

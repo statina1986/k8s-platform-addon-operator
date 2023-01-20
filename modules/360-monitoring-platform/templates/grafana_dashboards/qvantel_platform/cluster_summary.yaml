@@ -1,4 +1,5 @@
 ---
+{{- if $.Values.monitoringPlatform.OnePointZero }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -6,6 +7,8 @@ metadata:
   namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
 data:
   cluster-summary.json: |-
         {
@@ -681,3 +684,4 @@ data:
         "uid": "ZLV9U71Mk",
         "version": 31
         }
+{{- end }}

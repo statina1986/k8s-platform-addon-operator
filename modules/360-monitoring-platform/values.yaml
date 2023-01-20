@@ -1,4 +1,31 @@
 monitoringPlatform:
+#Variable to control alerts and dashboards deployed based on the solution stack
+  OnePointZero: false
+  ZeroPointSix: false
+#Customer variable to control alerts and dashboards deployed per Program
+  customer:
+    lyle: false
+    sayco: false
+    windtre: false
+#Variable to control applications deployed in the environment
+  application:
+    bssapi: false
+    flexBpmn: false
+    ordersBpmn: false
+    ordersManager: false
+#Modules variables to control alerts and dashboards deployed based on the modules already deployed
+  modules:
+    kafka: false
+    kasope: false
+    consul: false
+    vault: false
+    istio: false
+    elasticsearch: false
+    postgres: false
+    mariadb: false
+    redis: false
+    rabbitmq: false
+    mongo: false
 #INSTANA disabled by default as we need a cloud backend to actually connect it to.
   instana-agent:
     enabled: false
@@ -75,10 +102,16 @@ monitoringPlatform:
           enabled: true
           defaultDatasourceEnabled: true
           maxLines: 1000
-      dashboardProviders:
-        dashboardproviders.yaml:
-          apiVersion: 1
-          providers:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard
+          labelValue: "1"
+          folder: /tmp/dashboards
+          provider:
+          # enabling UI dashboards updated
+            allowUiUpdates: true
+          # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
+            foldersFromFilesStructure: true
     prometheus:
       enabled: true
       prometheusSpec:
@@ -150,206 +183,3 @@ monitoringPlatform:
               regex: ([^:]+):.*
               replacement: $1:9404
               target_label: __address__
-           
-    additionalPrometheusRulesMap:
-      #common QV alerts
-      rule-name:
-        groups:
-          - name: bssapi-alerts
-            rules:
-              - alert: BSSAPIExcessiveFailingPOST
-                # Checks if more than 2% of the incoming POST requests has failed the last hour
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} POST requests has more than {{` {{$value}} `}}% errors last hour
-                  procedure: TBD
-                expr: sum(rate(aggregator_requests_total{status="failed",method="POST"}[1h])) by(job) / sum(rate(aggregator_requests_total{method="POST"}[1h])) by(job) * 100 > 2
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPIExcessiveFailingGET
-                # Checks if more than 2% of the incoming GET requests has failed the last hour
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} GET requests has more than {{` {{$value}}`}} %  error last hour
-                  procedure: TBD
-                expr: sum(rate(aggregator_requests_total{status="failed",method="GET"}[1h])) by(job) / sum(rate(aggregator_requests_total{method="GET"}[1h])) by(job) * 100 > 2
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPIISReceivingInvalidRequests
-              # Checks if more than 10 invalid requests has been received during the last hour
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} has received more than {{` {{value}} `}} invalid requests the last hour
-                  procedure: TBD
-                expr: sum(increase(aggregator_requests_total{status="invalid"}[1h])) by(job) > 10
-                for: 5m
-                labels:
-                  severity: info
-                  level: application
-                  package: base
-              - alert: BSSAPIExcessiveResponseTimesGET
-                # Checks if the average response time over the last hour for GET requests has been more than 2.5 second
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} GET response times have an hourly average of {{` {{$value}} `}} seconds
-                  procedure: TBD
-                expr: sum(rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="GET"}[1h])) by(job) > 2.5
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPIExcessiveResponseTimesPOST
-                # Checks if the average response time over the last hour for POST requests has been more than 2.5 second
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} POST response times have an hourly average of {{` {{$value}} `}} seconds
-                  procedure: TBD
-                expr: sum(rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="POST"}[1h])) by(job) > 2.5
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPILongResponseTimesGET
-                # Checks if the average response time over the last hour for GET requests has been between 1.5 sec and 2.5 sec
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} GET response times have an hourly average of {{` {{$value}} `}} seconds
-                  procedure: TBD
-                expr: sum(rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="GET"}[1h])) by(job) > 1.5 and sum(rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="GET"}[1h])) by(job) < 2.5
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPILongResponseTimesPOST
-                # Checks if the average response time over the last hour for GET requests has been between 1.5 sec and 2.5 sec
-                annotations:
-                  brief: BSSAPI {{` {{$labels.job}} `}} POST response times have an hourly average of {{` {{$value}} `}} seconds
-                  procedure: TBD
-                expr: sum(rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="POST"}[1h])) by(job) > 1.5 and sum(rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="POST"}[1h])) by(job) < 2.5
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPINoMetrics
-                # Checks if we are missing metrics starting with 'jvm_' from aggregator
-                annotations:
-                  brief: We are not recieving bssapi metrics for last 5 minutes.
-                  procedure: TBD
-                expr: absent({__name__=~"jvm_.*",job=~"bssapi-aggregator.*"}) == 1
-                for: 5m
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-              - alert: BSSAPIResponseTimesDayComparisonForGET
-                annotations:
-                  brief: BSSAPI api {{` {{$labels.job}} `}} has last 5m on average used {{` {{$value}} `}} more than same request has taken on average last hour for GET requests
-                  procedure: TBD
-                expr: (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[5m])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[5m]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h]))) > 2
-                for: 5m
-                labels:
-                  severity: info
-                  level: application
-                  package: base
-              - alert: BSSAPIResponseTimesDayComparisonForPOST
-                annotations:
-                  brief: BSSAPI api {{` {{$labels.job}} `}} has last 5m on average used {{` {{$value}} `}} more than same request has taken on average last hour for POST requests
-                  procedure: TBD
-                expr: (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[5m])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[5m]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h]))) > 2
-                for: 5m
-                labels:
-                  severity: info
-                  level: application
-                  package: base
-              - alert: BSSAPIResponseTimesWeekComparisonForGET
-                annotations:
-                  brief: BSSAPI api {{` {{$labels.job}} `}} has taken last 5m on average {{` {{$value}} `}} more than same request has taken on average last hour doing the GET request
-                  procedure: TBD
-                expr: 2 * (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h] offset 1w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h] offset 1w)) + sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h] offset 2w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h] offset 2w))) > 2
-                for: 5m
-                labels:
-                  severity: info
-                  level: application
-                  package: base
-              - alert: BSSAPIResponseTimesWeekComparisonForPOST
-                annotations:
-                  brief: BSSAPI api {{` {{$labels.job}} `}} has taken last 5m on average {{` {{$value}} `}} more than same request has taken on average last hour doing the POST request
-                  procedure: TBD
-                expr: 2 * (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h] offset 1w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h] offset 1w)) + sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h] offset 2w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h] offset 2w))) > 1.2
-                for: 5m
-                labels:
-                  severity: info
-                  level: application
-          #monitoring_application-behavior.alerts.yml: |-
-          - name: application-behavior.alerts
-            rules:
-              - alert: ThreadStarvationDetected
-                expr: round(increase(thread_starvation_detector_executions_total{success="false"}[1h]) > 3)
-                labels:
-                  severity: warning
-                  level: application
-                  package: base
-                annotations:
-                  brief: 'The threadpool/dispatcher {{` {{$labels.name}} `}} for {{` {{$labels.job}} `}} has {{` {{$value}} `}} failed thread pool starvation tests during the last 1 hour'
-                  procedure: >
-                      A failing threadpool test is an indicator that the pool is exhausted and not being able to execute jobs efficiently.
-                      There are many potential reasons for this but recurring alerts and/or prolonged issues can lead to loss of traffic or failed health responses resulting in application death.
-                      The team responsible for the application needs to be notified
-          #monitoring_container_alerts.yml: |-
-          - name: container.alerts
-            rules:
-            - alert: TemporaryContainerRunning
-              annotations:
-                brief: "A temporary container with the name {{` {{ $labels.container }} `}} has been running for {{` {{ $value|humanizeDuration }} `}} on pod {{` {{ $labels.pod }} `}}. Since it's a temporary container and it's been running for this long, it's very likely that someone forgot to stop it and in that case, it would be wasting resources."
-                procedure: "If a username is present in \"{{` {{ $labels.container }} `}}\", reach out to them and ask if they are still using it. If there isn't a username in the container name nor a warning asking people to not stop it, stop the container with \"docker stop {{` {{ $labels.name }} `}}\""
-              expr: (time() - container_start_time_seconds{name=~"(exciting|strange|busy|beautiful|nice|intelligent|funny|interesting|great|admiring|adoring|affectionate|agitated|amazing|angry|awesome|blissful|bold|boring|brave|charming|clever|cocky|cool|compassionate|competent|condescending|confident|cranky|crazy|dazzling|determined|distracted|dreamy|eager|ecstatic|elastic|elated|elegant|eloquent|epic|fervent|festive|flamboyant|focused|friendly|frosty|gallant|gifted|goofy|gracious|happy|hardcore|heuristic|hopeful|hungry|infallible|inspiring|jolly|jovial|keen|kind|laughing|loving|lucid|magical|mystifying|modest|musing|naughty|nervous|nifty|nostalgic|objective|optimistic|peaceful|pedantic|pensive|practical|priceless|quirky|quizzical|recursing|relaxed|reverent|romantic|sad|serene|sharp|silly|sleepy|stoic|stupefied|suspicious|sweet|tender|thirsty|trusting|unruffled|upbeat|vibrant|vigilant|vigorous|wizardly|wonderful|xenodochial|youthful|zealous|zen)_.+|.*nodetool.*|.*cqlsh.*|.*tools.*|.*-cli.*|.*impala.*shell.*|.*drolex.*|.*tibemsadmin.*|.*mysql-.*|.*robot.*docker.*test.*|keytool-.*", image!~"(.*exporter.*)" }) > 3600
-              for: 5m
-              labels:
-                level: application
-                severity: info
-            - alert: AppOccasionalDeaths
-              annotations:
-                brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h, this behaviour could be affecting service availability."
-                escalation: "Escalate to L2 following the established procedure and taking into account the severity of this alert (warning)."
-              expr: 3 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{service!~"(cp_.+|.*dump.*)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace) < 10
-              labels:
-                level: application
-                severity: warning
-            - alert: AppFrequentDeaths
-              annotations:
-                brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h (it's a bloodbath!), this behaviour could be affecting service availability."
-                escalation: "Escalate to L2 following the established procedure and taking into account the severity of this alert (critical)."
-              expr: 10 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{service!="", service!~"(cp_.+|.*dump.*)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace)
-              labels:
-                level: application
-                severity: critical
-            - alert: ContainerHighMemoryUsage
-              annotations:
-                brief: "The {{` {{ $labels.container }} `}} container on pod {{` {{ $labels.pod }} `}} is using {{` {{ $value|humanize }} `}}% of the memory assigned to it. This means that the container could be close to running out of memory which could mean outage or degradation of the service that it's providing."
-                procedure: "Check that the {{` {{ $labels.container }} `}} container on node {{` {{ $labels.node }} `}} is not a temporary container and check if it is crashing. If it's not a temporary container and it is crashing, then escalate to L2 so they can investigate it as soon as possible. If it isn't crashing but it's not a temporary container, treat this as a warning and escalate to L2 for investigation during business hours."
-              expr: container_memory_rss{image!~"(.*docker-ems-tools.*|.*docker-cassandra-tools.*|.*kafkacat.*|.*drolex.*)", name!~"(exciting|strange|busy|beautiful|nice|intelligent|funny|interesting|great|admiring|adoring|affectionate|agitated|amazing|angry|awesome|blissful|bold|boring|brave|charming|clever|cocky|cool|compassionate|competent|condescending|confident|cranky|crazy|dazzling|determined|distracted|dreamy|eager|ecstatic|elastic|elated|elegant|eloquent|epic|fervent|festive|flamboyant|focused|friendly|frosty|gallant|gifted|goofy|gracious|happy|hardcore|heuristic|hopeful|hungry|infallible|inspiring|jolly|jovial|keen|kind|laughing|loving|lucid|magical|mystifying|modest|musing|naughty|nervous|nifty|nostalgic|objective|optimistic|peaceful|pedantic|pensive|practical|priceless|quirky|quizzical|recursing|relaxed|reverent|romantic|sad|serene|sharp|silly|sleepy|stoic|stupefied|suspicious|sweet|tender|thirsty|trusting|unruffled|upbeat|vibrant|vigilant|vigorous|wizardly|wonderful|xenodochial|youthful|zealous|zen)_.+|^kafka-tools.+|.*-cli.*|^impala-shell.*|.*mysql.*|.*robot.*docker.*test.*|keytool-.*"} / container_spec_memory_limit_bytes * 100 >= 95 and container_spec_memory_limit_bytes != 0
-              for: 5m
-              labels:
-                level: application
-                severity: warning
-          #monitoring_pod.alerts.yml: |-
-          - name: pod.alerts
-            rules:
-            - alert: FailingPods
-              annotations:
-                message: "Pods Failing to run in 5 minutes"
-              expr: sum (kube_pod_container_status_waiting_reason > 0)
-              for: 5m
-              labels:
-                severity: critical
-            - alert: PendingPods
-              annotations:
-                message: "Pods in Pending status for more than 15 minutes"
-              expr: sum (kube_pod_status_phase{phase="Pending"} > 0)
-              for: 15m
-              labels:
-                severity: critical

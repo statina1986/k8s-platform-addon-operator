@@ -1,11 +1,14 @@
 ---
+{{- if $.Values.monitoringPlatform.OnePointZero }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: monitor-prometheus-operato-qvantel-swat-k8s
+  name: grafana-dashboard-swat-k8s
   namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
 data:
   swat-k8s.json: |-
     {
@@ -1876,3 +1879,4 @@ data:
       },
       "version": 2
     }
+{{- end }}

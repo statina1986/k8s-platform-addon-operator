@@ -1,4 +1,5 @@
 ---
+{{- if $.Values.monitoringPlatform.OnePointZero }}{{- if $.Values.monitoringPlatform.application.ordersBpmn }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -6,6 +7,8 @@ metadata:
   namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_apps
 data:
   rid.json: |-
         {
@@ -1365,3 +1368,4 @@ data:
           },
           "version": 1
         }
+{{- end }}{{- end }}

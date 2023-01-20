@@ -1,0 +1,30 @@
+{{- if $.Values.monitoringPlatform.OnePointZero }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-application-behavior.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: application-behavior.alerts
+    rules:
+      - alert: ThreadStarvationDetected
+        expr: round(increase(thread_starvation_detector_executions_total{success="false"}[1h]) > 3)
+        labels:
+          severity: warning
+          level: application
+          package: base
+        annotations:
+          brief: 'The threadpool/dispatcher {{` {{$labels.name}} `}} for {{` {{$labels.job}} `}} has {{` {{$value}} `}} failed thread pool starvation tests during the last 1 hour'
+          procedure: >
+              A failing threadpool test is an indicator that the pool is exhausted and not being able to execute jobs efficiently.
+              There are many potential reasons for this but recurring alerts and/or prolonged issues can lead to loss of traffic or failed health responses resulting in application death.
+              The team responsible for the application needs to be notified
+{{- end }}
