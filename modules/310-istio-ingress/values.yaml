@@ -4,7 +4,6 @@ istioIngress:
   publicIngressProxyProtocolEnabled: false
   publicIngress:
     name: public-ingress
-    proxyProtocolEnabled: false
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -71,7 +70,6 @@ istioIngress:
   integrationsHttpIngressProxyProtocolEnabled: false
   integrationsHttpIngress:
     name: integrations-http-ingress
-    proxyProtocolEnabled: false
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
