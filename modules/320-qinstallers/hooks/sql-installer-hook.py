@@ -59,11 +59,13 @@ kubernetes:
                         statement = replace_computed_values(statement, vals)
                         db.query(statement)
                 elif db_type == "postgresql":
-                    import psycopg
-                    conn = psycopg.connect(db_url, autocommit=True)
+                    import psycopg2
+                    conn = psycopg2.connect(db_url)
+                    conn.set_session(autocommit=True)
+                    cur = conn.cursor()
                     for statement in db_provision_sql:
                         statement = replace_computed_values(statement, vals)
-                        conn.execute(statement)
+                        cur.execute(statement)
 
                 execute_post_actions(post_actions,vals)
 
