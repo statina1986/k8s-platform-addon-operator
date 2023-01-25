@@ -28,6 +28,10 @@ lokiPlatform:
           max_per_second: 20
           up_to: 3
       compactor: {}
+      tableManager:
+      	enabled: false
+	  extraVolumeMounts: []
+      extraVolumes: []
     serviceAccount:
       create: true
   promtail:
