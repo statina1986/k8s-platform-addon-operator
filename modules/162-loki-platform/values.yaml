@@ -30,7 +30,7 @@ lokiPlatform:
       compactor: {}
     tableManager:
       enabled: false
-	  extraVolumeMounts: []
+      extraVolumeMounts: []
       extraVolumes: []
     serviceAccount:
       create: true
