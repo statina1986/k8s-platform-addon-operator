@@ -40,6 +40,22 @@ lokiPlatform:
       extraVolumes: []
     serviceAccount:
       create: true
+    read:
+      affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "loki.readSelectorLabels" . | nindent 10 }}
+              topologyKey: kubernetes.io/hostname
+    write:
+      affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "loki.writeSelectorLabels" . | nindent 10 }}
+              topologyKey: kubernetes.io/hostname
   promtail:
     enabled: false
     config:
