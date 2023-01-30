@@ -56,6 +56,8 @@ lokiPlatform:
                 matchLabels:
                   {{- include "loki.writeSelectorLabels" . | nindent 10 }}
               topologyKey: kubernetes.io/hostname
+    gateway:
+      replicas: 1
   promtail:
     enabled: false
     config:
