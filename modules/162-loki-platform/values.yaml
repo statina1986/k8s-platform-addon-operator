@@ -58,6 +58,13 @@ lokiPlatform:
               topologyKey: kubernetes.io/hostname
     gateway:
       replicas: 1
+      affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  {{- include "loki.gatewaySelectorLabels" . | nindent 10 }}
+              topologyKey: kubernetes.io/hostname
   promtail:
     enabled: false
     config:
