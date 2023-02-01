@@ -1,5 +1,5 @@
 //This sould be SemVer and it goes both to docker image and helm chart
-VERSION = "0.1.6"
+VERSION = "2.0.0-prerelease"
 
 // Type of CI job
 TYPE = "generic"
@@ -71,7 +71,7 @@ def shortCommit() {
 }
 
 def imageVersion() {
-  return "${VERSION}.${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}"
+  return "${VERSION}+${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}"
 }
 
 def imageName() {
