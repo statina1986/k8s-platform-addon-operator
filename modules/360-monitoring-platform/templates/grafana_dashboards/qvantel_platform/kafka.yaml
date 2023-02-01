@@ -1,4 +1,5 @@
 ---
+{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.kafka }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,6 +7,8 @@ metadata:
   name: grafana-dashboards-kafka
   labels:
     grafana_dashboard: "1"
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
 data:
   kafka.json: |-        
     {
@@ -2955,4 +2958,4 @@ data:
       },
       "version": 8
     }
-
+{{- end }}

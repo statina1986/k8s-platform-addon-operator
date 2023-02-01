@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-pod.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: pod.alerts
+    rules:
+    - alert: FailingPods
+      annotations:
+        message: "Pods Failing to run in 5 minutes"
+      expr: sum (kube_pod_container_status_waiting_reason > 0)
+      for: 5m
+      labels:
+        severity: critical
+    - alert: PendingPods
+      annotations:
+        message: "Pods in Pending status for more than 15 minutes"
+      expr: sum (kube_pod_status_phase{phase="Pending"} > 0)
+      for: 15m
+      labels:
+        severity: critical

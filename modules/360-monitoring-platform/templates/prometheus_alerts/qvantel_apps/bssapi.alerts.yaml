@@ -1,0 +1,146 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.applications.bssapi }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-bssapi.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: bssapi-alerts
+    rules:
+      - alert: BSSAPIExcessiveFailingPOST
+        # Checks if more than 2% of the incoming POST requests has failed the last hour
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} POST requests has more than {{` {{$value}} `}}% errors last hour
+          procedure: TBD
+        expr: sum(rate(aggregator_requests_total{status="failed",method="POST"}[1h])) by(job) / sum(rate(aggregator_requests_total{method="POST"}[1h])) by(job) * 100 > 2
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPIExcessiveFailingGET
+        # Checks if more than 2% of the incoming GET requests has failed the last hour
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} GET requests has more than {{` {{$value}}`}} %  error last hour
+          procedure: TBD
+        expr: sum(rate(aggregator_requests_total{status="failed",method="GET"}[1h])) by(job) / sum(rate(aggregator_requests_total{method="GET"}[1h])) by(job) * 100 > 2
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPIISReceivingInvalidRequests
+      # Checks if more than 10 invalid requests has been received during the last hour
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} has received more than {{` {{value}} `}} invalid requests the last hour
+          procedure: TBD
+        expr: sum(increase(aggregator_requests_total{status="invalid"}[1h])) by(job) > 10
+        for: 5m
+        labels:
+          severity: info
+          level: application
+          package: base
+      - alert: BSSAPIExcessiveResponseTimesGET
+        # Checks if the average response time over the last hour for GET requests has been more than 2.5 second
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} GET response times have an hourly average of {{` {{$value}} `}} seconds
+          procedure: TBD
+        expr: sum(rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="GET"}[1h])) by(job) > 2.5
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPIExcessiveResponseTimesPOST
+        # Checks if the average response time over the last hour for POST requests has been more than 2.5 second
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} POST response times have an hourly average of {{` {{$value}} `}} seconds
+          procedure: TBD
+        expr: sum(rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="POST"}[1h])) by(job) > 2.5
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPILongResponseTimesGET
+        # Checks if the average response time over the last hour for GET requests has been between 1.5 sec and 2.5 sec
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} GET response times have an hourly average of {{` {{$value}} `}} seconds
+          procedure: TBD
+        expr: sum(rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="GET"}[1h])) by(job) > 1.5 and sum(rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="GET"}[1h])) by(job) < 2.5
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPILongResponseTimesPOST
+        # Checks if the average response time over the last hour for GET requests has been between 1.5 sec and 2.5 sec
+        annotations:
+          brief: BSSAPI {{` {{$labels.job}} `}} POST response times have an hourly average of {{` {{$value}} `}} seconds
+          procedure: TBD
+        expr: sum(rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="POST"}[1h])) by(job) > 1.5 and sum(rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) by(job) / sum(rate(aggregator_response_time_seconds_count{method="POST"}[1h])) by(job) < 2.5
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPINoMetrics
+        # Checks if we are missing metrics starting with 'jvm_' from aggregator
+        annotations:
+          brief: We are not recieving bssapi metrics for last 5 minutes.
+          procedure: TBD
+        expr: absent({__name__=~"jvm_.*",job=~"bssapi-aggregator.*"}) == 1
+        for: 5m
+        labels:
+          severity: warning
+          level: application
+          package: base
+      - alert: BSSAPIResponseTimesDayComparisonForGET
+        annotations:
+          brief: BSSAPI api {{` {{$labels.job}} `}} has last 5m on average used {{` {{$value}} `}} more than same request has taken on average last hour for GET requests
+          procedure: TBD
+        expr: (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[5m])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[5m]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h]))) > 2
+        for: 5m
+        labels:
+          severity: info
+          level: application
+          package: base
+      - alert: BSSAPIResponseTimesDayComparisonForPOST
+        annotations:
+          brief: BSSAPI api {{` {{$labels.job}} `}} has last 5m on average used {{` {{$value}} `}} more than same request has taken on average last hour for POST requests
+          procedure: TBD
+        expr: (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[5m])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[5m]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h]))) > 2
+        for: 5m
+        labels:
+          severity: info
+          level: application
+          package: base
+      - alert: BSSAPIResponseTimesWeekComparisonForGET
+        annotations:
+          brief: BSSAPI api {{` {{$labels.job}} `}} has taken last 5m on average {{` {{$value}} `}} more than same request has taken on average last hour doing the GET request
+          procedure: TBD
+        expr: 2 * (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h] offset 1w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h] offset 1w)) + sum by (job) (rate(aggregator_response_time_seconds_sum{method="GET"}[1h] offset 2w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="GET"}[1h] offset 2w))) > 2
+        for: 5m
+        labels:
+          severity: info
+          level: application
+          package: base
+      - alert: BSSAPIResponseTimesWeekComparisonForPOST
+        annotations:
+          brief: BSSAPI api {{` {{$labels.job}} `}} has taken last 5m on average {{` {{$value}} `}} more than same request has taken on average last hour doing the POST request
+          procedure: TBD
+        expr: 2 * (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h])) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h]))) / (sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h] offset 1w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h] offset 1w)) + sum by (job) (rate(aggregator_response_time_seconds_sum{method="POST"}[1h] offset 2w)) / sum by (job) (rate(aggregator_response_time_seconds_count{method="POST"}[1h] offset 2w))) > 1.2
+        for: 5m
+        labels:
+          severity: info
+          level: application
+{{- end }}
+

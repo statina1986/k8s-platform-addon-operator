@@ -6,6 +6,8 @@ metadata:
   namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
 data:
   capacity-volumes-monitoring.json: |-    
     {
@@ -3605,6 +3607,3 @@ data:
       },
       "version": 14
     }
-
-
-

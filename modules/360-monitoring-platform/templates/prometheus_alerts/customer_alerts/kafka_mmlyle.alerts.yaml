@@ -1,0 +1,26 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-kafka.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: kafka.alerts
+    rules:
+    - alert: KafkaAbsentConsumerConnectionCDREventReceiver
+      annotations:
+        brief: Absent of Kafka consumer connection in cdr-event-receiver application
+        procedure: Follow QOPS-8470 and raise to platform team (on-call if needed)
+      expr: absent(kafka_consumer_connections{app="cdr-event-receiver"})
+      for: 5m
+      labels:
+        severity: critical
+{{- end }}
