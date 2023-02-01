@@ -2,7 +2,7 @@ monitoringPlatform:
   qvantelMonitoring:
   #Customer variable to control alerts and dashboards deployed per Program
     programs:
-      lyle: false
+      mmlyle: false
       sayco: false
       windtre: false
   #Variable to control applications deployed in the environment
