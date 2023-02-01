@@ -1,4 +1,4 @@
-{{- if $.Values.monitoringPlatform.OnePointZero }}{{- if $.Values.monitoringPlatform.application.bssapi }}
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.applications.bssapi }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -142,5 +142,5 @@ spec:
         labels:
           severity: info
           level: application
-{{- end }}{{- end }}
+{{- end }}
 

@@ -1,5 +1,5 @@
 ---
-{{- if $.Values.monitoringPlatform.OnePointZero }}{{- if $.Values.monitoringPlatform.application.flexBpmn }}
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.applications.flex }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -923,4 +923,4 @@ data:
           },
           "version": 10
         }
-{{- end }}{{- end }}
+{{- end }}

@@ -1,31 +1,30 @@
 monitoringPlatform:
-#Variable to control alerts and dashboards deployed based on the solution stack
-  OnePointZero: false
-  ZeroPointSix: false
-#Customer variable to control alerts and dashboards deployed per Program
-  customer:
-    lyle: false
-    sayco: false
-    windtre: false
-#Variable to control applications deployed in the environment
-  application:
-    bssapi: false
-    flexBpmn: false
-    ordersBpmn: false
-    ordersManager: false
-#Modules variables to control alerts and dashboards deployed based on the modules already deployed
-  modules:
-    kafka: false
-    kasope: false
-    consul: false
-    vault: false
-    istio: false
-    elasticsearch: false
-    postgres: false
-    mariadb: false
-    redis: false
-    rabbitmq: false
-    mongo: false
+  qvantelMonitoring:
+  #Customer variable to control alerts and dashboards deployed per Program
+    programs:
+      lyle: false
+      sayco: false
+      windtre: false
+  #Variable to control applications deployed in the environment
+    applications:
+      commonOnePointZero: false
+      commonZeroPointSix: false
+      bssapi: false
+      flex: false
+      ordersManager: false
+  #Modules variables to control alerts and dashboards deployed based on the modules already deployed
+    modules:
+      kafka: false
+      kasope: false
+      consul: false
+      vault: false
+      istio: false
+      elasticsearch: false
+      postgres: false
+      mariadb: false
+      redis: false
+      rabbitmq: false
+      mongo: false
 #INSTANA disabled by default as we need a cloud backend to actually connect it to.
   instana-agent:
     enabled: false

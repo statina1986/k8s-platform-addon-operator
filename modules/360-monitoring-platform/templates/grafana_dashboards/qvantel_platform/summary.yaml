@@ -1,5 +1,4 @@
 ---
-{{- if $.Values.monitoringPlatform.OnePointZero }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -1476,4 +1475,3 @@ data:
     "uid": "JABGX_-mz",
     "version": 1
     }
-{{- end }}

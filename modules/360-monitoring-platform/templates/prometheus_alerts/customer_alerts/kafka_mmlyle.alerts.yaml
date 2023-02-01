@@ -1,4 +1,4 @@
-{{- if $.Values.monitoringPlatform.customer.lyle }}{{- if  $.Values.monitoringPlatform.modules.kafka }}
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -23,4 +23,4 @@ spec:
       for: 5m
       labels:
         severity: critical
-{{- end }}{{- end }}
+{{- end }}

@@ -1,5 +1,4 @@
 ---
-{{- if $.Values.monitoringPlatform.OnePointZero }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -1544,4 +1543,3 @@ data:
         "uid": "Hzyg1Dzmk",
         "version": 1
       }
-{{- end }}
