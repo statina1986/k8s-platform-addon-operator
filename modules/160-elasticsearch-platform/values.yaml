@@ -21,9 +21,8 @@ elasticsearchPlatform:
     enabled: true
   logsearchBackup:
     enabled: false
-
-    # volumePolicy is used to define if the PVC/PV is deleted when the elastic cluster is upgraded 
-    # or only when the cluster is scaled down with, DeleteOnScaledownOnly or DeleteOnScaledownAndClusterDeletion values.
+  logsearchTestEnv:
+    enabled: false
 
   configElastic:
     definitions:
