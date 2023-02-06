@@ -21,7 +21,7 @@ elasticsearchPlatform:
     enabled: true
   logsearchBackup:
     enabled: false
-  # prod and logsearchTestEnv are to be used if logsearch is used without the backup functions. They create a environment specific logging-setups
+  # prod or logsearchTestEnv are to be used if logsearch is used without the backup functions. They create a environment specific logging-setups
   prod:
     enabled: false
   logsearchTestEnv:
