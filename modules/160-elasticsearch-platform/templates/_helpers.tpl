@@ -12,6 +12,12 @@ Compute if the logsearch is enabled.
 {{- $_ := set . "logsearchEnabled" (eq (.Values.elasticsearchPlatform.logsearch.enabled | toString) "true") -}}
 {{- end -}}
 {{/*
+Compute if the prod environment is enabled.
+*/}}
+{{- define "elasticsearchPlatform.prodEnabled" -}}
+{{- $_ := set . "prodEnabled" (eq (.Values.elasticsearchPlatform.prod.enabled | toString) "true") -}}
+{{- end -}}
+{{/*
 Compute if the snapshot is enabled.
 */}}
 {{- define "elasticsearchPlatform.logsearchBackupEnabled" -}}
@@ -23,3 +29,4 @@ Compute if the testing environment is enabled.
 {{- define "elasticsearchPlatform.logsearchTestEnvEnabled" -}}
 {{- $_ := set . "logsearchTestEnvEnabled" (eq (.Values.elasticsearchPlatform.logsearchTestEnv.enabled | toString) "true") -}}
 {{- end -}}
+

@@ -16,10 +16,13 @@ elasticsearchPlatform:
 
   smartsearch:
     enabled: true
-  # Enable only one of the logsearch or logsearchBackup options.
+  # Logsearch and LogsearchBackup create different kind of elastic deployments and elasticbackup has a unique logging-setup
   logsearch:
     enabled: true
   logsearchBackup:
+    enabled: false
+  # prod or logsearchTestEnv are to be used if logsearch is used without the backup functions. They create a environment specific logging-setups
+  prod:
     enabled: false
   logsearchTestEnv:
     enabled: false
