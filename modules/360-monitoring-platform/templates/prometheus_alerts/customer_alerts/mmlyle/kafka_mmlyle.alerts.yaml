@@ -23,4 +23,24 @@ spec:
       for: 5m
       labels:
         severity: critical
+    - alert: KafkaAbsentConsumerConnectionCDRBSSEventReceiver
+      annotations:
+        brief: Absent of Kafka consumer connection in cdr-bss-event-receiver application
+        procedure: Follow QOPS-8470 and raise to platform team (on-call if needed)
+      expr: absent(kafka_consumer_connections{app="cdr-bss-event-receiver"})
+      for: 5m
+      labels:
+        severity: critical
+        level: application
+        package: base
+    - alert: KafkaAbsentConsumerConnectionCDRREEventReceiver
+      annotations:
+        brief: Absent of Kafka consumer connection in cdr-re-event-receiver application
+        procedure: Follow QOPS-8470 and raise to platform team (on-call if needed)
+      expr: absent(kafka_consumer_connections{app="cdr-re-event-receiver"})
+      for: 5m
+      labels:
+        severity: critical
+        level: application
+        package: base
 {{- end }}
