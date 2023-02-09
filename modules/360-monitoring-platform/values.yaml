@@ -25,41 +25,6 @@ monitoringPlatform:
       redis: false
       rabbitmq: false
       mongo: false
-#INSTANA disabled by default as we need a cloud backend to actually connect it to.
-  instana-agent:
-    enabled: false
-    agent:
-      key: to-be-filled
-      endpointHost: to-be-filled-ingress-address
-      endpointPort: 443
-      env:
-        INSTANA_AGENT_MODE: to-be-filled APM/INFRASTRUCTURE
-        INSTANA_AGENT_TAGS: to-be-filled
-      pod:
-        requests:
-          cpu: 0.5
-          memory: 512
-        limits:
-          cpu: 2
-          memory: 768
-      configuration_yaml: |
-        com.instana.plugin.profiling.java:
-          enabled: true
-        com.instana.plugin.opentelemetry:
-          enabled: true
-        com.instana.ignore:
-          processes:
-            - 'stunnel'
-          arguments:
-            - 'io.strimzi.operator.cluster.Main'
-            - 'kafka.Kafka'
-            - 'org.apache.zookeeper.server.quorum.QuorumPeerMain'
-            - 'io.strimzi.operator.topic.Main'
-            - 'io.strimzi.operator.user.Main'
-    cluster:
-      name: to-be-filled
-    zone:
-      name: to-be-filled
   prometheus-blackbox-exporter:
     enabled: true
   prometheus-consul-exporter:

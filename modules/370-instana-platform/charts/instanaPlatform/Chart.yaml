@@ -1,0 +1,7 @@
+apiVersion: v2
+name: instanaPlatform
+version: 0.0.1
+dependencies:
+  - name: instana-agent
+    version: "1.2.53"
+    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"

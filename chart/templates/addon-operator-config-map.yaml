@@ -39,6 +39,9 @@ data:
 
   grafanaPlatformEnabled: "{{ .Values.modulesConfig.grafanaPlatformEnabled }}"
   grafanaPlatform: {{ print "|\n" (.Values.modulesConfig.grafanaPlatform | toYaml | indent 4) }}
+  
+  instanaPlatformEnabled: "{{ .Values.modulesConfig.instanaPlatformEnabled }}"
+  instanaPlatform: {{ print "|\n" (.Values.modulesConfig.instanaPlatform | toYaml | indent 4) }}
 
   istioIngressEnabled: "{{ .Values.modulesConfig.istioIngressEnabled }}"
   istioIngress: {{ print "|\n" (.Values.modulesConfig.istioIngress | toYaml | indent 4) }}

@@ -6,10 +6,6 @@ dependencies:
     condition: kube-prometheus-stack.enabled
     version: "~43.0.0"
     repository: "https://prometheus-community.github.io/helm-charts"
-  - name: instana-agent
-    condition: instana-agent.enabled
-    version: "1.2.35"
-    repository: "https://agents.instana.io/helm"
   - name: prometheus-blackbox-exporter
     condition: prometheus-blackbox-exporter.enabled
     version: "7.1.3"

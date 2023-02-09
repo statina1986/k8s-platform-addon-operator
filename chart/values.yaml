@@ -56,6 +56,10 @@ modulesConfig:
   grafanaPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  instanaPlatformEnabled: "false"
+  instanaPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   istioIngressEnabled: "false"
   istioIngress:
     configurationRequired: "check module documentation for configuration options"
@@ -95,7 +99,7 @@ modulesConfig:
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     configurationRequired: "check module documentation for configuration options"
-  
+
   postgresPlatformEnabled: "false"
   postgresPlatform:
     configurationRequired: "check module documentation for configuration options"
