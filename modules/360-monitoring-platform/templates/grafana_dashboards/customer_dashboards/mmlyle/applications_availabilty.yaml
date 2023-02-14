@@ -1,0 +1,1489 @@
+---
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: grafana-dashboards-applications-availability
+  namespace: {{.Release.Namespace}}
+  labels:
+    grafana_dashboard: '1'
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_apps
+data:
+  applications-availability.json: |-
+        {
+          "annotations": {
+            "list": [
+              {
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+              }
+            ]
+          },
+          "editable": true,
+          "gnetId": null,
+          "graphTooltip": 0,
+          "id": 5,
+          "links": [],
+          "panels": [
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 0
+              },
+              "id": 2,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "sum(up{app=\"customer-manager\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                },
+                {
+                  "expr": "sum(up{app=\"bssapi-aggregator\"})",
+                  "hide": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "B"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Customer Manager Instances",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 0
+              },
+              "id": 6,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"customer-manager\"}))) / (sum((up{app=\"customer-manager\"}))) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Customer Manager availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 0
+              },
+              "hiddenSeries": false,
+              "id": 8,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"customer-manager\"}))) / (sum((up{app=\"customer-manager\"}))) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "customer-manager",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Customer Manager availability trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 8
+              },
+              "id": 10,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "sum(up{app=\"product-catalog-api\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Product Catalog API Instances",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 8
+              },
+              "id": 12,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"product-catalog-api\"}))) / (sum((up{app=\"product-catalog-api\"}))) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Product Catalog API availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 8
+              },
+              "hiddenSeries": false,
+              "id": 14,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"product-catalog-api\"}))) / (sum((up{app=\"product-catalog-api\"}))) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "product-catalog-api",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Product Catalog API availability trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 16
+              },
+              "id": 21,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "sum(up{app=\"product-catalog-rest-loader\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Product Catalog Rest Loader Instances",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 16
+              },
+              "id": 22,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"product-catalog-rest-loader\"}))) / (sum((up{app=\"product-catalog-rest-loader\"}))) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Product Catalog Rest Loader availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 16
+              },
+              "hiddenSeries": false,
+              "id": 23,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"product-catalog-rest-loader\"}))) / (sum((up{app=\"product-catalog-rest-loader\"}))) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "product-catalog-rest-loader",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Product Catalog Rest Loader availability trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 24
+              },
+              "id": 15,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "sum(up{app=\"sales-and-care-toolbox\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Sales and Care Toolbox Instances",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 24
+              },
+              "id": 16,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"sales-and-care-toolbox\"}))) / (sum((up{app=\"sales-and-care-toolbox\"}))) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Sales and Care Toolbox availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 24
+              },
+              "hiddenSeries": false,
+              "id": 17,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"sales-and-care-toolbox\"}))) / (sum((up{app=\"sales-and-care-toolbox\"}))) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "sales-and-care-toolbox",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Sales and Care Toolbox availability trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 32
+              },
+              "id": 18,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "sum(up{app=\"bssapi-aggregator\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "BSSAPI Aggregator instances",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 32
+              },
+              "id": 19,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"bssapi-aggregator\"}))) / (sum((up{app=\"bssapi-aggregator\"}))) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "BSSAPI Agreggator availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 32
+              },
+              "hiddenSeries": false,
+              "id": 20,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum((up{app=\"bssapi-aggregator\"}))) / (sum((up{app=\"bssapi-aggregator\"}))) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "bssapi-aggregator",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "BSSAPI Aggregator availability trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 40
+              },
+              "id": 27,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Orders Manager + Orders BPMN Executor",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 40
+              },
+              "id": 28,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) / (sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Orders manager + Orders BPMN Executor availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 40
+              },
+              "hiddenSeries": false,
+              "id": 29,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) / (sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "orders-manager/orders-bpmn-executor",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Orders manager + Orders BPMN Executor trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "datasource": "Prometheus",
+              "description": "Checks if target if target app is up or not.",
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 48
+              },
+              "id": 30,
+              "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "super-light-green",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  "limit": 1,
+                  "overrides": [],
+                  "values": false
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto"
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "(up{job=\"catalog-qflow-product-catalog-designer-9003\"})",
+                  "hide": false,
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Product Catalog Designer",
+              "type": "stat"
+            },
+            {
+              "cacheTimeout": null,
+              "datasource": null,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 48
+              },
+              "id": 31,
+              "links": [],
+              "options": {
+                "fieldOptions": {
+                  "calcs": [
+                    "mean"
+                  ],
+                  "defaults": {
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "dark-red",
+                          "value": null
+                        },
+                        {
+                          "color": "dark-green",
+                          "value": 99.89
+                        }
+                      ]
+                    },
+                    "title": "",
+                    "unit": "percent"
+                  },
+                  "overrides": [],
+                  "values": false
+                },
+                "orientation": "auto",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+              },
+              "pluginVersion": "6.7.1",
+              "targets": [
+                {
+                  "expr": "((sum((up{job=\"catalog-qflow-product-catalog-designer-9003\"}))) / (sum((up{job=\"catalog-qflow-product-catalog-designer-9003\"}))) > 0 OR on() vector(0)) * 100",
+                  "hide": false,
+                  "instant": false,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Product Catalog Designer availability",
+              "type": "gauge"
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": null,
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 48
+              },
+              "hiddenSeries": false,
+              "id": 32,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "((sum((up{job=\"catalog-qflow-product-catalog-designer-9003\"}))) / (sum((up{job=\"catalog-qflow-product-catalog-designer-9003\"}))) > 0 OR on() vector(0)) * 100",
+                  "interval": "",
+                  "legendFormat": "catalog-qflow-product-catalog-designer",
+                  "refId": "A"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Product Catalog Designer trend",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": "100",
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "percent",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            }
+          ],
+          "refresh": "1m",
+          "schemaVersion": 22,
+          "style": "dark",
+          "tags": [],
+          "templating": {
+            "list": []
+          },
+          "time": {
+            "from": "now-30m",
+            "to": "now"
+          },
+          "timepicker": {
+            "refresh_intervals": [
+              "5s",
+              "10s",
+              "30s",
+              "1m",
+              "5m",
+              "15m",
+              "30m",
+              "1h",
+              "2h",
+              "1d"
+            ]
+          },
+          "timezone": "",
+          "title": "Applications availability",
+          "uid": "rCjJrHx7z",
+          "variables": {
+            "list": []
+          },
+          "version": 1
+        }
+{{- end }}
