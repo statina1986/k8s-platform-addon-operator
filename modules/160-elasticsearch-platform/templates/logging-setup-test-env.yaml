@@ -150,7 +150,7 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size":"20GB"
+                "max_size":"10GB"
               },
               "set_priority": {
                 "priority": 50
@@ -268,7 +268,7 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size":"20GB"
+                "max_size":"10GB"
               },
               "set_priority": {
                 "priority": 50
@@ -327,7 +327,7 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size":"20GB"
+                "max_size":"10GB"
               },
               "set_priority": {
                 "priority": 50
@@ -386,7 +386,7 @@ data:
           "hot": {
             "actions": {
               "rollover": {
-                "max_size":"20GB"
+                "max_size":"10GB"
               },
               "set_priority": {
                 "priority": 50
