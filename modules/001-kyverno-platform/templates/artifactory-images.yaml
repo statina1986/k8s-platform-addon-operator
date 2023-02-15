@@ -1,0 +1,79 @@
+{{- if .Values.kyvernoPlatform.enforceQvantelArtifactory }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: replace-image-registry
+  annotations:
+    policies.kyverno.io/title: Replace Image Registry
+    pod-policies.kyverno.io/autogen-controllers: none
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    kyverno.io/kyverno-version: 1.7.2
+    policies.kyverno.io/minversion: 1.6.0
+    kyverno.io/kubernetes-version: "1.23"
+    policies.kyverno.io/description: >-
+      Rather than blocking Pods which come from outside registries,
+      it is also possible to mutate them so the pulls are directed to
+      approved registries. In some cases, those registries may function as
+      pull-through proxies and can fetch the image if not cached.
+      This policy mutates all images either in the form 'image:tag' or
+      'registry.corp.com/image:tag' to be `myregistry.corp.com/`. Any
+      path in the image name will be preserved. Note that this mutates Pods
+      directly and not their controllers. It can be changed if desired but
+      if so may need to not match on Pods.            
+spec:
+  background: true
+  rules:
+    - name: replace-image-registry-pod-containers
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      exclude:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            names:
+            - kube-proxy*
+            - coredns*
+            - aws-node*
+      mutate:
+        foreach:
+        - list: "request.object.spec.containers"
+          patchStrategicMerge:
+            spec:
+              containers:
+              - name:  {{ printf "{{ element.name }}" | quote }}
+                image: {{ printf "{{ regex_replace_all_literal('^[^/]+', '{{element.image}}', 'artifactory.qvantel.net' )}}" | quote }}
+    - name: replace-image-registry-pod-initcontainers
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      exclude:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            names:
+            - kube-proxy*
+            - coredns*
+            - aws-node*
+      preconditions:
+        all:
+        - key: {{ printf "{{ request.object.spec.initContainers[] || `[]` | length(@) }}" | quote }}
+          operator: GreaterThanOrEquals
+          value: 1
+      mutate:
+        foreach:
+        - list: "request.object.spec.initContainers"
+          patchStrategicMerge:
+            spec:
+              initContainers:
+              - name: {{ printf "{{ element.name }}" | quote }}
+                image: {{ printf "{{ regex_replace_all_literal('^[^/]+', '{{element.image}}', 'artifactory.qvantel.net' )}}" | quote }}
+{{- end }}

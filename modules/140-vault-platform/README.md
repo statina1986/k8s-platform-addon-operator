@@ -22,17 +22,18 @@ Vault UI is available at:
 - vault-platform-ui.platform.svc
 
 ### Auto initialization
-Module is deployed with auto-initialization feature which is capable to aut-initialize **vault**.
+Module is deployed with auto-initialization feature which is capable to auto-initialize **vault**.
 If auto-unseal feature is not used, Shamir keys will be stored in k8s secret.
 
 ### Auto-unsealing
 It is possible to configure module to use auto-unsealing feature with external secrets service:
 * AWS KMS. In this case following is needed:  
-  * Service Account should be annotated with IAM role which has needed KMS permissions (e.g. : eks.amazonaws.com/role-arn: arn:aws:iam::386844351831:role/eksctl-platform-gitops-sit-addon-iamservicea-Role1-M314GVKTRB5M)
-  * **vault** config should contain auto-unseal block containing KMS key id
+  * This Module uses `platform` Service Account for Vault by default. This service account should be annotated with AWS role, which has permissions to access AWS KMS key
+  * **vault** server config should contain auto-unseal block containing KMS key id, e.g.
     ```
     seal "awskms" {
         region     = "eu-central-1"
         kms_key_id = "arn:aws:kms:eu-central-1:386844351831:key/mrk-a123090215d7415ab37eb27d76f4f35d"
     }
     ```
+    This is easy to add with ".Values.vault.ha.raft.additionalConfig" parameter. See [values.yaml](values.yaml)

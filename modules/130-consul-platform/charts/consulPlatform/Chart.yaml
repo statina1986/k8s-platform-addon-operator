@@ -2,6 +2,9 @@ apiVersion: v2
 name: consulPlatform
 version: 0.0.1
 dependencies:
+#  - name: consul
+#    version: 0.39.0
+#    repository: https://helm.releases.hashicorp.com
   - name: consul
-    version: 0.39.0
-    repository: https://helm.releases.hashicorp.com
+    version: 1.0.3
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

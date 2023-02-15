@@ -2,15 +2,27 @@ apiVersion: v2
 name: awsPlatform
 version: 0.0.1
 dependencies:
+#  - name: aws-load-balancer-controller
+#    version: "1.4.1"
+#    repository: https://aws.github.io/eks-charts
+#    condition: aws-load-balancer-controller-enabled
+#  - name: aws-efs-csi-driver
+#    version: 2.2.6
+#    repository: https://kubernetes-sigs.github.io/aws-efs-csi-driver/
+#    condition: aws-efs-csi-driver-enabled
+#  - name: aws-ebs-csi-driver
+#    version: 2.7.0
+#    repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver/
+#    condition: aws-ebs-csi-driver-enabled
   - name: aws-load-balancer-controller
-    version: "1.4.1"
-    repository: https://aws.github.io/eks-charts
+    version: "1.4.7"
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     condition: aws-load-balancer-controller-enabled
   - name: aws-efs-csi-driver
-    version: 2.2.6
-    repository: https://kubernetes-sigs.github.io/aws-efs-csi-driver/
+    version: "2.3.6"
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     condition: aws-efs-csi-driver-enabled
   - name: aws-ebs-csi-driver
-    version: 2.7.0
-    repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver/
+    version: "2.16.0"
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     condition: aws-ebs-csi-driver-enabled

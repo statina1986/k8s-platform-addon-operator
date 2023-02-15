@@ -2,6 +2,9 @@ apiVersion: v2
 name: certPlatform
 version: 0.0.1
 dependencies:
+#  - name: cert-manager
+#    version: v1.10.1
+#    repository: https://charts.jetstack.io
   - name: cert-manager
     version: v1.10.1
-    repository: https://charts.jetstack.io
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

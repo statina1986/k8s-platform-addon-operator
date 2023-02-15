@@ -5,9 +5,10 @@ vaultPlatform:
       enabled: true
     injector:
       enabled: false
-    server:        
-      image:
-        tag: "1.9.3"
+    server:            
+      serviceAccount:
+        create: false
+        name: platform  
       readinessProbe:
         enabled: true
         path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
@@ -47,8 +48,10 @@ vaultPlatform:
         raft:
           enabled: true
           setNodeId: true
+          additionalConfig: ""
           config: |
             ui = true
+
             listener "tcp" {
               address = "[::]:8200"
               cluster_address = "[::]:8201"
@@ -79,3 +82,4 @@ vaultPlatform:
             }
 
             service_registration "kubernetes" {}
+            {{ .Values.server.ha.raft.additionalConfig}}

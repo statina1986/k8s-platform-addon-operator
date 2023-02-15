@@ -2,7 +2,11 @@ apiVersion: v2
 name: mariadbPlatform
 version: 0.0.1
 dependencies:
+#  - name: mariadb
+#    version: 11.4.4
+#    repository: https://charts.bitnami.com/bitnami
   - name: mariadb
-    version: 10.4.4
-    repository: https://charts.bitnami.com/bitnami
+    version: 11.4.4
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+
 

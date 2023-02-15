@@ -1,0 +1,14 @@
+apiVersion: v2
+name: kyvernoPlatform
+version: 0.0.1
+dependencies:
+#  - name: kyverno
+#    version: ^1.9.0
+#    repository: https://kyverno.github.io/kyverno/
+  - name: kyverno 
+    version: ^2.7.0
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  - name: kyverno-policies
+    version: ^2.7.0
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    condition: kyverno-policies.enabled

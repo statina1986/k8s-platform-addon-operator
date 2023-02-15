@@ -1,5 +1,4 @@
 kasopePlatform:
-  k8ssandra-operator:
   clusters:
     - name: cluster
       spec:

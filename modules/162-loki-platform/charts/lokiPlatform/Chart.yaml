@@ -6,7 +6,11 @@ dependencies:
   #   condition: promtail.enabled
   #   repository: "https://grafana.github.io/helm-charts"
   #   version: "^6.7.0"
+#  - name: loki
+#    condition: loki.enabled
+#    version: ^3.8.0
+#    repository: https://grafana.github.io/helm-charts
   - name: loki
     condition: loki.enabled
     version: ^3.8.0
-    repository: https://grafana.github.io/helm-charts
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

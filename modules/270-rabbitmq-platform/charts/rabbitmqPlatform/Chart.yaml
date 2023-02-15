@@ -2,7 +2,10 @@ apiVersion: v2
 name: rabbitmqPlatform
 version: 0.0.1
 dependencies:
+#  - name: rabbitmq
+#    version: 11.2.2
+#    repository: https://charts.bitnami.com/bitnami
   - name: rabbitmq
     version: 11.2.2
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
 

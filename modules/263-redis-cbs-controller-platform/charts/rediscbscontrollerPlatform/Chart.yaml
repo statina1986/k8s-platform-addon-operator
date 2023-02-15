@@ -2,6 +2,9 @@ apiVersion: v2
 name: redisCbsControllerPlatform
 version: 0.0.1
 dependencies:
+#  - name: redis
+#    version: 17.3.17
+#    repository: https://charts.bitnami.com/bitnami
   - name: redis
     version: 17.3.17
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

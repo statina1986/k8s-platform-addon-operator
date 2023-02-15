@@ -1,9 +1,6 @@
 redisPlatform:
   redis:
     global:
-      imageRegistry: ""
-      imagePullSecrets: []
-      storageClass: ""
       redis:
         password: "test"
     kubeVersion: ""
@@ -20,14 +17,6 @@ redisPlatform:
         - sleep
       args:
         - infinity
-    image:
-      registry: docker.io
-      repository: bitnami/redis
-      tag: 6.2.7-debian-10-r0
-      pullPolicy: IfNotPresent
-      pullSecrets: []
-      debug: false
-
     architecture: replication
     auth:
       enabled: true
@@ -261,13 +250,6 @@ redisPlatform:
         targetMemory: ""
     sentinel:
       enabled: false
-      image:
-        registry: docker.io
-        repository: bitnami/redis-sentinel
-        tag: 6.2.7-debian-10-r0
-        pullPolicy: IfNotPresent
-        pullSecrets: []
-        debug: false
       masterSet: mymaster
       quorum: 2
       getMasterTimeout: 220
@@ -380,12 +362,6 @@ redisPlatform:
 
     metrics:
       enabled: false
-      image:
-        registry: docker.io
-        repository: bitnami/redis-exporter
-        tag: 1.37.0-debian-10-r39
-        pullPolicy: IfNotPresent
-        pullSecrets: []
       command: []
       redisTargetHost: "localhost"
       extraArgs: {}
@@ -427,12 +403,6 @@ redisPlatform:
 
     volumePermissions:
       enabled: false
-      image:
-        registry: docker.io
-        repository: bitnami/bitnami-shell
-        tag: 10-debian-10-r408
-        pullPolicy: IfNotPresent
-        pullSecrets: []
       resources:
         limits: {}
         requests: {}
@@ -441,12 +411,6 @@ redisPlatform:
 
     sysctl:
       enabled: false
-      image:
-        registry: docker.io
-        repository: bitnami/bitnami-shell
-        tag: 10-debian-10-r408
-        pullPolicy: IfNotPresent
-        pullSecrets: []
       command: []
       mountHostSys: false
       resources:

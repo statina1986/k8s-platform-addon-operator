@@ -58,6 +58,9 @@ data:
   keycloakPlatformEnabled: "{{ .Values.modulesConfig.keycloakPlatformEnabled }}"
   keycloakPlatform: {{ print "|\n" (.Values.modulesConfig.keycloakPlatform | toYaml | indent 4) }}
 
+  kyvernoPlatformEnabled: "{{ .Values.modulesConfig.kyvernoPlatformEnabled }}"
+  kyvernoPlatform: {{ print "|\n" (.Values.modulesConfig.kyvernoPlatform | toYaml | indent 4) }}
+
   lokiPlatformEnabled: "{{ .Values.modulesConfig.lokiPlatformEnabled }}"
   lokiPlatform: {{ print "|\n" (.Values.modulesConfig.lokiPlatform | toYaml | indent 4) }}
 

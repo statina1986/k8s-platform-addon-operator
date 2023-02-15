@@ -2,9 +2,15 @@ apiVersion: v2
 name: vaultPlatform
 version: 0.0.1
 dependencies:
-  - name: vault
-    version: 0.19.0
-    repository: https://helm.releases.hashicorp.com
+#  - name: vault
+#    version: 0.19.0
+#    repository: https://helm.releases.hashicorp.com
+#  - name: vault-secrets-webhook
+#    version: 1.15.6
+#    repository: https://kubernetes-charts.banzaicloud.com
   - name: vault-secrets-webhook
-    version: 1.15.6
-    repository: https://kubernetes-charts.banzaicloud.com
+    version: 1.18.2
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  - name: vault
+    version: 0.23.0
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

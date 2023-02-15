@@ -1,3 +1,6 @@
 mongodbPlatform:
   mongodb:
     architecture: replicaset
+    metrics:
+      enabled: false
+      

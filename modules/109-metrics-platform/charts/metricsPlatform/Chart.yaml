@@ -2,6 +2,9 @@ apiVersion: v2
 name: metricsPlatform
 version: 0.0.1
 dependencies:
+#  - name: metrics-server
+#    version: "3.8.2"
+#    repository: https://kubernetes-sigs.github.io/metrics-server/
   - name: metrics-server
     version: "3.8.2"
-    repository: https://kubernetes-sigs.github.io/metrics-server/
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

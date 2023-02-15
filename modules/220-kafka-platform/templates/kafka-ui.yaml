@@ -22,7 +22,7 @@ spec:
           value: kafka
         - name: LOGGING_LEVEL_COM_PROVECTUS
           value: info
-        image: provectuslabs/kafka-ui:latest
+        image: artifactory.qvantel.net/provectuslabs/kafka-ui:latest
         imagePullPolicy: Always
         name: kafka-ui
         ports:

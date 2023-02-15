@@ -7,14 +7,22 @@ awsPlatform:
       create: false
   aws-efs-csi-driver-enabled: false
   aws-efs-csi-driver:
-    storageClasses: 
-    # Add StorageClass resources like:
+    controller:
+      serviceAccount:
+        create: false
+        name: platform
+    node:
+      serviceAccount:
+        create: false
+        name: platform
+    storageClasses:
+      # Add StorageClass resources like:
       - name: efs-sc
-    #   annotations:
-    #     # Use that annotation if you want this to your default storageclass
-    #     storageclass.kubernetes.io/is-default-class: "true"
+        #   annotations:
+        #     # Use that annotation if you want this to your default storageclass
+        #     storageclass.kubernetes.io/is-default-class: "true"
         mountOptions:
-        - tls
+          - tls
         parameters:
           provisioningMode: efs-ap
           fileSystemId: SYSTEM_EFS_VALUE_HERE
@@ -28,14 +36,22 @@ awsPlatform:
         volumeBindingMode: Immediate
   aws-ebs-csi-driver-enabled: false
   aws-ebs-csi-driver:
+    controller:
+      serviceAccount:
+        create: false
+        name: platform
+    node:
+      serviceAccount:
+        create: false
+        name: platform
     storageClasses:
-    - name: gp3
-      # annotation metadata
-      annotations:
-        storageclass.kubernetes.io/is-default-class: "true"
-      # defaults to WaitForFirstConsumer
-      volumeBindingMode: WaitForFirstConsumer
-      # defaults to Delete
-      reclaimPolicy: Delete
-      parameters:        
-        type: gp3
+      - name: gp3
+        # annotation metadata
+        annotations:
+          storageclass.kubernetes.io/is-default-class: "true"
+        # defaults to WaitForFirstConsumer
+        volumeBindingMode: WaitForFirstConsumer
+        # defaults to Delete
+        reclaimPolicy: Delete
+        parameters:
+          type: gp3

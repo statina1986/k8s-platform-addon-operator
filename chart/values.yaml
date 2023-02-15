@@ -75,6 +75,10 @@ modulesConfig:
   kasopePlatformEnabled: "false"
   kasopePlatform:
     configurationRequired: "check module documentation for configuration options"
+  
+  kyvernoPlatformEnabled: "false"
+  kyvernoPlatform:
+    configurationRequired: "check module documentation for configuration options"
 
   lokiPlatformEnabled: "false"
   lokiPlatform:

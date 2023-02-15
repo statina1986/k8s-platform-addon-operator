@@ -2,6 +2,9 @@ apiVersion: v2
 name: cassandraPlatform
 version: 0.0.1
 dependencies:
+#  - name: k8ssandra
+#    version: 1.4.1
+#    repository: https://helm.k8ssandra.io
   - name: k8ssandra
     version: 1.4.1
-    repository: https://helm.k8ssandra.io
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/

@@ -1,9 +1,6 @@
 redisPcdPlatform:
   redis:
     global:
-      imageRegistry: ""
-      imagePullSecrets: []
-      storageClass: ""
       redis:
         password: "test"
     kubeVersion: ""
@@ -21,7 +18,6 @@ redisPcdPlatform:
       args:
         - infinity
     image:
-      registry: docker.io
       repository: bitnami/redis
       tag: 6.2.7-debian-10-r0
       pullPolicy: IfNotPresent
@@ -262,7 +258,6 @@ redisPcdPlatform:
     sentinel:
       enabled: true
       image:
-        registry: docker.io
         repository: bitnami/redis-sentinel
         tag: 6.2.7-debian-10-r0
         pullPolicy: IfNotPresent
@@ -381,7 +376,6 @@ redisPcdPlatform:
     metrics:
       enabled: false
       image:
-        registry: docker.io
         repository: bitnami/redis-exporter
         tag: 1.37.0-debian-10-r39
         pullPolicy: IfNotPresent
@@ -428,7 +422,6 @@ redisPcdPlatform:
     volumePermissions:
       enabled: false
       image:
-        registry: docker.io
         repository: bitnami/bitnami-shell
         tag: 10-debian-10-r408
         pullPolicy: IfNotPresent
@@ -442,7 +435,6 @@ redisPcdPlatform:
     sysctl:
       enabled: false
       image:
-        registry: docker.io
         repository: bitnami/bitnami-shell
         tag: 10-debian-10-r408
         pullPolicy: IfNotPresent

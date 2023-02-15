@@ -66,7 +66,11 @@ function helm::run_helm_dependency_update_hook() {
     echo '{"configVersion":"v1", "beforeHelm": 1}'
   else
     dirs=(${0%/*}/../charts/*)
-    helm dependency update "${dirs[0]}"
+    if [[ ! -f "${dirs[0]}/Chart.lock" ]] ; then
+      helm dependency update "${dirs[0]}"
+    else
+      qlog "Dependencies already downloaded. Skipping"
+    fi
   fi
 }
 
