@@ -355,6 +355,9 @@ elasticsearchPlatform:
         xpack.monitoring.elasticsearch.username: 'elastic'
         xpack.monitoring.elasticsearch.password: '${ELASTICSEARCH_PASSWORD}'
         pipeline.ecs_compatibility: disabled
+      log4j2.properties: |
+        logger.logstashpipeline.name = logstash.filters.json
+        logger.logstashpipeline.level = INFO
     logstashPipeline:
       logstash.conf: |
         input {
