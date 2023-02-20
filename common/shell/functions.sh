@@ -83,7 +83,7 @@ function common::ensure_resources() {
           cat ensure_resources.log && exit 1 
       }
     done
-    echo '{"configVersion":"v1", "beforeHelm": 1}'
+    echo '{"configVersion":"v1", "onStartup": 1}'
   else
     cat ensure_resources.log
   fi

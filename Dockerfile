@@ -6,4 +6,5 @@ RUN pip3 install boto3
 ADD common /common
 ADD modules /modules
 ADD global-hooks /global-hooks
+ADD resources /resources
 ENV PYTHONPATH=/
