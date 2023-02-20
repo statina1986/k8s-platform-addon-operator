@@ -1,4 +1,8 @@
 kasopePlatform:
+  k8ssandra-operator:
+    cass-operator:
+      admissionWebhooks:
+        enabled: false
   clusters:
     - name: cluster
       spec:
