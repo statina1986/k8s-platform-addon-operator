@@ -46,6 +46,17 @@ beforeAll: 1
                     },
                     "spec": {}
                 })
+            k8s_crd.patch_namespaced_custom_object_status(
+                group="qvantel.com",
+                version="v1",
+                name="platform-deployment",
+                namespace="platform",
+                plural="deploymentstatuses",
+                body={
+                        "status": {
+                            "conditions": [{"type": "Ready", "status": "False", "reason": "ModuleDeploymentStarted"}]
+                        }
+                })
         except ApiException as e:
             if e.status == 409:  # if the CRD already exists the K8s API will respond with a 409 Conflict
                 logger.info("Deployment resource already exist")
