@@ -16,10 +16,6 @@ modulesConfig:
   awsPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  auroraMysqlDbEnabled: "false"
-  auroraMysqlDb:
-    configurationRequired: "check module documentation for configuration options"
-
   cassandraPlatformEnabled: "false"
   cassandraPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -34,10 +30,6 @@ modulesConfig:
 
   consulPlatformEnabled: "false"
   consulPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
-  crossplanePlatformEnabled: "false"
-  crossplanePlatform:
     configurationRequired: "check module documentation for configuration options"
 
   dbManagementEnabled: "false"

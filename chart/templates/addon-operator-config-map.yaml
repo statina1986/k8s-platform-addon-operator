@@ -13,9 +13,6 @@ data:
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
   awsPlatform: {{ print "|\n" (.Values.modulesConfig.awsPlatform | toYaml | indent 4) }}
 
-  auroraMysqlDbEnabled: "{{ .Values.modulesConfig.auroraMysqlDbEnabled }}"
-  auroraMysqlDb: {{ print "|\n" (.Values.modulesConfig.auroraMysqlDb | toYaml | indent 4) }}
-
   cassandraPlatformEnabled: "{{ .Values.modulesConfig.cassandraPlatformEnabled }}"
   cassandraPlatform: {{ print "|\n" (.Values.modulesConfig.cassandraPlatform | toYaml | indent 4) }}
 
@@ -24,9 +21,6 @@ data:
 
   consulPlatformEnabled: "{{ .Values.modulesConfig.consulPlatformEnabled }}"
   consulPlatform: {{ print "|\n" (.Values.modulesConfig.consulPlatform | toYaml | indent 4) }}
-
-  crossplanePlatformEnabled: "{{ .Values.modulesConfig.crossplanePlatformEnabled }}"
-  crossplanePlatform: {{ print "|\n" (.Values.modulesConfig.crossplanePlatform | toYaml | indent 4) }}
 
   dbManagementEnabled: "{{ .Values.modulesConfig.dbManagementEnabled }}"
   dbManagement: {{ print "|\n" (.Values.modulesConfig.dbManagement | toYaml | indent 4) }}
