@@ -25,6 +25,23 @@ monitoringPlatform:
       redis: false
       rabbitmq: false
       mongo: false
+  x509-certificate-exporter:
+    enabled: true
+    secretsExporter:
+      podExtraLabels:
+        "release": "monitoring-platform"
+    hostPathsExporter:
+      podExtraLabels:
+        "release": "monitoring-platform"
+    service:
+      extraLabels: 
+        "release": "monitoring-platform"  
+    prometheusServiceMonitor:
+      extraLabels:
+        "release": "monitoring-platform"
+    prometheusRules:
+      extraLabels: 
+        "release": "monitoring-platform"  
   prometheus-blackbox-exporter:
     enabled: true
   prometheus-consul-exporter:
