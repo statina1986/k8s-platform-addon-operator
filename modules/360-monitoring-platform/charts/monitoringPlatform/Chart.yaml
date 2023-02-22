@@ -30,3 +30,7 @@ dependencies:
     condition: prometheus-consul-exporter.enabled
     version: "0.5.1"
     repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+  - name: x509-certificate-exporter
+    condition: x509-certificate-exporter.enabled
+    version: "v3.6.0"
+    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
