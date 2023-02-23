@@ -1,0 +1,53 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-operato-top-up.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: top-up.alerts
+      rules:
+      - alert: ManyFRInitialTopupAndUpdateRechargeEngineTopUpFailed
+        expr: sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition="FR_Initial_Topup_And_Update_Recharge_Engine",app="orders-bpmn-executor"}[1h])) > 5
+        annotations:
+          brief: Top ups FR_Initial_Topup_And_Update_Recharge_Engine are reporting unexpected errors.
+          procedure: Follow EVENT-1853 and raise to platform team.
+        labels:
+          severity: warning
+      - alert: ExcessiveFRInitialTopupAndUpdateRechargeEngineTopUpFailed
+        expr: sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition="FR_Initial_Topup_And_Update_Recharge_Engine",app="orders-bpmn-executor"}[1h])) > 10
+        annotations:
+          brief: Top ups FR_Initial_Topup_And_Update_Recharge_Engine are reporting critical errors.
+          procedure: Follow EVENT-1853 and raise to platform team (on-call if needed)
+        labels:
+          severity: critical
+      - alert: ManyFRTopupAndUpdateRechargeEngineTopUpFailed
+        expr: sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition="FR_Topup_And_Update_Recharge_Engine",app="orders-bpmn-executor"}[1h])) > 10
+        annotations:
+          brief: Top ups FR_Topup_And_Update_Recharge_Engine are reporting unexpected errors.
+          procedure: Follow EVENT-1853 and raise to platform team.
+        labels:
+          severity: warning
+      - alert: ExcessiveFRTopupAndUpdateRechargeEngineTopUpFailed
+        expr: sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition="FR_Topup_And_Update_Recharge_Engine",app="orders-bpmn-executor"}[1h])) > 15
+        annotations:
+          brief: Top ups FR_Topup_And_Update_Recharge_Engine are reporting critical errors.
+          procedure: Follow EVENT-1853 and raise to platform team (on-call if needed)
+        labels:
+          severity: critical
+      - alert: LackOfTopUpDailyLimitCheckActivity
+        expr: sum(increase(flex_bpmn_activity_completed_total{definition="top-up-daily-limit-check"}[5m])) == 0
+        for: 20m
+        annotations:
+          brief: No Top up daily limit check activity could cause no top ups triggered.
+          procedure: Follow EVENT-1853 and raise to platform team.
+        labels:
+          severity: critical
