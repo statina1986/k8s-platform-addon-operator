@@ -51,3 +51,4 @@ spec:
           procedure: Follow EVENT-1853 and raise to platform team.
         labels:
           severity: critical
+{{- end }}
