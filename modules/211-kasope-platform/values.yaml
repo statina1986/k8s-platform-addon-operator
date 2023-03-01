@@ -11,7 +11,6 @@ kasopePlatform:
           config:
             cassandraYaml:     
               num_tokens: 8
-              allocate_tokens_for_local_replication_factor: 3
             jvmOptions:
               heapSize: 4Gi
           storageConfig:
@@ -27,6 +26,10 @@ kasopePlatform:
           datacenters:
             - metadata:
                 name: dc1
+                services:
+                  dcService:
+                    annotations:
+                      consul.hashicorp.com/service-port: native
               size: 3
           telemetry:
             prometheus:

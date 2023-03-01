@@ -41,11 +41,11 @@ hook::trigger() {
       curl::execute "--request POST \
         --header 'X-Vault-Token: ${token}' \
         --data '{\"plugin_name\": \"postgresql-database-plugin\", \
-          \"connection_url\":\"postgresql://{{username}}:{{password}}@$endpoint\", \
+          \"connection_url\":\"postgresql://{{username}}:{{password}}@$endpoint/postgres\", \
           \"allowed_roles\":\"*\", \
           \"username\": \"$username\", \
           \"password\": \"$password\"}' \
-        '${VAULT_ADDR}/v1/database/config/$name'" 200
+        '${VAULT_ADDR}/v1/database/config/$name'" 204
     fi
   fi
 }

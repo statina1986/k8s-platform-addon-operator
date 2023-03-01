@@ -45,7 +45,7 @@ hook::trigger() {
           \"allowed_roles\":\"*\", \
           \"username\": \"$username\", \
           \"password\": \"$password\"}' \
-        '${VAULT_ADDR}/v1/database/config/$name'" 200
+        '${VAULT_ADDR}/v1/database/config/$name'" 204
     fi
   fi
 }
