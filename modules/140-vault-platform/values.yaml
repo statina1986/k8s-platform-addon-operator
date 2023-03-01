@@ -1,5 +1,6 @@
 # vaultPlatformNamespace: vault
 vaultPlatform:
+  autoUnseal: false
   vault:
     global:
       enabled: true

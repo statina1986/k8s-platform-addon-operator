@@ -29,6 +29,11 @@ If auto-unseal feature is not used, Shamir keys will be stored in k8s secret.
 It is possible to configure module to use auto-unsealing feature with external secrets service:
 * AWS KMS. In this case following is needed:  
   * This Module uses `platform` Service Account for Vault by default. This service account should be annotated with AWS role, which has permissions to access AWS KMS key
+  * Configuration should enable auto-unsealing automation (it is **false** by default) :
+    ```
+    vaultPlatform:
+      autoUnseal: true
+    ```
   * **vault** server config should contain auto-unseal block containing KMS key id, e.g.
     ```
     seal "awskms" {

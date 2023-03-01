@@ -6,7 +6,8 @@ imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 globalConfig:
-  someGlobalValue: "put your value"
+  # one of  'development', 'testing', 'production'
+  configurationProfile: "development"
 modulesConfig:
 
   platformCore:
