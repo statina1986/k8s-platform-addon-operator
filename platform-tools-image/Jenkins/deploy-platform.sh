@@ -8,6 +8,7 @@ KPLAT_RELEASE_NAME=${KPLAT_RELEASE_NAME:-"k8s-platform"}
 KPLAT_NAMESPACE=${KPLAT_NAMESPACE:-"platform"}
 KPLAT_REPO=${KPLAT_REPO:-"https://artifactory.qvantel.net/artifactory/all-helm/"}
 KPLAT_CHART=${KPLAT_CHART:-"k8s-platform-addon-operator"}
+KPLAT_CHART_VERSION=${KPLAT_CHART_VERSION:-""}
 HELM_VALUES=${HELM_VALUES:-""}
 HELM_SET=${HELM_SET:-""}
 TIMEOUT=${TIMEOUT:-"600s"}
@@ -15,8 +16,14 @@ TIMEOUT=${TIMEOUT:-"600s"}
 
 # Here we deploy platform helm chart with custom configuration from myvalues.yaml and also instruct it to use our locally built image
 START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-helm upgrade --install $KPLAT_RELEASE_NAME -n $KPLAT_NAMESPACE --create-namespace \
-    --repo $KPLAT_REPO $KPLAT_CHART $HELM_VALUES $HELM_SET
+if [[ -n $KPLAT_CHART_VERSION ]] ; then
+    helm upgrade --install $KPLAT_RELEASE_NAME -n $KPLAT_NAMESPACE --create-namespace \
+        --repo $KPLAT_REPO --version $KPLAT_CHART_VERSION $KPLAT_CHART $HELM_VALUES $HELM_SET
+else
+    helm upgrade --install $KPLAT_RELEASE_NAME -n $KPLAT_NAMESPACE --create-namespace \
+        --repo $KPLAT_REPO $KPLAT_CHART $HELM_VALUES $HELM_SET
+fi
+
 sleep 5
 echo "Waiting for addon-operator pod to be available"
 kubectl wait deployment addon-operator -n $KPLAT_NAMESPACE --for condition=Available=True --timeout=$TIMEOUT
