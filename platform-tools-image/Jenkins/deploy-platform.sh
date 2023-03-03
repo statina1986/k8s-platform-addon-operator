@@ -2,7 +2,7 @@
 
 set -e 
 
-trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+#trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
 KPLAT_RELEASE_NAME=${KPLAT_RELEASE_NAME:-"k8s-platform"}
 KPLAT_NAMESPACE=${KPLAT_NAMESPACE:-"platform"}
@@ -54,3 +54,5 @@ echo "Waiting for addon-operator deployement to complete"
 kubectl logs $ADDON_OPERATOR_POD -n $KPLAT_NAMESPACE -f --since-time=$START_TIME &
 
 kubectl wait --for=condition=ready dss -n $KPLAT_NAMESPACE platform-deployment --timeout=$TIMEOUT
+
+echo "Deployment completed"
