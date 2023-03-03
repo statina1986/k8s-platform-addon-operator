@@ -8,4 +8,6 @@ RUN wget https://storage.googleapis.com/kubernetes-release/release/v1.19.11/bin/
     tar -z -x -C /bin -f /helm.tgz --strip-components=1 ${helmArch}/helm && \
 rm -f /helm.tgz
 
+ADD Jenkins/deploy-platform.sh /kplat/deploy-platform.sh
+
 CMD ["/bin/sh"]
