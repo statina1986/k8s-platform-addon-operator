@@ -171,6 +171,16 @@ istioIngress:
                   host: qvaa-proxy-80.qvantel.svc.cluster.local
                   port:
                     number: 80
+          - match:
+              - uri:
+                  prefix: /auth/js/
+            retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: qvaa-proxy-80.qvantel.svc.cluster.local
+                  port:
+                    number: 80
       address-manager:
         enabled: false
         gateways:
