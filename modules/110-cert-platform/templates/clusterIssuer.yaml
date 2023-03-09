@@ -1,0 +1,12 @@
+{{- template "certPlatform.clusterIssuerEnabled" . -}}
+{{- if .clusterIssuerEnabled -}}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-platform
+  namespace: {{.Release.Namespace}}
+spec:
+  {{- range .Values.certPlatform.clusterIssuer }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}

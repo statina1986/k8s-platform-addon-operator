@@ -1,0 +1,6 @@
+dependencies:
+- name: certPlatform
+  repository: ""
+  version: 0.0.1
+digest: sha256:1c5e7f6cb06d9c5804bd3145eb0675a63a8ce83379a0b2b7fa8896564c053dbf
+generated: "2023-03-07T17:39:37.244553008+02:00"
