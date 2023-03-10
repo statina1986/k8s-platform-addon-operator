@@ -42,6 +42,24 @@ monitoringPlatform:
     prometheusRules:
       extraLabels: 
         "release": "monitoring-platform"  
+  kafka-lag-exporter:
+    enabled: true
+    clusters:
+      - name: "kafka-cluster"
+        bootstrapBrokers: kafka-cluster-kafka-bootstrap.platform.svc:9092  
+        groupWhitelist:
+        - .*    
+        topicWhitelist:
+        - .*      
+    prometheus:
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          "release": "monitoring-platform"
+    deploymentExtraLabels:
+      "release": "monitoring-platform"
+    podExtraLabels:
+      "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
   prometheus-consul-exporter:

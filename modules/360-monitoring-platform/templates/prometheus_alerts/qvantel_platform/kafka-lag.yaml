@@ -1,0 +1,25 @@
+{{- if index $.Values "monitoringPlatform" "kafka-lag-exporter" "enabled" }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-kafka-lag-exporter.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: pod.alerts
+    rules: 
+      - alert: ConsumerGroupLagHigh
+        annotations:
+          message: "{{` {{ $labels.group }} `}} on cluster {{` {{ $labels.cluster_name }} `}} is lagging on topic {{` {{ $labels.topic }} `}}"
+        expr: 'max by (cluster_name, group, topic) (kafka_consumergroup_group_lag_seconds{cluster_name=~"my-cluster", group=~"consumergroup.A"} ) < Inf > 180'
+        for: 5m
+        labels:
+         severity: critical
+{{- end }}

@@ -34,3 +34,7 @@ dependencies:
     condition: x509-certificate-exporter.enabled
     version: "v3.6.0"
     repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+  - name: kafka-lag-exporter
+    condition: kafka-lag-exporter.enabled
+    version: "v0.8.2"
+    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
