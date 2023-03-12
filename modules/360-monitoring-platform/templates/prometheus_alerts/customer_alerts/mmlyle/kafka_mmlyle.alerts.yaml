@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: monitoring-platform-kube-p-kafka.rules
+  name: monitoring-platform-kube-p-kafka-mmlyle.rules
   namespace: {{.Release.Namespace}}
   generation: 1
   annotations:
@@ -13,16 +13,28 @@ metadata:
     release: monitoring-platform
 spec:
   groups:
-  - name: kafka.alerts
+  - name: kafka_mmlyle.alerts
     rules:
-    - alert: KafkaAbsentConsumerConnectionCDREventReceiver
+    - alert: KafkaAbsentConsumerConnectionCDREventReceiverLebara
       annotations:
-        brief: Absent of Kafka consumer connection in cdr-event-receiver application
+        brief: Absent of Kafka consumer connection in cdr-event-receiver-lebara application
         procedure: Follow QOPS-8470 and raise to platform team (on-call if needed)
-      expr: absent(kafka_consumer_connections{app="cdr-event-receiver"})
+      expr: absent(kafka_consumer_connections{app="cdr-event-receiver-lebara"})
       for: 5m
       labels:
         severity: critical
+        level: application
+        package: base
+    - alert: KafkaAbsentConsumerConnectionCDREventReceiverLyca
+      annotations:
+        brief: Absent of Kafka consumer connection in cdr-event-receiver-lyca application
+        procedure: Follow QOPS-8470 and raise to platform team (on-call if needed)
+      expr: absent(kafka_consumer_connections{app="cdr-event-receiver-lyca"})
+      for: 5m
+      labels:
+        severity: critical
+        level: application
+        package: base
     - alert: KafkaAbsentConsumerConnectionCDRBSSEventReceiver
       annotations:
         brief: Absent of Kafka consumer connection in cdr-bss-event-receiver application

@@ -1,0 +1,143 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.kafka }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-kafka.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: kafka.alerts
+    rules:
+    - alert: KafkaLostController
+      expr: sum by(job, datacenter) (kafka_controller_kafkacontroller_activecontrollercount) != 1
+      for: 1m
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "No kafka controller for more than 1 minute in cluster {{` {{ $labels.job }} `}}."
+        procedure: "Escalate to L2 team ASAP after verifying"
+    - alert: KafkaUnderreplicatedPartitions
+      expr: kafka_server_replicamanager_underreplicatedpartitions != 0
+      for: 1m
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "Instance {{` {{ $labels.instance }} `}} has underreplicated partitions for
+          more than 1 minutes."
+        procedure: "Escalate to L2 team ASAP after verifying"
+    - alert: KafkaOfflinePartitions
+      expr: kafka_controller_kafkacontroller_offlinepartitionscount != 0
+      for: 1m
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "Instance {{` {{ $labels.instance }} `}} has had offline partitions for more than 1 minute."
+        procedure: "Escalate to L2 team ASAP after verifying"
+    - alert: KafkaLeaderReelections
+      expr: sum by(job) (delta(kafka_controller_controllerstats_leaderelectionrateandtimems[1h])) > 0
+      for: 1m
+      labels:
+        severity: warning
+        level: application
+        package: base
+      annotations:
+        brief: "Kafka cluster {{` {{ $labels.job }} `}} has experienced leader reelections."
+        procedure: "Escalate to L2 team after verifying"
+    - alert: KafkaUncleanLeaderReelection
+      expr: sum by(job) (delta(kafka_controller_controllerstats_topicuncleanleaderelectionenablerateandtimems[1d])) > 0
+      for: 1m
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "Kafka cluster {{` {{ $labels.job }} `}} experienced unclean leader elections. Message loss likely."
+        procedure: "Escalate to L2 ASAP after verifying."
+    - alert: KafkaTopicFailedToProduceRequests
+      expr: sum by(topic) (rate(kafka_server_brokertopicmetrics_failedproducerequests_total{topic!=""}[5m])) > 0
+      for: 1m
+      labels:
+        severity: warning
+        level: application
+        package: base
+      annotations:
+        brief: "Kafka cluster {{` {{ $labels.job }} `}} has {{` {{ $value }} `}} failed produce requests for {{` {{ $labels.topic }} `}}"
+        procedure: "Escalate to L2 after verifying."
+#kafka lags alerts could be removed after verifying kafa lag exporter alert works better in real (traffic) environment
+    - alert: KafkaWarningConsumerLag
+      expr: sum by (topic, partition, app) (kafka_consumer_fetch_manager_records_lag_max{topic!=""}) > 5000
+      for: 15m
+      labels:
+        severity: warning
+        level: application
+        package: base
+      annotations:
+        brief: "Consumer Lag detected for topic {{` {{ $labels.topic }} `}} on partition {{` {{ $labels.partition }} `}} in app {{` {{ $labels.app }} `}}"
+        procedure: "Escalate to L2 after verifying."
+    - alert: KafkaSevereConsumerLag
+      expr: sum by (topic, partition, app) (kafka_consumer_fetch_manager_records_lag_max{topic!=""}) > 10000
+      for: 15m
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "Consumer Lag detected for topic {{` {{ $labels.topic }} `}} on partition {{` {{ $labels.partition }} `}} in app {{` {{ $labels.app }} `}}"
+        procedure: "Escalate to L2 ASAP after verifying." 
+    - alert: KafkaBrokerExceededPartitionLimit
+      expr: kafka_server_replicamanager_partitioncount >= 4000
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "The Kafka broker on instance {{` {{ $labels.instance }} `}} has reached the limit of partitions it can handle"
+        procedure: "Create a ticket for the NoSQL team to investigate (as soon as the support policy for this env allows)."
+    - alert: KafkaCloseToClusterPartitionLimit
+      expr: 100000 <= sum(kafka_server_replicamanager_partitioncount) by (job) < 200000
+      labels:
+        severity: warning
+        level: application
+        package: base
+      annotations:
+        brief: "The number of partitions in the Kafka cluster with the metrics service name {{` {{ $labels.job }} `}} is nearing it's limit"
+        procedure: "Create a ticket for the NoSQL team to investigate during business hours"
+    - alert: KafkaExceededClusterPartitionLimit
+      expr: sum(kafka_server_replicamanager_partitioncount) by (job) >= 200000
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: "The cluster with the metrics service name {{` {{ $labels.job }} `}} has reached the maximum number of partitions it can handle" 
+        procedure: "Create a ticket for the NoSQL team to investigate urgently"
+    - alert: KafkaOccasionalRestart
+      annotations:
+        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h, this behaviour could be affecting service availability."
+        escalation: "Escalate to NoSQL team following the established procedure and taking into account the severity of this alert (warning)."
+      expr: 1 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{container=~"(topic-operator|user-operator|tls-sidecar|zookeeper|kafka|kafka-ui)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace) < 2
+      labels:
+        level: application
+        severity: warning
+    - alert: KafkaFrequentRestart
+      annotations:
+        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h (it's a bloodbath!), this behaviour could be affecting service availability."
+        escalation: "Escalate to NoSQL team following the established procedure and taking into account the severity of this alert (critical)."
+      expr: 2 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{container=~"(topic-operator|user-operator|tls-sidecar|zookeeper|kafka|kafka-ui)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace)
+      labels:
+        level: application
+        severity: critical
+{{- end }}
