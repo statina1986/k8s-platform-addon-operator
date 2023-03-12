@@ -600,7 +600,7 @@ istioIngress:
         http:
           - route:
               - destination:
-                  host: monitoring-platform-prometheus-server.platform.svc.cluster.local
+                  host: monitoring-platform-kube-p-prometheus.platform.svc.cluster.local
                   port:
                     number: 80
       kafka-ui:
