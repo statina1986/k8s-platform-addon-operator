@@ -1,0 +1,6 @@
+dependencies:
+- name: consul
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.0.3
+digest: sha256:cb107ffea04ce4c62a68f4d9e9bd41eff3e21d4f7a842a03c515b81390b2bee7
+generated: "2023-03-13T21:25:30.010616104+02:00"

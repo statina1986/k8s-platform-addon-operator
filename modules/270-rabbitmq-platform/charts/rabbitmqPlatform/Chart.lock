@@ -1,0 +1,6 @@
+dependencies:
+- name: rabbitmq
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 11.2.2
+digest: sha256:ea41d25fc48b0d2d16d912c1c4e62d5426b02b29ac974eef16f30c1cb0e444ac
+generated: "2023-03-13T21:32:54.86544724+02:00"

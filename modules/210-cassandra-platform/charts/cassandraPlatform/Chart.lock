@@ -1,0 +1,6 @@
+dependencies:
+- name: k8ssandra
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.4.1
+digest: sha256:78ab6077a43afbdcc5867c7f5cbaddf92692876f2bcb5e45ef2a360cd2e39492
+generated: "2023-03-13T21:29:03.265868533+02:00"

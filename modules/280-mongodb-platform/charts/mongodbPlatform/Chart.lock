@@ -1,0 +1,6 @@
+dependencies:
+- name: mongodb
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 13.1.3
+digest: sha256:afb896dbe6b8f5511ad923fa7a8cd7e9635f51d6aa4e8fb2d8535be95a3efe3a
+generated: "2023-03-13T21:33:17.852667485+02:00"

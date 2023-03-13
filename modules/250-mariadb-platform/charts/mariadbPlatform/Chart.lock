@@ -1,0 +1,6 @@
+dependencies:
+- name: mariadb
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 11.4.4
+digest: sha256:ef5069c5eeac5cc6816ed4adcfa9dfab4b4f799e372495d39f1fb6f88399bbae
+generated: "2023-03-13T21:30:48.718330417+02:00"

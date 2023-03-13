@@ -1,0 +1,15 @@
+dependencies:
+- name: gateway
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.13.2
+- name: gateway
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.13.2
+- name: gateway
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.13.2
+- name: gateway
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.13.2
+digest: sha256:8b25a469413f5ff3eaf640b4a2d860f9cb8c2985f1ccff39445bd683c890d45f
+generated: "2023-03-13T21:33:45.15706182+02:00"

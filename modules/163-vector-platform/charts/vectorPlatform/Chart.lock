@@ -1,0 +1,9 @@
+dependencies:
+- name: vector
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 0.18.0
+- name: vector
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 0.18.0
+digest: sha256:035cdec11190889019dfd802b5daa2d8ee4a203503cc7810069cc9e27e9eeba3
+generated: "2023-03-13T21:28:34.153887056+02:00"

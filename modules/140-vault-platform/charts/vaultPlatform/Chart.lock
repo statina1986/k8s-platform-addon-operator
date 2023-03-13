@@ -1,0 +1,9 @@
+dependencies:
+- name: vault-secrets-webhook
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.18.2
+- name: vault
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 0.23.0
+digest: sha256:7273d5e0ecb9c4bd16318206f22a609f2d58515b0619b6b05e2ef923eb99a1c3
+generated: "2023-03-13T21:25:57.822787216+02:00"

@@ -1,0 +1,9 @@
+dependencies:
+- name: base
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.13.2
+- name: istiod
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 1.13.2
+digest: sha256:b4554a96855ed84da0e3311b91bce7dd8020cd170228c5e08a47f3bf5737befc
+generated: "2023-03-13T21:26:30.344232434+02:00"

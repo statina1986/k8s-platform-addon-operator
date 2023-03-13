@@ -1,0 +1,6 @@
+dependencies:
+- name: grafana
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 6.52.3
+digest: sha256:116ca5af5525782a319fbd0a6abbe18e1a51ae9d79b726fc17c894f4a9b5365a
+generated: "2023-03-13T21:27:42.449081784+02:00"
