@@ -36,7 +36,7 @@ do
     if kubectl wait --for=condition=ready=true dss -n $KPLAT_NAMESPACE platform-deployment --timeout=1s ; then 
         echo "Deployment already in the ready state. Exiting"
         kubectl logs $ADDON_OPERATOR_POD -n $KPLAT_NAMESPACE --since-time=$START_TIME  
-        exit 1 
+        exit 0
     else
         echo "No deployment status or deployemnt is not yet triggered. Repeat waiting"
         sleep 1 
