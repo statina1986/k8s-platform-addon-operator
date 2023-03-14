@@ -13,8 +13,11 @@ elasticsearchPlatform:
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
     createClusterScopedResources: true
-
+  logstashEnabled: true
+  filebeatEnabled: true
   smartsearch:
+    enabled: true
+  kibana:
     enabled: true
   # Logsearch and LogsearchBackup create different kind of elastic deployments and elasticbackup has a unique logging-setup
   logsearch:

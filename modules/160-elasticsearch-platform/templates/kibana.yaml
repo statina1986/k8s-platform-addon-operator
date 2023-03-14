@@ -1,5 +1,5 @@
-{{- template "elasticsearchPlatform.logsearchEnabled" . -}}
-{{- if .logsearchEnabled -}}
+{{- template "elasticsearchPlatform.kibanaEnabled" . -}}
+{{- if .kibanaEnabled -}}
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
