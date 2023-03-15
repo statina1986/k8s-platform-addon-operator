@@ -27,4 +27,40 @@ spec:
               A failing threadpool test is an indicator that the pool is exhausted and not being able to execute jobs efficiently.
               There are many potential reasons for this but recurring alerts and/or prolonged issues can lead to loss of traffic or failed health responses resulting in application death.
               The team responsible for the application needs to be notified
+      - alert: Occasional5XXCalls
+        expr: sum(rate(http_server_requests_total{http_status_code="5xx"}[1h])) by(app) / sum(rate(http_server_requests_total{http_status_code="2xx"}[1h])) by(app) * 100 > 2
+        labels:
+          severity: warning
+          level: application
+          package: base
+        annotations:
+          brief: "More than 2% of calls in {{` {{ $labels.app }} `}} are receiving 5XX status code"
+          procedure: "Escalate to L2 team to check the application involved"
+      - alert: Frequent5XXCalls
+        expr: sum(rate(http_server_requests_total{http_status_code="5xx"}[1h])) by(app) / sum(rate(http_server_requests_total{http_status_code="2xx"}[1h])) by(app) * 100 > 4
+        labels:
+          severity: critical
+          level: application
+          package: base
+        annotations:
+          brief: "More than 4% of calls in {{` {{ $labels.app }} `}} are receiving 5XX status code"
+          procedure: "Escalate to L2 team ASAP to check the application involved"       
+      - alert: Occasional4XXCalls
+        expr: sum(rate(http_server_requests_total{http_status_code="4xx"}[1h])) by(app) / sum(rate(http_server_requests_total{http_status_code="2xx"}[1h])) by(app) * 100 > 40
+        labels:
+          severity: warning
+          level: application
+          package: base
+        annotations:
+          brief: "More than 40% of calls in {{` {{ $labels.app }} `}} are receiving 4XX status code"
+          procedure: "Escalate to L2 team to check the application involved"
+      - alert: Frequent4XXCalls
+        expr: sum(rate(http_server_requests_total{http_status_code="4xx"}[1h])) by(app) / sum(rate(http_server_requests_total{http_status_code="2xx"}[1h])) by(app) * 100 > 60
+        labels:
+          severity: critical
+          level: application
+          package: base
+        annotations:
+          brief: "More than 60% of calls in {{` {{ $labels.app }} `}} are receiving 4XX status code"
+          procedure: "Escalate to L2 team ASAP to check the application involved"  
 {{- end }}
