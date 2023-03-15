@@ -30,6 +30,9 @@ kasopePlatform:
                   dcService:
                     annotations:
                       consul.hashicorp.com/service-port: native
+                  allPodsService:
+                    annotations:
+                      consul.hashicorp.com/service-port: native
               size: 3
           telemetry:
             prometheus:

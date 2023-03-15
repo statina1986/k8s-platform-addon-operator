@@ -215,6 +215,25 @@ istioIngress:
                   host: bssapi-documentation-service.qvantel.svc.cluster.local
                   port:
                     number: 8010
+      case-admin:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - match:
+              - uri:
+                  exact: /
+            redirect:
+              uri: /caseadmin/sa/
+            retries:
+              attempts: 0
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: case-admin.qvantel.svc.cluster.local
+                  port:
+                    number: 8096
       case-management:
         enabled: false
         gateways:
@@ -602,7 +621,7 @@ istioIngress:
               - destination:
                   host: monitoring-platform-kube-p-prometheus.platform.svc.cluster.local
                   port:
-                    number: 80
+                    number: 9090
       kafka-ui:
         gateways:
           - private-ingress
