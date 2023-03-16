@@ -788,12 +788,12 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{namespace=\"$kubernetes_namespace\",pod=\"$pod\"}) by (pod)",
+              "expr": "sum(container_memory_usage_bytes{namespace=\"$kubernetes_namespace\",pod=~\"kafka-cluster-kafka-[0-9]\"}) by (pod)",
               "format": "time_series",
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": " {{ "{{$pod}}"  }} ",
+              "legendFormat": " {{ "{{pod}}"  }} ",
               "refId": "A"
             }
           ],
@@ -882,7 +882,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$kubernetes_namespace\",pod=\"$pod\"}[5m])) by (pod)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$kubernetes_namespace\",pod=~\"kafka-cluster-kafka-[0-9]\"}[15m])) by (pod)",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -1070,7 +1070,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_open_fds{job=\"kafka\",instance=~\"$kafka_broker\"}",
+              "expr": "process_open_fds{job=\"metrics/kafka-resources-metrics\",instance=~\"$kafka_broker\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2707,7 +2707,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kafka_network_socketserver_networkprocessoravgidlepercent{instance=~\"$kafka_broker\"}*100",
+              "expr": "kafka_network_socketserver_networkprocessoravgidle_percent{instance=~\"$kafka_broker\"}*100",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -2910,7 +2910,7 @@ data:
             ],
             "query": "label_values(container_network_receive_packets_total,pod)",
             "refresh": 0,
-            "regex": "/.*kafka-oper-kafka-*./",
+            "regex": "kafka-cluster-kafka-[0-9]",
             "skipUrlSync": false,
             "sort": 0,
             "tagValuesQuery": "",
