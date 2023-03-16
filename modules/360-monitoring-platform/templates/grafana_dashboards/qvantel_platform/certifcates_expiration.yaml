@@ -392,7 +392,7 @@ data:
                 }
               ],
               "title": "Media",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "current"
             },
             {
