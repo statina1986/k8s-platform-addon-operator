@@ -127,6 +127,10 @@ modulesConfig:
   sftp:
     configurationRequired: "check module documentation for configuration options"
 
+  sftpgoPlatformEnabled: "true"
+  sftpgoPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   traefikIngressEnabled: "false"
   traefikIngress:
     configurationRequired: "check module documentation for configuration options"
