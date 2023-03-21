@@ -1,3 +1,37 @@
 # certPlatformNamespace: cert-manager
 certPlatform:
   cert-manager:
+  qvantelWildcard:
+    enabled: false
+  qvantelSystemsIssuer:
+    enabled: false
+  ### Example configuration below.
+  clusterIssuer:
+    spec:
+      acme:
+        server: https://acme-v02.api.letsencrypt.org/directory
+        email: harri.jantti@qvantel.com
+        privateKeySecretRef:
+          name: letsencrypt-platform-dns
+        solvers:
+        - selector:
+            dnsZones:
+              - "qvantel.systems"
+          dns01:
+            route53:
+              region: us-east-1
+              hostedZoneID: ZJ7W7ERY57J33
+              role: "arn:aws:iam::067412573140:role/qv-mumbai-platform-1-dns-manager"
+  certificateConf:
+    spec:
+      secretName: qvantel-wildcard
+      privateKey:
+        rotationPolicy: Always
+      dnsNames:
+      - '*.qvantel.systems'
+      - qvantel.systems
+      issuerRef:
+        name: letsencrypt-platform
+        kind: ClusterIssuer
+        group: cert-manager.io
+      renewBefore: 720h

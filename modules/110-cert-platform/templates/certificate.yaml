@@ -1,0 +1,12 @@
+{{- template "certPlatform.certificateEnabled" . -}}
+{{- if .certificateEnabled -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: qvantel-wildcard
+  namespace: {{.Release.Namespace}}
+spec:
+  {{- range .Values.certPlatform.certificateConf }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
