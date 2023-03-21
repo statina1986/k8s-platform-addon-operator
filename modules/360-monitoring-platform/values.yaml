@@ -166,17 +166,102 @@ monitoringPlatform:
               target_label: node
               replacement: $1
               action: replace
-          - job_name: "kafka"
+          - job_name: podMonitor/metrics/kafka-resources-metrics/0
+            honor_timestamps: true
             scrape_interval: 30s
-            scrape_timeout:  20s
+            scrape_timeout: 10s
             metrics_path: /metrics
-            consul_sd_configs:
-              - server: consul.service.consul:8500
-                services:
-                  - 'kafka'
+            scheme: http
+            follow_redirects: true
             relabel_configs:
-            - source_labels: [__address__]
+            - source_labels: [job]
+              separator: ;
+              regex: (.*)
+              target_label: __tmp_prometheus_job_name
+              replacement: $1
               action: replace
-              regex: ([^:]+):.*
-              replacement: $1:9404
-              target_label: __address__
+            - source_labels: [__meta_kubernetes_pod_label_strimzi_io_kind]
+              separator: ;
+              regex: Kafka|KafkaConnect|KafkaMirrorMaker|KafkaMirrorMaker2
+              replacement: $1
+              action: keep
+            - source_labels: [__meta_kubernetes_pod_container_port_name]
+              separator: ;
+              regex: tcp-prometheus
+              replacement: $1
+              action: keep
+            - source_labels: [__meta_kubernetes_namespace]
+              separator: ;
+              regex: (.*)
+              target_label: namespace
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_kubernetes_pod_container_name]
+              separator: ;
+              regex: (.*)
+              target_label: container
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_kubernetes_pod_name]
+              separator: ;
+              regex: (.*)
+              target_label: pod
+              replacement: $1
+              action: replace
+            - separator: ;
+              regex: (.*)
+              target_label: job
+              replacement: metrics/kafka-resources-metrics
+              action: replace
+            - separator: ;
+              regex: (.*)
+              target_label: endpoint
+              replacement: tcp-prometheus
+              action: replace
+            - separator: ;
+              regex: __meta_kubernetes_pod_label_(strimzi_io_.+)
+              replacement: $1
+              action: labelmap
+            - source_labels: [__meta_kubernetes_namespace]
+              separator: ;
+              regex: (.*)
+              target_label: namespace
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_kubernetes_pod_name]
+              separator: ;
+              regex: (.*)
+              target_label: kubernetes_pod_name
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_kubernetes_pod_node_name]
+              separator: ;
+              regex: (.*)
+              target_label: node_name
+              replacement: $1
+              action: replace
+            - source_labels: [__meta_kubernetes_pod_host_ip]
+              separator: ;
+              regex: (.*)
+              target_label: node_ip
+              replacement: $1
+              action: replace
+            - source_labels: [__address__]
+              separator: ;
+              regex: (.*)
+              modulus: 1
+              target_label: __tmp_hash
+              replacement: $1
+              action: hashmod
+            - source_labels: [__tmp_hash]
+              separator: ;
+              regex: "0"
+              replacement: $1
+              action: keep
+            kubernetes_sd_configs:
+            - role: pod
+              kubeconfig_file: ""
+              follow_redirects: true
+              namespaces:
+                names:
+                - platform

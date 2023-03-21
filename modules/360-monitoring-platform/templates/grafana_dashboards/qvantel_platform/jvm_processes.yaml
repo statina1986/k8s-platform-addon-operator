@@ -76,7 +76,7 @@ data:
               "timeFrom": null,
               "timeShift": null,
               "title": "Request Distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "current"
             },
             {
@@ -123,7 +123,7 @@ data:
               "timeFrom": null,
               "timeShift": null,
               "title": "Http 4xx Response Distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "current"
             },
             {
@@ -170,7 +170,7 @@ data:
               "timeFrom": null,
               "timeShift": null,
               "title": "Http 5xx Response Distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "current"
             },
             {
