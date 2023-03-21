@@ -33,8 +33,8 @@ vectorPlatform:
               log("Unable to parse Qvantel LOG: " + err, level: "error")
             } else {
               .qvantel_message = .message
-              .structured.timestamp = .structured.@timestamp
               . = merge!(., structured)
+               .timestamp = to_timestamp!(.@timestamp)
             }
       sinks:
         prometheus:
@@ -49,6 +49,7 @@ vectorPlatform:
             - kubernetes_logs_types.common_kubernetes_logs
             - qvantel_log_format_transform
           endpoint: http://loki-write.platform.svc:3100
+          out_of_order_action: accept
           labels:
             forwarder: vector
             source_type: |-
