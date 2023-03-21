@@ -8,7 +8,8 @@ Depends on modules:
 
 The configuration requirements need a role to access the S3 bucket, which needs to be linked to the service account. Example of this can be found below
 
-`"serviceAccount:
+```markdown
+serviceAccount:
   # -- Enable service account creation.
   create: true
 
@@ -18,4 +19,5 @@ The configuration requirements need a role to access the S3 bucket, which needs 
 
   # -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template.
-  name: "`
+  name: ""
+```
