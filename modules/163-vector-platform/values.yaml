@@ -11,14 +11,62 @@ vectorPlatform:
       sources:
         kubernetes:
           type: kubernetes_logs
+        vector_logs:
+          type: internal_logs
+        vector_metrics:
+          type: internal_metrics
+      transforms:
+        kubernetes_logs_types:
+          type: route
+          inputs:
+            - kubernetes
+          route:
+            qvantel_kubernetes_logs: .kubernetes.pod_namespace == "qvantel"
+            common_kubernetes_logs: .kubernetes.pod_namespace != "qvantel"
+        qvantel_log_format_transform:
+          type: remap
+          inputs:
+            - kubernetes_logs_types.qvantel_kubernetes_logs
+          source: |
+            structured, err = parse_json(.message)
+            if err != null {
+              log("Unable to parse Qvantel LOG: " + err, level: "error")
+            } else {
+              .qvantel_message = .message
+              .structured.timestamp = .structured.@timestamp
+              . = merge!(., structured)
+            }
       sinks:
+        prometheus:
+          type: prometheus_remote_write
+          endpoint: http://monitoring-platform-kube-p-prometheus.platform.svc:9090/api/v1/write
+          inputs:
+            - vector_metrics
         loki:
           type: loki
           inputs:
-            - kubernetes
-          endpoint: http://loki-platform.platform.svc:3100
+            - vector_logs
+            - kubernetes_logs_types.common_kubernetes_logs
+            - qvantel_log_format_transform
+          endpoint: http://loki-write.platform.svc:3100
           labels:
             forwarder: vector
+            source_type: |-
+              {{ print "{{ source_type }}" }}
+            pod_namespace: |-
+              {{ print "{{ kubernetes.pod_namespace }}" }}
+            pod_name: |-
+              {{ print "{{ kubernetes.pod_name }}" }}
+            pod_labels_*: |-
+              {{ print "{{ kubernetes.pod_labels }}" }}
+            log_type: |-
+              {{ print "{{ log_type }}" }}
+            service_name: |-
+              {{ print "{{ service_name }}" }}
+            artifact_id: |-
+              {{ print "{{ artifact_id }}" }}
+            log_level: |-
+              {{ print "{{ log_level }}" }}
           acknowledgements: null
           compression: snappy
           encoding:
@@ -26,5 +74,4 @@ vectorPlatform:
           healthcheck: null
   aggregator:
     enabled: false
-    role: "Aggregator"  
-          
+    role: "Aggregator"

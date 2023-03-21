@@ -13,58 +13,78 @@ lokiPlatform:
       limits_config:
         enforce_metric_name: false
         reject_old_samples: true
-        reject_old_samples_max_age: 168h
+        reject_old_samples_max_age: "168h"
+        max_query_length: "2160h" # 90 days
         max_cache_freshness_per_query: 10m
         split_queries_by_interval: 15m
-      commonConfig:
-        replication_factor: 1
+        ingestion_rate_mb: 10
+        ingestion_burst_size_mb: 20
+      schema_config:
+        configs:
+          - from: "2023-01-01"
+            index:
+              period: 24h
+              prefix: index_
+            store: tsdb
+            object_store: s3
+            schema: v12
       storage:
-        type: 'filesystem'
-      schema_config: {}
-      rulerConfig: {}
+        bucketNames:
+          chunks: <bucket-name>
+        type: s3
       storage_config:
-        hedging:
-          at: "250ms"
-          max_per_second: 20
-          up_to: 3
+        aws:
+          s3: s3://<region>/<bucket-name>
+          insecure: false
+          s3forcepathstyle: false
+        tsdb_shipper:
+          active_index_directory: /data/tsdb-index
+          cache_location: /data/tsdb-cache
+          shared_store: s3
+      query_scheduler:
+        # the TSDB index dispatches many more, but each individually smaller, requests.
+        # We increase the pending request queue sizes to compensate.
+        max_outstanding_requests_per_tenant: 32768
+      querier:
+        # Each `querier` component process runs a number of parallel workers to process queries simultaneously.
+        # You may want to adjust this up or down depending on your resource usage
+        # (more available cpu and memory can tolerate higher values and vice versa),
+        # but we find the most success running at around `16` with tsdb
+        max_concurrent: 16
+      rulerConfig:
+        storage:
+          type: local
+          local:
+            directory: /var/loki/rules
       chunk_store_config:
-        max_look_back_period: 10s
-
+        max_look_back_period: 672h
       table_manager:
-        retention_deletes_enabled: false
-        retention_period: 336h
-      compactor: {}
+        retention_deletes_enabled: true
+        retention_period: 7d
+      compactor:
+        working_directory: /var/loki/compactor
+        shared_store: s3
+        compaction_interval: 10m
+        retention_enabled: true
+        retention_delete_delay: 2h
+        retention_delete_worker_count: 150
     tableManager:
-      enabled: false
-      extraVolumeMounts: []
-      extraVolumes: []
+      enabled: true
+      extraVolumes:
+        - name: data
+          emptyDir: {}
+      extraVolumeMounts:
+        - name: data
+          mountPath: /var/loki
     serviceAccount:
-      create: true
+      create: false
+      name: platform
     read:
-      affinity: |
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  {{- include "loki.readSelectorLabels" . | nindent 10 }}
-              topologyKey: kubernetes.io/hostname
+      replicas: 1
     write:
-      affinity: |
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  {{- include "loki.writeSelectorLabels" . | nindent 10 }}
-              topologyKey: kubernetes.io/hostname
+      replicas: 1
     gateway:
       replicas: 1
-      affinity: |
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  {{- include "loki.gatewaySelectorLabels" . | nindent 10 }}
-              topologyKey: kubernetes.io/hostname
   promtail:
     enabled: false
     config:

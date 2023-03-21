@@ -1,18 +1,18 @@
 monitoringPlatform:
   qvantelMonitoring:
-  #Customer variable to control alerts and dashboards deployed per Program
+    #Customer variable to control alerts and dashboards deployed per Program
     programs:
       mmlyle: false
       sayco: false
       windtre: false
-  #Variable to control applications deployed in the environment
+    #Variable to control applications deployed in the environment
     applications:
       commonOnePointZero: false
       commonZeroPointSix: false
       bssapi: false
       flex: false
       ordersManager: false
-  #Modules variables to control alerts and dashboards deployed based on the modules already deployed
+    #Modules variables to control alerts and dashboards deployed based on the modules already deployed
     modules:
       kafka: false
       kasope: false
@@ -34,23 +34,23 @@ monitoringPlatform:
       podExtraLabels:
         "release": "monitoring-platform"
     service:
-      extraLabels: 
-        "release": "monitoring-platform"  
+      extraLabels:
+        "release": "monitoring-platform"
     prometheusServiceMonitor:
       extraLabels:
         "release": "monitoring-platform"
     prometheusRules:
-      extraLabels: 
-        "release": "monitoring-platform"  
+      extraLabels:
+        "release": "monitoring-platform"
   kafka-lag-exporter:
     enabled: true
     clusters:
       - name: "kafka-cluster"
-        bootstrapBrokers: kafka-cluster-kafka-bootstrap.platform.svc:9092  
+        bootstrapBrokers: kafka-cluster-kafka-bootstrap.platform.svc:9092
         groupWhitelist:
-        - .*    
+          - .*
         topicWhitelist:
-        - .*      
+          - .*
     prometheus:
       serviceMonitor:
         enabled: true
@@ -80,15 +80,15 @@ monitoringPlatform:
         enabled: true
         size: 30Gi
         finalizers:
-          - kubernetes.io/pvc-protection      
+          - kubernetes.io/pvc-protection
       adminPassword: Q4nt3l321
       datasources:
         datasources.yaml:
           apiVersion: 1
           datasources:
-          - name: Loki
-            type: loki
-            url: http://loki-platform.platform.svc:3100
+            - name: Loki
+              type: loki
+              url: http://loki-gateway.platform.svc:80
       grafana.ini:
         auth.anonymous:
           enabled: true
@@ -104,9 +104,9 @@ monitoringPlatform:
           labelValue: "1"
           folder: /tmp/dashboards
           provider:
-          # enabling UI dashboards updated
+            # enabling UI dashboards updated
             allowUiUpdates: true
-          # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
+            # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
             foldersFromFilesStructure: true
     prometheus:
       enabled: true
@@ -117,6 +117,7 @@ monitoringPlatform:
           customer: need-to-define
           datacenter: need-to-define
           environment: need-to-define
+        enableRemoteWriteReceiver: true
         storageSpec:
           volumeClaimTemplate:
             spec:
@@ -125,8 +126,8 @@ monitoringPlatform:
                   storage: 50Gi
         additionalAlertManagerConfigs:
           - static_configs:
-            - targets:
-              - "alertmanager.alert.k8s.qvantel.net:9096"
+              - targets:
+                  - "alertmanager.alert.k8s.qvantel.net:9096"
         additionalScrapeConfigs: |
           - job_name: 'kubernetes-pods'
             kubernetes_sd_configs:
