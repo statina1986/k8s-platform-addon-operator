@@ -1,0 +1,104 @@
+{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.loki }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-loki-rules.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: loki_rules
+    partial_response_strategy: ''
+    rules:
+      - expr: >-
+          histogram_quantile(0.99,sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job))
+        labels:
+          cluster: loki-platform
+        record: job:loki_request_duration_seconds:99quantile
+      - expr: >-
+          histogram_quantile(0.50,sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job))
+        labels:
+          cluster: loki-platform
+        record: job:loki_request_duration_seconds:50quantile
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_sum[1m])) by (job) / sum(rate(loki_request_duration_seconds_count[1m])) by (job)
+        labels:
+          cluster: loki-platform
+        record: job:loki_request_duration_seconds:avg
+      - expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job)
+        labels:
+          cluster: loki-platform
+        record: job:loki_request_duration_seconds_bucket:sum_rate
+      - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (job)
+        labels:
+          cluster: loki-platform
+        record: job:loki_request_duration_seconds_sum:sum_rate
+      - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (job)
+        labels:
+          cluster: loki-platform
+        record: job:loki_request_duration_seconds_count:sum_rate
+      - expr: >-
+          histogram_quantile(0.99,sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job,route))
+        labels:
+          cluster: loki-platform
+        record: job_route:loki_request_duration_seconds:99quantile
+      - expr: >-
+          histogram_quantile(0.50,sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job,route))
+        labels:
+          cluster: loki-platform
+        record: job_route:loki_request_duration_seconds:50quantile
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_sum[1m])) by (job, route) / sum(rate(loki_request_duration_seconds_count[1m])) by (job, route)
+        labels:
+          cluster: loki-platform
+        record: job_route:loki_request_duration_seconds:avg
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job,route)
+        labels:
+          cluster: loki-platform
+        record: job_route:loki_request_duration_seconds_bucket:sum_rate
+      - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (job, route)
+        labels:
+          cluster: loki-platform
+        record: job_route:loki_request_duration_seconds_sum:sum_rate
+      - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (job, route)
+        labels:
+          cluster: loki-platform
+        record: job_route:loki_request_duration_seconds_count:sum_rate
+      - expr: >-
+          histogram_quantile(0.99,sum(rate(loki_request_duration_seconds_bucket[1m])) by (le,namespace, job, route))
+        labels:
+          cluster: loki-platform
+        record: namespace_job_route:loki_request_duration_seconds:99quantile
+      - expr: >-
+          histogram_quantile(0.50,sum(rate(loki_request_duration_seconds_bucket[1m])) by (le,namespace, job, route))
+        labels:
+          cluster: loki-platform
+        record: namespace_job_route:loki_request_duration_seconds:50quantile
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_sum[1m])) by (namespace, job,route) / sum(rate(loki_request_duration_seconds_count[1m])) by(namespace, job, route)
+        labels:
+          cluster: loki-platform
+        record: namespace_job_route:loki_request_duration_seconds:avg
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_bucket[1m])) by (le,namespace, job, route)
+        labels:
+          cluster: loki-platform
+        record: namespace_job_route:loki_request_duration_seconds_bucket:sum_rate
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_sum[1m])) by (namespace, job,route)
+        labels:
+          cluster: loki-platform
+        record: namespace_job_route:loki_request_duration_seconds_sum:sum_rate
+      - expr: >-
+          sum(rate(loki_request_duration_seconds_count[1m])) by (namespace,job, route)
+        labels:
+          cluster: loki-platform
+        record: namespace_job_route:loki_request_duration_seconds_count:sum_rate
+{{- end }}

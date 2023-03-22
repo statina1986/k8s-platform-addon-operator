@@ -15,6 +15,8 @@ monitoringPlatform:
     #Modules variables to control alerts and dashboards deployed based on the modules already deployed
     modules:
       kafka: false
+      loki: false
+      vector: false
       kasope: false
       consul: false
       vault: false

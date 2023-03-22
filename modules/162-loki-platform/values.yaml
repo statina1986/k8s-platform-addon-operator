@@ -8,6 +8,13 @@ lokiPlatform:
         enabled: false
       selfMonitoring:
         enabled: false
+      dashboards: 
+        enabled: false
+      serviceMonitor:
+        labels:
+          release: monitoring-platform
+      rules:
+        enabled: false
     loki:
       auth_enabled: false
       limits_config:
