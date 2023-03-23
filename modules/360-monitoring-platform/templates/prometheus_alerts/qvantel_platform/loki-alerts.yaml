@@ -1,0 +1,62 @@
+{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.loki }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-loki-alerts.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: loki_alerts
+    partial_response_strategy: ''
+    rules:
+      - alert: LokiRequestErrors
+        annotations:
+          message: >
+            {{` {{  $labels.job }} `}} {{` {{ $labels.route }} `}} is experiencing {{` {{ printf "%.2f" $value }} `}}% errors.
+          procedure: "Create a ticket for the Platform team to investigate urgently"
+        expr: >
+          100 *
+          sum(rate(loki_request_duration_seconds_count{status_code=~"5.."}[1m])) by (namespace, job, route)
+            /
+          sum(rate(loki_request_duration_seconds_count[1m])) by (namespace,job, route)
+            > 10
+        for: 15m
+        labels:
+          severity: critical
+      - alert: LokiRequestPanics
+        annotations:
+          message: >
+            {{` {{ $labels.job }} `}} is experiencing {{` {{ printf "%.2f" $value }} `}}% increase of panics.
+          procedure: "Create a ticket for the Platform team to investigate urgently"
+        expr: |
+          sum(increase(loki_panic_total[10m])) by (namespace, job) > 0
+        labels:
+          severity: critical
+      - alert: LokiRequestLatency
+        annotations:
+          message: >
+            {{` {{ $labels.job }} `}} {{` {{ $labels.route }} `}} is experiencing {{` {{ printf "%.2f" $value }} `}}s 99th percentile latency.
+          procedure: "Create a ticket for the Platform team to investigate urgently"
+        expr: >
+          namespace_job_route:loki_request_duration_seconds:99quantile{route!~"(?i).*tail.*"} > 1
+        for: 15m
+        labels:
+          severity: critical
+      - alert: LokiTooManyCompactorsRunning
+        annotations:
+          message: >
+            {{` {{ $labels.namespace }} `}} has had {{` {{ printf "%.0f" $value }} `}} compactors running for more than 5m. Only one compactor should run at a time.
+          procedure: "Create a ticket for the Platform team to investigate it"
+        expr: |
+          sum(loki_boltdb_shipper_compactor_running) by (namespace) > 1
+        for: 5m
+        labels:
+          severity: warning
+{{- end }}
