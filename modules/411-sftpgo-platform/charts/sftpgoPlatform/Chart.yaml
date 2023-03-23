@@ -1,0 +1,7 @@
+apiVersion: v2
+name: sftpgoPlatform
+version: 0.0.1
+dependencies:
+  - name: sftpgo
+    version: "0.14.2"
+    repository: "https://charts.sagikazarmark.dev"

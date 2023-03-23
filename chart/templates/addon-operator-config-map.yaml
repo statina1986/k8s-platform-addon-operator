@@ -93,6 +93,9 @@ data:
   sftpEnabled: "{{ .Values.modulesConfig.sftpEnabled }}"
   sftp: {{ print "|\n" (.Values.modulesConfig.sftp | toYaml | indent 4) }}
 
+  sftpgoPlatformEnabled: "{{ .Values.modulesConfig.sftpgoPlatformEnabled }}"
+  sftpgoPlatform: {{ print "|\n" (.Values.modulesConfig.sftpgoPlatform | toYaml | indent 4) }}
+
   vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
   vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}
 

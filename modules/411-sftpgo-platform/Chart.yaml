@@ -1,0 +1,6 @@
+apiVersion: v2
+name: sftpgo-platform
+version: 0.0.1
+dependencies:
+  - name: sftpgoPlatform
+    version: 0.0.1

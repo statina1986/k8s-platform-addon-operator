@@ -1,0 +1,11 @@
+sftpgoPlatform:
+  sftpgo:
+    replicaCount: 1
+    sftpd:
+      enabled: true
+    httpd:
+      enabled: true
+    serviceAccount:
+      create: false
+      annotations: {}
+      name: "platform"
