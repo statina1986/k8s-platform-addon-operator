@@ -34,7 +34,7 @@ vectorPlatform:
             } else {
               .qvantel_message = .message
               . = merge!(., structured)
-               .timestamp = to_timestamp!(.@timestamp)
+              .timestamp = to_timestamp!(.@timestamp)
             }
       sinks:
         prometheus:
