@@ -16,6 +16,7 @@ kubernetes:
   kind: SqlInstallers  
   executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
   queue: SqlInstallersQueue
+  allowFailure: true
 """)
     case EventHook(eventName, context):
         k8s = get_k8s_client()
