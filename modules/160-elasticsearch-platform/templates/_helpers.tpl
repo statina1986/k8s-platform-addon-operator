@@ -29,4 +29,9 @@ Compute if the testing environment is enabled.
 {{- define "elasticsearchPlatform.logsearchTestEnvEnabled" -}}
 {{- $_ := set . "logsearchTestEnvEnabled" (eq (.Values.elasticsearchPlatform.logsearchTestEnv.enabled | toString) "true") -}}
 {{- end -}}
-
+{{/*
+Compute if the kibana is enabled.
+*/}}
+{{- define "elasticsearchPlatform.kibanaEnabled" -}}
+{{- $_ := set . "kibanaEnabled" (eq (.Values.elasticsearchPlatform.kibana.enabled | toString) "true") -}}
+{{- end -}}
