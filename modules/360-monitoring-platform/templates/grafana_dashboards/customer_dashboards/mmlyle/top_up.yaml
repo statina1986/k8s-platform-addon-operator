@@ -29,7 +29,7 @@ data:
           "gnetId": null,
           "graphTooltip": 0,
           "id": 20,
-          "iteration": 1676385295645,
+          "iteration": 1679995896385,
           "links": [],
           "panels": [
             {
@@ -1114,8 +1114,8 @@ data:
             ]
           },
           "time": {
-            "from": "2023-02-12T23:00:00.000Z",
-            "to": "2023-02-13T22:59:59.000Z"
+            "from": "now-24h",
+            "to": "now"
           },
           "timepicker": {
             "refresh_intervals": [
@@ -1137,6 +1137,6 @@ data:
           "variables": {
             "list": []
           },
-          "version": 5
+          "version": 6
         }
 {{- end }}
