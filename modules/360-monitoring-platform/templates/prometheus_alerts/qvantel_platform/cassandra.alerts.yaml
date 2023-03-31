@@ -1,0 +1,92 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.kasope }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-kasope.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: cassandra.alerts
+    rules:
+    - alert: CassandraManyPendingCompactionTasks
+      expr: 'avg_over_time(org_apache_cassandra_metrics_compaction_pending_tasks[5m]) > 15 and avg_over_time(org_apache_cassandra_metrics_compaction_pending_tasks[5m]) < 30'
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        brief: "{{` {{ $labels.node }} `}} of service {{` {{$labels.job }} `}} has had {{` {{ $value }} `}} pending compaction task(s) in average for more than 5 minutes."
+        procedure: "Contact NoSQL team during business hours over a ticket"
+    - alert: CassandraExcessivePendingCompactionTasks
+      expr: 'avg_over_time(corg_apache_cassandra_metrics_compaction_pending_tasks[5m]) >= 30'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "{{` {{ $labels.node }} `}} of service {{` {{$labels.job }} `}} has had {{` {{ $value }} `}} pending compaction task(s) in average for more than 5 minutes."
+        procedure: "Contact NoSQL urgently to verify the potential risk and create a ticket to them"
+    - alert: CassandraFailingInstance
+      expr: 'count(absent(sum(rate(org_apache_cassandra_metrics_compaction_completed_tasks{}[1m:30s]))))'
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Cassandra node has been down for more than 1 minute."
+        procedure: "Contact NoSQL urgently if Cassandra node keeps down and create a ticket to them"
+    - alert: CassandraManyTombstones
+      expr: 'max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) > 80000 and max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) < 90000'
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        brief: "Tombstones have a high value {{` {{ $value }} `}} at {{` {{ $labels.table }} `}} which could cause failures."
+        procedure: "Contact NoSQL team during business hours over a ticket"
+    - alert: CassandraExcessiveTombstones
+      expr: 'max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) >= 90000'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Tombstones have a high value {{` {{ $value }} `}} at {{` {{ $labels.table }} `}} which could cause failures."
+        procedure: "Contact NoSQL urgently and create a ticket to them"
+    - alert: CassandraHighWriteLatency
+      expr: 'rate(org_apache_cassandra_metrics_table_write_total_latency[5m]) / rate(org_apache_cassandra_metrics_table_write_total_latency[5m]) >= 10000'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "WRITE Latency for {{` {{ $labels.table }} `}} in {{` {{ $labels.keyspace }} `}} is currently {{` {{ $value }} `}} us for more than 5 minutes."
+        procedure: "Contact NoSQL urgently and create a ticket to them"
+    - alert: CassandraHighReadLatency
+      expr: 'rate(org_apache_cassandra_metrics_table_read_total_latency[5m]) / rate(org_apache_cassandra_metrics_table_read_total_latency[5m]) >= 10000'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "READ Latency for {{` {{ $labels.table }} `}} in {{` {{ $labels.keyspace }} `}} is currently {{` {{ $value }} `}} us for more than 5 minutes."
+        procedure: "Contact NoSQL urgently and create a ticket to them"
+    - alert: CassandraClientRequestFailures
+      expr: 'irate(org_apache_cassandra_metrics_client_request_failures_total[5m]) > 0'
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        brief: "{{` {{ $value }} `}} failing Cassandra client request have been detected at {{` {{ $labels.instance }} `}}"
+        procedure: "Contact NoSQL team during business hours over a ticket"
+    - alert: CassandraSevereClientRequestFailures
+      expr: 'irate(org_apache_cassandra_metrics_client_request_failures_total[5m]) > 0'
+      for: 10m
+      labels:
+        severity: critical
+        level: application
+        package: base
+      annotations:
+        brief: '{{` {{ $value }} `}} failing Cassandra client request have been detected at {{` {{ $labels.instance }} `}} for 10 minutes'
+        procedure: "Contact NoSQL urgently and create a ticket to them"
+{{- end }}
