@@ -37,6 +37,10 @@ kasopePlatform:
           telemetry:
             prometheus:
               enabled: true
+              commonLabels:
+                release: monitoring-platform
+            mcac:
+              enabled: false
         reaper:
           autoScheduling:
             enabled: true
