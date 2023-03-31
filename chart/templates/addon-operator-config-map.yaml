@@ -73,7 +73,7 @@ data:
   postgresPlatformEnabled: "{{ .Values.modulesConfig.postgresPlatformEnabled }}"
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
 
-  qinstallersEnabled: "{{ .Values.modulesConfig.qinstallersEnabled }}"
+  qvantelGlueEnabled: "{{ .Values.modulesConfig.qvantelGlueEnabled }}"
 
   rabbitmqPlatformEnabled: "{{ .Values.modulesConfig.rabbitmqPlatformEnabled }}"
   rabbitmqPlatform: {{ print "|\n" (.Values.modulesConfig.rabbitmqPlatform | toYaml | indent 4) }}

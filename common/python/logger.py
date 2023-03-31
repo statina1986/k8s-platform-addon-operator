@@ -1,4 +1,5 @@
 import logging
+from pythonjsonlogger import jsonlogger
 from os import environ
 
 level = environ.get('LOG_LEVEL', 'info').upper()
@@ -11,7 +12,7 @@ ch = logging.StreamHandler()
 ch.setLevel(level)
 
 # create formatter
-formatter = logging.Formatter('%(message)s')
+formatter = jsonlogger.JsonFormatter()
 
 # add formatter to ch
 ch.setFormatter(formatter)

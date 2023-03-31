@@ -101,7 +101,7 @@ modulesConfig:
   postgresPlatform:
     configurationRequired: "check module documentation for configuration options"
 
-  qinstallersEnabled: "false"
+  qvantelGlueEnabled: "false"
 
   rabbitmqPlatformEnabled: "false"
   rabbitmqPlatform:
@@ -127,7 +127,7 @@ modulesConfig:
   sftp:
     configurationRequired: "check module documentation for configuration options"
 
-  sftpgoPlatformEnabled: "true"
+  sftpgoPlatformEnabled: "false"
   sftpgoPlatform:
     configurationRequired: "check module documentation for configuration options"
 

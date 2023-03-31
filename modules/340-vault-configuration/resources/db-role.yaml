@@ -17,6 +17,11 @@ spec:
     - dr
   versions:
     - name: v1
+      additionalPrinterColumns:
+        - description: The state of the the sqlinstaller
+          jsonPath: .status.conditions[?(@.type=="Ready")].status
+          name: Ready
+          type: string
       served: true
       storage: true
       schema:
@@ -46,3 +51,42 @@ spec:
                 creation-statements:
                   type: string
                   description: Specifies the database statements executed to create and configure a user. See the plugin's API page for more information on support and formatting for this parameter.
+            status:
+              description: The status of the deployment.
+              type: object
+              properties:
+                conditions:
+                  description: List of status conditions.
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: Last time the condition of a type changed from
+                          one status to another. The required format is 'yyyy-MM-ddTHH:mm:ssZ',
+                          in the UTC time zone.
+                        type: string
+                      message:
+                        description: Human-readable message indicating details about
+                          the condition's last transition.
+                        type: string
+                      reason:
+                        description: The reason for the condition's last transition
+                          (a single word in CamelCase).
+                        type: string
+                      status:
+                        description: The status of the condition, either True, False
+                          or Unknown.
+                        type: string
+                      type:
+                        description: The unique identifier of a condition, used to distinguish
+                          between other conditions in the resource.
+                        type: string
+                    type: object
+                  type: array
+                observedGeneration:
+                  description: The generation of the CRD that was last reconciled by
+                    the operator.
+                  type: integer
+        # subresources for the custom resource
+      subresources:
+        # enables the status subresource                
+        status: {}

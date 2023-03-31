@@ -6,6 +6,7 @@ from common.python.logger import logger
 k8s = None
 k8s_crd = None
 
+
 def get_k8s_crd_client():
     global k8s_crd
     if k8s_crd is None:
@@ -15,6 +16,7 @@ def get_k8s_crd_client():
             config.load_kube_config()
         k8s_crd = client.CustomObjectsApi()
     return k8s_crd
+
 
 def get_k8s_client():
     global k8s
@@ -26,7 +28,8 @@ def get_k8s_client():
         k8s = client.CoreV1Api()
     return k8s
 
-def update_crd_status(group,version,namespace,plural,name,update):
+
+def update_crd_status(group, version, namespace, plural, name, update):
     k8s_crd = get_k8s_crd_client()
     response = k8s_crd.get_namespaced_custom_object_status(
         group=group,
@@ -34,10 +37,10 @@ def update_crd_status(group,version,namespace,plural,name,update):
         name=name,
         namespace=namespace,
         plural=plural)
-    
-    response=update(response)
 
-    patch={
+    response = update(response)
+
+    patch = {
         "status": response['status']
     }
 
@@ -49,7 +52,15 @@ def update_crd_status(group,version,namespace,plural,name,update):
         plural=plural,
         body=patch)
 
-def updateCrdStatusCondition(response, type, status, reason):
+
+def updateCrdStatusCondition(response, type, status, reason, message=""):
+    if 'status' in response:
+        if 'conditions' in response['status']:
+            pass
+        else:
+            response['status']['conditions'] = []
+    else:
+        response['status'] = {"conditions": []}
     conditions = response['status']['conditions']
     for idx, item in enumerate(conditions):
         if item["type"] == type:
@@ -59,6 +70,7 @@ def updateCrdStatusCondition(response, type, status, reason):
         "lastTransitionTime": datetime.datetime.utcnow().astimezone().isoformat(),
         "status": status,
         "type": type,
-        "reason": reason
+        "reason": reason,
+        "message": message
     })
     return response

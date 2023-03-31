@@ -1,46 +1,77 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: kv1secrets.platform-vault.qvantel.com
+  name: sqlinstallers.platform.qvantel.com
 spec:
-  group: platform-vault.qvantel.com
+  group: platform.qvantel.com
   scope: Namespaced
   names:
     # plural name to be used in the URL: /apis/<group>/<version>/<plural>
-    plural: kv1secrets
+    plural: sqlinstallers
     # singular name to be used as an alias on the CLI and for display
-    singular: kv1secret
+    singular: sqlinstaller
     # kind is normally the CamelCased singular type. Your resource manifests use this.
-    kind: KV1Secret
+    kind: SqlInstaller
     # shortNames allow shorter string to match your resource on the CLI
     shortNames:
-    - kv1s
+    - sqlinsts
   versions:
     - name: v1
+      served: true
+      storage: true
       additionalPrinterColumns:
-        - description: The state of the the resource
+        - description: The state of the the sqlinstaller
           jsonPath: .status.conditions[?(@.type=="Ready")].status
           name: Ready
           type: string
-      served: true
-      storage: true
-      schema:
+      schema:      
         openAPIV3Schema:
           type: object
-          description: KV Version 1 Secret
+          description: SQL QInstaller for provisioning of sql database
           required:
             - spec
           properties:
             spec:
               type: object
               properties:
-                path:
+                forceGeneration:
+                  type: integer
+                type:
                   type: string
-                  description: Path for the secret.
-                secret:
-                  type: object
-                  description: Key-value pairs of the secret.
-                  additionalProperties: true
+                  description: The type of database to provision
+                  enum:
+                    - postgresql
+                    - mariadb
+                db-provision-sql:
+                  type: array
+                  items:
+                    type: string
+                db-secret-name:
+                  type: string
+                db-url:
+                  type: string
+                db-username:
+                  type: string
+                db-password:
+                  type: string
+                computed-values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
+                post-actions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
             status:
               description: The status of the deployment.
               type: object
