@@ -8,8 +8,16 @@ kasopePlatform:
       spec:
         cassandra:
           serverVersion: "3.11.13"
+          metadata:
+            services:
+              dcService:
+                annotations:
+                  consul.hashicorp.com/service-port: native
+              allPodsService:
+                annotations:
+                  consul.hashicorp.com/service-port: native
           config:
-            cassandraYaml:     
+            cassandraYaml:
               num_tokens: 8
             jvmOptions:
               heapSize: 4Gi
