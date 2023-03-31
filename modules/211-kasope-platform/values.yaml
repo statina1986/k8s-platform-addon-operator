@@ -7,7 +7,7 @@ kasopePlatform:
     - name: cluster
       spec:
         cassandra:
-          serverVersion: "3.11.11"
+          serverVersion: "3.11.13"
           config:
             cassandraYaml:     
               num_tokens: 8
