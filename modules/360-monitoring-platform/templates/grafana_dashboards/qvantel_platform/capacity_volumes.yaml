@@ -221,7 +221,7 @@ data:
                 }
               ],
               "title": "Customer requests - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
@@ -598,7 +598,7 @@ data:
                 }
               ],
               "title": "BSSAPI requests - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
@@ -793,7 +793,7 @@ data:
                 }
               ],
               "title": "Kafka IN distribution - by Topic",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
@@ -988,7 +988,7 @@ data:
                 }
               ],
               "title": "Flex processes - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
@@ -1184,7 +1184,7 @@ data:
                 }
               ],
               "title": "CDR - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -1365,7 +1365,7 @@ data:
                 }
               ],
               "title": "FLEX - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -1546,7 +1546,7 @@ data:
                 }
               ],
               "title": "OCS - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -1727,7 +1727,7 @@ data:
                 }
               ],
               "title": "ORDERS - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -1908,7 +1908,7 @@ data:
                 }
               ],
               "title": "SCT - distribution",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
@@ -2104,7 +2104,7 @@ data:
                 }
               ],
               "title": "Orders distribution - by PO",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
@@ -2294,7 +2294,7 @@ data:
                 }
               ],
               "title": "CPU cores - distribution by namespace",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -2379,7 +2379,7 @@ data:
                 }
               ],
               "title": "CPU cores - distribution by container",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -3163,7 +3163,7 @@ data:
                 }
               ],
               "title": "Memory - distribution by namespace",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             },
             {
@@ -3248,7 +3248,7 @@ data:
                 }
               ],
               "title": "Memory - distribution by container",
-              "type": "grafana-piechart-panel",
+              "type": "piechart",
               "valueName": "avg"
             }
           ],
