@@ -27,9 +27,9 @@ kubernetes:
     def handle_binding(self, binding):
         match(binding):
             case EventHook(eventName, context):
-                name = context['object']['metadata']['name']  
+                name = context['object']['metadata']['name']
                 namespace = context['object']['metadata']['namespace']
-                try:                                      
+                try:
                     path = context['object']['spec']['path']
                     # compatibility with qdeployer 3.80.0
                     if path.startswith("secret/"):
@@ -37,7 +37,8 @@ kubernetes:
 
                     secret = v1.read_namespaced_secret(
                         "vault-keys", "platform").data
-                    token = base64.b64decode(secret["root_token"]).decode('utf-8')
+                    token = base64.b64decode(
+                        secret["root_token"]).decode('utf-8')
                     vault_client = hvac.Client(
                         url='http://vault-platform.platform.svc.cluster.local:8200', token=token)
 
@@ -45,18 +46,25 @@ kubernetes:
                         vault_client.secrets.kv.v1.delete_secret(path)
                     else:
                         values = context['object']['spec']['secret']
+                        # Merge with data from CRD with existing values. Existing values takes priority.
+                        try:
+                            existing = vault_client.secrets.kv.v1.read_secret(
+                                path)['data']
+                            values = {**values, **existing}
+                        except:
+                            pass
                         vault_client.secrets.kv.v1.create_or_update_secret(
                             path, secret=values)
-                    
+
                     update_crd_status(
-                                group="platform-vault.qvantel.com",
-                                version="v1",
-                                name=name,
-                                namespace=namespace,
-                                plural="kv1secrets",
-                                update=lambda response: updateCrdStatusCondition(
-                                    response, "Ready", "True", "KV1SecretProvisioned")
-                            )
+                        group="platform-vault.qvantel.com",
+                        version="v1",
+                        name=name,
+                        namespace=namespace,
+                        plural="kv1secrets",
+                        update=lambda response: updateCrdStatusCondition(
+                            response, "Ready", "True", "KV1SecretProvisioned")
+                    )
                 except:
                     update_crd_status(
                         group="platform-vault.qvantel.com",
@@ -70,5 +78,7 @@ kubernetes:
                     raise
             case _:
                 print("Unknown hook data")
+
+
 hook = Kv1SecretsHook()
 hook.handle_hook()
