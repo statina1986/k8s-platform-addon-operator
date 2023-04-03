@@ -1,5 +1,4 @@
 ---
-{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.kasope }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -4368,4 +4367,3 @@ data:
       "version": 1,
       "weekStart": ""
     }
-{{- end }}

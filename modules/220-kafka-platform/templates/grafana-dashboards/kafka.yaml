@@ -1,5 +1,4 @@
 ---
-{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.kafka }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -2958,4 +2957,3 @@ data:
       },
       "version": 8
     }
-{{- end }}

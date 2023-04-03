@@ -1,16 +1,15 @@
 ---
-{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.loki }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{.Release.Namespace}}
-  name: grafana-dashboards-loki-retention
+  name: grafana-dashboards-loki-chunks
   labels:
     grafana_dashboard: "1"
   annotations:
     k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
 data:
-  loki-retention.json: |-        
+  loki-chunks.json: |-        
     {
       "annotations": {
         "list": [
@@ -37,7 +36,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 127,
+      "id": 121,
       "links": [
         {
           "asDropdown": true,
@@ -66,7 +65,7 @@ data:
             "x": 0,
             "y": 0
           },
-          "id": 18,
+          "id": 15,
           "panels": [],
           "targets": [
             {
@@ -77,7 +76,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Resource Usage",
+          "title": "Active Series / Chunks",
           "type": "row"
         },
         {
@@ -86,14 +85,13 @@ data:
           "dashLength": 10,
           "dashes": false,
           "datasource": {
-            "type": "prometheus",
             "uid": "$datasource"
           },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
-            "w": 8,
+            "w": 12,
             "x": 0,
             "y": 1
           },
@@ -120,13 +118,7 @@ data:
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "limit",
-              "color": "#E02F44",
-              "fill": 0
-            }
-          ],
+          "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
@@ -135,32 +127,17 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "editorMode": "code",
-              "expr": "sum by(pod) (rate(container_cpu_usage_seconds_total{pod=~\"(loki|enterprise-logs)-read.*\"}[$__rate_interval]))",
+              "expr": "sum(loki_ingester_memory_chunks{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"})",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{pod}}" }}",
-              "range": true,
+              "legendFormat": "series",
               "refId": "A",
-              "step": 10
-            },
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "editorMode": "code",
-              "expr": "min(container_spec_cpu_quota{pod=~\"(loki|enterprise-logs)-read.*\"} / container_spec_cpu_period{pod=~\"(loki|enterprise-logs)-read.*\"})",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "limit",
-              "range": true,
-              "refId": "B",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "CPU",
+          "title": "Series",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -195,15 +172,14 @@ data:
           "dashLength": 10,
           "dashes": false,
           "datasource": {
-            "type": "prometheus",
             "uid": "$datasource"
           },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
-            "w": 8,
-            "x": 8,
+            "w": 12,
+            "x": 12,
             "y": 1
           },
           "hiddenSeries": false,
@@ -229,13 +205,7 @@ data:
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "limit",
-              "color": "#E02F44",
-              "fill": 0
-            }
-          ],
+          "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
@@ -244,32 +214,17 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "editorMode": "code",
-              "expr": "max by(pod) (container_memory_working_set_bytes{pod=~\"(loki|enterprise-logs)-read.*\"})",
+              "expr": "sum(loki_ingester_memory_chunks{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}) / sum(loki_ingester_memory_streams{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"})",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{pod}}" }}",
-              "range": true,
+              "legendFormat": "chunks",
               "refId": "A",
-              "step": 10
-            },
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "editorMode": "code",
-              "expr": "min(container_spec_memory_limit_bytes{pod=~\"(loki|enterprise-logs)-read.*\"} > 0)",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "limit",
-              "range": true,
-              "refId": "B",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Memory (workingset)",
+          "title": "Chunks per series",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -283,7 +238,7 @@ data:
           },
           "yaxes": [
             {
-              "format": "bytes",
+              "format": "short",
               "logBase": 1,
               "min": 0,
               "show": true
@@ -299,6 +254,32 @@ data:
           }
         },
         {
+          "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "id": 16,
+          "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
+          "title": "Flush Stats",
+          "type": "row"
+        },
+        {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
@@ -310,9 +291,9 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
-            "w": 8,
-            "x": 16,
-            "y": 1
+            "w": 12,
+            "x": 0,
+            "y": 9
           },
           "hiddenSeries": false,
           "id": 3,
@@ -346,17 +327,39 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"})",
+              "expr": "histogram_quantile(0.99, sum(rate(loki_ingester_chunk_utilization_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)) * 1",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{pod}}" }}",
+              "legendFormat": "99th Percentile",
               "refId": "A",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "histogram_quantile(0.50, sum(rate(loki_ingester_chunk_utilization_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)) * 1",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "50th Percentile",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum(rate(loki_ingester_chunk_utilization_sum{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) * 1 / sum(rate(loki_ingester_chunk_utilization_count{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Average",
+              "refId": "C",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Memory (go heap inuse)",
+          "title": "Utilization",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -370,7 +373,116 @@ data:
           },
           "yaxes": [
             {
-              "format": "bytes",
+              "format": "percentunit",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 12,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "9.3.1",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "histogram_quantile(0.99, sum(rate(loki_ingester_chunk_age_seconds_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)) * 1e3",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "99th Percentile",
+              "refId": "A",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "histogram_quantile(0.50, sum(rate(loki_ingester_chunk_age_seconds_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)) * 1e3",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "50th Percentile",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum(rate(loki_ingester_chunk_age_seconds_sum{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) * 1e3 / sum(rate(loki_ingester_chunk_age_seconds_count{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Average",
+              "refId": "C",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Age",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "ms",
               "logBase": 1,
               "min": 0,
               "show": true
@@ -395,9 +507,9 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 8
+            "y": 16
           },
-          "id": 19,
+          "id": 17,
           "panels": [],
           "targets": [
             {
@@ -408,119 +520,8 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Compact and Mark",
+          "title": "Flush Stats",
           "type": "row"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "fixedColor": "blue",
-                "mode": "fixed"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              },
-              "unit": "dateTimeFromNow"
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 0,
-            "y": 9
-          },
-          "id": 4,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "percentage": false,
-          "pluginVersion": "9.3.1",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "loki_boltdb_shipper_compact_tables_operation_last_successful_run_timestamp_seconds{cluster=~\"$cluster\", namespace=~\"$namespace\"} * 1e3",
-              "format": "time_series",
-              "instant": true,
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "title": "Last Compact and Mark Operation Success",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "stat",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ]
         },
         {
           "aliasColors": {},
@@ -534,9 +535,9 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
-            "w": 8,
-            "x": 8,
-            "y": 9
+            "w": 12,
+            "x": 0,
+            "y": 17
           },
           "hiddenSeries": false,
           "id": 5,
@@ -570,17 +571,39 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "loki_boltdb_shipper_compact_tables_operation_duration_seconds{cluster=~\"$cluster\", namespace=~\"$namespace\"}",
+              "expr": "histogram_quantile(0.99, sum(rate(loki_ingester_chunk_entries_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)) * 1",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "duration",
+              "legendFormat": "99th Percentile",
               "refId": "A",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "histogram_quantile(0.50, sum(rate(loki_ingester_chunk_entries_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)) * 1",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "50th Percentile",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum(rate(loki_ingester_chunk_entries_sum{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) * 1 / sum(rate(loki_ingester_chunk_entries_count{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Average",
+              "refId": "C",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Compact and Mark Operations Duration",
+          "title": "Log Entries Per Chunk",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -594,7 +617,7 @@ data:
           },
           "yaxes": [
             {
-              "format": "s",
+              "format": "short",
               "logBase": 1,
               "min": 0,
               "show": true
@@ -621,9 +644,9 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
-            "w": 8,
-            "x": 16,
-            "y": 9
+            "w": 12,
+            "x": 12,
+            "y": 17
           },
           "hiddenSeries": false,
           "id": 6,
@@ -657,307 +680,17 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum by (status)(rate(loki_boltdb_shipper_compact_tables_operation_total{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
+              "expr": "sum(rate(loki_chunk_store_index_entries_per_chunk_sum{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[5m])) / sum(rate(loki_chunk_store_index_entries_per_chunk_count{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{success}}" }}",
+              "legendFormat": "Index Entries",
               "refId": "A",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Compact and Mark Operations Per Status",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "collapsed": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 16
-          },
-          "id": 20,
-          "panels": [],
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "refId": "A"
-            }
-          ],
-          "title": "Per Table Marker",
-          "type": "row"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "fill": 10,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 0,
-            "y": 17
-          },
-          "hiddenSeries": false,
-          "id": 7,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 0,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.3.1",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "editorMode": "code",
-              "expr": "count by(action)(loki_boltdb_shipper_retention_marker_table_processed_total{cluster=~\"$cluster\", namespace=~\"$namespace\"})",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{action}}" }}",
-              "range": true,
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Processed Tables Per Action",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fill": 10,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 8,
-            "y": 17
-          },
-          "hiddenSeries": false,
-          "id": 8,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 0,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.3.1",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "count by(table,action)(loki_boltdb_shipper_retention_marker_table_processed_total{cluster=~\"$cluster\", namespace=~\"$namespace\" , action=~\"modified|deleted\"})",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{table}}-{{action}}" }}",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Modified Tables",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fill": 10,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 16,
-            "y": 17
-          },
-          "hiddenSeries": false,
-          "id": 9,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 0,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.3.1",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "sum by (table)(rate(loki_boltdb_shipper_retention_marker_count_total{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) >0",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{table}}" }}",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Marks Creation Rate Per Table",
+          "title": "Index Entries Per Chunk",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -998,7 +731,7 @@ data:
             "x": 0,
             "y": 24
           },
-          "id": 21,
+          "id": 18,
           "panels": [],
           "targets": [
             {
@@ -1009,74 +742,8 @@ data:
               "refId": "A"
             }
           ],
+          "title": "Flush Stats",
           "type": "row"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 25
-          },
-          "id": 10,
-          "links": [],
-          "options": {
-            "colorMode": "none",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
-          },
-          "pluginVersion": "9.3.1",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "editorMode": "code",
-              "expr": "sum (increase(loki_boltdb_shipper_retention_marker_count_total{cluster=~\"$cluster\", namespace=~\"$namespace\"}[24h]))",
-              "format": "time_series",
-              "instant": true,
-              "intervalFactor": 2,
-              "refId": "A"
-            }
-          ],
-          "title": "Marked Chunks (24h)",
-          "type": "stat"
         },
         {
           "aliasColors": {},
@@ -1091,11 +758,11 @@ data:
           "gridPos": {
             "h": 7,
             "w": 12,
-            "x": 12,
+            "x": 0,
             "y": 25
           },
           "hiddenSeries": false,
-          "id": 11,
+          "id": 7,
           "legend": {
             "avg": false,
             "current": false,
@@ -1126,39 +793,17 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(loki_boltdb_shipper_retention_marker_table_processed_duration_seconds_bucket{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le)) * 1e3",
+              "expr": "cortex_ingester_flush_queue_length{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "99th Percentile",
+              "legendFormat": " {{ "{{pod}}" }}",
               "refId": "A",
-              "step": 10
-            },
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "histogram_quantile(0.50, sum(rate(loki_boltdb_shipper_retention_marker_table_processed_duration_seconds_bucket{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le)) * 1e3",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "50th Percentile",
-              "refId": "B",
-              "step": 10
-            },
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "sum(rate(loki_boltdb_shipper_retention_marker_table_processed_duration_seconds_sum{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) * 1e3 / sum(rate(loki_boltdb_shipper_retention_marker_table_processed_duration_seconds_count{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "Average",
-              "refId": "C",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Mark Table Latency",
+          "title": "Queue Length",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -1172,7 +817,102 @@ data:
           },
           "yaxes": [
             {
-              "format": "ms",
+              "format": "short",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
+          "aliasColors": {
+            "1xx": "#EAB839",
+            "2xx": "#7EB26D",
+            "3xx": "#6ED0E0",
+            "4xx": "#EF843C",
+            "5xx": "#E24D42",
+            "error": "#E24D42",
+            "success": "#7EB26D"
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fill": 10,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 12,
+            "y": 25
+          },
+          "hiddenSeries": false,
+          "id": 8,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 0,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "9.3.1",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum by (status) (\n  label_replace(label_replace(rate(loki_ingester_chunk_age_seconds_count{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{status}}" }}",
+              "refId": "A",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Flush Rate",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
               "logBase": 1,
               "min": 0,
               "show": true
@@ -1199,7 +939,7 @@ data:
             "x": 0,
             "y": 32
           },
-          "id": 22,
+          "id": 19,
           "panels": [],
           "targets": [
             {
@@ -1210,73 +950,95 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Sweeper",
+          "title": "Flush Stats",
           "type": "row"
         },
         {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": {
             "uid": "$datasource"
           },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
+          "fill": 1,
+          "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 12,
             "x": 0,
             "y": 33
           },
-          "id": 12,
-          "links": [],
-          "options": {
-            "colorMode": "none",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto"
+          "hiddenSeries": false,
+          "id": 9,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
           },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
           "pluginVersion": "9.3.1",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum (increase(loki_boltdb_shipper_retention_sweeper_chunk_deleted_duration_seconds_count{cluster=~\"$cluster\", namespace=~\"$namespace\"}[24h]))",
+              "expr": "sum(rate(loki_ingester_chunks_flushed_total{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]))",
               "format": "time_series",
-              "instant": true,
               "intervalFactor": 2,
-              "refId": "A"
+              "legendFormat": "{{ "{{pod}}" }}",
+              "refId": "A",
+              "step": 10
             }
           ],
-          "title": "Delete Chunks (24h)",
-          "type": "stat"
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Chunks Flushed/Second",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
         },
         {
           "aliasColors": {},
@@ -1293,6 +1055,389 @@ data:
             "w": 12,
             "x": 12,
             "y": 33
+          },
+          "hiddenSeries": false,
+          "id": 10,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "9.3.1",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum by (reason) (rate(loki_ingester_chunks_flushed_total{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) / ignoring(reason) group_left sum(rate(loki_ingester_chunks_flushed_total{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{reason}}" }}",
+              "refId": "A",
+              "step": 10
+            }
+          ],
+          "thresholds": [],
+          "timeRegions": [],
+          "title": "Chunk Flush Reason",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "show": false
+            }
+          ],
+          "yaxis": {
+            "align": false
+          }
+        },
+        {
+          "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 40
+          },
+          "id": 20,
+          "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
+          "title": "Utilization",
+          "type": "row"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateSpectral",
+            "exponent": 0.5,
+            "mode": "spectrum"
+          },
+          "dataFormat": "tsbuckets",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "scaleDistribution": {
+                  "type": "linear"
+                }
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 41
+          },
+          "heatmap": {},
+          "hideZeroBuckets": false,
+          "highlightCards": true,
+          "id": 11,
+          "legend": {
+            "show": true
+          },
+          "options": {
+            "calculate": false,
+            "calculation": {},
+            "cellGap": 2,
+            "cellValues": {},
+            "color": {
+              "exponent": 0.5,
+              "fill": "#b4ff00",
+              "mode": "scheme",
+              "reverse": false,
+              "scale": "exponential",
+              "scheme": "Spectral",
+              "steps": 128
+            },
+            "exemplars": {
+              "color": "rgba(255,0,255,0.7)"
+            },
+            "filterValues": {
+              "le": 1e-9
+            },
+            "legend": {
+              "show": true
+            },
+            "rowsFrame": {
+              "layout": "auto"
+            },
+            "showValue": "never",
+            "tooltip": {
+              "show": true,
+              "yHistogram": true
+            },
+            "yAxis": {
+              "axisPlacement": "left",
+              "decimals": 0,
+              "reverse": false,
+              "unit": "percentunit"
+            }
+          },
+          "pluginVersion": "9.3.1",
+          "targets": [
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum by (le) (rate(loki_ingester_chunk_utilization_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval]))",
+              "format": "heatmap",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{le}}" }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Chunk Utilization",
+          "tooltip": {
+            "show": true,
+            "showHistogram": true
+          },
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "decimals": 0,
+            "format": "percentunit",
+            "show": true
+          },
+          "yBucketBound": "auto"
+        },
+        {
+          "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 48
+          },
+          "id": 21,
+          "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
+          "title": "Utilization",
+          "type": "row"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateSpectral",
+            "exponent": 0.5,
+            "mode": "spectrum"
+          },
+          "dataFormat": "tsbuckets",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "scaleDistribution": {
+                  "type": "linear"
+                }
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 49
+          },
+          "heatmap": {},
+          "hideZeroBuckets": false,
+          "highlightCards": true,
+          "id": 12,
+          "legend": {
+            "show": true
+          },
+          "options": {
+            "calculate": false,
+            "calculation": {},
+            "cellGap": 2,
+            "cellValues": {},
+            "color": {
+              "exponent": 0.5,
+              "fill": "#b4ff00",
+              "mode": "scheme",
+              "reverse": false,
+              "scale": "exponential",
+              "scheme": "Spectral",
+              "steps": 128
+            },
+            "exemplars": {
+              "color": "rgba(255,0,255,0.7)"
+            },
+            "filterValues": {
+              "le": 1e-9
+            },
+            "legend": {
+              "show": true
+            },
+            "rowsFrame": {
+              "layout": "auto"
+            },
+            "showValue": "never",
+            "tooltip": {
+              "show": true,
+              "yHistogram": true
+            },
+            "yAxis": {
+              "axisPlacement": "left",
+              "decimals": 0,
+              "reverse": false,
+              "unit": "bytes"
+            }
+          },
+          "pluginVersion": "9.3.1",
+          "targets": [
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum(rate(loki_ingester_chunk_size_bytes_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[$__rate_interval])) by (le)",
+              "format": "heatmap",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{le}}" }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Chunk Size Bytes",
+          "tooltip": {
+            "show": true,
+            "showHistogram": true
+          },
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "decimals": 0,
+            "format": "bytes",
+            "show": true
+          },
+          "yBucketBound": "auto"
+        },
+        {
+          "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 56
+          },
+          "id": 22,
+          "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
+          "title": "Utilization",
+          "type": "row"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 57
           },
           "hiddenSeries": false,
           "id": 13,
@@ -1326,10 +1471,10 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(loki_boltdb_shipper_retention_sweeper_chunk_deleted_duration_seconds_bucket{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le)) * 1e3",
+              "expr": "histogram_quantile(0.99, sum(rate(loki_ingester_chunk_size_bytes_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "99th Percentile",
+              "legendFormat": "p99",
               "refId": "A",
               "step": 10
             },
@@ -1337,10 +1482,10 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.50, sum(rate(loki_boltdb_shipper_retention_sweeper_chunk_deleted_duration_seconds_bucket{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le)) * 1e3",
+              "expr": "histogram_quantile(0.90, sum(rate(loki_ingester_chunk_size_bytes_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "50th Percentile",
+              "legendFormat": "p90",
               "refId": "B",
               "step": 10
             },
@@ -1348,17 +1493,17 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum(rate(loki_boltdb_shipper_retention_sweeper_chunk_deleted_duration_seconds_sum{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) * 1e3 / sum(rate(loki_boltdb_shipper_retention_sweeper_chunk_deleted_duration_seconds_count{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, sum(rate(loki_ingester_chunk_size_bytes_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[1m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Average",
+              "legendFormat": "p50",
               "refId": "C",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Delete Latency",
+          "title": "Chunk Size Quantiles",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -1372,7 +1517,7 @@ data:
           },
           "yaxes": [
             {
-              "format": "ms",
+              "format": "bytes",
               "logBase": 1,
               "min": 0,
               "show": true
@@ -1397,7 +1542,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 40
+            "y": 64
           },
           "id": 23,
           "panels": [],
@@ -1410,6 +1555,7 @@ data:
               "refId": "A"
             }
           ],
+          "title": "Duration",
           "type": "row"
         },
         {
@@ -1424,9 +1570,9 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
-            "w": 8,
+            "w": 24,
             "x": 0,
-            "y": 41
+            "y": 65
           },
           "hiddenSeries": false,
           "id": 14,
@@ -1460,103 +1606,39 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "time() - (loki_boltdb_shipper_retention_sweeper_marker_file_processing_current_time{cluster=~\"$cluster\", namespace=~\"$namespace\"} > 0)",
+              "expr": "histogram_quantile(0.5, sum(rate(loki_ingester_chunk_bounds_hours_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "lag",
+              "legendFormat": "p50",
               "refId": "A",
               "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Sweeper Lag",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "logBase": 1,
-              "show": true
             },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 8,
-            "y": 41
-          },
-          "hiddenSeries": false,
-          "id": 15,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.3.1",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
             {
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum(loki_boltdb_shipper_retention_sweeper_marker_files_current{cluster=~\"$cluster\", namespace=~\"$namespace\"})",
+              "expr": "histogram_quantile(0.99, sum(rate(loki_ingester_chunk_bounds_hours_bucket{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "count",
-              "refId": "A",
+              "legendFormat": "p99",
+              "refId": "B",
+              "step": 10
+            },
+            {
+              "datasource": {
+                "uid": "$datasource"
+              },
+              "expr": "sum(rate(loki_ingester_chunk_bounds_hours_sum{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[5m])) / sum(rate(loki_ingester_chunk_bounds_hours_count{cluster=\"$cluster\", job=~\"$namespace/(loki|enterprise-logs)-write\"}[5m]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "avg",
+              "refId": "C",
               "step": 10
             }
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "Marks Files to Process",
+          "title": "Chunk Duration hours (end-start)",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -1584,156 +1666,6 @@ data:
           "yaxis": {
             "align": false
           }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 16,
-            "y": 41
-          },
-          "hiddenSeries": false,
-          "id": 16,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.3.1",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "sum by (status)(rate(loki_boltdb_shipper_retention_sweeper_chunk_deleted_duration_seconds_count{cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{status}}" }}",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Delete Rate Per Status",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "collapsed": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "gridPos": {
-            "h": 1,
-            "w": 24,
-            "x": 0,
-            "y": 48
-          },
-          "id": 24,
-          "panels": [],
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "refId": "A"
-            }
-          ],
-          "title": "Logs",
-          "type": "row"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "${logs}"
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 24,
-            "x": 0,
-            "y": 49
-          },
-          "id": 17,
-          "options": {
-            "dedupStrategy": "none",
-            "enableLogDetails": true,
-            "prettifyLogMessage": false,
-            "showCommonLabels": false,
-            "showLabels": false,
-            "showTime": false,
-            "sortOrder": "Descending",
-            "wrapLogMessage": false
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "${logs}"
-              },
-              "editorMode": "code",
-              "expr": "{cluster=~\"$cluster\", job=~\"($namespace)/(loki|enterprise-logs)-read\"}",
-              "queryType": "range",
-              "refId": "A"
-            }
-          ],
-          "title": "Compactor Logs",
-          "type": "logs"
         }
       ],
       "refresh": "10s",
@@ -1821,29 +1753,11 @@ data:
             "tagsQuery": "",
             "type": "query",
             "useTags": false
-          },
-          {
-            "current": {
-              "selected": true,
-              "text": "Loki-1",
-              "value": "Loki-1"
-            },
-            "hide": 0,
-            "includeAll": false,
-            "multi": false,
-            "name": "logs",
-            "options": [],
-            "query": "loki",
-            "queryValue": "",
-            "refresh": 1,
-            "regex": "",
-            "skipUrlSync": false,
-            "type": "datasource"
           }
         ]
       },
       "time": {
-        "from": "now-2d",
+        "from": "now-3h",
         "to": "now"
       },
       "timepicker": {
@@ -1872,9 +1786,8 @@ data:
         ]
       },
       "timezone": "utc",
-      "title": "Loki / Retention",
-      "uid": "retention",
-      "version": 4,
+      "title": "Loki / Chunks",
+      "uid": "chunks",
+      "version": 3,
       "weekStart": ""
     }
-{{- end }}

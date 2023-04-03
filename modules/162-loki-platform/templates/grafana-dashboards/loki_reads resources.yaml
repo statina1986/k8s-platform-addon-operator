@@ -1,5 +1,4 @@
 ---
-{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.loki }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1199,4 +1198,3 @@ data:
       "version": 3,
       "weekStart": ""
     }
-{{- end }}

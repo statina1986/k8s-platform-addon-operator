@@ -46,7 +46,7 @@ kubernetes:
                         vault_client.secrets.kv.v1.delete_secret(path)
                     else:
                         values = context['object']['spec']['secret']
-                        # Merge with data from CRD with existing values. Existing values takes priority.
+                        # Merge data from CRD with existing values. Existing values takes priority.
                         try:
                             existing = vault_client.secrets.kv.v1.read_secret(
                                 path)['data']

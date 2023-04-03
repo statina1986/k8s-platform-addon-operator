@@ -1,16 +1,15 @@
 ---
-{{- if  $.Values.monitoringPlatform.qvantelMonitoring.modules.loki }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{.Release.Namespace}}
-  name: grafana-dashboards-loki-reads
+  name: grafana-dashboards-loki-writes
   labels:
     grafana_dashboard: "1"
   annotations:
     k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
 data:
-  loki-reads.json: |-        
+  loki-writes.json: |-        
     {
       "annotations": {
         "list": [
@@ -37,7 +36,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 125,
+      "id": 128,
       "links": [
         {
           "asDropdown": true,
@@ -77,7 +76,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "Read Path",
+          "title": "Write Path",
           "type": "row"
         },
         {
@@ -136,7 +135,7 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum by (status) (\n  label_replace(label_replace(rate(loki_request_duration_seconds_count{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-read\", route=~\"loki_api_v1_series|api_prom_series|api_prom_query|api_prom_label|api_prom_label_name_values|loki_api_v1_query|loki_api_v1_query_range|loki_api_v1_labels|loki_api_v1_label_name_values\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+              "expr": "sum by (status) (\n  label_replace(label_replace(rate(loki_request_duration_seconds_count{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-write\", route=~\"api_prom_push|loki_api_v1_push|/httpgrpc.HTTP/Handle\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{status}}" }}",
@@ -181,6 +180,7 @@ data:
           "dashLength": 10,
           "dashes": false,
           "datasource": {
+            "type": "prometheus",
             "uid": "$datasource"
           },
           "fill": 1,
@@ -223,10 +223,12 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.99, sum by (le,route) (job_route:loki_request_duration_seconds_bucket:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-read\", route=~\"loki_api_v1_series|api_prom_series|api_prom_query|api_prom_label|api_prom_label_name_values|loki_api_v1_query|loki_api_v1_query_range|loki_api_v1_labels|loki_api_v1_label_name_values\", cluster=~\"$cluster\"})) * 1e3",
+              "editorMode": "code",
+              "expr": "histogram_quantile(0.99, sum by (le) (job:loki_request_duration_seconds_bucket:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-write\", cluster=~\"$cluster\"})) * 1e3",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{ route }} "}} 99th Percentile",
+              "legendFormat": "99th Percentile",
+              "range": true,
               "refId": "A",
               "step": 10
             },
@@ -234,10 +236,10 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.50, sum by (le,route) (job_route:loki_request_duration_seconds_bucket:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-read\", route=~\"loki_api_v1_series|api_prom_series|api_prom_query|api_prom_label|api_prom_label_name_values|loki_api_v1_query|loki_api_v1_query_range|loki_api_v1_labels|loki_api_v1_label_name_values\", cluster=~\"$cluster\"})) * 1e3",
+              "expr": "histogram_quantile(0.50, sum by (le) (job:loki_request_duration_seconds_bucket:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-write\", cluster=~\"$cluster\"})) * 1e3",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{ route }} "}} 50th Percentile",
+              "legendFormat": "50th Percentile",
               "refId": "B",
               "step": 10
             },
@@ -245,10 +247,10 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "1e3 * sum(job_route:loki_request_duration_seconds_sum:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-read\", route=~\"loki_api_v1_series|api_prom_series|api_prom_query|api_prom_label|api_prom_label_name_values|loki_api_v1_query|loki_api_v1_query_range|loki_api_v1_labels|loki_api_v1_label_name_values\", cluster=~\"$cluster\"}) by (route)  / sum(job_route:loki_request_duration_seconds_count:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-read\", route=~\"loki_api_v1_series|api_prom_series|api_prom_query|api_prom_label|api_prom_label_name_values|loki_api_v1_query|loki_api_v1_query_range|loki_api_v1_labels|loki_api_v1_label_name_values\", cluster=~\"$cluster\"}) by (route) ",
+              "expr": "1e3 * sum(job:loki_request_duration_seconds_sum:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-write\", cluster=~\"$cluster\"}) / sum(job:loki_request_duration_seconds_count:sum_rate{job=~\"($namespace)/(loki|enterprise-logs)-write\", cluster=~\"$cluster\"})",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{ route }} "}} Average",
+              "legendFormat": "Average",
               "refId": "C",
               "step": 10
             }
@@ -366,7 +368,7 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum by (status) (\n  label_replace(label_replace(rate(loki_boltdb_shipper_request_duration_seconds_count{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-read\", operation=\"Shipper.Query\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+              "expr": "sum by (status) (\n  label_replace(label_replace(rate(loki_boltdb_shipper_request_duration_seconds_count{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-write\", operation=\"WRITE\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{status}}" }}",
@@ -453,7 +455,7 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(loki_boltdb_shipper_request_duration_seconds_bucket{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-read\", operation=\"Shipper.Query\"}[$__rate_interval])) by (le)) * 1e3",
+              "expr": "histogram_quantile(0.99, sum(rate(loki_boltdb_shipper_request_duration_seconds_bucket{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-write\", operation=\"WRITE\"}[$__rate_interval])) by (le)) * 1e3",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99th Percentile",
@@ -464,7 +466,7 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "histogram_quantile(0.50, sum(rate(loki_boltdb_shipper_request_duration_seconds_bucket{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-read\", operation=\"Shipper.Query\"}[$__rate_interval])) by (le)) * 1e3",
+              "expr": "histogram_quantile(0.50, sum(rate(loki_boltdb_shipper_request_duration_seconds_bucket{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-write\", operation=\"WRITE\"}[$__rate_interval])) by (le)) * 1e3",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50th Percentile",
@@ -475,7 +477,7 @@ data:
               "datasource": {
                 "uid": "$datasource"
               },
-              "expr": "sum(rate(loki_boltdb_shipper_request_duration_seconds_sum{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-read\", operation=\"Shipper.Query\"}[$__rate_interval])) * 1e3 / sum(rate(loki_boltdb_shipper_request_duration_seconds_count{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-read\", operation=\"Shipper.Query\"}[$__rate_interval]))",
+              "expr": "sum(rate(loki_boltdb_shipper_request_duration_seconds_sum{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-write\", operation=\"WRITE\"}[$__rate_interval])) * 1e3 / sum(rate(loki_boltdb_shipper_request_duration_seconds_count{cluster=~\"$cluster\",job=~\"($namespace)/(loki|enterprise-logs)-write\", operation=\"WRITE\"}[$__rate_interval]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Average",
@@ -604,7 +606,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-24h",
+        "from": "now-1h",
         "to": "now"
       },
       "timepicker": {
@@ -633,9 +635,8 @@ data:
         ]
       },
       "timezone": "utc",
-      "title": "Loki / Reads",
-      "uid": "reads",
+      "title": "Loki / Writes",
+      "uid": "writes",
       "version": 2,
       "weekStart": ""
     }
-{{- end }}
