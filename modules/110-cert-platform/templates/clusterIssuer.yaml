@@ -1,12 +1,16 @@
-{{- template "certPlatform.clusterIssuerEnabled" . -}}
-{{- if .clusterIssuerEnabled -}}
+{{- if .Values.certPlatform.clusterIssuers }}
+{{- range keys .Values.certPlatform.clusterIssuers  }}
+{{- $current := get $.Values.certPlatform.clusterIssuers . }}
+{{- if $current.enabled }}
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-platform
+  name: {{ . }}
   namespace: {{.Release.Namespace}}
 spec:
-  {{- range .Values.certPlatform.clusterIssuer }}
-    {{- toYaml . | nindent 2 }}
-  {{- end }}
+  {{- print "\n" ($current.spec | toYaml | indent 2) }}
+
+{{- end }}
+{{- end }}
 {{- end }}
