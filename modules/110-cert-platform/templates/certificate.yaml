@@ -1,15 +1,14 @@
-{{- if .Values.certPlatform.certificateConf }}
-{{- range keys .Values.certPlatform.certificateConf  }}
-{{- $current := get $.Values.certPlatform.certificateConf . }}
+{{- if .Values.certPlatform.certificates }}
+{{- range keys .Values.certPlatform.certificates  }}
+{{- $current := get $.Values.certPlatform.certificates . }}
 {{- if $current.enabled }}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ . }}
-  namespace: {{.Release.Namespace}}
 spec:
-  {{- print "\n" ($current.certificate | toYaml | indent 2) }}
+  {{- toYaml $current.spec | nindent 2 }}
 
 {{- end }}
 {{- end }}

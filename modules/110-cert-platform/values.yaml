@@ -4,7 +4,7 @@ certPlatform:
   ### Example configuration below.
   clusterIssuers:
     qvantelSystems:
-      enabled: false
+      enabled: true
       spec:
         acme:
           server: https://acme-v02.api.letsencrypt.org/directory
@@ -20,10 +20,10 @@ certPlatform:
                 region: us-east-1
                 hostedZoneID: ZJ7W7ERY57J33
                 role: "arn:aws:iam::067412573140:role/qv-mumbai-platform-1-dns-manager"
-  certificateConf:
+  certificates:
     qvantel-wildcard:
-      enabled: false
-      certificate:
+      enabled: true
+      spec:
         secretName: qvantel-wildcard
         privateKey:
           rotationPolicy: Always

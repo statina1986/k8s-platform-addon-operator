@@ -15,7 +15,6 @@ metadata:
     {{- toYaml $joinedAnnotations | nindent 4 }}
   {{- end }}
   name: {{ . }}
-  namespace: platform
 spec:
   gateways: {{ print "\n" ($current.gateways | toYaml | indent 2) }} 
   {{- if $current.hosts }}

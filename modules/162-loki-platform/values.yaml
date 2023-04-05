@@ -87,9 +87,9 @@ lokiPlatform:
       create: false
       name: platform
     read:
-      replicas: 1
+      replicas: 3
     write:
-      replicas: 1
+      replicas: 3
     gateway:
       replicas: 1
   promtail:

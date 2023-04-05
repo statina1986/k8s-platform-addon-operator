@@ -4,7 +4,8 @@ kasopePlatform:
       admissionWebhooks:
         enabled: false
   clusters:
-    - name: cluster
+    cluster:
+      enabled: false
       spec:
         cassandra:
           serviceAccount: platform

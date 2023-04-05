@@ -1,13 +1,15 @@
 {{- if .Values.kasopePlatform.clusters }}
-{{- $relnamespace := .Release.Namespace -}}
-{{- range .Values.kasopePlatform.clusters  }}
+{{- range keys .Values.kasopePlatform.clusters  }}
+{{- $current := get $.Values.kasopePlatform.clusters . }}
+{{- if $current.enabled }}
 ---
 apiVersion: k8ssandra.io/v1alpha1
 kind: K8ssandraCluster
 metadata:
-  name: {{ .name }}
-  namespace: {{ $relnamespace }}
+  name: {{ . }}
 spec:
-  {{- toYaml .spec | nindent 2 }}
+  {{- toYaml $current.spec | nindent 2 }}
+
+{{- end }}
 {{- end }}
 {{- end }}
