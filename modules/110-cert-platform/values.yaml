@@ -3,8 +3,8 @@ certPlatform:
   cert-manager: {}
   ### Example configuration below.
   clusterIssuers:
-    qvantelSystems:
-      enabled: true
+    qvantel-dot-systems:
+      enabled: false
       spec:
         acme:
           server: https://acme-v02.api.letsencrypt.org/directory
@@ -22,7 +22,7 @@ certPlatform:
                 role: "arn:aws:iam::067412573140:role/qv-mumbai-platform-1-dns-manager"
   certificates:
     qvantel-wildcard:
-      enabled: true
+      enabled: false
       spec:
         secretName: qvantel-wildcard
         privateKey:
@@ -31,7 +31,7 @@ certPlatform:
         - '*.qvantel.systems'
         - qvantel.systems
         issuerRef:
-          name: qvantelSystems
+          name: qvantel-dot-systems
           kind: ClusterIssuer
           group: cert-manager.io
         renewBefore: 720h
