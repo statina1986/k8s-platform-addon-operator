@@ -90,7 +90,7 @@ monitoringPlatform:
           datasources:
             - name: Loki
               type: loki
-              url: http://loki-gateway.platform.svc:80
+              url: http://loki-read.platform.svc:3100
       grafana.ini:
         auth.anonymous:
           enabled: true

@@ -17,6 +17,9 @@ lokiPlatform:
         enabled: false
     loki:
       auth_enabled: false
+      extraServerConfig: 
+        grpc_server_max_recv_msg_size: 20971520
+        grpc_server_max_send_msg_size: 20971520
       limits_config:
         enforce_metric_name: false
         reject_old_samples: true
