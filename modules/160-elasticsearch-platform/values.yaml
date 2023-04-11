@@ -19,15 +19,14 @@ elasticsearchPlatform:
     enabled: true
   kibana:
     enabled: true
-  # Logsearch and LogsearchBackup create different kind of elastic deployments and elasticbackup has a unique logging-setup
   logsearch:
     enabled: true
-  logsearchBackup:
-    enabled: false
-  # prod or logsearchTestEnv are to be used if logsearch is used without the backup functions. They create a environment specific logging-setups
+  # Prod is used for 30d log retention, logsearchTestEnv for 2d log retention and logsearchBackup is used to configure ELK-stack to use S3 storage
   prod:
     enabled: false
   logsearchTestEnv:
+    enabled: false
+  logsearchBackup:
     enabled: false
 
   configElastic:
