@@ -15,7 +15,7 @@ consulPlatform:
             "http_max_conns_per_client": 2000
           },
           "rpc": {
-            "enable_streaming": true
+            "enable_streaming": false
           }
         }
     client:
