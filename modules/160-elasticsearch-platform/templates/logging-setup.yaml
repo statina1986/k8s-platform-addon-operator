@@ -1,5 +1,5 @@
-{{- template "elasticsearchPlatform.logsearchEnabled" . -}}
-{{- if .logsearchEnabled -}}
+{{- template "elasticsearchPlatform.prodEnabled" . -}}
+{{- if .prodEnabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
