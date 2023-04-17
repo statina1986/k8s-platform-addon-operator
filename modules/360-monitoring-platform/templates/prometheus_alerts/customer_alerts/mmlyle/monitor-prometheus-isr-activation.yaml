@@ -1,11 +1,16 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: monitor-prometheus-isr-activation.rules
-  namespace: platform
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
   labels:
-    app: prometheus-operator
-    release: monitor
+    app: kube-prometheus-stack
+    release: monitoring-platform
 spec:
   groups:
     - name: isr-activation.alerts
@@ -24,3 +29,4 @@ spec:
           procedure: Follow QOPS-11491 and create internal SL2, check if there is other alerts indicating MM network problems, if not raise to L2 support
         labels:
           severity: critical
+{{- end }}
