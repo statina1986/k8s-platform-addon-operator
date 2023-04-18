@@ -1,0 +1,32 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-isr-activation.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: isr-activation.alerts
+      rules:
+      - alert: ISRFullActivationNotTriggered
+        expr: (round(sum(increase(flex_bpmn_process_in_triggerable_service_task_entered_total{definition="ISR_Full_Activation"}[10m]))) or vector(0)) < 10 unless ((hour() < 8.5 or hour() >20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: ISR Full Activation processes are not triggered during business hours. 
+          procedure: Follow QOPS-11491 and create internal SL2, check if there is other alerts indicating MM network problems, if not raise to L2 support
+        labels:
+          severity: critical
+      - alert: ISRFullActivationNotCompleted
+        expr: (round(sum(increase(flex_bpmn_process_completed_total{app!="",definition="ISR_Full_Activation"}[10m]))) or vector(0)) < 10 unless ((hour() < 8.5 or hour() >20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: ISR Full Activation processes are not completed during business hours. 
+          procedure: Follow QOPS-11491 and create internal SL2, check if there is other alerts indicating MM network problems, if not raise to L2 support
+        labels:
+          severity: critical
+{{- end }}
