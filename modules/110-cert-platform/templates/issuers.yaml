@@ -1,0 +1,15 @@
+{{- if .Values.certPlatform.issuers }}
+{{- range keys .Values.certPlatform.issuers  }}
+{{- $current := get $.Values.certPlatform.issuers . }}
+{{- if $current.enabled }}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ . }}
+spec:
+  {{- toYaml $current.spec | nindent 2 }}
+
+{{- end }}
+{{- end }}
+{{- end }}

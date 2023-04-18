@@ -1,8 +1,20 @@
 # certPlatformNamespace: cert-manager
 certPlatform:
   cert-manager: {}
-  ### Example configuration below.
+  issuers: []
   clusterIssuers:
+    # This issuer is used to generate self-signed certificate for Simple Qvantel CA
+    qvantel-selfsigned-issuer:
+      enabled: true
+      spec:
+        selfSigned: {}
+    # This issuer is Simple Qvantel CA issuer
+    qvantel-ca-issuer:
+      enabled: true
+      spec:
+        ca:
+          secretName: qvantel-root-ca
+    # This issuer is used for *.qvantel.systems certificates issuing with letsencrypt
     qvantel-dot-systems:
       enabled: false
       spec:
@@ -21,7 +33,27 @@ certPlatform:
                 hostedZoneID: ZJ7W7ERY57J33
                 role: "arn:aws:iam::067412573140:role/qv-mumbai-platform-1-dns-manager"
   certificates:
-    qvantel-wildcard:
+    # This is the root CA certificate for Simple Qvantel CA
+    qvantel-ca:
+      enabled: true
+      spec:
+        isCA: true
+        commonName: qvantel.com
+        duration: 87660h # 10 years
+        renewBefore: 360h # 15d
+        subject:
+          organizations:
+            - "Qvantel Oy"
+        secretName: qvantel-root-ca
+        privateKey:
+          algorithm: ECDSA
+          size: 256
+        issuerRef:
+          name: qvantel-selfsigned-issuer
+          kind: ClusterIssuer
+          group: cert-manager.io          
+    # This is the wildcard certificate issued for *.qvantel.systems name
+    qvantel-dot-systems-wildcard:
       enabled: false
       spec:
         secretName: qvantel-wildcard
