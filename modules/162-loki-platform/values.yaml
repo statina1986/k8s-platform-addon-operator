@@ -8,7 +8,9 @@ lokiPlatform:
         enabled: false
       selfMonitoring:
         enabled: false
-      dashboards: 
+        grafanaAgent:
+          installOperator: false
+      dashboards:
         enabled: false
       serviceMonitor:
         labels:
@@ -25,7 +27,7 @@ lokiPlatform:
         compaction_interval: 10m
         retention_enabled: true
         retention_delete_delay: 2h
-        retention_delete_worker_count: 150            
+        retention_delete_worker_count: 150
       chunk_store_config:
         max_look_back_period: 672h
       limits_config:
@@ -37,6 +39,7 @@ lokiPlatform:
         split_queries_by_interval: 15m
         ingestion_rate_mb: 10
         ingestion_burst_size_mb: 20
+        retention_period: 744h # 31 days
       query_scheduler:
         # the TSDB index dispatches many more, but each individually smaller, requests.
         # We increase the pending request queue sizes to compensate.
@@ -77,13 +80,10 @@ lokiPlatform:
           active_index_directory: /data/tsdb-index
           cache_location: /data/tsdb-cache
           shared_store: s3
-      table_manager:
-        retention_deletes_enabled: true
-        retention_period: 7d
       tracing:
-        enabled: false       
+        enabled: false
     tableManager:
-      enabled: true
+      enabled: false
       extraVolumes:
         - name: data
           emptyDir: {}
@@ -94,11 +94,13 @@ lokiPlatform:
       create: false
       name: platform
     read:
+      legacyReadTarget: true
       replicas: 3
     write:
       replicas: 3
     gateway:
-      replicas: 1
+      enabled: false
+      replicas: 0    
   promtail:
     enabled: false
     config:

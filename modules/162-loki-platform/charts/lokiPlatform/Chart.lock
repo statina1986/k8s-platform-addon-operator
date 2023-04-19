@@ -1,6 +1,6 @@
 dependencies:
 - name: loki
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 3.10.0
-digest: sha256:f883a6e7b58f95621d7c25e92f73f3ac06b060a61e6c408ab54b7cbcee39136b
-generated: "2023-03-13T21:28:07.794303918+02:00"
+  version: 5.1.0
+digest: sha256:ac6aa0e39e194fd5d6b591ddebe7a3b6da0a32231448806a5ab397d8adf99760
+generated: "2023-04-18T19:07:47.065037689+03:00"

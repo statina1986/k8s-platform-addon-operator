@@ -2,9 +2,9 @@ apiVersion: v2
 name: kasopePlatform
 version: 0.0.1
 # dependencies:
-##  - name: k8ssandra-operator
-##    version: 0.38.2
-##    repository: https://helm.k8ssandra.io
+#  - name: k8ssandra-operator
+#    version: 1.6.1
+#    repository: https://helm.k8ssandra.io
 # - name: k8ssandra-operator
 #   version: 0.39.3
 #   repository: https://artifactory.qvantel.net/artifactory/helm-platform/

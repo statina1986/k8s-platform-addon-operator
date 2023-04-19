@@ -1,4 +1,4 @@
-{{- if .Values.client.enabled }}
+{{- if .Values.crdUpgraderEnabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:

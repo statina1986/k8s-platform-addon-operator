@@ -4,6 +4,6 @@ dependencies:
   version: 0.29.0
 - name: cass-operator
   repository: https://helm.k8ssandra.io
-  version: 0.40.0
-digest: sha256:85b90cede39b55c895eb70915ce532f5bcbecb59ee7d27c5886bc22f25e651bc
-generated: "2023-02-21T17:54:18.463551997+02:00"
+  version: 0.41.0
+digest: sha256:ae663d8acc49d912cf6b5fbb976180a46980219751452893bbca0204b8f346ea
+generated: "2023-03-23T13:37:58.467648878Z"

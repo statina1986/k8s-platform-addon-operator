@@ -1,7 +1,5 @@
 # k8ssandra-operator
 
-![Version: 0.37.0](https://img.shields.io/badge/Version-0.37.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
-
 Kubernetes operator which handles the provisioning and management of K8ssandra clusters.
 
 **Homepage:** <https://github.com/k8ssandra/k8ssandra-operator>
@@ -19,10 +17,10 @@ Kubernetes operator which handles the provisioning and management of K8ssandra c
 
 ## Requirements
 
-| Repository | Name | Version |
-|------------|------|---------|
-| file://../cass-operator | cass-operator | 0.35.0 |
-| file://../k8ssandra-common | k8ssandra-common | 0.28.4 |
+| Repository | Name |
+|------------|------|
+| https://helm.k8ssandra.io | cass-operator |
+| https://helm.k8ssandra.io | k8ssandra-common |
 
 ## Values
 

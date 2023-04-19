@@ -5,7 +5,7 @@ kasopePlatform:
         enabled: false
   clusters:
     cluster:
-      enabled: false
+      enabled: true
       spec:
         cassandra:
           serviceAccount: platform
