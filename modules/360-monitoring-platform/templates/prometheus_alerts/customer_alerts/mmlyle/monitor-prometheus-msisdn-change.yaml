@@ -1,0 +1,25 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-msisdn-change.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: msisdn-change.alerts
+      rules:
+      - alert: ErrorsInMSISDNPortInChanges
+        expr: (round(sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="PO_NumberPortIn_Filebased"}[5m])) OR vector(0))) > 5
+        annotations:
+          brief: Errors found when performing MSISDN changes
+          procedure: If errors, raise SL3 ticket to QA 
+        labels:
+          severity: warning
+{{- end }}
