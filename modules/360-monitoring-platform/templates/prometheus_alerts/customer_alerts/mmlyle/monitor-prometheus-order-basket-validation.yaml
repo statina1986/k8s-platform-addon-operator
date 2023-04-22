@@ -1,0 +1,39 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-order-basket-validation.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: order-basket-validation.alerts
+      rules:
+      - alert: OrderBasketValidationNotTriggered
+        expr: (round(sum(increase(flex_bpmn_process_started_total{app!="",definition="FR_ValidateBasket_OnboardingResources"}[5m]))) or vector(0)) < 10 unless ((hour() < 8 or hour() > 20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: FR Order Basket Validation processes are not triggered during business hours
+          procedure: Create internal SL2, check if other alerts in our stack. Raise to QA in business hours and ping Service Manager in Teams
+        labels:
+          severity: critical
+      - alert: OrderBasketValidationNotCompleted
+        expr: (round(sum(increase(flex_bpmn_process_completed_total{app!="",definition="FR_ValidateBasket_OnboardingResources"}[10m]))) or vector(0)) < 10 unless ((hour() < 8 or hour() > 20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: FR Order Basket Validation processes are not completed during business hours.
+          procedure: Create internal SL2, check if other alerts in our stack. Raise to QA in business hours and ping Service Manager in Teams
+        labels:
+          severity: critical
+      - alert: OrderBasketValidationNotTriggeredDuringWeekend
+        expr: (round(sum(increase(flex_bpmn_process_started_total{app!="",definition="FR_ValidateBasket_OnboardingResources"}[10m]))) or vector(0)) < 10 and (day_of_week() == 6 or day_of_week() == 0) unless (hour() < 8 or hour() > 20)         
+        annotations:
+          brief: FR Order Basket Validation processes are not triggered during weekend business hours.
+          procedure: Create internal SL2, check if other alerts in our stack. Raise to QA in business hours and ping Service Manager in Teams
+        labels:
+          severity: critical
+{{- end }}
