@@ -1,0 +1,32 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-terminations.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: terminations.alerts
+      rules:
+      - alert: ISRTerminateSubscriptionErrors
+        expr: ((sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="ISR_Terminate_Subscription"}[10m]) OR vector(0))) / (sum(increase(flex_bpmn_process_completed_total{app!="",definition="ISR_Terminate_Subscription"}[10m]) OR vector(0)) + (sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="ISR_Terminate_Subscription"}[10m]) OR vector(0))) )) * 100 > 20 unless ((hour() < 8.5 or hour() >20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: ISR Terminate Subscription errors more than 20% during business hours. 
+          procedure: Follow QOPS-11495 and create internal SL3, check if there isn't other alerts it might be MM network problems and ticket towards them should be raised, if not raise to QA as SL3 in business hours
+        labels:
+          severity: critical
+      - alert: ISRTerminateSubscriptionAndPONumberPortOutErrors
+        expr: (((sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="PO_NumberPortOut"}[10m]) OR vector(0))) + (sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="ISR_Terminate_Subscription"}[10m]) OR vector(0)))) / (((sum(increase(flex_bpmn_process_completed_total{app!="",definition="PO_NumberPortOut"}[10m]) OR vector(0))) + (sum(increase(flex_bpmn_process_completed_total{app!="",definition="ISR_Terminate_Subscription"}[10m]) OR vector(0)))) + ((sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="PO_NumberPortOut"}[10m]) OR vector(0))) + (sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="ISR_Terminate_Subscription"}[10m]) OR vector(0)))))) * 100 > 20
+        annotations:
+          brief: ISR Terminate Subscription/PO Number Port Out errors over 20%
+          procedure: Follow QOPS-11495 and create internal SL2 to be checked by L2 team first thing in the morning and ping service manager
+        labels:
+          severity: critical
+{{- end }}
