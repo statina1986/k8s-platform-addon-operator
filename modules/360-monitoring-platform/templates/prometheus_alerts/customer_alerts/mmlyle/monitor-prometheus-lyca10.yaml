@@ -1,0 +1,32 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-lyca10.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: lyca10.alerts
+      rules:
+      - alert: POLycaGlobe10NotTriggered
+        expr: (round(sum(increase(flex_bpmn_process_in_triggerable_service_task_entered_total{definition="PO_Lyca_Globe10"}[10m]))) or vector(0)) < 10 unless ((hour() < 8 or hour() >20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: PO Lyca Globe 10 less than 10 triggered processes in last 10 min during business hours
+          procedure: Follow QOPS-11497 and create internal SL2, raise to QA during business hours, otherwise to L2 support
+        labels:
+          severity: critical
+      - alert: POLycaGlobe10Errors
+        expr: (round(sum(increase(flex_bpmn_activity_error_received_total{definition="PO_Lyca_Globe10"}[10h])))) > 10 unless ((hour() < 8 or hour() >20) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: PO Lyca Globe 10 has over 10 erroneous processes during business hours
+          procedure: Follow QOPS-11497 and create internal SL2, raise to QA during business hours, otherwise to L2 support
+        labels:
+          severity: critical
+{{- end }}
