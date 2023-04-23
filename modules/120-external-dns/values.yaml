@@ -1,8 +1,16 @@
 externalDns:
-  awsRole: ""
-  awsAssumeRole: ""
-  route53ZonId: ""
-  annotationFilter: platform.qvantel.com/exclude-from-external-dns notin (true)
-  pollInterval: "10m"
-  dryRun: "1"
-  logLevel: "debug"
+  external-dns:
+    serviceAccount:
+      create: false
+      name: platform
+    provider: aws
+    aws:
+      zoneType: public
+    sources:
+      - service
+      - ingress
+      - istio-gateway
+      - istio-virtualservice
+    txtPrefix: extdns.
+    interval: 10m
+    annotationFilter: platform.qvantel.com/exclude-from-external-dns notin (true)

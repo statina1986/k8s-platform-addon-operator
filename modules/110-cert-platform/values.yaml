@@ -1,6 +1,9 @@
 # certPlatformNamespace: cert-manager
 certPlatform:
-  cert-manager: {}
+  cert-manager:
+    serviceAccount:
+      create: false
+      name: platform
   issuers: []
   clusterIssuers:
     # This issuer is used to generate self-signed certificate for Simple Qvantel CA
@@ -20,7 +23,7 @@ certPlatform:
       spec:
         acme:
           server: https://acme-v02.api.letsencrypt.org/directory
-          email: harri.jantti@qvantel.com
+          email: infra.finland@qvantel.com
           privateKeySecretRef:
             name: letsencrypt-platform-dns
           solvers:
@@ -29,9 +32,27 @@ certPlatform:
                 - "qvantel.systems"
             dns01:
               route53:
-                region: us-east-1
+                region: eu-central-1
                 hostedZoneID: ZJ7W7ERY57J33
-                role: "arn:aws:iam::067412573140:role/qv-mumbai-platform-1-dns-manager"
+                role: "arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account"
+      # This issuer is used for *.qvantel.solutions certificates issuing with letsencrypt
+    qvantel-dot-solutions:
+      enabled: false
+      spec:
+        acme:
+          server: https://acme-v02.api.letsencrypt.org/directory
+          email: infra.finland@qvantel.com
+          privateKeySecretRef:
+            name: qvantel-dot-solutions-private-key-letsencrypt
+          solvers:
+          - selector:
+              dnsZones:
+                - "qvantel.solutions"
+            dns01:
+              route53:
+                region: eu-central-1
+                hostedZoneID: ZPXWBK7RK86EX
+                role: "arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"
   certificates:
     # This is the root CA certificate for Simple Qvantel CA
     qvantel-ca:
@@ -64,6 +85,21 @@ certPlatform:
         - qvantel.systems
         issuerRef:
           name: qvantel-dot-systems
+          kind: ClusterIssuer
+          group: cert-manager.io
+        renewBefore: 720h
+    # This is the wildcard certificate issued for *.qvantel.solutions name
+    qvantel-dot-solutions-wildcard:
+      enabled: false
+      spec:
+        secretName: qvantel-wildcard
+        privateKey:
+          rotationPolicy: Always
+        dnsNames:
+        - '*.qvantel.solutions'
+        - qvantel.solutions
+        issuerRef:
+          name: qvantel-dot-solutions
           kind: ClusterIssuer
           group: cert-manager.io
         renewBefore: 720h
