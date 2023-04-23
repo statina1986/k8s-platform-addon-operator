@@ -1,0 +1,25 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-po-processing.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: po-processing.alerts
+      rules:
+      - alert: SlownessInPOOrderProcessing
+        expr: (avg((idelta(order_orchestrate_duration_sum{status="ok",app="orders-manager"}[1m]) >0) / (idelta(order_orchestrate_duration_count{status="ok",app="orders-manager"}[1m]) >0))) > 1
+        annotations:
+          brief: Slowness in PO order processing. Processing is currently taking over 1s to load.
+          procedure: "Check order duration from grafana: https://grafana-mmlyle-prod.qvantel.solutions/d/V3dYQwEZk/rid-order-management?orgId=1&refresh=30s. If order processing is constantly slow, create internal SL2. More info on QOPS-11607."
+        labels:
+          severity: critical
+{{- end }}
