@@ -1,4 +1,10 @@
 kafkaPlatform:
+  strimzi-kafka-operator:
+    resources:
+      limits: {}
+      requests:
+        memory: 384Mi
+        cpu: 200m
   cluster:
     kafka:
       version: 2.8.1
