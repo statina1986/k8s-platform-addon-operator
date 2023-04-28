@@ -1,7 +1,9 @@
 kafkaPlatform:
   strimzi-kafka-operator:
     resources:
-      limits: {}
+      limits:
+        memory: 1Gi
+        cpu: "1"
       requests:
         memory: 384Mi
         cpu: 200m
