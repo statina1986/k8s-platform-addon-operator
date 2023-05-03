@@ -1,0 +1,58 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.consul }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-consul.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: consul.alerts
+    rules:
+    - alert: ConsulLeaderFailed
+      expr: count(consul_raft_leader) < 1
+      for: 3m
+      labels:
+        severity: critical
+      annotations:
+        brief: There is no active Consul leader
+        procedure: Contact Platform Team urgently to verify the potential risk and create a ticket to them
+    - alert: ConsulLanMembers
+      expr: count by(instance) (kube_node_info) - avg by(instance) ((count by(instance) (consul_health_node_status)/4))
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        brief: There is a node that is not member of consul
+        procedure: Check if all nodes are registered in Consul UI. Otherwise please, contact Platform Team urgently.
+    - alert: ConsulCriticalNodeStatus
+      expr: count_over_time(consul_health_node_status{status=~'critical'}  [3h])  / on (instance) group_left max(count_over_time(consul_health_node_status{status=~'critical'} [3h])) by (instance) < 0.97 OR consul_health_node_status{status=~'critical'} == 1
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        brief: Node {{` {{$labels.instance}} `}} is reporting critical status
+        procedure: Check the node affected in the Consul UI. If node is unhealthy, please contact Platform Team urgently.
+    - alert: ConsulWarningNodeStatus
+      expr: count_over_time(consul_health_node_status{status=~'warning'}  [3h])  / on (instance) group_left max(count_over_time(consul_health_node_status{status=~'warning'} [3h])) by (instance) < 0.97 OR consul_health_node_status{status=~'warning'} == 1
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        brief: Node {{` {{$labels.instance}} `}} is reporting warning status
+        procedure: Check the node affected in the Consul UI. If node is unhealthy, please contact Platform Team urgently.
+    - alert: ConsulNodeInMaintenance
+      expr: consul_health_node_status{status=~'maintenance'} == 1
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        brief: Node {{` {{$labels.instance}} `}} is in MAINTENANCE status
+        procedure: Check the node affected in the Consul UI. If node is unhealthy, please contact Platform Team urgently.
+{{- end }}

@@ -66,7 +66,10 @@ monitoringPlatform:
     enabled: true
   prometheus-consul-exporter:
     enabled: true
+    consulServer: consul-consul-server:8500
     serviceMonitor:
+      labels: 
+        "release": "monitoring-platform"
       enabled: true
       interval: 30s
       telemetryPath: /metrics

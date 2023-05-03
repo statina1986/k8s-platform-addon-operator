@@ -16,8 +16,12 @@ consulPlatform:
           },
           "rpc": {
             "enable_streaming": false
+          },
+          "telemetry": {
+            "disable_hostname": true,
+            "prometheus_retention_time": "168h"
           }
-        }
+        } 
     client:
       enabled: false
     syncCatalog:
