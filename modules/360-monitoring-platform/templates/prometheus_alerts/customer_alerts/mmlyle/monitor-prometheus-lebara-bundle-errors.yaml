@@ -1,0 +1,25 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-lebara-bundle.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: lebara-bundle.alerts
+      rules:
+      - alert: LebaraBundleActivationErrors
+        expr: ((round(sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="PO_TODO_INCLUIDO_10_Lebara"}[1h])) OR on() vector(0))) / (round(sum(increase(flex_bpmn_process_completed_total{app!="",definition="PO_TODO_INCLUIDO_10_Lebara"}[1h]))  OR on() vector(0))) * 100) > 20
+        annotations:
+          brief: Errors on Lebara bundle activation is higher than 20%.
+          procedure: "Verify errors from grafana https://grafana-mmlyle-prod.qvantel.solutions/d/5CocyPx4z/business-dashboard?orgId=1&panelId=52&fullscreen and follow QOPS-11498 / create internal SL2."
+        labels:
+          severity: critical
+{{- end }}
