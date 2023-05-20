@@ -1,3 +1,4 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.applications.commonOnePointZero }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -28,3 +29,4 @@ spec:
       for: 15m
       labels:
         severity: critical
+{{- end }}
