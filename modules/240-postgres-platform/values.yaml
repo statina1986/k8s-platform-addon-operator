@@ -11,6 +11,7 @@ postgresPlatform:
     - name: qvt-postgredb
       spec:
         teamId: "qvt"
+        dockerImage: artifactory.qvantel.net/qvantel-spilo:2.1-p7.20221130075959_postgres-14_b47cdbd7
         volume:
           size: 150Gi
         numberOfInstances: 2
