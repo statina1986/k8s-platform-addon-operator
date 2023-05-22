@@ -53,5 +53,6 @@ awsPlatform:
         volumeBindingMode: WaitForFirstConsumer
         # defaults to Delete
         reclaimPolicy: Delete
+        allowVolumeExpansion: true
         parameters:
           type: gp3
