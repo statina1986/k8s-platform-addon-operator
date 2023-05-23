@@ -74,6 +74,9 @@ monitoringPlatform:
     enabled: true
     grafana:
       enabled: true
+      serviceMonitor:
+        labels:
+          "release": "monitoring-platform"
       image:
         # we use enterprise license which is free-to-use to avoid AGPL3 in grafana-oss
         repository: grafana/grafana-enterprise
