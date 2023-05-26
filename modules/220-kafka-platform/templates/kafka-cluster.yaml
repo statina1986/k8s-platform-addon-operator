@@ -1,6 +1,0 @@
-apiVersion: kafka.strimzi.io/v1beta2
-kind: Kafka
-metadata:
-  name: kafka-cluster
-  namespace: {{ .Release.Namespace }}
-spec: {{- toYaml .Values.kafkaPlatform.cluster | nindent 2 }}

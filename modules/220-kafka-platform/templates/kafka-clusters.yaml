@@ -1,0 +1,14 @@
+{{- if .Values.kafkaPlatform.clusters }}
+{{- range .Values.kafkaPlatform.clusters  }}
+{{- $current := get $.Values.kafkaPlatform.clusters . }}
+{{- if $current.enabled }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ .name }}
+spec:
+  {{- toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
