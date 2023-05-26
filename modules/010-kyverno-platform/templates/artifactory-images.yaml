@@ -41,8 +41,9 @@ spec:
             - coredns*
             - aws-node*
 ##### Qvantel namespace excluded due to some paths withing applications getting broken ####
+        - resources:
             namespaces:
-            - qvantel*
+            - qvantel
       mutate:
         foreach:
         - list: "request.object.spec.containers"
@@ -67,8 +68,9 @@ spec:
             - coredns*
             - aws-node*
 ##### Qvantel namespace excluded due to some paths withing applications getting broken ####
+        - resources:
             namespaces:
-            - qvantel*
+            - qvantel
       preconditions:
         all:
         - key: {{ printf "{{ request.object.spec.initContainers[] || `[]` | length(@) }}" | quote }}
