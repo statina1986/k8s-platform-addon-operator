@@ -11,3 +11,4 @@ spec:
   {{- toYaml $current.spec | nindent 2 }}
 {{- end }}
 {{- end }}
+{{- end }}
