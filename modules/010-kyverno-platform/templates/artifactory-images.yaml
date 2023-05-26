@@ -40,6 +40,9 @@ spec:
             - kube-proxy*
             - coredns*
             - aws-node*
+##### Qvantel namespace excluded due to some paths withing applications getting broken ####
+            namespaces:
+            - qvantel*
       mutate:
         foreach:
         - list: "request.object.spec.containers"
@@ -63,6 +66,9 @@ spec:
             - kube-proxy*
             - coredns*
             - aws-node*
+##### Qvantel namespace excluded due to some paths withing applications getting broken ####
+            namespaces:
+            - qvantel*
       preconditions:
         all:
         - key: {{ printf "{{ request.object.spec.initContainers[] || `[]` | length(@) }}" | quote }}
