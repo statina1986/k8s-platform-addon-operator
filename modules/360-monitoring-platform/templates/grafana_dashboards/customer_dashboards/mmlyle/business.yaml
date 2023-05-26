@@ -16,24 +16,37 @@ data:
             "list": [
               {
                 "builtIn": 1,
-                "datasource": "-- Grafana --",
+                "datasource": {
+                  "type": "datasource",
+                  "uid": "grafana"
+                },
                 "enable": true,
                 "hide": true,
                 "iconColor": "rgba(0, 211, 255, 1)",
                 "name": "Annotations & Alerts",
+                "target": {
+                  "limit": 100,
+                  "matchAny": false,
+                  "tags": [],
+                  "type": "dashboard"
+                },
                 "type": "dashboard"
               }
             ]
           },
           "editable": true,
-          "gnetId": null,
+          "fiscalYearStartMonth": 0,
           "graphTooltip": 0,
-          "id": 23,
+          "id": 79,
           "links": [],
+          "liveNow": false,
           "panels": [
             {
               "collapsed": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "gridPos": {
                 "h": 1,
                 "w": 24,
@@ -42,18 +55,45 @@ data:
               },
               "id": 40,
               "panels": [],
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "refId": "A"
+                }
+              ],
               "title": "TOP UP",
               "type": "row"
             },
             {
               "aliasColors": {},
               "breakPoint": "50%",
-              "cacheTimeout": null,
               "combine": {
                 "label": "Others",
                 "threshold": 0
               },
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              },
               "fontSize": "80%",
               "format": "short",
               "gridPos": {
@@ -64,22 +104,49 @@ data:
               },
               "hideTimeOverride": false,
               "id": 32,
-              "interval": null,
               "legend": {
                 "percentage": true,
                 "percentageDecimals": 2,
                 "show": true,
-                "values": false
+                "values": true
               },
               "legendType": "Under graph",
               "links": [],
+              "maxDataPoints": 100,
               "nullPointMode": "connected",
+              "options": {
+                "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                    "value",
+                    "percent"
+                  ]
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "pieType": "pie",
               "pluginVersion": "6.7.1",
               "strokeWidth": 1,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -89,36 +156,58 @@ data:
                   "refId": "A"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "NOK",
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOP UP KPI",
               "type": "piechart",
               "valueName": "total"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -130,43 +219,29 @@ data:
               "id": 33,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0) + (sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval]))) OR on() vector(0) + (sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval]))) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -176,38 +251,46 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK TOP UP",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -219,83 +302,74 @@ data:
               "id": 36,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval]) OR on() vector(0)) + sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0) + (sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval]))) OR on() vector(0))",
-                  "format": "time_series",
-                  "instant": false,
-                  "interval": "1m",
-                  "intervalFactor": 1,
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval]) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\"}[$__interval]))) OR on() vector(0))",
+                  "interval": "",
                   "legendFormat": "",
-                  "refId": "A"
+                  "refId": "B"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK TOP UP",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -307,43 +381,29 @@ data:
               "id": 28,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval]))) OR on() vector(0)",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval]))) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -352,39 +412,47 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "OK TOP UP FR_Initial_Topup_And_Update_Recharge_Engine",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "decimals": 0,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -396,43 +464,29 @@ data:
               "id": 30,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval]))) OR on() vector(0)",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval]))) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -441,38 +495,46 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "NOK TOP UP FR_Initial_Topup_And_Update_Recharge_Engine",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -484,43 +546,29 @@ data:
               "id": 29,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval]))) OR on() vector(0)",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval]))) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -529,39 +577,46 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "OK TOP UP FR_Topup_And_Update_Recharge_Engine",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "decimals": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -573,43 +628,29 @@ data:
               "id": 31,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval]))) OR on() vector(0)",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval]))) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -618,38 +659,46 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "NOK TOP UP FR_Topup_And_Update_Recharge_Engine ",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -661,43 +710,29 @@ data:
               "id": 35,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval]))) OR on() vector(0)",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\"}[$__interval]))) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -706,39 +741,47 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "OK TOP UP call-payment-process",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "decimals": 0,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -750,43 +793,29 @@ data:
               "id": 34,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval]))) OR on() vector(0)",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\"}[$__interval]))) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -795,28 +824,24 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "NOK TOP UP call-payment-process",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -844,9 +869,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -856,7 +882,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
@@ -865,7 +895,11 @@ data:
                   "refId": "A"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0))",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -873,7 +907,11 @@ data:
                   "refId": "B"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "call-payment-process",
@@ -881,9 +919,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "OK TOP UP trend",
               "tooltip": {
                 "shared": true,
@@ -892,42 +928,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -955,9 +990,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -967,7 +1003,11 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "",
@@ -976,7 +1016,11 @@ data:
                   "refId": "A"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$__interval])) OR on() vector(0))",
                   "instant": false,
                   "interval": "",
                   "intervalFactor": 10,
@@ -984,7 +1028,11 @@ data:
                   "refId": "B"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\"}[$__interval])) OR on() vector(0))",
                   "interval": "",
                   "intervalFactor": 10,
                   "legendFormat": "call-payment-process",
@@ -992,9 +1040,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "NOK TOP UP trend ",
               "tooltip": {
                 "shared": true,
@@ -1003,38 +1049,32 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "collapsed": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "gridPos": {
                 "h": 1,
                 "w": 24,
@@ -1043,18 +1083,45 @@ data:
               },
               "id": 42,
               "panels": [],
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "refId": "A"
+                }
+              ],
               "title": "NEW ADDS",
               "type": "row"
             },
             {
               "aliasColors": {},
               "breakPoint": "50%",
-              "cacheTimeout": null,
               "combine": {
                 "label": "Others",
                 "threshold": 0
               },
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              },
               "fontSize": "80%",
               "format": "short",
               "gridPos": {
@@ -1065,7 +1132,6 @@ data:
               },
               "hideTimeOverride": false,
               "id": 44,
-              "interval": null,
               "legend": {
                 "percentage": true,
                 "show": true,
@@ -1073,12 +1139,40 @@ data:
               },
               "legendType": "Under graph",
               "links": [],
+              "maxDataPoints": 100,
               "nullPointMode": "connected",
+              "options": {
+                "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                    "value",
+                    "percent"
+                  ]
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "pieType": "pie",
               "pluginVersion": "6.7.1",
               "strokeWidth": 1,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval]))  OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval]))  OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -1086,36 +1180,57 @@ data:
                   "refId": "C"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "NOK",
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "NEW ADDS KPI",
               "type": "piechart",
               "valueName": "total"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1127,42 +1242,28 @@ data:
               "id": 79,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval]))  OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -1173,38 +1274,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK Adds",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1216,43 +1324,29 @@ data:
               "id": 80,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -1262,38 +1356,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK Adds",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1305,42 +1406,28 @@ data:
               "id": 83,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval]))  OR on() vector(0)) ",
                   "format": "time_series",
                   "hide": false,
@@ -1351,38 +1438,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "ISR_Full_Activation OK",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1394,43 +1488,29 @@ data:
               "id": 84,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -1440,38 +1520,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "ISR_Full_Activation NOK",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1483,42 +1570,28 @@ data:
               "id": 85,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -1529,38 +1602,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "PO_NumberPortIn_Filebased OK",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1572,43 +1652,29 @@ data:
               "id": 86,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -1618,28 +1684,24 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "PO_NumberPortIn_Filebased NOK",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -1667,9 +1729,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -1679,6 +1742,10 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
@@ -1688,6 +1755,10 @@ data:
                   "refId": "A"
                 },
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval]))  OR on() vector(0))",
                   "interval": "",
                   "legendFormat": "PO_NumberPortIn_Filebased",
@@ -1695,9 +1766,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "OK Adds trend",
               "tooltip": {
                 "shared": true,
@@ -1706,42 +1775,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -1769,9 +1837,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -1781,25 +1850,32 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Full_Activation\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
-                  "intervalFactor": 1,
+                  "interval": "",
+                  "intervalFactor": 10,
                   "legendFormat": "ISR_Full_Activation",
                   "refId": "A"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortIn_Filebased\"}[$__interval])) OR on() vector(0))",
                   "interval": "",
+                  "intervalFactor": 10,
                   "legendFormat": "PO_NumberPortIn_Filebased",
                   "refId": "B"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "NOK Adds trend ",
               "tooltip": {
                 "shared": true,
@@ -1808,38 +1884,32 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "collapsed": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "gridPos": {
                 "h": 1,
                 "w": 24,
@@ -1848,18 +1918,45 @@ data:
               },
               "id": 54,
               "panels": [],
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "refId": "A"
+                }
+              ],
               "title": "TERMINATIONS",
               "type": "row"
             },
             {
               "aliasColors": {},
               "breakPoint": "50%",
-              "cacheTimeout": null,
               "combine": {
                 "label": "Others",
                 "threshold": 0
               },
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              },
               "fontSize": "80%",
               "format": "short",
               "gridPos": {
@@ -1870,20 +1967,47 @@ data:
               },
               "hideTimeOverride": false,
               "id": 55,
-              "interval": null,
               "legend": {
                 "percentage": true,
                 "show": true,
-                "values": false
+                "values": true
               },
               "legendType": "Under graph",
               "links": [],
+              "maxDataPoints": 100,
               "nullPointMode": "connected",
+              "options": {
+                "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                    "value",
+                    "percent"
+                  ]
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "pieType": "pie",
               "pluginVersion": "6.7.1",
               "strokeWidth": 1,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval]))  OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval]))  OR on() vector(0)) ",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -1891,36 +2015,57 @@ data:
                   "refId": "C"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "NOK",
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "Terminations KPI",
               "type": "piechart",
               "valueName": "total"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -1932,42 +2077,28 @@ data:
               "id": 46,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval]))  OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -1978,38 +2109,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK Terminations",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -2021,43 +2159,29 @@ data:
               "id": 57,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -2067,38 +2191,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK Terminations",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -2110,42 +2241,28 @@ data:
               "id": 87,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -2156,38 +2273,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "ISR_Terminate_Subscription OK",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -2199,43 +2323,29 @@ data:
               "id": 89,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -2245,38 +2355,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "ISR_Terminate_Subscription NOK ",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -2288,42 +2405,28 @@ data:
               "id": 88,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -2334,38 +2437,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "PO_NumberPortOut OK",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 4,
@@ -2377,43 +2487,29 @@ data:
               "id": 90,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -2423,28 +2519,24 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "PO_NumberPortOut NOK ",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -2472,9 +2564,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -2484,6 +2577,10 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -2494,6 +2591,10 @@ data:
                   "refId": "A"
                 },
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval]))  OR on() vector(0))",
                   "hide": false,
                   "interval": "",
@@ -2502,9 +2603,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "OK Terminations trend",
               "tooltip": {
                 "shared": true,
@@ -2513,42 +2612,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -2576,9 +2674,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -2588,25 +2687,32 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"ISR_Terminate_Subscription\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
-                  "interval": "1m",
-                  "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "interval": "",
+                  "intervalFactor": 10,
+                  "legendFormat": "ISR_Terminate_Subscription",
                   "refId": "A"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_NumberPortOut\"}[$__interval])) OR on() vector(0))",
                   "interval": "",
+                  "intervalFactor": 10,
                   "legendFormat": "PO_NumberPortOut",
                   "refId": "B"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "NOK Terminatons trend ",
               "tooltip": {
                 "shared": true,
@@ -2615,38 +2721,32 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "collapsed": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "gridPos": {
                 "h": 1,
                 "w": 24,
@@ -2655,18 +2755,45 @@ data:
               },
               "id": 63,
               "panels": [],
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "refId": "A"
+                }
+              ],
               "title": "LYCA 10 Bundle",
               "type": "row"
             },
             {
               "aliasColors": {},
               "breakPoint": "50%",
-              "cacheTimeout": null,
               "combine": {
                 "label": "Others",
                 "threshold": 0
               },
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              },
               "fontSize": "80%",
               "format": "short",
               "gridPos": {
@@ -2677,20 +2804,47 @@ data:
               },
               "hideTimeOverride": false,
               "id": 64,
-              "interval": null,
               "legend": {
                 "percentage": true,
                 "show": true,
-                "values": false
+                "values": true
               },
               "legendType": "Under graph",
               "links": [],
+              "maxDataPoints": 100,
               "nullPointMode": "connected",
+              "options": {
+                "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                    "percent",
+                    "value"
+                  ]
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "pieType": "pie",
               "pluginVersion": "6.7.1",
               "strokeWidth": 1,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval]))  OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -2698,36 +2852,57 @@ data:
                   "refId": "C"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "NOK",
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "Lyca 10 Bundle KPI",
               "type": "piechart",
               "valueName": "total"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 8,
@@ -2739,42 +2914,28 @@ data:
               "id": 65,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -2785,38 +2946,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK Lyca 10 Bundle",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 8,
@@ -2828,43 +2996,29 @@ data:
               "id": 66,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -2874,28 +3028,24 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK Lyca 10 Bundle",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -2923,9 +3073,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -2935,19 +3086,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "legendFormat": "PO_Lyca_Globe10",
                   "refId": "A"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "OK Lyca 10 Bundle trend",
               "tooltip": {
                 "shared": true,
@@ -2956,42 +3109,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -3019,9 +3171,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -3031,19 +3184,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_Lyca_Globe10\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "legendFormat": "PO_Lyca_Globe10",
                   "refId": "A"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "NOK Lyca 10 Bundle trend ",
               "tooltip": {
                 "shared": true,
@@ -3052,38 +3207,32 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "collapsed": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "gridPos": {
                 "h": 1,
                 "w": 24,
@@ -3092,18 +3241,45 @@ data:
               },
               "id": 70,
               "panels": [],
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "refId": "A"
+                }
+              ],
               "title": "LEBARA 10 Bundle",
               "type": "row"
             },
             {
               "aliasColors": {},
               "breakPoint": "50%",
-              "cacheTimeout": null,
               "combine": {
                 "label": "Others",
                 "threshold": 0
               },
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              },
               "fontSize": "80%",
               "format": "short",
               "gridPos": {
@@ -3114,20 +3290,47 @@ data:
               },
               "hideTimeOverride": false,
               "id": 71,
-              "interval": null,
               "legend": {
                 "percentage": true,
                 "show": true,
-                "values": false
+                "values": true
               },
               "legendType": "Under graph",
               "links": [],
+              "maxDataPoints": 100,
               "nullPointMode": "connected",
+              "options": {
+                "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                    "percent",
+                    "value"
+                  ]
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "pieType": "pie",
               "pluginVersion": "6.7.1",
               "strokeWidth": 1,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval]))  OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -3135,36 +3338,57 @@ data:
                   "refId": "C"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "NOK",
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "Lebara 10 Bundle KPI",
               "type": "piechart",
               "valueName": "total"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 8,
@@ -3176,42 +3400,28 @@ data:
               "id": 72,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -3222,38 +3432,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK Lebara 10 Bundle",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 8,
@@ -3265,74 +3482,56 @@ data:
               "id": 73,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
                   "interval": "1m",
-                  "intervalFactor": 10,
+                  "intervalFactor": 1,
                   "legendFormat": "",
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK Lebara 10 Bundle",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -3360,9 +3559,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -3372,19 +3572,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "legendFormat": "PO_TODO_INCLUIDO_10_Lebara",
                   "refId": "A"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "OK Lebara 10 Bundle trend",
               "tooltip": {
                 "shared": true,
@@ -3393,42 +3595,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -3456,9 +3657,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -3468,19 +3670,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"PO_TODO_INCLUIDO_10_Lebara\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "legendFormat": "PO_TODO_INCLUIDO_10_Lebara",
                   "refId": "A"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "NOK Lebara 10 Bundle trend ",
               "tooltip": {
                 "shared": true,
@@ -3489,38 +3693,32 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "collapsed": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "gridPos": {
                 "h": 1,
                 "w": 24,
@@ -3529,18 +3727,45 @@ data:
               },
               "id": 77,
               "panels": [],
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "refId": "A"
+                }
+              ],
               "title": "Order basket validation",
               "type": "row"
             },
             {
               "aliasColors": {},
               "breakPoint": "50%",
-              "cacheTimeout": null,
               "combine": {
                 "label": "Others",
                 "threshold": 0
               },
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              },
               "fontSize": "80%",
               "format": "short",
               "gridPos": {
@@ -3551,20 +3776,47 @@ data:
               },
               "hideTimeOverride": false,
               "id": 78,
-              "interval": null,
               "legend": {
                 "percentage": true,
                 "show": true,
-                "values": false
+                "values": true
               },
               "legendType": "Under graph",
               "links": [],
+              "maxDataPoints": 100,
               "nullPointMode": "connected",
+              "options": {
+                "legend": {
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true,
+                  "values": [
+                    "percent",
+                    "value"
+                  ]
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
               "pieType": "pie",
               "pluginVersion": "6.7.1",
               "strokeWidth": 1,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval]))  OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
@@ -3572,36 +3824,57 @@ data:
                   "refId": "C"
                 },
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval])) OR on() vector(0))",
                   "interval": "1m",
                   "intervalFactor": 1,
                   "legendFormat": "NOK",
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "Order basket validation KPI",
               "type": "piechart",
               "valueName": "total"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 8,
@@ -3613,42 +3886,28 @@ data:
               "id": 56,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
@@ -3659,38 +3918,45 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK Order basket validation",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 8,
@@ -3702,43 +3968,29 @@ data:
               "id": 48,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "hide": false,
                   "instant": false,
@@ -3748,28 +4000,24 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK Order basket validation",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -3797,9 +4045,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -3809,19 +4058,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval]))  OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "legendFormat": "FR_ValidateBasket_OnboardingResources",
                   "refId": "A"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "OK Order basket validation trend",
               "tooltip": {
                 "shared": true,
@@ -3830,42 +4081,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -3893,9 +4143,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -3905,19 +4156,21 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "round(sum(increase(flex_bpmn_process_completed_with_error_end_event_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval])) OR on() vector(0))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"FR_ValidateBasket_OnboardingResources\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
                   "interval": "1m",
                   "intervalFactor": 1,
-                  "legendFormat": "ISR_Full_Activation",
+                  "legendFormat": "FR_ValidateBasket_OnboardingResources",
                   "refId": "A"
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "NOK Order basket validation trend ",
               "tooltip": {
                 "shared": true,
@@ -3926,38 +4179,29 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             }
           ],
           "refresh": false,
-          "schemaVersion": 22,
+          "schemaVersion": 37,
           "style": "dark",
           "tags": [],
           "templating": {
@@ -3984,9 +4228,7 @@ data:
           "timezone": "browser",
           "title": "Business dashboard",
           "uid": "5CocyPx4z",
-          "variables": {
-            "list": []
-          },
-          "version": 87
+          "version": 2,
+          "weekStart": ""
         }
 {{- end }}

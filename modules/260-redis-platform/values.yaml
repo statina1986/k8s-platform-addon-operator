@@ -249,7 +249,7 @@ redisPlatform:
         targetCPU: ""
         targetMemory: ""
     sentinel:
-      enabled: false
+      enabled: true
       masterSet: mymaster
       quorum: 2
       getMasterTimeout: 220

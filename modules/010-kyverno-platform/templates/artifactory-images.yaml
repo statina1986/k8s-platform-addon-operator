@@ -40,6 +40,10 @@ spec:
             - kube-proxy*
             - coredns*
             - aws-node*
+##### Qvantel namespace excluded because Qvantel apps already use artifactory and Kyverno image rewrite policy conflicts with banzai-vault-webhook file secrets implementation ####
+        - resources:
+            namespaces:
+            - qvantel
       mutate:
         foreach:
         - list: "request.object.spec.containers"
@@ -63,6 +67,10 @@ spec:
             - kube-proxy*
             - coredns*
             - aws-node*
+##### Qvantel namespace excluded because Qvantel apps already use artifactory and Kyverno image rewrite policy conflicts with banzai-vault-webhook file secrets implementation ####
+        - resources:
+            namespaces:
+            - qvantel
       preconditions:
         all:
         - key: {{ printf "{{ request.object.spec.initContainers[] || `[]` | length(@) }}" | quote }}
