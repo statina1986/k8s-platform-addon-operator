@@ -164,7 +164,7 @@ data:
               "tableColumn": "",
               "targets": [
                 {
-                  "expr": "sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$interval])) + sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$interval])) + sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$interval]))",
+                  "expr": "sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\"}[$interval]) OR on() vector(0)) + sum(increase(flex_bpmn_process_completed_total{definition=\"FR_Topup_And_Update_Recharge_Engine\"}[$interval]) OR on() vector(0)) + sum(increase(flex_bpmn_process_completed_total{definition=\"call-payment-process\"}[$interval]) OR on() vector(0))",
                   "format": "time_series",
                   "instant": true,
                   "interval": "",
@@ -252,7 +252,7 @@ data:
               "tableColumn": "",
               "targets": [
                 {
-                  "expr": "sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$interval])) + sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$interval])) + sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$interval]))",
+                  "expr": "sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Initial_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$interval]) OR on() vector(0)) + sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"FR_Topup_And_Update_Recharge_Engine\",app=\"orders-bpmn-executor\"}[$interval]) OR on() vector(0)) + sum(increase(flex_bpmn_process_completed_with_error_end_event_total{definition=\"call-payment-process\",app=\"flex-bpmn-executor\"}[$interval]) OR on() vector(0))",
                   "format": "time_series",
                   "instant": true,
                   "interval": "",
