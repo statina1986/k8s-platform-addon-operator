@@ -8,7 +8,7 @@ kafkaPlatform:
         memory: 384Mi
         cpu: 200m
   clusters:
-    - name: kafka-cluster
+    kafka-cluster:
       enabled: true
       spec:
         kafka:
