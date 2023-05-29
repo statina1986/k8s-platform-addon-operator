@@ -1,9 +1,23 @@
 istioIngress:
-# Public Ingress
+  # Public Ingress
   publicIngressEnabled: false
   publicIngressProxyProtocolEnabled: false
   publicIngress:
     name: public-ingress
+    replicaCount: 3
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 9
+      targetCPUUtilizationPercentage: 80
+    labels:
+      istio-ingress: "true"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 1024Mi
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -11,32 +25,54 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-  publicIngressGateways:
-    - name: public-ingress
-      spec: 
-        selector:
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: public-ingress
           istio: public-ingress
-        servers:
-          - hosts:
-            - '*'
-            port:
-              name: http
-              number: 80
-              protocol: HTTP
-          - hosts:
-            - '*'
-            port:
-              name: https
-              number: 443
-              protocol: HTTPS
-            tls:
-              mode: SIMPLE
-              credentialName: qvantel-wildcard              
-# Private Ingress
+  publicIngressGateways:
+  - name: public-ingress
+    spec:
+      selector:
+        istio: public-ingress
+      servers:
+      - hosts:
+        - '*'
+        port:
+          name: http
+          number: 80
+          protocol: HTTP
+      - hosts:
+        - '*'
+        port:
+          name: https
+          number: 443
+          protocol: HTTPS
+        tls:
+          mode: SIMPLE
+          credentialName: qvantel-wildcard
+          # Private Ingress
   privateIngressEnabled: false
   privateIngressProxyProtocolEnabled: false
   privateIngress:
     name: private-ingress
+    replicaCount: 3
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 9
+      targetCPUUtilizationPercentage: 80
+    labels:
+      istio-ingress: "true"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 1024Mi
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -44,32 +80,54 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-  privateIngressGateways:
-    - name: private-ingress
-      spec: 
-        selector:
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: private-ingress
           istio: private-ingress
-        servers:
-          - hosts:
-            - '*'
-            port:
-              name: http
-              number: 80
-              protocol: HTTP
-          - hosts:
-            - '*'
-            port:
-              name: https
-              number: 443
-              protocol: HTTPS
-            tls:
-              mode: SIMPLE
-              credentialName: qvantel-wildcard
-# IntegrationsHttp Ingress
+  privateIngressGateways:
+  - name: private-ingress
+    spec:
+      selector:
+        istio: private-ingress
+      servers:
+      - hosts:
+        - '*'
+        port:
+          name: http
+          number: 80
+          protocol: HTTP
+      - hosts:
+        - '*'
+        port:
+          name: https
+          number: 443
+          protocol: HTTPS
+        tls:
+          mode: SIMPLE
+          credentialName: qvantel-wildcard
+          # IntegrationsHttp Ingress
   integrationsHttpIngressEnabled: false
   integrationsHttpIngressProxyProtocolEnabled: false
   integrationsHttpIngress:
     name: integrations-http-ingress
+    replicaCount: 3
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 9
+      targetCPUUtilizationPercentage: 80
+    labels:
+      istio-ingress: "true"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 1024Mi
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -77,32 +135,54 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: integrations-http-ingress
+          istio: integrations-http-ingress
   integrationsHttpIngressGateways:
   - name: integrations-http-ingress
-    spec: 
+    spec:
       selector:
         istio: integrations-http-ingress
       servers:
-        - hosts:
-          - '*'
-          port:
-            name: http
-            number: 80
-            protocol: HTTP
-        - hosts:
-          - '*'
-          port:
-            name: https
-            number: 443
-            protocol: HTTPS
-          tls:
-            mode: SIMPLE
-            credentialName: qvantel-wildcard
-# IntegrationsNonHttp Ingress
+      - hosts:
+        - '*'
+        port:
+          name: http
+          number: 80
+          protocol: HTTP
+      - hosts:
+        - '*'
+        port:
+          name: https
+          number: 443
+          protocol: HTTPS
+        tls:
+          mode: SIMPLE
+          credentialName: qvantel-wildcard
+          # IntegrationsNonHttp Ingress
   integrationsNonHttpIngressEnabled: false
   integrationsNonHttpIngressProxyProtocolEnabled: false
   integrationsNonHttpIngress:
     name: integrations-non-http-ingress
+    replicaCount: 3
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 9
+      targetCPUUtilizationPercentage: 80
+    labels:
+      istio-ingress: "true"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 1024Mi
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -111,26 +191,34 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
       ports:
-        - name: status-port
-          port: 15021
-          protocol: TCP
-          targetPort: 15021
-        - name: sftp
-          port: 22
-          protocol: TCP
-          targetPort: 22
-  integrationsNonHttpIngressGateways:
-    - name: integrations-non-http-ingress
-      spec: 
-        selector:
+      - name: status-port
+        port: 15021
+        protocol: TCP
+        targetPort: 15021
+      - name: sftp
+        port: 22
+        protocol: TCP
+        targetPort: 22
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: integrations-non-http-ingress
           istio: integrations-non-http-ingress
-        servers:
-          - hosts:
-            - '*'
-            port:
-              name: sftp
-              number: 22
-              protocol: TCP
+  integrationsNonHttpIngressGateways:
+  - name: integrations-non-http-ingress
+    spec:
+      selector:
+        istio: integrations-non-http-ingress
+      servers:
+      - hosts:
+        - '*'
+        port:
+          name: sftp
+          number: 22
+          protocol: TCP
   virtualServices:
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
@@ -139,162 +227,134 @@ istioIngress:
       auth:
         enabled: false
         gateways:
-          - public-ingress
+        - public-ingress
         http:
-          - match:
-              - uri:
-                  prefix: /auth/realms/qvantel/
-            retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: qvaa-proxy-80.qvantel.svc.cluster.local
-                  port:
-                    number: 80
-          - match:
-              - uri:
-                  prefix: /auth/realms/consumers/
-            retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: qvaa-proxy-80.qvantel.svc.cluster.local
-                  port:
-                    number: 80
-          - match:
-              - uri:
-                  prefix: /auth/resources/
-            retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: qvaa-proxy-80.qvantel.svc.cluster.local
-                  port:
-                    number: 80
-          - match:
-              - uri:
-                  prefix: /auth/js/
-            retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: qvaa-proxy-80.qvantel.svc.cluster.local
-                  port:
-                    number: 80
+        - match:
+          - uri:
+              prefix: /auth/realms/qvantel/
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/realms/consumers/
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/resources/
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/js/
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
       address-manager:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: addresses.qvantel.svc.cluster.local
-                  port:
-                    number: 8000
+        - route:
+          - destination:
+              host: addresses.qvantel.svc.cluster.local
+              port:
+                number: 8000
       bssapi:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: bssapi-aggregator.qvantel.svc.cluster.local
-                  port:
-                    number: 8080
+        - route:
+          - destination:
+              host: bssapi-aggregator.qvantel.svc.cluster.local
+              port:
+                number: 8080
       bssapi-docs:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: bssapi-documentation-service.qvantel.svc.cluster.local
-                  port:
-                    number: 8010
+        - route:
+          - destination:
+              host: bssapi-documentation-service.qvantel.svc.cluster.local
+              port:
+                number: 8010
       case-admin:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - match:
-              - uri:
-                  exact: /
-            redirect:
-              uri: /caseadmin/sa/
-            retries:
-              attempts: 0
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: case-admin.qvantel.svc.cluster.local
-                  port:
-                    number: 8096
+        - match:
+          - uri:
+              exact: /
+          redirect:
+            uri: /caseadmin/sa/
+        - route:
+          - destination:
+              host: case-admin.qvantel.svc.cluster.local
+              port:
+                number: 8096
       case-management:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - match:
-              - uri:
-                  exact: /
-            redirect:
-              uri: /casemanager/sa/
-            retries:
-              attempts: 0
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: case-manager.qvantel.svc.cluster.local
-                  port:
-                    number: 8092
+        - match:
+          - uri:
+              exact: /
+          redirect:
+            uri: /casemanager/sa/
+        - route:
+          - destination:
+              host: case-manager.qvantel.svc.cluster.local
+              port:
+                number: 8092
       catalog-deployer:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: catalog-qflow-catalog-deployer.qvantel.svc.cluster.local
-                  port:
-                    number: 8080
+        - route:
+          - destination:
+              host: catalog-qflow-catalog-deployer.qvantel.svc.cluster.local
+              port:
+                number: 8080
       catalog-designer:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - match:
-              - uri:
-                  prefix: /websockets
-            retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: catalog-qflow-product-catalog-designer-9005.qvantel.svc.cluster.local
-                  port:
-                    number: 9005
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: catalog-qflow-product-catalog-designer-9003.qvantel.svc.cluster.local
-                  port:
-                    number: 9003
+        - match:
+          - uri:
+              prefix: /websockets
+          route:
+          - destination:
+              host: catalog-qflow-product-catalog-designer-9005.qvantel.svc.cluster.local
+              port:
+                number: 9005
+        - route:
+          - destination:
+              host: catalog-qflow-product-catalog-designer-9003.qvantel.svc.cluster.local
+              port:
+                number: 9003
       cdt:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: cdt-frontend.qvantel.svc.cluster.local
               port:
@@ -302,13 +362,11 @@ istioIngress:
       document-manager:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
         - match:
           - uri:
               prefix: /api/documents/render-template
-          retries:
-            attempts: 0
           route:
           - destination:
               host: documents-doc-manager-dynamic-template.qvantel.svc.cluster.local
@@ -317,16 +375,12 @@ istioIngress:
         - match:
           - uri:
               prefix: /api/documents/
-          retries:
-            attempts: 0
           route:
           - destination:
               host: documents-doc-manager-backend.qvantel.svc.cluster.local
               port:
                 number: 8080
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: documents-doc-manager-frontend.qvantel.svc.cluster.local
               port:
@@ -334,13 +388,11 @@ istioIngress:
       document-storage:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
         - match:
           - uri:
               prefix: /api/
-          retries:
-            attempts: 0
           route:
           - destination:
               host: documents-doc-storage-backend.qvantel.svc.cluster.local
@@ -349,8 +401,6 @@ istioIngress:
         - match:
           - uri:
               prefix: /file/
-          retries:
-            attempts: 0
           route:
           - destination:
               host: documents-doc-storage-backend.qvantel.svc.cluster.local
@@ -359,40 +409,32 @@ istioIngress:
         - match:
           - uri:
               prefix: /external-documents/
-          retries:
-            attempts: 0
           route:
           - destination:
               host: documents-doc-storage-backend.qvantel.svc.cluster.local
               port:
                 number: 8080
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: documents-doc-storage-frontend.qvantel.svc.cluster.local
               port:
-                number: 8080                  
+                number: 8080
       flex-admin:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: flex-admin.qvantel.svc.cluster.local
-                  port:
-                    number: 21080
+        - route:
+          - destination:
+              host: flex-admin.qvantel.svc.cluster.local
+              port:
+                number: 21080
       flex-app-store:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: flex-app-store.qvantel.svc.cluster.local
               port:
@@ -400,11 +442,9 @@ istioIngress:
       graphql:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: graphql-graphql-bssapi.qvantel.svc.cluster.local
               port:
@@ -412,11 +452,9 @@ istioIngress:
       keycloak:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: qvaa-proxy-80.qvantel.svc.cluster.local
               port:
@@ -424,18 +462,14 @@ istioIngress:
       knowledge:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
         - match:
           - uri:
               exact: /
           redirect:
             uri: /knowledge_wiki/
-          retries:
-            attempts: 0
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: knowledge-wiki.qvantel.svc.cluster.local
               port:
@@ -443,11 +477,9 @@ istioIngress:
       message-manager:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: message-manager-wui.qvantel.svc.cluster.local
               port:
@@ -455,11 +487,9 @@ istioIngress:
       mockbank:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: omnichannel-bank.qvantel.svc.cluster.local
               port:
@@ -467,11 +497,9 @@ istioIngress:
       mockoss:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: mockoss.qvantel.svc.cluster.local
               port:
@@ -479,11 +507,9 @@ istioIngress:
       pcb:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: pcb.qvantel.svc.cluster.local
               port:
@@ -491,21 +517,17 @@ istioIngress:
       pos:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
         - match:
           - uri:
               prefix: /images/
-          retries:
-            attempts: 0
           route:
           - destination:
               host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
               port:
                 number: 80
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: omnichannel-pos.qvantel.svc.cluster.local
               port:
@@ -513,11 +535,9 @@ istioIngress:
       recharge-manager:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: recharge-manager-frontend.qvantel.svc.cluster.local
               port:
@@ -525,13 +545,11 @@ istioIngress:
       rim:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
         - match:
           - uri:
               prefix: /loader/
-          retries:
-            attempts: 0
           rewrite:
             uri: /
           route:
@@ -542,8 +560,6 @@ istioIngress:
         - match:
           - uri:
               prefix: /rim-api/
-          retries:
-            attempts: 0
           rewrite:
             uri: /
           route:
@@ -551,9 +567,7 @@ istioIngress:
               host: rim-wui-frontback.qvantel.svc.cluster.local
               port:
                 number: 9000
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: rim-wui-frontend.qvantel.svc.cluster.local
               port:
@@ -561,33 +575,27 @@ istioIngress:
       sct:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - match:
-              - uri:
-                  prefix: /images/
-            retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
-                  port:
-                    number: 80
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
-                  port:
-                    number: 9000
+        - match:
+          - uri:
+              prefix: /images/
+          route:
+          - destination:
+              host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - route:
+          - destination:
+              host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
+              port:
+                number: 9000
       tnt:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-        - retries:
-            attempts: 0
-          route:
+        - route:
           - destination:
               host: tnt-web-tnt-web.qvantel.svc.cluster.local
               port:
@@ -595,59 +603,59 @@ istioIngress:
       consul-ui:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: consul-platform-consul-ui.platform.svc.cluster.local
-                  port:
-                    number: 80
+        - route:
+          - destination:
+              host: consul-platform-consul-ui.platform.svc.cluster.local
+              port:
+                number: 80
       grafana:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: monitoring-platform-grafana.platform.svc.cluster.local
-                  port:
-                    number: 80
+        - route:
+          - destination:
+              host: monitoring-platform-grafana.platform.svc.cluster.local
+              port:
+                number: 80
       prometheus:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: monitoring-platform-kube-p-prometheus.platform.svc.cluster.local
-                  port:
-                    number: 9090
+        - route:
+          - destination:
+              host: monitoring-platform-kube-p-prometheus.platform.svc.cluster.local
+              port:
+                number: 9090
       kafka-ui:
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: kafka-ui.platform.svc.cluster.local
-                  port:
-                    number: 8080
+        - route:
+          - destination:
+              host: kafka-ui.platform.svc.cluster.local
+              port:
+                number: 8080
       kibana:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: kibana-kb-http.platform.svc.cluster.local
-                  port:
-                    number: 5601
+        - route:
+          - destination:
+              host: kibana-kb-http.platform.svc.cluster.local
+              port:
+                number: 5601
       vault-ui:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
-          - route:
-              - destination:
-                  host: vault-platform.platform.svc.cluster.local
-                  port:
-                    number: 8200
+        - route:
+          - destination:
+              host: vault-platform.platform.svc.cluster.local
+              port:
+                number: 8200

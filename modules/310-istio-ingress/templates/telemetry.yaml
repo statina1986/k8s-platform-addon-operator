@@ -1,0 +1,9 @@
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:  
+  name: istio-ingress-telemetry
+  namespace: platform
+spec:
+  accessLogging:
+  - providers:
+    - name: ingress-access-log

@@ -22,19 +22,55 @@ vectorPlatform:
             - kubernetes
           route:
             qvantel_kubernetes_logs: .kubernetes.pod_namespace == "qvantel"
-            common_kubernetes_logs: .kubernetes.pod_namespace != "qvantel"
+            istio_gateway_logs: .kubernetes.pod_annotations."inject.istio.io/templates" == "gateway"
+            loki_logs: .kubernetes.pod_lables."app.kubernetes.io/name" == "loki"
+            vault_logs: .kubernetes.pod_lables."app.kubernetes.io/name" == "vault"
         qvantel_log_format_transform:
           type: remap
           inputs:
             - kubernetes_logs_types.qvantel_kubernetes_logs
           source: |
+            if .message != null && .message != "" {
+              structured, err = parse_json(.message)
+              if err != null {
+                log("Unable to parse Qvantel JSON: " + string!(.message), level: "error")
+              } else {
+                .qvantel_message = .message
+                . = merge!(., structured)
+                parsed_timestamp, err = to_timestamp(.@timestamp)
+                if err != null {
+                  parsed_timestamp = parse_timestamp!(.@timestamp, "%Y-%m-%dT%H:%M:%S%.3f%z")
+                  .timestamp = parsed_timestamp
+                } else {
+                  .timestamp = parsed_timestamp
+                }                
+              }
+            }
+        istio_gateway_log_format_transform:
+          type: remap
+          inputs:
+            - kubernetes_logs_types.istio_gateway_logs
+          source: |
             structured, err = parse_json(.message)
             if err != null {
-              log("Unable to parse Qvantel LOG: " + err, level: "error")
+              log("Unable to parse Istio Access JSON: " + string!(.message), level: "error")
             } else {
-              .qvantel_message = .message
+              .log_type = "AUDIT"
               . = merge!(., structured)
-              .timestamp = to_timestamp!(.@timestamp)
+              .timestamp = to_timestamp!(.start_time)
+            }
+        vault_log_format_transform:
+          type: remap
+          inputs:
+            - kubernetes_logs_types.vault_logs
+          source: |
+            structured, err = parse_json(.message)
+            if err != null {
+              log("Unable to parse Vault JSON: " + string!(.message), level: "error")
+            } else {
+              .log_type = "AUDIT"
+              . = merge!(., structured)
+              .timestamp = to_timestamp!(.time)
             }
       sinks:
         prometheus:
@@ -46,8 +82,10 @@ vectorPlatform:
           type: loki
           inputs:
             - vector_logs
-            - kubernetes_logs_types.common_kubernetes_logs
+            - kubernetes_logs_types._unmatched
             - qvantel_log_format_transform
+            - istio_gateway_log_format_transform
+            - vault_log_format_transform
           endpoint: http://loki-write.platform.svc:3100
           out_of_order_action: accept
           labels:

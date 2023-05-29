@@ -6,3 +6,40 @@ istioPlatform:
   istiod:
     global:
       istioNamespace: platform
+    meshConfig:
+      defaultHttpRetryPolicy:
+        retries:
+          attempts: 0
+      extensionProviders:
+      - name: ingress-access-log
+        envoyFileAccessLog:
+          logFormat:
+            labels:
+              start_time: "%START_TIME%"
+              method: "%REQ(:METHOD)%"
+              path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+              protocol: "%PROTOCOL%"
+              response_code: "%RESPONSE_CODE%"
+              response_flags: "%RESPONSE_FLAGS%"
+              response_code_details: "%RESPONSE_CODE_DETAILS%"
+              duration: "%DURATION%"
+              upstream_host: "%UPSTREAM_HOST%"
+              upstream_service_time: "%REQ(X-ENVOY-UPSTREAM_SERVICE_TIME)%"
+              upstream_local_address: "%UPSTREAM_LOCAL_ADDRESS%"
+              upstream_cluster: "%UPSTREAM_CLUSTER%"
+              upstream_transport_failure_reason: "%UPSTREAM_TRANSPORT_FAILURE_REASON%"
+              route_name: "%ROUTE_NAME%"
+              downstream_local_address: "%DOWNSTREAM_LOCAL_ADDRESS%"
+              user_agent: "%REQ(USER-AGENT)%"
+              request_id: "%REQ(X-REQUEST-ID)%"
+              client_ip: "%REQ(TRUE-Client-IP)%"
+              requested_server_name: "%REQUESTED_SERVER_NAME%"
+              bytes_received: "%BYTES_RECEIVED%"
+              bytes_sent: "%BYTES_SENT%"
+              downstream_remote_address: "%DOWNSTREAM_REMOTE_ADDRESS%"
+              downstream_peer_serial: "%DOWNSTREAM_PEER_SERIAL%"
+              authority: "%REQ(:AUTHORITY)%"
+              x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
+              x_trace_token: "%REQ(X-TRACE-TOKEN)%"
+
+

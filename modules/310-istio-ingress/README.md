@@ -1,0 +1,14 @@
+# istio-ingress module
+This module is responsible for deployment of [Istio](https://github.com/istio/istio) Ingress Gateway solution in the cluster.
+This module deploys only Ingress Gateways, not Istio control plane itself
+
+Depends on modules:
+- [istio-platform](/modules/150-istio-platform/README.md) which deploys Istio control-plane is required 
+
+Provides:
+- Several Ingress Gateway deployments
+- Virtual Service management 
+- Set of default Virtual Services for common Qvantel apps 
+- Access logs with JSON format
+
+Additional documentation can be found in Platform Docs https://intra.qvantel.com/display/QKA/Ingress
