@@ -23,8 +23,8 @@ vectorPlatform:
           route:
             qvantel_kubernetes_logs: .kubernetes.pod_namespace == "qvantel"
             istio_gateway_logs: .kubernetes.pod_annotations."inject.istio.io/templates" == "gateway"
-            loki_logs: .kubernetes.pod_lables."app.kubernetes.io/name" == "loki"
-            vault_logs: .kubernetes.pod_lables."app.kubernetes.io/name" == "vault"
+            loki_logs: .kubernetes.pod_labels."app.kubernetes.io/name" == "loki"
+            vault_logs: .kubernetes.pod_labels."app.kubernetes.io/name" == "vault"
         qvantel_log_format_transform:
           type: remap
           inputs:
