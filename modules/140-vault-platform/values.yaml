@@ -6,7 +6,7 @@ vaultPlatform:
       enabled: true
     injector:
       enabled: false
-    server:            
+    server:
       serviceAccount:
         create: false
         name: platform  
@@ -84,3 +84,26 @@ vaultPlatform:
 
             service_registration "kubernetes" {}
             {{ .Values.server.ha.raft.additionalConfig}}
+      affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "vault.name" . }}
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
+                  component: server
+              topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: {{ template "vault.instance" . }}
+            app.kubernetes.io/name: {{ template "vault.name" . }}
+        maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+      resources:
+        requests:
+          memory: '100Mi'
+          cpu: "100m"
+        limits:
+          memory: '1Gi'
