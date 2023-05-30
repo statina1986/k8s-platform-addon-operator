@@ -89,15 +89,15 @@ vaultPlatform:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: vault
-                  app.kubernetes.io/instance: vault-platform
+                  app.kubernetes.io/name: {{ template "vault.name" . }}
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
                   component: server
               topologyKey: kubernetes.io/hostname
       topologySpreadConstraints:
       - labelSelector:
           matchLabels:
-            app.kubernetes.io/instance: {{ template "vault.instance" . }}
-            app.kubernetes.io/name: {{ template "vault.name" . }}
+            app.kubernetes.io/instance: vault-platform
+            app.kubernetes.io/name: vault
         maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
