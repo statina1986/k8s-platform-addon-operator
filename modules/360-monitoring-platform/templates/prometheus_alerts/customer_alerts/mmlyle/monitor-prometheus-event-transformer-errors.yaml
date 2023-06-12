@@ -1,0 +1,32 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-event-transformer-errors.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: event-transformer-errors.alerts
+      rules:
+      - alert: KafkaEventTransformerErrorsBusinessHours
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="EVENT-TRANSFORMER-ERROR"}[10m])) > 5000 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: This is an alert about errors produced by event-transformer. The topic is high-volume.
+          procedure: Check the trends in prometheus, errors can be come in large batches. If errors keep coming, escalate to L2 during business hours. Alert created on QOPS-11557.
+        labels:
+          severity: critical
+      - alert: KafkaEventTransformerErrorsGeneral
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="EVENT-TRANSFORMER-ERROR"}[10m])) > 15000
+        annotations:
+          brief: This is an alert about errors produced by event-transformer. The topic is high-volume.
+          procedure: Check trends from prometheus, errors can come in large batches. If this alerts during business hours and errors keep producing, escalate to L2. If this is alerting OoO and errors keep producing, escalate to on-call. Alert created on QOPS-11557.
+        labels:
+          severity: critical
+{{- end }}
