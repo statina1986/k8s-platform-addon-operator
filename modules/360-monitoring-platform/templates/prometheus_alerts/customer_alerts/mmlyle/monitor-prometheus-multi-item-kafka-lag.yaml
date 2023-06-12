@@ -1,0 +1,74 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-multi-item-kafka-lag.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: multi-item-kafka-lag.alerts
+      rules:
+      - alert: KafkaGeneralMultiItemLag
+        expr: sum by(topic, partition, app) (kafka_consumer_fetch_manager_records_lag_max{topic=~"STREAM-PERIODIC-TOPUP-EVENTS|STREAM-PERIODIC-TOPUP-BY-RENEWAL-DATE-EVENTS|RECHARGE-EVENTS-POST-PROCESSING|REACTIVATE-SUBSCRIPTION-ELIGIBLE-RECHARGES|MNP-PORTOUT-FILEBASED-ORDERS-IN|MNP-PORTIN-FILEBASED-FEEDBACK-IN"}) > 30
+        annotations:
+          brief: This a general alert for low-volume topics in Kafka. Possible peaks for following STREAM-PERIODIC-TOPUP-EVENTS and STREAM-PERIODIC-TOPUP-BY-RENEWAL-DATE-EVENTS at 21.00 and 00.00 UTC, regarding MNP-PORTOUT-FILEBASED-ORDERS-IN and MNP-PORTIN-FILEBASED-FEEDBACK-IN check Mykhailos comment, these two are dependent how big the creation files are.
+          procedure: Check from prometheus which topic(s) is alerting and follow the trend. If lag is prolonged and doesnt appear to be consumed, escalate to L2 during business hours and on-call durin OoO if needed. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+      - alert: KafkaProcessingErrorsTopicLag
+        expr: sum by (topic) (increase(kafka_server_brokertopicmetrics_messagesin_total{topic=~"cdr-aggregator-error|cdr-processor-error|cdr-reactivation-error|revenue-loader-error-topic"}[15m])) > 100
+        annotations:
+          brief: This is a multicheck for cdr and revenue-loader error topics which are mid-volume topics.
+          procedure: These topics collect errors, which means that they wont get consumed/decreased. Check which topic has had its count increased and if it keeps increasing. If errors continue to accumulate in a fast manner, escalate to L2 durin business hours and on-call during OoO if needed. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+      - alert: KafkaStreamOrchestrationLoad
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="STREAM-ORCHESTRATION-INFORMATION"}[5m])) > 5500 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: This is an alert for general system health reflected as lag in Kafka. Topic experiences increased load between 22.45 - 23.30 UTC due to peak of incoming lifecycle CDRs.
+          procedure: Check trends for this alert. This topic collects messages often in big spikes and is high-volume topic, so you need to check if message accumulation is prolonged. Escalate to L2 if needed and on-call during OoO if needed. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+      - alert: KafkaStreamOrderOrchestrationErrors
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="STREAM-ORDER-ORCHESTRATION-ERRORS"}[15m])) > 200 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: This is an alert for mid-volume topic collecting errors during order fullfilment process.
+          procedure: Check if errors keep coming and escalate to L2 during business hours and on-call during OoO if needed. Trend can be spiky, so follow the situation. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+      - alert: KafkaStreamOrderErrors
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="STREAM-ORDER-ERRORS"}[15m])) > 20
+        annotations:
+          brief: This is a low-volume topic. This topic shouldnt accumulate error-messages really fast.
+          procedure: This alert indicates that during order fullfilment proces, there are errors occuring. If there are large number of errors and they keep accumulating, escalate to L2 and on-call during OoO if needed. Alert created on QOPS-11308
+        labels:
+          severity: critical
+      - alert: KafkaStreamBasketOrchestrationTasksLoad
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="STREAM-BASKET-ORCHESTRATION-TASKS"}[5m])) > 1200 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: This alert is about STREAM-BASKET-ORCHESTRATION-TASKS topic, which is high-volume topic. This alert might indicate too heavy load or slow consumers.
+          procedure: Follow the trend of this topic, traffic can come in spikes. Escalate to L2 during business hours and on-call during OoO if needed. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+      - alert: KafkaOrderLoaderPostponeMessages
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="ORDER-LOADER-POSTPONE"}[15m])) > 100 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: This is mid-volume topic, which collects orders with postponed status. Follow the trend, it can be spiky.
+          procedure: If this topic is accumulating messages with high volume for prolonged time, escalate to L2 during business hours and on-call during OoO if needed. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+      - alert: KafkaStreamTrackedProcessActionsTopicEntries
+        expr: sum(increase(kafka_server_brokertopicmetrics_messagesin_total{topic="STREAM-TRACKED-PROCESS-ACTIONS"}[15m])) > 50
+        annotations:
+          brief: This is really low-volume topic, if there are entries, then this topic should be closely monitored. Topic is populated as a result of retrying orders/baskets from TnT/Mass-tool.
+          procedure: In case this topic starts to collect messages, escalate to L2 during business hours and on-call during OoO if needed. Alert created on QOPS-11308.
+        labels:
+          severity: critical
+{{- end }}
