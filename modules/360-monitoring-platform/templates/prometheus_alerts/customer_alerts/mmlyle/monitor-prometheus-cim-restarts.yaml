@@ -1,0 +1,46 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-cim-restarts.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: cim-restarts.alerts
+      rules:
+      - alert: CIM-restartsInHourPerInstance
+        expr: sum by (pod) (round(increase(kube_pod_container_status_restarts_total{container="customer-manager"}[1h]))>= 2)
+        annotations:
+          brief: 'Customer-manager has restarted two or more times in the past hour'
+          procedure: 'Follow the situation and check if there is possibly something wrong with customer-manager instances. If something is found, escalate to L2 via normal procedures, on-call if needed. Alert made on QOPS-13107.'
+        labels:
+          severity: warning
+      - alert: CIM-restartsInMinutesPerInstance
+        expr: sum by (pod) (round(increase(kube_pod_container_status_restarts_total{container="customer-manager"}[10m]))>= 2)
+        annotations:
+          brief: 'Customer-manager has restarted two or more times in the past 10 minutes. This has direct correlation with environments functionality as CIM is critical component.'
+          procedure: 'Check resource usage and logs for errors. Escalate to L2 and on-call if behaviour continues. Alert made on QOPS-13107.'
+        labels:
+          severity: critical
+      - alert: CIM-restartsInDeploymentInMinutes
+        expr: sum(round(increase(kube_pod_container_status_restarts_total{container="customer-manager"}[10m])) >= 3)
+        annotations:
+          brief: 'Customer-manager deployment has had three or more restarts in the last 10 minutes.'
+          procedure: 'Check resource usage and logs if there is a visible reason why mutiple instances have restarted in short period of time. Escalate to L2 and on-call if needed. Alert made on QOPS-13107.'
+        labels:
+          severity: critical
+      - alert: CIM-restartsInDeploymentInHour
+        expr: sum(round(increase(kube_pod_container_status_restarts_total{container="customer-manager"}[1h])) >= 3)
+        annotations:
+          brief: 'Customer-manager deployment has had three or more restarts in the last hour.'
+          procedure: 'Check resource usage and logs incase there is a visible reason why restarts keeps happening in relatively short timespan. Escalate to L2 if needed, in severe cases on-call. Alert made on QOPS-13107.'
+        labels:
+          severity: warning
+{{- end }}
