@@ -1,0 +1,32 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-sim-change-errors.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: sim-change-errors.alerts
+      rules:
+      - alert: SCTFlowErrorRate
+        expr: (round(sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="care-manage_resource-update_sim"}[20m])))/((round(sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="care-manage_resource-update_sim"}[20m])))) + round(sum(increase(flex_bpmn_activity_completed_total{app!="",definition="care-manage_resource-update_sim"}[20m]))))) * 100 > 10 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: Only applicable during business hours. There are more than 10% errors in care-manage_resource-update_sim, it indicates that there might be problems in SIM change. This is only used in SCT so no critical impact.
+          procedure: Creation ticket https://qvantel.atlassian.net/browse/QOPS-11559 . Check the graphs from prometheus and raise an SL3 ticket if the errors continue for a while.
+        labels:
+          severity: warning
+      - alert: OrderFulfillmentProcessErrorRate
+        expr: (round(sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="PO_change_sim_process"}[20m])))/((round(sum(increase(flex_bpmn_activity_error_received_total{app!="",definition="PO_change_sim_process"}[20m])))) + round(sum(increase(flex_bpmn_activity_completed_total{app!="",definition="PO_change_sim_process"}[20m]))))) * 100 > 10 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: Only applicable during business hours. There are more than 10% errors in PO_change_sim_process, it indicates that there might be problems in SIM change. This is only used in SCT so not no critical impact.
+          procedure: Creation ticket https://qvantel.atlassian.net/browse/QOPS-11559 . Check the graphs from prometheus and raise an SL3 ticket if the errors continue for a while.
+        labels:
+          severity: warning
+{{- end }}
