@@ -600,6 +600,16 @@ istioIngress:
               host: tnt-web-tnt-web.qvantel.svc.cluster.local
               port:
                 number: 9001
+      zipkin:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: zipkin.qvantel.svc.cluster.local
+              port:
+                number: 9411
       consul-ui:
         enabled: false
         gateways:
