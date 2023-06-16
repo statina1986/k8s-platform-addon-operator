@@ -72,6 +72,10 @@ monitoringPlatform:
       telemetryPath: /metrics
   kube-prometheus-stack:
     enabled: true
+    defaultRules:
+      create: true
+      rules:
+        kubernetesStorage: false
     grafana:
       enabled: true
       serviceMonitor:
