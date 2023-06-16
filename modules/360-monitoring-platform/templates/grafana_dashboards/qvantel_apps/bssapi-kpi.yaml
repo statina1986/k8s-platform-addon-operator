@@ -1223,15 +1223,15 @@ data:
               "auto_min": "10s",
               "current": {
                 "selected": false,
-                "text": "1m",
-                "value": "1m"
+                "text": "1d",
+                "value": "1d"
               },
               "hide": 0,
               "label": "interval",
               "name": "interval",
               "options": [
                 {
-                  "selected": true,
+                  "selected": false,
                   "text": "1m",
                   "value": "1m"
                 },
@@ -1261,7 +1261,7 @@ data:
                   "value": "12h"
                 },
                 {
-                  "selected": false,
+                  "selected": true,
                   "text": "1d",
                   "value": "1d"
                 },
@@ -1345,7 +1345,7 @@ data:
           ]
         },
         "time": {
-          "from": "now/M",
+          "from": "now-24h",
           "to": "now"
         },
         "timepicker": {

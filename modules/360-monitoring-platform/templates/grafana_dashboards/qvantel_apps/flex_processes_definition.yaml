@@ -16,25 +16,67 @@ data:
             "list": [
               {
                 "builtIn": 1,
-                "datasource": "-- Grafana --",
+                "datasource": {
+                  "type": "datasource",
+                  "uid": "grafana"
+                },
                 "enable": true,
                 "hide": true,
                 "iconColor": "rgba(0, 211, 255, 1)",
                 "name": "Annotations & Alerts",
+                "target": {
+                  "limit": 100,
+                  "matchAny": false,
+                  "tags": [],
+                  "type": "dashboard"
+                },
                 "type": "dashboard"
               }
             ]
           },
           "editable": true,
-          "gnetId": null,
+          "fiscalYearStartMonth": 0,
           "graphTooltip": 0,
-          "id": 21,
-          "iteration": 1684828813881,
+          "id": 82,
           "links": [],
+          "liveNow": false,
           "panels": [
             {
-              "cacheTimeout": null,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "decimals": 3,
+                  "mappings": [
+                    {
+                      "id": 0,
+                      "op": "=",
+                      "text": "N/A",
+                      "type": 1,
+                      "value": "null"
+                    }
+                  ],
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "percentunit"
+                },
+                "overrides": []
+              },
               "gridPos": {
                 "h": 10,
                 "w": 9,
@@ -44,76 +86,98 @@ data:
               "hideTimeOverride": false,
               "id": 32,
               "links": [],
+              "maxDataPoints": 1000,
               "options": {
-                "fieldOptions": {
+                "orientation": "horizontal",
+                "reduceOptions": {
                   "calcs": [
                     "mean"
                   ],
-                  "defaults": {
-                    "decimals": 3,
-                    "mappings": [
-                      {
-                        "id": 0,
-                        "op": "=",
-                        "text": "N/A",
-                        "type": 1,
-                        "value": "null"
-                      }
-                    ],
-                    "nullValueMode": "connected",
-                    "thresholds": {
-                      "mode": "absolute",
-                      "steps": [
-                        {
-                          "color": "green",
-                          "value": null
-                        },
-                        {
-                          "color": "red",
-                          "value": 80
-                        }
-                      ]
-                    },
-                    "unit": "percentunit"
-                  },
-                  "overrides": [],
+                  "fields": "",
+                  "limit": 1,
                   "values": false
                 },
-                "orientation": "horizontal",
                 "showThresholdLabels": false,
                 "showThresholdMarkers": true
               },
-              "pluginVersion": "6.7.1",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
-                  "expr": "1 - ((round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0))) / (round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"$processDefinition\"}[$__interval]))  OR on() vector(0))))",
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "editorMode": "code",
+                  "exemplar": true,
+                  "expr": "1 - (round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0)) / (round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0)) + round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"$processDefinition\"}[$__interval]))  OR on() vector(0))))",
+                  "hide": false,
+                  "instant": false,
                   "interval": "",
-                  "legendFormat": "",
+                  "legendFormat": "{{ "{{label_name}}" }}",
+                  "range": true,
                   "refId": "B"
                 }
               ],
-              "timeFrom": null,
-              "timeShift": null,
               "title": "$processDefinition",
+              "transformations": [
+                {
+                  "id": "filterByValue",
+                  "options": {
+                    "filters": [
+                      {
+                        "config": {
+                          "id": "greater",
+                          "options": {
+                            "value": 0
+                          }
+                        },
+                        "fieldName": "Value"
+                      }
+                    ],
+                    "match": "all",
+                    "type": "include"
+                  }
+                }
+              ],
               "type": "gauge"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 10,
@@ -125,42 +189,28 @@ data:
               "id": 39,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_started_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
@@ -170,38 +220,46 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "Total Started $processDefinition",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": null,
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 10,
@@ -213,42 +271,28 @@ data:
               "id": 33,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_process_completed_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
@@ -258,38 +302,36 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL OK  $processDefinition",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [
-                {
-                  "op": "=",
-                  "text": "N/A",
-                  "value": "null"
-                }
-              ],
-              "valueName": "total"
+              "type": "stat"
             },
             {
-              "cacheTimeout": null,
-              "colorBackground": false,
-              "colorValue": false,
-              "colors": [
-                "#299c46",
-                "rgba(237, 129, 40, 0.89)",
-                "#d44a3a"
-              ],
-              "datasource": "Prometheus",
-              "format": "none",
-              "gauge": {
-                "maxValue": 100,
-                "minValue": 0,
-                "show": false,
-                "thresholdLabels": false,
-                "thresholdMarkers": true
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "none"
+                },
+                "overrides": []
               },
               "gridPos": {
                 "h": 10,
@@ -301,42 +343,29 @@ data:
               "id": 36,
               "interval": "",
               "links": [],
-              "mappingType": 1,
-              "mappingTypes": [
-                {
-                  "name": "value to text",
-                  "value": 1
-                },
-                {
-                  "name": "range to text",
-                  "value": 2
-                }
-              ],
               "maxDataPoints": 100,
-              "nullPointMode": "connected",
-              "nullText": null,
-              "postfix": "",
-              "postfixFontSize": "50%",
-              "prefix": "",
-              "prefixFontSize": "50%",
-              "rangeMaps": [
-                {
-                  "from": "null",
-                  "text": "N/A",
-                  "to": "null"
-                }
-              ],
-              "sparkline": {
-                "fillColor": "rgba(31, 118, 189, 0.18)",
-                "full": false,
-                "lineColor": "rgb(31, 120, 193)",
-                "show": false,
-                "ymax": null,
-                "ymin": null
+              "options": {
+                "colorMode": "none",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "sum"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "textMode": "auto"
               },
-              "tableColumn": "",
+              "pluginVersion": "9.3.1",
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
+                  "editorMode": "code",
                   "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{app!=\"\",definition=\"$processDefinition\"}[$__interval])) OR on() vector(0))",
                   "format": "time_series",
                   "instant": false,
@@ -346,22 +375,24 @@ data:
                   "refId": "A"
                 }
               ],
-              "thresholds": "",
-              "timeFrom": null,
-              "timeShift": null,
               "title": "TOTAL NOK $processDefinition",
-              "type": "singlestat",
-              "valueFontSize": "80%",
-              "valueMaps": [],
-              "valueName": "total"
+              "type": "stat"
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -389,9 +420,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -401,6 +433,10 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "sum(rate(flex_bpmn_process_started_total{definition=\"$processDefinition\"}[5m])) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
@@ -411,9 +447,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "STARTED $processDefinition",
               "tooltip": {
                 "shared": true,
@@ -422,42 +456,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -485,9 +518,10 @@ data:
               "links": [],
               "nullPointMode": "null",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": false,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -497,6 +531,10 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "sum(rate(flex_bpmn_process_completed_total{definition=\"$processDefinition\"}[5m])) OR on() vector(0)",
                   "format": "time_series",
                   "instant": false,
@@ -507,9 +545,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "COMPLETED $processDefinition",
               "tooltip": {
                 "shared": true,
@@ -518,42 +554,41 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             },
             {
               "aliasColors": {},
               "bars": false,
-              "cacheTimeout": null,
               "dashLength": 10,
               "dashes": false,
-              "datasource": null,
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "links": []
+                },
+                "overrides": []
+              },
               "fill": 1,
               "fillGradient": 0,
               "gridPos": {
@@ -581,9 +616,10 @@ data:
               "links": [],
               "nullPointMode": "null as zero",
               "options": {
-                "dataLinks": []
+                "alertThreshold": true
               },
               "percentage": true,
+              "pluginVersion": "9.3.1",
               "pointradius": 2,
               "points": false,
               "renderer": "flot",
@@ -593,6 +629,10 @@ data:
               "steppedLine": false,
               "targets": [
                 {
+                  "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                  },
                   "expr": "round(sum(increase(flex_bpmn_activity_error_received_total{definition=\"$processDefinition\"}[5m])) OR on() vector(0))",
                   "interval": "",
                   "intervalFactor": 1,
@@ -601,9 +641,7 @@ data:
                 }
               ],
               "thresholds": [],
-              "timeFrom": null,
               "timeRegions": [],
-              "timeShift": null,
               "title": "ERROR $processDefinition",
               "tooltip": {
                 "shared": true,
@@ -612,64 +650,58 @@ data:
               },
               "type": "graph",
               "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
               },
               "yaxes": [
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 },
                 {
                   "format": "short",
-                  "label": null,
                   "logBase": 1,
-                  "max": null,
-                  "min": null,
                   "show": true
                 }
               ],
               "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
               }
             }
           ],
           "refresh": false,
-          "schemaVersion": 22,
+          "schemaVersion": 37,
           "style": "dark",
           "tags": [],
           "templating": {
             "list": [
               {
-                "allValue": null,
                 "current": {
+                  "selected": true,
                   "text": "PO_Lyca_Globe10",
                   "value": "PO_Lyca_Globe10"
                 },
-                "datasource": "Prometheus",
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
                 "definition": "label_values(flex_bpmn_process_started_total,definition)",
                 "hide": 0,
                 "includeAll": false,
-                "index": -1,
-                "label": null,
                 "multi": false,
                 "name": "processDefinition",
                 "options": [],
-                "query": "label_values(flex_bpmn_process_started_total,definition)",
+                "query": {
+                  "query": "label_values(flex_bpmn_process_started_total,definition)",
+                  "refId": "Prometheus-processDefinition-Variable-Query"
+                },
                 "refresh": 1,
                 "regex": "",
                 "skipUrlSync": false,
                 "sort": 1,
                 "tagValuesQuery": "",
-                "tags": [],
                 "tagsQuery": "",
                 "type": "query",
                 "useTags": false
@@ -697,9 +729,7 @@ data:
           "timezone": "browser",
           "title": "Flex Process Definition",
           "uid": "bqHX8b1Vz",
-          "variables": {
-            "list": []
-          },
-          "version": 7
+          "version": 6,
+          "weekStart": ""
         }
 {{- end }}
