@@ -1,0 +1,46 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-onboarding-and-addonactivation-errors.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: onboarding-and-addonactivation-errors.alerts
+      rules:
+      - alert: OnboardingErrorsDuringSubscriberActivation
+        expr: round(sum(increase(flex_bpmn_activity_error_received_total{definition="RFS_MSA_Activate_Subscriber"}[5m])) by (app)) > 10
+        annotations:
+          brief: 'Errors are present in subscriber activation process.'
+          procedure: 'Check errors for orders-bpmn-executor and if errors keep producing for RFS_MSA_Activate_Subscriber. Escalate to L2 and on-call if needed. Alert created on QOPS-12682.'
+        labels:
+          severity: critical
+      - alert: LowSubscriberActivationThroughput
+        expr: sum(increase(flex_bpmn_activity_completed_total{definition="RFS_MSA_Activate_Subscriber",app="orders-bpmn-executor"}[10m]) or vector(0)) < 30 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Onboarding count for the last 10 minutes is considerably low.'
+          procedure: 'Check the health of orders-bpmn-executor and if RFS_MSA_Activate_Subscriber process is being blocked. Follow the situation and escalate to L2 if needed. Alert created on QOPS-12682.'
+        labels:
+          severity: warning
+      - alert: ErrorsDuringAddonActivation
+        expr: round(sum(increase(flex_bpmn_activity_error_received_total{definition="RFS_MSA_Add_DataPlan"}[5m])) by (app)) > 10
+        annotations:
+          brief: 'Errors are present in add-on activation process.'
+          procedure: 'Check errors for orders-bpmn-executor and if errors keep producing for RFS_MSA_Add_DataPlan. Escalate to L2 and on-call if needed. Alert created on QOPS-12682.'
+        labels:
+          severity: critical
+      - alert: LowAddonActivationThroughput
+        expr: sum(increase(flex_bpmn_activity_completed_total{definition="RFS_MSA_Add_DataPlan",app="orders-bpmn-executor"}[10m]) or vector(0)) < 30 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Add-on activation count for the last 10 minutes is considerably low.'
+          procedure: 'Check the health of orders-bpmn-executor and if RFS_MSA_Add_DataPlan process is being blocked. Follow the situation and escalate to L2 if needed. Alert created on QOPS-12682.'
+        labels:
+          severity: warning
+{{- end }}
