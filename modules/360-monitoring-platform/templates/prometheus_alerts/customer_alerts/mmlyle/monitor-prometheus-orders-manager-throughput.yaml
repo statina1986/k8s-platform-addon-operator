@@ -1,0 +1,53 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-orders-manager-throughput.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: orders-manager-throughput.alerts
+      rules:
+      - alert: OrdersManagerTroughputToBpmnBunissHours
+        expr: sum(rate(order_orchestrate_duration_count[5m])) by (app, status) > 5 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'This is an alert following the performance of orders-manager by following the troughput of order requests to BPMN-executors. System can handle increased loads up to a certain point.'
+          procedure: 'This alert is set to watch limit of 5 during business hours(9-22). If the metric is high for prolonged period of time, consider escalating to L2.'
+        labels:
+          severity: warning
+      - alert: OrdersManagerTroughputToBpmnGeneral
+        expr: sum(rate(order_orchestrate_duration_count[5m])) by (app, status) > 12
+        annotations:
+          brief: 'This is an alert following the performance of orders-manager by following the troughput of order requests to BPMN-executors. System can handle increased loads up to a certain point.'
+          procedure: 'This version of the alert is general version and watching the limit of 12 around the clock. If alerting for polonged periods of time, consider escalating to L2 on-call.'
+        labels:
+          severity: warning
+      - alert: OrdersManagerOrderLatencyToBpmnBunissHours
+        expr: sum(rate(order_orchestrate_duration_sum[5m])) by (app, status) / sum(rate(order_orchestrate_duration_count[5m])) by (app, status) > 1 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'This alert is following the latency of order requests sent to BPMN-executor.'
+          procedure: 'If the latencies are elevated for prolonged period of time, escalate for L2 to check.'
+        labels:
+          severity: critical
+      - alert: OrdersManagerTroughputToBpmnByPoBunissHours
+        expr: sum(rate(order_orchestrate_total{app="orders-manager"}[5m])) by (op) > 2.5 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: This is an alert following the performance of orders-manager by following the troughput of order requests to BPMN-executors by PO. System can handle increased loads up to a certain point.
+          procedure: This alert is set to watch limit of 5 during business hours(9-22). If the metric is high for prolonged period of time, consider escalating to L2.
+        labels:
+          severity: warning
+      - alert: OrdersManagerTroughputToBpmnByPoGeneral
+        expr: sum(rate(order_orchestrate_total{app="orders-manager"}[5m])) by (op) > 8
+        annotations:
+          brief: 'This is an alert following the performance of orders-manager by following the troughput of order requests to BPMN-executors by PO. System can handle increased loads up to a certain point.'
+          procedure: 'This version of the alert is general version and watching the limit of 8 around the clock. If alerting for polonged periods of time, consider escalating to L2 on-call.'
+        labels:
+          severity: warning
+{{- end }}
