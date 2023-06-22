@@ -291,6 +291,18 @@ istioIngress:
               host: bssapi-documentation-service.qvantel.svc.cluster.local
               port:
                 number: 8010
+      bssapi-explorer:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: bssapi-explorer.qvantel.svc.cluster.local
+                  port:
+                    number: 8080 
       case-admin:
         enabled: false
         gateways:
