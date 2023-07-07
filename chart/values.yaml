@@ -122,6 +122,10 @@ modulesConfig:
   redisCbsControllerPlatformEnabled: "false"
   redisCbsControllerPlatform:
     configurationRequired: "check module documentation for configuration options"
+
+  rancherPlatformEnabled: "false"
+  rancherPlatform:
+    configurationRequired: "check module documentation for configuration options"
   
   sftpEnabled: "false"
   sftp:

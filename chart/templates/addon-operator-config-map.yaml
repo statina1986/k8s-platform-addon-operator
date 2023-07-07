@@ -81,6 +81,9 @@ data:
   redisPlatformEnabled: "{{ .Values.modulesConfig.redisPlatformEnabled }}"
   redisPlatform: {{ print "|\n" (.Values.modulesConfig.redisPlatform | toYaml | indent 4) }}
 
+  rancherPlatformEnabled: "{{ .Values.modulesConfig.rancherPlatformEnabled }}"
+  rancherPlatform: {{ print "|\n" (.Values.modulesConfig.rancherPlatform | toYaml | indent 4) }}
+
   redisPcdPlatformEnabled: "{{ .Values.modulesConfig.redisPcdPlatformEnabled }}"
   redisPcdPlatform: {{ print "|\n" (.Values.modulesConfig.redisPcdPlatform | toYaml | indent 4) }}
 
