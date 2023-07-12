@@ -1,0 +1,49 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-suspension-reactivation.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: suspension-reactivation.alerts
+      rules:
+        - alert: CustomerReactivation
+          annotations:
+            brief: Customer reactivation activity is taking longer than 15 seconds.
+            procedure: >-
+              Follow instructions on QOPS-11558 and check if other components
+              are reporting slowness. Escalate to L2 if this is prominent issue
+              and continues to alert(check prometheus).
+          expr: >-
+            avg by (op)
+            ((idelta(order_orchestrate_duration_sum{app="orders-manager",op=~".+Suspension.+.Cease",status="ok"}[1m])
+            > 0.1) /
+            (idelta(order_orchestrate_duration_count{app="orders-manager",op=~".+Suspension.+.Cease",status="ok"}[1m])
+            > 0.1)) > 0.25
+          labels:
+            severity: critical
+        - alert: CustomerSuspension
+          annotations:
+            brief: Customer suspension activity is taking longer than 15 seconds.
+            procedure: >-
+              Follow instructions on QOPS-11558 and check if other components
+              are reporting slowness. Escalate to L2 if this is prominent issue
+              and continues to alert(check prometheus). This will likely alert
+              during the night when batch actions are done(after 22.45 UTC).
+          expr: >-
+            avg by (op)
+            ((idelta(order_orchestrate_duration_sum{app="orders-manager",op!~".+Suspension.+.Cease",op=~".+Suspension.+",status="ok"}[1m])
+            > 0.1) /
+            (idelta(order_orchestrate_duration_count{app="orders-manager",op!~".+Suspension.+.Cease",op=~".+Suspension.+",status="ok"}[1m])
+            > 0.1)) > 0.25
+          labels:
+            severity: critical
+{{- end }}
