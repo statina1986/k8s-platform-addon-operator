@@ -9,3 +9,17 @@ sftpgoPlatform:
       create: false
       annotations: {}
       name: "platform"
+    volumes:
+      - name: sftpgo-pvc-volume
+        persistentVolumeClaim:
+          claimName: sftpgo-pvc
+    volumeMounts:
+      - name: sftpgo-pvc-volume
+        mountPath: /var/lib/sftpgo
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+    config:
+      sftpd:
+        enabled_ssh_commands: ["md5sum","sha1sum","sha256sum","cd","pwd","scp","rsync"]
