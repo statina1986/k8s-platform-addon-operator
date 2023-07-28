@@ -26,17 +26,17 @@ spec:
         severity: info
     - alert: AppOccasionalDeaths
       annotations:
-        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h, this behaviour could be affecting service availability."
+        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 1h, this behaviour could be affecting service availability."
         escalation: "Escalate to L2 following the established procedure and taking into account the severity of this alert (warning)."
-      expr: 3 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{service!~"(cp_.+|.*dump.*)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace) < 10
+      expr: 3 <= sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{pod!~"(cp_.+|.*dump.*)"}[1h]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1))
       labels:
         level: application
         severity: warning
     - alert: AppFrequentDeaths
       annotations:
-        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 24h (it's a bloodbath!), this behaviour could be affecting service availability."
+        brief: "{{` {{ $value }} `}} {{` {{ $labels.container }} `}} on pod {{` {{ $labels.pod }} `}} instances have died in the last 10m (it's a bloodbath!), this behaviour could be affecting service availability."
         escalation: "Escalate to L2 following the established procedure and taking into account the severity of this alert (critical)."
-      expr: 10 <= sum(clamp_max(label_replace(time() - max_over_time(container_last_seen{service!="", service!~"(cp_.+|.*dump.*)"}[24h]) > 120,  "container", "$1", "container", "([^\\.]+).*"), 1)) by (container,pod,namespace)
+      expr: 3 <= sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{pod!~"(cp_.+|.*dump.*)"}[10m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1))
       labels:
         level: application
         severity: critical
