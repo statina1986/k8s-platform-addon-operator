@@ -294,7 +294,7 @@ istioIngress:
       bssapi-explorer:
         enabled: false
         gateways:
-          - private-ingress
+        - private-ingress
         http:
           - route:
             - destination:
