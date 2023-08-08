@@ -78,6 +78,10 @@ monitoringPlatform:
         kubernetesStorage: false
     grafana:
       enabled: true
+      admin:
+        existingSecret: grafana-admin-pass-secret
+        passwordKey: grafanaAdminPassword
+        userKey: adminUser
       serviceMonitor:
         labels:
           "release": "monitoring-platform"
@@ -90,7 +94,6 @@ monitoringPlatform:
         size: 30Gi
         finalizers:
           - kubernetes.io/pvc-protection
-      adminPassword: Q4nt3l321
       datasources:
         datasources.yaml:
           apiVersion: 1
