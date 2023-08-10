@@ -1,0 +1,116 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-orders-api-general.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: orders-api-general.alerts
+      rules:
+      - alert: OrdersApiSuccesfullBaskets
+        expr: sum(rate(span_processing_time_seconds_count{app="orders-api", operation="baskets-submit", error="false"}[5m])) > 5 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'This alert is following high throughput of succesfull baskets by Orders-api during businesshours.'
+          procedure: 'If this is alerting, follow the system functionality. System can handle elevated loads, but should there be too much load, then system will fail. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiFailedBasketSubmissions
+        expr: sum(increase(span_processing_time_seconds_count{app="orders-api", operation="baskets-submit", error="true"}[5m])) > 3 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Order-api is failing to submit succesfull baskets.'
+          procedure: 'If baskets keep failing, escalate to L2 and on-call if needed. Alert made on QOPS-12803.'
+        labels:
+          severity: critical
+      - alert: OrdersApiBasketOperationsGeneral
+        expr: sum(rate(span_processing_time_seconds_count{app="orders-api", operation!="baskets-submit", operation=~"basket.*"}[5m])) by (operation) > 25
+        annotations:
+          brief: 'Orders-api is having increased load in the form of increased basket-operation.'
+          procedure: 'Check trends from Prometheus. If this is alerting, follow the system functionality. System can handle elevated loads, but should there be too much load, then system will fail. Alert made on QOPS-12803. There are spikes often at ~23.00 UTC.'
+        labels:
+          severity: warning
+      - alert: OrdersApiBasketOperationsBusinessHours
+        expr: sum(rate(span_processing_time_seconds_count{app="orders-api", operation!="baskets-submit", operation=~"basket.*"}[5m])) by (operation) > 15 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Orders-api is having increased load in the form of increased basket-operation.'
+          procedure: 'Check trends from Prometheus. If this is alerting, follow the system functionality. System can handle elevated loads, but should there be too much load, then system will fail. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiOrdersCreateRequestsGeneral
+        expr: sum(rate(span_processing_time_seconds_count{app="orders-api", operation="orders-create", error="false"}[5m])) > 15
+        annotations:
+          brief: 'Orders-api is having increased load in form of increased orders-create requests.'
+          procedure: 'Check trends from Prometheus. If this is alerting, follow the system functionality. System can handle elevated loads, but should there be too much load, then system will fail. Alert made on QOPS-12803. There are spikes often at ~23.00 UTC.'
+        labels:
+          severity: warning
+      - alert: OrdersApiOrdersCreateRequestsBusinessHours
+        expr: sum(rate(span_processing_time_seconds_count{app="orders-api", operation="orders-create", error="false"}[5m])) > 5 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Orders-api is having increased load in form of increased orders-create requests.'
+          procedure: 'Check trends from Prometheus. If this is alerting, follow the system functionality. System can handle elevated loads, but should there be too much load, then system will fail. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiFailedOrdersCreateRequests
+        expr: sum(rate(span_processing_time_seconds_count{app="orders-api", operation="orders-create", error="true"}[5m])) > 0.002
+        annotations:
+          brief: 'Orders-api is failing create-requests.'
+          procedure: 'Check trends if issue continues and logs for errors. Escalate to L2 and on-call if needed. Alert made on QOPS-12803.'
+        labels:
+          severity: critical
+      - alert: OrdersApiSuccesBasketSubmissionLatencies
+        expr: sum(rate(span_processing_time_seconds_sum{app="orders-api", operation="baskets-submit", error="false"}[5m])) > 0.5 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Latencies for succesfull basket submissions are on the rise.'
+          procedure: 'Check trends if this is prolonged issue. Escalate to L2 if needed. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiFailedBasketSubmissionLatencies
+        expr: increase(span_processing_time_seconds_sum{app="orders-api", operation="baskets-submit", error="true"}[10m]) / increase(span_processing_time_seconds_count{app="orders-api", operation="baskets-submit", error="true"}[10m]) > 6
+        annotations:
+          brief: 'Latencies for failed basket submissions are on the rise.'
+          procedure: 'Check trends if this is prolonged issue. Escalate to L2 if needed. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiBasketOperationsLatenciesGeneral
+        expr: sum(rate(span_processing_time_seconds_sum{app="orders-api", operation!="baskets-submit", operation=~"basket.*"}[5m])) by (operation) / sum(rate(span_processing_time_seconds_count{app="orders-api", operation!="baskets-submit", operation=~"basket.*"}[5m])) by (operation) > 2
+        annotations:
+          brief: 'Orders-api is having elevated basket-operation latencies.'
+          procedure: 'Check trends if this is prolonged issue. Escalate to L2 if needed. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiBasketOperationsLatenciesBusinessHours
+        expr: sum(rate(span_processing_time_seconds_sum{app="orders-api", operation!="baskets-submit", operation=~"basket.*"}[5m])) by (operation) / sum(rate(span_processing_time_seconds_count{app="orders-api", operation!="baskets-submit", operation=~"basket.*"}[5m])) by (operation) > 0.6 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Orders-api is having elevated basket-operation latencies.'
+          procedure: 'Check trends if this is prolonged issue. Escalate to L2 if needed. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiSuccesfullOrdersCreateLatenciesGeneral
+        expr: sum(rate(span_processing_time_seconds_sum{app="orders-api", operation="orders-create", error="false"}[5m]))/ sum(rate(span_processing_time_seconds_count{app="orders-api", operation="orders-create", error="false"}[5m])) > 3.25
+        annotations:
+          brief: 'Orders-api is succesfully completing orders-create requests with increased latencies.'
+          procedure: 'If latencies are increased for prolonged period of time, escalate to L2, and if affecting other functions, to on-call. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiSuccesfullOrdersCreateLatenciesBusinessHours
+        expr: sum(rate(span_processing_time_seconds_sum{app="orders-api", operation="orders-create", error="false"}[5m]))/ sum(rate(span_processing_time_seconds_count{app="orders-api", operation="orders-create", error="false"}[5m])) > 2 unless ((hour() < 7 or hour() >19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Orders-api is succesfully completing orders-create requests with increased latencies.'
+          procedure: 'If latencies are increased for prolonged period of time, escalate to L2. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+      - alert: OrdersApiFailedOrdersCreateRequestLatencies
+        expr: round(increase(span_processing_time_seconds_sum{app="orders-api", operation="orders-create", error="true"}[60m]) / increase(span_processing_time_seconds_count{app="orders-api", operation="orders-create", error="true"}[60m])) > 150 unless ((hour() < 7 or hour() > 19) or (day_of_week() > 5 or day_of_week() == 0))
+        annotations:
+          brief: 'Orders-api has increased latencies for failed orders-create requests.'
+          procedure: 'If latencies are increased for prolonged period of time, escalate to L2. Alert made on QOPS-12803.'
+        labels:
+          severity: warning
+{{- end }}
