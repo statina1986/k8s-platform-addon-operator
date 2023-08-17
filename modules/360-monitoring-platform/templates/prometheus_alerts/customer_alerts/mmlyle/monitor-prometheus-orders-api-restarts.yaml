@@ -1,0 +1,39 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.programs.mmlyle }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitor-prometheus-orders-api-restarts.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: order-api-restarts.alerts
+      rules:
+      - alert: OrdersApiPodRestart
+        expr: sum by (pod) (increase(kube_pod_container_status_restarts_total{container="orders-api"}[1h]) >= 1)
+        annotations:
+          brief: 'Orders-api has restarted, this is a critical component in LycaLebara and has direct impact to order handling'
+          procedure: 'Check resource usage and logs if you can see anything obvious. In case this continues, escalate to L2 and on-call if needed. Alert created on QOPS-14626.'
+        labels:
+          severity: warning
+      - alert: OrdersApiPodRestartsInMinutes
+        expr: sum by (pod) (increase(kube_pod_container_status_restarts_total{container="orders-api"}[10m]) >= 2)
+        annotations:
+          brief: 'Orders-api instances have restarted two or more times in 10 minutes, this is a critical component in LycaLebara and has direct impact to order handling'
+          procedure: 'Check resource usage and logs if you can see anything obvious. Escalate to L2 and on-call if needed. Alert created on QOPS-14626.'
+        labels:
+          severity: critical
+      - alert: OrdersApiDeploymentRestartsInHour
+        expr: sum(increase(kube_pod_container_status_restarts_total{container="orders-api"}[1h])) >= 3
+        annotations:
+          brief: 'Orders-api has had three or more restarts in an hour. This is a critical component in LycaLebara and has direct impact to order handling'
+          procedure: 'Check resource usage and logs if you can see anything obvious. Escalate to L2 and on-call if needed. Alert created on QOPS-14626.'
+        labels:
+          severity: critical
+{{- end }}      
