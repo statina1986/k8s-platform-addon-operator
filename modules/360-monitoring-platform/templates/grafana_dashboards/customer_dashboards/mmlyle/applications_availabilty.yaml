@@ -960,7 +960,7 @@ data:
                   "pluginVersion": "6.7.1",
                   "targets": [
                     {
-                      "expr": "sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})",
+                      "expr": "sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"}) + sum(up{app=\"orders-api\"}) + sum(up{app=\"orders-batch-manager\"})",
                       "hide": false,
                       "instant": true,
                       "interval": "",
@@ -970,7 +970,7 @@ data:
                   ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Orders Manager + Orders BPMN Executor Instances",
+                  "title": "Orders Manager + Orders BPMN Executor + Orders API + Orders-batch instances",
                   "type": "stat"
                 },
                 {
@@ -1018,7 +1018,7 @@ data:
                   "pluginVersion": "6.7.1",
                   "targets": [
                     {
-                      "expr": "((sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) / (sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) > 0 OR on() vector(0)) * 100",
+                      "expr": "((sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"}) + sum(up{app=\"orders-api\"}) + sum(up{app=\"orders-batch-manager\"})) / (sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"}) + sum(up{app=\"orders-api\"}) + sum(up{app=\"orders-batch-manager\"})) > 0 OR on() vector(0)) * 100",
                       "hide": false,
                       "instant": false,
                       "interval": "",
@@ -1028,7 +1028,7 @@ data:
                   ],
                   "timeFrom": null,
                   "timeShift": null,
-                  "title": "Orders manager + Orders BPMN Executor availability",
+                  "title": "Orders Manager + Orders BPMN Executor + Orders API + Orders-batch availability",
                   "type": "gauge"
                 },
                 {
@@ -1072,7 +1072,7 @@ data:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "((sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) / (sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"})) > 0 OR on() vector(0)) * 100",
+                      "expr": "((sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"}) + sum(up{app=\"orders-api\"}) + sum(up{app=\"orders-batch-manager\"})) / (sum(up{app=\"orders-manager\"}) + sum(up{app=\"orders-bpmn-executor\"}) + sum(up{app=\"orders-api\"}) + sum(up{app=\"orders-batch-manager\"})) > 0 OR on() vector(0)) * 100",
                       "interval": "",
                       "legendFormat": "orders-manager/orders-bpmn-executor",
                       "refId": "A"
@@ -1082,7 +1082,7 @@ data:
                   "timeFrom": null,
                   "timeRegions": [],
                   "timeShift": null,
-                  "title": "Orders manager + Orders BPMN Executor trend",
+                  "title": "Orders Manager + Orders BPMN Executor + Orders API + Orders-batch trend",
                   "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1120,7 +1120,7 @@ data:
                   }
                 }
               ],
-              "title": "Orders Manager + Orders BPMN Executor",
+              "title": "Orders Manager + Orders BPMN Executor + Orders API + Orders-batch",
               "type": "row"
             },
             {
