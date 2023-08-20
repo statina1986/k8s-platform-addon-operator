@@ -1,4 +1,5 @@
 {{- if .Values.istioIngress.virtualServices.instances }}
+{{- $root := . }}
 {{- range keys .Values.istioIngress.virtualServices.instances  }}
 {{- $current := get $.Values.istioIngress.virtualServices.instances . }}
 {{- if $current.enabled }}
@@ -20,19 +21,28 @@ spec:
   {{- if $current.hosts }}
   {{- with $current.hosts }}
   hosts: 
-    {{- toYaml . | nindent 2 }}
+    {{- tpl (toYaml .) $root | nindent 2 }}
   {{- end }}
   {{- else }}
   hosts: 
   - {{ . }}-{{ $.Values.istioIngress.virtualServices.dnsBase }}
   {{- end }}
   {{- with $current.http }}
-  http: 
-    {{- toYaml . | nindent 2 }}
+  http:
+    {{- if and $root.Values.istioIngress.pomeriumEnabled $current.pomeriumProtected }}
+    - route:
+      - destination:
+          host: pomerium-platform-proxy.platform.svc.cluster.local
+          port:
+            number: 80
+    {{- else }}
+    {{- tpl (toYaml .) $root | nindent 2 }}
+    {{ end }}
+    
   {{- end }}
   {{- with $current.tcp }}
   tcp: 
-    {{- toYaml . | nindent 2 }}
+    {{- tpl (toYaml .) $root | nindent 2 }}
   {{- end }}
 {{- end }}
 {{- end }}

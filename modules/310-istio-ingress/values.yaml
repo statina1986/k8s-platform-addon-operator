@@ -1,7 +1,10 @@
 istioIngress:
+  pomeriumEnabled: false
   # Public Ingress
   publicIngressEnabled: false
   publicIngressProxyProtocolEnabled: false
+  publicIngressLogFullRequest: false
+  publicIngressLogFullResponse: false
   publicIngress:
     name: public-ingress
     replicaCount: 3
@@ -57,6 +60,8 @@ istioIngress:
           # Private Ingress
   privateIngressEnabled: false
   privateIngressProxyProtocolEnabled: false
+  privateIngressLogFullRequest: false
+  privateIngressLogFullResponse: false
   privateIngress:
     name: private-ingress
     replicaCount: 3
@@ -112,6 +117,8 @@ istioIngress:
           # IntegrationsHttp Ingress
   integrationsHttpIngressEnabled: false
   integrationsHttpIngressProxyProtocolEnabled: false
+  integrationsHttpIngressLogFullRequest: false
+  integrationsHttpIngressLogFullResponse: false
   integrationsHttpIngress:
     name: integrations-http-ingress
     replicaCount: 3
@@ -167,6 +174,8 @@ istioIngress:
           # IntegrationsNonHttp Ingress
   integrationsNonHttpIngressEnabled: false
   integrationsNonHttpIngressProxyProtocolEnabled: false
+  integrationsNonHttpIngressLogFullRequest: false
+  integrationsNonHttpIngressLogFullResponse: false
   integrationsNonHttpIngress:
     name: integrations-non-http-ingress
     replicaCount: 3
@@ -622,6 +631,7 @@ istioIngress:
                 number: 9411
       consul-ui:
         enabled: false
+        pomeriumProtected: true
         gateways:
         - private-ingress
         http:
@@ -642,6 +652,7 @@ istioIngress:
                 number: 80
       prometheus:
         enabled: false
+        pomeriumProtected: true
         gateways:
         - private-ingress
         http:
@@ -651,6 +662,8 @@ istioIngress:
               port:
                 number: 9090
       kafka-ui:
+        enabled: false
+        pomeriumProtected: true
         gateways:
         - private-ingress
         http:

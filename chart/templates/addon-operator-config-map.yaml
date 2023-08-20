@@ -70,6 +70,9 @@ data:
   monitoringPlatformEnabled: "{{ .Values.modulesConfig.monitoringPlatformEnabled }}"
   monitoringPlatform: {{ print "|\n" (.Values.modulesConfig.monitoringPlatform | toYaml | indent 4) }}
 
+  pomeriumPlatformEnabled: "{{ .Values.modulesConfig.pomeriumPlatformEnabled }}"
+  pomeriumPlatform: {{ print "|\n" (.Values.modulesConfig.pomeriumPlatform | toYaml | indent 4) }}
+  
   postgresPlatformEnabled: "{{ .Values.modulesConfig.postgresPlatformEnabled }}"
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
 

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pomerium-platform
+version: 0.0.1
+dependencies:
+  - name: pomeriumPlatform
+    version: 0.0.1
