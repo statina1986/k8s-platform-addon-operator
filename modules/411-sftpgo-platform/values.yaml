@@ -1,4 +1,11 @@
 sftpgoPlatform:
+  storage:
+    storageClass: gp3
+    storageSize: 10Gi
+  secrets:
+    existingSecretName: sftpgo-shared-secrets
+    forceGenerateServiceSecrets: false
+    extraSharedSecretLabels: []
   sftpgo:
     replicaCount: 1
     sftpd:
@@ -9,17 +16,47 @@ sftpgoPlatform:
       create: false
       annotations: {}
       name: "platform"
-    volumes:
+    envVars:
+      - name: SFTPGO_LOG_LEVEL
+        value: "info"
+      - name: SFTPGO_LOG_UTC_TIME
+        value: "1"
+    envFrom:
+      - secretRef:
+          name: sftpgo-shared-secrets
+    volumes:  
       - name: sftpgo-pvc-volume
         persistentVolumeClaim:
           claimName: sftpgo-pvc
+      - name: trusted-ca-tls
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: trusted-ca
     volumeMounts:
       - name: sftpgo-pvc-volume
         mountPath: /var/lib/sftpgo
+      - name: trusted-ca-tls
+        mountPath: /etc/ssl/certs          
     podSecurityContext:
       runAsUser: 0
       runAsGroup: 0
       fsGroup: 0
     config:
+      httpd:
+        bindings:
+          - oidc:
+              client_id: sftpgo
+              config_url: "http://192.168.1.12:8086/auth/realms/sftpgo"
+              redirect_base_url: "http://192.168.1.50:8080"
+              scopes: 
+                - openid
+                - profile
+                - email
+                - roles
+              username_field: "preferred_username"
+              implicit_roles: true # until we have proper role from Keycloak
       sftpd:
-        enabled_ssh_commands: ["md5sum","sha1sum","sha256sum","cd","pwd","scp","rsync"]
+        enabled_ssh_commands:
+          ["md5sum", "sha1sum", "sha256sum", "cd", "pwd", "scp", "rsync"]
+

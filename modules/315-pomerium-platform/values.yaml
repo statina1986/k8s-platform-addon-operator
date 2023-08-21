@@ -2,16 +2,28 @@
 pomeriumPlatform:
   pomerium:
     baseUrl: CHANGE_IT! qva-very-sit.aws.windtre.it
+    ingress:
+      enabled: false
+    extraVolumeMounts:
+      - name: trusted-ca-tls
+        mountPath: /etc/ssl/certs
+    extraVolumes:
+      - name: trusted-ca-tls
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: trusted-ca
     proxy:
       authenticateServiceUrl: CHANGE_IT! https://auth-qva-very-sit.aws.windtre.it
-    config:
+    config: 
       extraOpts:
         log_level: info
+      existingSharedSecret: pomerium-platform-shared
+      extraSharedSecretLabels: []
       insecure: true
       insecureProxy: true
       generateTLS: false
       generateSigningKey: true
-      # rootDomain: CHANGE_IT! aws.windtre.it
       routes: |
         - from: https://kafka-ui-{{ .Values.baseUrl}}
           to: http://kafka-ui.platform.svc.cluster.local:8080
@@ -40,4 +52,3 @@ pomeriumPlatform:
         provider: oidc
         url: CHANGE_IT! https://auth-qva-very-sit.aws.windtre.it/auth/realms/qvantel
         clientID: "pomerium"
-        clientSecret: CHANGE_IT! "y158KQCP0fkxZCN3k4WVhwK5v5h347hX"

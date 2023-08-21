@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sftpgo-pvc
+spec:
+  storageClassName: {{ .Values.sftpgoPlatform.storage.storageClass }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.sftpgoPlatform.storage.storageSize }}
