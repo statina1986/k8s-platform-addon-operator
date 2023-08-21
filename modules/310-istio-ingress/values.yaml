@@ -5,6 +5,7 @@ istioIngress:
   publicIngressProxyProtocolEnabled: false
   publicIngressLogFullRequest: false
   publicIngressLogFullResponse: false
+  publicIngressBufferHttpRequestSize: 0
   publicIngress:
     name: public-ingress
     replicaCount: 3
@@ -62,6 +63,7 @@ istioIngress:
   privateIngressProxyProtocolEnabled: false
   privateIngressLogFullRequest: false
   privateIngressLogFullResponse: false
+  privateIngressBufferHttpRequestSize: 0
   privateIngress:
     name: private-ingress
     replicaCount: 3
@@ -119,6 +121,7 @@ istioIngress:
   integrationsHttpIngressProxyProtocolEnabled: false
   integrationsHttpIngressLogFullRequest: false
   integrationsHttpIngressLogFullResponse: false
+  integrationsHttpIngressBufferHttpRequestSize: 0
   integrationsHttpIngress:
     name: integrations-http-ingress
     replicaCount: 3
@@ -176,6 +179,7 @@ istioIngress:
   integrationsNonHttpIngressProxyProtocolEnabled: false
   integrationsNonHttpIngressLogFullRequest: false
   integrationsNonHttpIngressLogFullResponse: false
+  integrationsNonHttpIngressBufferHttpRequestSize: 0
   integrationsNonHttpIngress:
     name: integrations-non-http-ingress
     replicaCount: 3
