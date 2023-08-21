@@ -105,6 +105,27 @@ monitoringPlatform:
         auth.anonymous:
           enabled: true
           org_role: Viewer
+#        server:
+#          root_url: https://grafana-qrp-devint-fleet.qvantel.systems/ #set in the target environment values file
+        auth.generic_oauth:
+          enabled: true
+          name: Keycloak-OAuth
+          icon: signin
+          allow_sign_up: true
+          client_id: grafana
+          scopes: openid email profile offline_access roles
+          email_attribute_path: email
+          login_attribute_path: username
+          name_attribute_path: full_name
+#          auth_url: https://auth-qrp-devint-fleet.qvantel.systems/auth/realms/qvantel/protocol/openid-connect/auth # set in the target environment values file
+#          signout_redirect_url: https://auth-qrp-devint-fleet.qvantel.systems/auth/realms/qvantel/protocol/openid-connect/logout # set in the target environment values file
+          token_url: http://qvaa-proxy-80.qvantel.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
+          api_url: http://qvaa-proxy-80.qvantel.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
+          role_attribute_path: contains(realm_access.roles[*], 'grafana_admin') && 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') && 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') && 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') && 'Viewer'
+          allow_assign_grafana_admin: true
+          role_attribute_strict: true
+          use_pkce: true
+      envFromSecret: grafana-keycloak-client-secret
       sidecar:
         datasources:
           enabled: true
