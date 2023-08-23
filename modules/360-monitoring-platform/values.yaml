@@ -64,6 +64,17 @@ monitoringPlatform:
       "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
+  yet-another-cloudwatch-exporter:
+    enabled: false
+    serviceAccount:
+      create: false
+      name: platform
+    extraArgs:
+      scraping-interval: 60
+    serviceMonitor:
+      enabled: true
+      labels:
+        "release": "monitoring-platform"
   prometheus-consul-exporter:
     enabled: true
     serviceMonitor:
