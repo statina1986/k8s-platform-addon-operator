@@ -32,7 +32,7 @@ sftpgoPlatform:
         secret:
           defaultMode: 420
           optional: true
-          secretName: trusted-ca
+          secretName: qvantel-root-ca
     volumeMounts:
       - name: sftpgo-pvc-volume
         mountPath: /var/lib/sftpgo
@@ -47,8 +47,8 @@ sftpgoPlatform:
         bindings:
           - oidc:
               client_id: sftpgo
-              config_url: "http://192.168.1.12:8086/auth/realms/sftpgo"
-              redirect_base_url: "http://192.168.1.50:8080"
+              config_url: "https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel"
+              redirect_base_url: "https://sftp-ui-${values['global']['ingressBaseUrl']}"
               scopes: 
                 - openid
                 - profile

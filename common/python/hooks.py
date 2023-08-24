@@ -122,19 +122,19 @@ class Hook:
             for bc in bc_json:
                 binding = bc['binding']
                 if binding == "onStartup":
-                    self.execute_with_retry(StartupHook(
+                    self.handle_binding(StartupHook(
                         values_json, configValues_json))
                 elif binding == "afterAll":
-                    self.execute_with_retry(AfterAllHook(
+                    self.handle_binding(AfterAllHook(
                         values_json, configValues_json))
                 elif binding == "beforeAll":
-                    self.execute_with_retry(BeforeAllHook(
+                    self.handle_binding(BeforeAllHook(
                         values_json, configValues_json))
                 elif binding == "afterHelm":
-                    self.execute_with_retry(AfterHelmHook(
+                    self.handle_binding(AfterHelmHook(
                         values_json, configValues_json))
                 elif binding == "beforeHelm":
-                    self.execute_with_retry(BeforeHelmHook(
+                    self.handle_binding(BeforeHelmHook(
                         values_json, configValues_json))
                 else:
                     type = bc['type']
