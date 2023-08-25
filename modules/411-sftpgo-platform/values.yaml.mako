@@ -8,6 +8,8 @@ sftpgoPlatform:
     extraSharedSecretLabels: []
   sftpgo:
     replicaCount: 1
+    image:
+      tag: v2.5.4
     sftpd:
       enabled: true
     httpd:
