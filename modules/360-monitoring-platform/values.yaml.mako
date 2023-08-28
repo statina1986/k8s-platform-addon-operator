@@ -89,10 +89,6 @@ monitoringPlatform:
         kubernetesStorage: false
     grafana:
       enabled: true
-      server:
-        root_url: https://grafana-${values['global']['ingressBaseUrl']}
-        auth_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/auth
-        signout_redirect_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/logout
       admin:
         existingSecret: grafana-admin-pass-secret
         passwordKey: grafanaAdminPassword
@@ -120,8 +116,8 @@ monitoringPlatform:
         auth.anonymous:
           enabled: true
           org_role: Viewer
-#        server:
-#          root_url: https://grafana-qrp-devint-fleet.qvantel.systems/ #set in the target environment values file
+        server:
+          root_url: https://grafana-${values['global']['ingressBaseUrl']}
         auth.generic_oauth:
           enabled: true
           name: Keycloak-OAuth
