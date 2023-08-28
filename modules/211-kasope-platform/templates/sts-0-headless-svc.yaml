@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+{{- range .Values.kasopePlatform.clusters.cluster.spec.cassandra.datacenters }}
+metadata:
+  name: cluster-{{ .metadata.name }}-default-sts-0-headless
+  labels:
+    app: cluster-{{ .metadata.name }}-default-sts-0
+spec:
+  clusterIP: None
+  selector:
+    statefulset.kubernetes.io/pod-name: cluster-{{ .metadata.name }}-default-sts-0
+{{- end }}
+  ports:
+  - name: native
+    port: 9042
+    protocol: TCP
+    targetPort: 9042
+  - name: tls-native
+    port: 9142
+    protocol: TCP
+    targetPort: 9142
+

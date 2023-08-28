@@ -1,0 +1,64 @@
+sftpgoPlatform:
+  storage:
+    storageClass: gp3
+    storageSize: 10Gi
+  secrets:
+    existingSecretName: sftpgo-shared-secrets
+    forceGenerateServiceSecrets: false
+    extraSharedSecretLabels: []
+  sftpgo:
+    replicaCount: 1
+    image:
+      tag: v2.5.4
+    sftpd:
+      enabled: true
+    httpd:
+      enabled: true
+    serviceAccount:
+      create: false
+      annotations: {}
+      name: "platform"
+    envVars:
+      - name: SFTPGO_LOG_LEVEL
+        value: "info"
+      - name: SFTPGO_LOG_UTC_TIME
+        value: "1"
+    envFrom:
+      - secretRef:
+          name: sftpgo-shared-secrets
+    volumes:  
+      - name: sftpgo-pvc-volume
+        persistentVolumeClaim:
+          claimName: sftpgo-pvc
+      - name: trusted-ca-tls
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: qvantel-root-ca
+    volumeMounts:
+      - name: sftpgo-pvc-volume
+        mountPath: /var/lib/sftpgo
+      - name: trusted-ca-tls
+        mountPath: /etc/ssl/certs          
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+    config:
+      httpd:
+        bindings:
+          - oidc:
+              client_id: sftpgo
+              config_url: "https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel"
+              redirect_base_url: "https://sftp-ui-${values['global']['ingressBaseUrl']}"
+              scopes: 
+                - openid
+                - profile
+                - email
+                - roles
+              username_field: "preferred_username"
+              implicit_roles: true # until we have proper role from Keycloak
+      sftpd:
+        enabled_ssh_commands:
+          ["md5sum", "sha1sum", "sha256sum", "cd", "pwd", "scp", "rsync"]
+

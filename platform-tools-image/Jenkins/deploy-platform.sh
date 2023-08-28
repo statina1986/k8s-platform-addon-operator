@@ -4,6 +4,7 @@ set -e
 
 #trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
+ADDON_OPERATOR_DEPLOYMENT_NAME=${ADDON_OPERATOR_DEPLOYMENT_NAME:-"addon-operator"}
 KPLAT_RELEASE_NAME=${KPLAT_RELEASE_NAME:-"k8s-platform"}
 KPLAT_NAMESPACE=${KPLAT_NAMESPACE:-"platform"}
 KPLAT_REPO=${KPLAT_REPO:-"https://artifactory.qvantel.net/artifactory/all-helm/"}
@@ -14,7 +15,10 @@ HELM_SET=${HELM_SET:-""}
 TIMEOUT=${TIMEOUT:-"600s"}
 
 
-# Here we deploy platform helm chart with custom configuration from myvalues.yaml and also instruct it to use our locally built image
+START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+PLATFORM_READY=$(kubectl get dss -n platform platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
+
+# Here we deploy platform helm chart with custom configuration
 START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 if [[ -n $KPLAT_CHART_VERSION ]] ; then
     helm upgrade --install $KPLAT_RELEASE_NAME -n $KPLAT_NAMESPACE --create-namespace \
@@ -24,35 +28,44 @@ else
         --repo $KPLAT_REPO $KPLAT_CHART $HELM_VALUES $HELM_SET
 fi
 
-sleep 5
-echo "Waiting for addon-operator pod to be available"
-kubectl wait deployment addon-operator -n $KPLAT_NAMESPACE --for condition=Available=True --timeout=$TIMEOUT
-ADDON_OPERATOR_POD=$(kubectl get pod -n $KPLAT_NAMESPACE -l app=addon-operator -o jsonpath="{.items[0].metadata.name}")
-echo "$ADDON_OPERATOR_POD"
-
-echo "Waiting for addon-operator deployement to start"
-until kubectl wait --for=condition=ready=false dss -n $KPLAT_NAMESPACE platform-deployment --timeout=5s
+DEPLOYMENT_AVAILABLE="False"
+REPLICAS=0
+until [[ ($DEPLOYMENT_AVAILABLE = "True") && ($REPLICAS = "1") ]]
 do
-    if kubectl wait --for=condition=ready=true dss -n $KPLAT_NAMESPACE platform-deployment --timeout=1s ; then 
-        echo "Deployment already in the ready state. Exiting"
-        kubectl logs $ADDON_OPERATOR_POD -n $KPLAT_NAMESPACE --since-time=$START_TIME  
-        exit 0
-    else
-        echo "No deployment status or deployemnt is not yet triggered. Repeat waiting"
-        sleep 1 
-    fi    
+    echo "Waiting for addon-operator deployment to be available"
+    sleep 5
+    DEPLOYMENT_AVAILABLE=$(kubectl get deployment $ADDON_OPERATOR_DEPLOYMENT_NAME -n $KPLAT_NAMESPACE -o jsonpath="{.status.conditions[?(@.type=='Available')].status}")
+    REPLICAS=$(kubectl get deployment $ADDON_OPERATOR_DEPLOYMENT_NAME -n $KPLAT_NAMESPACE -o jsonpath="{.status.replicas}")
 done
 
-echo "Deployment started"
+ADDON_OPERATOR_POD=$(kubectl get pod -n $KPLAT_NAMESPACE -l app=$ADDON_OPERATOR_DEPLOYMENT_NAME -o jsonpath="{.items[0].metadata.name}")
+echo "$ADDON_OPERATOR_POD"
+# kubectl logs $ADDON_OPERATOR_POD -n $KPLAT_NAMESPACE -f --since-time=$START_TIME &
 
-sleep 5
+N=30
+while [[ $PLATFORM_READY = "True" ]]
+do
+    if [[ $N -lt 0 ]] ; then
+        echo "Platform is already in the Ready state. Exiting."        
+        exit 0
+    fi
+    echo "Waiting for platform to restart"
+    sleep 5
+    N=$N-5
+    PLATFORM_READY=$(kubectl get dss -n platform platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
+done
 
-kubectl get dss -n $KPLAT_NAMESPACE platform-deployment
-
-echo "Waiting for addon-operator deployement to complete"
-
-kubectl logs $ADDON_OPERATOR_POD -n $KPLAT_NAMESPACE -f --since-time=$START_TIME &
-
-kubectl wait --for=condition=ready dss -n $KPLAT_NAMESPACE platform-deployment --timeout=$TIMEOUT
+N=1800
+until [[ $PLATFORM_READY = "True" ]]
+do
+    if [[ $N -lt 0 ]] ; then
+        echo "Platform deployment timeout."        
+        exit 1
+    fi
+    echo "Waiting for platform deployment to complete"
+    sleep 5
+    N=$N-5
+    PLATFORM_READY=$(kubectl get dss -n platform platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
+done
 
 echo "Deployment completed"

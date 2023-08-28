@@ -1,0 +1,118 @@
+
+{{- if .Values.istioIngress.privateIngressBufferHttpRequestSize  }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: private-ingress-http-req-buffering-filter
+  namespace: platform
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.http_connection_manager
+              subFilter:
+                name: envoy.filters.http.router
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.buffer
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+            max_request_bytes: {{ .Values.istioIngress.privateIngressBufferHttpRequestSize }}
+  workloadSelector:
+    labels:
+      istio: private-ingress
+{{- end }}
+
+{{- if .Values.istioIngress.publicIngressBufferHttpRequestSize  }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: public-ingress-http-req-buffering-filter
+  namespace: platform
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.http_connection_manager
+              subFilter:
+                name: envoy.filters.http.router
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.buffer
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+            max_request_bytes: {{ .Values.istioIngress.publicIngressBufferHttpRequestSize }}
+  workloadSelector:
+    labels:
+      istio: public-ingress
+{{- end }}
+
+
+{{- if .Values.istioIngress.integrationsHttpIngressBufferHttpRequestSize  }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: integrations-http-ingress-http-req-buffering-filter
+  namespace: platform
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.http_connection_manager
+              subFilter:
+                name: envoy.filters.http.router
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.buffer
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+            max_request_bytes: {{ .Values.istioIngress.integrationsHttpIngressBufferHttpRequestSize }}
+  workloadSelector:
+    labels:
+      istio: integrations-http-ingress
+{{- end }}
+
+
+{{- if .Values.istioIngress.integrationsNonHttpIngressBufferHttpRequestSize  }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: integrations-non-http-ingress-http-req-buffering-filter
+  namespace: platform
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.http_connection_manager
+              subFilter:
+                name: envoy.filters.http.router
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.buffer
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+            max_request_bytes: {{ .Values.istioIngress.integrationsNonHttpIngressBufferHttpRequestSize }}
+  workloadSelector:
+    labels:
+      istio: integrations-non-http-ingress
+{{- end }}

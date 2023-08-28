@@ -1,0 +1,7 @@
+apiVersion: v2
+name: pomeriumPlatform
+version: 0.0.1
+dependencies:
+  - name: pomerium
+    version: "34.0.1"
+    repository: https://helm.pomerium.io

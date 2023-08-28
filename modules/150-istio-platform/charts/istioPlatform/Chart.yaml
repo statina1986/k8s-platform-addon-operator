@@ -9,8 +9,8 @@ dependencies:
 #    version: "1.13.2"
 #    repository: https://istio-release.storage.googleapis.com/charts
   - name: base
-    version: "1.13.2"
+    version: "1.17.2"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   - name: istiod
-    version: "1.13.2"
+    version: "1.17.2"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/

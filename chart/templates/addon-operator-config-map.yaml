@@ -70,6 +70,9 @@ data:
   monitoringPlatformEnabled: "{{ .Values.modulesConfig.monitoringPlatformEnabled }}"
   monitoringPlatform: {{ print "|\n" (.Values.modulesConfig.monitoringPlatform | toYaml | indent 4) }}
 
+  pomeriumPlatformEnabled: "{{ .Values.modulesConfig.pomeriumPlatformEnabled }}"
+  pomeriumPlatform: {{ print "|\n" (.Values.modulesConfig.pomeriumPlatform | toYaml | indent 4) }}
+  
   postgresPlatformEnabled: "{{ .Values.modulesConfig.postgresPlatformEnabled }}"
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
 
@@ -80,6 +83,9 @@ data:
 
   redisPlatformEnabled: "{{ .Values.modulesConfig.redisPlatformEnabled }}"
   redisPlatform: {{ print "|\n" (.Values.modulesConfig.redisPlatform | toYaml | indent 4) }}
+
+  rancherPlatformEnabled: "{{ .Values.modulesConfig.rancherPlatformEnabled }}"
+  rancherPlatform: {{ print "|\n" (.Values.modulesConfig.rancherPlatform | toYaml | indent 4) }}
 
   redisPcdPlatformEnabled: "{{ .Values.modulesConfig.redisPcdPlatformEnabled }}"
   redisPcdPlatform: {{ print "|\n" (.Values.modulesConfig.redisPcdPlatform | toYaml | indent 4) }}

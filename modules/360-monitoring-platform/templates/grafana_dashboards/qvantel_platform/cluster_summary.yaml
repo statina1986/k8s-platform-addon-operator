@@ -2,7 +2,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: grafana-dashboards-cluster
+  name: grafana-dashboards-cluster-summary
   namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'

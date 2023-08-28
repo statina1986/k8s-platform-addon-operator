@@ -378,7 +378,15 @@ elasticsearchPlatform:
             if ([message] =~"audit"
                 or[message] =~"AUDIT"
                 or [log_type] =~ "AUDIT"
-                or [message] =~ "(operationType=)|(type=LOG(IN|OUT))" ) {
+                or [message] =~ "(operationType=)|(type=LOG(IN|OUT))"
+                or "auditbeat" in [tags]
+                or "cassandra" in [tags]
+                or "http_error" in [tags]
+                or "kerberos" in [tags]
+                or "realm" in [tags]
+                or "secure" in [tags]
+                or "messages" in [tags]
+                or "audit" in [tags]) {
                 elasticsearch {
                     user => "elastic"
                     password => "${ELASTICSEARCH_PASSWORD}"
@@ -387,6 +395,22 @@ elasticsearchPlatform:
                     ilm_rollover_alias => "auditalias"
                     ilm_pattern => "{now/d}-0001"
                     ilm_policy => "audit_policy"
+                }
+            }
+            if ("tibco" in [tags]
+                or "bw" in [tags]
+                or "fomplatform" in [tags]
+                or "fom" in [tags]
+                or "bwplatform" in [tags]
+                or "ems" in [tags]) {
+                elasticsearch {
+                    user => "elastic"
+                    password => "${ELASTICSEARCH_PASSWORD}"
+                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    ssl => false
+                    ilm_rollover_alias => "all-tibco"
+                    ilm_pattern => "{now/d}-0001"
+                    ilm_policy => "tibco_policy"
                 }
             }
             if ([kubernetes][namespace] == "platform"

@@ -97,6 +97,10 @@ modulesConfig:
   monitoringPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  pomeriumPlatformEnabled: "false"
+  pomeriumPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   postgresPlatformEnabled: "false"
   postgresPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -121,6 +125,10 @@ modulesConfig:
 
   redisCbsControllerPlatformEnabled: "false"
   redisCbsControllerPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  rancherPlatformEnabled: "false"
+  rancherPlatform:
     configurationRequired: "check module documentation for configuration options"
   
   sftpEnabled: "false"
