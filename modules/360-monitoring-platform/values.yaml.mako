@@ -1,8 +1,8 @@
 monitoringPlatform:
   qvantelMonitoring:
     #Customer variable to control alerts and dashboards deployed per Program
-    programs:
-      mmlyle: false
+    programs:  
+      mmlyle: false 
       sayco: false
       windtre: false
     #Variable to control applications deployed in the environment
@@ -109,8 +109,8 @@ monitoringPlatform:
         auth.anonymous:
           enabled: true
           org_role: Viewer
-#        server:
-#          root_url: https://grafana-qrp-devint-fleet.qvantel.systems/ #set in the target environment values file
+        server:
+          root_url: https://grafana-${values['global']['ingressBaseUrl']}/ # override if needed in the target environment values file
         auth.generic_oauth:
           enabled: true
           name: Keycloak-OAuth
