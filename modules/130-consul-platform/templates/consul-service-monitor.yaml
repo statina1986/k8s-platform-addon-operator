@@ -1,14 +1,9 @@
-{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.consul }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  annotations:
-    meta.helm.sh/release-name: monitoring-platform
-    meta.helm.sh/release-namespace: {{.Release.Namespace}}
-  generation: 1
   labels:
     release: monitoring-platform
-  name: monitoring-platform-consul
+  name: consul-service-monitor
 spec:
   endpoints:
     - honorTimestamps: true
@@ -23,4 +18,3 @@ spec:
       app: consul
       release: consul-platform
       component: server
-{{- end }}
