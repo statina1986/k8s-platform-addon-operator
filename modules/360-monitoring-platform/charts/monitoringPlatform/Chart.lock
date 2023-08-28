@@ -14,5 +14,8 @@ dependencies:
 - name: kafka-lag-exporter
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   version: 0.8.2
-digest: sha256:78db1aba537a76b71822e79e83bc8889880e95bf6889f58df02688ae86dd434b
-generated: "2023-03-13T21:34:40.71314275+02:00"
+- name: yet-another-cloudwatch-exporter
+  repository: https://nerdswords.github.io/helm-charts
+  version: 0.21.0
+digest: sha256:66ddc96f8f09a3ccc0ed8759c2779eef731ed6a8ddb36f1e54494c1bdea7831a
+generated: "2023-08-23T15:55:47.6824131+02:00"
