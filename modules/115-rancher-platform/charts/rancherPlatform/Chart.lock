@@ -1,4 +1,4 @@
 dependencies:
 - name: rancher
   repository: https://artifactory.qvantel.net/artifactory/rancher/rancher
-  version: 2.7.1
+  version: 2.7.5
