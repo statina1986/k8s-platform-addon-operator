@@ -7,3 +7,11 @@ This configuration is also definable in the values by the name of volumePolicy.
 
 When running a upgrade the downtime for elasticsearch will be around 5mins and if this is not acceptable you can temporaly remove some of the elasticsearch nodes from the ECK-operators management. The guide below will walk you trough the process:
 - [k8s-upgrading-eck](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-upgrading-eck.html) This was not tested, because there should not be need for it.
+
+# Filebeat connections to Vector
+
+Filebeat can be utilized on VM nodes, like Tibco nodes, to transmit traffic to the k8s cluster. In order to send the traffic to Vector, it's essential to include an additional host address that points to Vector. Here's an example:
+
+    hosts:
+      - "${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}"
+      - "vector-platform-aggregator.platform.svc.cluster.local:9000"

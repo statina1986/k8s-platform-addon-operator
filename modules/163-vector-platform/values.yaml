@@ -113,4 +113,27 @@ vectorPlatform:
           healthcheck: null
   aggregator:
     enabled: false
-    role: "Aggregator"
+    role: "Stateless-Aggregator"
+    customConfig:
+      api:
+        address: 0.0.0.0:8686
+        enabled: true
+        playground: false
+      data_dir: /vector-data-dir
+      sources:
+        logstash:
+          type: logstash
+          address: 0.0.0.0:9000
+      sinks:
+        loki:
+          type: loki
+          acknowledgements: null
+          compression: snappy
+          encoding:
+            codec: json
+          endpoint: http://loki-write.platform.svc:3100
+          healthcheck: null
+          inputs:
+          - logstash
+          labels:
+            forwarder: logstash
