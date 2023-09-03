@@ -3,9 +3,6 @@
 apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
-  annotations:
-    helm.sh/hook: post-install,post-upgrade,pre-delete
-    helm.sh/hook-weight: "5"
   name: kibana
   namespace: {{.Release.Namespace}}
 spec:

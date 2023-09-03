@@ -6,8 +6,6 @@ metadata:
   name: logsearch
   namespace: {{.Release.Namespace}}
   annotations:
-    helm.sh/hook: post-install,post-upgrade,pre-delete
-    helm.sh/hook-weight: "4"
     eck.k8s.elastic.co/downward-node-labels: "topology.kubernetes.io/zone"
 spec:
   {{- range .Values.elasticsearchPlatform.configElastic }}
@@ -22,8 +20,6 @@ metadata:
   name: logsearch
   namespace: {{.Release.Namespace}}
   annotations:
-    helm.sh/hook: post-install,post-upgrade,pre-delete
-    helm.sh/hook-weight: "4"
     eck.k8s.elastic.co/downward-node-labels: "topology.kubernetes.io/zone"
 spec:
   {{- range .Values.elasticsearchPlatform.configElasticBackup }}

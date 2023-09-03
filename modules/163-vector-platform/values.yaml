@@ -16,24 +16,71 @@ vectorPlatform:
         vector_metrics:
           type: internal_metrics
       transforms:
-        kubernetes_logs_types:
-          type: route
-          inputs:
-            - kubernetes
-          route:
-            qvantel_kubernetes_logs: .kubernetes.pod_namespace == "qvantel"
-            istio_gateway_logs: .kubernetes.pod_annotations."inject.istio.io/templates" == "gateway"
-            loki_logs: .kubernetes.pod_labels."app.kubernetes.io/name" == "loki"
-            vault_logs: .kubernetes.pod_labels."app.kubernetes.io/name" == "vault"
-        qvantel_log_format_transform:
+        vector_logs_transform:
           type: remap
           inputs:
-            - kubernetes_logs_types.qvantel_kubernetes_logs
+            - vector_logs
           source: |
+            .log_source = "vector_logs"
+      sinks:
+        prometheus:
+          type: prometheus_remote_write
+          endpoint: http://monitoring-platform-kube-p-prometheus.platform.svc:9090/api/v1/write
+          inputs:
+            - vector_metrics
+        vector:
+          type: vector
+          inputs:
+            - kubernetes
+            - vector_logs_transform
+          address: vector-platform-aggregator.platform.svc:6000
+  aggregator:
+    enabled: false
+    role: "Aggregator"
+    env:
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: logsearch-es-elastic-user
+            key: elastic
+    customConfig:
+      api:
+        address: 0.0.0.0:8686
+        enabled: true
+        playground: false
+      data_dir: /vector-data-dir
+      sources:
+        vector:
+          type: vector
+          address: 0.0.0.0:6000
+        logstash:
+          type: logstash
+          address: 0.0.0.0:9000
+      transforms:
+        log_types:
+          type: route
+          inputs:
+            - vector
+            - logstash
+          route:
+            qvantel_apps: .kubernetes.pod_namespace == "qvantel"
+            istio_gateway: .kubernetes.pod_annotations."inject.istio.io/templates" == "gateway"
+            loki: .kubernetes.pod_labels."app.kubernetes.io/name" == "loki"
+            vault: .kubernetes.pod_labels."app.kubernetes.io/name" == "vault"
+            tibco: .tags != null && includes(array!(.tags), "tibco")
+            nodes_messages: .tags != null && includes(array!(.tags), "messages")
+            nodes_container: .tags != null && includes(array!(.tags), "container")
+        qvantel_apps_transform:
+          type: remap
+          inputs:
+            - log_types.qvantel_apps
+          source: |
+            .log_source = "qvantel_apps"
             if .message != null && .message != "" {
               structured, err = parse_json(.message)
               if err != null {
                 log("Unable to parse Qvantel JSON: " + string!(.message), level: "error")
+                .parse_error = err
               } else {
                 .qvantel_message = .message
                 . = merge!(., structured)
@@ -46,52 +93,79 @@ vectorPlatform:
                 }                
               }
             }
-        istio_gateway_log_format_transform:
+        qvantel_apps_no_debug:
+          type: filter
+          inputs:
+            - qvantel_apps_transform
+          condition: |
+            .log_level != "DEBUG" && .log_level != "TRACE"
+        istio_gateway_transform:
           type: remap
           inputs:
-            - kubernetes_logs_types.istio_gateway_logs
+            - log_types.istio_gateway
           source: |
+            .log_source = "istio_access_logs"
             structured, err = parse_json(.message)
             if err != null {
               log("Unable to parse Istio Access JSON: " + string!(.message), level: "error")
+              .parse_error = err
             } else {
               .log_type = "AUDIT"
               . = merge!(., structured)
               .timestamp = to_timestamp!(.start_time)
             }
-        vault_log_format_transform:
+        vault_transform:
           type: remap
           inputs:
-            - kubernetes_logs_types.vault_logs
+            - log_types.vault
           source: |
+            .log_source = "vault_audit_logs"
             structured, err = parse_json(.message)
             if err != null {
               log("Unable to parse Vault JSON: " + string!(.message), level: "error")
+              .parse_error = err
             } else {
               .log_type = "AUDIT"
               . = merge!(., structured)
               .timestamp = to_timestamp!(.time)
             }
-      sinks:
-        prometheus:
-          type: prometheus_remote_write
-          endpoint: http://monitoring-platform-kube-p-prometheus.platform.svc:9090/api/v1/write
+        tibco_transform:
+          type: remap
           inputs:
-            - vector_metrics
+            - log_types.tibco
+          source: |
+            .log_source = "tibco_logs"
+        nodes_messages_transform:
+          type: remap
+          inputs:
+            - log_types.nodes_messages
+          source: |
+            .log_source = "nodes_messages"
+        nodes_container_transform:
+          type: remap
+          inputs:
+            - log_types.nodes_container
+          source: |
+            .log_source = "nodes_containers"
+      sinks:
         loki:
           type: loki
           inputs:
-            - vector_logs
-            - kubernetes_logs_types._unmatched
-            - qvantel_log_format_transform
-            - istio_gateway_log_format_transform
-            - vault_log_format_transform
+            - log_types._unmatched
+            - qvantel_apps_transform
+            - istio_gateway_transform
+            - vault_transform
+            - tibco_transform
+            - nodes_messages_transform
+            - nodes_container_transform
           endpoint: http://loki-write.platform.svc:3100
           out_of_order_action: accept
           labels:
-            forwarder: vector
+            forwarder: vector_aggregator
             source_type: |-
               {{ print "{{ source_type }}" }}
+            log_source: |-
+              {{ print "{{ log_source }}" }}
             pod_namespace: |-
               {{ print "{{ kubernetes.pod_namespace }}" }}
             pod_name: |-
@@ -106,34 +180,36 @@ vectorPlatform:
               {{ print "{{ artifact_id }}" }}
             log_level: |-
               {{ print "{{ log_level }}" }}
-          acknowledgements: null
           compression: snappy
           encoding:
             codec: json
-          healthcheck: null
-  aggregator:
-    enabled: false
-    role: "Stateless-Aggregator"
-    customConfig:
-      api:
-        address: 0.0.0.0:8686
-        enabled: true
-        playground: false
-      data_dir: /vector-data-dir
-      sources:
-        logstash:
-          type: logstash
-          address: 0.0.0.0:9000
-      sinks:
-        loki:
-          type: loki
-          acknowledgements: null
-          compression: snappy
-          encoding:
-            codec: json
-          endpoint: http://loki-write.platform.svc:3100
-          healthcheck: null
+        elk_tibco:
+          compression: none
+          endpoint: http://logsearch-es-http.platform.svc:9200
           inputs:
-          - logstash
-          labels:
-            forwarder: logstash
+            - tibco_transform
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: "${ELASTICSEARCH_PASSWORD}"
+            user: elastic
+          bulk:
+            index: "all-tibco-%Y-%m-%d"
+        elk_apps:
+          compression: none
+          endpoint: http://logsearch-es-http.platform.svc:9200
+          inputs:
+            - qvantel_apps_no_debug
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: "${ELASTICSEARCH_PASSWORD}"
+            user: elastic
+          bulk:
+            index: "application-%Y-%m-%d"

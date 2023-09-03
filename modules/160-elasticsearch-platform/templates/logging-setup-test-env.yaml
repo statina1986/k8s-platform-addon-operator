@@ -81,7 +81,7 @@ data:
             "timeFieldName": "@timestamp"
       }
     }'
-    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/ingress* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/all-tibco* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "all-tibco*",
@@ -150,7 +150,7 @@ data:
     }
     EOF
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_template/all-tibco <<EOF
+        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_template/all-tibco_template <<EOF
     {
       "index_patterns": ["all-tibco*"],
       "order": -1,
