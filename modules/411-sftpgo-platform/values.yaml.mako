@@ -45,6 +45,8 @@ sftpgoPlatform:
       runAsGroup: 0
       fsGroup: 0
     config:
+      common:
+        max_per_host_connections: 0 # remove limit, as our MEF publisher do not support it.
       httpd:
         bindings:
           - oidc:

@@ -26,9 +26,9 @@ spec:
     cassandra.datastax.com/cluster: {{ $clusterName }}
     cassandra.datastax.com/datacenter: {{ $dataCenter.metadata.name }}
 {{- if $dataCenter.racks }}
-    statefulset.kubernetes.io/pod-name: {{ $clusterName }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
+    statefulset.kubernetes.io/pod-name: {{ lower $clusterName }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
 {{- else }}    
-    statefulset.kubernetes.io/pod-name: {{ $clusterName }}-{{ $dataCenter.metadata.name }}-default-sts-0
+    statefulset.kubernetes.io/pod-name: {{ lower $clusterName }}-{{ $dataCenter.metadata.name }}-default-sts-0
 {{- end }}
 
 {{- end }}
