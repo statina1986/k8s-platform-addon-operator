@@ -21,15 +21,29 @@ lokiPlatform:
       analytics:
         reporting_enabled: false
       auth_enabled: false
+      commonConfig:
+        % if values['global']['configurationProfile'] == 'dev':
+        replication_factor: 1
+        ring:
+          kvstore:
+            store: inmemory 
+        % endif
+
       compactor:
         working_directory: /var/loki/compactor
+        % if values['global']['configurationProfile'] == 'dev':
+        shared_store: filesystem
+        % else:
         shared_store: s3
+        % endif
         compaction_interval: 10m
         retention_enabled: true
         retention_delete_delay: 2h
         retention_delete_worker_count: 150
+
       chunk_store_config:
         max_look_back_period: 672h
+        
       limits_config:
         enforce_metric_name: false
         reject_old_samples: true
@@ -54,64 +68,73 @@ lokiPlatform:
         # the TSDB index dispatches many more, but each individually smaller, requests.
         # We increase the pending request queue sizes to compensate.
         max_outstanding_requests_per_tenant: 32768
+
       querier:
         # Each `querier` component process runs a number of parallel workers to process queries simultaneously.
         # You may want to adjust this up or down depending on your resource usage
         # (more available cpu and memory can tolerate higher values and vice versa),
         # but we find the most success running at around `16` with tsdb
         max_concurrent: 16
-      rulerConfig:
-        storage:
-          type: local
-          local:
-            directory: /var/loki/rules
-      schema_config:
+
+      schemaConfig:
         configs:
           - from: "2023-01-01"
             index:
               period: 24h
               prefix: index_
-            store: tsdb
-            object_store: s3
+            store: tsdb            
             schema: v12
+            % if values['global']['configurationProfile'] == 'dev':
+            object_store: filesystem
+            % else:
+            object_store: s3
+            % endif
+
       server:
         grpc_server_max_recv_msg_size: 20971520
         grpc_server_max_send_msg_size: 20971520
+      
       storage:
         bucketNames:
-          chunks: <bucket-name> # change this for S3 bucket name
+          chunks: <name-of-your-loki-logs-bucket(s)> ## TO CONFIGURE FOR S3, GCS, etc. Put your logs bucket name here
+          ruler: <name-of-your-loki-ruler-bucket> ## TO CONFIGURE FOR S3, GCS, etc. Put your ruler bucket name here if Ruler is used.
+        s3:             
+          s3: s3://<your-S3-region-here> ## TO CONFIGURE FOR S3. Put your S3 connection here, e.g. s3://eu-south-1
+
+        % if values['global']['configurationProfile'] == 'dev':
+        type: filesystem
+        % else:
         type: s3
+        % endif
+
       storage_config:
-        aws:
-          s3: s3://<region>/<bucket-name> # change this for S3 bucket ARN
-          insecure: false
-          s3forcepathstyle: false
         tsdb_shipper:
-          active_index_directory: /data/tsdb-index
-          cache_location: /data/tsdb-cache
+          % if values['global']['configurationProfile'] == 'dev':
+          shared_store: filesystem
+          % else:
           shared_store: s3
+          % endif
       tracing:
         enabled: false
-    tableManager:
-      enabled: false
-      extraVolumes:
-        - name: data
-          emptyDir: {}
-      extraVolumeMounts:
-        - name: data
-          mountPath: /var/loki
+
     serviceAccount:
       create: false
       name: platform
+
+    gateway:
+      enabled: false
+      replicas: 0
+
+    % if values['global']['configurationProfile'] == 'dev':
+    singleBinary:
+        replicas: 1
+    % else:
     read:
       legacyReadTarget: true
       replicas: 3
     write:
       replicas: 3
-    gateway:
-      enabled: false
-      replicas: 0
+    % endif
+    
   promtail:
     enabled: false
-    config:
-      lokiAddress: http://loki-platform.platform.svc:3100/loki/api/v1/push

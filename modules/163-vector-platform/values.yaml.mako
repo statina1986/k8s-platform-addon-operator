@@ -35,14 +35,16 @@ vectorPlatform:
             - vector_logs_transform
           address: vector-platform-aggregator.platform.svc:6000
   aggregator:
-    enabled: false
+    enabled: true
     role: "Aggregator"
+    % if values['global']['configurationProfile'] != 'dev':
     env:
       - name: ELASTICSEARCH_PASSWORD
         valueFrom:
           secretKeyRef:
             name: logsearch-es-elastic-user
             key: elastic
+    % endif
     customConfig:
       api:
         address: 0.0.0.0:8686
@@ -157,8 +159,12 @@ vectorPlatform:
             - vault_transform
             - tibco_transform
             - nodes_messages_transform
-            - nodes_container_transform
+            - nodes_container_transform            
+          % if values['global']['configurationProfile'] == 'dev':
+          endpoint: http://loki-platform.platform.svc:3100
+          % else:
           endpoint: http://loki-write.platform.svc:3100
+          % endif
           out_of_order_action: accept
           labels:
             forwarder: vector_aggregator
@@ -183,6 +189,7 @@ vectorPlatform:
           compression: snappy
           encoding:
             codec: json
+        % if values['global']['configurationProfile'] != 'dev':
         elk_tibco:
           compression: none
           endpoint: http://logsearch-es-http.platform.svc:9200
@@ -194,7 +201,7 @@ vectorPlatform:
             verify_hostname: false
           auth:
             strategy: basic
-            password: "${ELASTICSEARCH_PASSWORD}"
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
             user: elastic
           bulk:
             index: "all-tibco-%Y-%m-%d"
@@ -209,7 +216,8 @@ vectorPlatform:
             verify_hostname: false
           auth:
             strategy: basic
-            password: "${ELASTICSEARCH_PASSWORD}"
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
             user: elastic
           bulk:
             index: "application-%Y-%m-%d"
+        % endif

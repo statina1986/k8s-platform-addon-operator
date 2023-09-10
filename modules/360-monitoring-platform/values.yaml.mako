@@ -114,7 +114,12 @@ monitoringPlatform:
           datasources:
             - name: Loki
               type: loki
+              % if values['global']['configurationProfile'] == 'dev':
+              url: http://loki-platform.platform.svc:3100
+              % else:
               url: http://loki-read.platform.svc:3100
+              % endif
+              
       grafana.ini:
         auth.anonymous:
           enabled: true

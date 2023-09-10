@@ -74,20 +74,6 @@ function helm::run_helm_dependency_update_hook() {
   fi
 }
 
-function common::ensure_resources() {
-  set -e
-  if [[ $1 == "--config" ]] ; then
-    yamls=(${0%/*}/../resources/*)
-    for val in ${yamls[@]}; do
-      kubectl apply --server-side --force-conflicts=true -f $val &> ensure_resources.log || { 
-          cat ensure_resources.log && exit 1 
-      }
-    done
-    echo '{"configVersion":"v1", "onStartup": 1}'
-  else
-    cat ensure_resources.log
-  fi
-}
 
 function kubectl::replace_or_create() {
   object=$(cat)
