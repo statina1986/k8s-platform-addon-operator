@@ -53,7 +53,7 @@ lokiPlatform:
         split_queries_by_interval: 15m
         ingestion_rate_mb: 100
         ingestion_burst_size_mb: 200
-        per_stream_rate_limit: 10MB
+        per_stream_rate_limit: 100MB
         per_stream_rate_limit_burst: 200MB
         retention_period: 744h # 31 days
         retention_stream:
