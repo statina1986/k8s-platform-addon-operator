@@ -91,13 +91,14 @@ lokiPlatform:
             % endif
 
       server:
-        grpc_server_max_recv_msg_size: 20971520
-        grpc_server_max_send_msg_size: 20971520
+        http_server_write_timeout: 310s
+        http_server_read_timeout: 310s
+        grpc_server_max_recv_msg_size: 104857600  # 100 Mb
+        grpc_server_max_send_msg_size: 104857600  # 100 Mb
       
       storage:
         bucketNames:
           chunks: <name-of-your-loki-logs-bucket(s)> ## TO CONFIGURE FOR S3, GCS, etc. Put your logs bucket name here
-          ruler: <name-of-your-loki-ruler-bucket> ## TO CONFIGURE FOR S3, GCS, etc. Put your ruler bucket name here if Ruler is used.
         s3:             
           s3: s3://<your-S3-region-here> ## TO CONFIGURE FOR S3. Put your S3 connection here, e.g. s3://eu-south-1
 
