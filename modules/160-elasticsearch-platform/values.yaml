@@ -43,9 +43,7 @@ elasticsearchPlatform:
         config:
           node.attr.zone: ${ZONE}
           cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
-          node.attr.data: warm
-          node.attr.type: warm
-          node.roles: ["master", "data", "ingest", "data_hot", "data_warm"]
+          node.roles: ["master", "data", "ingest", "data_hot"]
           node.store.allow_mmap: false
           logger.org.elasticsearch: info
         volumeClaimTemplates:
