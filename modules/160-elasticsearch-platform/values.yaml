@@ -322,7 +322,7 @@ elasticsearchPlatform:
           selfSignedCertificate:
             disabled: true
       version: 7.16.2
-      count: 3
+      count: 1
       elasticsearchRef:
         name: logsearch
         namespace: platform
