@@ -126,6 +126,8 @@ monitoringPlatform:
           org_role: Viewer
         server:
           root_url: https://grafana-${values['global']['ingressBaseUrl']}
+        users:
+          viewers_can_edit: true
         auth.generic_oauth:
           enabled: true
           name: Keycloak-OAuth
