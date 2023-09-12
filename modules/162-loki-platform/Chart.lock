@@ -1,0 +1,6 @@
+dependencies:
+- name: lokiPlatform
+  repository: ""
+  version: 0.0.1
+digest: sha256:ee793951eb1f0973b84cbc1b342d8ab6df5cd8b2cb9e5826b6bd7dd044cc129c
+generated: "2023-09-12T08:20:58.834537173+03:00"

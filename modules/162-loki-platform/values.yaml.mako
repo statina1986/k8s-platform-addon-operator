@@ -11,16 +11,24 @@ lokiPlatform:
         grafanaAgent:
           installOperator: false
       dashboards:
-        enabled: false
+        annotations:
+          k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
       serviceMonitor:
         labels:
           release: monitoring-platform
       rules:
-        enabled: false
+        labels:
+          release: monitoring-platform
     loki:
       analytics:
         reporting_enabled: false
       auth_enabled: false
+      structuredConfig:
+        ruler:
+          storage:
+            type: local
+            local:
+              directory: /var/loki/ruler
       commonConfig:
         % if values['global']['configurationProfile'] == 'dev':
         replication_factor: 1

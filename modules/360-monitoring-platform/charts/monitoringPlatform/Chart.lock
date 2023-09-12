@@ -1,7 +1,7 @@
 dependencies:
 - name: kube-prometheus-stack
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 43.0.0
+  version: 51.0.0
 - name: prometheus-blackbox-exporter
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   version: 7.1.3
@@ -17,5 +17,5 @@ dependencies:
 - name: yet-another-cloudwatch-exporter
   repository: https://nerdswords.github.io/helm-charts
   version: 0.21.0
-digest: sha256:66ddc96f8f09a3ccc0ed8759c2779eef731ed6a8ddb36f1e54494c1bdea7831a
-generated: "2023-08-23T15:55:47.6824131+02:00"
+digest: sha256:b15e9c19bee3acf76b685bd49747e9365d3e5c77cb409c1bd764688b30d0619e
+generated: "2023-09-12T09:14:23.488087428+03:00"

@@ -20,7 +20,7 @@ dependencies:
 #    repository: "https://prometheus-community.github.io/helm-charts"
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
-    version: "~43.0.0"
+    version: "~51.0.0"
     repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
   - name: prometheus-blackbox-exporter
     condition: prometheus-blackbox-exporter.enabled
