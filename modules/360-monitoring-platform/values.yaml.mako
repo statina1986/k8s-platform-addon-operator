@@ -178,10 +178,12 @@ monitoringPlatform:
               resources:
                 requests:
                   storage: 50Gi
+        % if values['global']['configurationProfile'] != 'dev':
         additionalAlertManagerConfigs:
           - static_configs:
               - targets:
                   - "alertmanager.alert.k8s.qvantel.net:9096"
+        % endif
         additionalScrapeConfigs: |
           - job_name: 'kubernetes-pods'
             kubernetes_sd_configs:
