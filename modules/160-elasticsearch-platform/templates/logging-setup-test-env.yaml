@@ -324,7 +324,7 @@ data:
       "actions": [
         {
           "add": {
-            "index": "application-date*",
+            "index": "application*",
             "alias": "applicationalias"
           }
         }
