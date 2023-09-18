@@ -317,35 +317,6 @@ data:
       }
     }
     EOF
-    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data
-    @- \
-        http://logsearch-es-http.platform.svc:9200/_aliases?pretty <<EOF
-    {
-      "actions": [
-        {
-          "add": {
-            "index": "application*",
-            "alias": "applicationalias"
-          }
-        }
-      ]
-    }
-
-    EOF
-    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data
-    @- \
-        http://logsearch-es-http.platform.svc:9200/_aliases?pretty <<EOF
-    {
-      "actions": [
-        {
-          "add": {
-            "index": "all-tibco*",
-            "alias": "tibcoalias"
-          }
-        }
-      ]
-    }
-    EOF
 
 ---
 apiVersion: v1
