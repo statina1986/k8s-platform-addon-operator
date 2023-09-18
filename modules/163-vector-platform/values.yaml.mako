@@ -22,6 +22,12 @@ vectorPlatform:
             - vector_logs
           source: |
             .log_source = "vector_logs"
+        vector_metrics_transform:
+          type: remap
+          inputs: 
+          - vector_metrics
+          source: |
+            del(.tags.file)
       sinks:
         prometheus:
           type: prometheus_remote_write
