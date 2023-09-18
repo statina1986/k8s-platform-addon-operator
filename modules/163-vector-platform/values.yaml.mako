@@ -30,10 +30,10 @@ vectorPlatform:
             del(.tags.file)
       sinks:
         prometheus:
-          type: prometheus_remote_write
-          endpoint: http://monitoring-platform-kube-p-prometheus.platform.svc:9090/api/v1/write
+          type: prometheus_exporter
+          address: 0.0.0.0:9598
           inputs:
-            - vector_metrics
+            - vector_metrics_transform
         vector:
           type: vector
           inputs:
@@ -64,7 +64,23 @@ vectorPlatform:
         logstash:
           type: logstash
           address: 0.0.0.0:9000
+        vector_metrics:
+          type: internal_metrics
+        vector_logs:
+          type: internal_logs
       transforms:
+        vector_logs_transform:
+          type: remap
+          inputs:
+            - vector_logs
+          source: |
+            .log_source = "vector_logs"
+        vector_metrics_transform:
+          type: remap
+          inputs: 
+          - vector_metrics
+          source: |
+            del(.tags.file)
         log_types:
           type: route
           inputs:
@@ -156,6 +172,11 @@ vectorPlatform:
           source: |
             .log_source = "nodes_containers"
       sinks:
+        prometheus:
+          type: prometheus_exporter
+          address: 0.0.0.0:9598
+          inputs:
+            - vector_metrics_transform
         loki:
           type: loki
           inputs:
@@ -165,7 +186,8 @@ vectorPlatform:
             - vault_transform
             - tibco_transform
             - nodes_messages_transform
-            - nodes_container_transform            
+            - nodes_container_transform
+            - vector_logs_transform      
           % if values['global']['configurationProfile'] == 'dev':
           endpoint: http://loki-platform.platform.svc:3100
           % else:
@@ -191,6 +213,8 @@ vectorPlatform:
             artifact_id: |-
               {{ print "{{ artifact_id }}" }}
             log_level: |-
+              {{ print "{{ log_level }}" }}
+            level: |-
               {{ print "{{ log_level }}" }}
           compression: snappy
           encoding:

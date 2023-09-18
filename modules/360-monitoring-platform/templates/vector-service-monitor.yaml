@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: monitoring-platform
+  name: vector-agent-service-monitor
+spec:
+  endpoints:
+    - honorTimestamps: true
+      path: '/metrics'
+      scheme: http
+      scrapeTimeout: 30s
+      params:
+        format: ['prometheus']
+      targetPort: 9598
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vector-platform
+      app.kubernetes.io/name: agent
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: monitoring-platform
+  name: vector-aggregator-service-monitor
+spec:
+  endpoints:
+    - honorTimestamps: true
+      path: '/metrics'
+      scheme: http
+      scrapeTimeout: 30s
+      params:
+        format: ['prometheus']
+      targetPort: 9598
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vector-platform
+      app.kubernetes.io/name: aggregator

@@ -18,7 +18,7 @@ lokiPlatform:
           release: monitoring-platform
       rules:
         labels:
-          release: monitoring-platform
+          release: monitoring-platform    
     loki:
       analytics:
         reporting_enabled: false
@@ -143,6 +143,8 @@ lokiPlatform:
       replicas: 3
     write:
       replicas: 3
+      persistence:
+        size: 50Gi
     % endif
     
   promtail:

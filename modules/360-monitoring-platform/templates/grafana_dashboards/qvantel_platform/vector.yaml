@@ -132,7 +132,7 @@ data:
               "format": "time_series",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{ "{{host}}" }}",
+              "legendFormat": "{{ "{{component_name}} : {{host}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -231,7 +231,7 @@ data:
               "expr": "sum(rate(vector_events_out_total{component_kind=\"sink\"}[$__rate_interval])) by (component_name, host)",
               "format": "time_series",
               "interval": "",
-              "legendFormat": "{{ "{{component_name}}:{{host}}" }}",
+              "legendFormat": "{{ "{{component_name}} : {{host}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -323,7 +323,7 @@ data:
               },
               "editorMode": "code",
               "expr": "sum(rate(vector_http_client_requests_sent_total[$__rate_interval])) by (component_name, host)",
-              "legendFormat": "{{ "{{component_name}}:{{host}}" }}",
+              "legendFormat": "{{ "{{component_name}} : {{host}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -415,7 +415,7 @@ data:
               },
               "editorMode": "code",
               "expr": "rate(vector_processed_events_total{component_kind=\"source\",component_name!=\"metrics_id\"}[5m])",
-              "legendFormat": "{{ "{{component_name}}:{{host}}" }}",
+              "legendFormat": "{{ "{{component_name}} : {{host}}" }}",
               "range": true,
               "refId": "A"
             }

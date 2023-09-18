@@ -124,6 +124,8 @@ monitoringPlatform:
         auth.anonymous:
           enabled: true
           org_role: Viewer
+        dataproxy:
+          timeout: 310
         server:
           root_url: https://grafana-${values['global']['ingressBaseUrl']}
         users:
