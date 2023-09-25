@@ -4,8 +4,29 @@ istioPlatform:
     global:
       istioNamespace: platform
   istiod:
+    pilot:
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              app: istiod
+              istio: pilot
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes with 2 replicas
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      autoscaleMin: 2     
+      replicaCount: 2
+      % endif 
     global:
       istioNamespace: platform
+      logAsJson: true
     meshConfig:
       defaultHttpRetryPolicy:
         retries:

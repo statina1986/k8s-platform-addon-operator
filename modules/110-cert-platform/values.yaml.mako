@@ -4,6 +4,16 @@ certPlatform:
     serviceAccount:
       create: false
       name: platform
+    global:
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      % endif
   issuers: []
   clusterIssuers:
     # This issuer is used to generate self-signed certificate for Simple Qvantel CA
@@ -27,14 +37,14 @@ certPlatform:
           privateKeySecretRef:
             name: letsencrypt-platform-dns
           solvers:
-          - selector:
-              dnsZones:
-                - "qvantel.systems"
-            dns01:
-              route53:
-                region: eu-central-1
-                hostedZoneID: ZJ7W7ERY57J33
-                role: "arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account"
+            - selector:
+                dnsZones:
+                  - "qvantel.systems"
+              dns01:
+                route53:
+                  region: eu-central-1
+                  hostedZoneID: ZJ7W7ERY57J33
+                  role: "arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account"
       # This issuer is used for *.qvantel.solutions certificates issuing with letsencrypt
     qvantel-dot-solutions:
       enabled: false
@@ -45,14 +55,14 @@ certPlatform:
           privateKeySecretRef:
             name: qvantel-dot-solutions-private-key-letsencrypt
           solvers:
-          - selector:
-              dnsZones:
-                - "qvantel.solutions"
-            dns01:
-              route53:
-                region: eu-central-1
-                hostedZoneID: ZPXWBK7RK86EX
-                role: "arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"
+            - selector:
+                dnsZones:
+                  - "qvantel.solutions"
+              dns01:
+                route53:
+                  region: eu-central-1
+                  hostedZoneID: ZPXWBK7RK86EX
+                  role: "arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"
   certificates:
     # This is the root CA certificate for Simple Qvantel CA
     qvantel-ca:
@@ -72,7 +82,7 @@ certPlatform:
         issuerRef:
           name: qvantel-selfsigned-issuer
           kind: ClusterIssuer
-          group: cert-manager.io          
+          group: cert-manager.io
     # This is the wildcard certificate issued for *.qvantel.systems name
     qvantel-dot-systems-wildcard:
       enabled: false
@@ -81,8 +91,8 @@ certPlatform:
         privateKey:
           rotationPolicy: Always
         dnsNames:
-        - '*.qvantel.systems'
-        - qvantel.systems
+          - "*.qvantel.systems"
+          - qvantel.systems
         issuerRef:
           name: qvantel-dot-systems
           kind: ClusterIssuer
@@ -96,8 +106,8 @@ certPlatform:
         privateKey:
           rotationPolicy: Always
         dnsNames:
-        - '*.qvantel.solutions'
-        - qvantel.solutions
+          - "*.qvantel.solutions"
+          - qvantel.solutions
         issuerRef:
           name: qvantel-dot-solutions
           kind: ClusterIssuer

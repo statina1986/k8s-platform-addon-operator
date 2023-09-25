@@ -7,6 +7,15 @@ kafkaPlatform:
       requests:
         memory: 384Mi
         cpu: 200m
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
   clusters:
     kafka-cluster:
       enabled: true
@@ -52,6 +61,11 @@ kafkaPlatform:
             topologyKey: topology.kubernetes.io/zone
           template:
             pod:
+              tolerations:
+                - key: "dedicated-nodes"
+                  value: "platform-masters"
+                  operator: "Equal"
+                  effect: "NoSchedule"
               affinity:
                 podAntiAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:
@@ -66,6 +80,16 @@ kafkaPlatform:
                             values:
                               - kafka-cluster-kafka
                       topologyKey: kubernetes.io/hostname
+                % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: dedicated-nodes
+                          operator: In
+                          values:
+                          - platform-masters
+                % endif
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -94,6 +118,11 @@ kafkaPlatform:
                 key: zookeeper-metrics-config.yml
           template:
             pod:
+              tolerations:
+                - key: "dedicated-nodes"
+                  value: "platform-masters"
+                  operator: "Equal"
+                  effect: "NoSchedule"              
               affinity:
                 podAntiAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:
@@ -108,6 +137,16 @@ kafkaPlatform:
                             values:
                               - kafka-cluster-zookeeper
                       topologyKey: kubernetes.io/hostname
+                % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: dedicated-nodes
+                          operator: In
+                          values:
+                          - platform-masters
+                % endif
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -119,6 +158,50 @@ kafkaPlatform:
         entityOperator:
           topicOperator: {}
           userOperator: {}
+          template:
+            pod:
+              tolerations:
+                - key: "dedicated-nodes"
+                  value: "platform-masters"
+                  operator: "Equal"
+                  effect: "NoSchedule"              
+              % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+              affinity:                
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: dedicated-nodes
+                          operator: In
+                          values:
+                          - platform-masters
+              % endif
         kafkaExporter:
+          template:
+            pod:
+              tolerations:
+                - key: "dedicated-nodes"
+                  value: "platform-masters"
+                  operator: "Equal"
+                  effect: "NoSchedule"              
+              % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+              affinity:                
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: dedicated-nodes
+                          operator: In
+                          values:
+                          - platform-masters
+              % endif
+              topologySpreadConstraints:
+                - maxSkew: 1
+                  topologyKey: topology.kubernetes.io/zone
+                  whenUnsatisfiable: DoNotSchedule
+                  labelSelector:
+                    matchLabels:
+                      strimzi.io/cluster: kafka-cluster
+                      strimzi.io/name: kafka-cluster-zookeeper
           topicRegex: ".*"
           groupRegex: ".*"

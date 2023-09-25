@@ -2,6 +2,8 @@ vectorPlatform:
   agent:
     role: "Agent"
     enabled: true
+    tolerations:
+        - operator: Exists
     customConfig:
       data_dir: /vector-data-dir
       api:
@@ -43,6 +45,20 @@ vectorPlatform:
   aggregator:
     enabled: true
     role: "Aggregator"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    replicas: 3
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    resources:
+      requests:
+        cpu: 1
+        memory: 2Gi
+    % endif
+    tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
     % if values['global']['configurationProfile'] != 'dev':
     env:
       - name: ELASTICSEARCH_PASSWORD

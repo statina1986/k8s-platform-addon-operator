@@ -1,12 +1,12 @@
 dependencies:
 - name: aws-load-balancer-controller
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.4.7
+  version: 1.6.1
 - name: aws-efs-csi-driver
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 2.3.6
+  version: 2.5.0
 - name: aws-ebs-csi-driver
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 2.16.0
-digest: sha256:5dad28e380ec4974009d242623912ac1aa754b8142b1da211fc0a5949c27f275
-generated: "2023-03-13T21:24:04.864672347+02:00"
+  version: 2.23.0
+digest: sha256:4e67c37440c5db51758717f63b9cb796271ed3dad6bcc8a8a80765c80fdb43ec
+generated: "2023-09-23T01:51:58.859237891+03:00"

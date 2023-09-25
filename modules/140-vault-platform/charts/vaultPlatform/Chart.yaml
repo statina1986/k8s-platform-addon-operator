@@ -9,7 +9,7 @@ dependencies:
 #    version: 1.15.6
 #    repository: https://kubernetes-charts.banzaicloud.com
   - name: vault-secrets-webhook
-    version: 1.18.2
+    version: 1.20.0
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   - name: vault
     version: 0.23.0

@@ -29,6 +29,15 @@ monitoringPlatform:
       mongo: false
   x509-certificate-exporter:
     enabled: true
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
     secretsExporter:
       podExtraLabels:
         "release": "monitoring-platform"
@@ -46,6 +55,15 @@ monitoringPlatform:
         "release": "monitoring-platform"
   kafka-lag-exporter:
     enabled: true
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
     clusters:
       - name: "kafka-cluster"
         bootstrapBrokers: kafka-cluster-kafka-bootstrap.platform.svc:9092
@@ -64,8 +82,26 @@ monitoringPlatform:
       "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
   yet-another-cloudwatch-exporter:
     enabled: false
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
     serviceAccount:
       create: false
       name: platform
@@ -77,6 +113,15 @@ monitoringPlatform:
         "release": "monitoring-platform"
   prometheus-consul-exporter:
     enabled: true
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
     consulServer: consul-consul-server:8500
     serviceMonitor:
       labels: 
@@ -86,12 +131,30 @@ monitoringPlatform:
       telemetryPath: /metrics
   kube-prometheus-stack:
     enabled: true
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
     defaultRules:
       create: true
       rules:
         kubernetesStorage: false
     grafana:
       enabled: true
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      % endif
       admin:
         existingSecret: grafana-admin-pass-secret
         passwordKey: grafanaAdminPassword
@@ -166,6 +229,15 @@ monitoringPlatform:
             foldersFromFilesStructure: true
     prometheus:
       enabled: true
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      % endif
       prometheusSpec:
         retention: 12d
         externalLabels:
@@ -174,6 +246,15 @@ monitoringPlatform:
           datacenter: need-to-define
           environment: need-to-define
         enableRemoteWriteReceiver: true
+        tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+        % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+        nodeSelector:
+          dedicated-nodes: platform-masters
+        % endif
         storageSpec:
           volumeClaimTemplate:
             spec:

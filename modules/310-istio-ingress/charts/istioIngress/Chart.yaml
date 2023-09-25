@@ -25,20 +25,20 @@ dependencies:
   - name: gateway
     alias: privateIngress
     condition: privateIngressEnabled
-    version: "1.17.2"
+    version: "1.17.6"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   - name: gateway
     alias: publicIngress
     condition: publicIngressEnabled
-    version: "1.17.2"
+    version: "1.17.6"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   - name: gateway
     alias: integrationsHttpIngress
     condition: integrationsHttpIngressEnabled
-    version: "1.17.2"
+    version: "1.17.6"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
   - name: gateway
     alias: integrationsNonHttpIngress
     condition: integrationsNonHttpIngressEnabled
-    version: "1.17.2"
+    version: "1.17.6"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/

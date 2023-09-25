@@ -13,6 +13,15 @@ elasticsearchPlatform:
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
     createClusterScopedResources: true
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
   logstashEnabled: true
   filebeatEnabled: true
   smartsearch:
@@ -41,7 +50,7 @@ elasticsearchPlatform:
       - name: logsearch
         count: 1
         config:
-          node.attr.zone: ${ZONE}
+          node.attr.zone: <%text>${ZONE}</%text>
           cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
           node.roles: ["master", "data", "ingest", "data_hot"]
           node.store.allow_mmap: false
@@ -75,6 +84,15 @@ elasticsearchPlatform:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+            tolerations:
+              - key: "dedicated-nodes"
+                value: "platform-masters"
+                operator: "Equal"
+                effect: "NoSchedule"              
+            % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+            nodeSelector:
+              dedicated-nodes: platform-masters
+            % endif
             topologySpreadConstraints:
               - maxSkew: 1
                 topologyKey: topology.kubernetes.io/zone
@@ -83,53 +101,6 @@ elasticsearchPlatform:
                   matchLabels:
                     elasticsearch.k8s.elastic.co/cluster-name: logsearch
                     elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
-      # - name: logsearch-cold
-      #   count: 1
-      #   config:
-      #     node.attr.zone: ${ZONE}
-      #     cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
-      #     node.attr.data: cold
-      #     node.attr.type: cold
-      #     node.roles: ["data_cold", "data_content"]
-      #     node.store.allow_mmap: false
-      #     logger.org.elasticsearch: info
-      #   volumeClaimTemplates:
-      #     - metadata:
-      #         name: elasticsearch-data
-      #       spec:
-      #         accessModes:
-      #           - ReadWriteOnce
-      #         resources:
-      #           requests:
-      #             storage: 500Gi
-      #   podTemplate:
-      #     spec:
-      #       initContainers:
-      #       - name: sysctl
-      #         securityContext:
-      #           privileged: true
-      #           runAsUser: 0
-      #         command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
-      #       containers:
-      #         - name: elasticsearch
-      #           image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
-      #           resources:
-      #             requests:
-      #               memory: 2000Mi
-      #               cpu: "1"
-      #           env:
-      #           - name: ZONE
-      #             valueFrom:
-      #               fieldRef:
-      #                 fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-      #       topologySpreadConstraints:
-      #         - maxSkew: 1
-      #           topologyKey: topology.kubernetes.io/zone
-      #           whenUnsatisfiable: DoNotSchedule
-      #           labelSelector:
-      #             matchLabels:
-      #               elasticsearch.k8s.elastic.co/cluster-name: logsearch
-      #               elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
       podDisruptionBudget:
         spec:
           minAvailable: 1
@@ -149,7 +120,7 @@ elasticsearchPlatform:
       - name: logsearch
         count: 3
         config:
-          node.attr.zone: ${ZONE}
+          node.attr.zone: <%text>${ZONE}</%text>
           cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
           node.attr.data: warm
           node.attr.type: warm
@@ -230,7 +201,7 @@ elasticsearchPlatform:
       - name: logsearch-cold
         count: 1
         config:
-          node.attr.zone: ${ZONE}
+          node.attr.zone: <%text>${ZONE}</%text>
           cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
           node.attr.data: cold
           node.attr.type: cold
@@ -335,6 +306,15 @@ elasticsearchPlatform:
                 requests:
                   memory: 0.5Gi
                   cpu: 0.1
+          % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+          nodeSelector:
+            dedicated-nodes: platform-masters
+          % endif
+          tolerations:
+            - key: "dedicated-nodes"
+              value: "platform-masters"
+              operator: "Equal"
+              effect: "NoSchedule"
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -351,9 +331,9 @@ elasticsearchPlatform:
     logstashConfig: 
       logstash.yml: |
         http.host: 0.0.0.0
-        xpack.monitoring.elasticsearch.hosts: ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+        xpack.monitoring.elasticsearch.hosts: <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
         xpack.monitoring.elasticsearch.username: 'elastic'
-        xpack.monitoring.elasticsearch.password: '${ELASTICSEARCH_PASSWORD}'
+        xpack.monitoring.elasticsearch.password: <%text>'${ELASTICSEARCH_PASSWORD}'</%text>
         pipeline.ecs_compatibility: disabled
       log4j2.properties: |
         logger.logstashpipeline.name = logstash.filters.json
@@ -387,8 +367,8 @@ elasticsearchPlatform:
                 or "audit" in [tags]) {
                 elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "auditalias"
                     ilm_pattern => "{now/d}-0001"
@@ -403,8 +383,8 @@ elasticsearchPlatform:
                 or "ems" in [tags]) {
                 elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "all-tibco"
                     ilm_pattern => "{now/d}-0001"
@@ -416,8 +396,8 @@ elasticsearchPlatform:
                 or[kubernetes][namespace] == "kube-system") {
                 elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "platformalias"
                     ilm_pattern => "{now/d}-0001"
@@ -427,8 +407,8 @@ elasticsearchPlatform:
             else if ([kubernetes][namespace] == "qvantel") {
                 elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "applicationalias"
                     ilm_pattern => "{now/d}-0001"
@@ -439,8 +419,8 @@ elasticsearchPlatform:
                 or[kubernetes][namespace] == "istio-system") {
                 elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "ingressalias"
                     ilm_pattern => "{now/d}-0001"
@@ -450,8 +430,8 @@ elasticsearchPlatform:
             if ("rbs" in [tags]) {
                     elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "applicationalias"
                     ilm_pattern => "{now/d}-0001"
@@ -469,8 +449,8 @@ elasticsearchPlatform:
                 and[message] !~ "(operationType=)|(type=LOG(IN|OUT))") {
                 elasticsearch {
                     user => "elastic"
-                    password => "${ELASTICSEARCH_PASSWORD}"
-                    hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+                    password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
+                    hosts => <%text>["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]</%text>
                     ssl => false
                     ilm_rollover_alias => "undecidedalias"
                     ilm_pattern => "{now/d}-0001"
@@ -551,7 +531,7 @@ elasticsearchPlatform:
               - /var/log/containers/*.log
             processors:
               - add_kubernetes_metadata:
-                  host: ${NODE_NAME}
+                  host: <%text>${NODE_NAME}</%text>
                   matchers:
                   - logs_path:
                       logs_path: "/var/log/containers/"
@@ -562,7 +542,7 @@ elasticsearchPlatform:
           output.logstash:
             loadbalance: false
             bulk_max_size: 1024
-            hosts: ['${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']
+            hosts: <%text>['${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
             logging.level: info
       resources:
         requests:

@@ -9,6 +9,22 @@ istioIngress:
   publicIngress:
     name: public-ingress
     replicaCount: 3
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            istio: public-ingress
     autoscaling:
       enabled: true
       minReplicas: 3
@@ -67,6 +83,22 @@ istioIngress:
   privateIngress:
     name: private-ingress
     replicaCount: 3
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            istio: private-ingress
     autoscaling:
       enabled: true
       minReplicas: 3
@@ -125,6 +157,22 @@ istioIngress:
   integrationsHttpIngress:
     name: integrations-http-ingress
     replicaCount: 3
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            istio: integrations-http-ingress
     autoscaling:
       enabled: true
       minReplicas: 3
@@ -183,6 +231,22 @@ istioIngress:
   integrationsNonHttpIngress:
     name: integrations-non-http-ingress
     replicaCount: 3
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            istio: integrations-non-http-ingress
     autoscaling:
       enabled: true
       minReplicas: 3

@@ -15,14 +15,14 @@ dependencies:
 #    repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver/
 #    condition: aws-ebs-csi-driver-enabled
   - name: aws-load-balancer-controller
-    version: "1.4.7"
+    version: "1.6.1"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     condition: aws-load-balancer-controller-enabled
   - name: aws-efs-csi-driver
-    version: "2.3.6"
+    version: "2.5.0"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     condition: aws-efs-csi-driver-enabled
   - name: aws-ebs-csi-driver
-    version: "2.16.0"
+    version: "2.23.0"
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     condition: aws-ebs-csi-driver-enabled

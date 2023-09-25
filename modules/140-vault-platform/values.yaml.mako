@@ -1,6 +1,24 @@
 # vaultPlatformNamespace: vault
 vaultPlatform:
   autoUnseal: false
+  vault-secrets-webhook:
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    topologySpreadConstraints:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: vault-platform
+            app.kubernetes.io/name: vault
+        maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
   vault:
     global:
       enabled: true
@@ -9,7 +27,34 @@ vaultPlatform:
     server:
       serviceAccount:
         create: false
-        name: platform  
+        name: platform
+      affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "vault.name" . }}
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
+                  component: server
+              topologyKey: kubernetes.io/hostname
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+      nodeSelector: |
+        dedicated-nodes: platform-masters
+      % endif
+      tolerations: |
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+      topologySpreadConstraints: |
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: vault-platform
+              app.kubernetes.io/name: vault
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+      resources:
       readinessProbe:
         enabled: true
         path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
@@ -17,16 +62,16 @@ vaultPlatform:
         enabled: true
         path: "/v1/sys/health?standbyok=true&sealedcode=204"
         initialDelaySeconds: 60
-      extraVolumes: 
+      extraVolumes:
         - type: configMap
           name: vault-auto-init-config
           defaultMode: 0777
       extraContainers:
         - name: auto-init-sidecar
           args:
-          - /init-script/init.sh
+            - /init-script/init.sh
           command:
-          - /bin/sh
+            - /bin/sh
           env:
             - name: VAULT_K8S_POD_NAME
               valueFrom:
@@ -41,8 +86,8 @@ vaultPlatform:
           image: artifactory.qvantel.net/k8s-platform-tools:latest
           imagePullPolicy: IfNotPresent
           volumeMounts:
-          - mountPath: /init-script/
-            name: userconfig-vault-auto-init-config
+            - mountPath: /init-script/
+              name: userconfig-vault-auto-init-config
       ha:
         enabled: true
         replicas: 3
@@ -84,26 +129,8 @@ vaultPlatform:
 
             service_registration "kubernetes" {}
             {{ .Values.server.ha.raft.additionalConfig}}
-      affinity: |
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ template "vault.name" . }}
-                  app.kubernetes.io/instance: "{{ .Release.Name }}"
-                  component: server
-              topologyKey: kubernetes.io/hostname
-      topologySpreadConstraints:
-      - labelSelector:
-          matchLabels:
-            app.kubernetes.io/instance: vault-platform
-            app.kubernetes.io/name: vault
-        maxSkew: 1
-        topologyKey: topology.kubernetes.io/zone
-        whenUnsatisfiable: DoNotSchedule
-      resources:
         requests:
-          memory: '100Mi'
+          memory: "100Mi"
           cpu: "100m"
         limits:
-          memory: '1Gi'
+          memory: "1Gi"

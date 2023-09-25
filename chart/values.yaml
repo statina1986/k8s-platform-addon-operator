@@ -6,7 +6,7 @@ imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 globalConfig:
-  # one of  'dev', 'test', 'prod'
+  # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
   ingressBaseUrl: "some-env.qvantel.solutions"
 modulesConfig:

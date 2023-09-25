@@ -3,6 +3,7 @@ kasopePlatform:
     cass-operator:
       admissionWebhooks:
         enabled: false
+      
   mainCassandraCluster: "cluster"
   clusters:
     cluster:
