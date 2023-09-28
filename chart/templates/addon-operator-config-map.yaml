@@ -10,6 +10,9 @@ data:
   platformCoreEnabled: "true"
   platformCore: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
 
+  apisixPlatformEnabled: "{{ .Values.modulesConfig.apisixPlatformEnabled }}"
+  apisixPlatform: {{ print "|\n" (.Values.modulesConfig.apisixPlatform | toYaml | indent 4) }}
+  
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
   awsPlatform: {{ print "|\n" (.Values.modulesConfig.awsPlatform | toYaml | indent 4) }}
 
