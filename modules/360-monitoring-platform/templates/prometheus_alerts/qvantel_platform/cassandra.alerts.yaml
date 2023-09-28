@@ -89,4 +89,11 @@ spec:
       annotations:
         brief: '{{` {{ $value }} `}} failing Cassandra client request have been detected at {{` {{ $labels.instance }} `}} for 10 minutes'
         procedure: "Contact NoSQL urgently and create a ticket to them"
+    - alert: K8ssandraBackupJobFailed
+      annotations:
+        brief: K8ssandra Medusa backup job failed (instance {{ $labels.instance }})
+        procedure: Contact NoSQL team during business hours over a ticket
+      expr: kube_customresource_failedMedusaBackups > 0
+      labels:
+        severity: critical        
 {{- end }}
