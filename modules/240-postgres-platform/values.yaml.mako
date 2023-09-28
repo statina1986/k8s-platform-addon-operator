@@ -54,9 +54,10 @@ postgresPlatform:
         % endif
         resources:
           limits:
+            cpu: 1000m
             memory: 6Gi
           requests:
-            cpu: 1
+            cpu: 250m
             memory: 2Gi
         postgresql:
           version: "13"
