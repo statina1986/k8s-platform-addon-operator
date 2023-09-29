@@ -22,8 +22,8 @@ elasticsearchPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-  logstashEnabled: true
-  filebeatEnabled: true
+  logstashEnabled: false
+  filebeatEnabled: false
   smartsearch:
     enabled: true
   kibana:
@@ -102,6 +102,7 @@ elasticsearchPlatform:
                     elasticsearch.k8s.elastic.co/cluster-name: logsearch
                     elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
       podDisruptionBudget:
+        enabled: false
         spec:
           minAvailable: 1
           selector:

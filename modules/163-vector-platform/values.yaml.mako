@@ -59,7 +59,7 @@ vectorPlatform:
           value: "platform-masters"
           operator: "Equal"
           effect: "NoSchedule"
-    % if values['global']['configurationProfile'] != 'dev':
+    % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
     env:
       - name: ELASTICSEARCH_PASSWORD
         valueFrom:
@@ -132,13 +132,7 @@ vectorPlatform:
                   .timestamp = parsed_timestamp
                 }                
               }
-            }
-        qvantel_apps_no_debug:
-          type: filter
-          inputs:
-            - qvantel_apps_transform
-          condition: |
-            .log_level != "DEBUG" && .log_level != "TRACE"
+            }        
         istio_gateway_transform:
           type: remap
           inputs:
@@ -154,6 +148,21 @@ vectorPlatform:
               . = merge!(., structured)
               .timestamp = to_timestamp!(.start_time)
             }
+        % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
+        istio_to_elk_transform:
+          inputs:
+          - istio_gateway_transform
+          source: |
+            del(.kubernetes)
+            .@timestamp = del(.timestamp)
+          type: remap
+        qvantel_apps_no_debug:
+          type: filter
+          inputs:
+            - qvantel_apps_transform
+          condition: |
+            .log_level != "DEBUG" && .log_level != "TRACE"
+        % endif
         vault_transform:
           type: remap
           inputs:
@@ -235,7 +244,7 @@ vectorPlatform:
           compression: snappy
           encoding:
             codec: json
-        % if values['global']['configurationProfile'] != 'dev':
+        % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
         elk_tibco:
           compression: none
           endpoint: http://logsearch-es-http.platform.svc:9200
@@ -270,7 +279,7 @@ vectorPlatform:
           compression: none
           endpoint: http://logsearch-es-http.platform.svc:9200
           inputs:
-            - istio_gateway_transform
+            - istio_to_elk_transform
           type: elasticsearch
           tls:
             verify_certificate: false
