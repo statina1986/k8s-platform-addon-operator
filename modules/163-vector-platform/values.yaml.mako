@@ -266,4 +266,19 @@ vectorPlatform:
             user: elastic
           bulk:
             index: "application-%Y-%m-%d"
+        elk_ingress:
+          compression: none
+          endpoint: http://logsearch-es-http.platform.svc:9200
+          inputs:
+            - istio_gateway_transform
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
+            user: elastic
+          bulk:
+            index: "ingress-%Y-%m-%d"
         % endif
