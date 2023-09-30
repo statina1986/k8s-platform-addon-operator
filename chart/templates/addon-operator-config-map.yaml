@@ -43,6 +43,9 @@ data:
   istioPlatformEnabled: "{{ .Values.modulesConfig.istioPlatformEnabled }}"
   istioPlatform: {{ print "|\n" (.Values.modulesConfig.istioPlatform | toYaml | indent 4) }}
 
+  ksixPlatformEnabled: "{{ .Values.modulesConfig.ksixPlatformEnabled }}"
+  ksixPlatform: {{ print "|\n" (.Values.modulesConfig.ksixPlatform | toYaml | indent 4) }}
+
   kafkaPlatformEnabled: "{{ .Values.modulesConfig.kafkaPlatformEnabled }}"
   kafkaPlatform: {{ print "|\n" (.Values.modulesConfig.kafkaPlatform | toYaml | indent 4) }}
   

@@ -1,5 +1,9 @@
 apisixPlatform:
   apisix:
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: monitoring-platform
     dashboard:
       enabled: true
       config:

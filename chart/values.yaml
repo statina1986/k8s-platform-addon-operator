@@ -62,6 +62,10 @@ modulesConfig:
   istioPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  ksixPlatformEnabled: "false"
+  ksixPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
     configurationRequired: "check module documentation for configuration options"
