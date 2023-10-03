@@ -54,6 +54,7 @@ postgresPlatform:
         % endif
         resources:
           limits:
+            cpu: 100
             memory: 6Gi
           requests:
             cpu: 1

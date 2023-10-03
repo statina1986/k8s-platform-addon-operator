@@ -102,7 +102,6 @@ elasticsearchPlatform:
                     elasticsearch.k8s.elastic.co/cluster-name: logsearch
                     elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
       podDisruptionBudget:
-        enabled: false
         spec:
           minAvailable: 1
           selector:
