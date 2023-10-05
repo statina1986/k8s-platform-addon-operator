@@ -1,3 +1,4 @@
+rancherHelmVersion: "2.7.7"
 rancherPlatformNamespace: cattle-system
 rancherPlatform:
   rancher:

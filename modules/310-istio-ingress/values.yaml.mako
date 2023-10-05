@@ -267,7 +267,7 @@ istioIngress:
   virtualServices:
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
-    dnsBase: qvantel-finland.qvantel.systems
+    dnsBase: ${values['global']['ingressBaseUrl']}
     instances:
       auth:
         enabled: false

@@ -3,5 +3,5 @@ name: rancherPlatform
 version: 0.0.1
 dependencies:
   - name: rancher
-    version: "2.7.6"
+    version: ${values['rancherPlatform']['rancherHelmVersion'] or '2.7.7'}
     repository: https://artifactory.qvantel.net:443/artifactory/all-docker/rancher/
