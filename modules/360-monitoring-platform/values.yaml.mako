@@ -171,6 +171,10 @@ monitoringPlatform:
         size: 30Gi
         finalizers:
           - kubernetes.io/pvc-protection
+      % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
+      envFromSecrets: 
+        - name: "logsearch-es-elastic-user"
+      % endif
       datasources:
         datasources.yaml:
           apiVersion: 1
@@ -182,7 +186,33 @@ monitoringPlatform:
               % else:
               url: http://loki-read.platform.svc:3100
               % endif
-              
+            % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
+            - name: Elasticsearch-Ingress
+              type: elasticsearch
+              access: http
+              url: http://logsearch-es-logsearch.service.consul:9200
+              basicAuth: true
+              basicAuthUser: elastic
+              database: ingress*
+              isDefault: false
+              jsonData:
+                timeField: "@timestamp"
+              secureJsonData:
+                basicAuthPassword: <%text>${elastic}</%text>
+            - name: Elasticsearch-Application
+              type: elasticsearch
+              access: http
+              url: http://logsearch-es-logsearch.service.consul:9200
+              basicAuth: true
+              basicAuthUser: elastic
+              database: application*
+              isDefault: false
+              jsonData:
+                timeField: "@timestamp"
+              secureJsonData:
+                basicAuthPassword: <%text>${elastic}</%text>
+            % endif
+
       grafana.ini:
         auth.anonymous:
           enabled: true
