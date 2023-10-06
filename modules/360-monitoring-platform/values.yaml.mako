@@ -257,6 +257,41 @@ monitoringPlatform:
             allowUiUpdates: true
             # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
             foldersFromFilesStructure: true
+    kube-state-metrics:
+      rbac:
+        extraRules:
+        - apiGroups: ["medusa.k8ssandra.io"]
+          resources: ["medusabackupjobs"]
+          verbs: ["list", "watch"]             
+      customResourceState:
+        enabled: true
+        config:
+          kind: CustomResourceStateMetrics
+          spec:
+            resources:
+              - groupVersionKind:
+                  group: "medusa.k8ssandra.io"
+                  kind: "MedusaBackupJob"
+                  version: "v1alpha1"
+                labelsFromPath:
+                  name: [metadata, name]
+                metrics:
+                  - name: "finishedMedusaBackups"
+                    help: "finished backups"
+                    each:
+                      type: Info
+                      info:                          
+                        path: [status, finished]
+                        labelsFromPath:
+                          ref: []                        
+                  - name: "failedMedusaBackups"
+                    help: "failed backups"
+                    each:
+                      type: Info
+                      info:                          
+                        path: [status, failed]
+                        labelsFromPath:
+                          ref: []                         
     prometheus:
       enabled: true
       tolerations:
