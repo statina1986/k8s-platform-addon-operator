@@ -260,15 +260,18 @@ monitoringPlatform:
     kube-state-metrics:
       rbac:
         extraRules:
+        % if addon_operator['kasopePlatformEnabled'] == 'true':
         - apiGroups: ["medusa.k8ssandra.io"]
           resources: ["medusabackupjobs"]
-          verbs: ["list", "watch"]             
+          verbs: ["list", "watch"]
+        % endif       
       customResourceState:
         enabled: true
         config:
           kind: CustomResourceStateMetrics
           spec:
             resources:
+              % if addon_operator['kasopePlatformEnabled'] == 'true':
               - groupVersionKind:
                   group: "medusa.k8ssandra.io"
                   kind: "MedusaBackupJob"
@@ -291,7 +294,8 @@ monitoringPlatform:
                       info:                          
                         path: [status, failed]
                         labelsFromPath:
-                          ref: []                         
+                          ref: []  
+              % endif
     prometheus:
       enabled: true
       tolerations:
