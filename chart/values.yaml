@@ -117,8 +117,7 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
 
   redisPlatformEnabled: "false"
-  redisPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  redisPlatform: {}
 
   redisPcdPlatformEnabled: "false"
   redisPcdPlatform:

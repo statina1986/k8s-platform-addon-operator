@@ -1,3 +1,4 @@
+% if addon_operator['monitoringPlatformEnabled'] == 'true':
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -18,3 +19,4 @@ spec:
       app: consul
       release: consul-platform
       component: server
+% endif 

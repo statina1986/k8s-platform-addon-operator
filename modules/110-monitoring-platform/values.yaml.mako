@@ -212,7 +212,7 @@ monitoringPlatform:
               secureJsonData:
                 basicAuthPassword: <%text>${elastic}</%text>
             % endif
-
+            
       grafana.ini:
         auth.anonymous:
           enabled: true
