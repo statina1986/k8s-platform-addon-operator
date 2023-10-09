@@ -108,6 +108,7 @@ vectorPlatform:
             loki: .kubernetes.pod_labels."app.kubernetes.io/name" == "loki"
             vault: .kubernetes.pod_labels."app.kubernetes.io/name" == "vault"
             tibco: .tags != null && includes(array!(.tags), "tibco")
+            rbs: .tags != null && includes(array!(.tags), "rbs")
             nodes_messages: .tags != null && includes(array!(.tags), "messages")
             nodes_container: .tags != null && includes(array!(.tags), "container")
         qvantel_apps_transform:
@@ -196,6 +197,12 @@ vectorPlatform:
             - log_types.nodes_container
           source: |
             .log_source = "nodes_containers"
+        rbs_transform:
+          type: remap
+          inputs:
+            - log_types.rbs
+          source: |
+            .log_source = "rbs_logs"
       sinks:
         prometheus:
           type: prometheus_exporter
@@ -210,6 +217,7 @@ vectorPlatform:
             - istio_gateway_transform
             - vault_transform
             - tibco_transform
+            - rbs_transform
             - nodes_messages_transform
             - nodes_container_transform
             - vector_logs_transform      
@@ -250,6 +258,7 @@ vectorPlatform:
           endpoint: http://logsearch-es-http.platform.svc:9200
           inputs:
             - tibco_transform
+            - rbs_transform
           type: elasticsearch
           tls:
             verify_certificate: false
