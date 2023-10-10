@@ -258,7 +258,6 @@ vectorPlatform:
           endpoint: http://logsearch-es-http.platform.svc:9200
           inputs:
             - tibco_transform
-            - rbs_transform
           type: elasticsearch
           tls:
             verify_certificate: false
@@ -274,6 +273,7 @@ vectorPlatform:
           endpoint: http://logsearch-es-http.platform.svc:9200
           inputs:
             - qvantel_apps_no_debug
+            - rbs_transform
           type: elasticsearch
           tls:
             verify_certificate: false
