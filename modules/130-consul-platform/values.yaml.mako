@@ -16,6 +16,7 @@ consulPlatform:
           value: "platform-masters"
           operator: "Equal"
           effect: "NoSchedule"
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
       topologySpreadConstraints: |
         - labelSelector:
             matchLabels:
@@ -25,7 +26,6 @@ consulPlatform:
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
-      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
       nodeSelector: |
         dedicated-nodes: platform-masters
       % endif

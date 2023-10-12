@@ -1,5 +1,5 @@
 redisPlatform:
-  redis:    
+  redis:
     architecture: replication
     auth:
       enabled: true
@@ -7,30 +7,29 @@ redisPlatform:
     master:
       resources:
         limits: {}
-        requests: {}      
+        requests: {}
       persistence:
         enabled: true
         storageClass: ""
         size: 8Gi
     replica:
-      replicaCount: 2      
+      replicaCount: 3
       resources:
         limits: {}
-        requests: {}      
+        requests: {}
       persistence:
-        enabled: true        
-        storageClass: ""        
-        size: 8Gi      
+        enabled: true
+        storageClass: ""
+        size: 8Gi
     sentinel:
-      enabled: false
-      masterSet: mymaster
+      enabled: true
+      masterSet: redis
       quorum: 2
-      getMasterTimeout: 220
-      automateClusterRecovery: false
-      downAfterMilliseconds: 60000
-      failoverTimeout: 18000      
       resources:
         limits: {}
-        requests: {}      
+        requests: {}
+      service:
+        annotations:
+          consul.hashicorp.com/service-port: tcp-sentinel
     metrics:
       enabled: true
