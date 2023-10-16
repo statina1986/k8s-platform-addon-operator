@@ -35,7 +35,7 @@ postgresPlatform:
         teamId: "qvt"
         dockerImage: artifactory.qvantel.net/qvantel-spilo:2.1-p7.20221130075959_postgres-14_b47cdbd7        
         volume:
-          size: 150Gi
+          size: 100Gi
         numberOfInstances: 2
         tolerations:
         - key: "dedicated-nodes"
@@ -54,10 +54,10 @@ postgresPlatform:
         % endif
         resources:
           limits:
-            cpu: 100
+            cpu: "100"
             memory: 6Gi
           requests:
-            cpu: 1
+            cpu: "1"
             memory: 2Gi
         postgresql:
           version: "13"

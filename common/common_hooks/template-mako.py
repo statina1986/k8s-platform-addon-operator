@@ -8,7 +8,7 @@ class MyHook(Hook):
     def __init__(self):
         super().__init__("""
 configVersion: v1
-onStartup: 1
+beforeHelm: 1
 """)
 
     def handle_binding(self, binding):
