@@ -1,6 +1,6 @@
 dependencies:
 - name: strimzi-kafka-operator
   repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 0.27.1
-digest: sha256:776990345375d4bb3fcca683329bdde0fbcf8764be447d676cbc6d348cb2f57f
-generated: "2023-03-13T21:29:51.058673597+02:00"
+  version: 0.37.0
+digest: sha256:3dbbff50a8f83929476a9aaf2953abd2bdbc5ab20ac91b79759a44ea4ca2d399
+generated: "2023-10-16T16:20:06.7955421+03:00"

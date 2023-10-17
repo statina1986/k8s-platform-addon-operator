@@ -6,5 +6,5 @@ dependencies:
 #    version: 0.27.1
 #    repository: https://strimzi.io/charts/
   - name: strimzi-kafka-operator    
-    version: 0.27.1
+    version: 0.37.0
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/

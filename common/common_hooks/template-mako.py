@@ -13,7 +13,7 @@ beforeHelm: 1
 
     def handle_binding(self, binding):
         match(binding):
-            case StartupHook(values_json, configValues_json):
+            case BeforeHelmHook(values_json, configValues_json):
                 cm = get_config_map("platform", "addon-operator")                
                 directory = os.getcwd()
                 for file in glob.glob(os.path.dirname(__file__)+"/../**/*.mako", recursive=True):

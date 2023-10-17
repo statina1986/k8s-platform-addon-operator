@@ -21,7 +21,7 @@ kafkaPlatform:
       enabled: true
       spec:
         kafka:
-          version: 2.8.1
+          version: 3.5.1
           % if values['global']['configurationProfile'] in {'perf', 'prod'}:
           replicas: 6
           % else:
@@ -31,7 +31,6 @@ kafkaPlatform:
             auto.create.topics.enable: "true"
             default.replication.factor: 3            
             log.retention.hours: 168
-            log.message.format.version: "2.8"
             num.partitions: 3
             offsets.topic.replication.factor: 3
             transaction.state.log.min.isr: 2
