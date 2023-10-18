@@ -675,7 +675,7 @@ istioIngress:
           - destination:
               host: consul-platform-consul-ui.platform.svc.cluster.local
               port:
-                number: 80
+                number: 80      
       grafana:
         enabled: false
         gateways:
@@ -718,6 +718,28 @@ istioIngress:
               host: kibana-kb-http.platform.svc.cluster.local
               port:
                 number: 5601
+      logsearch:
+        enabled: false
+        pomeriumProtected: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: logsearch-es-http.platform.svc.cluster.local
+              port:
+                number: 9200
+      loki-read:
+        enabled: false
+        pomeriumProtected: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: loki-read.platform.svc.cluster.local
+              port:
+                number: 3100
       vault-ui:
         enabled: false
         gateways:

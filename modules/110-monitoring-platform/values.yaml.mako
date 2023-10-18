@@ -176,9 +176,10 @@ monitoringPlatform:
         - name: "logsearch-es-elastic-user"
       % endif
       datasources:
-        datasources.yaml:
+        platform.yaml:
           apiVersion: 1
           datasources:
+
             - name: Loki
               type: loki
               % if values['global']['configurationProfile'] == 'dev':
