@@ -15,7 +15,7 @@ pomeriumPlatform:
           secretName: qvantel-root-ca
     proxy:
       authenticateServiceUrl: https://auth-${values['global']['ingressBaseUrl']}
-    config: 
+    config:
       extraOpts:
         log_level: info
       existingSharedSecret: pomerium-platform-shared
@@ -31,21 +31,36 @@ pomeriumPlatform:
           policy:
             - allow:
                 and:
-                  - authenticated_user: true
+                  - claim/realm_access.roles: kafka-readonly
+                  - http_method:
+                      is: GET
+            - allow:
+                and:
+                  - claim/realm_access.roles: kafka-admins
         - from: https://prometheus-${values['global']['ingressBaseUrl']}
           to: http://monitoring-platform-kube-p-prometheus.platform.svc.cluster.local:9090
           timeout: 30s
           policy:
             - allow:
                 and:
-                  - authenticated_user: true
+                  - claim/realm_access.roles: prometheus-readonly
+                  - http_method:
+                      is: GET
+            - allow:
+                and:
+                  - claim/realm_access.roles: prometheus-admins
         - from: https://consul-ui-${values['global']['ingressBaseUrl']}
           to: http://consul-platform-consul-ui.platform.svc.cluster.local:80
           timeout: 30s
           policy:
             - allow:
                 and:
-                  - authenticated_user: true
+                  - claim/realm_access.roles: consul-readonly
+                  - http_method:
+                      is: GET
+            - allow:
+                and:
+                  - claim/realm_access.roles: consul-admins
         {{ .Values.additionalRoutes}}
     authenticate:
       idp:

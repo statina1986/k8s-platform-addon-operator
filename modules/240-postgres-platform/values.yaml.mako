@@ -35,7 +35,7 @@ postgresPlatform:
         teamId: "qvt"
         dockerImage: artifactory.qvantel.net/qvantel-spilo:2.1-p7.20221130075959_postgres-14_b47cdbd7        
         volume:
-          size: 150Gi
+          size: 100Gi
         numberOfInstances: 2
         tolerations:
         - key: "dedicated-nodes"
@@ -52,12 +52,24 @@ postgresPlatform:
                   values:
                   - platform-masters
         % endif
+        % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes 
         resources:
           limits:
-            cpu: 1000m
+            cpu: "100"
             memory: 6Gi
           requests:
-            cpu: 250m
+            cpu: "1"
             memory: 2Gi
         postgresql:
           version: "13"
+        % else:
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: 6Gi
+          requests:
+            cpu: "250m"
+            memory: 2Gi
+        postgresql:
+          version: "13"
+        % endif

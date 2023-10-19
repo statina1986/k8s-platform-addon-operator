@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ksixPlatform
+version: 0.0.1
+dependencies:
+  - name: k6-operator
+    version: "0.0.1"

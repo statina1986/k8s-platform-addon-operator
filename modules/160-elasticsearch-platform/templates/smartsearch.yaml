@@ -7,6 +7,7 @@ metadata:
   namespace: {{.Release.Namespace}}
 spec:
   version: 7.16.2
+  volumeClaimDeletePolicy: DeleteOnScaledownOnly
   http:
     tls:
       selfSignedCertificate:

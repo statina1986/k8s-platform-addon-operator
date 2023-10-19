@@ -34,6 +34,9 @@ spec:
             spec:
               type: object
               properties:
+                mount_point:
+                  type: string
+                  description: Mount path of Database secrets engine. Default to 'database'.
                 role-name:
                   type: string
                   description: The name of the role to provision to Vault.

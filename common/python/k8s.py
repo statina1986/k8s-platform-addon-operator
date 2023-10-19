@@ -28,6 +28,10 @@ def get_k8s_client():
         k8s = client.CoreV1Api()
     return k8s
 
+def get_config_map(namespace, name):
+    k8s = get_k8s_client()
+    response = k8s.read_namespaced_config_map(name, namespace, pretty=False)
+    return response
 
 def update_crd_status(group, version, namespace, plural, name, update):
     k8s_crd = get_k8s_crd_client()

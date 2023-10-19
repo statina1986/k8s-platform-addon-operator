@@ -7,7 +7,7 @@ from common.python.vault import *
 from common.python.inline import *
 
 
-class DbPConnectionHook(Hook):
+class DbConnectionHook(Hook):
     def __init__(self):
         super().__init__("""
 configVersion: v1
@@ -57,8 +57,15 @@ kubernetes:
                         db_password = replace_computed_values(
                             db_password, vals)
 
+                        
                         vault_client.secrets.database.configure(
-                            name=connection_name, plugin_name=plugin_name, allowed_roles=allowed_roles, connection_url=db_url, username=db_username, password=db_password, **additional_params)
+                            name=connection_name,
+                            plugin_name=plugin_name,
+                            allowed_roles=allowed_roles,
+                            connection_url=db_url,
+                            username=db_username,
+                            password=db_password,
+                            **additional_params)
 
                         execute_post_actions(post_actions, vals)
 
@@ -86,5 +93,5 @@ kubernetes:
                 print("Unknown hook data")
 
 
-hook = DbPConnectionHook()
+hook = DbConnectionHook()
 hook.handle_hook()

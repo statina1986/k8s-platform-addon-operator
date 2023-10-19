@@ -22,7 +22,28 @@ kafkaPlatform:
       spec:
         kafka:
           version: 2.8.1
+          % if values['global']['configurationProfile'] in {'perf', 'prod'}:
+          replicas: 6
+          % else:
           replicas: 3
+          % endif
+          config:
+            auto.create.topics.enable: "true"
+            default.replication.factor: 3            
+            log.retention.hours: 168
+            log.message.format.version: "2.8"
+            num.partitions: 3
+            offsets.topic.replication.factor: 3
+            transaction.state.log.min.isr: 2
+            transaction.state.log.replication.factor: 3
+            min.insync.replicas: 2
+            group.initial.rebalance.delay.ms: 3000
+            % if values['global']['configurationProfile'] in {'perf', 'prod'}:
+            num.partitions: 12            
+            transaction.state.log.num.partitions: 48
+            offsets.topic.num.partitions: 48
+            delete.topic.enable: true
+            % endif
           listeners:
             - name: plain
               port: 9092
@@ -38,15 +59,6 @@ kafkaPlatform:
           livenessProbe:
             initialDelaySeconds: 15
             timeoutSeconds: 5
-          config:
-            auto.create.topics.enable: "true"
-            default.replication.factor: 3
-            log.message.format.version: "2.8"
-            num.partitions: 3
-            offsets.topic.replication.factor: 3
-            transaction.state.log.min.isr: 2
-            transaction.state.log.replication.factor: 3
-            min.insync.replicas: 2
           storage:
             type: persistent-claim
             size: 100Gi

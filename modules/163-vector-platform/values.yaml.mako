@@ -59,7 +59,7 @@ vectorPlatform:
           value: "platform-masters"
           operator: "Equal"
           effect: "NoSchedule"
-    % if values['global']['configurationProfile'] != 'dev':
+    % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
     env:
       - name: ELASTICSEARCH_PASSWORD
         valueFrom:
@@ -108,6 +108,7 @@ vectorPlatform:
             loki: .kubernetes.pod_labels."app.kubernetes.io/name" == "loki"
             vault: .kubernetes.pod_labels."app.kubernetes.io/name" == "vault"
             tibco: .tags != null && includes(array!(.tags), "tibco")
+            rbs: .tags != null && includes(array!(.tags), "rbs")
             nodes_messages: .tags != null && includes(array!(.tags), "messages")
             nodes_container: .tags != null && includes(array!(.tags), "container")
         qvantel_apps_transform:
@@ -132,13 +133,7 @@ vectorPlatform:
                   .timestamp = parsed_timestamp
                 }                
               }
-            }
-        qvantel_apps_no_debug:
-          type: filter
-          inputs:
-            - qvantel_apps_transform
-          condition: |
-            .log_level != "DEBUG" && .log_level != "TRACE"
+            }        
         istio_gateway_transform:
           type: remap
           inputs:
@@ -154,6 +149,21 @@ vectorPlatform:
               . = merge!(., structured)
               .timestamp = to_timestamp!(.start_time)
             }
+        % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
+        istio_to_elk_transform:
+          inputs:
+          - istio_gateway_transform
+          source: |
+            del(.kubernetes)
+            .@timestamp = del(.timestamp)
+          type: remap
+        qvantel_apps_no_debug:
+          type: filter
+          inputs:
+            - qvantel_apps_transform
+          condition: |
+            .log_level != "DEBUG" && .log_level != "TRACE"
+        % endif
         vault_transform:
           type: remap
           inputs:
@@ -187,6 +197,12 @@ vectorPlatform:
             - log_types.nodes_container
           source: |
             .log_source = "nodes_containers"
+        rbs_transform:
+          type: remap
+          inputs:
+            - log_types.rbs
+          source: |
+            .log_source = "rbs_logs"
       sinks:
         prometheus:
           type: prometheus_exporter
@@ -201,6 +217,7 @@ vectorPlatform:
             - istio_gateway_transform
             - vault_transform
             - tibco_transform
+            - rbs_transform
             - nodes_messages_transform
             - nodes_container_transform
             - vector_logs_transform      
@@ -235,7 +252,7 @@ vectorPlatform:
           compression: snappy
           encoding:
             codec: json
-        % if values['global']['configurationProfile'] != 'dev':
+        % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
         elk_tibco:
           compression: none
           endpoint: http://logsearch-es-http.platform.svc:9200
@@ -256,6 +273,7 @@ vectorPlatform:
           endpoint: http://logsearch-es-http.platform.svc:9200
           inputs:
             - qvantel_apps_no_debug
+            - rbs_transform
           type: elasticsearch
           tls:
             verify_certificate: false
@@ -266,4 +284,19 @@ vectorPlatform:
             user: elastic
           bulk:
             index: "application-%Y-%m-%d"
+        elk_ingress:
+          compression: none
+          endpoint: http://logsearch-es-http.platform.svc:9200
+          inputs:
+            - istio_to_elk_transform
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
+            user: elastic
+          bulk:
+            index: "ingress-%Y-%m-%d"
         % endif

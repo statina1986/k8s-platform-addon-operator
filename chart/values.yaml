@@ -14,6 +14,10 @@ modulesConfig:
   platformCore:
     configurationRequired: "check module documentation for configuration options"
 
+  apisixPlatformEnabled: "false"
+  apisixPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   awsPlatformEnabled: "false"
   awsPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -56,6 +60,10 @@ modulesConfig:
 
   istioPlatformEnabled: "false"
   istioPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  ksixPlatformEnabled: "false"
+  ksixPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   kafkaPlatformEnabled: "false"
@@ -109,8 +117,7 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
 
   redisPlatformEnabled: "false"
-  redisPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  redisPlatform: {}
 
   redisPcdPlatformEnabled: "false"
   redisPcdPlatform:

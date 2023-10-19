@@ -44,15 +44,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-    topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: topology.kubernetes.io/zone
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app: public-ingress
-          istio: public-ingress
+        #service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
   publicIngressGateways:
   - name: public-ingress
     spec:
@@ -118,15 +110,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-    topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: topology.kubernetes.io/zone
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app: private-ingress
-          istio: private-ingress
+        #service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
   privateIngressGateways:
   - name: private-ingress
     spec:
@@ -192,15 +176,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-    topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: topology.kubernetes.io/zone
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app: integrations-http-ingress
-          istio: integrations-http-ingress
+        #service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
   integrationsHttpIngressGateways:
   - name: integrations-http-ingress
     spec:
@@ -276,14 +252,6 @@ istioIngress:
         port: 22
         protocol: TCP
         targetPort: 22
-    topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: topology.kubernetes.io/zone
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app: integrations-non-http-ingress
-          istio: integrations-non-http-ingress
   integrationsNonHttpIngressGateways:
   - name: integrations-non-http-ingress
     spec:
@@ -299,7 +267,7 @@ istioIngress:
   virtualServices:
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
-    dnsBase: qvantel-finland.qvantel.systems
+    dnsBase: ${values['global']['ingressBaseUrl']}
     instances:
       auth:
         enabled: false
@@ -707,7 +675,7 @@ istioIngress:
           - destination:
               host: consul-platform-consul-ui.platform.svc.cluster.local
               port:
-                number: 80
+                number: 80      
       grafana:
         enabled: false
         gateways:
@@ -750,6 +718,28 @@ istioIngress:
               host: kibana-kb-http.platform.svc.cluster.local
               port:
                 number: 5601
+      logsearch:
+        enabled: false
+        pomeriumProtected: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: logsearch-es-http.platform.svc.cluster.local
+              port:
+                number: 9200
+      loki-read:
+        enabled: false
+        pomeriumProtected: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: loki-read.platform.svc.cluster.local
+              port:
+                number: 3100
       vault-ui:
         enabled: false
         gateways:

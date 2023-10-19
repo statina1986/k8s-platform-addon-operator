@@ -22,8 +22,8 @@ elasticsearchPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-  logstashEnabled: true
-  filebeatEnabled: true
+  logstashEnabled: false
+  filebeatEnabled: false
   smartsearch:
     enabled: true
   kibana:
