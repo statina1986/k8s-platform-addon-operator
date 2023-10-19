@@ -1,5 +1,5 @@
 //This sould be SemVer and it goes both to docker image and helm chart
-VERSION = "1.1.0-prerelease"
+VERSION = "1.1.0-kafka3"
 
 // Type of CI job
 TYPE = "generic"
@@ -10,7 +10,7 @@ CI_VERSION = "3"
 BITBUCKET_PROJECT = "cp"
 
 // Used to determine build types, if sending feedback, deploying automatically
-DELIVERY_BRANCHES = ["master", "experimental"]
+DELIVERY_BRANCHES = ["master", "experimental", "kafka-upgrade"]
 
 // Used to enable/disable CVE to fail on new Critical severitys
 CVE_FAIL_BUILD_ON_NEW = false
@@ -19,11 +19,11 @@ CVE_FAIL_BUILD_ON_NEW = false
 EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0.20220203130426_master_a204d90"
 
 // custom variables
-DOCKER_NAME = 'k8s-platform-addon-operator'
-DOCKER_TOOLS_NAME = 'k8s-platform-tools'
+K8S_PLATFORM_NAME = 'k8s-platform-addon-operator'
+TOOLS_NAME = 'k8s-platform-tools'
+DB_TOOLS_NAME = 'platform-db-tools'
 CHART_NAME = 'k8s-platform-addon-operator'
 ARTIFACTORY_URL = 'artifactory.qvantel.net'
-DOCKER_REPOSITORY = "${ARTIFACTORY_URL}/${DOCKER_NAME}"
 PROJECT_NAME = 'baseline'
  
 // Other configuration options on "jenkins" branch in pipeline.config file
@@ -41,17 +41,29 @@ def createPackage() {
     
     sh "docker build -t ${imageName()} ."
 
-    sh "docker build -t ${imageToolsName()} -t ${ARTIFACTORY_URL}/${DOCKER_TOOLS_NAME}:latest ./platform-tools-image"
+    sh "docker build -t ${imageTag(TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ${TOOLS_NAME}.Dockerfile"
 
-    sh "docker push ${imageName()}"
+    sh "docker build -t ${imageTag(DB_TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ${DB_TOOLS_NAME}.Dockerfile"
 
-    sh "docker push ${imageToolsName()}"
+    sh "docker push ${imageTag(K8S_PLATFORM_NAME)}"
 
-    sh "docker push ${ARTIFACTORY_URL}/${DOCKER_TOOLS_NAME}:latest"
+    sh "docker push ${imageTag(TOOLS_NAME)}"
 
-    pipelineBase.addCreatedImage(imageName())
+    sh "docker push ${imageTagLatest(TOOLS_NAME)}"
 
-    pipelineBase.addCreatedImage(imageToolsName())
+    sh "docker push ${imageTag(DB_TOOLS_NAME)}"
+
+    sh "docker push ${imageTagLatest(DB_TOOLS_NAME)}"
+
+    pipelineBase.addCreatedImage(imageTag(K8S_PLATFORM_NAME))
+
+    pipelineBase.addCreatedImage(imageTag(TOOLS_NAME))
+
+    pipelineBase.addCreatedImage(imageTagLatest(TOOLS_NAME))
+
+    pipelineBase.addCreatedImage(imageTag(DB_TOOLS_NAME))
+
+    pipelineBase.addCreatedImage(imageTagLatest(DB_TOOLS_NAME))
 
     sh "helm package --version ${VERSION} --app-version ${imageVersion()} ./chart"
 
@@ -74,12 +86,12 @@ def imageVersion() {
   return "${VERSION}_${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}"
 }
 
-def imageName() {
-  return "${DOCKER_REPOSITORY}:${imageVersion()}"
+def imageTag(name) {
+  return "${ARTIFACTORY_URL}/${name}:${imageVersion()}"
 }
 
-def imageToolsName() {
-  return "${ARTIFACTORY_URL}/${DOCKER_TOOLS_NAME}:${VERSION}"
+def imageTagLatest() {
+  return "${ARTIFACTORY_URL}/${name}:${VERSION}"
 }
 
 def chartName() {

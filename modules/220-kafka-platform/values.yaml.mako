@@ -1,4 +1,5 @@
 kafkaPlatform:
+  strimziHelmVersion: "0.37.0"
   strimzi-kafka-operator:
     resources:
       limits:
