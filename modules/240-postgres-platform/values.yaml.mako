@@ -52,7 +52,7 @@ postgresPlatform:
                   values:
                   - platform-masters
         % endif
-        % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes 
+        % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run postgres with higher CPU values
         resources:
           limits:
             cpu: "100"
