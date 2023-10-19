@@ -41,9 +41,9 @@ def createPackage() {
     
     sh "docker build -t ${imageTag(K8S_PLATFORM_NAME)} ."
 
-    sh "docker build -t ${imageTag(TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images${TOOLS_NAME}.Dockerfile"
+    sh "docker build -t ${imageTag(TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images/${TOOLS_NAME}.Dockerfile"
 
-    sh "docker build -t ${imageTag(DB_TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images${DB_TOOLS_NAME}.Dockerfile"
+    sh "docker build -t ${imageTag(DB_TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images/${DB_TOOLS_NAME}.Dockerfile"
 
     sh "docker push ${imageTag(K8S_PLATFORM_NAME)}"
 
