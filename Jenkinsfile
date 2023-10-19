@@ -90,7 +90,7 @@ def imageTag(name) {
   return "${ARTIFACTORY_URL}/${name}:${imageVersion()}"
 }
 
-def imageTagLatest() {
+def imageTagLatest(name) {
   return "${ARTIFACTORY_URL}/${name}:${VERSION}"
 }
 
