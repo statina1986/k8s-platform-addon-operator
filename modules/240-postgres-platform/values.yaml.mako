@@ -52,6 +52,7 @@ postgresPlatform:
                   values:
                   - platform-masters
         % endif
+        % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run postgres with higher CPU values
         resources:
           limits:
             cpu: "100"
@@ -61,3 +62,14 @@ postgresPlatform:
             memory: 2Gi
         postgresql:
           version: "13"
+        % else:
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: 6Gi
+          requests:
+            cpu: "250m"
+            memory: 2Gi
+        postgresql:
+          version: "13"
+        % endif
