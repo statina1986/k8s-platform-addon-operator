@@ -4185,9 +4185,9 @@ data:
                 },
                 "definition": "label_values(org_apache_cassandra_metrics_thread_pools_completed_tasks{}, cluster)",
                 "hide": 0,
-                "includeAll": true,
+                "includeAll": false,
                 "label": "Cluster",
-                "multi": true,
+                "multi": false,
                 "name": "cluster",
                 "options": [],
                 "query": {
