@@ -91,6 +91,35 @@ monitoringPlatform:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    config:
+      modules:
+        http_2xx:
+          http:
+            follow_redirects: true
+            preferred_ip_protocol: ip4
+            valid_http_versions:
+            - HTTP/1.1
+            - HTTP/2.0
+          prober: http
+          timeout: 5s
+        http_2xxs_post:
+          prober: http
+          timeout: 5s
+          http:
+            valid_status_codes: [200, 403]
+            no_follow_redirects: false
+            tls_config:
+              insecure_skip_verify: true
+            method: POST
+            preferred_ip_protocol: "ip4"
+        http_2xx_json:
+          prober: http
+          timeout: 5s
+          http:
+            headers:
+              Content-Type: application/json
+            body: '{"ResultText": "OK}'
+            preferred_ip_protocol: "ip4"    
   yet-another-cloudwatch-exporter:
     enabled: false
     tolerations:
