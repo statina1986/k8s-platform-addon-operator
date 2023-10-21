@@ -28,27 +28,33 @@ kubernetes:
                 name = event['object']['metadata']['name']
                 namespace = event['object']['metadata']['namespace']
                 mount_point = event['object']['spec'].get(
-                    'mount_point', 'database')
+                    'mount-point', 'database')
+                role_name = event['object']['spec'].get('role-name', name)
 
                 vault_client = get_vault_client()
 
                 if eventName == "Deleted":
                     vault_client.secrets.database.delete_role(
-                        name=name,
+                        name=role_name,
                         mount_point=mount_point)
                 else:
                     try:
-                        db_name = event['object']['metadata']['db_name']
-                        creation_statements = event['object']['spec']['creation_statements']
+                        db_name = event['object']['spec']['db-name']
+                        creation_statements = event['object']['spec']['creation-statements']
                         additional_params = event['object']['spec'].get(
                             'additional-params', {})
-                        max_ttl = event['object']['spec'].get('max_ttl', '0')
+                        max_ttl = event['object']['spec'].get('max-ttl', '0')
                         default_ttl = event['object']['spec'].get(
-                            'default_ttl', '0')
+                            'default-ttl', '0')
+                        computed_values = event['object']['spec'].get(
+                            'computed-values', {})
+                        post_actions = event['object']['spec'].get(
+                            'post-actions', {})
 
                         vals = get_computed_values(computed_values)
 
                         db_name = replace_computed_values(db_name, vals)
+                        role_name = replace_computed_values(role_name, vals)
                         max_ttl = replace_computed_values(
                             max_ttl, vals)
                         default_ttl = replace_computed_values(
@@ -57,12 +63,12 @@ kubernetes:
                             creation_statements, vals)
 
                         vault_client.secrets.database.create_role(
-                            name=name,
+                            name=role_name,
                             db_name=db_name,
                             creation_statements=creation_statements,
                             default_ttl=default_ttl,
                             max_ttl=max_ttl,
-                            mount_point=mount_point
+                            mount_point=mount_point,
                             ** additional_params)
 
                         execute_post_actions(post_actions, vals)

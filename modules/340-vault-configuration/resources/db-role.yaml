@@ -34,7 +34,9 @@ spec:
             spec:
               type: object
               properties:
-                mount_point:
+                forceSync:
+                  type: integer
+                mount-point:
                   type: string
                   description: Mount path of Database secrets engine. Default to 'database'.
                 role-name:
@@ -54,6 +56,28 @@ spec:
                 creation-statements:
                   type: string
                   description: Specifies the database statements executed to create and configure a user. See the plugin's API page for more information on support and formatting for this parameter.
+                additional-params:
+                  type: object
+                  description: Key-value pairs of additional params.
+                  additionalProperties: true
+                computed-values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
+                post-actions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
             status:
               description: The status of the deployment.
               type: object

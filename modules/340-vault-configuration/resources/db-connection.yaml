@@ -33,8 +33,8 @@ spec:
           properties:
             spec:
               type: object
-              properties:
-                forceGeneration:
+              properties:            
+                forceSync:
                   type: integer
                 connection-name:
                   type: string

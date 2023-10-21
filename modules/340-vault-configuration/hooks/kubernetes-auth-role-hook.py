@@ -38,7 +38,7 @@ kubernetes:
                         mount_point=mount_point)
                 else:
                     try:
-                        bound_service_account_names = event['object']['metadata']['bound_service_account_names']
+                        bound_service_account_names = event['object']['spec']['bound_service_account_names']
                         bound_service_account_namespaces = event['object']['spec']['bound_service_account_namespaces']
                         token_policies = event['object']['spec']['token_policies']
                         additional_params = event['object']['spec'].get(
@@ -46,6 +46,10 @@ kubernetes:
                         token_ttl = event['object']['spec'].get('token_ttl', '0')
                         token_max_ttl = event['object']['spec'].get(
                             'token_max_ttl', '0')
+                        computed_values = event['object']['spec'].get(
+                            'computed-values', {})
+                        post_actions = event['object']['spec'].get(
+                            'post-actions', {})
 
                         vals = get_computed_values(computed_values)
 
@@ -62,7 +66,7 @@ kubernetes:
                             ttl=token_ttl,
                             max_ttl=token_max_ttl,
                             policies=token_policies,
-                            mount_point=mount_point
+                            mount_point=mount_point,
                             ** additional_params)
 
                         execute_post_actions(post_actions, vals)

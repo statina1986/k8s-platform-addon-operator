@@ -175,6 +175,8 @@ monitoringPlatform:
         kubernetesStorage: false
     grafana:
       enabled: true
+      deploymentStrategy:
+        type: Recreate
       tolerations:
         - key: "dedicated-nodes"
           value: "platform-masters"

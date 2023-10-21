@@ -48,6 +48,8 @@ spec:
                   description: List of status conditions.
                   items:
                     properties:
+                      forceSync:
+                        type: integer
                       lastTransitionTime:
                         description: Last time the condition of a type changed from
                           one status to another. The required format is 'yyyy-MM-ddTHH:mm:ssZ',

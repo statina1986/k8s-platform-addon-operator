@@ -34,6 +34,8 @@ spec:
             spec:
               type: object
               properties:
+                forceSync:
+                  type: integer
                 mount_point:
                   type: string
                   description: Mount path of Kubernetes auth engine. Default to 'kubernetes'.
@@ -61,6 +63,28 @@ spec:
                   description: List of policies to encode onto generated tokens. Depending on the auth method, this list may be supplemented by user/group/other values.
                   items:
                     type: string
+                additional-params:
+                  type: object
+                  description: Key-value pairs of additional params.
+                  additionalProperties: true
+                computed-values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
+                post-actions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
             status:
               description: The status of the deployment.
               type: object
