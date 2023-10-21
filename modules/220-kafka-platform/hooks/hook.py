@@ -17,7 +17,7 @@ beforeHelm: 2
         match(binding):
             case BeforeHelmHook(values_json, configValues_json):
                 path = os.path.dirname(__file__) + \
-                    "/../charts/kafkaPlatform/charts"
+                    "/../charts/kafkaPlatform/charts/"
                 files = glob.glob(path+'/*')
                 for f in files:
                     os.remove(f)                
