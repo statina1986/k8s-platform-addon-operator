@@ -68,7 +68,7 @@ modulesConfig:
 
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    strimziHelmVersion: "0.27.1"
   
   kasopePlatformEnabled: "false"
   kasopePlatform:

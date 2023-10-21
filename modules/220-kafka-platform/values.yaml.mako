@@ -1,5 +1,4 @@
-kafkaPlatform:
-  strimziHelmVersion: "0.37.0"
+kafkaPlatform:  
   strimzi-kafka-operator:
     resources:
       limits:
@@ -22,7 +21,7 @@ kafkaPlatform:
       enabled: true
       spec:
         kafka:
-          version: 3.5.1
+          version: 2.8.1
           % if values['global']['configurationProfile'] in {'perf', 'prod'}:
           replicas: 6
           % else:
