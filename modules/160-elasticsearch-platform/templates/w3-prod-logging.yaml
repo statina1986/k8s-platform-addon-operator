@@ -62,7 +62,13 @@ data:
             "timeFieldName": "@timestamp"
       }
     }'
-
+    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/ingress* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "ingress*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
   elastic.sh: |
     curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
         http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_template/application_template <<EOF
@@ -85,6 +91,19 @@ data:
       "settings": {
         "index.lifecycle.name": "tibco_policy",
         "index.lifecycle.rollover_alias": "tibcoalias",
+        "index.number_of_replicas": 0,
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_template/ingress_template <<EOF
+    {
+      "index_patterns": ["ingress*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "ingress_policy",
+        "index.lifecycle.rollover_alias": "ingressalias",
         "index.number_of_replicas": 0,
         "index.highlight.max_analyzed_offset": 10000000
       }
@@ -140,7 +159,31 @@ data:
       }
     }
     EOF
-
+    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_ilm/policy/ingress_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size":"10GB"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "delete": {
+            "min_age":"2d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
   alias.sh: |
     DATE=$(date +"%Y-%m-%d")
     curl -u elastic:PW_REPLACE -X POST "http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_aliases?pretty" -H 'Content-Type: application/json' -d'
@@ -162,6 +205,18 @@ data:
           "add": {
             "index": "all-tibco-'$DATE'",
             "alias": "tibcoalias",
+            "is_write_index": "true"
+          }
+        }
+      ]
+    }'
+    curl -u elastic:PW_REPLACE -X POST "http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_aliases?pretty" -H 'Content-Type: application/json' -d'
+    {
+      "actions": [
+        {
+          "add": {
+            "index": "ingress-'$DATE'",
+            "alias": "ingressalias",
             "is_write_index": "true"
           }
         }
