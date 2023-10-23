@@ -33,6 +33,8 @@ elasticsearchPlatform:
   # Prod is used for 30d log retention, logsearchTestEnv for 2d log retention and logsearchBackup is used to configure ELK-stack to use S3 storage
   prod:
     enabled: false
+  w3-prod-logging:
+    enabled: false
   logsearchTestEnv:
     enabled: false
   logsearchBackup:

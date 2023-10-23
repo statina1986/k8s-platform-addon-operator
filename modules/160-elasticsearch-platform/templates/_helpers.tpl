@@ -18,6 +18,12 @@ Compute if the prod environment is enabled.
 {{- $_ := set . "prodEnabled" (eq (.Values.elasticsearchPlatform.prod.enabled | toString) "true") -}}
 {{- end -}}
 {{/*
+Compute if the w3-prod logging-setup is enabled.
+*/}}
+{{- define "elasticsearchPlatform.w3-prod-loggingEnabled" -}}
+{{- $_ := set . "w3-prod-loggingEnabled" (eq (.Values.elasticsearchPlatform.w3-prod-logging.enabled | toString) "true") -}}
+{{- end -}}
+{{/*
 Compute if the snapshot is enabled.
 */}}
 {{- define "elasticsearchPlatform.logsearchBackupEnabled" -}}
