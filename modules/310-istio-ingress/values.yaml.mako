@@ -44,7 +44,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        #service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
   publicIngressGateways:
   - name: public-ingress
     spec:
@@ -110,7 +110,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        #service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
   privateIngressGateways:
   - name: private-ingress
     spec:
@@ -176,7 +176,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        #service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
   integrationsHttpIngressGateways:
   - name: integrations-http-ingress
     spec:
@@ -242,7 +242,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
       ports:
       - name: status-port
         port: 15021
