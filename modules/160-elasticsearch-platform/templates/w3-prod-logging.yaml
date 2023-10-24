@@ -1,5 +1,5 @@
-{{- template "elasticsearchPlatform.w3-prod-loggingEnabled" . -}}
-{{- if .w3-prod-loggingEnabled -}}
+{{- template "elasticsearchPlatform.windprodloggingEnabled" . -}}
+{{- if .windprodloggingEnabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
