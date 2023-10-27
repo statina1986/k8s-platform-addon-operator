@@ -1,0 +1,25 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-prometheus-custom-alerting.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: prometheus.custom.alerts
+    rules:
+    - alert: PrometheusMetricsAppendedHigh
+      expr: rate(prometheus_tsdb_head_samples_appended_total[5m]) > 150000
+      for: 10m
+      labels:
+        severity: critical
+        level: application
+      annotations:
+        brief: "Amount of metrics being appended to Prometheus is high"
+        procedure: "Please escalate to monitoring team for a checkup."
