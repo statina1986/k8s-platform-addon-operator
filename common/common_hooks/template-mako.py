@@ -2,6 +2,7 @@
 import glob, mako.template, json
 from common.python.hooks import *
 from common.python.k8s import *
+from common.python.variables import *
 
 
 class MyHook(Hook):
@@ -14,7 +15,7 @@ beforeHelm: 1
     def handle_binding(self, binding):
         match(binding):
             case BeforeHelmHook(values_json, configValues_json):
-                cm = get_config_map("platform", "addon-operator")                
+                cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")                
                 directory = os.getcwd()
                 for file in glob.glob(os.path.dirname(__file__)+"/../**/*.mako", recursive=True):
                     print(file)
