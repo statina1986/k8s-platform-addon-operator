@@ -137,9 +137,6 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"10GB"
-              },
               "set_priority": {
                 "priority": 50
               }
@@ -162,9 +159,6 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"10GB"
-              },
               "set_priority": {
                 "priority": 50
               }
@@ -187,9 +181,6 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"10GB"
-              },
               "set_priority": {
                 "priority": 50
               }
@@ -212,9 +203,6 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"10GB"
-              },
               "set_priority": {
                 "priority": 50
               }
