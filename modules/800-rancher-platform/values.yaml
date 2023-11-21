@@ -63,7 +63,7 @@ rancherPlatform:
       enabled: true
       includeDefaultExtraAnnotations: true
       extraAnnotations: {}
-      ingressClassName: ""
+      ingressClassName: "nginx"
       # backend port number
       servicePort: 80
 
@@ -105,7 +105,7 @@ rancherPlatform:
     rancherImage: https://artifactory.qvantel.net:443/artifactory/all-docker/rancher/rancher
     # rancher/rancher image tag. https://hub.docker.com/r/rancher/rancher/tags/
     # Defaults to .Chart.appVersion
-    rancherImageTag: v2.7.6
+    rancherImageTag: {{rancherHelmVersion}}
 
     # Override imagePullPolicy for rancher server images
     # options: Always, Never, IfNotPresent
