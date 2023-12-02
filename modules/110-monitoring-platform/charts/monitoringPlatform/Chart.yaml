@@ -42,3 +42,8 @@ dependencies:
     condition: yet-another-cloudwatch-exporter.enabled
     version: "0.21.0"
     repository: "https://nerdswords.github.io/helm-charts"
+  - name: tempo
+    alias: grafana-tempo
+    condition: grafana-tempo.enabled
+    version: "1.7.1"
+    repository: "https://grafana.github.io/helm-charts"

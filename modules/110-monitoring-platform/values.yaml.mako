@@ -27,6 +27,20 @@ monitoringPlatform:
       redis: false
       rabbitmq: false
       mongo: false
+  grafana-tempo:
+    enabled: false
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    tempo:
+      storage:
+        trace:
+          backend: s3
+          s3:
+            endpoint: s3.eu-south-1.amazonaws.com  ### Need to set to correct endpoint
+            bucket: tempo-traces                
   x509-certificate-exporter:
     enabled: true
     tolerations:
