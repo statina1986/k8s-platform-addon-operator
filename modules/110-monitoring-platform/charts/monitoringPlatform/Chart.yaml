@@ -2,22 +2,6 @@ apiVersion: v2
 name: monitoringPlatform
 version: 0.0.1
 dependencies:
-#  - name: kube-prometheus-stack
-#    condition: kube-prometheus-stack.enabled
-#    version: "~43.0.0"
-#    repository: "https://prometheus-community.github.io/helm-charts"
-#  - name: instana-agent
-#    condition: instana-agent.enabled
-#    version: "1.2.35"
-#    repository: "https://agents.instana.io/helm"
-#  - name: prometheus-blackbox-exporter
-#    condition: prometheus-blackbox-exporter.enabled
-#    version: "7.1.3"
-#    repository: "https://prometheus-community.github.io/helm-charts"
-#  - name: prometheus-consul-exporter
-#    condition: prometheus-consul-exporter.enabled
-#    version: "0.5.1"
-#    repository: "https://prometheus-community.github.io/helm-charts"
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
     version: "~51.0.0"
