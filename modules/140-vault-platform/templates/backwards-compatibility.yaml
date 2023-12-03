@@ -1,3 +1,4 @@
+{{- if .Values.vaultPlatform.useBackwardsCompatibilityService }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -24,3 +25,4 @@ spec:
     component: server
   sessionAffinity: None
   type: ClusterIP
+{{- end }}

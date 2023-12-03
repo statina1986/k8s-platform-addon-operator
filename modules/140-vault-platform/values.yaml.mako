@@ -1,6 +1,7 @@
 # vaultPlatformNamespace: vault
 vaultPlatform:
   autoUnseal: false
+  useBackwardsCompatibilityService: true
   vault-secrets-webhook:
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
     nodeSelector:
