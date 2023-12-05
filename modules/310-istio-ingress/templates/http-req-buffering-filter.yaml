@@ -19,10 +19,28 @@ spec:
       patch:
         operation: INSERT_BEFORE
         value:
-          name: envoy.filters.http.buffer
+          name: with-matcher
           typed_config:
-            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
-            max_request_bytes: {{ .Values.istioIngress.privateIngressBufferHttpRequestSize }}
+            '@type':  type.googleapis.com/envoy.extensions.common.matching.v3.ExtensionWithMatcher
+            extension_config:
+              name: envoy.filters.http.buffer
+              typed_config:
+                '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+                max_request_bytes: {{ .Values.istioIngress.privateIngressBufferHttpRequestSize }}
+            xds_matcher:
+              matcher_tree:
+                input:
+                  name: request-headers
+                  typed_config:
+                    '@type': type.googleapis.com/envoy.type.matcher.v3.HttpRequestHeaderMatchInput
+                    header_name: Upgrade
+                exact_match_map:
+                  map:
+                    websocket:
+                      action:
+                        name: skip
+                        typed_config:
+                          '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
       istio: private-ingress
@@ -48,10 +66,28 @@ spec:
       patch:
         operation: INSERT_BEFORE
         value:
-          name: envoy.filters.http.buffer
+          name: with-matcher
           typed_config:
-            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
-            max_request_bytes: {{ .Values.istioIngress.publicIngressBufferHttpRequestSize }}
+            '@type':  type.googleapis.com/envoy.extensions.common.matching.v3.ExtensionWithMatcher
+            extension_config:
+              name: envoy.filters.http.buffer
+              typed_config:
+                '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+                max_request_bytes: {{ .Values.istioIngress.publicIngressBufferHttpRequestSize }}
+            xds_matcher:
+              matcher_tree:
+                input:
+                  name: request-headers
+                  typed_config:
+                    '@type': type.googleapis.com/envoy.type.matcher.v3.HttpRequestHeaderMatchInput
+                    header_name: Upgrade
+                exact_match_map:
+                  map:
+                    websocket:
+                      action:
+                        name: skip
+                        typed_config:
+                          '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
       istio: public-ingress
@@ -78,10 +114,28 @@ spec:
       patch:
         operation: INSERT_BEFORE
         value:
-          name: envoy.filters.http.buffer
+          name: with-matcher
           typed_config:
-            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
-            max_request_bytes: {{ .Values.istioIngress.integrationsHttpIngressBufferHttpRequestSize }}
+            '@type':  type.googleapis.com/envoy.extensions.common.matching.v3.ExtensionWithMatcher
+            extension_config:
+              name: envoy.filters.http.buffer
+              typed_config:
+                '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+                max_request_bytes: {{ .Values.istioIngress.integrationsHttpIngressBufferHttpRequestSize }}
+            xds_matcher:
+              matcher_tree:
+                input:
+                  name: request-headers
+                  typed_config:
+                    '@type': type.googleapis.com/envoy.type.matcher.v3.HttpRequestHeaderMatchInput
+                    header_name: Upgrade
+                exact_match_map:
+                  map:
+                    websocket:
+                      action:
+                        name: skip
+                        typed_config:
+                          '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
       istio: integrations-http-ingress
@@ -108,10 +162,28 @@ spec:
       patch:
         operation: INSERT_BEFORE
         value:
-          name: envoy.filters.http.buffer
+          name: with-matcher
           typed_config:
-            '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
-            max_request_bytes: {{ .Values.istioIngress.integrationsNonHttpIngressBufferHttpRequestSize }}
+            '@type':  type.googleapis.com/envoy.extensions.common.matching.v3.ExtensionWithMatcher
+            extension_config:
+              name: envoy.filters.http.buffer
+              typed_config:
+                '@type': type.googleapis.com/envoy.extensions.filters.http.buffer.v3.Buffer
+                max_request_bytes: {{ .Values.istioIngress.integrationsNonHttpIngressBufferHttpRequestSize }}
+            xds_matcher:
+              matcher_tree:
+                input:
+                  name: request-headers
+                  typed_config:
+                    '@type': type.googleapis.com/envoy.type.matcher.v3.HttpRequestHeaderMatchInput
+                    header_name: Upgrade
+                exact_match_map:
+                  map:
+                    websocket:
+                      action:
+                        name: skip
+                        typed_config:
+                          '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
       istio: integrations-non-http-ingress
