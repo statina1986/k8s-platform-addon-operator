@@ -65,7 +65,7 @@ elasticsearchPlatform:
                 - ReadWriteOnce
               resources:
                 requests:
-                  storage: 500Gi
+                  storage: 100Gi
         podTemplate:
           spec:
             initContainers:
@@ -103,12 +103,6 @@ elasticsearchPlatform:
                   matchLabels:
                     elasticsearch.k8s.elastic.co/cluster-name: logsearch
                     elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
-      podDisruptionBudget:
-        spec:
-          minAvailable: 1
-          selector:
-            matchLabels:
-              elasticsearch.k8s.elastic.co/cluster-name: logsearch
 
   configElasticBackup:
     definitions:
