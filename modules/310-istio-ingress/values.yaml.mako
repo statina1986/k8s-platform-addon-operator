@@ -316,6 +316,18 @@ istioIngress:
               host: addresses.qvantel.svc.cluster.local
               port:
                 number: 8000
+      billing:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: rbs-billing-front.qvantel.svc.cluster.local
+                  port:
+                    number: 3003
       bssapi:
         enabled: false
         gateways:
@@ -494,6 +506,30 @@ istioIngress:
               host: flex-app-store.qvantel.svc.cluster.local
               port:
                 number: 21090
+      flex-content-provider:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: flex-content-provider.qvantel.svc.cluster.local
+                  port:
+                    number: 21210
+      flex-bpmn-executor:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: flex-bpmn-executor.qvantel.svc.cluster.local
+                  port:
+                    number: 21010
       graphql:
         enabled: false
         gateways:
@@ -529,6 +565,77 @@ istioIngress:
               host: knowledge-wiki.qvantel.svc.cluster.local
               port:
                 number: 8080
+      mapp:
+        enabled: false
+        gateways:
+          - public-ingress
+        http:
+          - match:
+            - uri:
+                prefix: /uc/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: graphql-graphql-bssapi.qvantel.svc.cluster.local
+                port:
+                  number: 8180
+          - match:
+            - uri:
+                prefix: /images/
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - match:
+            - uri:
+                prefix: /file
+            retries:
+              attempts: 0
+            route:
+            - destination:
+                host: documents-doc-storage-backend.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+          - match:
+            - uri:
+                prefix: /flow/
+            retries:
+              attempts: 0
+            rewrite:
+              uri: /
+            route:
+            - destination:
+                host: mobile-flowable-api.qvantel.svc.cluster.local
+                port:
+                  number: 21090
+          - match:
+            - uri:
+                prefix: /flow/
+            retries:
+              attempts: 0
+            rewrite:
+              uri: /
+            route:
+            - destination:
+                host: mobile-flowable-api.qvantel.svc.cluster.local
+                port:
+                  number: 80
+          - match:
+            - uri:
+                prefix: /web/static
+            retries:
+              attempts: 0
+            rewrite:
+              uri: /static
+            route:
+            - destination:
+                host: mobile-flows-catalog-service.qvantel.svc.cluster.local
+                port:
+                  number: 80
       message-manager:
         enabled: false
         gateways:
@@ -539,6 +646,18 @@ istioIngress:
               host: message-manager-wui.qvantel.svc.cluster.local
               port:
                 number: 3003
+      mobile-ui-builder:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: mobile-ui-builder.qvantel.svc.cluster.local
+                  port:
+                    number: 21080
       mockbank:
         enabled: false
         gateways:
