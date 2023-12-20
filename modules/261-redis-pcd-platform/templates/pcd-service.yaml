@@ -6,7 +6,7 @@ spec:
   clusterIP: None # <= Don't forget!!
   selector:
     app.kubernetes.io/component: node
-    app.kubernetes.io/instance: redis-cbs-pcd-platform
+    app.kubernetes.io/instance: redis-pcd-platform
     app.kubernetes.io/name: redis
   ports:
     - protocol: TCP
@@ -20,7 +20,7 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/component: node
-    app.kubernetes.io/instance: redis-cbs-pcd-platform
+    app.kubernetes.io/instance: redis-pcd-platform
     app.kubernetes.io/name: redis
   ports:
     - protocol: TCP
