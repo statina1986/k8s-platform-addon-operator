@@ -1,0 +1,31 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.applications.commonOnePointZero }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-prometheus-message-manager-lag.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: message-manager-lag.alerts
+      rules:
+      - alert: MessageManagerLag
+        annotations:
+          brief: 'This is the alert to monitor undelivered sms and emails by message-manager.'
+          procedure: 'Check from the prometheus which topic is alerting and escalate to L2. Alert created on GLOC-12491 .'
+        expr: 'sum by (topic) (kafka_consumergroup_group_lag{topic=~"message-manager.queue-[0-9]+\\.(sms|email)"}) > 20000'
+        labels:
+          severity: critical
+      - alert: MessageManagerLag
+        annotations:
+          brief: 'This is the alert to monitor undelivered sms and emails by message-manager.'
+          procedure: 'Check from the prometheus which topic is alerting. In case this continues, escalate to L2. Alert created on GLOC-12491 .'
+        expr: 'sum by (topic) (kafka_consumergroup_group_lag{topic=~"message-manager.queue-[0-9]+\\.(sms|email)"}) > 10000'
+        labels:
+          severity: warning
