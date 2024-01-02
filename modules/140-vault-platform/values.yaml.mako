@@ -3,6 +3,9 @@ vaultPlatform:
   autoUnseal: false
   useBackwardsCompatibilityService: true
   vault-secrets-webhook:
+    certificate:
+      useCertManager: true
+      generate: false
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
     nodeSelector:
       dedicated-nodes: platform-masters

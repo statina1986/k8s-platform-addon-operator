@@ -31,6 +31,7 @@ postgresPlatform:
   clusters:
     qvt-postgredb:
       enabled: true
+      vaultConfiguration: true
       spec:
         teamId: "qvt"
         dockerImage: artifactory.qvantel.net/qvantel-spilo:2.1-p7.20221130075959_postgres-14_b47cdbd7        

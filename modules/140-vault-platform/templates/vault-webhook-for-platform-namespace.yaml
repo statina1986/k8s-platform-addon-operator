@@ -1,0 +1,48 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:    
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/vault-platform-vault-secrets-webhook-ca"
+  name: vault-platform-vault-secrets-webhook-for-platform
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    caBundle: ""
+    service:
+      name: vault-platform-vault-secrets-webhook
+      namespace: platform
+      path: /pods
+      port: 443
+  failurePolicy: Ignore
+  matchPolicy: Equivalent
+  name: pods.vault-secrets-webhook.admission.banzaicloud.com
+  namespaceSelector:
+    matchExpressions:
+    - key: name
+      operator: NotIn
+      values:
+      - kube-system
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - kube-system
+  objectSelector:
+    matchExpressions:
+    - key: security.banzaicloud.io/mutate
+      operator: NotIn
+      values:
+      - skip
+  reinvocationPolicy: Never
+  rules:
+  - apiGroups:
+    - '*'
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    resources:
+    - pods
+    scope: '*'
+  sideEffects: NoneOnDryRun
+  timeoutSeconds: 10

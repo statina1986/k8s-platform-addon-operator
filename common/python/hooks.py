@@ -61,7 +61,7 @@ class EventHook:
 
     def __init__(self, eventName, context):
         self.eventName = eventName
-        self.context = context
+        self.context = context        
 
 
 class GroupHook:
@@ -97,6 +97,7 @@ class Hook:
                 time.sleep(self.retryDelay)
             else:            
                 break
+            
 
     def handle_hook(self):
 
@@ -142,6 +143,8 @@ class Hook:
                         self.execute_with_retry(SynchronizationHook(bc))
                     elif type == "Event":
                         event_type = bc['watchEvent']
+                        self.retries = int(bc.get('object', {}).get('metadata', {}).get('annotations', {}).get('platform.qvantel.com/retry-count', str(self.retries)))
+                        self.retryDelay = int(bc.get('object', {}).get('metadata', {}).get('annotations', {}).get('platform.qvantel.com/retry-delay', str(self.retryDelay)))
                         self.execute_with_retry(EventHook(event_type, bc))
                     elif type == "Group":
                         self.execute_with_retry(GroupHook(bc))
