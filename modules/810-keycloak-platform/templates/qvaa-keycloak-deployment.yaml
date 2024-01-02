@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qvaa-keycloak
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: qvaa-keycloak
+    {{- if .Values.keycloakPlatform.deployment.additionalLabels }}
+    {{ tpl .Values.keycloakPlatform.deployment.additionalLabels . | nindent 4 }}
+    {{- end }}
+spec:
+  {{ tpl .Values.keycloakPlatform.deployment.spec . | nindent 2 }}
+  

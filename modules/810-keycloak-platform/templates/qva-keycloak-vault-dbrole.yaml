@@ -1,0 +1,11 @@
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: platform-postgresql-qvaa-keycloak
+spec:
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_keycloak TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_keycloak;" }}
+  db-name: {{ .Values.keycloakPlatform.database.name}}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: postgresql_qvaa-keycloak

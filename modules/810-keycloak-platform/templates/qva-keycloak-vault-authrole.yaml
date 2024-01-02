@@ -1,0 +1,11 @@
+apiVersion: platform-vault.qvantel.com/v1
+kind: KubernetesAuthRole
+metadata:
+  name: platform-qvaa-keycloak
+spec:
+  bound_service_account_names:
+  - keycloak
+  bound_service_account_namespaces:
+  - platform
+  token_policies:
+  - platform-qvaa-keycloak

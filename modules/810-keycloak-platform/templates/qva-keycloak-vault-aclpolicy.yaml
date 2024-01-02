@@ -1,0 +1,15 @@
+apiVersion: platform-vault.qvantel.com/v1
+kind: AclPolicy
+metadata:
+  name: platform-qvaa-keycloak
+spec:
+  policy-hcl: |
+    path "auth/token/renew-self" {
+        capabilities = ["update"]
+    }
+    path "database/creds/postgresql_qvaa-keycloak" {
+      capabilities = ["read"]
+    }
+    path "secret/data/apps/qvaa/keycloak" {
+      capabilities = ["read"]
+    }
