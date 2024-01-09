@@ -357,7 +357,19 @@ istioIngress:
             - destination:
                 host: bssapi-explorer.qvantel.svc.cluster.local
                 port:
-                  number: 8080 
+                  number: 8080
+      b2b-sales-tool:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: b2b-sales-tool-web.qvantel.svc.cluster.local
+                  port:
+                    number: 3000
       case-admin:
         enabled: false
         gateways:
