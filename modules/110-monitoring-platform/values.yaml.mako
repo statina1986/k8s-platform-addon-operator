@@ -96,6 +96,7 @@ monitoringPlatform:
       "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
+    pspEnabled: false
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -156,6 +157,8 @@ monitoringPlatform:
         "release": "monitoring-platform"
   prometheus-consul-exporter:
     enabled: true
+    rbac:
+      pspEnabled: false
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
