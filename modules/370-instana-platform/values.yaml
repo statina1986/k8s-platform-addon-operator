@@ -8,14 +8,19 @@ instanaPlatform:
     agent:
       image:
         repository: artifactory.qvantel.net/instana/agent
-#Agent key, endpoint host and port can be found in the Instana backend.
-      key: to-be-filled
-      endpointHost: to-be-filled
+        name: artifactory.qvantel.net/instana/agent
+        tag: latest-static
+      keysSecret: instana-agent-key
+      endpointHost: to-be-set
       endpointPort: 443
       env:
-        INSTANA_AGENT_MODE: to-be-filled APM/INFRASTRCTURE
-        INSTANA_AGENT_TAGS: to-be-filled
+        INSTANA_AGENT_MODE: to-be-set
+        INSTANA_AGENT_TAGS: to-be-set
       pod:
+        tolerations:
+        - effect: NoSchedule
+          key: dedicated-nodes
+          operator: Exists
         requests:
           cpu: 0.5
           memory: 512
@@ -25,7 +30,10 @@ instanaPlatform:
         com.instana.plugin.profiling.java:
           enabled: true
         com.instana.plugin.opentelemetry:
-          enabled: true
+          grpc:
+            enabled: true
+          http:
+            enabled: true
         com.instana.ignore:
           processes:
             - 'stunnel'
@@ -35,14 +43,18 @@ instanaPlatform:
             - 'org.apache.zookeeper.server.quorum.QuorumPeerMain'
             - 'io.strimzi.operator.topic.Main'
             - 'io.strimzi.operator.user.Main'
+    opentelemetry:
+      grpc:
+        enabled: true
+      http:
+        enabled: true
     cluster:
-      name: to-be-filled
+      name: to-be-set
     zone:
-      name: to-be-filled
+      name: to-be-set
   leaderElector:
     image:
       repository: artifactory.qvantel.net/instana/leader-elector
   k8s_sensor:
     image:
       repository: artifactory.qvantel.net/instana/k8sensor
-    
