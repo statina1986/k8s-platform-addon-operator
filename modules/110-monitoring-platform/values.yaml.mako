@@ -239,7 +239,7 @@ monitoringPlatform:
             - name: Elasticsearch-Ingress
               type: elasticsearch
               access: http
-              url: http://logsearch-es-logsearch.service.consul:9200
+              url: http://logsearch-es-logsearch.platform.svc:9200
               basicAuth: true
               basicAuthUser: elastic
               database: ingress*
@@ -251,7 +251,7 @@ monitoringPlatform:
             - name: Elasticsearch-Application
               type: elasticsearch
               access: http
-              url: http://logsearch-es-logsearch.service.consul:9200
+              url: http://logsearch-es-logsearch.platform.svc:9200
               basicAuth: true
               basicAuthUser: elastic
               database: application*

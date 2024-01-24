@@ -21,7 +21,7 @@ kafkaPlatform:
       enabled: true
       spec:
         kafka:
-          version: 2.8.1
+          version: 3.5.1
           % if values['global']['configurationProfile'] in {'perf', 'prod'}:
           replicas: 6
           % else:
