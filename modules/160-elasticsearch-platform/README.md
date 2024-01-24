@@ -10,8 +10,8 @@ When running a upgrade the downtime for elasticsearch will be around 5mins and i
 
 # Filebeat connections to Vector
 
-Filebeat can be utilized on VM nodes, like Tibco nodes, to transmit traffic to the k8s cluster. In order to send the traffic to Vector, it's essential to include an additional host address that points to Vector. Here's an example:
+Filebeat can be utilized on VM nodes, like Tibco nodes, to transmit traffic to the k8s cluster. In order to send the traffic to Vector, it's essential to change the logstash address to vector-aggregator, which sends the traffic to Elasticsearch and Loki. Here's an example:
 
-    hosts:
-      - "${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}"
-      - "vector-platform-aggregator.platform.svc.cluster.local:9000"
+    output.logstash:
+      hosts:
+      	- vector-platform-aggregator.service.consul:9000
