@@ -1,3 +1,5 @@
+{{- if .Values.istioIngress }}
+{{- if .Values.istioIngress.virtualServices }}
 {{- if .Values.istioIngress.virtualServices.instances }}
 {{- $root := . }}
 {{- range keys .Values.istioIngress.virtualServices.instances  }}
@@ -44,6 +46,8 @@ spec:
   tcp: 
     {{- tpl (toYaml .) $root | nindent 2 }}
   {{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

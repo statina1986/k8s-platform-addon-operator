@@ -1,3 +1,4 @@
+{{- $root := . }}
 {{- if .Values.istioIngress.publicIngressEnabled }}
 {{- range .Values.istioIngress.publicIngressGateways  }}
 ---
@@ -5,9 +6,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   {{- if .annotations }}
-    annotations:
-    {{- tpl .annotations . | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- tpl .annotations $root | nindent 4 }}
+  {{- end -}}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
@@ -21,9 +22,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:  
   {{- if .annotations }}
-    annotations:
-    {{- tpl .annotations . | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- tpl .annotations $root | nindent 4 }}
+  {{- end -}}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
@@ -37,9 +38,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   {{- if .annotations }}
-    annotations:
-    {{- tpl .annotations . | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- tpl .annotations $root | nindent 4 }}
+  {{- end -}}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
@@ -53,9 +54,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   {{- if .annotations }}
-    annotations:
-    {{- tpl .annotations . | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- tpl .annotations $root | nindent 4 }}
+  {{- end -}}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
