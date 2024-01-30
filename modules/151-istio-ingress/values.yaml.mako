@@ -577,6 +577,16 @@ istioIngress:
               host: knowledge-wiki.qvantel.svc.cluster.local
               port:
                 number: 8080
+      kpitool:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: kpi-tool-front.qvantel.svc.cluster.local
+              port:
+                number: 4458
       mapp:
         enabled: false
         gateways:
