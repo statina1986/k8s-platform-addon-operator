@@ -8,7 +8,7 @@ metadata:
   {{- if .annotations }}
   annotations:
     {{- tpl .annotations $root | nindent 4 }}
-  {{- end -}}
+  {{- end }}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
@@ -24,7 +24,7 @@ metadata:
   {{- if .annotations }}
   annotations:
     {{- tpl .annotations $root | nindent 4 }}
-  {{- end -}}
+  {{- end }}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
@@ -40,7 +40,7 @@ metadata:
   {{- if .annotations }}
   annotations:
     {{- tpl .annotations $root | nindent 4 }}
-  {{- end -}}
+  {{- end }}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
@@ -56,7 +56,7 @@ metadata:
   {{- if .annotations }}
   annotations:
     {{- tpl .annotations $root | nindent 4 }}
-  {{- end -}}
+  {{- end }}
   name: {{ .name }}
 spec: 
   {{- toYaml .spec | nindent 2 }}
