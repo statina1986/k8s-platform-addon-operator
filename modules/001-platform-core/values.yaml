@@ -1,2 +1,2 @@
 platformCore:
-  awsRole: your-aws-platform-role-here
+  corednsEnabled: false
