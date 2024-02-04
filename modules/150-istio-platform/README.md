@@ -2,8 +2,7 @@
 This module is responsible for deployment of [Istio](https://github.com/istio/istio) control plane the cluster
 
 Depends on modules:
-- [cert-platform](/modules/110-cert-platform/README.md) which is needed to established vault certificates
-
+- []
 Provides:
 - Istio Control Plane
 

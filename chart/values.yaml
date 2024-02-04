@@ -9,7 +9,7 @@ globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
   ingressBaseUrl: "some-env.qvantel.solutions"
-  kubernetesVersion: 1.25
+  kubernetesVersion: "1.25"
 modulesConfig:
 
   platformCore:

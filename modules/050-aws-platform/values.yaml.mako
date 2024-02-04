@@ -1,9 +1,50 @@
+<%
+  region = values['awsPlatform']['region'] or 'eu-central-1'
+  clusterName = values['awsPlatform']['clusterName'] or 'cluster-name'
+  awsRegistryAccount = {}
+  awsRegistryAccount['af-south-1']     = '877085696533'
+  awsRegistryAccount['ap-east-1']      = '800184023465'
+  awsRegistryAccount['ap-northeast-1'] = '602401143452'
+  awsRegistryAccount['ap-northeast-2'] = '602401143452'
+  awsRegistryAccount['ap-northeast-3'] = '602401143452'
+  awsRegistryAccount['ap-south-1']     = '602401143452'
+  awsRegistryAccount['ap-south-2']     = '900889452093'
+  awsRegistryAccount['ap-southeast-1'] = '602401143452'
+  awsRegistryAccount['ap-southeast-2'] = '602401143452'
+  awsRegistryAccount['ap-southeast-3'] = '296578399912'
+  awsRegistryAccount['ap-southeast-4'] = '491585149902'
+  awsRegistryAccount['ca-central-1']   = '602401143452'
+  awsRegistryAccount['ca-west-1']      = '761377655185'
+  awsRegistryAccount['cn-north-1']     = '918309763551'
+  awsRegistryAccount['cn-northwest-1'] = '961992271922'
+  awsRegistryAccount['eu-central-1']   = '602401143452'
+  awsRegistryAccount['eu-central-2']   = '900612956339'
+  awsRegistryAccount['eu-north-1']     = '602401143452'
+  awsRegistryAccount['eu-south-1']     = '590381155156'
+  awsRegistryAccount['eu-south-2']     = '455263428931'
+  awsRegistryAccount['eu-west-1']      = '602401143452'
+  awsRegistryAccount['eu-west-2']      = '602401143452'
+  awsRegistryAccount['eu-west-3']      = '602401143452'
+  awsRegistryAccount['il-central-1']   = '066635153087'
+  awsRegistryAccount['me-south-1']     = '558608220178'
+  awsRegistryAccount['me-central-1']   = '759879836304'
+  awsRegistryAccount['sa-east-1']      = '602401143452'
+  awsRegistryAccount['us-east-1']      = '602401143452'
+  awsRegistryAccount['us-east-2']      = '602401143452'
+  awsRegistryAccount['us-gov-east-1']  = '151742754352'
+  awsRegistryAccount['us-gov-west-1']  = '013241004608'
+  awsRegistryAccount['us-west-1']      = '602401143452'
+  awsRegistryAccount['us-west-2']      = '602401143452'
+%>
+
 awsPlatform:
-  region: eu-central-1  
-  apiServerEndpoint: https://172.20.0.1:443 # provide EKS API server endpoint
+  region: eu-central-1
+  clusterName: cluster-name
+  awsRegistry: ${awsRegistryAccount[region]}.dkr.ecr.${region}.amazonaws.com
+  apiServerEndpoint: https://172.20.0.1:443 # override EKS API server endpoint
   aws-load-balancer-controller-enabled: true
   aws-load-balancer-controller:
-    clusterName: cluster-name
+    clusterName: ${clusterName}
     serviceAccount:
       name: platform
       create: false
@@ -77,26 +118,33 @@ awsPlatform:
         parameters:
           type: gp3
   aws-vpc-cni-enabled: false
+  aws-vpc-cni:
+    eniConfig:
+      region: ${region}
+    image:
+      region: ${region}
+      account: '${awsRegistryAccount[region]}'
+    nodeAgent:
+      image:
+        region: ${region}
+        account: '${awsRegistryAccount[region]}'
+    init:
+      image:
+        region: ${region}
+        account: '${awsRegistryAccount[region]}'
   awsKubeProxyEnabled: false
-    awsKubeProxy:      
-      % if values['global']['kubernetesVersion'] in {'1.25'}: 
-      image: "v1.25.16-minimal-eksbuild.1"
-      % elif values['global']['kubernetesVersion'] in {'1.26'}:
-      image: "v1.26.11-minimal-eksbuild.4"
-      % elif values['global']['kubernetesVersion'] in {'1.27'}:
-      image: "v1.27.8-minimal-eksbuild.4"
-      % elif values['global']['kubernetesVersion'] in {'1.28'}:
-      image: "v1.28.4-minimal-eksbuild.4"
-      % elif values['global']['kubernetesVersion'] in {'1.29'}:
-      image: "v1.29.0-minimal-eksbuild.1"
-      % endif
-  % if values['awsPlatform']['region'] == 'ap-south-1': 
-  awsRegistry: 602401143452.dkr.ecr.ap-south-1.amazonaws.com
-  % elif values['awsPlatform']['region'] == 'ap-south-2': 
-  awsRegistry: 900889452093.dkr.ecr.ap-south-2.amazonaws.com
-  % elif values['awsPlatform']['region'] == 'eu-central-1': 
-  awsRegistry: 602401143452.dkr.ecr.eu-central-1.amazonaws.com
-  % elif values['awsPlatform']['region'] == 'eu-central-2': 
-  awsRegistry: 900612956339.dkr.ecr.eu-central-2.amazonaws.com  
-  % endif  
+  awsKubeProxy:      
+    % if values['global']['kubernetesVersion'] in {'1.25'}: 
+    image: "v1.25.16-minimal-eksbuild.1"
+    % elif values['global']['kubernetesVersion'] in {'1.26'}:
+    image: "v1.26.11-minimal-eksbuild.4"
+    % elif values['global']['kubernetesVersion'] in {'1.27'}:
+    image: "v1.27.8-minimal-eksbuild.4"
+    % elif values['global']['kubernetesVersion'] in {'1.28'}:
+    image: "v1.28.4-minimal-eksbuild.4"
+    % elif values['global']['kubernetesVersion'] in {'1.29'}:
+    image: "v1.29.0-minimal-eksbuild.1"
+    % else:
+    image: "v1.25.16-minimal-eksbuild.1"
+    % endif
     
