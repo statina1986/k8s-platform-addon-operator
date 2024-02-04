@@ -49,8 +49,8 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: spec.nodeName
-          image: >-
-            590381155156.dkr.ecr.eu-south-1.amazonaws.com/eks/kube-proxy:v1.24.7-minimal-eksbuild.2
+          image: >-            
+            {{ .Values.awsPlatform.awsRegistry }}/eks/kube-proxy:{{ .Values.awsPlatform.awsKubeProxy.image }}
           imagePullPolicy: IfNotPresent
           name: kube-proxy
           resources:

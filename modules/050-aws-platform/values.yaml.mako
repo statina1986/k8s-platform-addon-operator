@@ -1,4 +1,5 @@
 awsPlatform:
+  region: eu-central-1  
   apiServerEndpoint: https://172.20.0.1:443 # provide EKS API server endpoint
   aws-load-balancer-controller-enabled: true
   aws-load-balancer-controller:
@@ -77,4 +78,25 @@ awsPlatform:
           type: gp3
   aws-vpc-cni-enabled: false
   awsKubeProxyEnabled: false
+    awsKubeProxy:      
+      % if values['global']['kubernetesVersion'] in {'1.25'}: 
+      image: "v1.25.16-minimal-eksbuild.1"
+      % elif values['global']['kubernetesVersion'] in {'1.26'}:
+      image: "v1.26.11-minimal-eksbuild.4"
+      % elif values['global']['kubernetesVersion'] in {'1.27'}:
+      image: "v1.27.8-minimal-eksbuild.4"
+      % elif values['global']['kubernetesVersion'] in {'1.28'}:
+      image: "v1.28.4-minimal-eksbuild.4"
+      % elif values['global']['kubernetesVersion'] in {'1.29'}:
+      image: "v1.29.0-minimal-eksbuild.1"
+      % endif
+  % if values['awsPlatform']['region'] == 'ap-south-1': 
+  awsRegistry: 602401143452.dkr.ecr.ap-south-1.amazonaws.com
+  % elif values['awsPlatform']['region'] == 'ap-south-2': 
+  awsRegistry: 900889452093.dkr.ecr.ap-south-2.amazonaws.com
+  % elif values['awsPlatform']['region'] == 'eu-central-1': 
+  awsRegistry: 602401143452.dkr.ecr.eu-central-1.amazonaws.com
+  % elif values['awsPlatform']['region'] == 'eu-central-2': 
+  awsRegistry: 900612956339.dkr.ecr.eu-central-2.amazonaws.com  
+  % endif  
     
