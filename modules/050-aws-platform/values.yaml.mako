@@ -1,4 +1,5 @@
 awsPlatform:
+  apiServerEndpoint: https://172.20.0.1:443 # provide EKS API server endpoint
   aws-load-balancer-controller-enabled: true
   aws-load-balancer-controller:
     clusterName: cluster-name
@@ -74,3 +75,6 @@ awsPlatform:
         allowVolumeExpansion: true
         parameters:
           type: gp3
+  aws-vpc-cni-enabled: false
+  awsKubeProxyEnabled: false
+    

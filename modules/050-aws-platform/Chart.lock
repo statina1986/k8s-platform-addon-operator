@@ -1,0 +1,6 @@
+dependencies:
+- name: awsPlatform
+  repository: ""
+  version: 0.0.1
+digest: sha256:70e4b91a03a1ab600661f7787dfd893315370aba4b00b637fac7bcef8d4c34ba
+generated: "2024-02-04T11:53:03.498284585+02:00"

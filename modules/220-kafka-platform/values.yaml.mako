@@ -1,4 +1,5 @@
 kafkaPlatform:  
+  # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
     resources:
       limits:
@@ -16,6 +17,7 @@ kafkaPlatform:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+  # List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource.
   clusters:
     kafka-cluster:
       enabled: true
