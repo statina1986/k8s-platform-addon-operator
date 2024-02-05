@@ -370,6 +370,16 @@ istioIngress:
                   host: b2b-sales-tool-web.qvantel.svc.cluster.local
                   port:
                     number: 3000
+        b2b-flex-ecare:
+          enabled: false
+          gateways:
+          - private-ingress
+          http:
+          - route:
+            - destination:
+                host: b2b-flex-ecare-web.qvantel.svc.cluster.local
+                port:
+                  number: 3000
       case-admin:
         enabled: false
         gateways:
