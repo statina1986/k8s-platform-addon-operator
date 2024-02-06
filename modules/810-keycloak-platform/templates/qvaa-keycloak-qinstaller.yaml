@@ -12,7 +12,9 @@ spec:
     - "CREATE DATABASE keycloak WITH OWNER db_keycloak"
   db-username: postgres
   db-password: "{postgres-password}"
-  db-url: "postgresql://postgres:{postgres-password}@{{ .Values.keycloakPlatform.database.name }}.platform.svc:5432"
+  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ .Values.keycloakPlatform.database.name }}.platform.svc:5432/postgres"
   computed-values:
     - name: "postgres-password"
       expression: "k8s_get_secret_value('postgres.{{ .Values.keycloakPlatform.database.name }}.credentials.postgresql.acid.zalan.do', 'platform', 'password')"
+    - name: "postgres-user"
+      expression: "k8s_get_secret_value('postgres.{{ .Values.keycloakPlatform.database.name }}.credentials.postgresql.acid.zalan.do', 'platform', 'username')"

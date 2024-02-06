@@ -148,10 +148,6 @@ modulesConfig:
   traefikIngress:
     configurationRequired: "check module documentation for configuration options"
 
-  vaultConfigurationEnabled: "false"
-  vaultConfiguration:
-    configurationRequired: "check module documentation for configuration options"
-
   vaultPlatformEnabled: "false"
   vaultPlatform:
     configurationRequired: "check module documentation for configuration options"

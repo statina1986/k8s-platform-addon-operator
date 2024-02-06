@@ -1,6 +1,6 @@
 <%
-  region = values['awsPlatform']['region'] or 'eu-central-1'
-  clusterName = values['awsPlatform']['clusterName'] or 'cluster-name'
+  region = values.get('awsPlatform', {}).get('region','eu-central-1')
+  clusterName = values.get('awsPlatform', {}).get('clusterName','cluster-name')
   awsRegistryAccount = {}
   awsRegistryAccount['af-south-1']     = '877085696533'
   awsRegistryAccount['ap-east-1']      = '800184023465'

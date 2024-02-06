@@ -12,6 +12,7 @@ Provides:
   - KV (v1) engine at path *secret*
   - Database engine at path *database*
 - Vault UI
+- Manage of Vault entities with CRDs
 
 Vault is available at:
 - vault-platform.platform.svc
@@ -42,3 +43,13 @@ It is possible to configure module to use auto-unsealing feature with external s
     }
     ```
     This is easy to add with ".Values.vault.ha.raft.additionalConfig" parameter. See [values.yaml](values.yaml)
+
+### Manage vault entities with CRDs
+Provides configuration of following Vault entities via CRDs:
+- [Kubernetes auth method role](./resources/kubernetes-auth-role.yaml)
+- [Database secret engine connection](./resources/db-connection.yaml)
+- [Database secret engine role](./resources/db-role.yaml)
+- [ACL policy](./resources/acl-policy.yaml)
+- [K/V Secrets(v1)](./resources/kv1-secret.yaml)
+
+For details of each resource please check CRD definition.

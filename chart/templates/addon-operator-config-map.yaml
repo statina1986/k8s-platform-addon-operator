@@ -105,9 +105,6 @@ data:
   sftpgoPlatformEnabled: "{{ .Values.modulesConfig.sftpgoPlatformEnabled }}"
   sftpgoPlatform: {{ print "|\n" (.Values.modulesConfig.sftpgoPlatform | toYaml | indent 4) }}
 
-  vaultConfigurationEnabled: "{{ .Values.modulesConfig.vaultConfigurationEnabled }}"
-  vaultConfiguration: {{ print "|\n" (.Values.modulesConfig.vaultConfiguration | toYaml | indent 4) }}
-
   vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"
   vaultPlatform: {{ print "|\n" (.Values.modulesConfig.vaultPlatform | toYaml | indent 4) }}
 
