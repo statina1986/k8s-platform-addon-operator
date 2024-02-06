@@ -29,3 +29,4 @@ spec:
         expr: 'sum by (topic) (kafka_consumergroup_group_lag{topic=~"message-manager.queue-[0-9]+\\.(sms|email)"}) > 10000'
         labels:
           severity: warning
+{{- end }}
