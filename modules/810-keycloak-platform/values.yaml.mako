@@ -45,9 +45,16 @@ keycloakPlatform:
     additionalLabels: null
     replicaCount: 1
     image: "artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:23.0.4.2.20240116085404_master_9cdb6973"
+    # command: [ "some-command" ]
+    # args: [ "--some-option" ]
     spec: |
       progressDeadlineSeconds: 600
       replicas: {{ .Values.keycloakPlatform.deployment.replicaCount }}
+      % if values['global']['configurationProfile'] == 'dev':
+      # in single host environments pod affinity prevents rolling update because second pod can't run on same host
+      strategy:
+        type: Recreate
+      % endif
       selector:
         matchLabels:
           app: qvaa-keycloak
@@ -108,6 +115,12 @@ keycloakPlatform:
               - secretRef:
                   name: keycloak-admin-secret
             image: {{ .Values.keycloakPlatform.deployment.image }}
+            {{- if .Values.keycloakPlatform.deployment.command }}
+            command: {{ .Values.keycloakPlatform.deployment.command }}
+            {{- end }}
+            {{- if .Values.keycloakPlatform.deployment.args }}
+            args: {{ .Values.keycloakPlatform.deployment.args }}
+            {{- end }}
             imagePullPolicy: IfNotPresent
             livenessProbe:
               failureThreshold: 3
