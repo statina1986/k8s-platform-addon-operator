@@ -5,9 +5,9 @@ redisPlatform:
       enabled: true
       sentinel: true
     commonConfiguration: |-
-        # Enable AOF https://redis.io/topics/persistence#append-only-file
+      # Enable AOF https://redis.io/topics/persistence#append-only-file
       appendonly no
-        # Enable RDB persistence, AOF persistence already enabled.
+      # Enable RDB persistence, AOF persistence already enabled.
       save 900 1
       save 300 10
       save 60 10000
