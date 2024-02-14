@@ -1066,7 +1066,7 @@ data:
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             },
             "refresh": 1,
-            "regex": "/.*mmlyle-preprod*/",
+            "regex": "",
             "skipUrlSync": false,
             "sort": 0,
             "tagValuesQuery": "",
