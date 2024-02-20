@@ -49,4 +49,22 @@ spec:
       labels:
         level: application
         severity: warning
+    - alert: ContainerOomKilled
+      annotations:
+        brief: "The {{` {{ $labels.container }} `}} container on pod {{` {{ $labels.pod }} `}} has been oomkilled {{` {{ $value|humanize }} `}} times within the last hour." 
+        procedure: "Consider if this warning alert could have service impact and escalate following the established procedure."
+      expr: sum by (namespace,pod,container) (increase(kube_pod_container_status_restarts_total[1h])) * on(namespace,pod,container) group_left(reason) kube_pod_container_status_last_terminated_reason{reason="OOMKilled"} >= 1 <=3
+      for: 5m
+      labels:
+        level: application
+        severity: warning
+    - alert: ContainerOomKilledFrequently
+      annotations:
+        brief: "The {{` {{ $labels.container }} `}} container on pod {{` {{ $labels.pod }} `}} has been oomkilled {{` {{ $value|humanize }} `}} times within the last hour." 
+        procedure: "The {{` {{$labels.container}} `}} has been OOMkilled frequently. Depending on the component, this should likely be addressed asap. Escalate following the established procedure."
+      expr: sum by (namespace,pod,container) (increase(kube_pod_container_status_restarts_total[1h])) * on(namespace,pod,container) group_left(reason) kube_pod_container_status_last_terminated_reason{reason="OOMKilled"} >= 4
+      for: 5m
+      labels:
+        level: application
+        severity: critical
 {{- end }}
