@@ -47,6 +47,22 @@ keycloakPlatform:
     image: "artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:23.0.4.2.20240116085404_master_9cdb6973"
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
+    % if values['global']['configurationProfile'] in {'perf', 'prod'}:
+    # depending on keycloak use, even more could be needed, but this is a good starting point.
+    metaspace: 512m
+    maxMetaspace: 512m
+    xms: 1024m
+    xmx: 1024m
+    memory: 2G
+    cpu: 200m
+    % else:
+    metaspace: 256m
+    maxMetaspace: 256m
+    xms: 512m
+    xmx: 512m
+    memory: 1G
+    cpu: 100m
+    % endif
     spec: |
       progressDeadlineSeconds: 600
       replicas: {{ .Values.keycloakPlatform.deployment.replicaCount }}
@@ -87,17 +103,17 @@ keycloakPlatform:
             - name: APP_DOCKER_IMAGE
               value: {{ .Values.keycloakPlatform.deployment.image }}
             - name: METASPACE_SIZE
-              value: 256m
+              value: {{ .Values.keycloakPlatform.deployment.metaspace }}
             - name: KC_LOG_LEVEL
               value: info,org.keycloak.events:debug
             - name: SERVICE_NAME
               value: qvaa-keycloak
             - name: MAX_METASPACE_SIZE
-              value: 256m
+              value: {{ .Values.keycloakPlatform.deployment.maxMetaspace }}
             - name: XMX
-              value: 512m
+              value: {{ .Values.keycloakPlatform.deployment.xmx }}
             - name: XMS
-              value: 512m
+              value: {{ .Values.keycloakPlatform.deployment.xms }}
             - name: KC_DB
               value: postgres
             - name: KC_DB_URL
@@ -154,6 +170,6 @@ keycloakPlatform:
               timeoutSeconds: 9
             resources:
               limits:
-                memory: 1G
+                memory: {{ .Values.keycloakPlatform.deployment.memory }}
               requests:
-                cpu: 100m
+                cpu: {{ .Values.keycloakPlatform.deployment.cpu }}
