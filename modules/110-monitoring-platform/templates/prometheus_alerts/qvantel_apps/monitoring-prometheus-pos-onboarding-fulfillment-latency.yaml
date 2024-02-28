@@ -1,0 +1,52 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.applications.commonOnePointZero }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-prometheus-pos-onboarding-fulfillment-latency.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+    - name: orders-bpmn-executor-jvm-threads-state.alerts
+      rules:
+      - alert: BlockedJvmThreadsStateOrdersBpmnExecutor
+        annotations:
+          brief: 'orders-bpmn-executor jvm has blocked threads, this is the indication of latency in onboarding-fulfillment orders.'
+          procedure: 'Check for the blocked threads count. If the count reaches the threshold for a given period, please escalate to L2 team. Alert created on GLOC-14085.'
+        expr: 'sum(jvm_threads_states_threads{app="orders-bpmn-executor", state = "blocked"}) by (pod_name) >= 10'
+        for: 5m
+        labels:
+          severity: critical
+      - alert: BlockedJvmThreadsStateOrdersBpmnExecutor
+        annotations:
+          brief: 'orders-bpmn-executor jvm has blocked threads, this is the indication of latency in onboarding-fulfillment orders.'
+          procedure: 'Check for the blocked threads count. If the count reaches the threshold for a given period, please escalate to L2 team. Alert created on GLOC-14085.'
+        expr: 'sum(jvm_threads_states_threads{app="orders-bpmn-executor", state = "blocked"}) by (pod_name) >= 5'
+        for: 5m
+        labels:
+          severity: warning
+    - name: db-connection-average-duration-orders-bpmn-executor.alerts
+      rules:
+      - alert: AverageConnectionDurationOrdersBpmnExecutor
+        annotations:
+          brief: 'orders-bpmn-executor is taking more than expected time for connection establishment to DB, this is the indication of latency in onboarding-fulfillment orders.'
+          procedure: 'Check the average time for the connection, If the value reaches threshold for a given period, please escalate to L2 team. Alert created on GLOC-14085.'
+        expr: '(sum(rate(hikaricp_connections_usage_seconds_sum[5m])) by (app, pod_name) / sum(rate(hikaricp_connections_usage_seconds_count[5m])) by (app, pod_name)) >= 1'
+        for: 5m
+        labels:
+          severity: critical
+      - alert: AverageConnectionDurationOrdersBpmnExecutor
+        annotations:
+          brief: 'orders-bpmn-executor is taking more than expected time for connection establishment to DB, this is the indication of latency in onboarding-fulfillment orders.'
+          procedure: 'Check the average time for the connection, If the value reaches threshold for a given period, please escalate to L2 team. Alert created on GLOC-14085.'
+        expr: '(sum(rate(hikaricp_connections_usage_seconds_sum[5m])) by (app, pod_name) / sum(rate(hikaricp_connections_usage_seconds_count[5m])) by (app, pod_name)) >= 0.25'
+        for: 5m
+        labels:
+          severity: warning
+{{- end }}
