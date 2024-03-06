@@ -39,7 +39,7 @@ def createPackage() {
 
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
     
-    sh "docker build -t ${imageTag(K8S_PLATFORM_NAME)} ."
+    sh "docker build --build-arg BUILD_TAG=${imageVersion()} -t ${imageTag(K8S_PLATFORM_NAME)} ."
 
     sh "docker build -t ${imageTag(TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images/${TOOLS_NAME}.Dockerfile"
 

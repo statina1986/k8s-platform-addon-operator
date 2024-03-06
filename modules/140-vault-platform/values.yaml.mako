@@ -1,3 +1,7 @@
+<%!
+    import os
+    build_tag = os.environ.get('BUILD_TAG','latest')
+%>
 # vaultPlatformNamespace: vault
 vaultPlatform:
   autoUnseal: false
@@ -87,7 +91,7 @@ vaultPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-          image: artifactory.qvantel.net/k8s-platform-tools:latest
+          image: artifactory.qvantel.net/k8s-platform-tools:${build_tag}
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /init-script/

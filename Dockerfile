@@ -11,3 +11,5 @@ ADD modules /modules
 ADD global-hooks /global-hooks
 ADD resources /resources
 ENV PYTHONPATH=/
+ARG BUILD_TAG=latest
+ENV BUILD_TAG=${BUILD_TAG}
