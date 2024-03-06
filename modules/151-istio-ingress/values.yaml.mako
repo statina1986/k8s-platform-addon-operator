@@ -859,6 +859,17 @@ istioIngress:
               host: kafka-ui.platform.svc.cluster.local
               port:
                 number: 8080
+      reaper:
+        enabled: true
+        gateways:
+        - private-ingress
+        - integrations-http-ingress
+        http:
+        - route:
+          - destination:
+              host: reaper.platform.svc.cluster.local
+              port:
+                number: 8080
       kibana:
         enabled: false
         gateways:
