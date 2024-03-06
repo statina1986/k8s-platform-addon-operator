@@ -16,9 +16,9 @@ dependencies:
     alias: agent
     condition: agent.enabled
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-    version: "^0.18.0"
+    version: "^0.31.0"
   - name: vector
     alias: aggregator
     condition: aggregator.enabled
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-    version: "^0.18.0"
+    version: "^0.31.0"
