@@ -7,7 +7,9 @@ hook::config() {
 }
 
 hook::trigger() {
-  coredns_config="$(kubectl get configmap/coredns -n kube-system --output jsonpath='{.data.Corefile}')"
+  local coredns_file="${COREDNS_FILE:-coredns}"  # Default to 'coredns' if not set in the environment
+
+  coredns_config="$(kubectl get configmap/"$coredns_file" -n kube-system --output jsonpath='{.data.Corefile}')"
   if [[ $coredns_config == *"consul"* ]] ; then
     qlog "Consul DNS already registered within CoreDNS"
   else
@@ -19,7 +21,7 @@ consul {
     cache 30
     forward . $consul_ip
 }\"}}" | jq -sR .)
-    command="kubectl patch configmap/coredns -n kube-system -p $new_core_file --type=merge"
+    command="kubectl patch configmap/$coredns_file -n kube-system -p $new_core_file --type=merge"
     eval "$command"
   fi 
 }

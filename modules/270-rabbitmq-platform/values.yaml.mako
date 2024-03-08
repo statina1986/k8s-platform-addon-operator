@@ -1,4 +1,5 @@
 rabbitmqPlatform:
+# 
   rabbitmq:
     auth:
       username: user
@@ -29,7 +30,6 @@ rabbitmqPlatform:
     extraConfiguration: |-
       #default_vhost = {{ .Release.Namespace }}-vhost
       #disk_free_limit.absolute = 50MB
-
 
     replicaCount: 3
     tolerations:
