@@ -31,8 +31,6 @@ spec:
             value: {{ .Values.helmIgnoreRelease}}
           - name: INSIDE_CLUSTER
             value: "true"
-          - name: COREDNS_FILE
-            value: "{{ .Values.corednsFile }}"
           {{- range .Values.additionalEnvironmentVars }}
           - name: {{ .name }}
             value: {{ .value }}

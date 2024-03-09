@@ -61,6 +61,14 @@ function common::run_hook() {
   fi
 }
 
+function common::get_values_value() {
+  echo "$(jq -r $1 $VALUES_PATH)"
+}
+
+function common::get_config_values_value() {
+  echo "$(jq -r $1 $CONFIG_VALUES_PATH)"
+}
+
 function helm::run_helm_dependency_update_hook() {
   if [[ $1 == "--config" ]] ; then
     echo '{"configVersion":"v1", "beforeHelm": 1}'

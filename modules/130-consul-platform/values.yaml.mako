@@ -1,4 +1,8 @@
 consulPlatform:
+  updateCoreDns:    
+    enabled: "true"
+    configmapName: "coredns"
+    configmapNamespace: "kube-system"
   consul:
     server:
       replicas: 3
