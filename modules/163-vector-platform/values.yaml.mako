@@ -125,10 +125,9 @@ vectorPlatform:
               } else {
                 .qvantel_message = .message
                 . = merge!(., structured)
-                parsed_timestamp, err = to_timestamp(.@timestamp)
-                if err != null {
-                  parsed_timestamp = parse_timestamp!(.@timestamp, "%Y-%m-%dT%H:%M:%S%.3f%z")
-                  .timestamp = parsed_timestamp
+                parsed_timestamp, err = parse_timestamp(.@timestamp,"%+")
+                if err != null {                  
+                  .parse_error = err
                 } else {
                   .timestamp = parsed_timestamp
                 }                
@@ -147,7 +146,12 @@ vectorPlatform:
             } else {
               .log_type = "AUDIT"
               . = merge!(., structured)
-              .timestamp = to_timestamp!(.start_time)
+              parsed_timestamp, err = parse_timestamp(.start_time,"%+")
+              if err != null {                  
+                .parse_error = err
+              } else {
+                .timestamp = parsed_timestamp
+              }
             }
         % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
         istio_to_elk_transform:
@@ -177,7 +181,12 @@ vectorPlatform:
             } else {
               .log_type = "AUDIT"
               . = merge!(., structured)
-              .timestamp = to_timestamp!(.time)
+              parsed_timestamp, err = parse_timestamp(.time,"%+")
+              if err != null {                  
+                .parse_error = err
+              } else {
+                .timestamp = parsed_timestamp
+              }
             }
         tibco_transform:
           type: remap
