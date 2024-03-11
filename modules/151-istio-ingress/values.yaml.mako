@@ -328,6 +328,16 @@ istioIngress:
                   host: rbs-billing-front.qvantel.svc.cluster.local
                   port:
                     number: 3003
+      rbs-ui:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: rbs-ui.qvantel.svc.cluster.local
+                  port:
+                    number: 3000
       bssapi:
         enabled: false
         gateways:
@@ -748,6 +758,7 @@ istioIngress:
               host: recharge-manager-frontend.qvantel.svc.cluster.local
               port:
                 number: 7890
+
       rim:
         enabled: false
         gateways:
