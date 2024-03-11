@@ -264,7 +264,8 @@ vectorPlatform:
         % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
         elk_tibco:
           compression: none
-          endpoint: http://logsearch-es-http.platform.svc:9200
+          endpoints: 
+            - "http://logsearch-es-http.platform.svc:9200"
           inputs:
             - tibco_transform
           type: elasticsearch
@@ -279,7 +280,8 @@ vectorPlatform:
             index: "all-tibco-%Y-%m-%d"
         elk_apps:
           compression: none
-          endpoint: http://logsearch-es-http.platform.svc:9200
+          endpoints: 
+            - "http://logsearch-es-http.platform.svc:9200"
           inputs:
             - qvantel_apps_no_debug
             - rbs_transform
@@ -295,7 +297,8 @@ vectorPlatform:
             index: "application-%Y-%m-%d"
         elk_ingress:
           compression: none
-          endpoint: http://logsearch-es-http.platform.svc:9200
+          endpoints: 
+            - "http://logsearch-es-http.platform.svc:9200"
           inputs:
             - istio_to_elk_transform
           type: elasticsearch
