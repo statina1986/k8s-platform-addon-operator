@@ -41,6 +41,17 @@ rules:
     - list
     - watch
 - apiGroups:
+    - batch
+  resources:
+    - cronjobs
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - update
+    - watch
+- apiGroups:
     - cassandra.datastax.com
   resources:
     - cassandradatacenters
@@ -273,6 +284,32 @@ rules:
     - medusa.k8ssandra.io
   resources:
     - medusabackupschedules/status
+  verbs:
+    - get
+    - patch
+    - update
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusaconfigurations
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusaconfigurations/finalizers
+  verbs:
+    - update
+- apiGroups:
+    - medusa.k8ssandra.io
+  resources:
+    - medusaconfigurations/status
   verbs:
     - get
     - patch
