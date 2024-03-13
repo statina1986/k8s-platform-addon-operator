@@ -10,7 +10,7 @@ CI_VERSION = "3"
 BITBUCKET_PROJECT = "cp"
 
 // Used to determine build types, if sending feedback, deploying automatically
-DELIVERY_BRANCHES = ["master", "experimental"]
+DELIVERY_BRANCHES = ["master", "experimental", "KPLAT-228"]
 
 // Used to enable/disable CVE to fail on new Critical severitys
 CVE_FAIL_BUILD_ON_NEW = false
