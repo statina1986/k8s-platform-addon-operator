@@ -341,9 +341,7 @@ monitoringPlatform:
                     each:
                       type: Gauge
                       gauge:
-                        path: [status, finishTime]
-                        labelsFromPath:
-                          ref: []                        
+                        path: [status, finishTime]                        
                   - name: "failedMedusaBackups"
                     help: "failed backups"
                     each:
