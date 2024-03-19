@@ -339,8 +339,8 @@ monitoringPlatform:
                   - name: "medusaBackupsFinishTime"
                     help: "backup finished timestamp"
                     each:
-                      type: Info
-                      info:
+                      type: Gauge
+                      gauge:
                         path: [status, finishTime]
                         labelsFromPath:
                           ref: []                        
