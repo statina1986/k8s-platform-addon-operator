@@ -335,6 +335,14 @@ monitoringPlatform:
                       info:                          
                         path: [status, finished]
                         labelsFromPath:
+                          ref: []
+                  - name: "medusaBackupsFinishTime"
+                    help: "backup finished timestamp"
+                    each:
+                      type: Info
+                      info:
+                        path: [status, finishTime]
+                        labelsFromPath:
                           ref: []                        
                   - name: "failedMedusaBackups"
                     help: "failed backups"
