@@ -12,6 +12,8 @@ monitoringPlatform:
       bssapi: false
       flex: false
       ordersManager: false
+    integrations:
+      opsgenie: false
     #Modules variables to control alerts and dashboards deployed based on the modules already deployed
     modules:
       kafka: false
