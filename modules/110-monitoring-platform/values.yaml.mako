@@ -343,7 +343,13 @@ monitoringPlatform:
                       info:                          
                         path: [status, failed]
                         labelsFromPath:
-                          ref: []  
+                          ref: []
+                  - name: "medusaBackupsFinishTime"
+                    help: "backup finished timestamp"
+                    each:
+                      type: Gauge
+                      gauge:
+                        path: [status, finishTime]  
               % endif
     prometheus:
       enabled: true
