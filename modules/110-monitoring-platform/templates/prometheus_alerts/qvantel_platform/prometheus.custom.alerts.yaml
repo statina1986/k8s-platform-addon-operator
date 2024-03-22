@@ -23,3 +23,15 @@ spec:
       annotations:
         brief: "Amount of metrics being appended to Prometheus is high"
         procedure: "Please escalate to monitoring team for a checkup."
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.integrations.opsgenie }}
+  - name: deadmans-switch.alerts
+    rules:
+    - alert: DeadMansSwitch
+      expr: vector(1)
+      labels:
+        severity: none
+        level: application
+      annotations:
+        brief: This DeadMansSwitch alert is used to ensure that the alerting pipeline is functional. This is supposed to alert constantly in Prometheus and Alertmanager will send a heartbeat to Opsgenie.
+        escalation: Qvantel Operations Center and Platform teams are automatically informed via e-mail from Opsgenie if the Opsgenie heartbeat dies.
+{{- end }}
