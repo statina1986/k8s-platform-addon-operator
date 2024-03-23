@@ -13,7 +13,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: addon-operator
+  name: addon-operator-{{ .Release.Namespace }}
 rules:
 - apiGroups:
     - "*"
@@ -30,11 +30,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: addon-operator
+  name: addon-operator-{{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: addon-operator
+  name: addon-operator-{{ .Release.Namespace }}
 subjects:
   - kind: ServiceAccount
     name: platform
