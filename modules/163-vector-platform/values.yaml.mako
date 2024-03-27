@@ -42,6 +42,28 @@ vectorPlatform:
             - kubernetes
             - vector_logs_transform
           address: vector-platform-aggregator.platform.svc:6000
+  fluent-bit-events-collector:
+    enabled: true
+    kind: Deployment
+    nameOverride: fluent-bit-events-collector
+    testFramework:
+      enabled: false
+    rbac:
+      create: true
+      eventsAccess: true
+    config:
+        inputs: |
+          [INPUT]
+              name kubernetes_events
+              tag k8s_events
+              # ask k8s API for updates every 30 seconds (default 5)
+              interval_sec 30
+        outputs: |
+          [OUTPUT]
+              name forward
+              match k8s_events
+              host vector-platform-aggregator.platform.svc
+              port 9002
   aggregator:
     enabled: true
     role: "Aggregator"
@@ -84,7 +106,17 @@ vectorPlatform:
           type: internal_metrics
         vector_logs:
           type: internal_logs
+        k8s_events_fluent:
+          type: fluent
+          address: 0.0.0.0:9002
+          encoding: json
       transforms:
+        k8s_events_transform:
+          type: remap
+          inputs:
+            - k8s_events_fluent
+          source: |
+            .log_source = "k8s-events"
         vector_logs_transform:
           type: remap
           inputs:
@@ -229,7 +261,8 @@ vectorPlatform:
             - rbs_transform
             - nodes_messages_transform
             - nodes_container_transform
-            - vector_logs_transform      
+            - vector_logs_transform
+            - k8s_events_transform
           % if values['global']['configurationProfile'] == 'dev':
           endpoint: http://loki-platform.platform.svc:3100
           % else:
