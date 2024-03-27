@@ -1,17 +1,34 @@
 ---
 logLevel: info
 addonOperatorNamespace: "platform"
-additionalEnvironmentVars: []
-imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
+imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
+
+deployment:
+  replicas: 1
+  additionalEnvironmentVars: []
+  nodeSelector:
+    #cluster-controller: "true"
+  tolerations:
+    # - effect: NoSchedule
+    #   key: CriticalAddonsOnly
+    #   operator: Exists
+    # - effect: NoExecute
+    #   key: node.kubernetes.io/not-ready
+    #   operator: Exists
+    #   tolerationSeconds: 300
+    # - effect: NoExecute
+    #   key: node.kubernetes.io/unreachable
+    #   operator: Exists
+    #   tolerationSeconds: 300
+
 globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
   ingressBaseUrl: "some-env.qvantel.solutions"
   kubernetesVersion: "1.25"
 modulesConfig:
-
   platformCore:
     configurationRequired: "check module documentation for configuration options"
 
@@ -26,7 +43,7 @@ modulesConfig:
   certPlatformEnabled: "false"
   certPlatform:
     configurationRequired: "check module documentation for configuration options"
-  
+
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -70,11 +87,11 @@ modulesConfig:
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
     strimziHelmVersion: "0.27.1"
-  
+
   kasopePlatformEnabled: "false"
   kasopePlatform:
     configurationRequired: "check module documentation for configuration options"
-  
+
   kyvernoPlatformEnabled: "false"
   kyvernoPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -82,7 +99,7 @@ modulesConfig:
   lokiPlatformEnabled: "false"
   lokiPlatform:
     configurationRequired: "check module documentation for configuration options"
-  
+
   keycloakPlatformEnabled: "false"
   keycloakPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -135,7 +152,7 @@ modulesConfig:
   rancherPlatformEnabled: "false"
   rancherPlatform:
     configurationRequired: "check module documentation for configuration options"
-  
+
   sftpEnabled: "false"
   sftp:
     configurationRequired: "check module documentation for configuration options"
@@ -155,16 +172,3 @@ modulesConfig:
   vectorPlatformEnabled: "false"
   vectorPlatform:
     configurationRequired: "check module documentation for configuration options"
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-

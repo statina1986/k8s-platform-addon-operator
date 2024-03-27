@@ -15,7 +15,7 @@ beforeHelm: 1
     def handle_binding(self, binding):
         match(binding):
             case BeforeHelmHook(values_json, configValues_json):
-                cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")                
+                cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")
                 directory = os.getcwd()
                 for file in glob.glob(os.path.dirname(__file__)+"/../**/*.mako", recursive=True):
                     print(file)

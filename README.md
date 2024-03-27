@@ -78,7 +78,7 @@ You can check the hook example here [modules/001-cert-platform/hooks/ensureResou
 ### Dependencies subcharts
 **addon-operator** has one significant limitation - it is hard to use external helm charts as dependencies (see https://github.com/flant/addon-operator/issues/153). Main issue is that values files in **addon-operator**  has special structure which is not compatible with subcharts values convention in Helm.
 
-In order to overcome this it ispossible to introduce empty subchart named as module name in camelCase  as first dependency of the module. All external dependencies should be placed as subcharts of that empty subchart.
+In order to overcome this it is possible to introduce empty subchart named as module name in camelCase  as first dependency of the module. All external dependencies should be placed as subcharts of that empty subchart.
 See example in module "130-cassandra-platform"
 
 ```
