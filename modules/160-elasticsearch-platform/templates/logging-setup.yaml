@@ -118,7 +118,7 @@ data:
             }
           },
           "delete": {
-            "min_age":"10d",
+            "min_age":"31d",
             "actions": {
               "delete": {}
             }
@@ -140,7 +140,7 @@ data:
             }
           },
           "delete": {
-            "min_age":"30d",
+            "min_age":"31d",
             "actions": {
               "delete": {}
             }
@@ -162,7 +162,7 @@ data:
             }
           },
           "delete": {
-            "min_age":"30d",
+            "min_age":"31d",
             "actions": {
               "delete": {}
             }
