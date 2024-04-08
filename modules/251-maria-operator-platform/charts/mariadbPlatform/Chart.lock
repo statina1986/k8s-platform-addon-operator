@@ -1,0 +1,6 @@
+dependencies:
+- name: mariadb-operator
+  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  version: 0.27.0
+digest:
+generated:
