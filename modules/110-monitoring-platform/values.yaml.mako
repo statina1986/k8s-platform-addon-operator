@@ -194,6 +194,8 @@ monitoringPlatform:
         kubernetesStorage: false
     grafana:
       enabled: true
+      env:
+        GF_INSTALL_PLUGINS: https://artifactory.qvantel.net:443/artifactory/grafana-plugins/yesoreyeram-infinity-datasource-2.5.0.linux_amd64.zip;yesoreyeram-infinity-datasource
       deploymentStrategy:
         type: Recreate
       tolerations:
@@ -229,7 +231,6 @@ monitoringPlatform:
         platform.yaml:
           apiVersion: 1
           datasources:
-
             - name: Loki
               type: loki
               % if values['global']['configurationProfile'] == 'dev':
@@ -263,7 +264,14 @@ monitoringPlatform:
               secureJsonData:
                 basicAuthPassword: <%text>${elastic}</%text>
             % endif
-            
+        business.yaml:
+          apiVersion: 1
+          datasources:
+            - name: kpitool
+              type: yesoreyeram-infinity-datasource
+              uid: jEggJhu4k
+              isDefault: false
+
       grafana.ini:
         auth.anonymous:
           enabled: true
