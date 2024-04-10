@@ -40,7 +40,7 @@ spec:
       - alert: BSSAPIISReceivingInvalidRequests
       # Checks if more than 10 invalid requests has been received during the last hour
         annotations:
-          brief: BSSAPI {{` {{$labels.job}} `}} has received more than {{` {{value}} `}} invalid requests the last hour
+          brief: BSSAPI {{` {{$labels.job}} `}} has received more than {{` {{$value}} `}} invalid requests the last hour
           procedure: Escalate to L2 after verifying
         expr: sum(increase(aggregator_requests_total{status="invalid"}[1h])) by(job) > 10
         for: 5m

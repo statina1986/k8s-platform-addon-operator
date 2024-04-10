@@ -1,0 +1,12 @@
+apiVersion: v2
+name: mariaOperatorPlatform
+version: 0.0.1
+dependencies:
+#  - name: mariadb-operator
+#    version: 0.27.0
+#    repository: https://mariadb-operator.github.io/mariadb-operator
+  - name: mariadb-operator
+    version: 0.27.0
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+
+

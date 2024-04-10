@@ -95,6 +95,10 @@ modulesConfig:
   mariadbPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  mariaOperatorPlatformEnabled: "false"
+  mariaOperatorPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   metricsPlatformEnabled: "false"
   metricsPlatform:
     configurationRequired: "check module documentation for configuration options"
