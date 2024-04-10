@@ -55,6 +55,13 @@ monitoringPlatform:
       dedicated-nodes: platform-masters
     % endif
     secretsExporter:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 300Mi
+        requests:
+          cpu: 20m
+          memory: 20Mi 
       podExtraLabels:
         "release": "monitoring-platform"
     hostPathsExporter:
