@@ -36,6 +36,14 @@ keycloakPlatform:
                     name: {{ .Values.keycloakPlatform.pomeriumSecretName }}
                     key: IDP_CLIENT_SECRET
               % endif
+              % if addon_operator['monitoringPlatformEnabled'] == 'true':
+              - name: GRAFANA_CLIENT_SECRET
+                # https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/110-monitoring-platform/templates/secrets/grafana_keycloak_client_secret.yaml
+                valueFrom:
+                  secretKeyRef:
+                    name: grafana-keycloak-client-secret
+                    key: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+              % endif
             envFrom:
               - secretRef:
                   name: keycloak-admin-secret
@@ -64,6 +72,14 @@ keycloakPlatform:
                 redirect_uris:
                   # pomerium shares domain name with keycloak
                   - https://auth-${values['global']['ingressBaseUrl']}/*
+              grafana:
+                % if addon_operator['pomeriumPlatformEnabled'] == 'true':
+                secret: $GRAFANA_CLIENT_SECRET
+                % endif
+                roles_claim: realm_access.roles
+                pkce: S256
+                redirect_uris:
+                  - https://grafana-${values['global']['ingressBaseUrl']}/*
   deployment:
     additionalLabels: null
     replicaCount: 1
