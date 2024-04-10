@@ -1,4 +1,4 @@
-mariaOperatorPlatform:
+mariadbOperatorPlatform:
   nameOverride: "mariadb-operator-platform"
   webhook:
     cert:
@@ -8,7 +8,7 @@ mariaOperatorPlatform:
     enabled: true
   clusters:
     mariadb-test:
-      enabled: true
+      enabled: false
       spec:
         rootPasswordSecretKeyRef:
           name: mariadb
