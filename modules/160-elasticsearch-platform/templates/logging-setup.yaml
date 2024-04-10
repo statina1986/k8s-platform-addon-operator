@@ -53,24 +53,10 @@ data:
             "timeFieldName": "@timestamp"
       }
     }'
-    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/platform* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
-    {
-      "attributes": {
-            "title": "platform*",
-            "timeFieldName": "@timestamp"
-      }
-    }'
     curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/audit-* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
       "attributes": {
             "title": "audit*",
-            "timeFieldName": "@timestamp"
-      }
-    }'
-    curl -u elastic:PW_REPLACE -XPOST http://kibana-kb-http.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/undecided* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
-    {
-      "attributes": {
-            "title": "undecided*",
             "timeFieldName": "@timestamp"
       }
     }'
@@ -91,18 +77,7 @@ data:
       "settings": {
         "index.lifecycle.name": "application_policy",
         "index.lifecycle.rollover_alias": "applicationalias",
-        "index.highlight.max_analyzed_offset": 10000000
-      }
-    }
-    EOF
-    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_template/platform_template <<EOF
-    {
-      "index_patterns": ["platform*"],
-      "order": -1,
-      "settings": {
-        "index.lifecycle.name": "platform_policy",
-        "index.lifecycle.rollover_alias": "platformalias",
+        "index.number_of_replicas": 0,
         "index.highlight.max_analyzed_offset": 10000000
       }
     }
@@ -115,6 +90,7 @@ data:
       "settings": {
         "index.lifecycle.name": "audit_policy",
         "index.lifecycle.rollover_alias": "auditalias",
+        "index.number_of_replicas": 0,
         "index.highlight.max_analyzed_offset": 10000000
       }
     }
@@ -127,18 +103,8 @@ data:
       "settings": {
         "index.lifecycle.name": "ingress_policy",
         "index.lifecycle.rollover_alias": "ingressalias",
+        "index.number_of_replicas": 0,
         "index.highlight.max_analyzed_offset": 10000000
-      }
-    }
-    EOF
-    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_template/undecided_template <<EOF
-    {
-      "index_patterns": ["undecided*"],
-      "order": -1,
-      "settings": {
-        "index.lifecycle.name": "undecided_policy",
-        "index.lifecycle.rollover_alias": "undecidedalias"
       }
     }
     EOF
@@ -149,109 +115,13 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"20GB"
-              },
               "set_priority": {
                 "priority": 50
               }
             }
           },
-          "warm": {
-            "min_age":"2d",
-            "actions": {
-              "forcemerge": {
-                "max_num_segments": 1
-              },
-              "shrink": {
-                "number_of_shards": 1
-              },
-              "allocate": {
-                "require": {
-                  "data": "warm"
-                }
-              },
-              "set_priority": {
-                "priority": 25
-              }
-            }
-          },
-          "cold": {
-            "min_age":"7d",
-            "actions": {
-              "set_priority": {
-                "priority": 0
-              },
-              "freeze": {},
-              "allocate": {
-                "number_of_replicas": 0,
-                "require": {
-                  "data": "cold"
-                }
-              }
-            }
-          },
           "delete": {
-            "min_age":"14d",
-            "actions": {
-              "delete": {}
-            }
-          }
-        }
-      }
-    }
-    EOF
-    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_ilm/policy/platform_policy <<EOF
-    {
-      "policy": {
-        "phases": {
-          "hot": {
-            "actions": {
-              "rollover": {
-                "max_size":"10GB"
-              },
-              "set_priority": {
-                "priority": 50
-              }
-            }
-          },
-          "warm": {
-            "min_age":"2d",
-            "actions": {
-              "forcemerge": {
-                "max_num_segments": 1
-              },
-              "shrink": {
-                "number_of_shards": 1
-              },
-              "allocate": {
-                "require": {
-                  "data": "warm"
-                }
-              },
-              "set_priority": {
-                "priority": 25
-              }
-            }
-          },
-          "cold": {
-            "min_age":"7d",
-            "actions": {
-              "set_priority": {
-                "priority": 0
-              },
-              "freeze": {},
-              "allocate": {
-                "number_of_replicas": 0,
-                "require": {
-                  "data": "cold"
-                }
-              }
-            }
-          },
-          "delete": {
-            "min_age":"14d",
+            "min_age":"31d",
             "actions": {
               "delete": {}
             }
@@ -267,50 +137,13 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"20GB"
-              },
               "set_priority": {
                 "priority": 50
               }
             }
           },
-          "warm": {
-            "min_age":"2d",
-            "actions": {
-              "forcemerge": {
-                "max_num_segments": 1
-              },
-              "shrink": {
-                "number_of_shards": 1
-              },
-              "allocate": {
-                "require": {
-                  "data": "warm"
-                }
-              },
-              "set_priority": {
-                "priority": 25
-              }
-            }
-          },
-          "cold": {
-            "min_age":"7d",
-            "actions": {
-              "set_priority": {
-                "priority": 0
-              },
-              "freeze": {},
-              "allocate": {
-                "number_of_replicas": 0,
-                "require": {
-                  "data": "cold"
-                }
-              }
-            }
-          },
           "delete": {
-            "min_age":"20d",
+            "min_age":"31d",
             "actions": {
               "delete": {}
             }
@@ -326,109 +159,13 @@ data:
         "phases": {
           "hot": {
             "actions": {
-              "rollover": {
-                "max_size":"20GB"
-              },
               "set_priority": {
                 "priority": 50
               }
             }
           },
-          "warm": {
-            "min_age":"2d",
-            "actions": {
-              "forcemerge": {
-                "max_num_segments": 1
-              },
-              "shrink": {
-                "number_of_shards": 1
-              },
-              "allocate": {
-                "require": {
-                  "data": "warm"
-                }
-              },
-              "set_priority": {
-                "priority": 25
-              }
-            }
-          },
-          "cold": {
-            "min_age":"7d",
-            "actions": {
-              "set_priority": {
-                "priority": 0
-              },
-              "freeze": {},
-              "allocate": {
-                "number_of_replicas": 0,
-                "require": {
-                  "data": "cold"
-                }
-              }
-            }
-          },
           "delete": {
-            "min_age":"20d",
-            "actions": {
-              "delete": {}
-            }
-          }
-        }
-      }
-    }
-    EOF
-    curl -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
-        http://logsearch-es-http.{{.Release.Namespace}}.svc:9200/_ilm/policy/undecided_policy <<EOF
-    {
-      "policy": {
-        "phases": {
-          "hot": {
-            "actions": {
-              "rollover": {
-                "max_size":"20GB"
-              },
-              "set_priority": {
-                "priority": 50
-              }
-            }
-          },
-          "warm": {
-            "min_age": "2d",
-            "actions": {
-              "forcemerge": {
-                "max_num_segments": 1
-              },
-              "shrink": {
-                "number_of_shards": 1
-              },
-              "allocate": {
-                "require": {
-                  "data": "warm"
-                }
-              },
-              "set_priority": {
-                "priority": 25
-              }
-            }
-          },
-          "cold": {
-            "min_age":"7d",
-            "actions": {
-              "set_priority": {
-                "priority": 0
-              },
-              "freeze": {},
-              "allocate": {
-                "number_of_replicas": 0,
-                "require": {
-                  "data": "cold"
-                }
-              }
-            }
-          },
-          "delete": {
-            "min_age":"14d",
+            "min_age":"31d",
             "actions": {
               "delete": {}
             }
