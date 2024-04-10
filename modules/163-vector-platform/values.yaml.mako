@@ -143,6 +143,7 @@ vectorPlatform:
             rbs: .tags != null && includes(array!(.tags), "rbs")
             nodes_messages: .tags != null && includes(array!(.tags), "messages")
             nodes_container: .tags != null && includes(array!(.tags), "container")
+            nodes_secure: .tags != null && includes(array!(.tags), "secure")
         qvantel_apps_transform:
           type: remap
           inputs:

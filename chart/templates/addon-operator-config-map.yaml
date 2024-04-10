@@ -19,6 +19,9 @@ data:
   certPlatformEnabled: "{{ .Values.modulesConfig.certPlatformEnabled }}"
   certPlatform: {{ print "|\n" (.Values.modulesConfig.certPlatform | toYaml | indent 4) }}
 
+  cnpgPostgresPlatformEnabled: "{{ .Values.modulesConfig.cnpgPostgresPlatformEnabled }}"
+  cnpgPostgresPlatform: {{ print "|\n" (.Values.modulesConfig.cnpgPostgresPlatform | toYaml | indent 4) }}
+
   consulPlatformEnabled: "{{ .Values.modulesConfig.consulPlatformEnabled }}"
   consulPlatform: {{ print "|\n" (.Values.modulesConfig.consulPlatform | toYaml | indent 4) }}
 

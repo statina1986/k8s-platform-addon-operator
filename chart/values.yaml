@@ -31,6 +31,10 @@ modulesConfig:
   ciliumPlatform:
     configurationRequired: "check module documentation for configuration options"
 
+  cnpgPostgresPlatformEnabled: "false"
+  cnpgPostgresPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
   consulPlatformEnabled: "false"
   consulPlatform:
     configurationRequired: "check module documentation for configuration options"

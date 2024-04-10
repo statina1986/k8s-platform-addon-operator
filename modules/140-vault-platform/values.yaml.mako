@@ -96,6 +96,11 @@ vaultPlatform:
           volumeMounts:
             - mountPath: /init-script/
               name: userconfig-vault-auto-init-config
+      % if values['global']['configurationProfile'] in {'dev'}: 
+      ha:
+        enabled: false
+        replicas: 1
+      % else:
       ha:
         enabled: true
         replicas: 3
@@ -142,3 +147,4 @@ vaultPlatform:
           cpu: "100m"
         limits:
           memory: "1Gi"
+      % endif

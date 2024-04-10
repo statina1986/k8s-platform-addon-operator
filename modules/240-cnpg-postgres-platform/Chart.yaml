@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cnpg-postgres-platform
+version: 0.0.1
+dependencies:
+  - name: cnpgPostgresPlatform
+    version: 0.0.1
