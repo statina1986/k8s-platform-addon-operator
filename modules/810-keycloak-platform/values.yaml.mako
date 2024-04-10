@@ -6,7 +6,7 @@ keycloakPlatform:
   database:
     name: qvt-postgredb
   configurator:
-    image: "artifactory.qvantel.net/qinstaller-keycloak-configurator:1.13.1.20231201141851_develop_32d2199d"
+    image: "artifactory.qvantel.net/qinstaller-keycloak-configurator:1.15.0.20240322093657_develop_c05757fc"
     spec: |
       backoffLimit: 5
       template:
@@ -83,7 +83,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     replicaCount: 1
-    image: "artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:23.0.4.2.20240116085404_master_9cdb6973"
+    image: "artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:24.0.2.1.20240325131811_master_bb331b2c"
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
