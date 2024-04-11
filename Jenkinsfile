@@ -1,5 +1,5 @@
 //This sould be SemVer and it goes both to docker image and helm chart
-VERSION = "1.2.0-prerelease"
+VERSION = "1.2.0-k8ssandra"
 
 // Type of CI job
 TYPE = "generic"
@@ -10,7 +10,7 @@ CI_VERSION = "3"
 BITBUCKET_PROJECT = "cp"
 
 // Used to determine build types, if sending feedback, deploying automatically
-DELIVERY_BRANCHES = ["master", "experimental"]
+DELIVERY_BRANCHES = ["master", "experimental", "k8ssandra-operator-v1.13"]
 
 // Used to enable/disable CVE to fail on new Critical severitys
 CVE_FAIL_BUILD_ON_NEW = false
