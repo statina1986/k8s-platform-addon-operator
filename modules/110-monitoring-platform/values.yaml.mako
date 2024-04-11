@@ -199,6 +199,7 @@ monitoringPlatform:
       create: true
       rules:
         kubernetesStorage: false
+        kubeApiserverSlos: false
     grafana:
       enabled: true
       env:
