@@ -2,7 +2,7 @@
 {{- range keys .Values.cnpgPostgresPlatform  }}
 {{- if hasPrefix "cluster-" . }}
 {{- $current := get $.Values.cnpgPostgresPlatform . }}
-
+{{- if $current.enabled }}
 ---
 apiVersion: v1
 kind: Service
@@ -19,7 +19,7 @@ spec:
     targetPort: 5432
   selector:
     cnpg.io/cluster: {{ $current.fullnameOverride }}
-    cnpg.io/podRole: instance
+    role: primary
   sessionAffinity: None
   type: ClusterIP
 
@@ -67,7 +67,7 @@ spec:
   db-username: '{secret-username}'
   db-password: '{secret-password}'
 {{- end }}
-
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

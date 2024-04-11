@@ -7,95 +7,27 @@ mariadbOperatorPlatform:
   metrics:
     enabled: true
   clusters:
-    mariadb-test:
-      enabled: false
+    mariadb:
+      enabled: true
+      vaultConfiguration: true
       spec:
-        rootPasswordSecretKeyRef:
-          name: mariadb
-          key: root-password
-        username: mariadb
-        database: mariadb
-
         storage:
-          size: 1Gi
-          storageClassName: local-path
-          resizeInUseVolumes: true
-          waitForVolumeResize: true
-          volumeClaimTemplate:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 1Gi
-            storageClassName: local-path
-
-        replicas: 3
-
-        # point to an existing MaxScale instance. Doing this will delegate tasks such as primary failover to MaxScale.
-        # maxScaleRef:
-        #   name: maxscale
-
-        # provision a MaxScale instance and set 'spec.maxScaleRef' automatically.
-        maxScale:
+          size: 10Gi
+        replicas: 2
+        replication:
           enabled: true
-
-          connection:
-            secretName: mxs-galera-conn
-            port: 3306
-
-        galera:
+        metrics:
           enabled: true
-          primary:
-            podIndex: 0
-            automaticFailover: true
-          sst: mariabackup
-          availableWhenDonor: false
-          galeraLibPath: /usr/lib/galera/libgalera_smm.so
-          replicaThreads: 1
-          providerOptions:
-            gcs.fc_limit: '64'
-          agent:
-            image: ghcr.io/mariadb-operator/mariadb-operator:v0.0.27
-            port: 5555
-            kubernetesAuth:
-              enabled: true
-            gracefulShutdownTimeout: 1s
-          recovery:
-            enabled: true
-            minClusterSize: 50%
-            clusterMonitorInterval: 10s
-            clusterHealthyTimeout: 30s
-            clusterBootstrapTimeout: 10m
-            podRecoveryTimeout: 3m
-            podSyncTimeout: 3m
-          initContainer:
-            image: ghcr.io/mariadb-operator/mariadb-operator:v0.0.27
-          initJob:
-            labels:
-              sidecar.istio.io/inject: "false"
-          config:
-            reuseStorageVolume: false
-            volumeClaimTemplate:
-              resources:
-                requests:
-                  storage: 300Mi
-              accessModes:
-                - ReadWriteOnce
-
         affinity:
           enableAntiAffinity: true
-
         tolerations:
           - key: "k8s.mariadb.com/ha"
             operator: "Exists"
             effect: "NoSchedule"
-
         podDisruptionBudget:
           maxUnavailable: 33%
-
         updateStrategy:
           type: RollingUpdate
-
         myCnf: |
           [mariadb]
           bind-address=*
@@ -103,13 +35,9 @@ mariadbOperatorPlatform:
           binlog_format=row
           innodb_autoinc_lock_mode=2
           max_allowed_packet=256M
-
         resources:
           requests:
             cpu: 100m
             memory: 128Mi
           limits:
             memory: 1Gi
-
-        metrics:
-          enabled: true

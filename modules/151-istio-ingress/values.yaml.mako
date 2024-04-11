@@ -874,7 +874,6 @@ istioIngress:
         enabled: true
         gateways:
         - private-ingress
-        - integrations-http-ingress
         http:
         - route:
           - destination:

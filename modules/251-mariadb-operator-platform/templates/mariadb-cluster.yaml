@@ -50,7 +50,6 @@ spec:
   db-username: 'root'
   db-password: '{secret-password}'
 {{- end }}
-
 {{- end }}
 {{- end }}
 {{- end }}

@@ -386,6 +386,10 @@ monitoringPlatform:
         dedicated-nodes: platform-masters
       % endif
       prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false    
         retention: 12d
         externalLabels:
           country: need-to-define

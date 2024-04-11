@@ -6,7 +6,7 @@ dependencies:
     version: 0.20.2
     repository: https://cloudnative-pg.github.io/charts
   % for key in values['cnpgPostgresPlatform'].keys():
-    % if key.startswith("cluster-") and values['cnpgPostgresPlatform'][key]:
+    % if key.startswith("cluster-") and values['cnpgPostgresPlatform'][key]['enabled']:
   - name: cluster
     alias: ${key}    
     version: 0.0.7

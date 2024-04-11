@@ -1,0 +1,47 @@
+{{- if .Values.kasopePlatform.vaultConfiguration }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  name: cassandra
+  namespace: platform
+spec:
+  connection-name: cassandra
+  plugin-name: cassandra-database-plugin
+  allowed-roles: '*'  
+  additional-params:
+    hosts: main-cassandra-service.platform.svc
+    protocol_version: "4"
+    username_template: >-
+      {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
+  computed-values:
+  - expression: k8s_get_secret_value('cluster-superuser','platform','username')
+    name: secret-username
+  - expression: k8s_get_secret_value('cluster-superuser','platform','password')
+    name: secret-password
+  db-username: '{secret-username}'
+  db-password: '{secret-password}'
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: cassandra-admin-role
+  namespace: platform
+spec:
+  db-name: cassandra
+  creation-statements: >-
+          {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: cassandra-readonly-role
+  namespace: platform
+spec:
+  db-name: cassandra
+  creation-statements: >-
+    {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}};" }}
+
+{{- end }}
