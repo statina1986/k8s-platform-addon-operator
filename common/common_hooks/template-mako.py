@@ -9,12 +9,12 @@ class MyHook(Hook):
     def __init__(self):
         super().__init__("""
 configVersion: v1
-beforeHelm: 1
+onStartup: 1
 """)
 
     def handle_binding(self, binding):
         match(binding):
-            case BeforeHelmHook(values_json, configValues_json):
+            case StartupHook(values_json, configValues_json):
                 cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")                
                 directory = os.getcwd()
                 for file in glob.glob(os.path.dirname(__file__)+"/../**/*.mako", recursive=True):

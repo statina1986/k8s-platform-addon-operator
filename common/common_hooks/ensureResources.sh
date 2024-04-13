@@ -14,7 +14,7 @@ if [[ $1 == "--config" ]] ; then
         fi
         done
     fi
-    echo '{"configVersion":"v1", "onStartup": 1}'
+    echo '{"configVersion":"v1", "onStartup": 2}'
 else
     if [[ -f "ensure_resources.log" ]] ; then
         cat ensure_resources.log
