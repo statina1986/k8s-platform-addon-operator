@@ -15,6 +15,15 @@ redisPlatform:
       resources:
         limits: {}
         requests: {}
+      % if values['global']['platformMasters']:
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      % endif
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
       persistence:
         enabled: true
         storageClass: ""
@@ -24,6 +33,15 @@ redisPlatform:
       resources:
         limits: {}
         requests: {}
+      % if values['global']['platformMasters']:
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      % endif
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
       persistence:
         enabled: true
         storageClass: ""

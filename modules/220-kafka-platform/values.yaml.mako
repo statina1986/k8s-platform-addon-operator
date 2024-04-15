@@ -13,7 +13,7 @@ kafkaPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
@@ -93,7 +93,7 @@ kafkaPlatform:
                             values:
                               - kafka-cluster-kafka
                       topologyKey: kubernetes.io/hostname
-                % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+                % if values['global']['platformMasters']:
                 nodeAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
@@ -150,7 +150,7 @@ kafkaPlatform:
                             values:
                               - kafka-cluster-zookeeper
                       topologyKey: kubernetes.io/hostname
-                % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+                % if values['global']['platformMasters']:
                 nodeAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
@@ -178,7 +178,7 @@ kafkaPlatform:
                   value: "platform-masters"
                   operator: "Equal"
                   effect: "NoSchedule"              
-              % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+              % if values['global']['platformMasters']:
               affinity:                
                 nodeAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:
@@ -197,7 +197,7 @@ kafkaPlatform:
                   value: "platform-masters"
                   operator: "Equal"
                   effect: "NoSchedule"              
-              % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+              % if values['global']['platformMasters']:
               affinity:                
                 nodeAffinity:
                   requiredDuringSchedulingIgnoredDuringExecution:

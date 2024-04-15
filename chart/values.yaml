@@ -8,6 +8,7 @@ helmIgnoreRelease: "k8s-platform"
 globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
+  platformMasters: false
   ingressBaseUrl: "some-env.qvantel.solutions"
   kubernetesVersion: "1.25"
 modulesConfig:

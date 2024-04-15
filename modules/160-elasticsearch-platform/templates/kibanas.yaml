@@ -1,0 +1,16 @@
+{{- if .Values.elasticsearchPlatform.kibanas }}
+{{- range keys .Values.elasticsearchPlatform.kibanas  }}
+{{- $current := get $.Values.elasticsearchPlatform.kibanas . }}
+{{- if $current.enabled }}
+
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: {{ . }}
+spec:
+  {{- tpl $current.spec $ | nindent 2 }}
+
+{{- end }}
+{{- end }}
+{{- end }}

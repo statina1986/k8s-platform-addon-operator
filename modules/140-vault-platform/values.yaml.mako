@@ -10,7 +10,7 @@ vaultPlatform:
     certificate:
       useCertManager: true
       generate: false
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
@@ -45,7 +45,7 @@ vaultPlatform:
                   app.kubernetes.io/instance: "{{ .Release.Name }}"
                   component: server
               topologyKey: kubernetes.io/hostname
-      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+      % if values['global']['platformMasters']:
       nodeSelector: |
         dedicated-nodes: platform-masters
       % endif

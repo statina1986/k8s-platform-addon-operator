@@ -67,8 +67,7 @@ vectorPlatform:
   aggregator:
     enabled: true
     role: "Aggregator"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
-    replicas: 3
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     resources:
@@ -77,10 +76,10 @@ vectorPlatform:
         memory: 2Gi
     % endif
     tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
-          operator: "Equal"
-          effect: "NoSchedule"
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
     % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
     env:
       - name: ELASTICSEARCH_PASSWORD

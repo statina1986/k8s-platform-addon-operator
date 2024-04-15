@@ -8,7 +8,21 @@ kasopePlatform:
   clusters:
     cluster:
       enabled: true
-      spec:
+      storage:
+        cassandraDataVolumeClaimSpec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Gi
+      resources:
+        requests:
+          memory: 4Gi
+          cpu: "0.1"
+        limits:
+          memory: 8Gi 
+      size: 3     
+      spec: |
         cassandra:
           serviceAccount: platform
           serverVersion: "3.11.13"
@@ -24,17 +38,9 @@ kasopePlatform:
             cassandraYaml:
               num_tokens: 8
             jvmOptions:
-              heapSize: 4Gi
-          storageConfig:
-            cassandraDataVolumeClaimSpec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 100Gi
-          resources:
-            requests:
-              memory: 8Gi
+              heapSize: 2Gi
+          storageConfig: {{ toYaml .Values.kasopePlatform.clusters.cluster.storage | nindent 4 }}            
+          resources: {{ toYaml .Values.kasopePlatform.clusters.cluster.resources | nindent 4 }}
           datacenters:
             - metadata:
                 name: dc1
@@ -45,7 +51,18 @@ kasopePlatform:
                   allPodsService:
                     annotations:
                       consul.hashicorp.com/service-port: native
-              size: 3
+              size: {{ .Values.kasopePlatform.clusters.cluster.size }}
+              racks:
+                - name: default
+                  % if values['global']['platformMasters']:
+                  nodeAffinityLabels:
+                    dedicated-nodes: platform-masters
+                  % endif
+              tolerations:
+                - effect: NoSchedule
+                  key: dedicated-nodes
+                  operator: Equal
+                  value: platform-masters
           telemetry:
             cassandra:
               endpoint:

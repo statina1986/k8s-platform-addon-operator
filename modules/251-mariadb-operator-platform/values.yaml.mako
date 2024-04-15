@@ -6,6 +6,15 @@ mariadbOperatorPlatform:
         enabled: true
   metrics:
     enabled: true
+  tolerations:
+    - key: "dedicated-nodes"
+      value: "platform-masters"
+      operator: "Equal"
+      effect: "NoSchedule"
+  % if values['global']['platformMasters']:
+  nodeSelector:
+    dedicated-nodes: platform-masters
+  % endif
   clusters:
     mariadb:
       enabled: true
@@ -19,10 +28,18 @@ mariadbOperatorPlatform:
         metrics:
           enabled: true
         affinity:
-          enableAntiAffinity: true
+          enableAntiAffinity: true          
+        % if values['global']['platformMasters']:
+        nodeSelector:
+          dedicated-nodes: platform-masters
+        % endif
         tolerations:
           - key: "k8s.mariadb.com/ha"
             operator: "Exists"
+            effect: "NoSchedule"
+          - key: "dedicated-nodes"
+            value: "platform-masters"
+            operator: "Equal"
             effect: "NoSchedule"
         podDisruptionBudget:
           maxUnavailable: 33%
