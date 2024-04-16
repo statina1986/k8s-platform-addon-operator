@@ -1,20 +1,21 @@
 mariadbOperatorPlatform:
   nameOverride: "mariadb-operator-platform"
-  webhook:
-    cert:
-      certManager:
-        enabled: true
-  metrics:
-    enabled: true
-  tolerations:
-    - key: "dedicated-nodes"
-      value: "platform-masters"
-      operator: "Equal"
-      effect: "NoSchedule"
-  % if values['global']['platformMasters']:
-  nodeSelector:
-    dedicated-nodes: platform-masters
-  % endif
+  mariadb-operator:
+    webhook:
+      cert:
+        certManager:
+          enabled: true
+    metrics:
+      enabled: true
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    % if values['global']['platformMasters']:
+    nodeSelector:
+      dedicated-nodes: platform-masters
+    % endif
   clusters:
     mariadb:
       enabled: true

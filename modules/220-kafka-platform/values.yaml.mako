@@ -31,19 +31,21 @@ kafkaPlatform:
           % endif
           config:
             auto.create.topics.enable: "true"
+            delete.topic.enable: true
             default.replication.factor: 3            
-            log.retention.hours: 168
-            num.partitions: 3
+            log.retention.hours: 168            
             offsets.topic.replication.factor: 3
             transaction.state.log.min.isr: 2
             transaction.state.log.replication.factor: 3
             min.insync.replicas: 2
             group.initial.rebalance.delay.ms: 3000
+            compression.type: lz4
             % if values['global']['configurationProfile'] in {'perf', 'prod'}:
             num.partitions: 12            
             transaction.state.log.num.partitions: 48
-            offsets.topic.num.partitions: 48
-            delete.topic.enable: true
+            offsets.topic.num.partitions: 48                                    
+            % else:
+            num.partitions: 6
             % endif
           listeners:
             - name: plain
@@ -62,7 +64,7 @@ kafkaPlatform:
             timeoutSeconds: 5
           storage:
             type: persistent-claim
-            size: 100Gi
+            size: 10Gi
             deleteClaim: false
           metricsConfig:
             type: jmxPrometheusExporter
@@ -121,7 +123,7 @@ kafkaPlatform:
             timeoutSeconds: 5
           storage:
             type: persistent-claim
-            size: 100Gi
+            size: 1Gi
             deleteClaim: false
           metricsConfig:
             type: jmxPrometheusExporter
