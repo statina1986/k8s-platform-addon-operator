@@ -17,10 +17,12 @@ istioPlatform:
               istio: pilot
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfiable: DoNotSchedule
-      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes with 2 replicas
+          whenUnsatisfiable: DoNotSchedule     
+      % if values['global']['platformMasters']:
       nodeSelector:
         dedicated-nodes: platform-masters
+      % endif
+      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run with 2 replicas
       autoscaleMin: 2     
       replicaCount: 2
       % endif 

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mariadb-operator-platform
+version: 0.0.1
+dependencies:
+  - name: mariadbOperatorPlatform
+    version: 0.0.1

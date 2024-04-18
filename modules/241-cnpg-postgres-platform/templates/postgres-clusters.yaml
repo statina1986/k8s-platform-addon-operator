@@ -1,0 +1,73 @@
+{{- if .Values.cnpgPostgresPlatform }}
+{{- range keys .Values.cnpgPostgresPlatform  }}
+{{- if hasPrefix "cluster-" . }}
+{{- $current := get $.Values.cnpgPostgresPlatform . }}
+{{- if $current.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    cnpg.io/cluster: {{ $current.fullnameOverride }}
+  name: {{ $current.fullnameOverride }}
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: postgres
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    cnpg.io/cluster: {{ $current.fullnameOverride }}
+    role: primary
+  sessionAffinity: None
+  type: ClusterIP
+
+
+  
+{{- if $current.vaultConfiguration }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $current.fullnameOverride }}-admin-role
+spec:
+  db-name: {{ $current.fullnameOverride }}
+  creation-statements: >-
+    {{ printf "CREATE USER \"{{name}}\" SUPERUSER PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $current.fullnameOverride }}-readonly-role
+spec:
+  db-name: {{ $current.fullnameOverride }}
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data TO \"{{name}}\"" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ $current.fullnameOverride }}  
+spec:
+  connection-name: {{ $current.fullnameOverride }}
+  plugin-name: postgresql-database-plugin
+  allowed-roles: '*'
+  computed-values:
+  - expression: k8s_get_secret_value('{{ $current.fullnameOverride }}-superuser','{{ $.Release.Namespace }}','username')
+    name: secret-username
+  - expression: k8s_get_secret_value('{{ $current.fullnameOverride }}-superuser','{{ $.Release.Namespace }}','password')
+    name: secret-password
+  db-url: >-
+    {{ printf "postgresql://{{username}}:{{password}}@%s.platform.svc:5432/postgres" $current.fullnameOverride }}
+  db-username: '{secret-username}'
+  db-password: '{secret-password}'
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

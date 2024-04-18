@@ -46,6 +46,8 @@ data:
                 ROOT_TOKEN="$(jq -r '.root_token // empty' ${CURL_RESULT})"
                 RECOVERY_OUTPUT="$(cat ${CURL_RESULT} | base64 )"
 
+                kubectl delete secret "$KUBE_SECRETS_KEY" -n "$KUBE_NS" --ignore-not-found
+
                 kubectl create secret generic "$KUBE_SECRETS_KEY" -n "$KUBE_NS" \
                     --from-literal=recovery_output="$RECOVERY_OUTPUT"   \
                     --from-literal=root_token="$ROOT_TOKEN"      

@@ -17,10 +17,6 @@ instanaPlatform:
         INSTANA_AGENT_MODE: to-be-set
         INSTANA_AGENT_TAGS: to-be-set
       pod:
-        tolerations:
-        - effect: NoSchedule
-          key: dedicated-nodes
-          operator: Exists
         requests:
           cpu: 0.5
           memory: 512

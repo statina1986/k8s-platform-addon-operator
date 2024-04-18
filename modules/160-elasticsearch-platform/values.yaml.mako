@@ -13,7 +13,7 @@ elasticsearchPlatform:
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
     createClusterScopedResources: true
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
@@ -28,8 +28,6 @@ elasticsearchPlatform:
     enabled: true
   kibana:
     enabled: true
-  logsearch:
-    enabled: true
   # Prod is used for 30d log retention, logsearchTestEnv for 2d log retention and logsearchBackup is used to configure ELK-stack to use S3 storage
   prod:
     enabled: false
@@ -37,290 +35,178 @@ elasticsearchPlatform:
     enabled: false
   logsearchTestEnv:
     enabled: false
-  logsearchBackup:
-    enabled: false
 
-  configElastic:
-    definitions:
-      version: 7.16.2
-      volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
-      http:
-        tls:
-          selfSignedCertificate:
-            disabled: true
-      nodeSets:
-      - name: logsearch
-        count: 1
-        config:
-          node.attr.zone: <%text>${ZONE}</%text>
-          cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
-          node.roles: ["master", "data", "ingest", "data_hot"]
-          node.store.allow_mmap: false
-          logger.org.elasticsearch: info
-        volumeClaimTemplates:
-          - metadata:
-              name: elasticsearch-data
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 100Gi
-        podTemplate:
-          spec:
-            initContainers:
-            - name: sysctl
-              securityContext:
-                privileged: true
-                runAsUser: 0
-              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
-            containers:
-              - name: elasticsearch
-                image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
+  clusters:
+    logsearch:
+      enabled: true
+      storageSize: "50Gi"
+      resources:
+        requests:
+          memory: 2000Mi
+          cpu: "1"
+      spec: |
+        version: 7.16.2
+        volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
+        http:
+          tls:
+            selfSignedCertificate:
+              disabled: true
+        nodeSets:
+        - name: logsearch
+          count: 1
+          config:
+            node.attr.zone: <%text>${ZONE}</%text>
+            cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
+            node.roles: ["master", "data", "ingest", "data_hot"]
+            node.store.allow_mmap: false
+            logger.org.elasticsearch: info
+          volumeClaimTemplates:
+            - metadata:
+                name: elasticsearch-data
+              spec:
+                accessModes:
+                  - ReadWriteOnce
                 resources:
                   requests:
-                    memory: 2000Mi
-                    cpu: "1"
-                env:
-                - name: ZONE
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+                    storage: {{ .Values.elasticsearchPlatform.clusters.logsearch.storageSize}}
+          podTemplate:
+            spec:
+              initContainers:
+              - name: sysctl
+                securityContext:
+                  privileged: true
+                  runAsUser: 0
+                command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+              containers:
+                - name: elasticsearch
+                  image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
+                  resources: {{ toYaml .Values.elasticsearchPlatform.clusters.logsearch.resources | nindent 12  }}                    
+                  env:
+                  - name: ZONE
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: metadata.annotations['topology.kubernetes.io/zone']
+              tolerations:
+                - key: "dedicated-nodes"
+                  value: "platform-masters"
+                  operator: "Equal"
+                  effect: "NoSchedule"              
+              % if values['global']['platformMasters']:
+              nodeSelector:
+                dedicated-nodes: platform-masters
+              % endif
+              topologySpreadConstraints:
+                - maxSkew: 1
+                  topologyKey: topology.kubernetes.io/zone
+                  whenUnsatisfiable: DoNotSchedule
+                  labelSelector:
+                    matchLabels:
+                      elasticsearch.k8s.elastic.co/cluster-name: logsearch
+                      elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
+    smartsearch:
+      enabled: true
+      storageSize: "10Gi"
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 0.1
+        limits:
+          memory: 2Gi
+          cpu: 1
+      spec: |
+        version: 7.16.2
+        volumeClaimDeletePolicy: DeleteOnScaledownOnly
+        http:
+          tls:
+            selfSignedCertificate:
+              disabled: true
+        nodeSets:
+        - name: smartsearch
+          count: 1
+          config:
+            node.master: true
+            node.data: true
+            node.ingest: true
+            node.store.allow_mmap: false    
+            xpack.security.authc:
+              anonymous:
+                authz_exception: false
+                roles: superuser
+                username: anonymous
+          volumeClaimTemplates:
+              - metadata:
+                  name: elasticsearch-data
+                spec:
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: {{ .Values.elasticsearchPlatform.clusters.smartsearch.storageSize }}
+          podTemplate:
+            spec:
+              tolerations:
+                - key: "dedicated-nodes"
+                  value: "platform-masters"
+                  operator: "Equal"
+                  effect: "NoSchedule"              
+              % if values['global']['platformMasters']:
+              nodeSelector:
+                dedicated-nodes: platform-masters
+              % endif
+              topologySpreadConstraints:
+                - maxSkew: 1
+                  topologyKey: topology.kubernetes.io/zone
+                  whenUnsatisfiable: DoNotSchedule
+                  labelSelector:
+                    matchLabels:
+                      elasticsearch.k8s.elastic.co/cluster-name: smartsearch
+                      elasticsearch.k8s.elastic.co/statefulset-name: smartsearch-es-smartsearch
+              containers:
+                - name: elasticsearch
+                  image: artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2
+                  resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
+  kibanas:
+    kibana:
+      enabled: true
+      resources:
+        requests:
+          memory: 0.5Gi
+          cpu: 0.1
+      spec: |
+        http:
+          tls:
+            selfSignedCertificate:
+              disabled: true
+        version: 7.16.2
+        count: 1
+        elasticsearchRef:
+          name: logsearch
+          namespace: platform
+        podTemplate:
+          spec:
+            containers:
+              - name: kibana
+                image: "artifactory.qvantel.net/helm-k8s-kibana:7.16.2"
+                resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
+            % if values['global']['platformMasters']:
+            nodeSelector:
+              dedicated-nodes: platform-masters
+            % endif
             tolerations:
               - key: "dedicated-nodes"
                 value: "platform-masters"
                 operator: "Equal"
-                effect: "NoSchedule"              
-            % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
-            nodeSelector:
-              dedicated-nodes: platform-masters
-            % endif
-            topologySpreadConstraints:
-              - maxSkew: 1
-                topologyKey: topology.kubernetes.io/zone
-                whenUnsatisfiable: DoNotSchedule
-                labelSelector:
-                  matchLabels:
-                    elasticsearch.k8s.elastic.co/cluster-name: logsearch
-                    elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
-
-  configElasticBackup:
-    definitions:
-      version: 7.16.2
-      volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
-      http:
-        tls:
-          selfSignedCertificate:
-            disabled: true
-      nodeSets:
-      - name: logsearch
-        count: 3
-        config:
-          node.attr.zone: <%text>${ZONE}</%text>
-          cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
-          node.attr.data: warm
-          node.attr.type: warm
-          node.roles: ["master", "data", "ingest", "data_hot", "data_warm"]
-          node.store.allow_mmap: false
-          logger.org.elasticsearch: info
-        volumeClaimTemplates:
-          - metadata:
-              name: elasticsearch-data
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 500Gi
-        podTemplate:
-          spec:
-            initContainers:
-            - name: sysctl
-              securityContext:
-                privileged: true
-                runAsUser: 0
-              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
-            - name: install-plugins
-              command:
-              - sh
-              - -c
-              - |
-                bin/elasticsearch-plugin remove repository-s3
-                bin/elasticsearch-plugin install --batch repository-s3
-              env:
-              - name: ZONE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-            - name: add-access-keys
-              env:
-              - name: AWS_ACCESS_KEY_ID
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-keys
-                    key: access-key
-              - name: AWS_SECRET_ACCESS_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-keys
-                    key: secret-key
-              - name: ZONE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-              command:
-              - sh
-              - -c
-              - |
-                echo $AWS_ACCESS_KEY_ID | bin/elasticsearch-keystore add --stdin --force s3.client.default.access_key
-                echo $AWS_SECRET_ACCESS_KEY | bin/elasticsearch-keystore add --stdin --force s3.client.default.secret_key
-            containers:
-              - name: elasticsearch
-                image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
-                resources:
-                  requests:
-                    memory: 2000Mi
-                    cpu: "1"
-                env:
-                - name: ZONE
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-            topologySpreadConstraints:
-              - maxSkew: 1
-                topologyKey: topology.kubernetes.io/zone
-                whenUnsatisfiable: DoNotSchedule
-                labelSelector:
-                  matchLabels:
-                    elasticsearch.k8s.elastic.co/cluster-name: logsearch
-                    elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
-      - name: logsearch-cold
-        count: 1
-        config:
-          node.attr.zone: <%text>${ZONE}</%text>
-          cluster.routing.allocation.awareness.attributes: k8s_node_name,zone
-          node.attr.data: cold
-          node.attr.type: cold
-          node.roles: ["data_cold", "data_content"]
-          node.store.allow_mmap: false
-          logger.org.elasticsearch: info
-        volumeClaimTemplates:
-          - metadata:
-              name: elasticsearch-data
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 500Gi
-        podTemplate:
-          spec:
-            initContainers:
-            - name: sysctl
-              securityContext:
-                privileged: true
-                runAsUser: 0
-              command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
-            - name: install-plugins
-              command:
-              - sh
-              - -c
-              - |
-                bin/elasticsearch-plugin remove repository-s3
-                bin/elasticsearch-plugin install --batch repository-s3
-              env:
-              - name: ZONE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-            - name: add-access-keys
-              env:
-              - name: AWS_ACCESS_KEY_ID
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-keys
-                    key: access-key
-              - name: AWS_SECRET_ACCESS_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-keys
-                    key: secret-key
-              - name: ZONE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-              command:
-              - sh
-              - -c
-              - |
-                echo $AWS_ACCESS_KEY_ID | bin/elasticsearch-keystore add --stdin --force s3.client.default.access_key
-                echo $AWS_SECRET_ACCESS_KEY | bin/elasticsearch-keystore add --stdin --force s3.client.default.secret_key
-            containers:
-              - name: elasticsearch
-                image: "artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2"
-                resources:
-                  requests:
-                    memory: 2000Mi
-                    cpu: "1"
-                env:
-                - name: ZONE
-                  valueFrom:
-                    fieldRef:
-                      fieldPath: metadata.annotations['topology.kubernetes.io/zone']
-            topologySpreadConstraints:
-              - maxSkew: 1
-                topologyKey: topology.kubernetes.io/zone
-                whenUnsatisfiable: DoNotSchedule
-                labelSelector:
-                  matchLabels:
-                    elasticsearch.k8s.elastic.co/cluster-name: logsearch
-                    elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
-      podDisruptionBudget:
-        spec:
-          minAvailable: 1
-          selector:
-            matchLabels:
-              elasticsearch.k8s.elastic.co/cluster-name: logsearch
-
-  configKibana:
-    definitions:
-      http:
-        tls:
-          selfSignedCertificate:
-            disabled: true
-      version: 7.16.2
-      count: 1
-      elasticsearchRef:
-        name: logsearch
-        namespace: platform
-      podTemplate:
-        spec:
-          containers:
-            - name: kibana
-              image: "artifactory.qvantel.net/helm-k8s-kibana:7.16.2"
-              resources:
-                requests:
-                  memory: 0.5Gi
-                  cpu: 0.1
-          % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes.
-          nodeSelector:
-            dedicated-nodes: platform-masters
-          % endif
-          tolerations:
-            - key: "dedicated-nodes"
-              value: "platform-masters"
-              operator: "Equal"
-              effect: "NoSchedule"
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchExpressions:
-                      - key: kibana.k8s.elastic.co/name
-                        operator: In
-                        values:
-                          - kibana
-                  topologyKey: "kubernetes.io/zone"
+                effect: "NoSchedule"
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  - labelSelector:
+                      matchExpressions:
+                        - key: kibana.k8s.elastic.co/name
+                          operator: In
+                          values:
+                            - kibana
+                    topologyKey: "kubernetes.io/zone"
 
   logstash:
     replicas: 1

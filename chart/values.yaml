@@ -26,6 +26,7 @@ deployment:
 globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
+  platformMasters: false
   ingressBaseUrl: "some-env.qvantel.solutions"
   kubernetesVersion: "1.25"
 modulesConfig:
@@ -46,6 +47,10 @@ modulesConfig:
 
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  cnpgPostgresPlatformEnabled: "false"
+  cnpgPostgresPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   consulPlatformEnabled: "false"
@@ -106,6 +111,10 @@ modulesConfig:
 
   mariadbPlatformEnabled: "false"
   mariadbPlatform:
+    configurationRequired: "check module documentation for configuration options"
+
+  mariadbOperatorPlatformEnabled: "false"
+  mariadbOperatorPlatform:
     configurationRequired: "check module documentation for configuration options"
 
   metricsPlatformEnabled: "false"

@@ -22,3 +22,8 @@ dependencies:
     condition: aggregator.enabled
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
     version: "^0.31.0"
+  - name: fluent-bit
+    alias: fluent-bit-events-collector
+    condition: fluent-bit-events-collector.enabled
+    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    version: "^0.44.0"

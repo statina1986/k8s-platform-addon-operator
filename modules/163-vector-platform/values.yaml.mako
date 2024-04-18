@@ -42,11 +42,32 @@ vectorPlatform:
             - kubernetes
             - vector_logs_transform
           address: vector-platform-aggregator.platform.svc:6000
+  fluent-bit-events-collector:
+    enabled: true
+    kind: Deployment
+    nameOverride: fluent-bit-events-collector
+    testFramework:
+      enabled: false
+    rbac:
+      create: true
+      eventsAccess: true
+    config:
+        inputs: |
+          [INPUT]
+              name kubernetes_events
+              tag k8s_events
+              # ask k8s API for updates every 30 seconds (default 5)
+              interval_sec 30
+        outputs: |
+          [OUTPUT]
+              name forward
+              match k8s_events
+              host vector-platform-aggregator.platform.svc
+              port 9002
   aggregator:
     enabled: true
     role: "Aggregator"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
-    replicas: 3
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     resources:
@@ -55,10 +76,10 @@ vectorPlatform:
         memory: 2Gi
     % endif
     tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
-          operator: "Equal"
-          effect: "NoSchedule"
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
     % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
     env:
       - name: ELASTICSEARCH_PASSWORD
@@ -84,7 +105,17 @@ vectorPlatform:
           type: internal_metrics
         vector_logs:
           type: internal_logs
+        k8s_events_fluent:
+          type: fluent
+          address: 0.0.0.0:9002
+          encoding: json
       transforms:
+        k8s_events_transform:
+          type: remap
+          inputs:
+            - k8s_events_fluent
+          source: |
+            .log_source = "k8s-events"
         vector_logs_transform:
           type: remap
           inputs:
@@ -111,6 +142,7 @@ vectorPlatform:
             rbs: .tags != null && includes(array!(.tags), "rbs")
             nodes_messages: .tags != null && includes(array!(.tags), "messages")
             nodes_container: .tags != null && includes(array!(.tags), "container")
+            nodes_secure: .tags != null && includes(array!(.tags), "secure")
         qvantel_apps_transform:
           type: remap
           inputs:
@@ -229,7 +261,8 @@ vectorPlatform:
             - rbs_transform
             - nodes_messages_transform
             - nodes_container_transform
-            - vector_logs_transform      
+            - vector_logs_transform
+            - k8s_events_transform
           % if values['global']['configurationProfile'] == 'dev':
           endpoint: http://loki-platform.platform.svc:3100
           % else:

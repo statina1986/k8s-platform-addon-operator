@@ -50,11 +50,18 @@ monitoringPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
     secretsExporter:
+      resources:
+        limits:
+          cpu: 250m
+          memory: 300Mi
+        requests:
+          cpu: 20m
+          memory: 20Mi 
       podExtraLabels:
         "release": "monitoring-platform"
     hostPathsExporter:
@@ -76,7 +83,7 @@ monitoringPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
@@ -104,7 +111,7 @@ monitoringPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
@@ -144,7 +151,7 @@ monitoringPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
@@ -194,6 +201,8 @@ monitoringPlatform:
         kubernetesStorage: false
     grafana:
       enabled: true
+      env:
+        GF_INSTALL_PLUGINS: https://artifactory.qvantel.net:443/artifactory/grafana-plugins/yesoreyeram-infinity-datasource-2.5.0.linux_amd64.zip;yesoreyeram-infinity-datasource
       deploymentStrategy:
         type: Recreate
       tolerations:
@@ -229,7 +238,6 @@ monitoringPlatform:
         platform.yaml:
           apiVersion: 1
           datasources:
-
             - name: Loki
               type: loki
               % if values['global']['configurationProfile'] == 'dev':
@@ -263,7 +271,14 @@ monitoringPlatform:
               secureJsonData:
                 basicAuthPassword: <%text>${elastic}</%text>
             % endif
-            
+        business.yaml:
+          apiVersion: 1
+          datasources:
+            - name: kpitool
+              type: yesoreyeram-infinity-datasource
+              uid: jEggJhu4k
+              isDefault: false
+
       grafana.ini:
         auth.anonymous:
           enabled: true
@@ -337,7 +352,13 @@ monitoringPlatform:
                       info:                          
                         path: [status, finished]
                         labelsFromPath:
-                          ref: []                        
+                          ref: []
+                  - name: "medusaBackupsFinishTime"
+                    help: "backup finished timestamp"
+                    each:
+                      type: Gauge
+                      gauge:
+                        path: [status, finishTime]                        
                   - name: "failedMedusaBackups"
                     help: "failed backups"
                     each:
@@ -365,6 +386,10 @@ monitoringPlatform:
         dedicated-nodes: platform-masters
       % endif
       prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false    
         retention: 12d
         externalLabels:
           country: need-to-define
