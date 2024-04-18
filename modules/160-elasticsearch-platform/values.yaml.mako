@@ -159,8 +159,8 @@ elasticsearchPlatform:
                   whenUnsatisfiable: DoNotSchedule
                   labelSelector:
                     matchLabels:
-                      elasticsearch.k8s.elastic.co/cluster-name: logsearch
-                      elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
+                      elasticsearch.k8s.elastic.co/cluster-name: smartsearch
+                      elasticsearch.k8s.elastic.co/statefulset-name: smartsearch-es-smartsearch
               containers:
                 - name: elasticsearch
                   image: artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2
