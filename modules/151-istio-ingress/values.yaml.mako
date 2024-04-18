@@ -276,6 +276,30 @@ istioIngress:
         http:
         - match:
           - uri:
+              prefix: /auth/admin/realms/qvantel
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/admin/qvantel/
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/admin/serverinfo
+          route:
+          - destination:
+              host: qvaa-proxy-80.qvantel.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
               prefix: /auth/realms/qvantel/
           route:
           - destination:
