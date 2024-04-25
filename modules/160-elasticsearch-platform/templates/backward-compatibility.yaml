@@ -1,5 +1,3 @@
-{{- template "elasticsearchPlatform.smartsearchEnabled" . -}}
-{{- if .smartsearchEnabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,5 +20,3 @@ spec:
   ipFamilies:
     - IPv4
   ipFamilyPolicy: SingleStack
-
-{{- end }}

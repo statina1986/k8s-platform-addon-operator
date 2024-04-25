@@ -92,6 +92,10 @@ spec:
                     The generation of the CRD that was last reconciled by
                     the operator.
                   type: integer
+                state:
+                  description:
+                    Current known state of the cluster
+                  type: string
         # subresources for the custom resource
       subresources:
         # enables the status subresource

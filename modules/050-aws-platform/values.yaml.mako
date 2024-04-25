@@ -42,7 +42,7 @@ awsPlatform:
   clusterName: cluster-name
   awsRegistry: ${awsRegistryAccount[region]}.dkr.ecr.${region}.amazonaws.com
   apiServerEndpoint: https://172.20.0.1:443 # override EKS API server endpoint
-  aws-load-balancer-controller-enabled: true
+  aws-load-balancer-controller-enabled: false
   aws-load-balancer-controller:
     clusterName: ${clusterName}
     serviceAccount:
