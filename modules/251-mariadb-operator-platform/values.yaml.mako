@@ -21,6 +21,7 @@ mariadbOperatorPlatform:
       enabled: true
       vaultConfiguration: true
       spec:
+        image: mariadb:10.4.33
         storage:
           size: 10Gi
         replicas: 2

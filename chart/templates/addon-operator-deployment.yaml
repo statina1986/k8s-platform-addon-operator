@@ -7,7 +7,7 @@ metadata:
   labels:
     app: addon-operator
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployment.replicas}}
   strategy:
     type: Recreate
   selector:
@@ -31,7 +31,7 @@ spec:
             value: {{ .Values.helmIgnoreRelease}}
           - name: INSIDE_CLUSTER
             value: "true"
-          {{- range .Values.additionalEnvironmentVars }}
+          {{- range .Values.deployment.additionalEnvironmentVars }}
           - name: {{ .name }}
             value: {{ .value }}
           {{- end }}
@@ -40,3 +40,12 @@ spec:
             path: /healthz
             port: 9650
       serviceAccountName: platform
+      {{ if .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- tpl .Values.deployment.nodeSelector . | nindent 8 }}
+      {{- end }}
+      {{ if .Values.deployment.tolerations }}
+      tolerations:
+        {{- tpl .Values.deployment.tolerations . | nindent 8 }}
+      {{- end }}
+

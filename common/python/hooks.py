@@ -24,6 +24,15 @@ class StartupHook:
         self.configValues = configValues
 
 
+class ScheduleHook:
+    __match_args__ = ("scheduleName", "values", "configValues")
+
+    def __init__(self, scheduleName, values, configValues):
+        self.scheduleName = scheduleName
+        self.values = values
+        self.configValues = configValues
+
+
 class BeforeAllHook:
     __match_args__ = ("values", "configValues")
 
@@ -57,11 +66,13 @@ class AfterHelmHook:
 
 
 class EventHook:
-    __match_args__ = ("eventName", "context")
+    __match_args__ = ("eventName", "context", "values", "configValues")
 
-    def __init__(self, eventName, context):
+    def __init__(self, eventName, context, values, configValues):
         self.eventName = eventName
-        self.context = context        
+        self.context = context
+        self.values = values
+        self.configValues = configValues
 
 
 class GroupHook:
@@ -95,9 +106,8 @@ class Hook:
             except Exception as e:
                 logger.exception("Hook failed with exception")
                 time.sleep(self.retryDelay)
-            else:            
+            else:
                 break
-            
 
     def handle_hook(self):
 
@@ -139,12 +149,14 @@ class Hook:
                         values_json, configValues_json))
                 else:
                     type = bc['type']
+                    if type == "Schedule":
+                        self.execute_with_retry(ScheduleHook(binding, values_json, configValues_json))
                     if type == "Synchronization":
                         self.execute_with_retry(SynchronizationHook(bc))
                     elif type == "Event":
                         event_type = bc['watchEvent']
                         self.retries = int(bc.get('object', {}).get('metadata', {}).get('annotations', {}).get('platform.qvantel.com/retry-count', str(self.retries)))
                         self.retryDelay = int(bc.get('object', {}).get('metadata', {}).get('annotations', {}).get('platform.qvantel.com/retry-delay', str(self.retryDelay)))
-                        self.execute_with_retry(EventHook(event_type, bc))
+                        self.execute_with_retry(EventHook(event_type, bc, values_json, configValues_json))
                     elif type == "Group":
                         self.execute_with_retry(GroupHook(bc))
