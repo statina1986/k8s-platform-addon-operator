@@ -31,12 +31,19 @@ function curl::execute() {
   local query="curl -vs -w '%{http_code}' -o $CURL_RESULT $1 2>$CURL_DEBUG" 
   qlog_debug "Executing curl query: $query"
   CURL_STATUS=$(eval $query)    
-  if [[ -n $2 && $2 != $CURL_STATUS ]] ; then
+  if [[ -n $2 && ! $CURL_STATUS =~ $2 ]] ; then
     qlog "Unexpected status: $CURL_STATUS. Expected $2"
     qlog "$(cat $CURL_DEBUG)"    
     qlog "Response: $(cat $CURL_RESULT)"
     exit 1
   fi
+}
+
+function curl::put_data() {
+  local curl_data="/tmp/curl.data-$(rand)"
+  echo "$1" > $curl_data
+  curl::execute "--request PUT --data-binary '@$curl_data' $2" $3
+  rm -f "$curl_data"
 }
 
 function curl::post_data() {
