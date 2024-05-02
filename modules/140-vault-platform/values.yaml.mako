@@ -27,6 +27,9 @@ vaultPlatform:
         maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
+    configMapFailurePolicy: Fail
+    podsFailurePolicy: Fail
+    secretsFailurePolicy: Fail
   vault:
     global:
       enabled: true

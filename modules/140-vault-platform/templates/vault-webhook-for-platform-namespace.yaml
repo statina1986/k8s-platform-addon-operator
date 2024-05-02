@@ -14,7 +14,7 @@ webhooks:
       namespace: platform
       path: /pods
       port: 443
-  failurePolicy: Ignore
+  failurePolicy: Fail
   matchPolicy: Equivalent
   name: pods.vault-secrets-webhook.admission.banzaicloud.com
   namespaceSelector:
