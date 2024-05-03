@@ -271,6 +271,8 @@ vectorPlatform:
           out_of_order_action: accept
           labels:
             forwarder: vector_aggregator
+            severity: |-
+              {{ print "{{ severity }}" }}
             source_type: |-
               {{ print "{{ source_type }}" }}
             log_source: |-
