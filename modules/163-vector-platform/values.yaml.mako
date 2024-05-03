@@ -74,6 +74,11 @@ vectorPlatform:
       requests:
         cpu: 1
         memory: 2Gi
+    storage:
+      mode: managedPersistentVolumeClaim
+      managedPersistentVolumeClaim:
+        # The size to allocate.
+        size: 5Gi
     % endif
     tolerations:
       - key: "dedicated-nodes"
@@ -250,6 +255,10 @@ vectorPlatform:
           address: 0.0.0.0:9598
           inputs:
             - vector_metrics_transform
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
         loki:
           type: loki
           inputs:
@@ -296,6 +305,10 @@ vectorPlatform:
           compression: snappy
           encoding:
             codec: json
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
         % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
         elk_tibco:
           compression: none
@@ -313,6 +326,10 @@ vectorPlatform:
             user: elastic
           bulk:
             index: "all-tibco-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
         elk_apps:
           compression: none
           endpoints: 
@@ -330,6 +347,10 @@ vectorPlatform:
             user: elastic
           bulk:
             index: "application-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
         elk_ingress:
           compression: none
           endpoints: 
@@ -346,4 +367,8 @@ vectorPlatform:
             user: elastic
           bulk:
             index: "ingress-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
         % endif
