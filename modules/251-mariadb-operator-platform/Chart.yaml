@@ -4,3 +4,9 @@ version: 0.0.1
 dependencies:
   - name: mariadbOperatorPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: mariadb-operator
+      image: ghcr.io/mariadb-operator/mariadb-operator:v0.0.28
+    - name: mariadb
+      image: docker.io/mariadb:10.4.33

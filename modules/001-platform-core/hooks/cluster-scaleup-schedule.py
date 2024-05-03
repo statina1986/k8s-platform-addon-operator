@@ -5,7 +5,6 @@ from common.python.utils import *
 from common.python.hooks import *
 from common.python.vault import *
 from common.python.k8s import *
-from common.python.inline import *
 import yaml
 
 args = {

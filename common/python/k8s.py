@@ -10,6 +10,7 @@ k8s = None
 k8s_crd = None
 k8s_apps = None
 
+
 def get_k8s_crd_client():
     global k8s_crd
     if k8s_crd is None:
@@ -30,6 +31,7 @@ def get_k8s_client():
             config.load_kube_config()
         k8s = client.CoreV1Api()
     return k8s
+
 
 def get_k8s_apps_client():
     global k8s_apps

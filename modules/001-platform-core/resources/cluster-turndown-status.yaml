@@ -51,6 +51,27 @@ spec:
                     - up
                     - down
                     - current
+                strategy:
+                  type: object
+                  properties:
+                    up:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          expression:
+                            type: string
+                    down:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          expression:
+                            type: string
             status:
               description: The status of the cluster turndown/scaleup operation.
               type: object

@@ -1,28 +1,29 @@
----
+image:
+  registry: artifactory.qvantel.net
+  repository: docker-platform-local/bitnami/redis-sentinel
+  tag: 7.2.4-debian-12-r10
 logLevel: info
 addonOperatorNamespace: "platform"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
-
 deployment:
   replicas: 1
   additionalEnvironmentVars: []
   nodeSelector:
-    #cluster-controller: "true"
+  #cluster-controller: "true"
   tolerations:
-    # - effect: NoSchedule
-    #   key: CriticalAddonsOnly
-    #   operator: Exists
-    # - effect: NoExecute
-    #   key: node.kubernetes.io/not-ready
-    #   operator: Exists
-    #   tolerationSeconds: 300
-    # - effect: NoExecute
-    #   key: node.kubernetes.io/unreachable
-    #   operator: Exists
-    #   tolerationSeconds: 300
-
+  # - effect: NoSchedule
+  #   key: CriticalAddonsOnly
+  #   operator: Exists
+  # - effect: NoExecute
+  #   key: node.kubernetes.io/not-ready
+  #   operator: Exists
+  #   tolerationSeconds: 300
+  # - effect: NoExecute
+  #   key: node.kubernetes.io/unreachable
+  #   operator: Exists
+  #   tolerationSeconds: 300
 globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
@@ -32,152 +33,119 @@ globalConfig:
 modulesConfig:
   platformCore:
     configurationRequired: "check module documentation for configuration options"
-
   apisixPlatformEnabled: "false"
   apisixPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   awsPlatformEnabled: "false"
   awsPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   certPlatformEnabled: "false"
   certPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   cnpgPostgresPlatformEnabled: "false"
   cnpgPostgresPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   consulPlatformEnabled: "false"
   consulPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   dbManagementEnabled: "false"
   dbManagement:
     configurationRequired: "check module documentation for configuration options"
-
   elasticsearchPlatformEnabled: "false"
   elasticsearchPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   externalDnsEnabled: "false"
   externalDns:
     configurationRequired: "check module documentation for configuration options"
-
   grafanaPlatformEnabled: "false"
   grafanaPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   instanaPlatformEnabled: "false"
   instanaPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   istioIngressEnabled: "false"
   istioIngress:
     configurationRequired: "check module documentation for configuration options"
-
   istioPlatformEnabled: "false"
   istioPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   ksixPlatformEnabled: "false"
   ksixPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
     strimziHelmVersion: "0.27.1"
-
   kasopePlatformEnabled: "false"
   kasopePlatform:
     configurationRequired: "check module documentation for configuration options"
-
   kyvernoPlatformEnabled: "false"
   kyvernoPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   lokiPlatformEnabled: "false"
   lokiPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   keycloakPlatformEnabled: "false"
   keycloakPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   mariadbPlatformEnabled: "false"
   mariadbPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   mariadbOperatorPlatformEnabled: "false"
   mariadbOperatorPlatform:
-    configurationRequired: "check module documentation for configuration options"
-
+    images:
+      mariadb:
+        registry: docker.io
+        repository: mariadb
+        tag: 10.4.33
   metricsPlatformEnabled: "false"
   metricsPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   mongodbPlatformEnabled: "false"
   mongodbPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   pomeriumPlatformEnabled: "false"
   pomeriumPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   postgresPlatformEnabled: "false"
   postgresPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   qvantelGlueEnabled: "false"
-
   rabbitmqPlatformEnabled: "false"
   rabbitmqPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   redisPlatformEnabled: "false"
-  redisPlatform: {}
-
+  redisPlatform:
+    configurationRequired: "check module documentation for configuration options"
   redisPcdPlatformEnabled: "false"
   redisPcdPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   redisCbsMasterPlatformEnabled: "false"
   redisCbsMasterPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   redisCbsControllerPlatformEnabled: "false"
   redisCbsControllerPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   rancherPlatformEnabled: "false"
   rancherPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   sftpEnabled: "false"
   sftp:
     configurationRequired: "check module documentation for configuration options"
-
   sftpgoPlatformEnabled: "false"
   sftpgoPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   traefikIngressEnabled: "false"
   traefikIngress:
     configurationRequired: "check module documentation for configuration options"
-
   vaultPlatformEnabled: "false"
   vaultPlatform:
     configurationRequired: "check module documentation for configuration options"
-
   vectorPlatformEnabled: "false"
   vectorPlatform:
     configurationRequired: "check module documentation for configuration options"

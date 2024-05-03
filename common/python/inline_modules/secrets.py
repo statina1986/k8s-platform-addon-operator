@@ -1,18 +1,9 @@
-from secrets import token_urlsafe
 import boto3
 from common.python.vault import *
 from common.python.k8s import *
 from kubernetes.client.rest import ApiException
 
-from .inline_modules import onoff
-from .inline_modules import secrets
-
-# COMMON FUNCTIONS
-
-
-def get_random_string(length):
-    return token_urlsafe(length)
-
+# SECRETS MANAGEMENT FUNCTIONS
 
 def aws_get_secret_value(secretId):
     client = boto3.client('secretsmanager')
@@ -55,26 +46,3 @@ def vault_store_secret(path, key, value):
     existing[key] = value
     vault_client.secrets.kv.v1.create_or_update_secret(path, existing)
     return value
-
-
-def get_computed_values(vals):
-    results = {}
-    for val in vals:
-        results[val['name']] = eval(val['expression'])
-    return results
-
-
-def replace_computed_values(input: str, vals):
-    results = {}
-    for key in vals:
-        if vals[key] == None:
-            continue
-        input = input.replace('{' + key + '}', vals[key])
-    return input
-
-
-def execute_post_actions(actions, vals):
-    for val in actions:
-        action = val['expression']
-        action = replace_computed_values(action, vals)
-        eval(action)

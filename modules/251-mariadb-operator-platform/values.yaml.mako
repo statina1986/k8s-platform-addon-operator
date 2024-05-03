@@ -1,4 +1,9 @@
 mariadbOperatorPlatform:
+  images:
+    mariadb:
+      registry: docker.io
+      repository: mariadb
+      tag: 10.4.33
   nameOverride: "mariadb-operator-platform"
   mariadb-operator:
     webhook:
@@ -21,7 +26,7 @@ mariadbOperatorPlatform:
       enabled: true
       vaultConfiguration: true
       spec:
-        image: mariadb:10.4.33
+        image: ${values['mariadbOperatorPlatform']['images']['mariadb']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb']['tag']}
         storage:
           size: 10Gi
         replicas: 2
