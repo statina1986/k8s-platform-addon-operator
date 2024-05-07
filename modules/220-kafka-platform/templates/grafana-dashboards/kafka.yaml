@@ -787,7 +787,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{namespace=\"$kubernetes_namespace\",pod=~\"kafka-cluster-kafka-[0-9]\"}) by (pod)",
+              "expr": "sum(container_memory_usage_bytes{namespace=\"$kubernetes_namespace\",pod=~\"kafka-cluster-kafka-[0-9]\",container!=\"\"}) by (pod)",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -881,7 +881,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$kubernetes_namespace\",pod=~\"kafka-cluster-kafka-[0-9]\"}[15m])) by (pod)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$kubernetes_namespace\",pod=~\"kafka-cluster-kafka-[0-9]\",container!=\"\"}[15m])) by (pod)",
               "format": "time_series",
               "hide": false,
               "interval": "",
