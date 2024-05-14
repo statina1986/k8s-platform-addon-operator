@@ -4,3 +4,7 @@ version: 0.0.1
 dependencies:
   - name: lokiPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: loki
+      image: docker.io/grafana/loki:2.9.2

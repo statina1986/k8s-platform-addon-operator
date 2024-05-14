@@ -1,4 +1,9 @@
 lokiPlatform:
+  images:
+    loki:
+      registry: docker.io
+      repository: grafana/loki
+      tag: 2.9.2
   loki:
     enabled: true
     test:
