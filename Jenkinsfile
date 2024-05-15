@@ -91,7 +91,7 @@ def imageTag(name) {
 }
 
 def imageTagLatest(name) {
-  return "${ARTIFACTORY_URL}/${name}:${VERSION}"
+  return "${ARTIFACTORY_URL}/${name}:latest"
 }
 
 def chartName() {
