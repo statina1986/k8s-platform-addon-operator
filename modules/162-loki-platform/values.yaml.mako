@@ -1,9 +1,4 @@
 lokiPlatform:
-  images:
-    loki:
-      registry: docker.io
-      repository: grafana/loki
-      tag: 2.9.2
   loki:
     enabled: true
     test:
@@ -23,7 +18,7 @@ lokiPlatform:
           release: monitoring-platform
       rules:
         labels:
-          release: monitoring-platform    
+          release: monitoring-platform
     loki:
       analytics:
         reporting_enabled: false
