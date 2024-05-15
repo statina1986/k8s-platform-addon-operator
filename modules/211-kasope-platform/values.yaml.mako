@@ -1,5 +1,8 @@
 kasopePlatform:
   k8ssandra-operator:
+    client:
+      image:
+        tag: 1.6.0-20240506112248-96d77628
     cass-operator:
       admissionWebhooks:
         enabled: false
@@ -7,22 +10,8 @@ kasopePlatform:
   mainCassandraCluster: "cluster"
   clusters:
     cluster:
-      enabled: true
-      storage:
-        cassandraDataVolumeClaimSpec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 100Gi
-      resources:
-        requests:
-          memory: 4Gi
-          cpu: "0.1"
-        limits:
-          memory: 8Gi 
-      size: 3     
-      spec: |
+      enabled: true    
+      spec:
         cassandra:
           serviceAccount: platform
           serverVersion: "3.11.13"
@@ -39,8 +28,19 @@ kasopePlatform:
               num_tokens: 8
             jvmOptions:
               heapSize: 2Gi
-          storageConfig: {{ toYaml .Values.kasopePlatform.clusters.cluster.storage | nindent 4 }}            
-          resources: {{ toYaml .Values.kasopePlatform.clusters.cluster.resources | nindent 4 }}
+          storageConfig:
+            cassandraDataVolumeClaimSpec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 100Gi        
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: "0.1"
+            limits:
+              memory: 8Gi 
           datacenters:
             - metadata:
                 name: dc1
@@ -51,7 +51,7 @@ kasopePlatform:
                   allPodsService:
                     annotations:
                       consul.hashicorp.com/service-port: native
-              size: {{ .Values.kasopePlatform.clusters.cluster.size }}
+              size: 3
               racks:
                 - name: default
                   % if values['global']['platformMasters']:

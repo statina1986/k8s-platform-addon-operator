@@ -1,9 +1,8 @@
 {{- if .Values.kasopePlatform.mainCassandraCluster }}
 {{- $main := get .Values.kasopePlatform.clusters .Values.kasopePlatform.mainCassandraCluster }}
 {{- if $main.enabled }}
-{{- $cluster := fromYaml (tpl $main.spec $) }}
-{{- $clusterName :=  nospace (default .Values.kasopePlatform.mainCassandraCluster $cluster.cassandra.clusterName) }}
-{{- $dataCenter := first $cluster.cassandra.datacenters }}
+{{- $clusterName := nospace (default .Values.kasopePlatform.mainCassandraCluster $main.spec.cassandra.clusterName) }}
+{{- $dataCenter := first $main.spec.cassandra.datacenters }}
 
 apiVersion: v1
 kind: Service

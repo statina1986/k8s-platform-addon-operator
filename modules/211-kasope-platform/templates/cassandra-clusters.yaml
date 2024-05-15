@@ -8,7 +8,7 @@ kind: K8ssandraCluster
 metadata:
   name: {{ . }}
 spec:
-  {{- tpl $current.spec $ | nindent 2 }}
+  {{- toYaml $current.spec | nindent 2 }}
 
 {{- end }}
 {{- end }}
