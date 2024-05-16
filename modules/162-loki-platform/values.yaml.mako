@@ -18,7 +18,7 @@ lokiPlatform:
           release: monitoring-platform
       rules:
         labels:
-          release: monitoring-platform    
+          release: monitoring-platform
     loki:
       analytics:
         reporting_enabled: false
