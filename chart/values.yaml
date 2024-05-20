@@ -109,6 +109,9 @@ modulesConfig:
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     configurationRequired: "check module documentation for configuration options"
+  perconaPmmPlatformEnabled: "false"
+  perconaPmmPlatform:
+    configurationRequired: "check module documentation for configuration options"
   pomeriumPlatformEnabled: "false"
   pomeriumPlatform:
     configurationRequired: "check module documentation for configuration options"

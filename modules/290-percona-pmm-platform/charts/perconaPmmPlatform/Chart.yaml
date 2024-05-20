@@ -1,0 +1,7 @@
+apiVersion: v2
+name: perconaPmmPlatform
+version: 0.0.1
+dependencies:
+  - name: pmm
+    repository: https://percona.github.io/percona-helm-charts
+    version: "^1.3.13"

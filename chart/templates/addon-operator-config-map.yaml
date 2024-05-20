@@ -79,6 +79,9 @@ data:
   monitoringPlatformEnabled: "{{ .Values.modulesConfig.monitoringPlatformEnabled }}"
   monitoringPlatform: {{ print "|\n" (.Values.modulesConfig.monitoringPlatform | toYaml | indent 4) }}
 
+  perconaPmmPlatformEnabled: "{{ .Values.modulesConfig.perconaPmmPlatformEnabled }}"
+  perconaPmmPlatform: {{ print "|\n" (.Values.modulesConfig.perconaPmmPlatform | toYaml | indent 4) }}
+
   pomeriumPlatformEnabled: "{{ .Values.modulesConfig.pomeriumPlatformEnabled }}"
   pomeriumPlatform: {{ print "|\n" (.Values.modulesConfig.pomeriumPlatform | toYaml | indent 4) }}
   

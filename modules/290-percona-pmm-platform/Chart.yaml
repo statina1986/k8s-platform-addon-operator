@@ -1,0 +1,6 @@
+apiVersion: v2
+name: percona-pmm-platform
+version: 0.0.1
+dependencies:
+  - name: perconaPmmPlatform
+    version: 0.0.1
