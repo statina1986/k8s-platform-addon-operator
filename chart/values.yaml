@@ -43,7 +43,19 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   cnpgPostgresPlatformEnabled: "false"
   cnpgPostgresPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    images:
+      cloudnative-pg:
+        registry: ghcr.io
+        repository: cloudnative-pg/cloudnative-pg
+        tag: "1.22.2"
+      q-cnpg-timescale-15:
+        registry: artifactory.qvantel.net
+        repository: q-cnpg-timescale
+        tag: "15.7-1_5_master_e1aa9a467"
+      q-cnpg-timescale-16:    
+        registry: artifactory.qvantel.net
+        repository: q-cnpg-timescale
+        tag: "16.3-1_5_master_e1aa9a467"
   consulPlatformEnabled: "false"
   consulPlatform:
     configurationRequired: "check module documentation for configuration options"

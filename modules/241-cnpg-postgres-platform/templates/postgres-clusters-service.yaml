@@ -1,0 +1,27 @@
+{{- if .Values.cnpgPostgresPlatform }}
+{{- range keys .Values.cnpgPostgresPlatform.clusters  }}
+{{- $current := get $.Values.cnpgPostgresPlatform.clusters . }}
+{{- if $current.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    cnpg.io/cluster: {{ . }}
+  name: {{ . }}
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: postgres
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    cnpg.io/cluster: {{ . }}
+    role: primary
+  sessionAffinity: None
+  type: ClusterIP
+
+{{- end }}
+{{- end }}
+{{- end }}
