@@ -9,9 +9,9 @@
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $current.fullnameOverride }}-admin-role
+  name: {{ . }}-admin-role
 spec:
-  db-name: {{ $current.fullnameOverride }}
+  db-name: {{ . }}
   creation-statements: >-
     {{ printf "CREATE USER \"{{name}}\" SUPERUSER PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';" }}
 
@@ -19,9 +19,9 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $current.fullnameOverride }}-readonly-role
+  name: {{ . }}-readonly-role
 spec:
-  db-name: {{ $current.fullnameOverride }}
+  db-name: {{ . }}
   creation-statements: >-
     {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data TO \"{{name}}\"" }}
 
@@ -31,18 +31,18 @@ kind: DbConnection
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $current.fullnameOverride }}  
+  name: {{ . }}
 spec:
-  connection-name: {{ $current.fullnameOverride }}
+  connection-name: {{ . }}
   plugin-name: postgresql-database-plugin
   allowed-roles: '*'
   computed-values:
-  - expression: k8s_get_secret_value('{{ $current.fullnameOverride }}-superuser','{{ $.Release.Namespace }}','username')
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','username')
     name: secret-username
-  - expression: k8s_get_secret_value('{{ $current.fullnameOverride }}-superuser','{{ $.Release.Namespace }}','password')
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-url: >-
-    {{ printf "postgresql://{{username}}:{{password}}@%s.platform.svc:5432/postgres" $current.fullnameOverride }}
+    {{ printf "postgresql://{{username}}:{{password}}@%s.platform.svc:5432/postgres" . }}
   db-username: '{secret-username}'
   db-password: '{secret-password}'
 {{- end }}
