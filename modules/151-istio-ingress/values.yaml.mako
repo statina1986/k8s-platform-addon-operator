@@ -946,6 +946,16 @@ istioIngress:
               host: loki-read.platform.svc.cluster.local
               port:
                 number: 3100
+      pmm:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: pmm.platform.svc.cluster.local
+              port:
+                number: 80
       vault-ui:
         enabled: false
         gateways:
