@@ -141,7 +141,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     replicaCount: 1
-    image: "artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:24.0.4.1.20240510082735_master_cb49fae2"
+    image: "artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.1.20240605060726_master_0df9b134"
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
