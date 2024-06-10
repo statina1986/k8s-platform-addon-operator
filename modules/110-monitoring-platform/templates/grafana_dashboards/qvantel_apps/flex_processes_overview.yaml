@@ -4,6 +4,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: grafana-dashboards-flex-process-overview
+  namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'
   annotations:
