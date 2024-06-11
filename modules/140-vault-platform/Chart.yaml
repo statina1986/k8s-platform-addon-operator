@@ -4,3 +4,9 @@ version: 0.0.1
 dependencies:
   - name: vaultPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: vault
+      image: artifactory.qvantel.net/platform/hashicorp/vault:1.12.1
+    - name: vault-secrets-webhook
+      image: artifactory.qvantel.net/platform/banzaicloud/vault-secrets-webhook:1.18.0

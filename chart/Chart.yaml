@@ -4,6 +4,14 @@ version: 0.1.0 # will be overwritten from Jenkinsfile
 appVersion: "${VERSION}.${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}" # will be overwritten from Jenkinsfile
 annotations:
   images: |
+
+    ## CERT-MANAGER IMAGES
+    - name: cert-manager
+      image: quay.io/jetstack/cert-manager-controller:v1.12.4
+    - name: cainjector
+      image: quay.io/jetstack/cert-manager-cainjector:v1.12.4
+    - name: webhook
+      image: quay.io/jetstack/cert-manager-webhook:v1.12.4
   
     ## CloudNativePG IMAGES
     - name: q-cnpg-timescale-15
@@ -12,7 +20,23 @@ annotations:
       image: artifactory.qvantel.net/q-cnpg-timescale:16.3-1_5_master_e1aa9a467
     - name: cloudnative-pg
       image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2
+    
+    ## ISTIO IMAGES
+    - name: pilot
+      image: docker.io/istio/pilot:1.17.6
 
     ## LOKI IMAGES
     - name: loki
-      image: docker.io/platform/grafana/loki:2.9.2
+      image: docker.io/grafana/loki:2.9.2
+    
+    ## MARIADB IMAGES
+    - name: mariadb-operator
+      image: ghcr.io/mariadb-operator/mariadb-operator:v0.0.28
+    - name: mariadb
+      image: docker.io/mariadb:10.4.33
+
+    ## VAULT IMAGES
+    - name: vault
+      image: docker.io/hashicorp/vault:1.12.1
+    - name: vault-secrets-webhook
+      image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0

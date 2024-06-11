@@ -4,3 +4,7 @@ version: 0.0.1
 dependencies:
   - name: istioPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: pilot
+      image: artifactory.qvantel.net/platform/istio/pilot:1.17.6

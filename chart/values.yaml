@@ -37,7 +37,21 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   certPlatformEnabled: "false"
   certPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    cert-manager:
+      image:
+        registry: artifactory.qvantel.net
+        repository: platform/jetstack/cert-manager-controller
+        tag: v1.12.4
+      cainjector:
+        image:
+          registry: artifactory.qvantel.net
+          repository: platform/jetstack/cert-manager-cainjector
+          tag: v1.12.4
+      webhook:
+        image:
+          registry: artifactory.qvantel.net
+          repository: platform/jetstack/cert-manager-webhook
+          tag: v1.12.4
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -79,7 +93,11 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   istioPlatformEnabled: "false"
   istioPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    istiod:
+      pilot:
+        hub: "artifactory.qvantel.net/platform/istio"
+        tag: 1.17.6
+        image: pilot
   ksixPlatformEnabled: "false"
   ksixPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -136,7 +154,8 @@ modulesConfig:
   rabbitmqPlatform:
     configurationRequired: "check module documentation for configuration options"
   redisPlatformEnabled: "false"
-  redisPlatform: {}
+  redisPlatform:
+    configurationRequired: "check module documentation for configuration options"
   redisPcdPlatformEnabled: "false"
   redisPcdPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -160,7 +179,16 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   vaultPlatformEnabled: "false"
   vaultPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    autoUnseal: false
+    vault-secrets-webhook:
+      image:
+        repository: artifactory.qvantel.net/platform/banzaicloud/vault-secrets-webhook
+        tag: 1.18.0
+    vault:
+      server:
+        image:
+          repository: artifactory.qvantel.net/platform/hashicorp/vault
+          tag: 1.12.1
   vectorPlatformEnabled: "false"
   vectorPlatform:
     configurationRequired: "check module documentation for configuration options"

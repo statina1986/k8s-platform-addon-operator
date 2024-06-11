@@ -4,3 +4,11 @@ version: 0.0.1
 dependencies:
   - name: certPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: cert-manager-controller
+      image: artifactory.qvantel.net/platform/jetstack/cert-manager-controller:v1.12.4
+    - name: cert-manager-cainjector
+      image: artifactory.qvantel.net/platform/jetstack/cert-manager-cainjector:v1.12.4
+    - name: cert-manager-webhook
+      image: artifactory.qvantel.net/platform/jetstack/cert-manager-webhook:v1.12.4
