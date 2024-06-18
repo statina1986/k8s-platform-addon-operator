@@ -4,3 +4,11 @@ version: 0.0.1
 dependencies:
   - name: instanaPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: agent-static
+      image: platform-artifactory.qvantel.net/agent/static:1.276.0
+    - name: leader-elector
+      image: platform-artifactory.qvantel.net/instana/leader-elector:0.5.19
+    - name: k8sensor
+      image: platform-artifactory.qvantel.net/instana/k8sensor:ffb74e9

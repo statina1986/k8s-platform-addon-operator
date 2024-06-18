@@ -73,7 +73,19 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   instanaPlatformEnabled: "false"
   instanaPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    instana-agent:
+      agent:
+        image:
+          name: platform-artifactory.qvantel.net/agent/static
+          tag: 1.276.0
+      leaderElector:
+        image:
+          name: platform-artifactory.qvantel.net/instana/leader-elector
+          tag: 0.5.19
+      k8s_sensor:
+        image:
+          name: platform-artifactory.qvantel.net/instana/k8sensor
+          tag: ffb74e9
   istioIngressEnabled: "false"
   istioIngress:
     configurationRequired: "check module documentation for configuration options"
