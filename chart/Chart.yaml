@@ -16,3 +16,11 @@ annotations:
     ## LOKI IMAGES
     - name: loki
       image: docker.io/platform/grafana/loki:2.9.2
+
+    ## INSTANA IMAGES
+    - name: agent
+      image: containers.instana.io/instana/release/agent/static:1.276.0
+    - name: leader-elector
+      image: icr.io/instana/leader-elector:0.5.19
+    - name: k8sensor
+      image: icr.io/instana/k8sensor:ffb74e9
