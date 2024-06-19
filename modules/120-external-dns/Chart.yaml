@@ -4,3 +4,7 @@ version: 0.1.0
 dependencies:
   - name: externalDns
     version: 0.0.1
+annotations:
+  images: |
+    - name: external-dns
+      image: platform-artifactory.qvantel.net/bitnami/external-dns:0.13.4-debian-11-r2

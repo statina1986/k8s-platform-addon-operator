@@ -31,6 +31,10 @@ annotations:
     - name: envoy
       image: platform-artifactory.qvantel.net/envoyproxy/envoy:v1.23.1
     
+    ## EXTERNAL-DNS IMAGES
+    - name: external-dns
+      image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
+    
     ## ISTIO IMAGES
     - name: pilot
       image: docker.io/istio/pilot:1.17.6
