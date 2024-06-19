@@ -21,9 +21,21 @@ annotations:
     - name: cloudnative-pg
       image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2
     
+    ## CONSUL IMAGES
+    - name: consul
+      image: platform-artifactory.qvantel.net/hashicorp/consul:1.14.4
+    - name: consul-k8s-control-plane
+      image: platform-artifactory.qvantel.net/hashicorp/consul-k8s-control-plane:1.0.3
+    - name: consul-dataplane
+      image: platform-artifactory.qvantel.net/hashicorp/consul-dataplane:1.0.1
+    - name: envoy
+      image: platform-artifactory.qvantel.net/envoyproxy/envoy:v1.23.1
+    
     ## ISTIO IMAGES
     - name: pilot
       image: docker.io/istio/pilot:1.17.6
+    - name: proxyv2
+      image: docker.io/istio/proxyv2:1.17.6
 
     ## LOKI IMAGES
     - name: loki

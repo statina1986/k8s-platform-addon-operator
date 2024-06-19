@@ -39,18 +39,18 @@ modulesConfig:
   certPlatform:
     cert-manager:
       image:
-        registry: artifactory.qvantel.net
-        repository: platform/jetstack/cert-manager-controller
+        registry: platform-artifactory.qvantel.net
+        repository: jetstack/cert-manager-controller
         tag: v1.12.4
       cainjector:
         image:
-          registry: artifactory.qvantel.net
-          repository: platform/jetstack/cert-manager-cainjector
+          registry: platform-artifactory.qvantel.net
+          repository: jetstack/cert-manager-cainjector
           tag: v1.12.4
       webhook:
         image:
-          registry: artifactory.qvantel.net
-          repository: platform/jetstack/cert-manager-webhook
+          registry: platform-artifactory.qvantel.net
+          repository: jetstack/cert-manager-webhook
           tag: v1.12.4
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
@@ -72,7 +72,12 @@ modulesConfig:
         tag: "16.3-1_5_master_e1aa9a467"
   consulPlatformEnabled: "false"
   consulPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    global:
+      image: platform-artifactory.qvantel.net/hashicorp/consul:1.14.4
+      imageK8S: platform-artifactory.qvantel.net/hashicorp/consul-k8s-control-plane:1.0.3
+      imageConsulDataplane: platform-artifactory.qvantel.net/hashicorp/consul-dataplane:1.0.1
+    apiGateway:
+      imageEnvoy: platform-artifactory.qvantel.net/envoyproxy/envoy:v1.23.1
   dbManagementEnabled: "false"
   dbManagement:
     configurationRequired: "check module documentation for configuration options"
@@ -90,14 +95,18 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   istioIngressEnabled: "false"
   istioIngress:
-    configurationRequired: "check module documentation for configuration options"
   istioPlatformEnabled: "false"
   istioPlatform:
     istiod:
       pilot:
-        hub: "artifactory.qvantel.net/platform/istio"
+        hub: "platform-artifactory.qvantel.net/istio"
         tag: 1.17.6
         image: pilot
+    global: 
+      hub: "platform-artifactory.qvantel.net/istio"
+      tag: 1.17.6
+      proxy:
+        image: proxyv2
   ksixPlatformEnabled: "false"
   ksixPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -115,8 +124,8 @@ modulesConfig:
     loki:
       loki:
         image:
-          registry: artifactory.qvantel.net
-          repository: platform/grafana/loki
+          registry: platform-artifactory.qvantel.net
+          repository: grafana/loki
           tag: 2.9.2
   keycloakPlatformEnabled: "false"
   keycloakPlatform:
@@ -128,8 +137,8 @@ modulesConfig:
   mariadbOperatorPlatform:
     images:
       mariadb:
-        registry: artifactory.qvantel.net
-        repository: platform/library/mariadb
+        registry: platform-artifactory.qvantel.net
+        repository: library/mariadb
         tag: 10.4.33
   metricsPlatformEnabled: "false"
   metricsPlatform:
@@ -182,12 +191,12 @@ modulesConfig:
     autoUnseal: false
     vault-secrets-webhook:
       image:
-        repository: artifactory.qvantel.net/platform/banzaicloud/vault-secrets-webhook
+        repository: platform-artifactory.qvantel.net/banzaicloud/vault-secrets-webhook
         tag: 1.18.0
     vault:
       server:
         image:
-          repository: artifactory.qvantel.net/platform/hashicorp/vault
+          repository: platform-artifactory.qvantel.net/hashicorp/vault
           tag: 1.12.1
   vectorPlatformEnabled: "false"
   vectorPlatform:
