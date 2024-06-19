@@ -1,0 +1,12 @@
+apiVersion: v2
+name: metrics-platform
+version: 0.0.1
+dependencies:
+  - name: metricsPlatform
+    version: 0.0.1
+annotations:
+  images: |
+    - name: metrics-server
+      image: platform-artifactory.qvantel.net/metrics-server/metrics-server:v0.6.4
+    - name: addon-resizer
+      image: platform-artifactory.qvantel.net/autoscaling/addon-resizer:1.8.19

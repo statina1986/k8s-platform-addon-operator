@@ -50,6 +50,12 @@ annotations:
       image: ghcr.io/mariadb-operator/mariadb-operator:v0.0.28
     - name: mariadb
       image: docker.io/mariadb:10.4.33
+    
+    ## METRICS-PLATFORM IMAGES
+    - name: metrics-server
+      image: registry.k8s.io/metrics-server/metrics-server:v0.6.4
+    - name: addon-resizer
+      image: registry.k8s.io/autoscaling/addon-resizer:1.8.19
 
     ## VAULT IMAGES
     - name: vault
