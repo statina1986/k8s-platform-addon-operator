@@ -7,6 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: vault
-      image: artifactory.qvantel.net/platform/hashicorp/vault:1.12.1
+      image: platform-artifactory.qvantel.net/hashicorp/vault:1.12.1
     - name: vault-secrets-webhook
-      image: artifactory.qvantel.net/platform/banzaicloud/vault-secrets-webhook:1.18.0
+      image: platform-artifactory.qvantel.net/banzaicloud/vault-secrets-webhook:1.18.0

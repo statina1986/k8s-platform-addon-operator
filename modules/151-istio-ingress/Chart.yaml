@@ -4,3 +4,7 @@ version: 0.0.1
 dependencies:
   - name: istioIngress
     version: 0.0.1
+annotations:
+  images: |
+    - name: proxyv2
+      image: platform-artifactory.qvantel.net/istio/proxyv2:1.17.6

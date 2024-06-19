@@ -7,6 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: mariadb-operator
-      image: ghcr.io/mariadb-operator/mariadb-operator:v0.0.28
+      image: platform-artifactory.qvantel.net/mariadb-operator/mariadb-operator:v0.0.28
     - name: mariadb
-      image: docker.io/mariadb:10.4.33
+      image: platform-artifactory.qvantel.net/library/mariadb:10.4.33

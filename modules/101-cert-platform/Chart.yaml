@@ -7,8 +7,8 @@ dependencies:
 annotations:
   images: |
     - name: cert-manager-controller
-      image: artifactory.qvantel.net/platform/jetstack/cert-manager-controller:v1.12.4
+      image: platform-artifactory.qvantel.net/jetstack/cert-manager-controller:v1.12.4
     - name: cert-manager-cainjector
-      image: artifactory.qvantel.net/platform/jetstack/cert-manager-cainjector:v1.12.4
+      image: platform-artifactory.qvantel.net/jetstack/cert-manager-cainjector:v1.12.4
     - name: cert-manager-webhook
-      image: artifactory.qvantel.net/platform/jetstack/cert-manager-webhook:v1.12.4
+      image: platform-artifactory.qvantel.net/jetstack/cert-manager-webhook:v1.12.4
