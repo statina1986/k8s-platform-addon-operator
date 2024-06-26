@@ -6,6 +6,7 @@ instanaPlatform:
         name: ${values['instanaPlatform']['instana-agent']['agent']['image']['registry']}/${values['instanaPlatform']['instana-agent']['agent']['image']['repository']}
       keysSecret: instana-agent-key
       endpointHost: ingress-green-saas.instana.io
+      endpointHost: ingress-green-saas.instana.io
       endpointPort: 443
       env:
         INSTANA_AGENT_MODE: to-be-set
