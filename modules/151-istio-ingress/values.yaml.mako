@@ -268,68 +268,8 @@ istioIngress:
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
     dnsBase: ${values['global']['ingressBaseUrl']}
-    instances:
-      auth:
-        enabled: false
-        gateways:
-        - public-ingress
-        http:
-        - match:
-          - uri:
-              prefix: /auth/admin/realms/qvantel
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/admin/qvantel/
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/admin/serverinfo
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/realms/qvantel/
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/realms/consumers/
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/resources/
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/js/
-          route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
+    instances: 
+      # Product managed services    
       address-manager:
         enabled: false
         gateways:
@@ -595,17 +535,7 @@ istioIngress:
           - destination:
               host: graphql-graphql-bssapi.qvantel.svc.cluster.local
               port:
-                number: 8180
-      keycloak:
-        enabled: false
-        gateways:
-        - private-ingress
-        http:
-        - route:
-          - destination:
-              host: qvaa-proxy-80.qvantel.svc.cluster.local
-              port:
-                number: 80
+                number: 8180      
       knowledge:
         enabled: false
         gateways:
@@ -861,6 +791,68 @@ istioIngress:
               host: zipkin.qvantel.svc.cluster.local
               port:
                 number: 9411
+      # Platform Managed services    
+      auth:
+        enabled: false
+        gateways:
+        - public-ingress
+        http:
+        - match:
+          - uri:
+              prefix: /auth/admin/realms/qvantel
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/admin/qvantel/
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/admin/serverinfo
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/realms/qvantel/
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/realms/consumers/
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/resources/
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /auth/js/
+          route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80                
       consul-ui:
         enabled: false
         pomeriumProtected: true
@@ -904,6 +896,16 @@ istioIngress:
               host: kafka-ui.platform.svc.cluster.local
               port:
                 number: 8080
+      keycloak:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: qvaa-proxy-80.platform.svc.cluster.local
+              port:
+                number: 80
       reaper:
         enabled: true
         gateways:

@@ -7,7 +7,7 @@ kind: Gateway
 metadata:
   {{- if .annotations }}
   annotations:
-    {{- tpl .annotations $root | nindent 4 }}
+    {{- tpl (toYaml .annotations) $root | nindent 4 }}
   {{- end }}
   name: {{ .name }}
 spec: 
@@ -23,7 +23,7 @@ kind: Gateway
 metadata:  
   {{- if .annotations }}
   annotations:
-    {{- tpl .annotations $root | nindent 4 }}
+    {{- tpl (toYaml .annotations) $root | nindent 4 }}
   {{- end }}
   name: {{ .name }}
 spec: 
@@ -39,7 +39,7 @@ kind: Gateway
 metadata:
   {{- if .annotations }}
   annotations:
-    {{- tpl .annotations $root | nindent 4 }}
+    {{- tpl (toYaml .annotations) $root | nindent 4 }}
   {{- end }}
   name: {{ .name }}
 spec: 
@@ -55,7 +55,7 @@ kind: Gateway
 metadata:
   {{- if .annotations }}
   annotations:
-    {{- tpl .annotations $root | nindent 4 }}
+    {{- tpl (toYaml .annotations) $root | nindent 4 }}
   {{- end }}
   name: {{ .name }}
 spec: 
