@@ -1,13 +1,9 @@
 instanaPlatform:
   instana-agent:
     enabled: true
-    global:
-      imageRegistry: "platform-artifactory.qvantel.net"
-      imagePullSecrets: []
-      storageClass: ""
     agent:
       image:
-        name: platform-artifactory.qvantel.net/agent/static
+        name: ${values['instanaPlatform']['instana-agent']['agent']['image']['registry']}/${values['instanaPlatform']['instana-agent']['agent']['image']['repository']}
       keysSecret: instana-agent-key
       endpointHost: ingress-green-saas.instana.io
       endpointPort: 443
@@ -46,9 +42,9 @@ instanaPlatform:
       name: to-be-set
     zone:
       name: to-be-set
-  leaderElector:
-    image:
-      name: platform-artifactory.qvantel.net/instana/leader-elector
-  k8s_sensor:
-    image:
-      name: platform-artifactory.qvantel.net/instana/k8sensor
+    leaderElector:
+      image:
+        name: ${values['instanaPlatform']['instana-agent']['leaderElector']['image']['registry']}/${values['instanaPlatform']['instana-agent']['leaderElector']['image']['repository']}
+    k8s_sensor:
+      image:
+        name: ${values['instanaPlatform']['instana-agent']['k8s_sensor']['image']['registry']}/${values['instanaPlatform']['instana-agent']['k8s_sensor']['image']['repository']}

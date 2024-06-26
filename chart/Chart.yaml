@@ -2,25 +2,3 @@ apiVersion: v2
 name: k8s-platform-addon-operator
 version: 0.1.0 # will be overwritten from Jenkinsfile
 appVersion: "${VERSION}.${currentBuild.number}_${env.BRANCH_NAME}_${shortCommit()}" # will be overwritten from Jenkinsfile
-annotations:
-  images: |
-  
-    ## CloudNativePG IMAGES
-    - name: q-cnpg-timescale-15
-      image: artifactory.qvantel.net/q-cnpg-timescale:15.7-1_5_master_e1aa9a467
-    - name: q-cnpg-timescale-16
-      image: artifactory.qvantel.net/q-cnpg-timescale:16.3-1_5_master_e1aa9a467
-    - name: cloudnative-pg
-      image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2
-
-    ## LOKI IMAGES
-    - name: loki
-      image: docker.io/platform/grafana/loki:2.9.2
-
-    ## INSTANA IMAGES
-    - name: agent
-      image: containers.instana.io/instana/release/agent/static:1.276.0
-    - name: leader-elector
-      image: icr.io/instana/leader-elector:0.5.19
-    - name: k8sensor
-      image: icr.io/instana/k8sensor:ffb74e9

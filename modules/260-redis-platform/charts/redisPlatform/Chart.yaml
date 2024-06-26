@@ -1,0 +1,13 @@
+## WARNING! 
+## This is just a dummy Chart.yaml in order to support "helm dt" tooling. 
+## Proper Chart.yaml will be generated in runtime from Chart.yaml.mako file and it will override this file
+## However it should contain all actual versions of dependencies charts
+
+apiVersion: v2
+name: redisPlatform
+version: 0.0.1
+dependencies:
+ - name: redis
+   version: 18.1.2
+   repository: https://charts.bitnami.com/bitnami
+  

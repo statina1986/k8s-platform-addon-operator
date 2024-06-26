@@ -1,0 +1,9 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-06-26T16:27:07.111551091Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: keycloak-platform
+  version: 0.0.1
+  appVersion: ""
