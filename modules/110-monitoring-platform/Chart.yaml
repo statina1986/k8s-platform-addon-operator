@@ -4,3 +4,47 @@ version: 0.0.1
 dependencies:
   - name: monitoringPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: x509-certificate-exporter
+      image: docker.io/enix/x509-certificate-exporter:3.6.0
+    - name: kafka-lag-exporter
+      image: seglo/kafka-lag-exporter:0.8.2
+    - name: prometheus-blackbox-exporter
+      image: prom/blackbox-exporter:v0.22.0
+    - name: prometheus-consul-exporter
+      image: prom/consul-exporter:v0.5.0
+    - name: yet-another-cloudwatch-exporter
+      image: ghcr.io/nerdswords/yet-another-cloudwatch-exporter:v0.52.0
+    - name: alertmanager
+      image: quay.io/prometheus/alertmanager:v0.26.0
+    - name: admissionWebhooks
+      image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
+    - name: prometheus-operator
+      image: quay.io/prometheus-operator/prometheus-operator:v0.68.0
+    - name: prometheusConfigReloader
+      image: quay.io/prometheus-operator/prometheus-config-reloader:v0.68.0
+    - name: thanos
+      image: quay.io/thanos/thanos:v0.32.2
+    - name: prometheus
+      image: quay.io/prometheus/prometheus:v2.47.0
+    - name: thanos-rules
+      image: quay.io/thanos/thanos:v0.32.2
+    - name: grafana
+      image: docker.io/grafana/grafana-enterprise:10.1.1
+    - name: testFramework
+      image: docker.io/bats/bats:v1.4.1
+    - name: downloadDashboardsImage
+      image: docker.io/curlimages/curl:7.85.0
+    - name: initChownData
+      image: docker.io/library/busybox:1.31.1
+    - name: grafana-sidecar
+      image: quay.io/kiwigrid/k8s-sidecar:1.25.1
+    - name: imageRenderer
+      image: docker.io/grafana/grafana-image-renderer:latest
+    - name: prometheus-node-exporter
+      image: quay.io/prometheus/node-exporter:v1.6.1
+    - name: kubeRBACProxy
+      image: quay.io/brancz/kube-rbac-proxy:v0.14.0
+    - name: kube-state-metrics
+      image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.10.0
