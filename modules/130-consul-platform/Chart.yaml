@@ -7,10 +7,10 @@ dependencies:
 annotations:
   images: |
     - name: consul
-      image: platform-artifactory.qvantel.net/hashicorp/consul:1.14.4
+      image: docker.io/hashicorp/consul:1.14.4
     - name: consul-k8s-control-plane
-      image: platform-artifactory.qvantel.net/hashicorp/consul-k8s-control-plane:1.0.3
+      image: docker.io/hashicorp/consul-k8s-control-plane:1.0.3
     - name: consul-dataplane
-      image: platform-artifactory.qvantel.net/hashicorp/consul-dataplane:1.0.1
+      image: docker.io/hashicorp/consul-dataplane:1.0.1
     - name: envoy
-      image: platform-artifactory.qvantel.net/envoyproxy/envoy:v1.23.1
+      image: docker.io/envoyproxy/envoy:v1.23.1

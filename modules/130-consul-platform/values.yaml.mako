@@ -1,4 +1,10 @@
 consulPlatform:
+  global:
+    image: ${values['consulPlatform']['images']['consul']['registry']}/${values['consulPlatform']['images']['consul']['repository']}:${values['consulPlatform']['images']['consul']['tag']}
+    imageK8S: ${values['consulPlatform']['images']['consul-k8s-control-plane']['registry']}/${values['consulPlatform']['images']['consul-k8s-control-plane']['repository']}:${values['consulPlatform']['images']['consul-k8s-control-plane']['tag']}
+    imageConsulDataplane: ${values['consulPlatform']['images']['consul-dataplane']['registry']}/${values['consulPlatform']['images']['consul-dataplane']['repository']}:${values['consulPlatform']['images']['consul-dataplane']['tag']}
+  apiGateway:
+    imageEnvoy: ${values['consulPlatform']['images']['envoy']['registry']}/${values['consulPlatform']['images']['envoy']['repository']}:${values['consulPlatform']['images']['envoy']['tag']}
   updateCoreDns:    
     enabled: "true"
     configmapName: "coredns"

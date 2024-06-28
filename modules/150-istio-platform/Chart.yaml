@@ -7,4 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: pilot
-      image: platform-artifactory.qvantel.net/istio/pilot:1.17.6
+      image: docker.io/istio/pilot:1.17.6
+    - name: proxyv2
+      image: docker.io/istio/proxyv2:1.17.6

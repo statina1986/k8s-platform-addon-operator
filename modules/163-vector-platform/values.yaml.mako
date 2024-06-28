@@ -1,9 +1,16 @@
 vectorPlatform:
   agent:
+    image:
+      repository: ${values['vectorPlatform']['images']['agent']['registry']}/${values['vectorPlatform']['images']['agent']['repository']}
+      tag: ${values['vectorPlatform']['images']['agent']['tag']}
     role: "Agent"
     enabled: true
     tolerations:
         - operator: Exists
+    hotReload: 
+      image:
+        repository: ${values['vectorPlatform']['images']['configmap-reload']['registry']}/${values['vectorPlatform']['images']['configmap-reload']['repository']}
+        tag: ${values['vectorPlatform']['images']['configmap-reload']['tag']}
     customConfig:
       data_dir: /vector-data-dir
       api:
@@ -43,6 +50,9 @@ vectorPlatform:
             - vector_logs_transform
           address: vector-platform-aggregator.platform.svc:6000
   fluent-bit-events-collector:
+    image:
+      repository: ${values['vectorPlatform']['images']['fluent-bit-events-collector']['registry']}/${values['vectorPlatform']['images']['fluent-bit-events-collector']['repository']}
+      tag: ${values['vectorPlatform']['images']['fluent-bit-events-collector']['tag']}
     enabled: true
     kind: Deployment
     nameOverride: fluent-bit-events-collector
@@ -65,6 +75,9 @@ vectorPlatform:
               host vector-platform-aggregator.platform.svc
               port 9002
   aggregator:
+    image:
+      repository: ${values['vectorPlatform']['images']['aggregator']['registry']}/${values['vectorPlatform']['images']['aggregator']['repository']}
+      tag: ${values['vectorPlatform']['images']['aggregator']['tag']}
     enabled: true
     role: "Aggregator"
     % if values['global']['platformMasters']:
@@ -88,6 +101,10 @@ vectorPlatform:
             name: logsearch-es-elastic-user
             key: elastic
     % endif
+    haproxy:
+      image:
+        repository: ${values['vectorPlatform']['images']['haproxy']['registry']}/${values['vectorPlatform']['images']['haproxy']['repository']}
+        tag: ${values['vectorPlatform']['images']['haproxy']['tag']}
     customConfig:
       api:
         address: 0.0.0.0:8686

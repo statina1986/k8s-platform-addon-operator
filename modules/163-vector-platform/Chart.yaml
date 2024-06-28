@@ -4,3 +4,13 @@ version: 0.0.1
 dependencies:
   - name: vectorPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: fluent-bit
+      image: cr.fluentbit.io/fluent/fluent-bit:2.2.2
+    - name: configmap-reload
+      image: ghcr.io/jimmidyson/configmap-reload:v0.11.1
+    - name: vector
+      image: docker.io/timberio/vector:0.36.0-distroless-libc
+    - name: haproxy-alpine
+      image: docker.io/haproxytech/haproxy-alpine:2.6.12

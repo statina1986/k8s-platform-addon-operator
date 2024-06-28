@@ -7,6 +7,9 @@ vaultPlatform:
   autoUnseal: false
   useBackwardsCompatibilityService: true
   vault-secrets-webhook:
+    image:
+      repository: ${values['vaultPlatform']['images']['vault-secrets-webhook']['registry']}/${values['vaultPlatform']['images']['vault-secrets-webhook']['repository']}
+      tag: ${values['vaultPlatform']['images']['vault-secrets-webhook']['tag']}
     certificate:
       useCertManager: true
       generate: false
@@ -36,6 +39,9 @@ vaultPlatform:
     injector:
       enabled: false
     server:
+      image:
+        repository: ${values['vaultPlatform']['images']['vault']['registry']}/${values['vaultPlatform']['images']['vault']['repository']}
+        tag: ${values['vaultPlatform']['images']['vault']['tag']}
       serviceAccount:
         create: false
         name: platform
@@ -94,7 +100,7 @@ vaultPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-          image: artifactory.qvantel.net/k8s-platform-tools:${build_tag}
+          image: ${values['vaultPlatform']['images']['extraContainers']['registry']}/${values['vaultPlatform']['images']['extraContainers']['repository']}:${build_tag}
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /init-script/

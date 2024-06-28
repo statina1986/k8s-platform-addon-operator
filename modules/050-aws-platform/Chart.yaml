@@ -4,3 +4,25 @@ version: 0.0.1
 dependencies:
   - name: awsPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: aws-ebs-csi-driver
+      image: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.27.0
+    - name: external-provisioner
+      image: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v3.6.3-eks-1-29-3
+    - name: external-attacher
+      image: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher:v4.4.3-eks-1-29-3
+    - name: csi-snapshotter
+      image: public.ecr.aws/eks-distro/kubernetes-csi/external-snapshotter/csi-snapshotter:v6.3.3-eks-1-29-3
+    - name: livenessprobe
+      image: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.11.0-eks-1-29-3
+    - name: external-resizer
+      image: public.ecr.aws/eks-distro/kubernetes-csi/external-resizer:v1.9.3-eks-1-29-3
+    - name: node-driver-registrar
+      image: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.9.3-eks-1-29-3
+    - name: volume-modifier-for-k8s
+      image: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s:v0.2.1
+    - name: aws-efs-csi-driver
+      image: amazon/aws-efs-csi-driver:v1.7.4
+    - name: aws-load-balancer-controller
+      image: public.ecr.aws/eks/aws-load-balancer-controller:v2.7.0
