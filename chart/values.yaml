@@ -245,15 +245,16 @@ modulesConfig:
         tag: 10.4.33
   metricsPlatformEnabled: "false"
   metricsPlatform:
-    images:
-      metrics-server:
+    metrics-server:
+      image:
         registry: platform-artifactory.qvantel.net
         repository: metrics-server/metrics-server
-        tag: ""
+        tag: 0.6.4
       addonResizer:
-        registry: platform-artifactory.qvantel.net
-        repository: autoscaling/addon-resizer
-        tag: 1.8.19
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: autoscaling/addon-resizer
+          tag: 1.8.19
     configurationRequired: "check module documentation for configuration options"
   mongodbPlatformEnabled: "false"
   mongodbPlatform:
