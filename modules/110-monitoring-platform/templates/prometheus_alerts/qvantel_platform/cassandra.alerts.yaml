@@ -32,12 +32,12 @@ spec:
         brief: "{{` {{ $labels.node }} `}} of service {{` {{$labels.job }} `}} has had {{` {{ $value }} `}} pending compaction task(s) in average for more than 5 minutes."
         procedure: "Contact NoSQL urgently to verify the potential risk and create a ticket to them"
     - alert: CassandraFailingInstance
-      expr: 'count(absent(sum(rate(org_apache_cassandra_metrics_compaction_completed_tasks{}[1m:30s]))))'
+      expr: '1 <= sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{container="cassandra"}[15m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1))'
       for: 1m
       labels:
         severity: critical
       annotations:
-        brief: "Cassandra node has been down for more than 1 minute."
+        brief: 'Instance service {{` {{ $labels.service_name }} `}} {{` {{ $labels.service_id}} `}} has been down for more than 1 minute'
         procedure: "Contact NoSQL urgently if Cassandra node keeps down and create a ticket to them"
     - alert: CassandraManyTombstones
       expr: 'max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) > 80000 and max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) < 90000'

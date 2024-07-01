@@ -3,7 +3,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: grafana-dashboards-applications-availability-ootb
-  namespace: platform
+  namespace: {{.Release.Namespace}}
   labels:
     grafana_dashboard: '1'
   annotations:

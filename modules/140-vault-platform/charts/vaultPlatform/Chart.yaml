@@ -11,6 +11,7 @@ dependencies:
   - name: vault-secrets-webhook
     version: 1.20.0
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    condition: vaultWebhooksEnabled
   - name: vault
     version: 0.23.0
     repository: https://artifactory.qvantel.net/artifactory/helm-platform/

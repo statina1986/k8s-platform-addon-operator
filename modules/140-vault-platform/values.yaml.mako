@@ -4,6 +4,7 @@
 %>
 # vaultPlatformNamespace: vault
 vaultPlatform:
+  vaultWebhooksEnabled: true
   autoUnseal: false
   useBackwardsCompatibilityService: true
   vault-secrets-webhook:
