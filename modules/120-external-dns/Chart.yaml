@@ -7,4 +7,4 @@ dependencies:
 annotations:
   images: |
     - name: external-dns
-      image: platform-artifactory.qvantel.net/bitnami/external-dns:0.13.4-debian-11-r2
+      image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2

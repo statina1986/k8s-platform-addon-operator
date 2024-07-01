@@ -1,10 +1,14 @@
 # istioPlatformNamespace: istio-system
 istioPlatform:
+  global:
+    proxy:
+      image: ${values['istioPlatform']['images']['proxyv2']['registry']}/${values['istioPlatform']['images']['proxyv2']['repository']}:${values['istioPlatform']['images']['proxyv2']['tag']}
   base:
     global:
       istioNamespace: platform
   istiod:
     pilot:
+      image: ${values['istioPlatform']['images']['pilot']['registry']}/${values['istioPlatform']['images']['pilot']['repository']}:${values['istioPlatform']['images']['pilot']['tag']}
       tolerations:
         - key: "dedicated-nodes"
           value: "platform-masters"

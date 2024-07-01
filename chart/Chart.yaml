@@ -12,6 +12,10 @@ annotations:
       image: quay.io/jetstack/cert-manager-cainjector:v1.12.4
     - name: webhook
       image: quay.io/jetstack/cert-manager-webhook:v1.12.4
+    - name: acmesolver
+      image: quay.io/jetstack/cert-manager-acmesolver:v1.12.4
+    - name: cert-manager-ctl
+      image: quay.io/jetstack/cert-manager-ctl:v1.12.4
   
     ## CloudNativePG IMAGES
     - name: q-cnpg-timescale-15
@@ -23,13 +27,25 @@ annotations:
     
     ## CONSUL IMAGES
     - name: consul
-      image: platform-artifactory.qvantel.net/hashicorp/consul:1.14.4
+      image: docker.io/hashicorp/consul:1.14.4
     - name: consul-k8s-control-plane
-      image: platform-artifactory.qvantel.net/hashicorp/consul-k8s-control-plane:1.0.3
+      image: docker.io/hashicorp/consul-k8s-control-plane:1.0.3
     - name: consul-dataplane
-      image: platform-artifactory.qvantel.net/hashicorp/consul-dataplane:1.0.1
+      image: docker.io/hashicorp/consul-dataplane:1.0.1
     - name: envoy
-      image: platform-artifactory.qvantel.net/envoyproxy/envoy:v1.23.1
+      image: docker.io/envoyproxy/envoy:v1.23.1
+    
+    ## ELASTICSEARCH IMAGES
+    - name: elasticsearch
+      image: artifactory.qvantel.net/helm-k8s-elasticsearch:7.16.2
+    - name: kibana
+      image: artifactory.qvantel.net/helm-k8s-kibana:7.16.2
+    - name: eck-operator
+      image: artifactory.qvantel.net/helm-k8s-eck-operator:2.2.0
+    - name: filebeat
+      image: artifactory.qvantel.net/helm-k8s-filebeat:7.16.2
+    - name: logstash
+      image: artifactory.qvantel.net/helm-k8s-logstash:7.16.2
     
     ## EXTERNAL-DNS IMAGES
     - name: external-dns
@@ -62,3 +78,15 @@ annotations:
       image: docker.io/hashicorp/vault:1.12.1
     - name: vault-secrets-webhook
       image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
+    - name: platform-tools
+      image: artifactory.qvantel.net/k8s-platform-tools:latest
+    
+    ## VECTOR IMAGES
+    - name: fluent-bit
+      image: cr.fluentbit.io/fluent/fluent-bit:2.2.2
+    - name: configmap-reload
+      image: ghcr.io/jimmidyson/configmap-reload:v0.11.1
+    - name: vector
+      image: docker.io/timberio/vector:0.36.0-distroless-libc
+    - name: haproxy-alpine
+      image: docker.io/haproxytech/haproxy-alpine:2.6.12

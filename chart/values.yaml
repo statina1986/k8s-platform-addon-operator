@@ -34,8 +34,66 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   awsPlatformEnabled: "false"
   awsPlatform:
-    configurationRequired: "check module documentation for configuration options"
-  certPlatformEnabled: "false"
+    aws-ebs-csi-driver:
+      image:
+        repository: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver
+        tag: v1.27.0
+      sidecars:
+        provisioner:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner
+            tag: "v3.6.3-eks-1-29-3"
+        attacher:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher
+            tag: "v4.4.3-eks-1-29-3"
+        snapshotter:
+          forceEnable: true
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/external-snapshotter/csi-snapshotter
+            tag: "v6.3.3-eks-1-29-3"
+        livenessProbe:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe
+            tag: "v2.11.0-eks-1-29-3"
+        resizer:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/external-resizer
+            tag: "v1.9.3-eks-1-29-3"
+        nodeDriverRegistrar:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar
+            tag: "v2.9.3-eks-1-29-3"
+        volumemodifier:
+          image:
+            repository: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s
+            tag: "v0.2.1"
+    aws-efs-csi-driver:
+      image:
+        repository: amazon/aws-efs-csi-driver
+        tag: "v1.7.4"
+      sidecars:
+        livenessProbe:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe
+            tag: v2.11.0-eks-1-29-2
+        nodeDriverRegistrar:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar
+            tag: v2.9.3-eks-1-29-2
+        csiProvisioner:
+          image:
+            repository: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner
+            tag: v3.6.3-eks-1-29-2
+    aws-load-balancer-controller:
+      image:
+        repository: public.ecr.aws/eks/aws-load-balancer-controller
+        tag: v2.7.0
+    aws-vpc-cni:
+      init:
+        image:
+          tag: v1.16.2
+  certPlatformEnabled: "true"
   certPlatform:
     cert-manager:
       image:
@@ -51,6 +109,16 @@ modulesConfig:
         image:
           registry: platform-artifactory.qvantel.net
           repository: jetstack/cert-manager-webhook
+          tag: v1.12.4
+      startupapicheck:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: jetstack/cert-manager-ctl
+          tag: v1.12.4
+      acmesolver:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: jetstack/cert-manager-acmesolver
           tag: v1.12.4
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
@@ -72,18 +140,49 @@ modulesConfig:
         tag: "16.3-1_5_master_e1aa9a467"
   consulPlatformEnabled: "false"
   consulPlatform:
-    global:
-      image: platform-artifactory.qvantel.net/hashicorp/consul:1.14.4
-      imageK8S: platform-artifactory.qvantel.net/hashicorp/consul-k8s-control-plane:1.0.3
-      imageConsulDataplane: platform-artifactory.qvantel.net/hashicorp/consul-dataplane:1.0.1
-    apiGateway:
-      imageEnvoy: platform-artifactory.qvantel.net/envoyproxy/envoy:v1.23.1
+    images:
+      consul:
+        registry: platform-artifactory.qvantel.net
+        repository: hashicorp/consul
+        tag: 1.14.4
+      consul-k8s-control-plane:
+        registry: platform-artifactory.qvantel.net
+        repository: hashicorp/consul-k8s-control-plane
+        tag: 1.0.3
+      consul-dataplane:
+        registry: platform-artifactory.qvantel.net
+        repository: hashicorp/consul-dataplane
+        tag: 1.0.1
+      envoy:
+        registry: platform-artifactory.qvantel.net
+        repository: envoyproxy/envoy
+        tag: v1.23.1
   dbManagementEnabled: "false"
   dbManagement:
     configurationRequired: "check module documentation for configuration options"
   elasticsearchPlatformEnabled: "false"
   elasticsearchPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    images:
+      eck-operator:
+        registry: platform-artifactory.qvantel.net
+        repository: helm-k8s-eck-operator
+        tag: 2.2.0
+      elasticsearch:
+        registry: platform-artifactory.qvantel.net
+        repository: helm-k8s-elasticsearch
+        tag: 7.16.2
+      kibana:
+        registry: platform-artifactory.qvantel.net
+        repository: helm-k8s-kibana
+        tag: 7.16.2
+      logstash:
+        registry: platform-artifactory.qvantel.net
+        repository: helm-k8s-logstash
+        tag: 7.16.2
+      filebeat:
+        registry: platform-artifactory.qvantel.net
+        repository: helm-k8s-filebeat
+        tag: 7.16.2
   externalDnsEnabled: "false"
   externalDns:
     external-dns:
@@ -102,16 +201,15 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   istioPlatformEnabled: "false"
   istioPlatform:
-    istiod:
+    images:
       pilot:
-        hub: "platform-artifactory.qvantel.net/istio"
+        registry: platform-artifactory.qvantel.net
+        repository: istio/pilot
         tag: 1.17.6
-        image: pilot
-    global: 
-      hub: "platform-artifactory.qvantel.net/istio"
-      tag: 1.17.6
-      proxy:
-        image: proxyv2
+      proxyv2:
+        registry: platform-artifactory.qvantel.net
+        repository: istio/proxyv2
+        tag: 1.17.6
   ksixPlatformEnabled: "false"
   ksixPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -201,18 +299,42 @@ modulesConfig:
   traefikIngressEnabled: "false"
   traefikIngress:
     configurationRequired: "check module documentation for configuration options"
-  vaultPlatformEnabled: "false"
+  vaultPlatformEnabled: "true"
   vaultPlatform:
     autoUnseal: false
-    vault-secrets-webhook:
-      image:
-        repository: platform-artifactory.qvantel.net/banzaicloud/vault-secrets-webhook
+    images:
+      vault-secrets-webhook:
+        registry: platform-artifactory.qvantel.net
+        repository: banzaicloud/vault-secrets-webhook
         tag: 1.18.0
-    vault:
-      server:
-        image:
-          repository: platform-artifactory.qvantel.net/hashicorp/vault
-          tag: 1.12.1
-  vectorPlatformEnabled: "false"
+      vault:
+        registry: platform-artifactory.qvantel.net
+        repository: hashicorp/vault
+        tag: 1.12.1
+      extraContainers:
+        registry: platform-artifactory.qvantel.net
+        repository: k8s-platform-tools
+        tag: latest
+  vectorPlatformEnabled: "true"
   vectorPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    images:
+      fluent-bit-events-collector:
+        registry: platform-artifactory.qvantel.net
+        repository: fluent/fluent-bit
+        tag: 2.2.2
+      configmap-reload:
+        registry: platform-artifactory.qvantel.net
+        repository: jimmidyson/configmap-reload
+        tag: v0.11.1
+      haproxy:
+        registry: platform-artifactory.qvantel.net
+        repository: haproxytech/haproxy-alpine
+        tag: 2.6.12
+      aggregator:
+        registry: platform-artifactory.qvantel.net
+        repository: timberio/vector
+        tag: 0.36.0-distroless-libc
+      agent:
+        registry: platform-artifactory.qvantel.net
+        repository: timberio/vector
+        tag: 0.36.0-distroless-libc
