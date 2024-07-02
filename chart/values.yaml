@@ -264,7 +264,7 @@ modulesConfig:
       metrics-server:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/metrics-server/metrics-server
-        tag: 0.6.4
+        tag: v0.6.4
       addonResizer:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/autoscaling/addon-resizer
@@ -290,30 +290,31 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   redisPlatformEnabled: "false"
   redisPlatform:
-    image:
-      registry: platform-artifactory.qvantel.net
-      repository: platform-1-2-0/bitnami/redis
-      tag: 7.2.1-debian-11-r0
-    sentinel:
+    redis:
       image:
         registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/bitnami/redis-sentinel
+        repository: platform-1-2-0/bitnami/redis
         tag: 7.2.1-debian-11-r0
-    metrics:
-      image:
-        registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/bitnami/redis-exporter
-        tag: 1.54.0-debian-11-r0
-    volumePermissions:
-      image:
-        registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/bitnami/os-shell
-        tag: 11-debian-11-r60
-    sysctl:
-      image:
-        registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/bitnami/os-shell
-        tag: 11-debian-11-r60
+      sentinel:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/redis-sentinel
+          tag: 7.2.1-debian-11-r0
+      metrics:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/redis-exporter
+          tag: 1.54.0-debian-11-r0
+      volumePermissions:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/os-shell
+          tag: 11-debian-11-r60
+      sysctl:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/os-shell
+          tag: 11-debian-11-r60
   redisPcdPlatformEnabled: "false"
   redisPcdPlatform:
     configurationRequired: "check module documentation for configuration options"
