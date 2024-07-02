@@ -165,23 +165,23 @@ modulesConfig:
     images:
       eck-operator:
         registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/eck-operator
+        repository: platform-1-2-0/elastic/eck-operator
         tag: 2.2.0
       elasticsearch:
         registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/elasticsearch
+        repository: platform-1-2-0/library/elasticsearch
         tag: 7.16.2
       kibana:
         registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/kibana
+        repository: platform-1-2-0/library/kibana
         tag: 7.16.2
       logstash:
         registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/logstash
+        repository: platform-1-2-0/library/logstash
         tag: 7.16.2
       filebeat:
         registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/filebeat
+        repository: platform-1-2-0/elastic/filebeat
         tag: 7.16.2
   externalDnsEnabled: "false"
   externalDns:
@@ -260,17 +260,15 @@ modulesConfig:
         tag: 10.4.33
   metricsPlatformEnabled: "false"
   metricsPlatform:
-    metrics-server:
-      image:
+    images:
+      metrics-server:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/metrics-server/metrics-server
         tag: 0.6.4
       addonResizer:
-        image:
-          registry: platform-artifactory.qvantel.net
-          repository: platform-1-2-0/autoscaling/addon-resizer
-          tag: 1.8.19
-    configurationRequired: "check module documentation for configuration options"
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/autoscaling/addon-resizer
+        tag: 1.8.19
   mongodbPlatformEnabled: "false"
   mongodbPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -295,7 +293,7 @@ modulesConfig:
     image:
       registry: platform-artifactory.qvantel.net
       repository: platform-1-2-0/bitnami/redis
-      tag: 7.2.1-debian-11-r0  
+      tag: 7.2.1-debian-11-r0
     sentinel:
       image:
         registry: platform-artifactory.qvantel.net

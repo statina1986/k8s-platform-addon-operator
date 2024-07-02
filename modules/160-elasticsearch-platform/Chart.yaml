@@ -7,12 +7,12 @@ dependencies:
 annotations:
   images: |
     - name: elasticsearch
-      image: docker.io/elasticsearch:7.16.2
+      image: docker.io/library/elasticsearch:7.16.2
     - name: kibana
-      image: docker.io/kibana:7.16.2
+      image: docker.io/library/kibana:7.16.2
     - name: eck-operator
       image: docker.io/elastic/eck-operator:2.2.0
     - name: filebeat
       image: docker.io/elastic/filebeat:7.16.2
     - name: logstash
-      image: docker.io/logstash:7.16.2
+      image: docker.io/library/logstash:7.16.2
