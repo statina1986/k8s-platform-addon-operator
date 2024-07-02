@@ -43,27 +43,17 @@ def createPackage() {
 
     sh "docker build -t ${imageTag(TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images/${TOOLS_NAME}.Dockerfile"
 
-    sh "docker build -t ${imageTag(DB_TOOLS_NAME)} -t ${imageTagLatest(DB_TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images/${DB_TOOLS_NAME}.Dockerfile"
-
     sh "docker push ${imageTag(K8S_PLATFORM_NAME)}"
 
     sh "docker push ${imageTag(TOOLS_NAME)}"
 
     sh "docker push ${imageTagLatest(TOOLS_NAME)}"
 
-    sh "docker push ${imageTag(DB_TOOLS_NAME)}"
-
-    sh "docker push ${imageTagLatest(DB_TOOLS_NAME)}"
-
     pipelineBase.addCreatedImage(imageTag(K8S_PLATFORM_NAME))
 
     pipelineBase.addCreatedImage(imageTag(TOOLS_NAME))
 
     pipelineBase.addCreatedImage(imageTagLatest(TOOLS_NAME))
-
-    pipelineBase.addCreatedImage(imageTag(DB_TOOLS_NAME))
-
-    pipelineBase.addCreatedImage(imageTagLatest(DB_TOOLS_NAME))
 
     sh "helm package --version ${VERSION} --app-version ${imageVersion()} ./chart"
 
