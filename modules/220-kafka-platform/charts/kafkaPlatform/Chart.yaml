@@ -1,0 +1,12 @@
+## WARNING! 
+## This is just a dummy Chart.yaml in order to support "helm dt" tooling. 
+## Proper Chart.yaml will be generated in runtime from Chart.yaml.mako file and it will override this file
+## However it should contain all actual versions of dependencies charts
+
+apiVersion: v2
+name: kafkaPlatform
+version: 0.0.1
+dependencies:
+  - name: strimzi-kafka-operator    
+    version: 0.37.0
+    repository: https://strimzi.io/charts/

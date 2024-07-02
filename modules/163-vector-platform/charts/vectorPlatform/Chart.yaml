@@ -2,28 +2,18 @@ apiVersion: v2
 name: vectorPlatform
 version: 0.0.1
 dependencies:
-#  - name: vector
-#    alias: agent
-#    condition: agent.enabled
-#    repository: "https://helm.vector.dev"
-#    version: "^0.18.0"
-#  - name: vector
-#    alias: aggregator
-#    condition: aggregator.enabled
-#    repository: "https://helm.vector.dev"
-#    version: "^0.18.0"
   - name: vector
     alias: agent
     condition: agent.enabled
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://helm.vector.dev
     version: "^0.31.0"
   - name: vector
     alias: aggregator
     condition: aggregator.enabled
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://helm.vector.dev
     version: "^0.31.0"
   - name: fluent-bit
     alias: fluent-bit-events-collector
     condition: fluent-bit-events-collector.enabled
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://fluent.github.io/helm-charts
     version: "^0.44.0"

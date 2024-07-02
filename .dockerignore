@@ -1,5 +1,6 @@
 .git/
 .vscode/
+**/images
 **/tests
 **/__pycache__
 **/*.pyc

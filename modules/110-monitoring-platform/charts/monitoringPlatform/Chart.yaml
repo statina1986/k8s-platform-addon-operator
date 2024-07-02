@@ -5,23 +5,23 @@ dependencies:
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
     version: "~51.0.0"
-    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+    repository: "https://prometheus-community.github.io/helm-charts"
   - name: prometheus-blackbox-exporter
     condition: prometheus-blackbox-exporter.enabled
     version: "7.1.3"
-    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+    repository: "https://prometheus-community.github.io/helm-charts"
   - name: prometheus-consul-exporter
     condition: prometheus-consul-exporter.enabled
     version: "0.5.1"
-    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+    repository: "https://prometheus-community.github.io/helm-charts"
   - name: x509-certificate-exporter
     condition: x509-certificate-exporter.enabled
     version: "v3.6.0"
-    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+    repository: "https://charts.enix.io"
   - name: kafka-lag-exporter
     condition: kafka-lag-exporter.enabled
     version: "v0.8.2"
-    repository: "https://artifactory.qvantel.net/artifactory/helm-platform/"
+    repository: "https://seglo.github.io/kafka-lag-exporter/repo/"
   - name: yet-another-cloudwatch-exporter
     condition: yet-another-cloudwatch-exporter.enabled
     version: "0.21.0"

@@ -7,4 +7,4 @@ dependencies:
 #    repository: https://strimzi.io/charts/
   - name: strimzi-kafka-operator    
     version: ${values['kafkaPlatform']['strimziHelmVersion'] or '0.37.0'}
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://strimzi.io/charts/

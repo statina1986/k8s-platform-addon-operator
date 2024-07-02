@@ -2,43 +2,23 @@ apiVersion: v2
 name: istioIngress
 version: 0.0.1
 dependencies:
-#  - name: gateway
-#    alias: privateIngress
-#    condition: privateIngressEnabled
-#    version: "1.13.2"
-#    repository: https://istio-release.storage.googleapis.com/charts
-#  - name: gateway
-#    alias: publicIngress
-#    condition: publicIngressEnabled
-#    version: "1.13.2"
-#    repository: https://istio-release.storage.googleapis.com/charts
-#  - name: gateway
-#    alias: integrationsHttpIngress
-#    condition: integrationsHttpIngressEnabled
-#    version: "1.13.2"
-#    repository: https://istio-release.storage.googleapis.com/charts
-#  - name: gateway
-#    alias: integrationsNonHttpIngress
-#    condition: integrationsNonHttpIngressEnabled
-#    version: "1.13.2"
-#    repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: privateIngress
     condition: privateIngressEnabled
     version: "1.17.6"
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: publicIngress
     condition: publicIngressEnabled
     version: "1.17.6"
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: integrationsHttpIngress
     condition: integrationsHttpIngressEnabled
     version: "1.17.6"
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: integrationsNonHttpIngress
     condition: integrationsNonHttpIngressEnabled
     version: "1.17.6"
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://istio-release.storage.googleapis.com/charts

@@ -1,1 +1,0 @@
-At least some charts in this folder will be populated automatically from "subcharts" folder.

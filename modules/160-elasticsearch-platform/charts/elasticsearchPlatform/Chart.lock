@@ -1,12 +1,12 @@
 dependencies:
 - name: eck-operator
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  repository: https://helm.elastic.co
   version: 2.2.0
 - name: logstash
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  repository: https://helm.elastic.co
   version: 7.16.2
 - name: filebeat
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  repository: https://helm.elastic.co
   version: 7.16.2
-digest: sha256:5cd25af6096b76d27388018d195109d6cbe847e58485a00f4b8e98bb1f8f8075
-generated: "2023-03-13T21:27:06.878861639+02:00"
+digest: sha256:789e8c0850d12ab4b8169c3946d8f9d896d0fd51ba7f19af0a3d7a060b9fc719
+generated: "2024-07-01T16:53:01.688141968+03:00"

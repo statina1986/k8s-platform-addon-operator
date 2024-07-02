@@ -2,16 +2,9 @@ apiVersion: v2
 name: postgresPlatform
 version: 0.0.1
 dependencies:
-#  - name: postgres-operator
-#    version: 1.7.1
-#    repository: https://opensource.zalando.com/postgres-operator/charts/postgres-operator/
-#  - name: postgres-operator-ui
-#    version: 1.7.1
-#    repository: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui/
   - name: postgres-operator
     version: 1.10.1
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://opensource.zalando.com/postgres-operator/charts/postgres-operator/
   - name: postgres-operator-ui
     version: 1.10.1
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-
+    repository: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui/

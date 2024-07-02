@@ -98,27 +98,27 @@ modulesConfig:
     cert-manager:
       image:
         registry: platform-artifactory.qvantel.net
-        repository: jetstack/cert-manager-controller
+        repository: platform-1-2-0/jetstack/cert-manager-controller
         tag: v1.12.4
       cainjector:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: jetstack/cert-manager-cainjector
+          repository: platform-1-2-0/jetstack/cert-manager-cainjector
           tag: v1.12.4
       webhook:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: jetstack/cert-manager-webhook
+          repository: platform-1-2-0/jetstack/cert-manager-webhook
           tag: v1.12.4
       startupapicheck:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: jetstack/cert-manager-ctl
+          repository: platform-1-2-0/jetstack/cert-manager-ctl
           tag: v1.12.4
       acmesolver:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: jetstack/cert-manager-acmesolver
+          repository: platform-1-2-0/jetstack/cert-manager-acmesolver
           tag: v1.12.4
   ciliumPlatformEnabled: "false"
   ciliumPlatform:
@@ -127,35 +127,35 @@ modulesConfig:
   cnpgPostgresPlatform:
     images:
       cloudnative-pg:
-        registry: ghcr.io
-        repository: cloudnative-pg/cloudnative-pg
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/cloudnative-pg/cloudnative-pg
         tag: "1.22.2"
       q-cnpg-timescale-15:
-        registry: artifactory.qvantel.net
-        repository: q-cnpg-timescale
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/q-cnpg-timescale
         tag: "15.7-1_5_master_e1aa9a467"
-      q-cnpg-timescale-16:    
-        registry: artifactory.qvantel.net
-        repository: q-cnpg-timescale
+      q-cnpg-timescale-16:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/q-cnpg-timescale
         tag: "16.3-1_5_master_e1aa9a467"
   consulPlatformEnabled: "false"
   consulPlatform:
     images:
       consul:
         registry: platform-artifactory.qvantel.net
-        repository: hashicorp/consul
+        repository: platform-1-2-0/hashicorp/consul
         tag: 1.14.4
       consul-k8s-control-plane:
         registry: platform-artifactory.qvantel.net
-        repository: hashicorp/consul-k8s-control-plane
+        repository: platform-1-2-0/hashicorp/consul-k8s-control-plane
         tag: 1.0.3
       consul-dataplane:
         registry: platform-artifactory.qvantel.net
-        repository: hashicorp/consul-dataplane
+        repository: platform-1-2-0/hashicorp/consul-dataplane
         tag: 1.0.1
       envoy:
         registry: platform-artifactory.qvantel.net
-        repository: envoyproxy/envoy
+        repository: platform-1-2-0/envoyproxy/envoy
         tag: v1.23.1
   dbManagementEnabled: "false"
   dbManagement:
@@ -165,30 +165,30 @@ modulesConfig:
     images:
       eck-operator:
         registry: platform-artifactory.qvantel.net
-        repository: helm-k8s-eck-operator
+        repository: platform-1-2-0/eck-operator
         tag: 2.2.0
       elasticsearch:
         registry: platform-artifactory.qvantel.net
-        repository: helm-k8s-elasticsearch
+        repository: platform-1-2-0/elasticsearch
         tag: 7.16.2
       kibana:
         registry: platform-artifactory.qvantel.net
-        repository: helm-k8s-kibana
+        repository: platform-1-2-0/kibana
         tag: 7.16.2
       logstash:
         registry: platform-artifactory.qvantel.net
-        repository: helm-k8s-logstash
+        repository: platform-1-2-0/logstash
         tag: 7.16.2
       filebeat:
         registry: platform-artifactory.qvantel.net
-        repository: helm-k8s-filebeat
+        repository: platform-1-2-0/filebeat
         tag: 7.16.2
   externalDnsEnabled: "false"
   externalDns:
     external-dns:
       image:
         registry: platform-artifactory.qvantel.net
-        repository: bitnami/external-dns
+        repository: platform-1-2-0/bitnami/external-dns
         tag: 0.13.4-debian-11-r2
   grafanaPlatformEnabled: "false"
   grafanaPlatform:
@@ -199,17 +199,17 @@ modulesConfig:
       agent:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: agent/static
+          repository: platform-1-2-0/agent/static
           tag: 1.276.0
       leaderElector:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: instana/leader-elector
+          repository: platform-1-2-0/instana/leader-elector
           tag: 0.5.19
       k8s_sensor:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: instana/k8sensor
+          repository: platform-1-2-0/instana/k8sensor
           tag: Q-1.0.0
   istioIngressEnabled: "false"
   istioIngress:
@@ -219,11 +219,11 @@ modulesConfig:
     images:
       pilot:
         registry: platform-artifactory.qvantel.net
-        repository: istio/pilot
+        repository: platform-1-2-0/istio/pilot
         tag: 1.17.6
       proxyv2:
         registry: platform-artifactory.qvantel.net
-        repository: istio/proxyv2
+        repository: platform-1-2-0/istio/proxyv2
         tag: 1.17.6
   ksixPlatformEnabled: "false"
   ksixPlatform:
@@ -243,7 +243,7 @@ modulesConfig:
       loki:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: grafana/loki
+          repository: platform-1-2-0/grafana/loki
           tag: 2.9.2
   keycloakPlatformEnabled: "false"
   keycloakPlatform:
@@ -256,19 +256,19 @@ modulesConfig:
     images:
       mariadb:
         registry: platform-artifactory.qvantel.net
-        repository: library/mariadb
+        repository: platform-1-2-0/library/mariadb
         tag: 10.4.33
   metricsPlatformEnabled: "false"
   metricsPlatform:
     metrics-server:
       image:
         registry: platform-artifactory.qvantel.net
-        repository: metrics-server/metrics-server
+        repository: platform-1-2-0/metrics-server/metrics-server
         tag: 0.6.4
       addonResizer:
         image:
           registry: platform-artifactory.qvantel.net
-          repository: autoscaling/addon-resizer
+          repository: platform-1-2-0/autoscaling/addon-resizer
           tag: 1.8.19
     configurationRequired: "check module documentation for configuration options"
   mongodbPlatformEnabled: "false"
@@ -292,7 +292,30 @@ modulesConfig:
     configurationRequired: "check module documentation for configuration options"
   redisPlatformEnabled: "false"
   redisPlatform:
-    configurationRequired: "check module documentation for configuration options"
+    image:
+      registry: platform-artifactory.qvantel.net
+      repository: platform-1-2-0/bitnami/redis
+      tag: 7.2.1-debian-11-r0  
+    sentinel:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/redis-sentinel
+        tag: 7.2.1-debian-11-r0
+    metrics:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/redis-exporter
+        tag: 1.54.0-debian-11-r0
+    volumePermissions:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/os-shell
+        tag: 11-debian-11-r60
+    sysctl:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/os-shell
+        tag: 11-debian-11-r60
   redisPcdPlatformEnabled: "false"
   redisPcdPlatform:
     configurationRequired: "check module documentation for configuration options"
@@ -320,36 +343,36 @@ modulesConfig:
     images:
       vault-secrets-webhook:
         registry: platform-artifactory.qvantel.net
-        repository: banzaicloud/vault-secrets-webhook
+        repository: platform-1-2-0/banzaicloud/vault-secrets-webhook
         tag: 1.18.0
       vault:
         registry: platform-artifactory.qvantel.net
-        repository: hashicorp/vault
+        repository: platform-1-2-0/hashicorp/vault
         tag: 1.12.1
       extraContainers:
         registry: platform-artifactory.qvantel.net
-        repository: k8s-platform-tools
+        repository: platform-1-2-0/k8s-platform-tools
         tag: latest
   vectorPlatformEnabled: "true"
   vectorPlatform:
     images:
       fluent-bit-events-collector:
         registry: platform-artifactory.qvantel.net
-        repository: fluent/fluent-bit
+        repository: platform-1-2-0/fluent/fluent-bit
         tag: 2.2.2
       configmap-reload:
         registry: platform-artifactory.qvantel.net
-        repository: jimmidyson/configmap-reload
+        repository: platform-1-2-0/jimmidyson/configmap-reload
         tag: v0.11.1
       haproxy:
         registry: platform-artifactory.qvantel.net
-        repository: haproxytech/haproxy-alpine
+        repository: platform-1-2-0/haproxytech/haproxy-alpine
         tag: 2.6.12
       aggregator:
         registry: platform-artifactory.qvantel.net
-        repository: timberio/vector
+        repository: platform-1-2-0/timberio/vector
         tag: 0.36.0-distroless-libc
       agent:
         registry: platform-artifactory.qvantel.net
-        repository: timberio/vector
+        repository: platform-1-2-0/timberio/vector
         tag: 0.36.0-distroless-libc

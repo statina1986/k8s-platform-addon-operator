@@ -2,15 +2,9 @@ apiVersion: v2
 name: istioPlatform
 version: 0.0.1
 dependencies:
-#  - name: base
-#    version: "1.13.2"
-#    repository: https://istio-release.storage.googleapis.com/charts
-#  - name: istiod
-#    version: "1.13.2"
-#    repository: https://istio-release.storage.googleapis.com/charts
   - name: base
     version: "1.17.6"
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://istio-release.storage.googleapis.com/charts
   - name: istiod
     version: "1.17.6"
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://istio-release.storage.googleapis.com/charts

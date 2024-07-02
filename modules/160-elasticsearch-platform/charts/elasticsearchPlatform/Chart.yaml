@@ -2,23 +2,14 @@ apiVersion: v2
 name: elasticsearchPlatform
 version: 0.0.1
 dependencies:
-#  - name: eck-operator
-#    version: 2.2.0
-#    repository: https://helm.elastic.co
-#  - name: logstash
-#    version: 7.16.2
-#    repository: https://helm.elastic.co
-#  - name: filebeat
-#    version: 7.16.2
-#    repository: https://helm.elastic.co
   - name: eck-operator
     version: 2.2.0
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://helm.elastic.co
   - name: logstash
     version: 7.16.2
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://helm.elastic.co
     condition: logstashEnabled
   - name: filebeat
     version: 7.16.2
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    repository: https://helm.elastic.co
     condition: filebeatEnabled

@@ -7,4 +7,4 @@ dependencies:
 annotations:
   images: |
     - name: loki
-      image: artifactory.qvantel.net/platform/grafana/loki:2.9.2
+      image: docker.io/grafana/loki:2.9.2

@@ -1,6 +1,6 @@
 dependencies:
 - name: external-dns
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  repository: oci://registry-1.docker.io/bitnamicharts
   version: 6.18.0
-digest: sha256:0ca60d7eaa04bbbfcd9b7d21a4bfac4032a483def5bf17500672da7cb1d0c459
-generated: "2023-04-23T11:11:30.47137197+03:00"
+digest: sha256:b2c26675400d1eb9db79d4fa1bc5e44b1af92a0af3bb825b846f92b00492ecfd
+generated: "2024-07-01T17:09:04.618771537+03:00"
