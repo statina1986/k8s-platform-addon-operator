@@ -771,6 +771,16 @@ istioIngress:
               host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
               port:
                 number: 9000
+      tmf-openapi:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: tmf-openapi.qvantel.svc.cluster.local
+              port:
+                number: 7777
       tnt:
         enabled: false
         gateways:
