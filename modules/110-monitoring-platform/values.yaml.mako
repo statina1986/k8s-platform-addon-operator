@@ -45,6 +45,10 @@ monitoringPlatform:
             bucket: tempo-traces                
   x509-certificate-exporter:
     enabled: true
+    image:
+      registry: ${values['monitoringPlatform']['images']['x509-certificate-exporter']['registry']}
+      repository: ${values['monitoringPlatform']['images']['x509-certificate-exporter']['repository']}
+      tag: ${values['monitoringPlatform']['images']['x509-certificate-exporter']['tag']}
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -78,6 +82,9 @@ monitoringPlatform:
         "release": "monitoring-platform"
   kafka-lag-exporter:
     enabled: true
+    image:
+      repository: ${values['monitoringPlatform']['images']['kafka-lag-exporter']['registry']}/${values['monitoringPlatform']['images']['kafka-lag-exporter']['repository']}
+      tag: ${values['monitoringPlatform']['images']['kafka-lag-exporter']['tag']}
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -105,6 +112,9 @@ monitoringPlatform:
       "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
+    image:
+      repository: ${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['registry']}/${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['repository']}
+      tag: ${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['tag']}
     pspEnabled: false
     tolerations:
       - key: "dedicated-nodes"
@@ -146,6 +156,9 @@ monitoringPlatform:
             preferred_ip_protocol: "ip4"    
   yet-another-cloudwatch-exporter:
     enabled: false
+    image:
+      repository: ${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['registry']}/${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['repository']}
+      tag: ${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['tag']}
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -166,6 +179,9 @@ monitoringPlatform:
         "release": "monitoring-platform"
   prometheus-consul-exporter:
     enabled: true
+    image:
+      repository: ${values['monitoringPlatform']['images']['prometheus-consul-exporter']['registry']}/${values['monitoringPlatform']['images']['prometheus-consul-exporter']['repository']}
+      tag: ${values['monitoringPlatform']['images']['prometheus-consul-exporter']['tag']}
     rbac:
       pspEnabled: false
     tolerations:
@@ -200,8 +216,47 @@ monitoringPlatform:
       rules:
         kubernetesStorage: false
         kubeApiserverSlos: false
-    grafana:
+    alertmanager:
+      alertmanagerSpec:
+        image:
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['alertmanager']['alertmanagerSpec']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['alertmanager']['alertmanagerSpec']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['alertmanager']['alertmanagerSpec']['tag']}
+    prometheusOperator:
+      image:
+        registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['registry']}
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['tag']}        
+      prometheusConfigReloader:
+        image:
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['prometheusConfigReloader']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['prometheusConfigReloader']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['prometheusConfigReloader']['tag']}
+      admissionWebhooks:
+        patch:
+          image:
+            registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['patch']['registry']}
+            repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['patch']['repository']}
+            tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['patch']['tag']}
+      thanosImage:
+        registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['thanosImage']['registry']}
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['thanosImage']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['thanosImage']['tag']}
+    grafana:        
       enabled: true
+      image:
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['tag']}
+      testFramework:
+        image: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['tag']}
+      downloadDashboardsImage:
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['tag']}
+      initChownData:
+        image:
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['tag']}
       env:
         GF_INSTALL_PLUGINS: https://artifactory.qvantel.net:443/artifactory/grafana-plugins/yesoreyeram-infinity-datasource-2.5.0.linux_amd64.zip;yesoreyeram-infinity-datasource
       deploymentStrategy:
@@ -222,9 +277,6 @@ monitoringPlatform:
       serviceMonitor:
         labels:
           "release": "monitoring-platform"
-      image:
-        # we use enterprise license which is free-to-use to avoid AGPL3 in grafana-oss
-        repository: grafana/grafana-enterprise
       persistence:
         type: pvc
         enabled: true
@@ -310,6 +362,9 @@ monitoringPlatform:
           use_pkce: true
       envFromSecret: grafana-keycloak-client-secret
       sidecar:
+        image:
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['tag']}   
         datasources:
           enabled: true
           defaultDatasourceEnabled: true
@@ -324,7 +379,16 @@ monitoringPlatform:
             allowUiUpdates: true
             # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
             foldersFromFilesStructure: true
+    prometheus-node-exporter:
+      image:
+        registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheus-node-exporter']['registry']}
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheus-node-exporter']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheus-node-exporter']['tag']} 
     kube-state-metrics:
+      image:
+        registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['kube-state-metrics']['registry']}
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['kube-state-metrics']['repository']}
+        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['kube-state-metrics']['tag']} 
       rbac:
         extraRules:
         % if addon_operator['kasopePlatformEnabled'] == 'true':
@@ -332,6 +396,12 @@ monitoringPlatform:
           resources: ["medusabackupjobs"]
           verbs: ["list", "watch"]
         % endif       
+      kubeRBACProxy:
+        enabled: false
+        image:
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['kube-state-metrics']['kubeRBACProxy']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['kube-state-metrics']['kubeRBACProxy']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['kube-state-metrics']['kubeRBACProxy']['tag']} 
       customResourceState:
         enabled: true
         config:
@@ -375,6 +445,12 @@ monitoringPlatform:
                       gauge:
                         path: [status, finishTime]  
               % endif
+    thanosRuler:
+      thanosRulerSpec:
+        image:
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['thanosRuler']['thanosRulerSpec']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['thanosRuler']['thanosRulerSpec']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['thanosRuler']['thanosRulerSpec']['tag']}
     prometheus:
       enabled: true
       tolerations:
@@ -387,6 +463,10 @@ monitoringPlatform:
         dedicated-nodes: platform-masters
       % endif
       prometheusSpec:
+        image:
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheus']['prometheusSpec']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheus']['prometheusSpec']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheus']['prometheusSpec']['tag']}
         podMonitorSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
