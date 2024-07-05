@@ -93,7 +93,7 @@ modulesConfig:
       init:
         image:
           tag: v1.16.2
-  certPlatformEnabled: "true"
+  certPlatformEnabled: "false"
   certPlatform:
     cert-manager:
       image:
@@ -421,7 +421,7 @@ modulesConfig:
   traefikIngressEnabled: "false"
   traefikIngress:
     configurationRequired: "check module documentation for configuration options"
-  vaultPlatformEnabled: "true"
+  vaultPlatformEnabled: "false"
   vaultPlatform:
     autoUnseal: false
     images:
@@ -437,7 +437,7 @@ modulesConfig:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/k8s-platform-tools
         tag: latest
-  vectorPlatformEnabled: "true"
+  vectorPlatformEnabled: "false"
   vectorPlatform:
     images:
       fluent-bit-events-collector:
