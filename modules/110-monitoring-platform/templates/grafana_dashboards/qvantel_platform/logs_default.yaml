@@ -1,0 +1,267 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: grafana-dashboards-logs-default
+  namespace: platform
+  labels:
+    grafana_dashboard: '1'
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
+data:
+  logs-default.json: |-
+        {
+          "annotations": {
+            "list": [
+              {
+                "builtIn": 1,
+                "datasource": {
+                  "type": "grafana",
+                  "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+              }
+            ]
+          },
+          "description": "Spinoff dashboard similar to Kibanas Log Discovery",
+          "editable": true,
+          "fiscalYearStartMonth": 0,
+          "graphTooltip": 0,
+          "id": 279,
+          "links": [],
+          "liveNow": false,
+          "panels": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "description": "",
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "drawStyle": "bars",
+                    "fillOpacity": 100,
+                    "gradientMode": "hue",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 3,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 0
+              },
+              "id": 2,
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "pluginVersion": "10.1.1",
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "loki",
+                    "uid": "P8E80F9AEF21F6940"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by(pod_name)(count_over_time({service_name=\"$service_name\", pod_name=\"$pod\"} |~ \"$search_string\" [1s])) ",
+                  "legendFormat": "{{pod_name}}",
+                  "queryType": "range",
+                  "refId": "A"
+                }
+              ],
+              "title": "Logs Amount Recieved",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "description": "",
+              "gridPos": {
+                "h": 24,
+                "w": 24,
+                "x": 0,
+                "y": 7
+              },
+              "id": 1,
+              "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": false,
+                "showCommonLabels": false,
+                "showLabels": false,
+                "showTime": false,
+                "sortOrder": "Descending",
+                "wrapLogMessage": false
+              },
+              "targets": [
+                {
+                  "datasource": {
+                    "type": "loki",
+                    "uid": "P8E80F9AEF21F6940"
+                  },
+                  "editorMode": "code",
+                  "expr": "{service_name=\"$service_name\", pod_name=\"$pod\" } | json | label_format level=kubernetes_pod_annotations_vault_security_banzaicloud_io_log_level | line_format `{{__timestamp__}} {{.pod_name}}: {{.level}}: {{.log_type}}: {{.message}}` |~ `$search_string`",
+                  "queryType": "range",
+                  "refId": "A"
+                }
+              ],
+              "title": "Log Information",
+              "type": "logs"
+            }
+          ],
+          "refresh": "",
+          "schemaVersion": 38,
+          "style": "dark",
+          "tags": [],
+          "templating": {
+            "list": [
+              {
+                "current": {
+                  "selected": true,
+                  "text": "bssapi-aggregator",
+                  "value": "bssapi-aggregator"
+                },
+                "datasource": {
+                  "type": "loki",
+                  "uid": "P8E80F9AEF21F6940"
+                },
+                "definition": "",
+                "hide": 0,
+                "includeAll": true,
+                "multi": false,
+                "name": "service_name",
+                "options": [],
+                "query": {
+                  "label": "service_name",
+                  "refId": "LokiVariableQueryEditor-VariableQuery",
+                  "stream": "",
+                  "type": 1
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+              },
+              {
+                "current": {
+                  "selected": true,
+                  "text": "bssapi-aggregator-b68ccbf45-k6wmm",
+                  "value": "bssapi-aggregator-b68ccbf45-k6wmm"
+                },
+                "datasource": {
+                  "type": "loki",
+                  "uid": "P8E80F9AEF21F6940"
+                },
+                "definition": "",
+                "hide": 0,
+                "includeAll": false,
+                "multi": false,
+                "name": "pod",
+                "options": [],
+                "query": {
+                  "label": "pod_name",
+                  "refId": "LokiVariableQueryEditor-VariableQuery",
+                  "stream": "{service_name = \"$service_name\"}",
+                  "type": 1
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+              },
+              {
+                "current": {
+                  "selected": true,
+                  "text": "",
+                  "value": ""
+                },
+                "description": "Search the logs with parameters",
+                "hide": 0,
+                "label": "Search",
+                "name": "search_string",
+                "options": [
+                  {
+                    "selected": true,
+                    "text": "",
+                    "value": ""
+                  }
+                ],
+                "query": "",
+                "skipUrlSync": false,
+                "type": "textbox"
+              }
+            ]
+          },
+          "time": {
+            "from": "now-30m",
+            "to": "now"
+          },
+          "timepicker": {},
+          "timezone": "",
+          "title": "Logs Default",
+          "uid": "d81529f1-1122-4dfa-aa31-bad221e84a7c",
+          "version": 32,
+          "weekStart": ""
+        }
