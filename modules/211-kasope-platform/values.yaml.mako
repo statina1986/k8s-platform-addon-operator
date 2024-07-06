@@ -6,6 +6,7 @@ kasopePlatform:
     cass-operator:
       admissionWebhooks:
         enabled: false
+    disableCrdUpgraderJob: true
   vaultConfiguration: true
   mainCassandraCluster: "cluster"
   clusters:
