@@ -15,6 +15,7 @@ kasopePlatform:
         k8ssandraClient: ${values['kasopePlatform']['images']['k8ssandraClient']['registry']}/${values['kasopePlatform']['images']['k8ssandraClient']['repository']}:${values['kasopePlatform']['images']['k8ssandraClient']['tag']}
       admissionWebhooks:
         enabled: false
+    disableCrdUpgraderJob: true
   vaultConfiguration: true
   mainCassandraCluster: "cluster"
   clusters:
