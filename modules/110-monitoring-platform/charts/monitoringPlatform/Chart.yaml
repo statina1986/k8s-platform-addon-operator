@@ -4,19 +4,19 @@ version: 0.0.1
 dependencies:
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
-    version: "~51.0.0"
+    version: "61.2.0"
     repository: "https://prometheus-community.github.io/helm-charts"
   - name: prometheus-blackbox-exporter
     condition: prometheus-blackbox-exporter.enabled
-    version: "7.1.3"
+    version: "8.16.0"
     repository: "https://prometheus-community.github.io/helm-charts"
   - name: prometheus-consul-exporter
     condition: prometheus-consul-exporter.enabled
-    version: "0.5.1"
+    version: "1.0.0"
     repository: "https://prometheus-community.github.io/helm-charts"
   - name: x509-certificate-exporter
     condition: x509-certificate-exporter.enabled
-    version: "v3.6.0"
+    version: "v3.14.0"
     repository: "https://charts.enix.io"
   - name: kafka-lag-exporter
     condition: kafka-lag-exporter.enabled
@@ -24,10 +24,5 @@ dependencies:
     repository: "https://seglo.github.io/kafka-lag-exporter/repo/"
   - name: yet-another-cloudwatch-exporter
     condition: yet-another-cloudwatch-exporter.enabled
-    version: "0.21.0"
+    version: "0.38.0"
     repository: "https://nerdswords.github.io/helm-charts"
-  - name: tempo
-    alias: grafana-tempo
-    condition: grafana-tempo.enabled
-    version: "1.7.1"
-    repository: "https://grafana.github.io/helm-charts"
