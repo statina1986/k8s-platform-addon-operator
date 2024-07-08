@@ -1,6 +1,0 @@
-dependencies:
-- name: redis
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 17.3.17
-digest: sha256:c953553a5e5df163cc4a7a4ea3901e48f4ecdcad707e0150ba3193ced9410075
-generated: "2023-03-13T21:31:54.272944131+02:00"

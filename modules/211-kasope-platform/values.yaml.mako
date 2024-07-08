@@ -4,6 +4,15 @@ kasopePlatform:
       image:
         tag: 1.6.0-20240506112248-96d77628
     cass-operator:
+      image:
+        repositoryOverride: 
+          cassandra:
+            ${values['kasopePlatform']['images']['cassandra']['tag']}: ${values['kasopePlatform']['images']['cassandra']['repository']}:${values['kasopePlatform']['images']['cassandra']['tag']}
+        registryOverride: ${values['kasopePlatform']['images']['cassandra']['registry']}
+      imageConfig:
+        systemLogger: ${values['kasopePlatform']['images']['systemLogger']['registry']}/${values['kasopePlatform']['images']['systemLogger']['repository']}:${values['kasopePlatform']['images']['systemLogger']['tag']}
+        configBuilder: ${values['kasopePlatform']['images']['configBuilder']['registry']}/${values['kasopePlatform']['images']['configBuilder']['repository']}:${values['kasopePlatform']['images']['configBuilder']['tag']}
+        k8ssandraClient: ${values['kasopePlatform']['images']['k8ssandraClient']['registry']}/${values['kasopePlatform']['images']['k8ssandraClient']['repository']}:${values['kasopePlatform']['images']['k8ssandraClient']['tag']}
       admissionWebhooks:
         enabled: false
   vaultConfiguration: true
@@ -13,6 +22,7 @@ kasopePlatform:
       enabled: true    
       spec:
         cassandra:
+          perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
           serviceAccount: platform
           serverVersion: "3.11.13"
           metadata:

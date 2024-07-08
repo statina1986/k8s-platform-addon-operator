@@ -4,3 +4,19 @@ version: 0.0.1
 dependencies:
   - name: kafkaPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: operator
+      image: quay.io/strimzi/operator:0.37.0
+    - name: kafka
+      image: quay.io/strimzi/kafka:0.37.0-kafka-3.5.1
+    - name: kafka-bridge
+      image: quay.io/strimzi/kafka-bridge:0.26.1
+    - name: kaniko-executor
+      image: quay.io/strimzi/kaniko-executor:0.37.0
+    - name: maven-builder
+      image: quay.io/strimzi/maven-builder:0.37.0
+    # Kafka UI
+    - name: kafka-uid
+      image: ghcr.io/kafbat/kafka-ui:v1.0.0
+    

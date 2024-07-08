@@ -1,0 +1,24 @@
+{{- $root := . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafbat-ui-configmap
+data:
+  config.yml: |-
+    kafka:
+      clusters:
+        {{- if .Values.kafkaPlatform.clusters }}
+        {{- range keys .Values.kafkaPlatform.clusters  }}
+        {{- $current := get $.Values.kafkaPlatform.clusters . }}
+        {{- if $current.enabled }}
+        - name: {{ . }}
+          bootstrapServers: {{ . }}-kafka-bootstrap.{{ $root.Release.Namespace }}.svc.cluster.local.:9092
+        {{- end }}
+        {{- end }}
+        {{- end }}        
+    auth:
+      type: disabled
+    management:
+      health:
+        ldap:
+          enabled: false

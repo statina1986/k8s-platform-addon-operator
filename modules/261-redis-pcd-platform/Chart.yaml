@@ -1,6 +1,0 @@
-apiVersion: v2
-name: redis-pcd-platform
-version: 0.0.1
-dependencies:
-  - name: redisPcdPlatform
-    version: 0.0.1

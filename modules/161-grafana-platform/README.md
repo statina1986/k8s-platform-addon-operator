@@ -1,2 +1,0 @@
-This is auxillary package for rare cases where you need Grafana for special purposes without rest of the monitoring stack (prometheus, etc.)
-Please use 360-monitoring-platform module for normal Grafana deployments.

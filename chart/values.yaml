@@ -27,11 +27,9 @@ globalConfig:
   ingressBaseUrl: "some-env.qvantel.solutions"
   kubernetesVersion: "1.25"
 modulesConfig:
-  platformCore:
-    configurationRequired: "check module documentation for configuration options"
+  platformCore: {}
   apisixPlatformEnabled: "false"
-  apisixPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  apisixPlatform: {}
   awsPlatformEnabled: "false"
   awsPlatform:
     aws-ebs-csi-driver:
@@ -120,9 +118,6 @@ modulesConfig:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/jetstack/cert-manager-acmesolver
           tag: v1.12.4
-  ciliumPlatformEnabled: "false"
-  ciliumPlatform:
-    configurationRequired: "check module documentation for configuration options"
   cnpgPostgresPlatformEnabled: "false"
   cnpgPostgresPlatform:
     images:
@@ -157,9 +152,6 @@ modulesConfig:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/envoyproxy/envoy
         tag: v1.23.1
-  dbManagementEnabled: "false"
-  dbManagement:
-    configurationRequired: "check module documentation for configuration options"
   elasticsearchPlatformEnabled: "false"
   elasticsearchPlatform:
     images:
@@ -190,9 +182,6 @@ modulesConfig:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/bitnami/external-dns
         tag: 0.13.4-debian-11-r2
-  grafanaPlatformEnabled: "false"
-  grafanaPlatform:
-    configurationRequired: "check module documentation for configuration options"
   instanaPlatformEnabled: "false"
   instanaPlatform:
     instana-agent:
@@ -212,8 +201,7 @@ modulesConfig:
           repository: platform-1-2-0/instana/k8sensor
           tag: Q-1.0.0
   istioIngressEnabled: "false"
-  istioIngress:
-    configurationRequired: "check module documentation for configuration options"
+  istioIngress: {}
   istioPlatformEnabled: "false"
   istioPlatform:
     images:
@@ -226,17 +214,145 @@ modulesConfig:
         repository: platform-1-2-0/istio/proxyv2
         tag: 1.17.6
   ksixPlatformEnabled: "false"
-  ksixPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  ksixPlatform: {}
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
-    strimziHelmVersion: "0.27.1"
+    strimziHelmVersion: "0.37.0"
+    kafka-ui:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/kafbat/kafka-ui
+        tag: "v1.0.0"
+    strimzi-kafka-operator:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/strimzi
+        name: operator
+        tag: "0.37.0"
+      # Docker images that operator uses to provision various components of Strimzi.
+      kafka:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      kafkaConnect:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      topicOperator:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: operator
+          tag: "0.37.0"
+      userOperator:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: operator
+          tag: "0.37.0"
+      kafkaInit:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: operator
+          tag: "0.37.0"
+      tlsSidecarEntityOperator:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      kafkaMirrorMaker:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      kafkaBridge:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka-bridge
+          tag: 0.26.1
+      kafkaExporter:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      kafkaMirrorMaker2:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      cruiseControl:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kafka
+          tag: "0.37.0-kafka-3.5.1"
+      kanikoExecutor:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: kaniko-executor
+          tag: "0.37.0"
+      mavenBuilder:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/strimzi
+          name: maven-builder
+          tag: "0.37.0"
   kasopePlatformEnabled: "false"
   kasopePlatform:
-    configurationRequired: "check module documentation for configuration options"
+    k8ssandra-operator:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/k8ssandra/k8ssandra-operator
+        tag: "v1.15.0"
+      client:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/k8ssandra/k8ssandra-tools
+          tag: "1.6.0-20240506112248-96d77628"
+      cleaner:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/k8ssandra/k8ssandra-tools
+          tag: "1.6.0-20240506112248-96d77628"
+      cass-operator:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/k8ssandra/cass-operator
+          tag: "v1.19.1"
+    images:
+      cassandra:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/k8ssandra/cass-management-api
+        tag: "3.11.13"
+      systemLogger:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/k8ssandra/system-logger
+        tag: "v1.19.1"
+      configBuilder:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/datastax/cass-config-builder
+        tag: "1.0-ubi8"
+      perNodeConfig:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/mikefarah/yq
+        tag: "4"
+      k8ssandraClient:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/k8ssandra/k8ssandra-client
+        tag: "v0.2.2"
   kyvernoPlatformEnabled: "false"
-  kyvernoPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  kyvernoPlatform: {}
   lokiPlatformEnabled: "false"
   lokiPlatform:
     loki:
@@ -246,11 +362,9 @@ modulesConfig:
           repository: platform-1-2-0/grafana/loki
           tag: 2.9.2
   keycloakPlatformEnabled: "false"
-  keycloakPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  keycloakPlatform: {}
   mariadbPlatformEnabled: "false"
-  mariadbPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  mariadbPlatform: {}
   mariadbOperatorPlatformEnabled: "false"
   mariadbOperatorPlatform:
     images:
@@ -270,8 +384,7 @@ modulesConfig:
         repository: platform-1-2-0/autoscaling/addon-resizer
         tag: 1.8.19
   mongodbPlatformEnabled: "false"
-  mongodbPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  mongodbPlatform: {}
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     images:
@@ -361,18 +474,15 @@ modulesConfig:
             repository: platform-1-2-0/thanos/thanos
             tag: v0.32.2
   perconaPmmPlatformEnabled: "false"
-  perconaPmmPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  perconaPmmPlatform: {}
   pomeriumPlatformEnabled: "false"
-  pomeriumPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  pomeriumPlatform: {}
   postgresPlatformEnabled: "false"
-  postgresPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  postgresPlatform: {}
   qvantelGlueEnabled: "false"
+  qvantelGlue: {}
   rabbitmqPlatformEnabled: "false"
-  rabbitmqPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  rabbitmqPlatform: {}
   redisPlatformEnabled: "false"
   redisPlatform:
     redis:
@@ -400,27 +510,12 @@ modulesConfig:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/bitnami/os-shell
           tag: 11-debian-11-r60
-  redisPcdPlatformEnabled: "false"
-  redisPcdPlatform:
-    configurationRequired: "check module documentation for configuration options"
-  redisCbsMasterPlatformEnabled: "false"
-  redisCbsMasterPlatform:
-    configurationRequired: "check module documentation for configuration options"
-  redisCbsControllerPlatformEnabled: "false"
-  redisCbsControllerPlatform:
-    configurationRequired: "check module documentation for configuration options"
   rancherPlatformEnabled: "false"
-  rancherPlatform:
-    configurationRequired: "check module documentation for configuration options"
+  rancherPlatform: {}
   sftpEnabled: "false"
-  sftp:
-    configurationRequired: "check module documentation for configuration options"
+  sftp: {}
   sftpgoPlatformEnabled: "false"
-  sftpgoPlatform:
-    configurationRequired: "check module documentation for configuration options"
-  traefikIngressEnabled: "false"
-  traefikIngress:
-    configurationRequired: "check module documentation for configuration options"
+  sftpgoPlatform: {}
   vaultPlatformEnabled: "false"
   vaultPlatform:
     autoUnseal: false

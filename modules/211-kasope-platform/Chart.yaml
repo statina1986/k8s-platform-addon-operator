@@ -4,3 +4,25 @@ version: 0.0.1
 dependencies:
   - name: kasopePlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: cass-operator
+      image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.19.1
+    - name: cassandra
+      image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
+    - name: systemLogger
+      image: cr.k8ssandra.io/k8ssandra/system-logger:v1.19.1
+    - name: configBuilder
+      image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
+    - name: per-node-config
+      image: mikefarah/yq:4
+    - name: k8ssandraClient
+      image: cr.k8ssandra.io/k8ssandra/k8ssandra-client:v0.2.2
+    - name: k8ssandra-tools
+      image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
+    - name: k8ssandra-operator
+      image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.15.0
+    - name: reaper
+      image: thelastpickle/cassandra-reaper:3.5.0
+    - name: medusa
+      image: artifactory.qvantel.net/qmedusa/medusa:0.18.0_2_MMLYLE_bc4ab56a6

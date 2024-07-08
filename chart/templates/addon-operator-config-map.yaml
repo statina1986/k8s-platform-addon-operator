@@ -25,17 +25,11 @@ data:
   consulPlatformEnabled: "{{ .Values.modulesConfig.consulPlatformEnabled }}"
   consulPlatform: {{ print "|\n" (.Values.modulesConfig.consulPlatform | toYaml | indent 4) }}
 
-  dbManagementEnabled: "{{ .Values.modulesConfig.dbManagementEnabled }}"
-  dbManagement: {{ print "|\n" (.Values.modulesConfig.dbManagement | toYaml | indent 4) }}
-
   elasticsearchPlatformEnabled: "{{ .Values.modulesConfig.elasticsearchPlatformEnabled }}"
   elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}
 
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
-
-  grafanaPlatformEnabled: "{{ .Values.modulesConfig.grafanaPlatformEnabled }}"
-  grafanaPlatform: {{ print "|\n" (.Values.modulesConfig.grafanaPlatform | toYaml | indent 4) }}
   
   instanaPlatformEnabled: "{{ .Values.modulesConfig.instanaPlatformEnabled }}"
   instanaPlatform: {{ print "|\n" (.Values.modulesConfig.instanaPlatform | toYaml | indent 4) }}
@@ -89,6 +83,7 @@ data:
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
 
   qvantelGlueEnabled: "{{ .Values.modulesConfig.qvantelGlueEnabled }}"
+  qvantelGlue: {{ print "|\n" (.Values.modulesConfig.qvantelGlue | toYaml | indent 4) }}
 
   rabbitmqPlatformEnabled: "{{ .Values.modulesConfig.rabbitmqPlatformEnabled }}"
   rabbitmqPlatform: {{ print "|\n" (.Values.modulesConfig.rabbitmqPlatform | toYaml | indent 4) }}
@@ -98,15 +93,6 @@ data:
 
   rancherPlatformEnabled: "{{ .Values.modulesConfig.rancherPlatformEnabled }}"
   rancherPlatform: {{ print "|\n" (.Values.modulesConfig.rancherPlatform | toYaml | indent 4) }}
-
-  redisPcdPlatformEnabled: "{{ .Values.modulesConfig.redisPcdPlatformEnabled }}"
-  redisPcdPlatform: {{ print "|\n" (.Values.modulesConfig.redisPcdPlatform | toYaml | indent 4) }}
-
-  redisCbsMasterPlatformEnabled: "{{ .Values.modulesConfig.redisCbsMasterPlatformEnabled }}"
-  redisCbsMasterPlatform: {{ print "|\n" (.Values.modulesConfig.redisCbsMasterPlatform | toYaml | indent 4) }}
-
-  redisCbsControllerPlatformEnabled: "{{ .Values.modulesConfig.redisCbsControllerPlatformEnabled }}"
-  redisCbsControllerPlatform: {{ print "|\n" (.Values.modulesConfig.redisCbsControllerPlatform | toYaml | indent 4) }}
 
   sftpEnabled: "{{ .Values.modulesConfig.sftpEnabled }}"
   sftp: {{ print "|\n" (.Values.modulesConfig.sftp | toYaml | indent 4) }}

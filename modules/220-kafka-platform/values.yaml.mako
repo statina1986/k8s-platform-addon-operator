@@ -1,4 +1,9 @@
 kafkaPlatform:  
+  kafka-ui:
+    yamlApplicationConfigConfigMap:
+      name: "kafbat-ui-configmap"
+      keyName: "config.yml"
+
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
     resources:
@@ -17,6 +22,30 @@ kafkaPlatform:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+
+    # Docker images that operator uses to provision various components of Strimzi. 
+    kafka:
+      image:       
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['kafka']['image']['tag']}
+    kafkaConnect:
+      image:      
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['kafkaConnect']['image']['tag']}
+    tlsSidecarEntityOperator:
+      image:
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['tlsSidecarEntityOperator']['image']['tag']}
+    kafkaMirrorMaker:
+      image:
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['kafkaMirrorMaker']['image']['tag']}
+    kafkaExporter:
+      image:
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['kafkaExporter']['image']['tag']}
+    kafkaMirrorMaker2:
+      image:
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['kafkaMirrorMaker2']['image']['tag']}
+    cruiseControl:
+      image:
+        tagPrefix: ${values['kafkaPlatform']['strimzi-kafka-operator']['cruiseControl']['image']['tag']}
+
   # List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource.
   clusters:
     kafka-cluster:
@@ -72,8 +101,10 @@ kafkaPlatform:
               configMapKeyRef:
                 name: kafka-metrics
                 key: kafka-metrics-config.yml
+          % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
           rack:
             topologyKey: topology.kubernetes.io/zone
+          % endif
           template:
             pod:
               tolerations:
@@ -105,6 +136,7 @@ kafkaPlatform:
                           values:
                           - platform-masters
                 % endif
+              % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -113,6 +145,7 @@ kafkaPlatform:
                     matchLabels:
                       strimzi.io/cluster: kafka-cluster
                       strimzi.io/name: kafka-cluster-kafka
+              % endif
         zookeeper:
           replicas: 3
           readinessProbe:
@@ -162,6 +195,7 @@ kafkaPlatform:
                           values:
                           - platform-masters
                 % endif
+              % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -170,6 +204,7 @@ kafkaPlatform:
                     matchLabels:
                       strimzi.io/cluster: kafka-cluster
                       strimzi.io/name: kafka-cluster-zookeeper
+              % endif
         entityOperator:
           topicOperator: {}
           userOperator: {}
@@ -210,6 +245,7 @@ kafkaPlatform:
                           values:
                           - platform-masters
               % endif
+              % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -218,5 +254,6 @@ kafkaPlatform:
                     matchLabels:
                       strimzi.io/cluster: kafka-cluster
                       strimzi.io/name: kafka-cluster-zookeeper
+              % endif
           topicRegex: ".*"
           groupRegex: ".*"
