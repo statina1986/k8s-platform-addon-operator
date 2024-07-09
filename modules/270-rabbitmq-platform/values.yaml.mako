@@ -27,6 +27,8 @@ rabbitmqPlatform:
     extraContainerPorts:
       - name: web-stomp
         containerPort: 15674
+      - name: stomp
+        containerPort: 61613
     extraConfiguration: |-
       #default_vhost = {{ .Release.Namespace }}-vhost
       #disk_free_limit.absolute = 50MB
