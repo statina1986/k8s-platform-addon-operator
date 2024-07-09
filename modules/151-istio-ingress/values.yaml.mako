@@ -241,7 +241,6 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
       ports:
       - name: status-port
