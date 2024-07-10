@@ -4,3 +4,9 @@ version: 0.0.1
 dependencies:
   - name: pomeriumPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: ingress-controller
+      image: pomerium/ingress-controller:sha-54e3ddc
+    - name: pomerium
+      image: pomerium/pomerium:v0.22.1

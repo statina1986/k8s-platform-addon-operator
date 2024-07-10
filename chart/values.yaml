@@ -392,7 +392,36 @@ modulesConfig:
         repository: platform-1-2-0/autoscaling/addon-resizer
         tag: 1.8.19
   mongodbPlatformEnabled: "false"
-  mongodbPlatform: {}
+  mongodbPlatform:
+    image:
+      registry: platform-artifactory.qvantel.net
+      repository: platform-1-2-0/bitnami/mongodb
+      tag: 7.0.12-debian-12-r0
+    tls:
+      registry: platform-artifactory.qvantel.net
+      repository: platform-1-2-0/bitnami/nginx
+      tag: 1.27.0-debian-12-r2
+    externalAccess:
+      autoDiscovery:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/kubectl
+          tag: 1.30.2-debian-12-r0
+      dnsCheck:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/os-shell
+          tag: 12-debian-12-r23
+    volumePermissions:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/os-shell
+        tag: 12-debian-12-r23
+    metrics:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/mongodb-exporter
+        tag: 0.40.0-debian-12-r30
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     images:
@@ -487,7 +516,16 @@ modulesConfig:
   perconaPmmPlatformEnabled: "false"
   perconaPmmPlatform: {}
   pomeriumPlatformEnabled: "false"
-  pomeriumPlatform: {}
+  pomeriumPlatform:
+    images:
+      ingressController:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/pomerium/ingress-controller
+        tag: sha-54e3ddc
+      pomerium:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/pomerium/pomerium
+        tag: v0.22.1
   postgresPlatformEnabled: "false"
   postgresPlatform: {}
   qvantelGlueEnabled: "false"
