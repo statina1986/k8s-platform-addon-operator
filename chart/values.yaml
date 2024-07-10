@@ -399,7 +399,7 @@ modulesConfig:
       x509-certificate-exporter:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/enix/x509-certificate-exporter
-        tag: 3.6.0
+        tag: 3.14.0
       kafka-lag-exporter:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/seglo/kafka-lag-exporter
@@ -407,7 +407,7 @@ modulesConfig:
       prometheus-blackbox-exporter:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/prom/blackbox-exporter
-        tag: v0.22.0
+        tag: v0.25.0
       prometheus-consul-exporter:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/prom/consul-exporter
@@ -415,12 +415,12 @@ modulesConfig:
       yet-another-cloudwatch-exporter:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/nerdswords/yet-another-cloudwatch-exporter
-        tag: v0.52.0
+        tag: v0.61.2
       kube-prometheus-stack:
         grafana:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/grafana/grafana-enterprise
-          tag: 10.1.1
+          tag: 11.1.0
           testFramework:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/bats/bats
@@ -436,33 +436,36 @@ modulesConfig:
           sidecar:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/kiwigrid/k8s-sidecar
-            tag: 1.25.1
+            tag: 1.26.1
         prometheus-node-exporter:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/prometheus/node-exporter
-          tag: v1.6.1
+          tag: v1.8.1
         kube-state-metrics:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/kube-state-metrics/kube-state-metrics
-          tag: v2.10.0
+          tag: v2.12.0
           kubeRBACProxy:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/brancz/kube-rbac-proxy
-            tag: v0.14.0
+            tag: v0.18.0
         alertmanager:
           alertmanagerSpec:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/prometheus/alertmanager
-            tag: v0.26.0
+            tag: v0.27.0
         prometheusOperator:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/prometheus-operator/prometheus-operator
-          tag: v0.68.0
+          tag: v0.75.0
           prometheusConfigReloader:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/prometheus-operator/prometheus-config-reloader
-            tag: v0.68.0
+            tag: v0.75.0
           admissionWebhooks:
+            registry: platform-artifactory.qvantel.net
+            repository: platform-1-2-0/prometheus-operator/admission-webhook
+            tag: v0.75.0
             patch:
               registry: platform-artifactory.qvantel.net
               repository: platform-1-2-0/ingress-nginx/kube-webhook-certgen
@@ -470,17 +473,17 @@ modulesConfig:
           thanosImage:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/thanos/thanos
-            tag: v0.32.2
+            tag: v0.35.1
         prometheus:
           prometheusSpec:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/prometheus/prometheus
-            tag: v2.47.0
+            tag: v2.53.0
         thanosRuler:
           thanosRulerSpec:
             registry: platform-artifactory.qvantel.net
             repository: platform-1-2-0/thanos/thanos
-            tag: v0.32.2
+            tag: v0.35.1
   perconaPmmPlatformEnabled: "false"
   perconaPmmPlatform: {}
   pomeriumPlatformEnabled: "false"

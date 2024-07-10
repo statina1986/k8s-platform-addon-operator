@@ -28,21 +28,7 @@ monitoringPlatform:
       mariadb: false
       redis: false
       rabbitmq: false
-      mongo: false
-  grafana-tempo:
-    enabled: false
-    tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
-        operator: "Equal"
-        effect: "NoSchedule"
-    tempo:
-      storage:
-        trace:
-          backend: s3
-          s3:
-            endpoint: s3.eu-south-1.amazonaws.com  ### Need to set to correct endpoint
-            bucket: tempo-traces                
+      mongo: false            
   x509-certificate-exporter:
     enabled: true
     image:
@@ -113,7 +99,8 @@ monitoringPlatform:
   prometheus-blackbox-exporter:
     enabled: true
     image:
-      repository: ${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['registry']}/${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['repository']}
+      registry: ${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['registry']}
+      repository: ${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['repository']}
       tag: ${values['monitoringPlatform']['images']['prometheus-blackbox-exporter']['tag']}
     pspEnabled: false
     tolerations:
@@ -157,7 +144,8 @@ monitoringPlatform:
   yet-another-cloudwatch-exporter:
     enabled: false
     image:
-      repository: ${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['registry']}/${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['repository']}
+      registry: ${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['registry']}
+      repository: ${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['repository']}
       tag: ${values['monitoringPlatform']['images']['yet-another-cloudwatch-exporter']['tag']}
     tolerations:
       - key: "dedicated-nodes"
@@ -233,6 +221,10 @@ monitoringPlatform:
           repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['prometheusConfigReloader']['repository']}
           tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['prometheusConfigReloader']['tag']}
       admissionWebhooks:
+        image:
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['tag']}
         patch:
           image:
             registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['prometheusOperator']['admissionWebhooks']['patch']['registry']}
@@ -245,17 +237,22 @@ monitoringPlatform:
     grafana:        
       enabled: true
       image:
-        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['repository']}
+        registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['registry']}
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['repository']}
         tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['tag']}
       testFramework:
-        image: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['repository']}
-        tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['tag']}
+        image: 
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['repository']}
+          tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['testFramework']['tag']}
       downloadDashboardsImage:
-        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['repository']}
+        registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['registry']}
+        repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['repository']}
         tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['downloadDashboardsImage']['tag']}
       initChownData:
         image:
-          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['repository']}
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['registry']}
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['repository']}
           tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['initChownData']['tag']}
       env:
         GF_INSTALL_PLUGINS: https://artifactory.qvantel.net:443/artifactory/grafana-plugins/yesoreyeram-infinity-datasource-2.5.0.linux_amd64.zip;yesoreyeram-infinity-datasource
@@ -363,7 +360,8 @@ monitoringPlatform:
       envFromSecret: grafana-keycloak-client-secret
       sidecar:
         image:
-          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['registry']}/${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['repository']}
+          registry: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['registry']} 
+          repository: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['repository']}
           tag: ${values['monitoringPlatform']['images']['kube-prometheus-stack']['grafana']['sidecar']['tag']}   
         datasources:
           enabled: true
