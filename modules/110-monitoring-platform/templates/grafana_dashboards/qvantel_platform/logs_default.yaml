@@ -27,11 +27,10 @@ data:
               }
             ]
           },
-          "description": "Spinoff dashboard similar to Kibanas Log Discovery",
           "editable": true,
           "fiscalYearStartMonth": 0,
           "graphTooltip": 0,
-          "id": 279,
+          "id": 146,
           "links": [],
           "liveNow": false,
           "panels": [
@@ -121,7 +120,7 @@ data:
                     "uid": "P8E80F9AEF21F6940"
                   },
                   "editorMode": "code",
-                  "expr": "sum by(pod_name)(count_over_time({service_name=\"$service_name\", pod_name=\"$pod\"} |~ \"$search_string\" [1s])) ",
+                  "expr": "sum by(pod_name)(count_over_time({service_name=\"$service_name\", pod_name=\"$pod\"} |~ \"$search_string\" [1s]))  ",
                   "legendFormat": "{{ "{{pod_name}}" }}",
                   "queryType": "range",
                   "refId": "A"
@@ -150,7 +149,7 @@ data:
                 "showCommonLabels": false,
                 "showLabels": false,
                 "showTime": false,
-                "sortOrder": "Descending"
+                "sortOrder": "Descending",
                 "wrapLogMessage": false
               },
               "targets": [
@@ -160,7 +159,7 @@ data:
                     "uid": "P8E80F9AEF21F6940"
                   },
                   "editorMode": "code",
-                  "expr": "{service_name=\"$service_name\", pod_name=\"$pod\" } | json | label_format level=kubernetes_pod_annotations_vault_security_banzaicloud_io_log_level | line_format `"{{ "{{__timestamp__}}" }}" {{.pod_name}}: {{.level}}: {{.log_type}}: {{.message}}` |~ `$search_string`",
+                  "expr": "{service_name=\"$service_name\", pod_name=\"$pod\" } | json | label_format level=kubernetes_pod_annotations_vault_security_banzaicloud_io_log_level | line_format `{{` {{__timestamp__}} `}} {{` {{.pod_name}} `}}: {{` {{.level}} `}}: {{` {{.log_type}} `}}: {{` {{.message}} `}}` |~  \"$search_string\"",
                   "queryType": "range",
                   "refId": "A"
                 }
@@ -177,7 +176,7 @@ data:
             "list": [
               {
                 "current": {
-                  "selected": true,
+                  "selected": false,
                   "text": "bssapi-aggregator",
                   "value": "bssapi-aggregator"
                 },
@@ -205,9 +204,9 @@ data:
               },
               {
                 "current": {
-                  "selected": true,
-                  "text": "bssapi-aggregator-b68ccbf45-k6wmm",
-                  "value": "bssapi-aggregator-b68ccbf45-k6wmm"
+                  "selected": false,
+                  "text": "bssapi-aggregator-c7bf75995-grf2m",
+                  "value": "bssapi-aggregator-c7bf75995-grf2m"
                 },
                 "datasource": {
                   "type": "loki",
@@ -260,8 +259,8 @@ data:
           },
           "timepicker": {},
           "timezone": "",
-          "title": "Logs Default",
+          "title": "Logs default",
           "uid": "d81529f1-1122-4dfa-aa31-bad221e84a7c",
-          "version": 32,
+          "version": 1,
           "weekStart": ""
         }
