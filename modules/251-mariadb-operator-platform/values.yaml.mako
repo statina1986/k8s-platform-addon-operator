@@ -6,6 +6,9 @@ mariadbOperatorPlatform:
       tag: 10.4.33
   nameOverride: "mariadb-operator-platform"
   mariadb-operator:
+    image:
+      repository: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}
+      tag: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
     webhook:
       cert:
         certManager:

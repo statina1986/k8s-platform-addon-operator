@@ -351,6 +351,10 @@ modulesConfig:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/k8ssandra/k8ssandra-client
         tag: "v0.2.2"
+      reaper:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/thelastpickle/cassandra-reaper
+        tag: "3.5.0"
   kyvernoPlatformEnabled: "false"
   kyvernoPlatform: {}
   lokiPlatformEnabled: "false"
@@ -368,6 +372,10 @@ modulesConfig:
   mariadbOperatorPlatformEnabled: "false"
   mariadbOperatorPlatform:
     images:
+      mariadb-operator:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/mariadb-operator/mariadb-operator
+        tag: v0.0.28
       mariadb:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/library/mariadb

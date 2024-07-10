@@ -55,6 +55,7 @@ kasopePlatform:
           datacenters:
             - metadata:
                 name: dc1
+                perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
                 services:
                   dcService:
                     annotations:
@@ -92,3 +93,5 @@ kasopePlatform:
         reaper:
           autoScheduling:
             enabled: true
+          containerImage: ${values['kasopePlatform']['images']['reaper']['registry']}/${values['kasopePlatform']['images']['reaper']['repository']}:${values['kasopePlatform']['images']['reaper']['tag']}
+
