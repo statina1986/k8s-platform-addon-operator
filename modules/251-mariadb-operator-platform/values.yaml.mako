@@ -10,6 +10,9 @@ mariadbOperatorPlatform:
       repository: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}
       tag: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
     webhook:
+      image:
+        repository: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}
+        tag: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
       cert:
         certManager:
           enabled: true
