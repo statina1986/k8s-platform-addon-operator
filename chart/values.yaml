@@ -531,7 +531,17 @@ modulesConfig:
   qvantelGlueEnabled: "false"
   qvantelGlue: {}
   rabbitmqPlatformEnabled: "false"
-  rabbitmqPlatform: {}
+  rabbitmqPlatform:
+    rabbitmq:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/rabbitmq
+        tag: 3.11.5-debian-11-r2
+      volumePermissions:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/bitnami-shell
+          tag: 11-debian-11-r62
   redisPlatformEnabled: "false"
   redisPlatform:
     redis:

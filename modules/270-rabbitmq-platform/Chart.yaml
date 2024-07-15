@@ -4,3 +4,9 @@ version: 0.0.1
 dependencies:
   - name: rabbitmqPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: rabbitmq
+      image: platform-artifactory.qvantel.net/platform-1-2-0/bitnami/rabbitmq:3.11.5-debian-11-r2
+    - name: bitnami-shell
+      image: platform-artifactory.qvantel.net/platform-1-2-0/bitnami/bitnami-shell:11-debian-11-r62
