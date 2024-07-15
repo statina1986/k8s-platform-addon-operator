@@ -54,8 +54,7 @@ kasopePlatform:
               memory: 8Gi 
           datacenters:
             - metadata:
-                name: dc1
-                perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
+                name: dc1                
                 services:
                   dcService:
                     annotations:
@@ -64,6 +63,7 @@ kasopePlatform:
                     annotations:
                       consul.hashicorp.com/service-port: native
               size: 3
+              perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
               racks:
                 - name: default
                   % if values['global']['platformMasters']:
@@ -93,5 +93,13 @@ kasopePlatform:
         reaper:
           autoScheduling:
             enabled: true
-          containerImage: ${values['kasopePlatform']['images']['reaper']['registry']}/${values['kasopePlatform']['images']['reaper']['repository']}:${values['kasopePlatform']['images']['reaper']['tag']}
-
+          containerImage:
+            name: "cassandra-reaper"
+            registry: ${values['kasopePlatform']['images']['reaper']['registry']}
+            repository: ${values['kasopePlatform']['images']['reaper']['repository'].removesuffix('/cassandra-reaper')}
+            tag: ${values['kasopePlatform']['images']['reaper']['tag']}
+          initContainerImage:
+            name: "cassandra-reaper"
+            registry: ${values['kasopePlatform']['images']['reaper']['registry']}
+            repository: ${values['kasopePlatform']['images']['reaper']['repository'].removesuffix('/cassandra-reaper')}
+            tag: ${values['kasopePlatform']['images']['reaper']['tag']}

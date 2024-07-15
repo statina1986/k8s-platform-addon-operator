@@ -375,11 +375,23 @@ modulesConfig:
       mariadb-operator:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/mariadb-operator/mariadb-operator
-        tag: v0.0.28
+        tag: v0.0.29
       mariadb:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/library/mariadb
         tag: 10.4.33
+      maxscale:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/mariadb/maxscale
+        tag: 23.08.5
+      mariadb-exporter:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/prom/mysqld-exporter
+        tag: v0.15.1
+      maxscale-exporter:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/mariadb/maxscale-prometheus-exporter-ubi
+        tag: v0.0.1
   metricsPlatformEnabled: "false"
   metricsPlatform:
     images:
