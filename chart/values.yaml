@@ -405,7 +405,7 @@ modulesConfig:
         tag: 1.8.19
   mongodbPlatformEnabled: "false"
   mongodbPlatform:
-  	mongodb:
+    mongodb:
       image:
         registry: platform-artifactory.qvantel.net
         repository: platform-1-2-0/bitnami/mongodb
