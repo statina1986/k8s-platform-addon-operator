@@ -405,35 +405,36 @@ modulesConfig:
         tag: 1.8.19
   mongodbPlatformEnabled: "false"
   mongodbPlatform:
-    image:
-      registry: platform-artifactory.qvantel.net
-      repository: platform-1-2-0/bitnami/mongodb
-      tag: 7.0.12-debian-12-r0
-    tls:
-      registry: platform-artifactory.qvantel.net
-      repository: platform-1-2-0/bitnami/nginx
-      tag: 1.27.0-debian-12-r2
-    externalAccess:
-      autoDiscovery:
-        image:
-          registry: platform-artifactory.qvantel.net
-          repository: platform-1-2-0/bitnami/kubectl
-          tag: 1.30.2-debian-12-r0
-      dnsCheck:
+  	mongodb:
+      image:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/mongodb
+        tag: 7.0.12-debian-12-r0
+      tls:
+        registry: platform-artifactory.qvantel.net
+        repository: platform-1-2-0/bitnami/nginx
+        tag: 1.27.0-debian-12-r2
+      externalAccess:
+        autoDiscovery:
+          image:
+            registry: platform-artifactory.qvantel.net
+            repository: platform-1-2-0/bitnami/kubectl
+            tag: 1.30.2-debian-12-r0
+        dnsCheck:
+          image:
+            registry: platform-artifactory.qvantel.net
+            repository: platform-1-2-0/bitnami/os-shell
+            tag: 12-debian-12-r23
+      volumePermissions:
         image:
           registry: platform-artifactory.qvantel.net
           repository: platform-1-2-0/bitnami/os-shell
           tag: 12-debian-12-r23
-    volumePermissions:
-      image:
-        registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/bitnami/os-shell
-        tag: 12-debian-12-r23
-    metrics:
-      image:
-        registry: platform-artifactory.qvantel.net
-        repository: platform-1-2-0/bitnami/mongodb-exporter
-        tag: 0.40.0-debian-12-r30
+      metrics:
+        image:
+          registry: platform-artifactory.qvantel.net
+          repository: platform-1-2-0/bitnami/mongodb-exporter
+          tag: 0.40.0-debian-12-r30
   monitoringPlatformEnabled: "false"
   monitoringPlatform:
     images:
