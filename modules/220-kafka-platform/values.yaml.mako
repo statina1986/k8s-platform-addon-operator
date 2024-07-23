@@ -53,22 +53,31 @@ kafkaPlatform:
       spec:
         kafka:
           version: 3.5.1
-          % if values['global']['configurationProfile'] in {'perf', 'prod'}:
-          replicas: 6
+          % if values['global']['configurationProfile'] in {'dev'}:
+          replicas: 1
           % else:
           replicas: 3
           % endif
+          
           config:
             auto.create.topics.enable: "true"
             delete.topic.enable: true
-            default.replication.factor: 3            
-            log.retention.hours: 168            
+
+            % if values['global']['configurationProfile'] in {'dev'}:            
+            default.replication.factor: 1
+            offsets.topic.replication.factor: 1            
+            % else:
+            default.replication.factor: 3
             offsets.topic.replication.factor: 3
             transaction.state.log.min.isr: 2
             transaction.state.log.replication.factor: 3
             min.insync.replicas: 2
+            % endif
+
+            log.retention.hours: 168                                    
             group.initial.rebalance.delay.ms: 3000
             compression.type: lz4
+
             % if values['global']['configurationProfile'] in {'perf', 'prod'}:
             num.partitions: 12            
             transaction.state.log.num.partitions: 48
@@ -76,6 +85,7 @@ kafkaPlatform:
             % else:
             num.partitions: 6
             % endif
+
           listeners:
             - name: plain
               port: 9092
@@ -136,7 +146,7 @@ kafkaPlatform:
                           values:
                           - platform-masters
                 % endif
-              % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
+              % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -147,7 +157,11 @@ kafkaPlatform:
                       strimzi.io/name: kafka-cluster-kafka
               % endif
         zookeeper:
+          % if values['global']['configurationProfile'] in {'dev'}:
+          replicas: 1
+          % else:
           replicas: 3
+          % endif
           readinessProbe:
             initialDelaySeconds: 15
             timeoutSeconds: 5
@@ -195,7 +209,7 @@ kafkaPlatform:
                           values:
                           - platform-masters
                 % endif
-              % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
+              % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -245,7 +259,7 @@ kafkaPlatform:
                           values:
                           - platform-masters
               % endif
-              % if values['global']['configurationProfile'] in {'perf', 'prod'}: 
+              % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone

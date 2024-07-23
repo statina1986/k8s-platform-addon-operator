@@ -30,6 +30,7 @@ cnpgPostgresPlatform:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    % if addon_operator['monitoringPlatformEnabled'] == 'true':
     monitoring:
       podMonitorEnabled: true
       grafanaDashboard:
@@ -38,18 +39,27 @@ cnpgPostgresPlatform:
           grafana_dashboard: "1"
         annotations:
           k8s-sidecar-target-directory: /tmp/dashboards/Postgres
+    % endif
   clusters:
     qvt-postgredb:
-      enabled: false
+      enabled: true
       vaultConfiguration: true
       spec:
         affinity:
+          % if values['global']['multiZone']['enabled']:
           topologyKey: topology.kubernetes.io/zone
+          % endif
         enableSuperuserAccess: true
         imageName: ${values['cnpgPostgresPlatform']['images']['q-cnpg-timescale-15']['registry']}/${values['cnpgPostgresPlatform']['images']['q-cnpg-timescale-15']['repository']}:${values['cnpgPostgresPlatform']['images']['q-cnpg-timescale-15']['tag']}
-        instances: 2        
+        % if values['global']['configurationProfile'] in {'dev'}: 
+        instances: 1
+        % else:
+        instances: 2
+        % endif
+        % if addon_operator['monitoringPlatformEnabled'] == 'true':
         monitoring:
           enablePodMonitor: true
+        % endif
         postgresql:
           parameters:
             pg_stat_statements.max: "10000"

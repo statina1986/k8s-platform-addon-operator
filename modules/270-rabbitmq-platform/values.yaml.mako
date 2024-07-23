@@ -33,7 +33,12 @@ rabbitmqPlatform:
       #default_vhost = {{ .Release.Namespace }}-vhost
       #disk_free_limit.absolute = 50MB
 
+    % if values['global']['configurationProfile'] in {'dev'}:
+    replicaCount: 1
+    % else:
     replicaCount: 3
+    % endif
+    
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"

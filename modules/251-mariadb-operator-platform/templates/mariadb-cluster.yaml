@@ -45,8 +45,13 @@ spec:
   computed-values:
   - expression: k8s_get_secret_value('{{ . }}-root','{{ $.Release.Namespace }}','password')
     name: secret-password
+  {{- if $current.spec.replication.enabled }}
   db-url: >-
     {{ printf "{{username}}:{{password}}@tcp(%s-primary.platform.svc:3306)/" . }}
+  {{- else }}
+  db-url: >-
+    {{ printf "{{username}}:{{password}}@tcp(%s.platform.svc:3306)/" . }}
+  {{- end }}
   db-username: 'root'
   db-password: '{secret-password}'
 {{- end }}

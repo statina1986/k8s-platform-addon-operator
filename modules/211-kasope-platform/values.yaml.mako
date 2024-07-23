@@ -36,22 +36,39 @@ kasopePlatform:
                   consul.hashicorp.com/service-port: native
           config:
             cassandraYaml:
-              num_tokens: 8
+              num_tokens: 8            
             jvmOptions:
+              % if values['global']['configurationProfile'] in {'dev'}: 
+              heapSize: 500Mi
+              % else:
               heapSize: 2Gi
+              % endif              
           storageConfig:
             cassandraDataVolumeClaimSpec:
               accessModes:
                 - ReadWriteOnce
               resources:
                 requests:
-                  storage: 100Gi        
+                  % if values['global']['configurationProfile'] in {'dev'}: 
+                  storage: 10Gi
+                  % else:
+                  storage: 100Gi
+                  % endif
+          % if values['global']['configurationProfile'] in {'dev'}: 
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: "0.1"
+            limits:
+              memory: 8Gi 
+          % else:
           resources:
             requests:
               memory: 4Gi
               cpu: "0.1"
             limits:
               memory: 8Gi 
+          % endif
           datacenters:
             - metadata:
                 name: dc1                
@@ -62,7 +79,11 @@ kasopePlatform:
                   allPodsService:
                     annotations:
                       consul.hashicorp.com/service-port: native
+              % if values['global']['configurationProfile'] in {'dev'}: 
+              size: 1
+              % else:
               size: 3
+              % endif              
               perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
               racks:
                 - name: default

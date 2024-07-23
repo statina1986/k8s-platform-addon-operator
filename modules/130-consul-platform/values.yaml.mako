@@ -11,7 +11,11 @@ consulPlatform:
     configmapNamespace: "kube-system"
   consul:
     server:
+      % if values['global']['configurationProfile'] in {'dev'}: 
+      replicas: 1
+      % else:
       replicas: 3
+      % endif
       affinity: |
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -25,8 +29,8 @@ consulPlatform:
         - key: "dedicated-nodes"
           value: "platform-masters"
           operator: "Equal"
-          effect: "NoSchedule"
-      % if values['global']['platformMasters']:
+          effect: "NoSchedule"      
+      % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints: |
         - labelSelector:
             matchLabels:
@@ -36,6 +40,8 @@ consulPlatform:
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
+      % endif
+      % if values['global']['platformMasters']:
       nodeSelector: |
         dedicated-nodes: platform-masters
       % endif

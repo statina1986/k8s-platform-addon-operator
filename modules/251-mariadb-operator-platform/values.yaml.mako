@@ -16,8 +16,10 @@ mariadbOperatorPlatform:
       cert:
         certManager:
           enabled: true
+    % if addon_operator['monitoringPlatformEnabled'] == 'true':
     metrics:
       enabled: true
+    % endif  
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -48,11 +50,19 @@ mariadbOperatorPlatform:
         image: ${values['mariadbOperatorPlatform']['images']['mariadb']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb']['tag']}
         storage:
           size: 10Gi
+        % if values['global']['configurationProfile'] in {'dev'}: 
+        replication:
+          enabled: false
+        replicas: 1
+        % else:
         replicas: 2
         replication:
           enabled: true
+        % endif        
+        % if addon_operator['monitoringPlatformEnabled'] == 'true':
         metrics:
           enabled: true
+        % endif  
         affinity:
           enableAntiAffinity: true          
         % if values['global']['platformMasters']:

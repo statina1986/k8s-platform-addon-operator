@@ -23,6 +23,7 @@ vaultPlatform:
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
+    % if values['global']['multiZone']['enabled']:
     topologySpreadConstraints:
       - labelSelector:
           matchLabels:
@@ -31,6 +32,7 @@ vaultPlatform:
         maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
+    % endif
     configMapFailurePolicy: Fail
     podsFailurePolicy: Fail
     secretsFailurePolicy: Fail
@@ -64,6 +66,7 @@ vaultPlatform:
           value: "platform-masters"
           operator: "Equal"
           effect: "NoSchedule"
+      % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints: |
         - labelSelector:
             matchLabels:
@@ -72,6 +75,7 @@ vaultPlatform:
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
+      % endif
       resources:
       readinessProbe:
         enabled: true
