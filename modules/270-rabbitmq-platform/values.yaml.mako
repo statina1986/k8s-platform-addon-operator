@@ -30,6 +30,8 @@ rabbitmqPlatform:
       - name: stomp
         containerPort: 61613
     service:
+      annotations:
+        consul.hashicorp.com/service-port: amqp
       extraPorts:
       - name: web-stomp
         port: 15674
