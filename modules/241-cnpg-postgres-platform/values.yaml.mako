@@ -1,21 +1,7 @@
 cnpgPostgresPlatform:
-  images:
-    cloudnative-pg:
-      registry: ghcr.io
-      repository: cloudnative-pg/cloudnative-pg
-      tag: "1.22.2"
-    q-cnpg-timescale-15:
-      registry: artifactory.qvantel.net
-      repository: q-cnpg-timescale
-      tag: "15.7-1_5_master_e1aa9a467"
-    q-cnpg-timescale-16:    
-      registry: artifactory.qvantel.net
-      repository: q-cnpg-timescale
-      tag: "16.3-1_5_master_e1aa9a467"
   cloudnative-pg:
     image:
-      repository: ${values['cnpgPostgresPlatform']['images']['cloudnative-pg']['registry']}/${values['cnpgPostgresPlatform']['images']['cloudnative-pg']['repository']}      
-      tag: ${values['cnpgPostgresPlatform']['images']['cloudnative-pg']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/cloudnative-pg/cloudnative-pg
     crds:
       create: false
     serviceAccount:
@@ -50,7 +36,7 @@ cnpgPostgresPlatform:
           topologyKey: topology.kubernetes.io/zone
           % endif
         enableSuperuserAccess: true
-        imageName: ${values['cnpgPostgresPlatform']['images']['q-cnpg-timescale-15']['registry']}/${values['cnpgPostgresPlatform']['images']['q-cnpg-timescale-15']['repository']}:${values['cnpgPostgresPlatform']['images']['q-cnpg-timescale-15']['tag']}
+        imageName: ${values['global']['containerRegistryBase']}/cloudnative-pg/q-cnpg-timescale:15.7-1_5_master_e1aa9a467
         % if values['global']['configurationProfile'] in {'dev'}: 
         instances: 1
         % else:

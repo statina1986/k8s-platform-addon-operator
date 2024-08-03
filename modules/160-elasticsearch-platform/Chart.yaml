@@ -16,3 +16,5 @@ annotations:
       image: docker.io/elastic/filebeat:7.16.2
     - name: logstash
       image: docker.io/library/logstash:7.16.2
+    - name: loggingsetup
+      image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f

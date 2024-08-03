@@ -1,0 +1,10 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:05:34.267414996Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: qvantel-glue
+  version: 0.1.0
+  appVersion: ""
+images: []

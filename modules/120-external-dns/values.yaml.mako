@@ -1,5 +1,7 @@
 externalDns:
   external-dns:
+    image:
+      registry: ${values['global']['containerRegistryBase']}
     serviceAccount:
       create: false
       name: platform

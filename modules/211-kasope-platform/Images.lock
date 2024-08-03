@@ -1,0 +1,88 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-02T15:05:23.535496821Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: kasope-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: cass-operator
+    image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.19.1
+    chart: kasope-platform
+    digests:
+      - digest: sha256:b8d15191468b0d7fc4df65872b50008bf8cc20594a46a0898e69e4acb2fc6637
+        arch: linux/amd64
+      - digest: sha256:7c330f15cff09c360fdb0627f920e6161626bf860252ee809cf77e47f9b04498
+        arch: linux/arm64
+  - name: cassandra
+    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
+    chart: kasope-platform
+    digests:
+      - digest: sha256:fe7649ded0c2239ce6bef75c7e29006a68ab7cbaf82bfac1f5f437b058b7eeaa
+        arch: linux/amd64
+      - digest: sha256:feabfe15c8c99e6cf59ad49306e2b6d37a94b770d3be27475bfbbfdf4993b07f
+        arch: linux/arm64
+  - name: systemLogger
+    image: cr.k8ssandra.io/k8ssandra/system-logger:v1.19.1
+    chart: kasope-platform
+    digests:
+      - digest: sha256:3c81b31f57e901185a900f7b1032bce4b1d3f10507bae58ff45a5edb804e180a
+        arch: linux/amd64
+      - digest: sha256:652067f80dd0dc232f1750c2362166ba6e7c511c6ac6483441665f82497c4be2
+        arch: linux/arm64
+  - name: configBuilder
+    image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
+    chart: kasope-platform
+    digests:
+      - digest: sha256:9ea0fe726ece3cda64876ed389801ad0bc659a94dfc79a6cad080f20fc8d13b3
+        arch: linux/amd64
+      - digest: sha256:699ddf003d731c1ba93e3e2f6a46d1d1f354b71b4b8db861a6f20c46d8f5e191
+        arch: linux/arm64
+  - name: per-node-config
+    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    chart: kasope-platform
+    digests:
+      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
+        arch: linux/arm64
+      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
+        arch: linux/amd64
+  - name: k8ssandraClient
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-client:v0.2.2
+    chart: kasope-platform
+    digests:
+      - digest: sha256:df0474a565dfe7b98848534dfef485b6ccd0a8a5e72dc0c622490ce12fec0396
+        arch: linux/amd64
+      - digest: sha256:f258101bf0ac7691e1705710b16121cc4575c7e7a48aed0eee43911d72ce8483
+        arch: linux/arm64
+  - name: k8ssandra-tools
+    image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
+    chart: kasope-platform
+    digests:
+      - digest: sha256:4db559c3b2f139fda7cd63c774048d20d9ec9c205f34226eacbe70d203a2cbc2
+        arch: linux/amd64
+      - digest: sha256:82fa0c265f3e21613123e9bb52e16146be6f59aa66494ed6c3e964cea5a53cd1
+        arch: linux/arm64
+  - name: k8ssandra-operator
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.15.0
+    chart: kasope-platform
+    digests:
+      - digest: sha256:d0a7760f2b68017b41c25bf00c108357291c5941a9a784a1ed4bfb87ee9a8d46
+        arch: linux/amd64
+      - digest: sha256:d2f6f249aca74e0c87973de08be9fd6de4a71613bf266a7b17e19082c43fc2d3
+        arch: linux/arm64
+  - name: reaper
+    image: thelastpickle/cassandra-reaper:3.5.0
+    chart: kasope-platform
+    digests:
+      - digest: sha256:01bf9c6d0107b029c0de3a7c85db3b566a162d0873852118e4670d9f0dcca106
+        arch: linux/amd64
+      - digest: sha256:39aa611226150a98386f4efc40a1a2a628cc09a637153ff18f58a8ef8b57c311
+        arch: linux/arm64
+  - name: medusa
+    image: artifactory.qvantel.net/qmedusa/medusa:0.18.0_2_MMLYLE_bc4ab56a6
+    chart: kasope-platform
+    digests:
+      - digest: sha256:9d8f02c24f3936ef550ce558a3e0825e2412dcead983f7ff91fc0695d30b7026
+        arch: linux/amd64

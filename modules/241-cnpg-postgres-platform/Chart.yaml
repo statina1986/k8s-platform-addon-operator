@@ -7,8 +7,8 @@ dependencies:
 annotations:
   images: |
     - name: q-cnpg-timescale-15
-      image: artifactory.qvantel.net/q-cnpg-timescale:15.7-1_5_master_e1aa9a467
+      image: artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.7-1_6_master_a9bf1686f
     - name: q-cnpg-timescale-16
-      image: artifactory.qvantel.net/q-cnpg-timescale:16.3-1_5_master_e1aa9a467
+      image: artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.3-1_6_master_a9bf1686f
     - name: cloudnative-pg
       image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2

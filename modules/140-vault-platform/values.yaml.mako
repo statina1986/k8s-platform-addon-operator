@@ -9,8 +9,7 @@ vaultPlatform:
   useBackwardsCompatibilityService: true
   vault-secrets-webhook:
     image:
-      repository: ${values['vaultPlatform']['images']['vault-secrets-webhook']['registry']}/${values['vaultPlatform']['images']['vault-secrets-webhook']['repository']}
-      tag: ${values['vaultPlatform']['images']['vault-secrets-webhook']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-secrets-webhook
     certificate:
       useCertManager: true
       generate: false
@@ -33,8 +32,12 @@ vaultPlatform:
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
     % endif
+
+    # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     configMapFailurePolicy: Fail
+    # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     podsFailurePolicy: Fail
+    # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     secretsFailurePolicy: Fail
   vault:
     global:
@@ -43,8 +46,7 @@ vaultPlatform:
       enabled: false
     server:
       image:
-        repository: ${values['vaultPlatform']['images']['vault']['registry']}/${values['vaultPlatform']['images']['vault']['repository']}
-        tag: ${values['vaultPlatform']['images']['vault']['tag']}
+        repository: ${values['global']['containerRegistryBase']}/hashicorp/vault
       serviceAccount:
         create: false
         name: platform
@@ -105,7 +107,7 @@ vaultPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-          image: ${values['vaultPlatform']['images']['extraContainers']['registry']}/${values['vaultPlatform']['images']['extraContainers']['repository']}:${build_tag}
+          image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /init-script/

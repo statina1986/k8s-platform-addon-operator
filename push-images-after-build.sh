@@ -5,7 +5,7 @@ if [[ $commit_comment == *"other: push-images"* ]]; then
     
     dirs=(${0%/*}/modules/*)
     for val in ${dirs[@]}; do
-        helm dt images lock "$val" $1
+        helm dt images lock --platforms linux/amd64 --platforms linux/arm64 "$val" $1
     done
 
     yq eval-all '. as $item ireduce ({}; . *+ $item )' chart/Images.lock.template modules/*/Images.lock > chart/Images.lock

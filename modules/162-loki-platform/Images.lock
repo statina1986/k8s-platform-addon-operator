@@ -1,0 +1,18 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:04:23.143949551Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: loki-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: loki
+    image: docker.io/grafana/loki:2.9.2
+    chart: loki-platform
+    digests:
+      - digest: sha256:5c55214368bfb640d62289c30966e4948cd415c2576231b0aa592671d6b97bf4
+        arch: linux/amd64
+      - digest: sha256:46d99aee7bbabb3bc67708328e87df9265b9c6c2666139b6367f31372545de1e
+        arch: linux/arm64

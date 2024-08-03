@@ -15,7 +15,7 @@ annotations:
     - name: configBuilder
       image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
     - name: per-node-config
-      image: mikefarah/yq:4
+      image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
     - name: k8ssandraClient
       image: cr.k8ssandra.io/k8ssandra/k8ssandra-client:v0.2.2
     - name: k8ssandra-tools

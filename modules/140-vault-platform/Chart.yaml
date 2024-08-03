@@ -11,4 +11,4 @@ annotations:
     - name: vault-secrets-webhook
       image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
     - name: platform-tools
-      image: artifactory.qvantel.net/k8s-platform-tools:latest
+      image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f

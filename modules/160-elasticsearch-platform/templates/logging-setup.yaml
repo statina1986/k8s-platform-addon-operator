@@ -205,7 +205,7 @@ spec:
           name: logging-configurator
       containers:
       - name: logging-setup
-        image: centos
+        image: {{ .Values.elasticsearchPlatform.loggingSetupimage }}
         command: ["/bin/sh"]
         args: ["/logging_setup/run" ]
         volumeMounts:

@@ -1,0 +1,42 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:04:00.246691629Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: consul-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: consul
+    image: docker.io/hashicorp/consul:1.14.4
+    chart: consul-platform
+    digests:
+      - digest: sha256:6cabd7023b12556ecb63d07df07cfd6d6e35f2d7426f1d0f0ec7c3caf3f193cf
+        arch: linux/amd64
+      - digest: sha256:9b44aac2203797b88aae8d5e1c3dbe9ddc2768257b433039d02e802beca02158
+        arch: linux/arm64
+  - name: consul-k8s-control-plane
+    image: docker.io/hashicorp/consul-k8s-control-plane:1.0.3
+    chart: consul-platform
+    digests:
+      - digest: sha256:149049aea575ea8e779f0f0d379f6068bfe9f06fdbf219a3e105550d2dcc8b05
+        arch: linux/amd64
+      - digest: sha256:e71816c706ee433b4321b100873b4648d9d979d18c8dbfa307ea85512a38858e
+        arch: linux/arm64
+  - name: consul-dataplane
+    image: docker.io/hashicorp/consul-dataplane:1.0.1
+    chart: consul-platform
+    digests:
+      - digest: sha256:9815eeb33d341a537dcc1d2bb71e8c941e795b78196eeeccfbd5c925e2bc580c
+        arch: linux/arm64
+      - digest: sha256:e79755cb2c07890eeb087f99a8306a711124ca48e840edb6a95582e6032dbd3e
+        arch: linux/amd64
+  - name: envoy
+    image: docker.io/envoyproxy/envoy:v1.23.1
+    chart: consul-platform
+    digests:
+      - digest: sha256:fa1250b1e2b1d33d83f0a3fb82267eb9af3245fc7b5ae857dbed19e5282d5cec
+        arch: linux/arm64
+      - digest: sha256:2e528bb5731c21a53e9ab93578490306e79eae2ab37a39eb54721bab7cb7c643
+        arch: linux/amd64

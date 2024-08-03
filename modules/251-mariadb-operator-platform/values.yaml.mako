@@ -7,12 +7,10 @@ mariadbOperatorPlatform:
   nameOverride: "mariadb-operator-platform"
   mariadb-operator:
     image:
-      repository: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}
-      tag: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator
     webhook:
       image:
-        repository: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}
-        tag: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
+        repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator
       cert:
         certManager:
           enabled: true
@@ -31,23 +29,23 @@ mariadbOperatorPlatform:
     % endif
     extraEnv:
       - name: MARIADB_GALERA_AGENT_IMAGE
-        value: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:v0.0.29
       - name: MARIADB_GALERA_INIT_IMAGE
-        value: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:v0.0.29
       - name: MARIADB_OPERATOR_IMAGE
-        value: ${values['mariadbOperatorPlatform']['images']['mariadb-operator']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-operator']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb-operator']['tag']}
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:v0.0.29
       - name: RELATED_IMAGE_EXPORTER
-        value: ${values['mariadbOperatorPlatform']['images']['mariadb-exporter']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb-exporter']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb-exporter']['tag']}
+        value: ${values['global']['containerRegistryBase']}/prom/mysqld-exporter:v0.15.1
       - name: RELATED_IMAGE_EXPORTER_MAXSCALE
-        value: ${values['mariadbOperatorPlatform']['images']['maxscale-exporter']['registry']}/${values['mariadbOperatorPlatform']['images']['maxscale-exporter']['repository']}:${values['mariadbOperatorPlatform']['images']['maxscale-exporter']['tag']}
+        value: ${values['global']['containerRegistryBase']}/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
       - name: RELATED_IMAGE_MAXSCALE
-        value: ${values['mariadbOperatorPlatform']['images']['maxscale']['registry']}/${values['mariadbOperatorPlatform']['images']['maxscale']['repository']}:${values['mariadbOperatorPlatform']['images']['maxscale']['tag']}
+        value: ${values['global']['containerRegistryBase']}/mariadb/maxscale:23.08.5
   clusters:
     mariadb:
       enabled: true
       vaultConfiguration: true
       spec:
-        image: ${values['mariadbOperatorPlatform']['images']['mariadb']['registry']}/${values['mariadbOperatorPlatform']['images']['mariadb']['repository']}:${values['mariadbOperatorPlatform']['images']['mariadb']['tag']}
+        image: ${values['global']['containerRegistryBase']}/library/mariadb:10.4.33
         storage:
           size: 10Gi
         % if values['global']['configurationProfile'] in {'dev'}: 

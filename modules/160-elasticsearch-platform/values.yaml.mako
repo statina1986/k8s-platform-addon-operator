@@ -1,14 +1,10 @@
 elasticsearchPlatform:
+  loggingSetupimage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
   eck-operator:
     # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false
     image:
-      # repository is the container image prefixed by the registry name.
-      repository: ${values['elasticsearchPlatform']['images']['eck-operator']['registry']}/${values['elasticsearchPlatform']['images']['eck-operator']['repository']}
-      # pullPolicy is the container image pull policy.
-      pullPolicy: IfNotPresent
-      # tag is the container image tag. If not defined, defaults to chart appVersion.
-      tag: ${values['elasticsearchPlatform']['images']['eck-operator']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/elastic/eck-operator
     nameOverride: "elastic-operator"
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
@@ -79,7 +75,7 @@ elasticsearchPlatform:
                 command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
               containers:
                 - name: elasticsearch
-                  image: ${values['elasticsearchPlatform']['images']['elasticsearch']['registry']}/${values['elasticsearchPlatform']['images']['elasticsearch']['repository']}:${values['elasticsearchPlatform']['images']['elasticsearch']['tag']}
+                  image: ${values['global']['containerRegistryBase']}/library/elasticsearch:7.16.2
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.logsearch.resources | nindent 12  }}                    
                   env:
                   - name: ZONE
@@ -163,7 +159,7 @@ elasticsearchPlatform:
                       elasticsearch.k8s.elastic.co/statefulset-name: smartsearch-es-smartsearch
               containers:
                 - name: elasticsearch
-                  image: ${values['elasticsearchPlatform']['images']['elasticsearch']['registry']}/${values['elasticsearchPlatform']['images']['elasticsearch']['repository']}:${values['elasticsearchPlatform']['images']['elasticsearch']['tag']}
+                  image: ${values['global']['containerRegistryBase']}/library/elasticsearch:7.16.2
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
     kibana:
@@ -186,7 +182,7 @@ elasticsearchPlatform:
           spec:
             containers:
               - name: kibana
-                image: ${values['elasticsearchPlatform']['images']['kibana']['registry']}/${values['elasticsearchPlatform']['images']['kibana']['repository']}:${values['elasticsearchPlatform']['images']['kibana']['tag']}
+                image: ${values['global']['containerRegistryBase']}/library/kibana:7.16.2
                 resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
             % if values['global']['platformMasters']:
             nodeSelector:
@@ -355,8 +351,8 @@ elasticsearchPlatform:
         value: logsearch-es-http.platform.svc.cluster.local
       - name: ELASTICSEARCH_PORT
         value: "9200"
-    image: ${values['elasticsearchPlatform']['images']['logstash']['registry']}/${values['elasticsearchPlatform']['images']['logstash']['repository']}
-    imageTag: ${values['elasticsearchPlatform']['images']['logstash']['tag']}
+    image:  ${values['global']['containerRegistryBase']}/library/logstash
+    imageTag: "7.16.2"
     imagePullPolicy: "IfNotPresent"
     logstashJavaOpts: "-Xmx1g -Xms1g"
     resources:
@@ -434,8 +430,8 @@ elasticsearchPlatform:
           cpu: "100"
           memory: 1Gi
       tolerations: []
-    image: ${values['elasticsearchPlatform']['images']['filebeat']['registry']}/${values['elasticsearchPlatform']['images']['filebeat']['repository']}
-    imageTag: ${values['elasticsearchPlatform']['images']['filebeat']['tag']}
+    image:  ${values['global']['containerRegistryBase']}/library/filebeat
+    imageTag: "7.16.2"
     imagePullPolicy: "IfNotPresent"
     imagePullSecrets: []
     livenessProbe:

@@ -3,7 +3,7 @@ instanaPlatform:
     enabled: true
     agent:
       image:
-        name: ${values['instanaPlatform']['instana-agent']['agent']['image']['registry']}/${values['instanaPlatform']['instana-agent']['agent']['image']['repository']}
+        name: ${values['global']['containerRegistryBase']}/agent/static
       keysSecret: instana-agent-key
       endpointHost: ingress-green-saas.instana.io
       endpointPort: 443
@@ -44,7 +44,7 @@ instanaPlatform:
       name: to-be-set
     leaderElector:
       image:
-        name: ${values['instanaPlatform']['instana-agent']['leaderElector']['image']['registry']}/${values['instanaPlatform']['instana-agent']['leaderElector']['image']['repository']}
+        name: ${values['global']['containerRegistryBase']}/instana/leader-elector
     k8s_sensor:
       image:
-        name: ${values['instanaPlatform']['instana-agent']['k8s_sensor']['image']['registry']}/${values['instanaPlatform']['instana-agent']['k8s_sensor']['image']['repository']}
+        name: ${values['global']['containerRegistryBase']}/instana/k8sensor

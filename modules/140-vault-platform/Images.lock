@@ -1,0 +1,34 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-02T15:05:12.663130952Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: vault-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: vault
+    image: docker.io/hashicorp/vault:1.12.1
+    chart: vault-platform
+    digests:
+      - digest: sha256:826e463c73e677aad34c71cae94d54a55985a23488fd28fb45bfca0d0ef58a60
+        arch: linux/amd64
+      - digest: sha256:f6f3a5fd9ddca47e3dbbe25ae49053fc5500e0bbecb35e7ad50de27a5a476cbf
+        arch: linux/arm64
+  - name: vault-secrets-webhook
+    image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
+    chart: vault-platform
+    digests:
+      - digest: sha256:96dfd411856ad7efd84393fcf14aa00432b6d82d73052d9078dc837412532a03
+        arch: linux/amd64
+      - digest: sha256:1483685e0ec0eb25dd86bda57fed98a6e4c9dc6483dd67483c09a8c50e8be7df
+        arch: linux/arm64
+  - name: platform-tools
+    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    chart: vault-platform
+    digests:
+      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
+        arch: linux/arm64
+      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
+        arch: linux/amd64

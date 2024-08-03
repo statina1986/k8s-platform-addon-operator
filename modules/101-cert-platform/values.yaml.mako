@@ -1,6 +1,25 @@
 # certPlatformNamespace: cert-manager
 certPlatform:
   cert-manager:
+    image:
+      registry: ${values['global']['containerRegistryBase']}
+      repository: jetstack/cert-manager-controller
+    cainjector:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: jetstack/cert-manager-cainjector
+    webhook:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: jetstack/cert-manager-webhook
+    startupapicheck:
+      image:
+        registry: p${values['global']['containerRegistryBase']}
+        repository: jetstack/cert-manager-ctl
+    acmesolver:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: jetstack/cert-manager-acmesolver
     serviceAccount:
       create: false
       name: platform

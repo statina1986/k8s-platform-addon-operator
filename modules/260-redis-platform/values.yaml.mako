@@ -1,5 +1,13 @@
 redisPlatform:
   redis:
+    image:
+      registry: ${values['global']['containerRegistryBase']}
+    volumePermissions:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+    sysctl:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
     architecture: replication
     auth:
       enabled: true
@@ -46,8 +54,10 @@ redisPlatform:
         enabled: true
         storageClass: ""
         size: 8Gi
-    sentinel:
+    sentinel:      
       enabled: true
+      image:
+        registry: ${values['global']['containerRegistryBase']}
       masterSet: redis
       quorum: 2
       resources:
@@ -58,3 +68,5 @@ redisPlatform:
           consul.hashicorp.com/service-port: tcp-sentinel
     metrics:
       enabled: true
+      image:
+        registry: ${values['global']['containerRegistryBase']}

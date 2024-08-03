@@ -20,6 +20,8 @@ lokiPlatform:
         labels:
           release: monitoring-platform
     loki:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
       analytics:
         reporting_enabled: false
       auth_enabled: false

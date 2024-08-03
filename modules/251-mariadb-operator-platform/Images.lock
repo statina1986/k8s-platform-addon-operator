@@ -1,0 +1,50 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:05:07.414862348Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: mariadb-operator-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: mariadb-operator
+    image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.29
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:2409fe9768162a45dde50a617efb8b7b8d85b6f91f661b20be5a9ed44de8893a
+        arch: linux/arm64
+      - digest: sha256:99b134079b1aab95d4fecaab1952a1b6772fa0991fb53c6aebd2a245dbf54228
+        arch: linux/amd64
+  - name: mariadb
+    image: docker.io/mariadb:10.4.33
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:f445c1568634f2c2fbeda5d38e0a1a6c2e7730484191ba8630f9ce56fc6fb2b7
+        arch: linux/amd64
+      - digest: sha256:4979110eaf63b427c8a5b7bc10dae2e49685c3835518a6adfde68ed8bf213dbd
+        arch: linux/arm64
+  - name: maxscale
+    image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:5081aa9457a9d217c61fd87e162c05a60ca38db770df9890bf66460346b57a87
+        arch: linux/amd64
+      - digest: sha256:674ff05fb75d15c6a045e23db17ab9402b14c350ba2d6abfaab4db2a7cd5aba4
+        arch: linux/arm64
+  - name: mariadb-exporter
+    image: prom/mysqld-exporter:v0.15.1
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:cc6b391a57862699c0cc2fafbc7b53aec66f503291b3258e44d3fd1d61487fc1
+        arch: linux/amd64
+      - digest: sha256:40a1de57cc39e13c4dd2f1f5fe13f1bc78a93d6196442a58f7be2f28f5bcec98
+        arch: linux/arm64
+  - name: maxscale-exporter
+    image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:e1e2e157c824b3838c633b35272916915b9ba145755c80667dff7edb015c13a7
+        arch: linux/arm64
+      - digest: sha256:651ad5f6b510a67e76edd6e43fbdbf09018356cf937997da631150ad6835dff7
+        arch: linux/amd64

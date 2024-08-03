@@ -59,6 +59,18 @@ awsPlatform:
     % endif
   aws-efs-csi-driver-enabled: false
   aws-efs-csi-driver:
+    image:
+      repository: ${values['global']['containerRegistryBase']}/amazon/aws-efs-csi-driver
+    sidecars:
+      livenessProbe:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/livenessprobe
+      nodeDriverRegistrar:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/node-driver-registrar          
+      csiProvisioner:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-provisioner
     controller:
       serviceAccount:
         create: false
@@ -97,6 +109,30 @@ awsPlatform:
         volumeBindingMode: Immediate
   aws-ebs-csi-driver-enabled: false
   aws-ebs-csi-driver:
+    image:
+        repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/aws-ebs-csi-driver
+    sidecars:
+      provisioner:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-provisioner
+      attacher:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-attacher
+      snapshotter:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/external-snapshotter/csi-snapshotter
+      livenessProbe:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/livenessprobe
+      resizer:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-resizer
+      nodeDriverRegistrar:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/node-driver-registrar
+      volumemodifier:
+        image:
+          repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/volume-modifier-for-k8s
     controller:
       serviceAccount:
         create: false
@@ -128,6 +164,8 @@ awsPlatform:
       image:
         region: ${region}
         account: '${awsRegistryAccount[region]}'
+    env:
+      ENABLE_PREFIX_DELEGATION: "true"
     init:
       image:
         region: ${region}

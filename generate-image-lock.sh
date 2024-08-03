@@ -3,9 +3,9 @@
 dirs=(${0%/*}/modules/*)
 
 for val in ${dirs[@]}; do
-    helm dt images lock "$val"    
+    if [[ ! -f "$val/Images.lock" ]] ; then
+        helm dt images lock --platforms linux/amd64 --platforms linux/arm64 "$val" 
+    fi  
 done
 
-yq eval-all '. as $item ireduce ({}; . *+ $item )' chart/Images.lock.template modules/*/Images.lock > chart/Images.lock
-
-rm  modules/*/Images.lock
+yq eval-all '. as $item ireduce ({}; . *+ $item )' modules/*/Images.lock chart/Images.lock.template > chart/Images.lock

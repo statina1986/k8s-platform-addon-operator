@@ -3,14 +3,12 @@ pomeriumPlatform:
   pomerium:
     baseUrl: ${values['global']['ingressBaseUrl']}
     image:
-      repository: ${values['pomeriumPlatform']['images']['pomerium']['registry']}/${values['pomeriumPlatform']['images']['pomerium']['repository']}
-      tag: ${values['pomeriumPlatform']['images']['pomerium']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/pomerium/pomerium
     ingress:
       enabled: false
     ingressController:
       image:
-        repository: ${values['pomeriumPlatform']['images']['ingressController']['registry']}/${values['pomeriumPlatform']['images']['ingressController']['repository']}
-        tag: ${values['pomeriumPlatform']['images']['ingressController']['tag']}
+        repository: ${values['global']['containerRegistryBase']}/pomerium/ingress-controller
     extraVolumeMounts:
       - name: trusted-ca-tls
         mountPath: /etc/ssl/certs

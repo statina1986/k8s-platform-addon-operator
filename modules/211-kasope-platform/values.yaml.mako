@@ -1,18 +1,25 @@
 kasopePlatform:
   k8ssandra-operator:
+    image:
+      registry: ${values['global']['containerRegistryBase']}
     client:
       image:
-        tag: 1.6.0-20240506112248-96d77628
+        registry: ${values['global']['containerRegistryBase']}        
+        tag: "1.6.0-20240506112248-96d77628"
+    cleaner:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
     cass-operator:
       image:
+        registry: ${values['global']['containerRegistryBase']}
         repositoryOverride: 
           cassandra:
-            ${values['kasopePlatform']['images']['cassandra']['tag']}: ${values['kasopePlatform']['images']['cassandra']['repository']}:${values['kasopePlatform']['images']['cassandra']['tag']}
-        registryOverride: ${values['kasopePlatform']['images']['cassandra']['registry']}
+            "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13
+        registryOverride: ${values['global']['containerRegistryBase']}
       imageConfig:
-        systemLogger: ${values['kasopePlatform']['images']['systemLogger']['registry']}/${values['kasopePlatform']['images']['systemLogger']['repository']}:${values['kasopePlatform']['images']['systemLogger']['tag']}
-        configBuilder: ${values['kasopePlatform']['images']['configBuilder']['registry']}/${values['kasopePlatform']['images']['configBuilder']['repository']}:${values['kasopePlatform']['images']['configBuilder']['tag']}
-        k8ssandraClient: ${values['kasopePlatform']['images']['k8ssandraClient']['registry']}/${values['kasopePlatform']['images']['k8ssandraClient']['repository']}:${values['kasopePlatform']['images']['k8ssandraClient']['tag']}
+        systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.19.1
+        configBuilder: ${values['global']['containerRegistryBase']}/datastax/cass-config-builder:1.0-ubi8
+        k8ssandraClient: ${values['global']['containerRegistryBase']}/k8ssandra/k8ssandra-client/v0.2.2
       admissionWebhooks:
         enabled: false
     disableCrdUpgraderJob: true
@@ -23,7 +30,6 @@ kasopePlatform:
       enabled: true    
       spec:
         cassandra:
-          perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
           serviceAccount: platform
           serverVersion: "3.11.13"
           metadata:
@@ -84,7 +90,7 @@ kasopePlatform:
               % else:
               size: 3
               % endif              
-              perNodeConfigInitContainerImage: ${values['kasopePlatform']['images']['perNodeConfig']['registry']}/${values['kasopePlatform']['images']['perNodeConfig']['repository']}:${values['kasopePlatform']['images']['perNodeConfig']['tag']}
+              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
               racks:
                 - name: default
                   % if values['global']['platformMasters']:
@@ -116,11 +122,9 @@ kasopePlatform:
             enabled: true
           containerImage:
             name: "cassandra-reaper"
-            registry: ${values['kasopePlatform']['images']['reaper']['registry']}
-            repository: ${values['kasopePlatform']['images']['reaper']['repository'].removesuffix('/cassandra-reaper')}
-            tag: ${values['kasopePlatform']['images']['reaper']['tag']}
+            registry: ${values['global']['containerRegistryBase']}
+            tag: "3.5.0"
           initContainerImage:
             name: "cassandra-reaper"
-            registry: ${values['kasopePlatform']['images']['reaper']['registry']}
-            repository: ${values['kasopePlatform']['images']['reaper']['repository'].removesuffix('/cassandra-reaper')}
-            tag: ${values['kasopePlatform']['images']['reaper']['tag']}
+            registry: ${values['global']['containerRegistryBase']}
+            tag: "3.5.0"

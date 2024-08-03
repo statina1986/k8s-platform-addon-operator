@@ -1,0 +1,26 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:05:30.119295279Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: pomerium-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: ingress-controller
+    image: pomerium/ingress-controller:sha-54e3ddc
+    chart: pomerium-platform
+    digests:
+      - digest: sha256:c276a2ea6f36a866ec997b3ee35e16494f91d2fe21f6596ff9b06909beed1ebb
+        arch: linux/amd64
+      - digest: sha256:f6eb7d7435773d1ce9dd1b2af9a56a47428cff82cd01b3bf42e26736c6248cbb
+        arch: linux/arm64
+  - name: pomerium
+    image: pomerium/pomerium:v0.22.1
+    chart: pomerium-platform
+    digests:
+      - digest: sha256:721e2c7ee9b72ad01afdebc9bcf67b06abb43b7306748448292f7cbc79a22296
+        arch: linux/amd64
+      - digest: sha256:7f73e9b5a70b80f8727c2a1e9ded2f69b6e7a719d6ce9b218c7c8dc0a4353f2a
+        arch: linux/arm64

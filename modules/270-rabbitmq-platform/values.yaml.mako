@@ -1,6 +1,7 @@
 rabbitmqPlatform:
-# 
   rabbitmq:
+    image:
+      registry: ${values['global']['containerRegistryBase']}
     auth:
       username: user
       password: "dXNlcg=="
@@ -61,3 +62,5 @@ rabbitmqPlatform:
     
     volumePermissions:
       enabled: false
+      image:
+        registry: ${values['global']['containerRegistryBase']}    

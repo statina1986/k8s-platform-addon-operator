@@ -1,0 +1,10 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:05:48.720482141Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: ksix-platform
+  version: 0.0.1
+  appVersion: ""
+images: []

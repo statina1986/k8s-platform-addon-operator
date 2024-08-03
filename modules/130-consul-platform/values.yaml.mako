@@ -1,10 +1,10 @@
 consulPlatform:
   global:
-    image: ${values['consulPlatform']['images']['consul']['registry']}/${values['consulPlatform']['images']['consul']['repository']}:${values['consulPlatform']['images']['consul']['tag']}
-    imageK8S: ${values['consulPlatform']['images']['consul-k8s-control-plane']['registry']}/${values['consulPlatform']['images']['consul-k8s-control-plane']['repository']}:${values['consulPlatform']['images']['consul-k8s-control-plane']['tag']}
-    imageConsulDataplane: ${values['consulPlatform']['images']['consul-dataplane']['registry']}/${values['consulPlatform']['images']['consul-dataplane']['repository']}:${values['consulPlatform']['images']['consul-dataplane']['tag']}
+    image: ${values['global']['containerRegistryBase']}/hashicorp/consul:1.14.4
+    imageK8S: ${values['global']['containerRegistryBase']}/hashicorp/consul-k8s-control-plane:1.0.3
+    imageConsulDataplane: ${values['global']['containerRegistryBase']}/hashicorp/consul-dataplane:1.0.1
   apiGateway:
-    imageEnvoy: ${values['consulPlatform']['images']['envoy']['registry']}/${values['consulPlatform']['images']['envoy']['repository']}:${values['consulPlatform']['images']['envoy']['tag']}
+    imageEnvoy: ${values['global']['containerRegistryBase']}/envoyproxy/envoy:v1.23.1
   updateCoreDns:    
     enabled: "true"
     configmapName: "coredns"

@@ -11,7 +11,7 @@ annotations:
     - name: kafka-lag-exporter
       image: seglo/kafka-lag-exporter:0.8.2
     - name: prometheus-blackbox-exporter
-      image: prom/blackbox-exporter:v0.25.0
+      image: quay.io/prometheus/blackbox-exporter:v0.25.0
     - name: prometheus-consul-exporter
       image: prom/consul-exporter:v0.5.0
     - name: yet-another-cloudwatch-exporter
@@ -39,7 +39,7 @@ annotations:
     - name: downloadDashboardsImage
       image: docker.io/curlimages/curl:7.85.0
     - name: initChownData
-      image: docker.io/library/busybox:1.31.1
+      image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
     - name: grafana-sidecar
       image: quay.io/kiwigrid/k8s-sidecar:1.26.1
     - name: imageRenderer

@@ -1,0 +1,18 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:03:56.315896688Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: external-dns
+  version: 0.1.0
+  appVersion: ""
+images:
+  - name: external-dns
+    image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
+    chart: external-dns
+    digests:
+      - digest: sha256:7d61e5efae6a4f850341734edbe84c27a8997e15c81ce004ef293d938e55cd15
+        arch: linux/amd64
+      - digest: sha256:ef3176c7dc29074eabd95eafa762e665fc1f394438a0ffaaf8959a8afffdb3fb
+        arch: linux/arm64

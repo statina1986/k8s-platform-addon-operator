@@ -1,0 +1,184 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-02T13:39:28.69524599Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: monitoring-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: x509-certificate-exporter
+    image: docker.io/enix/x509-certificate-exporter:3.14.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:333feb146cabeabc000196246cd3b062c85312efb926d205bb014edac2472b59
+        arch: linux/amd64
+      - digest: sha256:b15e9ff44502d7551d89dcccf53da21335a9891a426c315c86cbadfb83e8ece1
+        arch: linux/arm64
+  - name: kafka-lag-exporter
+    image: seglo/kafka-lag-exporter:0.8.2
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:bc6205213421631aa70ab4bea3989874ceebb254cc41a16f50ec1cf9ddcf23c3
+        arch: linux/amd64
+  - name: prometheus-blackbox-exporter
+    image: quay.io/prometheus/blackbox-exporter:v0.25.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:67847e8aaec3c4852a2c7d84d5344e7931521962988c48df00cd980cd1b490a2
+        arch: linux/amd64
+      - digest: sha256:9761529b5ff576deb4e823e298ec5ca70e738086fd7d073a84698332c9ae3554
+        arch: linux/arm64
+  - name: prometheus-consul-exporter
+    image: prom/consul-exporter:v0.5.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:b84635725f7eb56411bab05e8309f2d1bab8b08de330439eff0bb5296e60cd5b
+        arch: linux/amd64
+      - digest: sha256:ae94c1cbbdfc98929084099df165cea999fd6e2ec77903284cbe8ab0180e4947
+        arch: linux/arm64
+  - name: yet-another-cloudwatch-exporter
+    image: ghcr.io/nerdswords/yet-another-cloudwatch-exporter:v0.61.2
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:4d70fbd4c7555d6cc5e6081bb0c742f53245271715442900d04f49b051178ea8
+        arch: linux/amd64
+      - digest: sha256:26956b0c1de0d9bc42948aafa8112f59f2e7514e26b3336990e655dfcc2066d4
+        arch: linux/arm64
+  - name: alertmanager
+    image: quay.io/prometheus/alertmanager:v0.27.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:45c3a586d4332d710bef92b06e90380c0b1f588968c00100d4b5e4e44c40ca5f
+        arch: linux/amd64
+      - digest: sha256:2fbdd4c66d91e740fe3fd462d8f52fc3d305a5b403bab3a58feb62be237a84fb
+        arch: linux/arm64
+  - name: prometheus-operator-webhook
+    image: quay.io/prometheus-operator/admission-webhook:v0.75.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:44c3130002e045eb8002dc326ac41abcd68f2bfb4bf17d1b632cbb26be369bd4
+        arch: linux/amd64
+      - digest: sha256:07811f6c558d753a9ce90dc9390b1b7e6074635f2585f1f69072049562cb011c
+        arch: linux/arm64
+  - name: admissionWebhooks
+    image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:5e6fdb9b2c74ad2576dd835b389d00d18ccfee21b547d1a79efb881009664099
+        arch: linux/amd64
+      - digest: sha256:b9c3b341fdb5203284c2d8b91afdc82c7dd350531a6b229bdc72de045841cc4e
+        arch: linux/arm64
+  - name: prometheus-operator
+    image: quay.io/prometheus-operator/prometheus-operator:v0.75.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:c3548de412969ee0e94ba03d215fe8905eff3228404219f2b68ab31d9bf6cc22
+        arch: linux/amd64
+      - digest: sha256:1ec00847b9c237329270131f70a38fb774f12f2683698ab9f08b94419c09ad37
+        arch: linux/arm64
+  - name: prometheusConfigReloader
+    image: quay.io/prometheus-operator/prometheus-config-reloader:v0.75.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:ae2467cd3be1f925d1b8ebb1171976501c8f3fc629a45eb560811eca4352166c
+        arch: linux/amd64
+      - digest: sha256:fd305cdf617c5a0a72a3c98f78520778da6c0d76abd6b0224584a508c10c5cf3
+        arch: linux/arm64
+  - name: thanos
+    image: quay.io/thanos/thanos:v0.35.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:4aeb627775e857ac554c321ca35fe8ac69f9d87b7cb47859640a77092c1cd04c
+        arch: linux/amd64
+      - digest: sha256:9d25522e3abdab607e28e70fd6838fc336f7be2fbd6f16bc453b1e87f202e26c
+        arch: linux/arm64
+  - name: prometheus
+    image: quay.io/prometheus/prometheus:v2.53.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:b8e8cec4bfdfda676f4334f4f2aab9d8758f51d76ac41fc35224f6ae79b79f54
+        arch: linux/amd64
+      - digest: sha256:d312bc9830421eb57179917f4c6290f31b0c75990d8e2f3beab3febbcb4b24ad
+        arch: linux/arm64
+  - name: thanos-rules
+    image: quay.io/thanos/thanos:v0.35.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:4aeb627775e857ac554c321ca35fe8ac69f9d87b7cb47859640a77092c1cd04c
+        arch: linux/amd64
+      - digest: sha256:9d25522e3abdab607e28e70fd6838fc336f7be2fbd6f16bc453b1e87f202e26c
+        arch: linux/arm64
+  - name: grafana
+    image: docker.io/grafana/grafana-enterprise:11.1.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:c518401e28900d80cc5ec01bb49ca84192be8f89f00cd41dee2909c1d380ccb5
+        arch: linux/amd64
+      - digest: sha256:c0503d416b95b0baecaf841d773e852d06eee8bc9400e4baafa09649d470981e
+        arch: linux/arm64
+  - name: testFramework
+    image: docker.io/bats/bats:v1.4.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:d1049593eee83c2c8f420cdc94e4a540532cb09d681cc6bb098cbc5c4e739aff
+        arch: linux/amd64
+      - digest: sha256:b7778baed271227ad03027fc07443a064eb08c3b43d88fd877c792f4fae86efd
+        arch: linux/arm64
+  - name: downloadDashboardsImage
+    image: docker.io/curlimages/curl:7.85.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:f4821d304c3d1fa06dcea4feb2be79f98ff012a8fa3a51943b94e333f69b0098
+        arch: linux/amd64
+      - digest: sha256:90e5dc1fd0c1ea56b5817ea17c8fc82ccb40eaa0e43a336b19a51e30e5b81c41
+        arch: linux/arm64
+  - name: initChownData
+    image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:73f7dcacb460dad137a58f24668470a5a2e47378838a0190eef0ab532c6e8998
+        arch: linux/amd64
+      - digest: sha256:8e2db05c13c422bfd50dbe48b8e075b8d9d735e7c5a2a54b4aec340b1ad2e6cd
+        arch: linux/arm64
+  - name: grafana-sidecar
+    image: quay.io/kiwigrid/k8s-sidecar:1.26.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:df5943bcaad597c7c58cee8d98b04f15b4e5157c1a2cad818c129b89dde25003
+        arch: linux/amd64
+      - digest: sha256:b2e05106a897584f31a33dbd9f3efd1a5153f2197d2bd3213d94e23a6f32f725
+        arch: linux/arm64
+  - name: imageRenderer
+    image: docker.io/grafana/grafana-image-renderer:latest
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:47e75ed1c8d6704f4ceb5c2e9f27fe5d9f3f8ecdcd8b2b85254e6bddbbcbea30
+        arch: linux/amd64
+      - digest: sha256:ae0725339d463c6a4e9947412fea6da5d20326ebe8a8d63bb7f420d40f0d155f
+        arch: linux/arm64
+  - name: prometheus-node-exporter
+    image: quay.io/prometheus/node-exporter:v1.8.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:e91be75cf2b242f73fc28a609c4a09f5f0409e03c03456e2bfc224b98730d286
+        arch: linux/amd64
+      - digest: sha256:c13575817446993529a7192d00ec3f3480a3216e93a291dad3ed87bc23887152
+        arch: linux/arm64
+  - name: kubeRBACProxy
+    image: quay.io/brancz/kube-rbac-proxy:v0.18.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:62eeb8a0aaa13a8d886de07e5805940cec079ffbaf1d74483e26ad4a84952dce
+        arch: linux/amd64
+      - digest: sha256:6384785247f126850e3ad620af329670612b0a7fbc15f51b4450f4918117e6ce
+        arch: linux/arm64
+  - name: kube-state-metrics
+    image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:af36e32f56c6f2e1f861525e8c438d6913ea236b5480aafe4bc6ab5d4b9d40f1
+        arch: linux/amd64
+      - digest: sha256:0b849c2a1fd2a8e3a8465803c0e0853e063fd89b33ad10847f82152b8f1f7066
+        arch: linux/arm64

@@ -1,0 +1,56 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-02T15:05:17.434696195Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: elasticsearch-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: elasticsearch
+    image: docker.io/library/elasticsearch:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:3e82c0aefb87f2b716d0d09ffc252076b200a05eb1692c795dcb5c3057952477
+        arch: linux/amd64
+      - digest: sha256:5837d1482e31630c7c8f0b309743361c260c50749dd2ca14d96b8950f727993b
+        arch: linux/arm64
+  - name: kibana
+    image: docker.io/library/kibana:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:51aec3d4fa9711e712bcd0af984bfc35a6fe0cb1bcaef2f241b5c5fafbf18e4d
+        arch: linux/amd64
+      - digest: sha256:f4bbb4e68162da8d7b492294e5fbdb8af96fe9149b3f844445b530695327665e
+        arch: linux/arm64
+  - name: eck-operator
+    image: docker.io/elastic/eck-operator:2.2.0
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:9f959870f664f36557b7d7163c0eb3498b6f3111b28e90313a7b04fe75a6f42a
+        arch: linux/amd64
+      - digest: sha256:3ef1438ca50c0bd1434658bb2c0870628139fdf9e58e200e7f554ab368532139
+        arch: linux/arm64
+  - name: filebeat
+    image: docker.io/elastic/filebeat:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:92aa1b3478d4d1edc9428957999770e6f42516f2435816bdda03b992b18478eb
+        arch: linux/amd64
+  - name: logstash
+    image: docker.io/library/logstash:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:a3f0ea205881847c0f72c07dd4e8cc49246f34c6cbefae35c3719f81552d812b
+        arch: linux/amd64
+      - digest: sha256:c2350fb6b74b694615e628764b338a2885ea55d7cfdd4344feb1e5ed41b7f12f
+        arch: linux/arm64
+  - name: loggingsetup
+    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
+        arch: linux/arm64
+      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
+        arch: linux/amd64

@@ -1,0 +1,10 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2024-08-01T11:05:04.648130797Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: mariadb-platform
+  version: 0.0.1
+  appVersion: ""
+images: []

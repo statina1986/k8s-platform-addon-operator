@@ -2,13 +2,13 @@
 istioPlatform:
   global:
     proxy:
-      image: ${values['istioPlatform']['images']['proxyv2']['registry']}/${values['istioPlatform']['images']['proxyv2']['repository']}:${values['istioPlatform']['images']['proxyv2']['tag']}
+      image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.17.6
   base:
     global:
       istioNamespace: platform
   istiod:
     pilot:
-      image: ${values['istioPlatform']['images']['pilot']['registry']}/${values['istioPlatform']['images']['pilot']['repository']}:${values['istioPlatform']['images']['pilot']['tag']}
+      image: ${values['global']['containerRegistryBase']}/istio/pilot:1.17.6
       tolerations:
         - key: "dedicated-nodes"
           value: "platform-masters"

@@ -1,16 +1,14 @@
 vectorPlatform:
   agent:
     image:
-      repository: ${values['vectorPlatform']['images']['agent']['registry']}/${values['vectorPlatform']['images']['agent']['repository']}
-      tag: ${values['vectorPlatform']['images']['agent']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/timberio/vector
     role: "Agent"
     enabled: true
     tolerations:
         - operator: Exists
     hotReload: 
       image:
-        repository: ${values['vectorPlatform']['images']['configmap-reload']['registry']}/${values['vectorPlatform']['images']['configmap-reload']['repository']}
-        tag: ${values['vectorPlatform']['images']['configmap-reload']['tag']}
+        repository: ${values['global']['containerRegistryBase']}/jimmidyson/configmap-reload
     customConfig:
       data_dir: /vector-data-dir
       api:
@@ -51,8 +49,7 @@ vectorPlatform:
           address: vector-platform-aggregator.platform.svc:6000
   fluent-bit-events-collector:
     image:
-      repository: ${values['vectorPlatform']['images']['fluent-bit-events-collector']['registry']}/${values['vectorPlatform']['images']['fluent-bit-events-collector']['repository']}
-      tag: ${values['vectorPlatform']['images']['fluent-bit-events-collector']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/fluent/fluent-bit
     enabled: true
     kind: Deployment
     nameOverride: fluent-bit-events-collector
@@ -76,8 +73,7 @@ vectorPlatform:
               port 9002
   aggregator:
     image:
-      repository: ${values['vectorPlatform']['images']['aggregator']['registry']}/${values['vectorPlatform']['images']['aggregator']['repository']}
-      tag: ${values['vectorPlatform']['images']['aggregator']['tag']}
+      repository: ${values['global']['containerRegistryBase']}/timberio/vector
     enabled: true
     role: "Aggregator"
     % if values['global']['platformMasters']:
@@ -108,8 +104,7 @@ vectorPlatform:
     % endif
     haproxy:
       image:
-        repository: ${values['vectorPlatform']['images']['haproxy']['registry']}/${values['vectorPlatform']['images']['haproxy']['repository']}
-        tag: ${values['vectorPlatform']['images']['haproxy']['tag']}
+        repository: ${values['global']['containerRegistryBase']}/haproxytech/haproxy-alpine
     customConfig:
       api:
         address: 0.0.0.0:8686
