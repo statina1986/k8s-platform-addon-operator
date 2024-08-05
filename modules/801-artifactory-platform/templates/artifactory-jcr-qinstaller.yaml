@@ -1,0 +1,36 @@
+{{- if .Values.artifactoryPlatform.databaseJCR.enabled }}
+
+apiVersion: platform.qvantel.com/v1
+kind: SqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: artifactory-jcr-postgresql-installer
+spec:
+  type: postgresql
+  db-provision-sql: 
+    - "CREATE USER artifactory_jcr WITH PASSWORD '{artifactory-password}'"    
+    - "CREATE DATABASE artifactory_jcr WITH OWNER artifactory_jcr"
+    - "GRANT ALL PRIVILEGES ON DATABASE artifactory_jcr TO artifactory_jcr;"
+  db-username: postgres
+  db-password: "{postgres-password}"
+  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ .Values.artifactoryPlatform.databaseJCR.name }}.platform.svc:5432/postgres"
+  computed-values:
+    - name: "postgres-password"
+      expression: "k8s_get_secret_value('{{ .Values.artifactoryPlatform.databaseJCR.name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "postgres-user"
+      expression: "k8s_get_secret_value('{{ .Values.artifactoryPlatform.databaseJCR.name }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+    - name: "artifactory-user"
+      expression: "'artifactory_jcr'"
+    - name: "artifactory-password"
+      expression: "get_random_string(8)"
+  post-actions:
+    - name: "store username in secrets"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseJCR.name }}-artifactory-jcr', '{{ $.Release.Namespace }}', 'username', 'artifactory_jcr')"
+    - name: "store password in secrets"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseJCR.name }}-artifactory-jcr', '{{ $.Release.Namespace }}', 'password', '{artifactory-password}')"
+    - name: "store url in secrets"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseJCR.name }}-artifactory-jcr', '{{ $.Release.Namespace }}', 'db-url', 'jdbc:postgresql://{{ .Values.artifactoryPlatform.databaseJCR.name }}.platform.svc.cluster.local.:5432/artifactory_jcr')"
+
+{{- end }}
+  

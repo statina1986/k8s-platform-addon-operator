@@ -1,0 +1,9 @@
+dependencies:
+- name: artifactory-oss
+  repository: https://charts.jfrog.io
+  version: 107.90.5
+- name: artifactory-jcr
+  repository: https://charts.jfrog.io
+  version: 107.90.5
+digest: sha256:5b85e6c1c5d86fdf54bf7a3f602bb4f5d43ded9c2ca139f15243b965ce1b64a7
+generated: "2024-08-04T03:27:35.012865845+03:00"

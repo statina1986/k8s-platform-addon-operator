@@ -1,0 +1,13 @@
+
+apiVersion: v2
+name: artifactoryPlatform
+version: 0.0.1
+dependencies:
+  - name: artifactory-oss
+    condition: artifactory-oss.enabled
+    version: 107.90.5
+    repository: https://charts.jfrog.io
+  - name: artifactory-jcr
+    condition: artifactory-jcr.enabled
+    version: 107.90.5
+    repository: https://charts.jfrog.io

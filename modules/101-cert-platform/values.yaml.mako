@@ -14,7 +14,7 @@ certPlatform:
         repository: jetstack/cert-manager-webhook
     startupapicheck:
       image:
-        registry: p${values['global']['containerRegistryBase']}
+        registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-ctl
     acmesolver:
       image:

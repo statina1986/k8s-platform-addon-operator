@@ -1,0 +1,36 @@
+{{- if .Values.artifactoryPlatform.databaseOSS.enabled }}
+
+apiVersion: platform.qvantel.com/v1
+kind: SqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: artifactory-oss-postgresql-installer
+spec:
+  type: postgresql
+  db-provision-sql: 
+    - "CREATE USER artifactory_oss WITH PASSWORD '{artifactory-password}'"    
+    - "CREATE DATABASE artifactory_oss WITH OWNER artifactory_oss"
+    - "GRANT ALL PRIVILEGES ON DATABASE artifactory_oss TO artifactory_oss;"
+  db-username: postgres
+  db-password: "{postgres-password}"
+  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ .Values.artifactoryPlatform.databaseOSS.name }}.platform.svc:5432/postgres"
+  computed-values:
+    - name: "postgres-password"
+      expression: "k8s_get_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "postgres-user"
+      expression: "k8s_get_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+    - name: "artifactory-user"
+      expression: "'artifactory_oss'"
+    - name: "artifactory-password"
+      expression: "get_random_string(8)"
+  post-actions:
+    - name: "store username in secrets"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-artifactory-oss', '{{ $.Release.Namespace }}', 'username', 'artifactory_oss')"
+    - name: "store password in secrets"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-artifactory-oss', '{{ $.Release.Namespace }}', 'password', '{artifactory-password}')"    
+    - name: "store url in secrets"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-artifactory-oss', '{{ $.Release.Namespace }}', 'db-url', 'jdbc:postgresql://{{ .Values.artifactoryPlatform.databaseOSS.name }}.platform.svc.cluster.local.:5432/artifactory_oss')"
+
+{{- end }}
+  

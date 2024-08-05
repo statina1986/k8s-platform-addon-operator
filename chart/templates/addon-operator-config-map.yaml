@@ -16,6 +16,11 @@ data:
   {{- if .Values.modulesConfig.apisixPlatform }}
   apisixPlatform: {{ print "|\n" (.Values.modulesConfig.apisixPlatform | toYaml | indent 4) }}
   {{- end }}
+
+  artifactoryPlatformEnabled: "{{ .Values.modulesConfig.artifactoryPlatformEnabled }}"
+  {{- if .Values.modulesConfig.artifactoryPlatform }}
+  artifactoryPlatform: {{ print "|\n" (.Values.modulesConfig.artifactoryPlatform | toYaml | indent 4) }}
+  {{- end }}
   
   awsPlatformEnabled: "{{ .Values.modulesConfig.awsPlatformEnabled }}"
   {{- if .Values.modulesConfig.awsPlatform }}
