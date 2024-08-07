@@ -215,7 +215,7 @@ monitoringPlatform:
             registry: ${values['global']['containerRegistryBase']}
       thanosImage:
         registry: ${values['global']['containerRegistryBase']}
-    grafana:        
+    grafana:    
       enabled: true
       image:
         registry: ${values['global']['containerRegistryBase']}
@@ -230,8 +230,21 @@ monitoringPlatform:
           registry: ${values['global']['containerRegistryBase']}
           repository: ubi9/ubi-minimal
           tag: 9.4-1194
-      env:
-        GF_INSTALL_PLUGINS: https://artifactory.qvantel.net:443/artifactory/grafana-plugins/yesoreyeram-infinity-datasource-2.5.0.linux_amd64.zip;yesoreyeram-infinity-datasource
+      extraContainerVolumes:
+        - name: grafana-plugins
+          emptyDir: { }
+      extraVolumeMounts:
+        - name: grafana-plugins
+          mountPath: /var/lib/grafana/plugins
+      extraInitContainers: 
+        - name: plugin-sidecar
+          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:0.0.1
+          command: ["/bin/sh", "-c"]
+          args:
+          - unzip /tmp/yesoreyeram-infinity-datasource-2.9.5.linux_amd64.zip -d /var/lib/grafana/plugins
+          volumeMounts:
+            - name: grafana-plugins
+              mountPath: /var/lib/grafana/plugins
       deploymentStrategy:
         type: Recreate
       tolerations:
