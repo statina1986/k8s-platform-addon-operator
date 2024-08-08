@@ -302,6 +302,12 @@ images:
         arch: linux/amd64
       - digest: sha256:0b849c2a1fd2a8e3a8465803c0e0853e063fd89b33ad10847f82152b8f1f7066
         arch: linux/arm64
+  - name: grafana-plugins
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:0.0.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:69b58876573bdcc2421bf4ef8b937e3ad2d4f8c8c6d5eea2b350cb6dbc193401
+        arch: linux/amd64
   - name: metrics-server
     image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/metrics-server/metrics-server:v0.6.4
     chart: metrics-platform
