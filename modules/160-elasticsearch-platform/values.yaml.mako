@@ -206,6 +206,7 @@ elasticsearchPlatform:
 
   logstash:
     replicas: 1
+    maxUnavailable: {}
     logstashConfig: 
       logstash.yml: |
         http.host: 0.0.0.0
