@@ -902,9 +902,9 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: kafka-ui.platform.svc.cluster.local
+              host: kafka-platform-kafka-ui.platform.svc.cluster.local
               port:
-                number: 8080
+                number: 80
       keycloak:
         enabled: false
         gateways:
