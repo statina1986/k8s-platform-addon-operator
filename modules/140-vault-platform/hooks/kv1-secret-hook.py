@@ -44,7 +44,7 @@ kubernetes:
 
                     if eventName == "Deleted":
                         # vault_client.secrets.kv.v1.delete_secret(path)
-                        pass
+                        return
                     else:
                         values = context['object']['spec']['secret']
                         # Merge data from CRD with existing values. Existing values takes priority.

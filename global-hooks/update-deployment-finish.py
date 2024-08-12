@@ -6,6 +6,8 @@ from common.python.hooks import *
 from common.python.k8s import *
 from kubernetes.client.rest import ApiException
 
+from common.python.variables import *
+
 
 class MyHook(Hook):
     def __init__(self):
@@ -23,7 +25,7 @@ afterAll: 999
                     group="qvantel.com",
                     version="v1",
                     name="platform-deployment",
-                    namespace="platform",
+                    namespace=ADDON_OPERATOR_NAMESPACE,
                     plural="deploymentstatuses",
                     update=lambda response: updateCrdStatusCondition(
                         response, "Ready", "True", "DeploymentCompleted")

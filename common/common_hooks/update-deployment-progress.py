@@ -2,6 +2,7 @@
 
 from common.python.hooks import *
 from common.python.k8s import *
+from common.python.variables import *
 
 class UpdateModuleDeploymentProgress(Hook):
     def __init__(self):
@@ -19,7 +20,7 @@ afterHelm: 999
                 update_crd_status(group="qvantel.com",
                                   version="v1",
                                   name="platform-deployment",
-                                  namespace="platform",
+                                  namespace=ADDON_OPERATOR_NAMESPACE,
                                   plural="deploymentstatuses",
                                   update=lambda response: updateCrdStatusCondition(response, moduleName+"-ready", "False", "ModuleDeploymentStarted"))
 
@@ -37,7 +38,7 @@ afterHelm: 999
                 update_crd_status(group="qvantel.com",
                                   version="v1",
                                   name="platform-deployment",
-                                  namespace="platform",
+                                  namespace=ADDON_OPERATOR_NAMESPACE,
                                   plural="deploymentstatuses",
                                   update=setModuleDeployed)
 

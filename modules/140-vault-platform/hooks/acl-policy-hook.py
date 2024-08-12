@@ -41,6 +41,7 @@ kubernetes:
 
                         if eventName == "Deleted":
                             vault_client.sys.delete_policy(name=(policy_name or name))
+                            return
                         else:
                             policy_hcl = context['object']['spec']['policy-hcl']
                             vault_client.sys.create_or_update_policy(

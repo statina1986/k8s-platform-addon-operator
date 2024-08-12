@@ -183,6 +183,7 @@ keycloakPlatform:
             vault.security.banzaicloud.io/vault-role: platform-qvaa-keycloak
           labels:
             app: qvaa-keycloak
+            security.banzaicloud.io/mutate: apply
         spec:
           serviceAccountName: keycloak
           affinity:

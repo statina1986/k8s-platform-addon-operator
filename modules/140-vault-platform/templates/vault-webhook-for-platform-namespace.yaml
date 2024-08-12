@@ -30,9 +30,9 @@ webhooks:
   objectSelector:
     matchExpressions:
     - key: security.banzaicloud.io/mutate
-      operator: NotIn
+      operator: In
       values:
-      - skip
+      - apply
   reinvocationPolicy: Never
   rules:
   - apiGroups:

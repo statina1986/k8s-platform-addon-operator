@@ -32,6 +32,7 @@ kubernetes:
                 if eventName == "Deleted":
                     vault_client.secrets.database.delete_connection(
                         connection_name)
+                    return
                 else:
                     try:
                         plugin_name = event['object']['spec']['plugin-name']

@@ -39,6 +39,14 @@ vaultPlatform:
     podsFailurePolicy: Fail
     # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     secretsFailurePolicy: Fail
+
+    # Limit Vault secrets to Qvantel namespace only by default
+    namespaceSelector:      
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - qvantel
   vault:
     global:
       enabled: true

@@ -37,6 +37,7 @@ kubernetes:
                     vault_client.secrets.database.delete_role(
                         name=role_name,
                         mount_point=mount_point)
+                    return
                 else:
                     try:
                         db_name = event['object']['spec']['db-name']

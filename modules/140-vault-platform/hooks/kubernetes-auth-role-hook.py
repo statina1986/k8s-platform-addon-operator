@@ -36,6 +36,7 @@ kubernetes:
                     vault_client.auth.kubernetes.delete_role(
                         name=name,
                         mount_point=mount_point)
+                    return
                 else:
                     try:
                         bound_service_account_names = event['object']['spec']['bound_service_account_names']
