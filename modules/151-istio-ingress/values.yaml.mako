@@ -267,6 +267,8 @@ istioIngress:
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
     dnsBase: ${values['global']['ingressBaseUrl']}
+    appsNamespace: ${values['global']['appsNamespace']}
+    platformNamespace: ${values['global']['platformNamespace']}
     instances: 
       # Product managed services    
       address-manager:
@@ -276,7 +278,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: addresses.qvantel.svc.cluster.local
+              host: addresses.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8000
       billing:
@@ -288,7 +290,7 @@ istioIngress:
               attempts: 0
             route:
               - destination:
-                  host: rbs-billing-front.qvantel.svc.cluster.local
+                  host: rbs-billing-front.${values['global']['appsNamespace']}.svc.cluster.local.
                   port:
                     number: 3003      
       bssapi:
@@ -298,7 +300,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: bssapi-aggregator.qvantel.svc.cluster.local
+              host: bssapi-aggregator.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
       bssapi-docs:
@@ -308,7 +310,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: bssapi-documentation-service.qvantel.svc.cluster.local
+              host: bssapi-documentation-service.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8010
       bssapi-explorer:
@@ -318,7 +320,7 @@ istioIngress:
         http:
           - route:
             - destination:
-                host: bssapi-explorer.qvantel.svc.cluster.local
+                host: bssapi-explorer.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 8080
       b2b-sales-tool:
@@ -330,7 +332,7 @@ istioIngress:
               attempts: 0
             route:
               - destination:
-                  host: b2b-sales-tool-web.qvantel.svc.cluster.local
+                  host: b2b-sales-tool-web.${values['global']['appsNamespace']}.svc.cluster.local.
                   port:
                     number: 3000
       b2b-flex-ecare:
@@ -340,7 +342,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: b2b-flex-ecare-web.qvantel.svc.cluster.local
+              host: b2b-flex-ecare-web.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 3000
       b2c-flex-ecare:
@@ -350,7 +352,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: b2c-flex-ecare-web.qvantel.svc.cluster.local
+              host: b2c-flex-ecare-web.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 3000
       case-admin:
@@ -365,7 +367,7 @@ istioIngress:
             uri: /caseadmin/sa/
         - route:
           - destination:
-              host: case-admin.qvantel.svc.cluster.local
+              host: case-admin.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8096
       case-management:
@@ -380,7 +382,7 @@ istioIngress:
             uri: /casemanager/sa/
         - route:
           - destination:
-              host: case-manager.qvantel.svc.cluster.local
+              host: case-manager.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8092
       catalog-deployer:
@@ -390,7 +392,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: catalog-qflow-catalog-deployer.qvantel.svc.cluster.local
+              host: catalog-qflow-catalog-deployer.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
       catalog-designer:
@@ -403,12 +405,12 @@ istioIngress:
               prefix: /websockets
           route:
           - destination:
-              host: catalog-qflow-product-catalog-designer-9005.qvantel.svc.cluster.local
+              host: catalog-qflow-product-catalog-designer-9005.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 9005
         - route:
           - destination:
-              host: catalog-qflow-product-catalog-designer-9003.qvantel.svc.cluster.local
+              host: catalog-qflow-product-catalog-designer-9003.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 9003
       cdt:
@@ -418,7 +420,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: cdt-frontend.qvantel.svc.cluster.local
+              host: cdt-frontend.qvantel.svc.${values['global']['appsNamespace']}.local.
               port:
                 number: 3001
       document-manager:
@@ -431,7 +433,7 @@ istioIngress:
               prefix: /api/documents/render-template
           route:
           - destination:
-              host: documents-doc-manager-dynamic-template.qvantel.svc.cluster.local
+              host: documents-doc-manager-dynamic-template.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 5001
         - match:
@@ -439,12 +441,12 @@ istioIngress:
               prefix: /api/documents/
           route:
           - destination:
-              host: documents-doc-manager-backend.qvantel.svc.cluster.local
+              host: documents-doc-manager-backend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
         - route:
           - destination:
-              host: documents-doc-manager-frontend.qvantel.svc.cluster.local
+              host: documents-doc-manager-frontend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 5000
       document-storage:
@@ -457,7 +459,7 @@ istioIngress:
               prefix: /api/
           route:
           - destination:
-              host: documents-doc-storage-backend.qvantel.svc.cluster.local
+              host: documents-doc-storage-backend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
         - match:
@@ -465,7 +467,7 @@ istioIngress:
               prefix: /file/
           route:
           - destination:
-              host: documents-doc-storage-backend.qvantel.svc.cluster.local
+              host: documents-doc-storage-backend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
         - match:
@@ -473,12 +475,12 @@ istioIngress:
               prefix: /external-documents/
           route:
           - destination:
-              host: documents-doc-storage-backend.qvantel.svc.cluster.local
+              host: documents-doc-storage-backend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
         - route:
           - destination:
-              host: documents-doc-storage-frontend.qvantel.svc.cluster.local
+              host: documents-doc-storage-frontend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
       flex-admin:
@@ -488,7 +490,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: flex-admin.qvantel.svc.cluster.local
+              host: flex-admin.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 21080
       flex-app-store:
@@ -498,7 +500,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: flex-app-store.qvantel.svc.cluster.local
+              host: flex-app-store.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 21090
       flex-content-provider:
@@ -510,7 +512,7 @@ istioIngress:
               attempts: 0
             route:
               - destination:
-                  host: flex-content-provider.qvantel.svc.cluster.local
+                  host: flex-content-provider.${values['global']['appsNamespace']}.svc.cluster.local.
                   port:
                     number: 21210
       flex-bpmn-executor:
@@ -522,7 +524,7 @@ istioIngress:
               attempts: 0
             route:
               - destination:
-                  host: flex-bpmn-executor.qvantel.svc.cluster.local
+                  host: flex-bpmn-executor.${values['global']['appsNamespace']}.svc.cluster.local.
                   port:
                     number: 21010
       graphql:
@@ -532,7 +534,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: graphql-graphql-bssapi.qvantel.svc.cluster.local
+              host: graphql-graphql-bssapi.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8180      
       knowledge:
@@ -547,7 +549,7 @@ istioIngress:
             uri: /knowledge_wiki/
         - route:
           - destination:
-              host: knowledge-wiki.qvantel.svc.cluster.local
+              host: knowledge-wiki.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8080
       kpitool:
@@ -557,7 +559,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: kpi-tool-front.qvantel.svc.cluster.local
+              host: kpi-tool-front.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 4458
       mapp:
@@ -572,7 +574,7 @@ istioIngress:
               attempts: 0
             route:
             - destination:
-                host: graphql-graphql-bssapi.qvantel.svc.cluster.local
+                host: graphql-graphql-bssapi.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 8180
           - match:
@@ -582,7 +584,7 @@ istioIngress:
               attempts: 0
             route:
             - destination:
-                host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+                host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 80
           - match:
@@ -592,7 +594,7 @@ istioIngress:
               attempts: 0
             route:
             - destination:
-                host: documents-doc-storage-backend.qvantel.svc.cluster.local
+                host: documents-doc-storage-backend.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 8080
           - match:
@@ -604,7 +606,7 @@ istioIngress:
               uri: /
             route:
             - destination:
-                host: mobile-flowable-api.qvantel.svc.cluster.local
+                host: mobile-flowable-api.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 21090
           - match:
@@ -616,7 +618,7 @@ istioIngress:
               uri: /
             route:
             - destination:
-                host: mobile-flowable-api.qvantel.svc.cluster.local
+                host: mobile-flowable-api.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 80
           - match:
@@ -628,7 +630,7 @@ istioIngress:
               uri: /static
             route:
             - destination:
-                host: mobile-flows-catalog-service.qvantel.svc.cluster.local
+                host: mobile-flows-catalog-service.${values['global']['appsNamespace']}.svc.cluster.local.
                 port:
                   number: 80
       message-manager:
@@ -638,7 +640,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: message-manager-wui.qvantel.svc.cluster.local
+              host: message-manager-wui.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 3003
       mobile-ui-builder:
@@ -650,7 +652,7 @@ istioIngress:
               attempts: 0
             route:
               - destination:
-                  host: mobile-ui-builder.qvantel.svc.cluster.local
+                  host: mobile-ui-builder.${values['global']['appsNamespace']}.svc.cluster.local.
                   port:
                     number: 21080
       mockbank:
@@ -660,7 +662,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: omnichannel-bank.qvantel.svc.cluster.local
+              host: omnichannel-bank.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 3500
       mockoss:
@@ -670,7 +672,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: mockoss.qvantel.svc.cluster.local
+              host: mockoss.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8000
       pcb:
@@ -680,7 +682,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: pcb.qvantel.svc.cluster.local
+              host: pcb.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8095
       pos:
@@ -693,12 +695,12 @@ istioIngress:
               prefix: /images/
           route:
           - destination:
-              host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+              host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - route:
           - destination:
-              host: omnichannel-pos.qvantel.svc.cluster.local
+              host: omnichannel-pos.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 5010
       rbs-ui:
@@ -708,7 +710,7 @@ istioIngress:
         http:
           - route:
               - destination:
-                  host: rbs-ui.qvantel.svc.cluster.local
+                  host: rbs-ui.${values['global']['appsNamespace']}.svc.cluster.local.
                   port:
                     number: 3000
       recharge-manager:
@@ -718,7 +720,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: recharge-manager-frontend.qvantel.svc.cluster.local
+              host: recharge-manager-frontend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 7890
 
@@ -734,7 +736,7 @@ istioIngress:
             uri: /
           route:
           - destination:
-              host: resource-inventory-backend-management.qvantel.svc.cluster.local
+              host: resource-inventory-backend-management.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 23000
         - match:
@@ -744,12 +746,12 @@ istioIngress:
             uri: /
           route:
           - destination:
-              host: rim-wui-frontback.qvantel.svc.cluster.local
+              host: rim-wui-frontback.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 9000
         - route:
           - destination:
-              host: rim-wui-frontend.qvantel.svc.cluster.local
+              host: rim-wui-frontend.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 8081
       sct:
@@ -762,12 +764,12 @@ istioIngress:
               prefix: /images/
           route:
           - destination:
-              host: catalog-qflow-catalog-data.qvantel.svc.cluster.local
+              host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - route:
           - destination:
-              host: sales-and-care-toolbox-web.qvantel.svc.cluster.local
+              host: sales-and-care-toolbox-web.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 9000
       tmf-openapi:
@@ -777,7 +779,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: tmf-openapi.qvantel.svc.cluster.local
+              host: tmf-openapi.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 7777
       tnt:
@@ -787,7 +789,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: tnt-web-tnt-web.qvantel.svc.cluster.local
+              host: tnt-web-tnt-web.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 9001
       zipkin:
@@ -797,7 +799,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: zipkin.qvantel.svc.cluster.local
+              host: zipkin.${values['global']['appsNamespace']}.svc.cluster.local.
               port:
                 number: 9411
       # Platform Managed services    
@@ -811,7 +813,7 @@ istioIngress:
               prefix: /auth/admin/realms/qvantel
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - match:
@@ -819,7 +821,7 @@ istioIngress:
               prefix: /auth/admin/qvantel/
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - match:
@@ -827,7 +829,7 @@ istioIngress:
               prefix: /auth/admin/serverinfo
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - match:
@@ -835,7 +837,7 @@ istioIngress:
               prefix: /auth/realms/qvantel/
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - match:
@@ -843,7 +845,7 @@ istioIngress:
               prefix: /auth/realms/consumers/
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - match:
@@ -851,7 +853,7 @@ istioIngress:
               prefix: /auth/resources/
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
         - match:
@@ -859,7 +861,7 @@ istioIngress:
               prefix: /auth/js/
           route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80                
       consul-ui:
@@ -870,7 +872,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: consul-platform-consul-ui.platform.svc.cluster.local
+              host: consul-platform-consul-ui.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80      
       grafana:
@@ -880,7 +882,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: monitoring-platform-grafana.platform.svc.cluster.local
+              host: monitoring-platform-grafana.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
       prometheus:
@@ -891,7 +893,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: monitoring-platform-kube-p-prometheus.platform.svc.cluster.local
+              host: monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 9090
       kafka-ui:
@@ -902,7 +904,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: kafka-platform-kafka-ui.platform.svc.cluster.local
+              host: kafka-platform-kafka-ui.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
       keycloak:
@@ -912,7 +914,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: qvaa-proxy-80.platform.svc.cluster.local
+              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
       reaper:
@@ -922,7 +924,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: reaper.platform.svc.cluster.local
+              host: reaper.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 8080
       kibana:
@@ -932,7 +934,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: kibana-kb-http.platform.svc.cluster.local
+              host: kibana-kb-http.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 5601
       logsearch:
@@ -943,7 +945,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: logsearch-es-http.platform.svc.cluster.local
+              host: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 9200
       loki-read:
@@ -954,7 +956,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: loki-read.platform.svc.cluster.local
+              host: loki-read.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 3100
       pmm:
@@ -964,7 +966,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: pmm.platform.svc.cluster.local
+              host: pmm.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 80
       vault-ui:
@@ -974,6 +976,6 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: vault-platform.platform.svc.cluster.local
+              host: vault-platform.${values['global']['platformNamespace']}.svc.cluster.local.
               port:
                 number: 8200
