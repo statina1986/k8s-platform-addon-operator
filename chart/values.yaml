@@ -27,6 +27,8 @@ globalConfig:
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"
+  appsNamespace: "qvantel"
+  platformNamespace: "platform"
   kubernetesVersion: "1.25"
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
 modulesConfig:
