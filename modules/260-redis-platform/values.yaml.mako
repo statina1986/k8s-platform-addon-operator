@@ -8,6 +8,9 @@ redisPlatform:
     sysctl:
       image:
         registry: ${values['global']['containerRegistryBase']}
+    kubectl:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
     architecture: replication
     auth:
       enabled: true
