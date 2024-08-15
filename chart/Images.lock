@@ -675,20 +675,20 @@ images:
       - digest: sha256:651ad5f6b510a67e76edd6e43fbdbf09018356cf937997da631150ad6835dff7
         arch: linux/amd64
   - name: kubectl
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/kubectl:1.30.3-debian-12-r4
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
     chart: redis
     digests:
-      - digest: sha256:081ec1d4a5891eb562b962acee9822a389e702d8a898178ff3c9b88b48ff9c6a
+      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
         arch: linux/amd64
-      - digest: sha256:53cc36e901a3a15033fef703f5ff5be717d751e1b00892a30d630f5812889d08
+      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
         arch: linux/arm64
   - name: os-shell
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/os-shell:12-debian-12-r27
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
     chart: redis
     digests:
-      - digest: sha256:cd41a3244e2c742611791d2764213796681a5ea9cf59aa86e27dc41df760cd9c
+      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
         arch: linux/amd64
-      - digest: sha256:9c3550accda74e642da2ca24894d334cf18381f7a354773129b230f5eb756e24
+      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
         arch: linux/arm64
   - name: redis-exporter
     image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/redis-exporter:1.62.0-debian-12-r2
