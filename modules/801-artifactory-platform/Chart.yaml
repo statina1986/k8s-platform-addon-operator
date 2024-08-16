@@ -7,10 +7,10 @@ dependencies:
 annotations:
   images: |
     - name: artifactory-oss
-      image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jfrog/artifactory-oss:7.90.5
+      image: releases-docker.jfrog.io/jfrog/artifactory-oss:7.90.5
     - name: artifactory-jcr
-      image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jfrog/artifactory-jcr:7.90.5
+      image: releases-docker.jfrog.io/jfrog/artifactory-jcr:7.90.5
     - name: router
-      image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jfrog/router:7.118.0
+      image: releases-docker.jfrog.io/jfrog/router:7.118.0
     - name: init-container
-      image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ubi9/ubi-minimal:9.4.949.1716471857
+      image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
