@@ -6,10 +6,10 @@ metadata:
 chart:
   name: k8s-platform-addon-operator
   version: 1.2.0
-  appVersion: 1.2.0
+  appVersion: "1.2.0"
 images:
   - name: aws-ebs-csi-driver
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ebs-csi-driver/aws-ebs-csi-driver:v1.27.0
+    image: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.27.0
     chart: aws-platform
     digests:
       - digest: sha256:e9171cf47f1c281a184dc148fc7ff225b841b11ed343cf33dbcefcda50a9772a
@@ -17,7 +17,7 @@ images:
       - digest: sha256:1cc768a74faacf59c6b9d0d4cba55170875f98dcd01a362b2bb15e0f6fa76d43
         arch: linux/arm64
   - name: external-provisioner
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner:v3.6.3-eks-1-29-3
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v3.6.3-eks-1-29-3
     chart: aws-platform
     digests:
       - digest: sha256:ff6a34bdeff8cfbe4a95a9581f9e7304b755af7042f2905a93c9aef785a9cb70
@@ -25,7 +25,7 @@ images:
       - digest: sha256:5d57536082f57525f25c5d483e4483a82fdb5b3ef76c8855e1f5ad4dec6d1c34
         arch: linux/arm64
   - name: external-attacher
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-attacher:v4.4.3-eks-1-29-3
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher:v4.4.3-eks-1-29-3
     chart: aws-platform
     digests:
       - digest: sha256:e35046e05dbac1db0d891f4dd1ea671aad96215cdd872894dc8b4abab79884c2
@@ -33,7 +33,7 @@ images:
       - digest: sha256:7d5401a48c9ff4781a3248db2e0f2bc7cb80804d6c57d8775c93f44c75d8a865
         arch: linux/arm64
   - name: csi-snapshotter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/external-snapshotter/csi-snapshotter:v6.3.3-eks-1-29-3
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-snapshotter/csi-snapshotter:v6.3.3-eks-1-29-3
     chart: aws-platform
     digests:
       - digest: sha256:f33d95ff3ee4113f9b7c10f10242b1f964d66402300bacd3aab0a8ad088b382c
@@ -41,7 +41,7 @@ images:
       - digest: sha256:daadc6e545669524a37c624d75e99d1499e87081ec0957f42fa66908880b5de9
         arch: linux/arm64
   - name: livenessprobe
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe:v2.11.0-eks-1-29-3
+    image: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.11.0-eks-1-29-3
     chart: aws-platform
     digests:
       - digest: sha256:f050c8d68a06a28d1dbdd6feb79ac132475d71bc3635577e1acb23e3e119d196
@@ -49,7 +49,7 @@ images:
       - digest: sha256:36ce6686436c4a95ea636283fe392b7554c9e334a0f5d8c6a57afc6e4115dd9a
         arch: linux/arm64
   - name: external-resizer
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-resizer:v1.9.3-eks-1-29-3
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-resizer:v1.9.3-eks-1-29-3
     chart: aws-platform
     digests:
       - digest: sha256:4382f9c42eac5ef9bef6087bc37405277a13e5494938dcbe7d03f1b6f9f54a73
@@ -57,7 +57,7 @@ images:
       - digest: sha256:8aa3100bdd7278d6da33fbd53ddf9706b2e65decab4186ed5dd2d75c81815550
         arch: linux/arm64
   - name: node-driver-registrar
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar:v2.9.3-eks-1-29-3
+    image: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.9.3-eks-1-29-3
     chart: aws-platform
     digests:
       - digest: sha256:4f220894ca29cd345634cc3bcb4992598acd41046dc85dd6a82aa42961345d4a
@@ -65,7 +65,7 @@ images:
       - digest: sha256:c6c7e483bf01cf47fbd97854deb440ca9d33fbcb99a858b6ea2fad09490cb46b
         arch: linux/arm64
   - name: volume-modifier-for-k8s
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ebs-csi-driver/volume-modifier-for-k8s:v0.2.1
+    image: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s:v0.2.1
     chart: aws-platform
     digests:
       - digest: sha256:1e80ff8d05cc7b7f105bc13dfac4efd52ac62cab91c14cb7bfbc27d0a77f60b9
@@ -73,7 +73,7 @@ images:
       - digest: sha256:893a2b02edeb61e73f12926baa1a74b401c4ceb1754be0236c2399d6627a428f
         arch: linux/arm64
   - name: aws-efs-csi-driver
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/amazon/aws-efs-csi-driver:v1.7.4
+    image: amazon/aws-efs-csi-driver:v1.7.4
     chart: aws-platform
     digests:
       - digest: sha256:b012f5946e740806d9e008a0388209371e2c07ed6ba335106cebb5f4eb5868af
@@ -81,7 +81,7 @@ images:
       - digest: sha256:b4d5c34d47be03e2449bb708841c6f66e69c3e0e832791ba738e133b6862c65c
         arch: linux/arm64
   - name: aws-load-balancer-controller
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/eks/aws-load-balancer-controller:v2.7.0
+    image: public.ecr.aws/eks/aws-load-balancer-controller:v2.7.0
     chart: aws-platform
     digests:
       - digest: sha256:a819361b6a151d42b0df1d1cd59266f6dca9e45e807010baa03889020ca5a489
@@ -89,7 +89,7 @@ images:
       - digest: sha256:ca29996d4c350ff0492059f7a4d41d90bf2df78cf16bfe59a669a911f68cb7da
         arch: linux/arm64
   - name: cert-manager
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jetstack/cert-manager-controller:v1.12.4
+    image: quay.io/jetstack/cert-manager-controller:v1.12.4
     chart: cert-platform
     digests:
       - digest: sha256:6e1ac1014429fe5d1b3178963662c0a0d26179040ecb097335df888f666e40aa
@@ -97,7 +97,7 @@ images:
       - digest: sha256:fb7dda079c7a706f45097f59c0b7a667c4c6bb0f1d945a1d60bfbc837203c6b5
         arch: linux/arm64
   - name: cainjector
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jetstack/cert-manager-cainjector:v1.12.4
+    image: quay.io/jetstack/cert-manager-cainjector:v1.12.4
     chart: cert-platform
     digests:
       - digest: sha256:7650d32936770ee29e80c9e487e136b9fa96e828cc6ca744555f5f82e634c635
@@ -105,7 +105,7 @@ images:
       - digest: sha256:60a27305e6885ced3f016053bc1d9d6b6f5164bc1239d381f67ae2438d522c82
         arch: linux/arm64
   - name: webhook
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jetstack/cert-manager-webhook:v1.12.4
+    image: quay.io/jetstack/cert-manager-webhook:v1.12.4
     chart: cert-platform
     digests:
       - digest: sha256:5981e72c90a931bc6852d79516ab9f9ba5eb5253d22299222e7d1c69552d9023
@@ -113,7 +113,7 @@ images:
       - digest: sha256:84680c65f894994e6576f492bee39b8151da7c9375ad26fc5ea213ee4bb08d40
         arch: linux/arm64
   - name: acmesolver
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jetstack/cert-manager-acmesolver:v1.12.4
+    image: quay.io/jetstack/cert-manager-acmesolver:v1.12.4
     chart: cert-platform
     digests:
       - digest: sha256:9cef1b382f0d1c1bad156e058fb01cf975cc75631f6ed1891812d08db23be91b
@@ -121,7 +121,7 @@ images:
       - digest: sha256:04dacac0afcad4df95bee9d146664a4bb32d9ece4cb5a5591f8547c453c249b7
         arch: linux/arm64
   - name: cert-manager-ctl
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jetstack/cert-manager-ctl:v1.12.4
+    image: quay.io/jetstack/cert-manager-ctl:v1.12.4
     chart: cert-platform
     digests:
       - digest: sha256:8e63eccde53be988d1bdfc887b7fd21c09e313e20f33ee64c48335e9324e3cc5
@@ -129,7 +129,7 @@ images:
       - digest: sha256:47b93b3bba9d87eef95f44f851283ad79dd0a94e652b51e978ae617776b9da22
         arch: linux/arm64
   - name: x509-certificate-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/enix/x509-certificate-exporter:3.14.0
+    image: docker.io/enix/x509-certificate-exporter:3.14.0
     chart: monitoring-platform
     digests:
       - digest: sha256:333feb146cabeabc000196246cd3b062c85312efb926d205bb014edac2472b59
@@ -137,13 +137,13 @@ images:
       - digest: sha256:b15e9ff44502d7551d89dcccf53da21335a9891a426c315c86cbadfb83e8ece1
         arch: linux/arm64
   - name: kafka-lag-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/seglo/kafka-lag-exporter:0.8.2
+    image: seglo/kafka-lag-exporter:0.8.2
     chart: monitoring-platform
     digests:
       - digest: sha256:bc6205213421631aa70ab4bea3989874ceebb254cc41a16f50ec1cf9ddcf23c3
         arch: linux/amd64
   - name: prometheus-blackbox-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus/blackbox-exporter:v0.25.0
+    image: quay.io/prometheus/blackbox-exporter:v0.25.0
     chart: monitoring-platform
     digests:
       - digest: sha256:67847e8aaec3c4852a2c7d84d5344e7931521962988c48df00cd980cd1b490a2
@@ -151,7 +151,7 @@ images:
       - digest: sha256:9761529b5ff576deb4e823e298ec5ca70e738086fd7d073a84698332c9ae3554
         arch: linux/arm64
   - name: prometheus-consul-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prom/consul-exporter:v0.5.0
+    image: prom/consul-exporter:v0.5.0
     chart: monitoring-platform
     digests:
       - digest: sha256:b84635725f7eb56411bab05e8309f2d1bab8b08de330439eff0bb5296e60cd5b
@@ -159,7 +159,7 @@ images:
       - digest: sha256:ae94c1cbbdfc98929084099df165cea999fd6e2ec77903284cbe8ab0180e4947
         arch: linux/arm64
   - name: yet-another-cloudwatch-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/nerdswords/yet-another-cloudwatch-exporter:v0.61.2
+    image: ghcr.io/nerdswords/yet-another-cloudwatch-exporter:v0.61.2
     chart: monitoring-platform
     digests:
       - digest: sha256:4d70fbd4c7555d6cc5e6081bb0c742f53245271715442900d04f49b051178ea8
@@ -167,7 +167,7 @@ images:
       - digest: sha256:26956b0c1de0d9bc42948aafa8112f59f2e7514e26b3336990e655dfcc2066d4
         arch: linux/arm64
   - name: alertmanager
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus/alertmanager:v0.27.0
+    image: quay.io/prometheus/alertmanager:v0.27.0
     chart: monitoring-platform
     digests:
       - digest: sha256:45c3a586d4332d710bef92b06e90380c0b1f588968c00100d4b5e4e44c40ca5f
@@ -175,7 +175,7 @@ images:
       - digest: sha256:2fbdd4c66d91e740fe3fd462d8f52fc3d305a5b403bab3a58feb62be237a84fb
         arch: linux/arm64
   - name: prometheus-operator-webhook
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus-operator/admission-webhook:v0.75.0
+    image: quay.io/prometheus-operator/admission-webhook:v0.75.0
     chart: monitoring-platform
     digests:
       - digest: sha256:44c3130002e045eb8002dc326ac41abcd68f2bfb4bf17d1b632cbb26be369bd4
@@ -183,7 +183,7 @@ images:
       - digest: sha256:07811f6c558d753a9ce90dc9390b1b7e6074635f2585f1f69072049562cb011c
         arch: linux/arm64
   - name: admissionWebhooks
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
+    image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
     chart: monitoring-platform
     digests:
       - digest: sha256:5e6fdb9b2c74ad2576dd835b389d00d18ccfee21b547d1a79efb881009664099
@@ -191,7 +191,7 @@ images:
       - digest: sha256:b9c3b341fdb5203284c2d8b91afdc82c7dd350531a6b229bdc72de045841cc4e
         arch: linux/arm64
   - name: prometheus-operator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus-operator/prometheus-operator:v0.75.0
+    image: quay.io/prometheus-operator/prometheus-operator:v0.75.0
     chart: monitoring-platform
     digests:
       - digest: sha256:c3548de412969ee0e94ba03d215fe8905eff3228404219f2b68ab31d9bf6cc22
@@ -199,7 +199,7 @@ images:
       - digest: sha256:1ec00847b9c237329270131f70a38fb774f12f2683698ab9f08b94419c09ad37
         arch: linux/arm64
   - name: prometheusConfigReloader
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus-operator/prometheus-config-reloader:v0.75.0
+    image: quay.io/prometheus-operator/prometheus-config-reloader:v0.75.0
     chart: monitoring-platform
     digests:
       - digest: sha256:ae2467cd3be1f925d1b8ebb1171976501c8f3fc629a45eb560811eca4352166c
@@ -207,7 +207,7 @@ images:
       - digest: sha256:fd305cdf617c5a0a72a3c98f78520778da6c0d76abd6b0224584a508c10c5cf3
         arch: linux/arm64
   - name: thanos
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/thanos/thanos:v0.35.1
+    image: quay.io/thanos/thanos:v0.35.1
     chart: monitoring-platform
     digests:
       - digest: sha256:4aeb627775e857ac554c321ca35fe8ac69f9d87b7cb47859640a77092c1cd04c
@@ -215,7 +215,7 @@ images:
       - digest: sha256:9d25522e3abdab607e28e70fd6838fc336f7be2fbd6f16bc453b1e87f202e26c
         arch: linux/arm64
   - name: prometheus
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus/prometheus:v2.53.0
+    image: quay.io/prometheus/prometheus:v2.53.0
     chart: monitoring-platform
     digests:
       - digest: sha256:b8e8cec4bfdfda676f4334f4f2aab9d8758f51d76ac41fc35224f6ae79b79f54
@@ -223,7 +223,7 @@ images:
       - digest: sha256:d312bc9830421eb57179917f4c6290f31b0c75990d8e2f3beab3febbcb4b24ad
         arch: linux/arm64
   - name: thanos-rules
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/thanos/thanos:v0.35.1
+    image: quay.io/thanos/thanos:v0.35.1
     chart: monitoring-platform
     digests:
       - digest: sha256:4aeb627775e857ac554c321ca35fe8ac69f9d87b7cb47859640a77092c1cd04c
@@ -231,7 +231,7 @@ images:
       - digest: sha256:9d25522e3abdab607e28e70fd6838fc336f7be2fbd6f16bc453b1e87f202e26c
         arch: linux/arm64
   - name: grafana
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/grafana/grafana-enterprise:11.1.0
+    image: docker.io/grafana/grafana-enterprise:11.1.0
     chart: monitoring-platform
     digests:
       - digest: sha256:c518401e28900d80cc5ec01bb49ca84192be8f89f00cd41dee2909c1d380ccb5
@@ -239,7 +239,7 @@ images:
       - digest: sha256:c0503d416b95b0baecaf841d773e852d06eee8bc9400e4baafa09649d470981e
         arch: linux/arm64
   - name: testFramework
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bats/bats:v1.4.1
+    image: docker.io/bats/bats:v1.4.1
     chart: monitoring-platform
     digests:
       - digest: sha256:d1049593eee83c2c8f420cdc94e4a540532cb09d681cc6bb098cbc5c4e739aff
@@ -247,7 +247,7 @@ images:
       - digest: sha256:b7778baed271227ad03027fc07443a064eb08c3b43d88fd877c792f4fae86efd
         arch: linux/arm64
   - name: downloadDashboardsImage
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/curlimages/curl:7.85.0
+    image: docker.io/curlimages/curl:7.85.0
     chart: monitoring-platform
     digests:
       - digest: sha256:f4821d304c3d1fa06dcea4feb2be79f98ff012a8fa3a51943b94e333f69b0098
@@ -255,7 +255,7 @@ images:
       - digest: sha256:90e5dc1fd0c1ea56b5817ea17c8fc82ccb40eaa0e43a336b19a51e30e5b81c41
         arch: linux/arm64
   - name: initChownData
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ubi9/ubi-minimal:9.4-1194
+    image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
     chart: monitoring-platform
     digests:
       - digest: sha256:73f7dcacb460dad137a58f24668470a5a2e47378838a0190eef0ab532c6e8998
@@ -263,7 +263,7 @@ images:
       - digest: sha256:8e2db05c13c422bfd50dbe48b8e075b8d9d735e7c5a2a54b4aec340b1ad2e6cd
         arch: linux/arm64
   - name: grafana-sidecar
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kiwigrid/k8s-sidecar:1.26.1
+    image: quay.io/kiwigrid/k8s-sidecar:1.26.1
     chart: monitoring-platform
     digests:
       - digest: sha256:df5943bcaad597c7c58cee8d98b04f15b4e5157c1a2cad818c129b89dde25003
@@ -271,7 +271,7 @@ images:
       - digest: sha256:b2e05106a897584f31a33dbd9f3efd1a5153f2197d2bd3213d94e23a6f32f725
         arch: linux/arm64
   - name: imageRenderer
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/grafana/grafana-image-renderer:latest
+    image: docker.io/grafana/grafana-image-renderer:latest
     chart: monitoring-platform
     digests:
       - digest: sha256:47e75ed1c8d6704f4ceb5c2e9f27fe5d9f3f8ecdcd8b2b85254e6bddbbcbea30
@@ -279,7 +279,7 @@ images:
       - digest: sha256:ae0725339d463c6a4e9947412fea6da5d20326ebe8a8d63bb7f420d40f0d155f
         arch: linux/arm64
   - name: prometheus-node-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prometheus/node-exporter:v1.8.1
+    image: quay.io/prometheus/node-exporter:v1.8.1
     chart: monitoring-platform
     digests:
       - digest: sha256:e91be75cf2b242f73fc28a609c4a09f5f0409e03c03456e2bfc224b98730d286
@@ -287,7 +287,7 @@ images:
       - digest: sha256:c13575817446993529a7192d00ec3f3480a3216e93a291dad3ed87bc23887152
         arch: linux/arm64
   - name: kubeRBACProxy
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/brancz/kube-rbac-proxy:v0.18.0
+    image: quay.io/brancz/kube-rbac-proxy:v0.18.0
     chart: monitoring-platform
     digests:
       - digest: sha256:62eeb8a0aaa13a8d886de07e5805940cec079ffbaf1d74483e26ad4a84952dce
@@ -295,7 +295,7 @@ images:
       - digest: sha256:6384785247f126850e3ad620af329670612b0a7fbc15f51b4450f4918117e6ce
         arch: linux/arm64
   - name: kube-state-metrics
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kube-state-metrics/kube-state-metrics:v2.12.0
+    image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0
     chart: monitoring-platform
     digests:
       - digest: sha256:af36e32f56c6f2e1f861525e8c438d6913ea236b5480aafe4bc6ab5d4b9d40f1
@@ -303,13 +303,13 @@ images:
       - digest: sha256:0b849c2a1fd2a8e3a8465803c0e0853e063fd89b33ad10847f82152b8f1f7066
         arch: linux/arm64
   - name: grafana-plugins
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:0.0.1
+    image: artifactory.qvantel.net/platform/grafana-plugins:0.0.1
     chart: monitoring-platform
     digests:
       - digest: sha256:69b58876573bdcc2421bf4ef8b937e3ad2d4f8c8c6d5eea2b350cb6dbc193401
         arch: linux/amd64
   - name: metrics-server
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/metrics-server/metrics-server:v0.6.4
+    image: registry.k8s.io/metrics-server/metrics-server:v0.6.4
     chart: metrics-platform
     digests:
       - digest: sha256:9f50dd170c1146f1da6a8bdf955c8aad35b4066097d847f94cd0377170d67d21
@@ -317,7 +317,7 @@ images:
       - digest: sha256:401a4b9796f3f80c1f03d22cd7b1a26839f515a36032ef49b682c237e5848ab3
         arch: linux/arm64
   - name: addon-resizer
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/autoscaling/addon-resizer:1.8.19
+    image: registry.k8s.io/autoscaling/addon-resizer:1.8.19
     chart: metrics-platform
     digests:
       - digest: sha256:5be88003cb3e04be0e651e2074a265912c817dd3ffe4033bacc9770216948051
@@ -325,7 +325,7 @@ images:
       - digest: sha256:20a2a63c8750170a53c10bc219ce257dc7a84b8807f012cf08657aa2ecc9aee4
         arch: linux/arm64
   - name: external-dns
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/external-dns:0.13.4-debian-11-r2
+    image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
     chart: external-dns
     digests:
       - digest: sha256:7d61e5efae6a4f850341734edbe84c27a8997e15c81ce004ef293d938e55cd15
@@ -333,7 +333,7 @@ images:
       - digest: sha256:ef3176c7dc29074eabd95eafa762e665fc1f394438a0ffaaf8959a8afffdb3fb
         arch: linux/arm64
   - name: consul
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/consul:1.14.4
+    image: docker.io/hashicorp/consul:1.14.4
     chart: consul-platform
     digests:
       - digest: sha256:6cabd7023b12556ecb63d07df07cfd6d6e35f2d7426f1d0f0ec7c3caf3f193cf
@@ -341,7 +341,7 @@ images:
       - digest: sha256:9b44aac2203797b88aae8d5e1c3dbe9ddc2768257b433039d02e802beca02158
         arch: linux/arm64
   - name: consul-k8s-control-plane
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/consul-k8s-control-plane:1.0.3
+    image: docker.io/hashicorp/consul-k8s-control-plane:1.0.3
     chart: consul-platform
     digests:
       - digest: sha256:149049aea575ea8e779f0f0d379f6068bfe9f06fdbf219a3e105550d2dcc8b05
@@ -349,7 +349,7 @@ images:
       - digest: sha256:e71816c706ee433b4321b100873b4648d9d979d18c8dbfa307ea85512a38858e
         arch: linux/arm64
   - name: consul-dataplane
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/consul-dataplane:1.0.1
+    image: docker.io/hashicorp/consul-dataplane:1.0.1
     chart: consul-platform
     digests:
       - digest: sha256:9815eeb33d341a537dcc1d2bb71e8c941e795b78196eeeccfbd5c925e2bc580c
@@ -357,7 +357,7 @@ images:
       - digest: sha256:e79755cb2c07890eeb087f99a8306a711124ca48e840edb6a95582e6032dbd3e
         arch: linux/amd64
   - name: envoy
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/envoyproxy/envoy:v1.23.1
+    image: docker.io/envoyproxy/envoy:v1.23.1
     chart: consul-platform
     digests:
       - digest: sha256:fa1250b1e2b1d33d83f0a3fb82267eb9af3245fc7b5ae857dbed19e5282d5cec
@@ -365,7 +365,7 @@ images:
       - digest: sha256:2e528bb5731c21a53e9ab93578490306e79eae2ab37a39eb54721bab7cb7c643
         arch: linux/amd64
   - name: vault
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/vault:1.12.1
+    image: docker.io/hashicorp/vault:1.12.1
     chart: vault-platform
     digests:
       - digest: sha256:826e463c73e677aad34c71cae94d54a55985a23488fd28fb45bfca0d0ef58a60
@@ -373,7 +373,7 @@ images:
       - digest: sha256:f6f3a5fd9ddca47e3dbbe25ae49053fc5500e0bbecb35e7ad50de27a5a476cbf
         arch: linux/arm64
   - name: vault-secrets-webhook
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/banzaicloud/vault-secrets-webhook:1.18.0
+    image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
     chart: vault-platform
     digests:
       - digest: sha256:96dfd411856ad7efd84393fcf14aa00432b6d82d73052d9078dc837412532a03
@@ -381,7 +381,7 @@ images:
       - digest: sha256:1483685e0ec0eb25dd86bda57fed98a6e4c9dc6483dd67483c09a8c50e8be7df
         arch: linux/arm64
   - name: platform-tools
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
     chart: vault-platform
     digests:
       - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
@@ -389,7 +389,7 @@ images:
       - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
         arch: linux/amd64
   - name: pilot
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/istio/pilot:1.17.6
+    image: docker.io/istio/pilot:1.17.6
     chart: istio-platform
     digests:
       - digest: sha256:a0c3713d1c44278d53b3b47b3c5e93fe50a640fe0a89fffb3e6566aea33deec5
@@ -397,7 +397,7 @@ images:
       - digest: sha256:a0cf35d40d64397102db0ed79043e4fcd334ea1bec99554c1e86b29a8857a789
         arch: linux/amd64
   - name: proxyv2
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/istio/proxyv2:1.17.6
+    image: docker.io/istio/proxyv2:1.17.6
     chart: istio-platform
     digests:
       - digest: sha256:df918c3411d889b2d7b43622e091d93f5a552b917d2605615c87167c114716b2
@@ -405,7 +405,7 @@ images:
       - digest: sha256:8cd08c20fc169a7333b152cc6434bb7c8b10fefa0c448fac46161a40829b0e25
         arch: linux/amd64
   - name: elasticsearch
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/library/elasticsearch:7.16.2
+    image: docker.io/library/elasticsearch:7.16.2
     chart: elasticsearch-platform
     digests:
       - digest: sha256:3e82c0aefb87f2b716d0d09ffc252076b200a05eb1692c795dcb5c3057952477
@@ -413,7 +413,7 @@ images:
       - digest: sha256:5837d1482e31630c7c8f0b309743361c260c50749dd2ca14d96b8950f727993b
         arch: linux/arm64
   - name: kibana
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/library/kibana:7.16.2
+    image: docker.io/library/kibana:7.16.2
     chart: elasticsearch-platform
     digests:
       - digest: sha256:51aec3d4fa9711e712bcd0af984bfc35a6fe0cb1bcaef2f241b5c5fafbf18e4d
@@ -421,7 +421,7 @@ images:
       - digest: sha256:f4bbb4e68162da8d7b492294e5fbdb8af96fe9149b3f844445b530695327665e
         arch: linux/arm64
   - name: eck-operator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/elastic/eck-operator:2.2.0
+    image: docker.io/elastic/eck-operator:2.2.0
     chart: elasticsearch-platform
     digests:
       - digest: sha256:9f959870f664f36557b7d7163c0eb3498b6f3111b28e90313a7b04fe75a6f42a
@@ -429,13 +429,13 @@ images:
       - digest: sha256:3ef1438ca50c0bd1434658bb2c0870628139fdf9e58e200e7f554ab368532139
         arch: linux/arm64
   - name: filebeat
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/elastic/filebeat:7.16.2
+    image: docker.io/elastic/filebeat:7.16.2
     chart: elasticsearch-platform
     digests:
       - digest: sha256:92aa1b3478d4d1edc9428957999770e6f42516f2435816bdda03b992b18478eb
         arch: linux/amd64
   - name: logstash
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/library/logstash:7.16.2
+    image: docker.io/library/logstash:7.16.2
     chart: elasticsearch-platform
     digests:
       - digest: sha256:a3f0ea205881847c0f72c07dd4e8cc49246f34c6cbefae35c3719f81552d812b
@@ -443,7 +443,7 @@ images:
       - digest: sha256:c2350fb6b74b694615e628764b338a2885ea55d7cfdd4344feb1e5ed41b7f12f
         arch: linux/arm64
   - name: loggingsetup
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
     chart: elasticsearch-platform
     digests:
       - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
@@ -451,7 +451,7 @@ images:
       - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
         arch: linux/amd64
   - name: loki
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/grafana/loki:2.9.2
+    image: docker.io/grafana/loki:2.9.2
     chart: loki-platform
     digests:
       - digest: sha256:5c55214368bfb640d62289c30966e4948cd415c2576231b0aa592671d6b97bf4
@@ -459,7 +459,7 @@ images:
       - digest: sha256:46d99aee7bbabb3bc67708328e87df9265b9c6c2666139b6367f31372545de1e
         arch: linux/arm64
   - name: fluent-bit
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/fluent/fluent-bit:2.2.2
+    image: cr.fluentbit.io/fluent/fluent-bit:2.2.2
     chart: vector-platform
     digests:
       - digest: sha256:b2d953d412cf1fb0b615f0fc3a7c6a019e61459c790c26de7911826c42243316
@@ -467,7 +467,7 @@ images:
       - digest: sha256:e21063671b1627f72c848d3c6c8afc4b06d42bb9f778b18a7084d123db244ac2
         arch: linux/arm64
   - name: configmap-reload
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jimmidyson/configmap-reload:v0.11.1
+    image: ghcr.io/jimmidyson/configmap-reload:v0.11.1
     chart: vector-platform
     digests:
       - digest: sha256:c87229e0eb2c48845f97e62733ab7688b6bf94626f327ff1c042d6d8cd0ec36b
@@ -475,7 +475,7 @@ images:
       - digest: sha256:fb874633ce07dbcdffe2d5ae976b72e866c0c3dfa5088a7ea4c8e73f82d29ecf
         arch: linux/amd64
   - name: vector
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/timberio/vector:0.36.0-distroless-libc
+    image: docker.io/timberio/vector:0.36.0-distroless-libc
     chart: vector-platform
     digests:
       - digest: sha256:7385eb60f4c2ae5add108d661721b729bd8ff83719712270fbf4c9bcb638c7d1
@@ -483,7 +483,7 @@ images:
       - digest: sha256:a147a214e239e73bb6230bf7ae591f316904742820663540e60ec6479320e6c7
         arch: linux/arm64
   - name: haproxy-alpine
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/haproxytech/haproxy-alpine:2.6.12
+    image: docker.io/haproxytech/haproxy-alpine:2.6.12
     chart: vector-platform
     digests:
       - digest: sha256:e758f95e4c6c0440d66e741255a1855a647d966499d66cbbca0a708b93f5ec9f
@@ -491,7 +491,7 @@ images:
       - digest: sha256:23116f314d0eba4bc541660cfcadebbad63c11fe2c86d2ee16efb578c52ba364
         arch: linux/arm64
   - name: cass-operator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-operator:v1.19.1
+    image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.19.1
     chart: kasope-platform
     digests:
       - digest: sha256:b8d15191468b0d7fc4df65872b50008bf8cc20594a46a0898e69e4acb2fc6637
@@ -499,7 +499,7 @@ images:
       - digest: sha256:7c330f15cff09c360fdb0627f920e6161626bf860252ee809cf77e47f9b04498
         arch: linux/arm64
   - name: cassandra
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:3.11.13
+    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
     chart: kasope-platform
     digests:
       - digest: sha256:fe7649ded0c2239ce6bef75c7e29006a68ab7cbaf82bfac1f5f437b058b7eeaa
@@ -507,7 +507,7 @@ images:
       - digest: sha256:feabfe15c8c99e6cf59ad49306e2b6d37a94b770d3be27475bfbbfdf4993b07f
         arch: linux/arm64
   - name: systemLogger
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/system-logger:v1.19.1
+    image: cr.k8ssandra.io/k8ssandra/system-logger:v1.19.1
     chart: kasope-platform
     digests:
       - digest: sha256:3c81b31f57e901185a900f7b1032bce4b1d3f10507bae58ff45a5edb804e180a
@@ -515,7 +515,7 @@ images:
       - digest: sha256:652067f80dd0dc232f1750c2362166ba6e7c511c6ac6483441665f82497c4be2
         arch: linux/arm64
   - name: configBuilder
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/datastax/cass-config-builder:1.0-ubi8
+    image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
     chart: kasope-platform
     digests:
       - digest: sha256:9ea0fe726ece3cda64876ed389801ad0bc659a94dfc79a6cad080f20fc8d13b3
@@ -523,7 +523,7 @@ images:
       - digest: sha256:699ddf003d731c1ba93e3e2f6a46d1d1f354b71b4b8db861a6f20c46d8f5e191
         arch: linux/arm64
   - name: per-node-config
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
     chart: kasope-platform
     digests:
       - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
@@ -531,7 +531,7 @@ images:
       - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
         arch: linux/amd64
   - name: k8ssandraClient
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/k8ssandra-client:v0.2.2
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-client:v0.2.2
     chart: kasope-platform
     digests:
       - digest: sha256:df0474a565dfe7b98848534dfef485b6ccd0a8a5e72dc0c622490ce12fec0396
@@ -539,7 +539,7 @@ images:
       - digest: sha256:f258101bf0ac7691e1705710b16121cc4575c7e7a48aed0eee43911d72ce8483
         arch: linux/arm64
   - name: k8ssandra-tools
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
+    image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
     chart: kasope-platform
     digests:
       - digest: sha256:4db559c3b2f139fda7cd63c774048d20d9ec9c205f34226eacbe70d203a2cbc2
@@ -547,7 +547,7 @@ images:
       - digest: sha256:82fa0c265f3e21613123e9bb52e16146be6f59aa66494ed6c3e964cea5a53cd1
         arch: linux/arm64
   - name: k8ssandra-operator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/k8ssandra-operator:v1.15.0
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.15.0
     chart: kasope-platform
     digests:
       - digest: sha256:d0a7760f2b68017b41c25bf00c108357291c5941a9a784a1ed4bfb87ee9a8d46
@@ -555,7 +555,7 @@ images:
       - digest: sha256:d2f6f249aca74e0c87973de08be9fd6de4a71613bf266a7b17e19082c43fc2d3
         arch: linux/arm64
   - name: reaper
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/thelastpickle/cassandra-reaper:3.5.0
+    image: thelastpickle/cassandra-reaper:3.5.0
     chart: kasope-platform
     digests:
       - digest: sha256:01bf9c6d0107b029c0de3a7c85db3b566a162d0873852118e4670d9f0dcca106
@@ -563,13 +563,13 @@ images:
       - digest: sha256:39aa611226150a98386f4efc40a1a2a628cc09a637153ff18f58a8ef8b57c311
         arch: linux/arm64
   - name: medusa
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/qmedusa/medusa:0.18.0_2_MMLYLE_bc4ab56a6
+    image: artifactory.qvantel.net/qmedusa/medusa:0.18.0_2_MMLYLE_bc4ab56a6
     chart: kasope-platform
     digests:
       - digest: sha256:9d8f02c24f3936ef550ce558a3e0825e2412dcead983f7ff91fc0695d30b7026
         arch: linux/amd64
   - name: operator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/strimzi/operator:0.37.0
+    image: quay.io/strimzi/operator:0.37.0
     chart: kafka-platform
     digests:
       - digest: sha256:202cb9d2cd20602b622cd09e5d522b650e6e327c9c54dfa8f3c2e559949aa477
@@ -577,7 +577,7 @@ images:
       - digest: sha256:205c994d398ef948960e3253ce5fae3ccac9771745c389fbd6bd9cd422b8bfa3
         arch: linux/arm64
   - name: kafka
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/strimzi/kafka:0.37.0-kafka-3.5.1
+    image: quay.io/strimzi/kafka:0.37.0-kafka-3.5.1
     chart: kafka-platform
     digests:
       - digest: sha256:17fffbb06201b9ab73c431eaa4e506ceaf855e8c29b844131cbfdf8067426234
@@ -585,7 +585,7 @@ images:
       - digest: sha256:ed433b82aa76529a6f8245ae967c8bddbd6c7da012474980e8e9845baeb9e99d
         arch: linux/arm64
   - name: kafka-bridge
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/strimzi/kafka-bridge:0.26.1
+    image: quay.io/strimzi/kafka-bridge:0.26.1
     chart: kafka-platform
     digests:
       - digest: sha256:0c8077ff5983ffdb4786aae89cd4a76007e317e84be88ecd55e64600726ccdf1
@@ -593,7 +593,7 @@ images:
       - digest: sha256:e93ff46ea3546fde10c0d3cf8d59bbbd397a70269392e7532f09239c7016882d
         arch: linux/arm64
   - name: kaniko-executor
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/strimzi/kaniko-executor:0.37.0
+    image: quay.io/strimzi/kaniko-executor:0.37.0
     chart: kafka-platform
     digests:
       - digest: sha256:71d30172bd94d6c39fb0f9ea4cb42b05bb428fd81b031e17f28828be2876cd08
@@ -601,7 +601,7 @@ images:
       - digest: sha256:a3348eb562f60b3afec727b266013bc43cbf8f9f1876ab6c089b5011760f6a4c
         arch: linux/arm64
   - name: maven-builder
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/strimzi/maven-builder:0.37.0
+    image: quay.io/strimzi/maven-builder:0.37.0
     chart: kafka-platform
     digests:
       - digest: sha256:408e0d7498ab8a35b647c249344a32b69ce9df857587117770b5454019b21013
@@ -609,7 +609,7 @@ images:
       - digest: sha256:e98dfbe7bbf8d99c3ce649abe249fd1e1b5f2e5f91c77bf0af551ff2f71dd358
         arch: linux/arm64
   - name: kafka-uid
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kafbat/kafka-ui:v1.0.0
+    image: ghcr.io/kafbat/kafka-ui:v1.0.0
     chart: kafka-platform
     digests:
       - digest: sha256:7272cbc8696669cce6294883d692af17baffa5ba3e96eb9cbff79842dbaac0c5
@@ -617,7 +617,7 @@ images:
       - digest: sha256:371775cacaa32fe2e2e20a1000c918f1c135d05fc5953fda93ceed173cbb56c7
         arch: linux/arm64
   - name: q-cnpg-timescale-15
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/cloudnative-pg/q-cnpg-timescale:15.7-1_6_master_a9bf1686f
+    image: artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.7-1_6_master_a9bf1686f
     chart: cnpg-postgres-platform
     digests:
       - digest: sha256:993eb4145adbe93abaf08d6b9475646315d314ec351266b8d0155dc6a3e31aa8
@@ -625,7 +625,7 @@ images:
       - digest: sha256:bbbc656d96ea3bfbe6f37556c1d56f6150ab7b3d30ca901ea2f1ffdfec585b49
         arch: linux/amd64
   - name: q-cnpg-timescale-16
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/cloudnative-pg/q-cnpg-timescale:16.3-1_6_master_a9bf1686f
+    image: artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.3-1_6_master_a9bf1686f
     chart: cnpg-postgres-platform
     digests:
       - digest: sha256:f0197457c4480c57f979510d661a25d14a6a1a87566ed83a858079af9329bec3
@@ -633,7 +633,7 @@ images:
       - digest: sha256:c14b7735f6680b00311f6e6af517974f4c95a8835204765a4176bb8a90881703
         arch: linux/amd64
   - name: cloudnative-pg
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/cloudnative-pg/cloudnative-pg:1.22.2
+    image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2
     chart: cnpg-postgres-platform
     digests:
       - digest: sha256:deb8a9cbd7d5c9f945ba88aab278191714a103efa8a124c4f22829ed2817c0cb
@@ -641,7 +641,7 @@ images:
       - digest: sha256:9f253f89790df21e1781900a88bb845476a96741a366e4d423add3caf9138484
         arch: linux/arm64
   - name: mariadb-operator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/mariadb-operator/mariadb-operator:v0.0.29
+    image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.29
     chart: mariadb-operator-platform
     digests:
       - digest: sha256:2409fe9768162a45dde50a617efb8b7b8d85b6f91f661b20be5a9ed44de8893a
@@ -649,7 +649,7 @@ images:
       - digest: sha256:99b134079b1aab95d4fecaab1952a1b6772fa0991fb53c6aebd2a245dbf54228
         arch: linux/amd64
   - name: mariadb
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/library/mariadb:10.4.33
+    image: docker.io/mariadb:10.4.33
     chart: mariadb-operator-platform
     digests:
       - digest: sha256:f445c1568634f2c2fbeda5d38e0a1a6c2e7730484191ba8630f9ce56fc6fb2b7
@@ -657,7 +657,7 @@ images:
       - digest: sha256:4979110eaf63b427c8a5b7bc10dae2e49685c3835518a6adfde68ed8bf213dbd
         arch: linux/arm64
   - name: maxscale
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/mariadb/maxscale:23.08.5
+    image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
     chart: mariadb-operator-platform
     digests:
       - digest: sha256:5081aa9457a9d217c61fd87e162c05a60ca38db770df9890bf66460346b57a87
@@ -665,7 +665,7 @@ images:
       - digest: sha256:674ff05fb75d15c6a045e23db17ab9402b14c350ba2d6abfaab4db2a7cd5aba4
         arch: linux/arm64
   - name: mariadb-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/prom/mysqld-exporter:v0.15.1
+    image: prom/mysqld-exporter:v0.15.1
     chart: mariadb-operator-platform
     digests:
       - digest: sha256:cc6b391a57862699c0cc2fafbc7b53aec66f503291b3258e44d3fd1d61487fc1
@@ -673,7 +673,7 @@ images:
       - digest: sha256:40a1de57cc39e13c4dd2f1f5fe13f1bc78a93d6196442a58f7be2f28f5bcec98
         arch: linux/arm64
   - name: maxscale-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+    image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
     chart: mariadb-operator-platform
     digests:
       - digest: sha256:e1e2e157c824b3838c633b35272916915b9ba145755c80667dff7edb015c13a7
@@ -681,7 +681,7 @@ images:
       - digest: sha256:651ad5f6b510a67e76edd6e43fbdbf09018356cf937997da631150ad6835dff7
         arch: linux/amd64
   - name: os-shell
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/os-shell:11-debian-11-r60
+    image: docker.io/bitnami/os-shell:11-debian-11-r60
     chart: redis
     digests:
       - digest: sha256:48bb9fe47c12cb9f65013f0b7cbf46f62db0576e2931457fdee98025a1a721f3
@@ -689,7 +689,7 @@ images:
       - digest: sha256:3ee956b2e0005a3823850b771cc28235ff5324c2fd27c7ef2566a9e6b76798ab
         arch: linux/arm64
   - name: redis-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/redis-exporter:1.54.0-debian-11-r0
+    image: docker.io/bitnami/redis-exporter:1.54.0-debian-11-r0
     chart: redis
     digests:
       - digest: sha256:a3fea8b081d7c638ce95b2da2a20dc19c72cdf7a8a0c965d92db9bd60750417c
@@ -697,7 +697,7 @@ images:
       - digest: sha256:033a32c6a08601f89cacd25854d8eba6b57c1253cf94a4d75295cc6ef04a8260
         arch: linux/arm64
   - name: redis-sentinel
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/redis-sentinel:7.2.1-debian-11-r0
+    image: docker.io/bitnami/redis-sentinel:7.2.1-debian-11-r0
     chart: redis
     digests:
       - digest: sha256:c072d851101aedd779693e367fc8408fca78a66b9f85222372c73c86bd7fd32c
@@ -705,7 +705,7 @@ images:
       - digest: sha256:dfbedb90c12e6bb849f4f05f359855ad42424235dedb0b2fc2a3ef85f8c2215f
         arch: linux/arm64
   - name: redis
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/redis:7.2.1-debian-11-r0
+    image: docker.io/bitnami/redis:7.2.1-debian-11-r0
     chart: redis
     digests:
       - digest: sha256:564f2cdb7d85185e374a963e7a683d82406175d69b28035fc7cc6c767649bac2
@@ -713,19 +713,19 @@ images:
       - digest: sha256:1a21e616b6c925a4928b65442392bbf8103fec713416145ebb7ece943889f6fb
         arch: linux/arm64
   - name: rabbitmq
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/rabbitmq:3.11.5-debian-11-r2
+    image: platform-artifactory.qvantel.net/platform-1-2-0/bitnami/rabbitmq:3.11.5-debian-11-r2
     chart: rabbitmq-platform
     digests:
       - digest: sha256:dde88ccc266cc42c872927a7c6ac7acc882a33a5cd797700b15697e777f4eb1d
         arch: linux/amd64
   - name: bitnami-shell
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/bitnami-shell:11-debian-11-r62
+    image: platform-artifactory.qvantel.net/platform-1-2-0/bitnami/bitnami-shell:11-debian-11-r62
     chart: rabbitmq-platform
     digests:
       - digest: sha256:3e1b1d8e0cded15ee5547a78a75c9a5b10d949ef51e889d89c1f550464cfb84f
         arch: linux/amd64
   - name: kubectl
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/kubectl:1.30.2-debian-12-r0
+    image: docker.io/bitnami/kubectl:1.30.2-debian-12-r0
     chart: mongodb
     digests:
       - digest: sha256:3ec696e5ce1b79f78eb0eac1fed4ef20fa6584662cdf3c7ad933b0b03b9ce3f6
@@ -733,13 +733,13 @@ images:
       - digest: sha256:cde63381127786f694d6ceb39168593f8dd7e0564f2534f1ca4e7d1aaa70d3db
         arch: linux/arm64
   - name: mongodb
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/mongodb:7.0.12-debian-12-r0
+    image: docker.io/bitnami/mongodb:7.0.12-debian-12-r0
     chart: mongodb
     digests:
       - digest: sha256:22ce4d823b0938340885de5cc39d1f93617a7686e60363c33c78e179d42fe404
         arch: linux/amd64
   - name: mongodb-exporter
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/mongodb-exporter:0.40.0-debian-12-r30
+    image: docker.io/bitnami/mongodb-exporter:0.40.0-debian-12-r30
     chart: mongodb
     digests:
       - digest: sha256:4111a9be9fea7ee34a7f16bae3a07fbaaa903ee652551dcf94051c3823bf941c
@@ -747,7 +747,7 @@ images:
       - digest: sha256:ae3f85d4cc555a5f214cedf00fe4ebdca469f7669b1e71fb75cd7098ba27679c
         arch: linux/arm64
   - name: nginx
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/nginx:1.27.0-debian-12-r2
+    image: docker.io/bitnami/nginx:1.27.0-debian-12-r2
     chart: mongodb
     digests:
       - digest: sha256:f228971a40e1c5de326428123cd044650b02f19baa8aac1c28f6e29fe43ecc81
@@ -755,7 +755,7 @@ images:
       - digest: sha256:21f6a568d4f30701576ea8c9ed89d77c5ecf6443746232555f594b0825a87c8c
         arch: linux/arm64
   - name: os-shell
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bitnami/os-shell:12-debian-12-r23
+    image: docker.io/bitnami/os-shell:12-debian-12-r23
     chart: mongodb
     digests:
       - digest: sha256:1c6aa5c51d48458b8cb00c59efb89bb9dbbb38906aeac24e57e719ab61e33e59
@@ -763,7 +763,7 @@ images:
       - digest: sha256:6b87753e9928bbe6f85fba5d8eba67f408de53bb03082953342ff9a2eec9890c
         arch: linux/arm64
   - name: ingress-controller
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/pomerium/ingress-controller:sha-54e3ddc
+    image: pomerium/ingress-controller:sha-54e3ddc
     chart: pomerium-platform
     digests:
       - digest: sha256:c276a2ea6f36a866ec997b3ee35e16494f91d2fe21f6596ff9b06909beed1ebb
@@ -771,7 +771,7 @@ images:
       - digest: sha256:f6eb7d7435773d1ce9dd1b2af9a56a47428cff82cd01b3bf42e26736c6248cbb
         arch: linux/arm64
   - name: pomerium
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/pomerium/pomerium:v0.22.1
+    image: pomerium/pomerium:v0.22.1
     chart: pomerium-platform
     digests:
       - digest: sha256:721e2c7ee9b72ad01afdebc9bcf67b06abb43b7306748448292f7cbc79a22296
@@ -779,7 +779,7 @@ images:
       - digest: sha256:7f73e9b5a70b80f8727c2a1e9ded2f69b6e7a719d6ce9b218c7c8dc0a4353f2a
         arch: linux/arm64
   - name: agent-static
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/agent/static:1.276.0
+    image: platform-artifactory.qvantel.net/agent/static:1.276.0
     chart: instana-platform
     digests:
       - digest: sha256:8dc3acc9430cec29c5dd3d906cbe87e9ea3033768f3d5e0596590781c6f2a07b
@@ -787,7 +787,7 @@ images:
       - digest: sha256:931153aad20d7ec99b349536bbe6d4e2240cbcd1ef76d4c1bf173aa1e7d6afda
         arch: linux/arm64
   - name: leader-elector
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/instana/leader-elector:0.5.19
+    image: platform-artifactory.qvantel.net/instana/leader-elector:0.5.19
     chart: instana-platform
     digests:
       - digest: sha256:0e849dd3903cced2d19e73390a5ffc70b0aa35d1f3b2e4b567e64850bcdf70d5
@@ -795,21 +795,53 @@ images:
       - digest: sha256:1af592691975d10be8f30c8bf9030670e5f4ad4cd1b0ed83ee5ff7c09ac74466
         arch: linux/arm64
   - name: k8sensor
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/instana/k8sensor:Q-1.0.0
+    image: platform-artifactory.qvantel.net/instana/k8sensor:Q-1.0.0
     chart: instana-platform
     digests:
       - digest: sha256:6ddf769fe58dd8071107444cbf0db2800d3ef74538b363d64bcdc5df0cb18b3a
         arch: linux/amd64
       - digest: sha256:f9d72e3c61137aec24b4805365493cadf46b5a2ac3215a902b7baab0b3493048
         arch: linux/arm64
+  - name: artifactory-oss
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jfrog/artifactory-oss:7.90.5
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:fb0b84cea8e80220b442f0eb70550d789363b898a769958630dc91ec1388ad51
+        arch: linux/arm64
+      - digest: sha256:1c837eb4005621ecd48518b8383e2b94546bdf11cee29a4fa6dd2753aa01fe7e
+        arch: linux/amd64
+  - name: artifactory-jcr
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jfrog/artifactory-jcr:7.90.5
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:dc7b9c9de235de285039aa98beec08f273c6559ce8cd5532ce0652b13589d259
+        arch: linux/arm64
+      - digest: sha256:068fb8dcc122682f256db81e356367d63732af93995579688aaa9952e24a214c
+        arch: linux/amd64
+  - name: router
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/jfrog/router:7.118.0
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:7c2cce12365c29e58289e6399a82104dd3dc6286599f5f3d503bcc8266e90f95
+        arch: linux/arm64
+      - digest: sha256:987138a8db4e90b6c2cf666596795fbb322eceb2ba3da4b1db8862c2d179bd26
+        arch: linux/amd64
+  - name: init-container
+    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ubi9/ubi-minimal:9.4-1194
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:73f7dcacb460dad137a58f24668470a5a2e47378838a0190eef0ab532c6e8998
+        arch: linux/amd64
+      - digest: sha256:8e2db05c13c422bfd50dbe48b8e075b8d9d735e7c5a2a54b4aec340b1ad2e6cd
+        arch: linux/arm64
   - name: keycloak
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.1.20240605060726_master_0df9b134
+    image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.1.20240605060726_master_0df9b134
     chart: keycloak-platform
     digests:
       - digest: sha256:af6107027ec7bf4192cf00be24a8b725485a18200eeaa9df10fa4ea5e0ba9cd8
         arch: linux/amd64
   - name: keycloak-configurator
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/qinstaller-keycloak-configurator:1.15.0.20240322093657_develop_c05757fc
+    image: artifactory.qvantel.net/qinstaller-keycloak-configurator:1.15.0.20240322093657_develop_c05757fc
     chart: keycloak-platform
     digests:
       - digest: sha256:d5a9f23dff73b00ea8603da4e2b9f07b2d873f1ca12d3a488414e6cd61689c3d
