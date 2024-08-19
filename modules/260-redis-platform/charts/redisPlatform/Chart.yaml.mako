@@ -6,8 +6,8 @@ dependencies:
     % if values['redisPlatform'][key]:
   - name: redis
     alias: ${key}    
-    version: 18.1.2
-    repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+    version: 19.6.4
+    repository: https://charts.bitnami.com/bitnami
     % endif  
   % endfor
   

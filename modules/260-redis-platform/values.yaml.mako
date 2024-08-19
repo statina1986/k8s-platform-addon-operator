@@ -8,6 +8,13 @@ redisPlatform:
     sysctl:
       image:
         registry: ${values['global']['containerRegistryBase']}
+        repository: platform/platform-k8s-tools-minimal
+        tag: 1.2.0_4_20c54b53f
+    kubectl:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: platform/platform-k8s-tools-minimal
+        tag: 1.2.0_4_20c54b53f
     architecture: replication
     auth:
       enabled: true
