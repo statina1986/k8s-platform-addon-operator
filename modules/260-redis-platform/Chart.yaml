@@ -4,3 +4,7 @@ version: 0.0.1
 dependencies:
   - name: redisPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: kubectl
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5

@@ -9,12 +9,12 @@ redisPlatform:
       image:
         registry: ${values['global']['containerRegistryBase']}
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_4_20c54b53f
+        tag: 1.2.0_10_5193dbce5
     kubectl:
       image:
         registry: ${values['global']['containerRegistryBase']}
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_4_20c54b53f
+        tag: 1.2.0_10_5193dbce5
     architecture: replication
     auth:
       enabled: true

@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-02T15:05:12.663130952Z"
+  generatedAt: "2024-08-20T15:29:24.282912671Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: vault-platform
@@ -24,11 +24,19 @@ images:
         arch: linux/amd64
       - digest: sha256:1483685e0ec0eb25dd86bda57fed98a6e4c9dc6483dd67483c09a8c50e8be7df
         arch: linux/arm64
-  - name: platform-tools
-    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+  - name: vault-env
+    image: ghcr.io/banzaicloud/vault-env:1.18.0
     chart: vault-platform
     digests:
-      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
+      - digest: sha256:55bb549526a1a4dfa7c42f0dc8ed32ee6198e7f4564642e3a2e29883b71e6bd5
+        arch: linux/amd64
+      - digest: sha256:782bb1ed1f2fec26e8ac1da615c0d2607db49e6bec5648546a4fe6f070f43ef9
         arch: linux/arm64
-      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
+  - name: platform-tools
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    chart: vault-platform
+    digests:
+      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
+        arch: linux/arm64
+      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
         arch: linux/amd64

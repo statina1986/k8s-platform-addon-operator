@@ -10,5 +10,7 @@ annotations:
       image: docker.io/hashicorp/vault:1.12.1
     - name: vault-secrets-webhook
       image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
+    - name: vault-env
+      image: ghcr.io/banzaicloud/vault-env:1.18.0
     - name: platform-tools
-      image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5

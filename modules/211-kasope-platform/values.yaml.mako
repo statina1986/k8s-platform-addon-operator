@@ -90,7 +90,7 @@ kasopePlatform:
               % else:
               size: 3
               % endif              
-              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
               racks:
                 - name: default
                   % if values['global']['platformMasters']:

@@ -1,5 +1,5 @@
 elasticsearchPlatform:
-  loggingSetupimage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+  loggingSetupimage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
   eck-operator:
     # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false

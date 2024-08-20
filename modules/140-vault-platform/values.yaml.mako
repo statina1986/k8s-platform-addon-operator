@@ -10,6 +10,8 @@ vaultPlatform:
   vault-secrets-webhook:
     image:
       repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-secrets-webhook
+    vaultEnv:
+      repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-env
     certificate:
       useCertManager: true
       generate: false
@@ -115,7 +117,7 @@ vaultPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-          image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+          image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /init-script/

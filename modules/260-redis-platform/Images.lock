@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-15T11:30:39.584141099Z"
+  generatedAt: "2024-08-20T15:29:46.224113296Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: redis-platform
@@ -9,21 +9,13 @@ chart:
   appVersion: ""
 images:
   - name: kubectl
-    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
-    chart: redis
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    chart: redis-platform
     digests:
-      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
-        arch: linux/amd64
-      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
+      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
         arch: linux/arm64
-  - name: os-shell
-    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
-    chart: redis
-    digests:
-      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
+      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
         arch: linux/amd64
-      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
-        arch: linux/arm64
   - name: redis
     image: docker.io/bitnami/redis:7.2.5-debian-12-r4
     chart: redis
@@ -48,4 +40,3 @@ images:
         arch: linux/amd64
       - digest: sha256:8d33769466e10e0ffc86f05fd73ae567aa86d8e0a2b29884f5f8231f70a88bf0
         arch: linux/arm64
-

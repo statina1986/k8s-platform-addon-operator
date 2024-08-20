@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-02T15:05:23.535496821Z"
+  generatedAt: "2024-08-20T15:29:35.787031695Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kasope-platform
@@ -41,12 +41,12 @@ images:
       - digest: sha256:699ddf003d731c1ba93e3e2f6a46d1d1f354b71b4b8db861a6f20c46d8f5e191
         arch: linux/arm64
   - name: per-node-config
-    image: artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_4_20c54b53f
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
     chart: kasope-platform
     digests:
-      - digest: sha256:8dea80119987d0abcf63558d8aedecd97192b5312f8c1649e86d88832ce8962c
+      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
         arch: linux/arm64
-      - digest: sha256:e1f5c92e19a1c7b074984f3f36ae3bcd5b596c831cbafecf8e5befc8bece6ac7
+      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
         arch: linux/amd64
   - name: k8ssandraClient
     image: cr.k8ssandra.io/k8ssandra/k8ssandra-client:v0.2.2
