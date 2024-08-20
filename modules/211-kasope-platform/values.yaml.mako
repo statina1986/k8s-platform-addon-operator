@@ -2,7 +2,6 @@ kasopePlatform:
   k8ssandra-operator:
     image:
       registry: ${values['global']['containerRegistryBase']}
-      
     client:
       image:
         registry: ${values['global']['containerRegistryBase']}
