@@ -35,7 +35,7 @@ keycloakPlatform:
   database:
     name: qvt-postgredb
   configurator:
-    image: ${values['global']['containerRegistryBase']}/qinstaller-keycloak-configurator:1.15.0.20240322093657_develop_c05757fc
+    image: ${values['global']['containerRegistryBase']}/qinstaller-keycloak-configurator:1.16.1.20240815092643_develop_67cdcc04
     spec: |
       backoffLimit: 5
       template:
@@ -141,7 +141,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     replicaCount: 1
-    image: ${values['global']['containerRegistryBase']}/library/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.1.20240605060726_master_0df9b134
+    image: ${values['global']['containerRegistryBase']}/library/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.4.20240819100502_hotfix-24_d5c69cea
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
@@ -243,7 +243,7 @@ keycloakPlatform:
                 - name: CheckType
                   value: liveness
                 path: /auth/health
-                port: 80
+                port: 8080
                 scheme: HTTP
               initialDelaySeconds: 300
               periodSeconds: 60
@@ -251,7 +251,7 @@ keycloakPlatform:
               timeoutSeconds: 20
             name: qvaa-keycloak
             ports:
-            - containerPort: 80
+            - containerPort: 8080
               protocol: TCP
             readinessProbe:
               failureThreshold: 3
@@ -260,7 +260,7 @@ keycloakPlatform:
                 - name: CheckType
                   value: readiness
                 path: /auth/health
-                port: 80
+                port: 8080
                 scheme: HTTP
               initialDelaySeconds: 10
               periodSeconds: 10
