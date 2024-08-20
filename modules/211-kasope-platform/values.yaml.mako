@@ -4,7 +4,7 @@ kasopePlatform:
       registry: ${values['global']['containerRegistryBase']}
     client:
       image:
-        registry: ${values['global']['containerRegistryBase']}        
+        registry: ${values['global']['containerRegistryBase']}
         tag: "1.6.0-20240506112248-96d77628"
     cleaner:
       image:
@@ -15,7 +15,6 @@ kasopePlatform:
         repositoryOverride: 
           cassandra:
             "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13
-        registryOverride: ${values['global']['containerRegistryBase']}
       imageConfig:
         systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.19.1
         configBuilder: ${values['global']['containerRegistryBase']}/datastax/cass-config-builder:1.0-ubi8
