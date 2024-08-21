@@ -10,7 +10,7 @@ artifactoryPlatform:
       image:
         registry: ${values['global']['containerRegistryBase']}
         repository: ubi9/ubi-minimal
-        tag: 9.4.949.1716471857
+        tag: 9.4-1194
     artifactory:
       fullnameOverride: artifactory-oss
       artifactory:
@@ -49,7 +49,7 @@ artifactoryPlatform:
       image:
         registry: ${values['global']['containerRegistryBase']}
         repository: ubi9/ubi-minimal
-        tag: 9.4.949.1716471857
+        tag: 9.4-1194
     artifactory:
       fullnameOverride: artifactory-jcr
       artifactory:
