@@ -4,3 +4,13 @@ version: 0.0.1
 dependencies:
   - name: artifactoryPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: artifactory-oss
+      image: releases-docker.jfrog.io/jfrog/artifactory-oss:7.90.5
+    - name: artifactory-jcr
+      image: releases-docker.jfrog.io/jfrog/artifactory-jcr:7.90.5
+    - name: router
+      image: releases-docker.jfrog.io/jfrog/router:7.118.0
+    - name: init-container
+      image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194

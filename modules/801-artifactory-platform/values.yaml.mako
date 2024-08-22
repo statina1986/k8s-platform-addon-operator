@@ -1,9 +1,22 @@
 artifactoryPlatform:
-  artifactory-oss:    
-    enabled: false    
+  artifactory-oss: 
+    enabled: false
+    router:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: jfrog/router
+        tag: 7.118.0
+    initContainers:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: ubi9/ubi-minimal
+        tag: 9.4-1194
     artifactory:
       fullnameOverride: artifactory-oss
       artifactory:
+        image:
+          registry: ${values['global']['containerRegistryBase']}
+          repository: jfrog/artifactory-oss
         admin:
           secret: artifactory-oss-admin-secret
           dataKey: bootstrap.creds
@@ -27,9 +40,22 @@ artifactoryPlatform:
             key: "db-url"
   artifactory-jcr:
     enabled: false
+    router:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: jfrog/router
+        tag: 7.118.0
+    initContainers:
+      image:
+        registry: ${values['global']['containerRegistryBase']}
+        repository: ubi9/ubi-minimal
+        tag: 9.4-1194
     artifactory:
       fullnameOverride: artifactory-jcr
       artifactory:
+        image:
+          registry: ${values['global']['containerRegistryBase']}
+          repository: jfrog/artifactory-jcr
         admin:
           secret: artifactory-jcr-admin-secret
           dataKey: bootstrap.creds
@@ -37,6 +63,7 @@ artifactoryPlatform:
         enabled: false
       postgresql:
         enabled: false
+      
       database:
         type: postgresql
         driver: org.postgresql.Driver
