@@ -19,7 +19,7 @@ CVE_FAIL_BUILD_ON_NEW = false
 EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0.20220203130426_master_a204d90"
 
 // custom variables
-K8S_PLATFORM_NAME = 'k8s-platform-addon-operator'
+K8S_PLATFORM_NAME = 'platform/k8s-platform-addon-operator'
 CHART_NAME = 'k8s-platform-addon-operator'
 ARTIFACTORY_URL = 'platform.artifactory.qvantel.net'
 PROJECT_NAME = 'baseline'
