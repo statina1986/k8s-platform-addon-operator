@@ -2,7 +2,7 @@ logLevel: info
 addonOperatorNamespace: "platform"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
-imageBase: "artifactory.qvantel.net/k8s-platform-addon-operator"
+imageBase: "platform.artifactory.qvantel.net/platform/k8s-platform-addon-operator"
 deployment:
   replicas: 1
   additionalEnvironmentVars: []

@@ -1,4 +1,4 @@
-FROM artifactory.qvantel.net/qvantel-addon-operator:1.0.3.7_qvantel-master_8457d5171
+FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.4.10_qvantel-master_be55cad85
 RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2
 RUN pip3 install kubernetes
 RUN pip3 install "hvac[parser]"

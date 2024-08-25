@@ -20,10 +20,8 @@ EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0.2022020
 
 // custom variables
 K8S_PLATFORM_NAME = 'k8s-platform-addon-operator'
-TOOLS_NAME = 'k8s-platform-tools'
-DB_TOOLS_NAME = 'platform-db-tools'
 CHART_NAME = 'k8s-platform-addon-operator'
-ARTIFACTORY_URL = 'artifactory.qvantel.net'
+ARTIFACTORY_URL = 'platform.artifactory.qvantel.net'
 PROJECT_NAME = 'baseline'
  
 // Other configuration options on "jenkins" branch in pipeline.config file
@@ -38,22 +36,9 @@ qPipeline jenkinsfile:this
 def createPackage() {
 
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
-    
-    sh "docker build --build-arg='BUILD_TAG=${imageVersion()}' -t ${imageTag(K8S_PLATFORM_NAME)} ."
 
-    sh "docker build -t ${imageTag(TOOLS_NAME)} -t ${imageTagLatest(TOOLS_NAME)} ./platform-tools-images --file ./platform-tools-images/${TOOLS_NAME}.Dockerfile"
-
-    sh "docker push ${imageTag(K8S_PLATFORM_NAME)}"
-
-    sh "docker push ${imageTag(TOOLS_NAME)}"
-
-    sh "docker push ${imageTagLatest(TOOLS_NAME)}"
-
-    pipelineBase.addCreatedImage(imageTag(K8S_PLATFORM_NAME))
-
-    pipelineBase.addCreatedImage(imageTag(TOOLS_NAME))
-
-    pipelineBase.addCreatedImage(imageTagLatest(TOOLS_NAME))
+    sh "docker buildx create --use"
+    sh "docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg='BUILD_TAG=${imageVersion()}' -t ${imageTag(K8S_PLATFORM_NAME)} ."
 
     sh "helm package --version ${VERSION} --app-version ${imageVersion()} ./chart"
 
@@ -62,7 +47,7 @@ def createPackage() {
         curl -sSf -u "${ARTIFACTORY_USERNAME}:${ARTIFACTORY_PASSWORD}" \
         -X PUT \
         -T ${CHART_NAME}-${VERSION}.tgz \
-        https://${ARTIFACTORY_URL}/artifactory/helm-packages/${CHART_NAME}/${chartName()}
+        https://artifactory.qvantel.net/artifactory/helm-packages/${CHART_NAME}/${chartName()}
       """
     }
   }
