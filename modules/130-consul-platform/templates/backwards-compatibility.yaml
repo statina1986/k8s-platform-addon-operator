@@ -4,7 +4,7 @@ metadata:
   name: consul-consul-server
 spec:
   type: ExternalName
-  externalName: {{.global.helmReleaseNamePrefix}}consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local
+  externalName: {{.Values.global.helmReleaseNamePrefix}}consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local
   ports:
   - name: http
     port: 8500
