@@ -29,6 +29,8 @@ spec:
             value: {{ .Values.logLevel}}
           - name: HELM_IGNORE_RELEASE
             value: {{ .Values.helmIgnoreRelease}}
+          - name: HELM_RELEASE_NAME_PREFIX
+            value: {{ .Values.globalConfig.helmReleaseNamePrefix}}
           - name: INSIDE_CLUSTER
             value: "true"
           {{- range .Values.deployment.additionalEnvironmentVars }}

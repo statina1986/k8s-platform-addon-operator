@@ -2,10 +2,9 @@ kind: Service
 apiVersion: v1
 metadata:
   name: consul-consul-server
-  namespace: platform
 spec:
   type: ExternalName
-  externalName: consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local
+  externalName: {{.global.helmReleaseNamePrefix}}consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local
   ports:
   - name: http
     port: 8500
