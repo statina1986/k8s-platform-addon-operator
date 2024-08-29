@@ -1,6 +1,6 @@
 dependencies:
 - name: cert-manager
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: v1.12.4
-digest: sha256:72620af5b59544afa805b9b9c54356c93970b4e609f5a8f14aaecf300be2fb21
-generated: "2023-09-22T23:44:28.527941385+03:00"
+  repository: https://charts.jetstack.io
+  version: v1.12.13
+digest: sha256:ac505d1f668ce73cdc1fec2b72f8c28c6293470d4040136382c25e99c5bb4559
+generated: "2024-08-30T00:08:06.095586439+03:00"
