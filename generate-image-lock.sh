@@ -8,5 +8,5 @@ for val in ${dirs[@]}; do
     fi  
 done
 
-yq eval-all '. as $item ireduce ({}; . *+ $item )' modules/*/Images.lock chart/Images.lock.template > chart/Images.lock
-yq -i ".images |= unique_by(.image)" chart/Images.lock
+./utils/yq eval-all '. as $item ireduce ({}; . *+ $item )' modules/*/Images.lock chart/Images.lock.template > chart/Images.lock
+./utils/yq -i ".images |= unique_by(.image)" chart/Images.lock
