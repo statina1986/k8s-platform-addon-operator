@@ -22,6 +22,7 @@ EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0.2022020
 K8S_PLATFORM_NAME = 'platform/k8s-platform-addon-operator'
 CHART_NAME = 'k8s-platform-addon-operator'
 ARTIFACTORY_URL = 'platform.artifactory.qvantel.net'
+IMAGES_RELOCATE_URL = 'platform.artifactory.qvantel.net/k8s-platform-1-2-0'
 PROJECT_NAME = 'baseline'
  
 // Other configuration options on "jenkins" branch in pipeline.config file
@@ -36,6 +37,9 @@ qPipeline jenkinsfile:this
 def createPackage() {
 
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
+
+    sh "./generate-image-lock.sh"
+    sh "./push-images-after-build.sh $IMAGES_RELOCATE_URL"
 
     sh "docker buildx create --use"
     sh "docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg='BUILD_TAG=${imageVersion()}' -t ${imageTag(K8S_PLATFORM_NAME)} ."

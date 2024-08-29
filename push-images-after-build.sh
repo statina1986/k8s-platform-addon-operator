@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
+changed_files=( `git diff --name-only HEAD HEAD~1` )
+
+for file in ${changed_files[@]}; do    
+    if [[ $file == *"Images.lock"* && -f $file ]] ; then
+        module=${file%"/Images.lock"}
+        echo "Detected changed Images.lock for $module. Updating images"
+        ./utils/dt --plain images pull $module
+        ./utils/dt --plain charts relocate $module $1
+        ./utils/dt --plain images push $module
+        git restore $file
+        git restore "$module/Chart.yaml"
+    fi  
+done
+
+
 commit_comment=( `git log --format=%B -n 1` )
 
 if [[ $commit_comment == *"other: push-images"* ]]; then
-    
-    dirs=(${0%/*}/modules/*)
-    for val in ${dirs[@]}; do
-        helm dt images lock --platforms linux/amd64 --platforms linux/arm64 "$val" $1
-    done
-
-    yq eval-all '. as $item ireduce ({}; . *+ $item )' chart/Images.lock.template modules/*/Images.lock > chart/Images.lock
-    rm  modules/*/Images.lock
-
-    helm dt images pull chart
-
-    helm dt charts relocate chart $2
-    
-    helm dt images push chart
+    ./utils/dt --plain images pull chart
+    ./utils/dt --plain charts relocate chart $1
+    ./utils/dt --plain images push chart
 fi

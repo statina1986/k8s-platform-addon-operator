@@ -4,7 +4,7 @@ dirs=(${0%/*}/modules/*)
 
 for val in ${dirs[@]}; do
     if [[ ! -f "$val/Images.lock" ]] ; then
-        helm dt images lock --platforms linux/amd64 --platforms linux/arm64 "$val" 
+        ./utils/dt images lock --plain --platforms linux/amd64 --platforms linux/arm64 "$val" 
     fi  
 done
 
