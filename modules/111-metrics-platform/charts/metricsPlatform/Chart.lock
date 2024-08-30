@@ -1,6 +1,6 @@
 dependencies:
 - name: metrics-server
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 3.11.0
-digest: sha256:989143f67d700da2e16493b4555625c3af598ccf36371c11bbc7001357561832
-generated: "2023-09-23T01:40:53.329965461+03:00"
+  repository: https://kubernetes-sigs.github.io/metrics-server/
+  version: 3.12.1
+digest: sha256:04f4717d4eda38b5cc8dac20ec1f82d7fa878eb56dfd2f2df6a383d19dde969b
+generated: "2024-08-30T10:54:16.398028743+03:00"
