@@ -1,10 +1,122 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:03:21.495312876Z"
+  generatedAt: "2024-08-31T18:24:26.384999098Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kyverno-platform
   version: 0.0.1
   appVersion: ""
-images: []
+images:
+  - name: kyverno-cli
+    image: ghcr.io/kyverno/kyverno-cli:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:b0f12027c2e1ff3ff0646a09b773e0648a0f8ace6c9fb77e7ddc77d3f96d0ed6
+        arch: linux/amd64
+      - digest: sha256:38936ba7613a607f87f641b83b5223eb6f75e64f9ba162b32e216b0f0b4068f5
+        arch: linux/arm64
+  - name: tools
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
+        arch: linux/arm64
+      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
+        arch: linux/amd64
+  - name: kyvernopre
+    image: ghcr.io/kyverno/kyvernopre:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:887f6fc3c2526d3f9fda09ad2f5d2e4a95ca6966846c52796bb2bd0aba14cedf
+        arch: linux/amd64
+      - digest: sha256:0b8065473f3bbf6cae71cf8a4aebc50cab9ce6ba6fa4967882b81e5efbba2248
+        arch: linux/arm64
+  - name: kyverno
+    image: ghcr.io/kyverno/kyverno:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:2a713842f1bfe3f621f942c9389c4d862c82b5f190fec9a94888aa5e749479ca
+        arch: linux/amd64
+      - digest: sha256:fa577cc6d84bdb6e90bb5430401d4b0acf84be7c9519760d7da57f289f3f12be
+        arch: linux/arm64
+  - name: background-controller
+    image: ghcr.io/kyverno/background-controller:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:8be71f2a3915e5523f8ec16b62aadebe08d712a08205cff8ebc277a3fa7b44a7
+        arch: linux/amd64
+      - digest: sha256:ca41990e70a1483e7d75a49ba25573fbfe4a4a59a29ca98a014a61127ce43f8d
+        arch: linux/arm64
+  - name: cleanup-controller
+    image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:af53fecd47b5409255c91ab8e6fd48dcb68316652233f4ebc250b58431b14c3e
+        arch: linux/amd64
+      - digest: sha256:8d62c43256681bbcbfcad5c1c137d1ce67d710f882d19bad68831d13a9a08cf5
+        arch: linux/arm64
+  - name: reports-controller
+    image: ghcr.io/kyverno/reports-controller:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:fd0c94551ae0be794c850cc2509a26fab42cc518c1f1bdff4f5594a2c55329e7
+        arch: linux/amd64
+      - digest: sha256:72ab55fabc7757db9f0048ff42f02eee8274f0e97abb0cea33403349fa1b2bf8
+        arch: linux/arm64
+  - name: kyverno-cli
+    image: ghcr.io/kyverno/kyverno-cli:v1.12.5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:b0f12027c2e1ff3ff0646a09b773e0648a0f8ace6c9fb77e7ddc77d3f96d0ed6
+        arch: linux/amd64
+      - digest: sha256:38936ba7613a607f87f641b83b5223eb6f75e64f9ba162b32e216b0f0b4068f5
+        arch: linux/arm64
+  - name: tools
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
+        arch: linux/arm64
+      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
+        arch: linux/amd64
+  - name: kyvernopre
+    image: ghcr.io/kyverno/kyvernopre:v1.12.5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:887f6fc3c2526d3f9fda09ad2f5d2e4a95ca6966846c52796bb2bd0aba14cedf
+        arch: linux/amd64
+      - digest: sha256:0b8065473f3bbf6cae71cf8a4aebc50cab9ce6ba6fa4967882b81e5efbba2248
+        arch: linux/arm64
+  - name: kyverno
+    image: ghcr.io/kyverno/kyverno:v1.12.5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:2a713842f1bfe3f621f942c9389c4d862c82b5f190fec9a94888aa5e749479ca
+        arch: linux/amd64
+      - digest: sha256:fa577cc6d84bdb6e90bb5430401d4b0acf84be7c9519760d7da57f289f3f12be
+        arch: linux/arm64
+  - name: background-controller
+    image: ghcr.io/kyverno/background-controller:v1.12.5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:8be71f2a3915e5523f8ec16b62aadebe08d712a08205cff8ebc277a3fa7b44a7
+        arch: linux/amd64
+      - digest: sha256:ca41990e70a1483e7d75a49ba25573fbfe4a4a59a29ca98a014a61127ce43f8d
+        arch: linux/arm64
+  - name: cleanup-controller
+    image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:af53fecd47b5409255c91ab8e6fd48dcb68316652233f4ebc250b58431b14c3e
+        arch: linux/amd64
+      - digest: sha256:8d62c43256681bbcbfcad5c1c137d1ce67d710f882d19bad68831d13a9a08cf5
+        arch: linux/arm64
+  - name: reports-controller
+    image: ghcr.io/kyverno/reports-controller:v1.12.5
+    chart: kyvernoPlatform
+    digests:
+      - digest: sha256:fd0c94551ae0be794c850cc2509a26fab42cc518c1f1bdff4f5594a2c55329e7
+        arch: linux/amd64
+      - digest: sha256:72ab55fabc7757db9f0048ff42f02eee8274f0e97abb0cea33403349fa1b2bf8
+        arch: linux/arm64

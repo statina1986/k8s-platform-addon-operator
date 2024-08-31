@@ -1,9 +1,9 @@
 dependencies:
 - name: kyverno
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 2.7.1
+  repository: https://kyverno.github.io/kyverno/
+  version: 3.2.6
 - name: kyverno-policies
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 2.7.1
-digest: sha256:f07dbf73a05314ae4f48a5e20193b550933cf2064cdd20599e86d0112caf69cc
-generated: "2023-03-13T21:23:24.680312306+02:00"
+  repository: https://kyverno.github.io/kyverno/
+  version: 3.2.5
+digest: sha256:e46409c39039b1bfbb1a1b8668ad7acc8689f19365be841d7d650004207cf61e
+generated: "2024-08-30T12:28:04.568214781+03:00"

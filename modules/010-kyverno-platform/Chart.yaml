@@ -4,3 +4,19 @@ version: 0.0.1
 dependencies:
   - name: kyvernoPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: kyverno-cli
+      image: ghcr.io/kyverno/kyverno-cli:v1.12.5
+    - name: tools
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    - name: kyvernopre
+      image: ghcr.io/kyverno/kyvernopre:v1.12.5
+    - name: kyverno
+      image: ghcr.io/kyverno/kyverno:v1.12.5
+    - name: background-controller
+      image: ghcr.io/kyverno/background-controller:v1.12.5
+    - name: cleanup-controller
+      image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+    - name: reports-controller
+      image: ghcr.io/kyverno/reports-controller:v1.12.5
