@@ -8,8 +8,12 @@ annotations:
   images: |
     - name: mariadb-operator
       image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.30
-    - name: mariadb
+    - name: mariadb-10-6
       image: docker.io/mariadb:10.6.19
+    - name: mariadb-10-11
+      image: docker.io/mariadb:10.11.9
+    - name: mariadb-11-4
+      image: docker.io/mariadb:11.4.3
     - name: maxscale
       image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
     - name: mariadb-exporter

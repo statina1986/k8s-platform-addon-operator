@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-09-02T08:46:51.992763Z"
+  generatedAt: "2024-09-02T21:07:39.796510232Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: mariadb-operator-platform
@@ -16,13 +16,29 @@ images:
         arch: linux/arm64
       - digest: sha256:82d56f138d0b8a8266e0c39c394f05e79c83422114fd10f835a9ff064b21cc4a
         arch: linux/amd64
-  - name: mariadb
+  - name: mariadb-10-6
     image: docker.io/mariadb:10.6.19
     chart: mariadb-operator-platform
     digests:
       - digest: sha256:f18089c3d4e210c1eef31071bd3215833eeb4d3370e19e74a333569daa8cbc1d
         arch: linux/amd64
       - digest: sha256:79bad87befced98f686c624852398f9d506268971a650477926c0a3e2ce96433
+        arch: linux/arm64
+  - name: mariadb-10-11
+    image: docker.io/mariadb:10.11.9
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:51b88fbd0e010909e583b8d169688e71400c7cedbedfc96e67ca6833329885ef
+        arch: linux/amd64
+      - digest: sha256:ed81bed23e24790ac0de1014a161211cd6d18237f5ef13adb4204d5ba98d84f9
+        arch: linux/arm64
+  - name: mariadb-11-4
+    image: docker.io/mariadb:11.4.3
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:d5233426216ec73aa127167603861a041e0da2416ec040f2c2b9a397b6842c26
+        arch: linux/amd64
+      - digest: sha256:4af5f62bd491332cddb5e898f1d6a87db6c3453b6594161abf139a359fed13c8
         arch: linux/arm64
   - name: maxscale
     image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
