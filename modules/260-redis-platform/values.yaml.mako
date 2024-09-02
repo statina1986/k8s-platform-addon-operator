@@ -1,18 +1,30 @@
 redisPlatform:
   redis:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     volumePermissions:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
     sysctl:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
+        % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.2.0_10_5193dbce5
     kubectl:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
+        % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.2.0_10_5193dbce5
     architecture: replication
@@ -64,7 +76,9 @@ redisPlatform:
     sentinel:      
       enabled: true
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
       masterSet: redis
       quorum: 2
       resources:
@@ -76,4 +90,6 @@ redisPlatform:
     metrics:
       enabled: true
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif

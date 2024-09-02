@@ -1,7 +1,9 @@
 externalDns:
   external-dns:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     serviceAccount:
       create: false
       name: platform

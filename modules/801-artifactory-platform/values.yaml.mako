@@ -3,19 +3,25 @@ artifactoryPlatform:
     enabled: false
     router:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jfrog/router
         tag: 7.118.0
+        % endif
     initContainers:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: ubi9/ubi-minimal
         tag: 9.4-1194
+        % endif
     artifactory:
       fullnameOverride: artifactory-oss
       artifactory:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
           repository: jfrog/artifactory-oss
         admin:
           secret: artifactory-oss-admin-secret
@@ -42,20 +48,26 @@ artifactoryPlatform:
     enabled: false
     router:
       image:
-        registry: ${values['global']['containerRegistryBase']}
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}        
         repository: jfrog/router
         tag: 7.118.0
+        % endif
     initContainers:
       image:
-        registry: ${values['global']['containerRegistryBase']}
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}      
         repository: ubi9/ubi-minimal
         tag: 9.4-1194
+        % endif
     artifactory:
       fullnameOverride: artifactory-jcr
       artifactory:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           repository: jfrog/artifactory-jcr
+          % endif
         admin:
           secret: artifactory-jcr-admin-secret
           dataKey: bootstrap.creds

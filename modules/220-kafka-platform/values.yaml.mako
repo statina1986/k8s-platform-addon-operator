@@ -1,14 +1,18 @@
 kafkaPlatform:  
   kafka-ui:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     yamlApplicationConfigConfigMap:
       name: "kafbat-ui-configmap"
       keyName: "config.yml"
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
+    % if 'containerRegistryBase' in values['global']:
     defaultImageRegistry: ${values['global']['containerRegistryBase']}
+    % endif
     resources:
       limits:
         memory: 1Gi
@@ -43,7 +47,7 @@ kafkaPlatform:
             auto.create.topics.enable: "true"
             delete.topic.enable: true
 
-            % if values['global']['configurationProfile'] in {'dev'}:            
+            % if values['global']['configurationProfile'] in {'dev'}:
             default.replication.factor: 1
             offsets.topic.replication.factor: 1            
             % else:

@@ -1,7 +1,9 @@
 rabbitmqPlatform:
   rabbitmq:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     auth:
       username: user
       password: "dXNlcg=="
@@ -63,4 +65,6 @@ rabbitmqPlatform:
     volumePermissions:
       enabled: false
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}    
+        % endif

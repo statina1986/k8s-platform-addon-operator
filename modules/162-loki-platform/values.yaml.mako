@@ -21,7 +21,9 @@ lokiPlatform:
           release: monitoring-platform
     loki:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
       analytics:
         reporting_enabled: false
       auth_enabled: false

@@ -2,13 +2,17 @@
 istioPlatform:
   global:
     proxy:
+      % if 'containerRegistryBase' in values['global']:
       image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.17.6
+      % endif
   base:
     global:
       istioNamespace: platform
   istiod:
     pilot:
+      % if 'containerRegistryBase' in values['global']:
       image: ${values['global']['containerRegistryBase']}/istio/pilot:1.17.6
+      % endif
       tolerations:
         - key: "dedicated-nodes"
           value: "platform-masters"

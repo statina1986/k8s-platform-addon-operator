@@ -60,17 +60,25 @@ awsPlatform:
   aws-efs-csi-driver-enabled: false
   aws-efs-csi-driver:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/amazon/aws-efs-csi-driver
+      % endif
     sidecars:
       livenessProbe:
-        image:
+        image: 
+          % if 'containerRegistryBase' in values['global']:        
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/livenessprobe
+          % endif
       nodeDriverRegistrar:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/node-driver-registrar          
+          % endif
       csiProvisioner:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-provisioner
+          % endif
     controller:
       serviceAccount:
         create: false
@@ -110,29 +118,45 @@ awsPlatform:
   aws-ebs-csi-driver-enabled: false
   aws-ebs-csi-driver:
     image:
-        repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/aws-ebs-csi-driver
+      % if 'containerRegistryBase' in values['global']:
+      repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/aws-ebs-csi-driver
+      % endif
     sidecars:
       provisioner:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-provisioner
+          % endif
       attacher:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-attacher
+          % endif
       snapshotter:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/external-snapshotter/csi-snapshotter
+          % endif
       livenessProbe:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/livenessprobe
+          % endif
       resizer:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-resizer
+          % endif
       nodeDriverRegistrar:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/node-driver-registrar
+          % endif
       volumemodifier:
         image:
+          % if 'containerRegistryBase' in values['global']:
           repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/volume-modifier-for-k8s
+          % endif
     controller:
       serviceAccount:
         create: false
