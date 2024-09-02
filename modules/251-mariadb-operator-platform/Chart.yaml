@@ -7,9 +7,9 @@ dependencies:
 annotations:
   images: |
     - name: mariadb-operator
-      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.29
+      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.30
     - name: mariadb
-      image: docker.io/mariadb:10.4.33
+      image: docker.io/mariadb:10.6.19
     - name: maxscale
       image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
     - name: mariadb-exporter

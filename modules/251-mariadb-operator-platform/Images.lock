@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:05:07.414862348Z"
+  generatedAt: "2024-09-02T08:46:51.992763Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: mariadb-operator-platform
@@ -9,20 +9,20 @@ chart:
   appVersion: ""
 images:
   - name: mariadb-operator
-    image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.29
+    image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:v0.0.30
     chart: mariadb-operator-platform
     digests:
-      - digest: sha256:2409fe9768162a45dde50a617efb8b7b8d85b6f91f661b20be5a9ed44de8893a
+      - digest: sha256:afdfb23d23c5466605c06519086b864e8c583de8d23353737eb58e0904e474df
         arch: linux/arm64
-      - digest: sha256:99b134079b1aab95d4fecaab1952a1b6772fa0991fb53c6aebd2a245dbf54228
+      - digest: sha256:82d56f138d0b8a8266e0c39c394f05e79c83422114fd10f835a9ff064b21cc4a
         arch: linux/amd64
   - name: mariadb
-    image: docker.io/mariadb:10.4.33
+    image: docker.io/mariadb:10.6.19
     chart: mariadb-operator-platform
     digests:
-      - digest: sha256:f445c1568634f2c2fbeda5d38e0a1a6c2e7730484191ba8630f9ce56fc6fb2b7
+      - digest: sha256:f18089c3d4e210c1eef31071bd3215833eeb4d3370e19e74a333569daa8cbc1d
         arch: linux/amd64
-      - digest: sha256:4979110eaf63b427c8a5b7bc10dae2e49685c3835518a6adfde68ed8bf213dbd
+      - digest: sha256:79bad87befced98f686c624852398f9d506268971a650477926c0a3e2ce96433
         arch: linux/arm64
   - name: maxscale
     image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
@@ -44,7 +44,7 @@ images:
     image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
     chart: mariadb-operator-platform
     digests:
-      - digest: sha256:e1e2e157c824b3838c633b35272916915b9ba145755c80667dff7edb015c13a7
+      - digest: sha256:dc07389d5c2e3b858a368193c03fb7bfa841e8b071914ef26930b916a299d6b2
         arch: linux/arm64
-      - digest: sha256:651ad5f6b510a67e76edd6e43fbdbf09018356cf937997da631150ad6835dff7
+      - digest: sha256:31cd85a021265395062a8a2f9e89df372e974686b379c638bd66c5c329fe562d
         arch: linux/amd64
