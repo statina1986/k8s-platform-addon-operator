@@ -1,14 +1,18 @@
 vectorPlatform:
   agent:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/timberio/vector
+      % endif
     role: "Agent"
     enabled: true
     tolerations:
         - operator: Exists
     hotReload: 
       image:
+        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/jimmidyson/configmap-reload
+        % endif
     customConfig:
       data_dir: /vector-data-dir
       api:
@@ -49,7 +53,9 @@ vectorPlatform:
           address: vector-platform-aggregator.platform.svc:6000
   fluent-bit-events-collector:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/fluent/fluent-bit
+      % endif
     enabled: true
     kind: Deployment
     nameOverride: fluent-bit-events-collector
@@ -73,7 +79,9 @@ vectorPlatform:
               port 9002
   aggregator:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/timberio/vector
+      % endif
     enabled: true
     role: "Aggregator"
     % if values['global']['platformMasters']:
@@ -104,7 +112,9 @@ vectorPlatform:
     % endif
     haproxy:
       image:
+        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/haproxytech/haproxy-alpine
+        % endif
     customConfig:
       api:
         address: 0.0.0.0:8686

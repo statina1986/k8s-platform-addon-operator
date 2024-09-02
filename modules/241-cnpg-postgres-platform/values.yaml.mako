@@ -1,7 +1,9 @@
 cnpgPostgresPlatform:
   cloudnative-pg:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/cloudnative-pg/cloudnative-pg
+      % endif
     crds:
       create: false
     serviceAccount:
@@ -36,7 +38,11 @@ cnpgPostgresPlatform:
           topologyKey: topology.kubernetes.io/zone
           % endif
         enableSuperuserAccess: true
-        imageName: ${values['global']['containerRegistryBase']}/cloudnative-pg/q-cnpg-timescale:15.7-1_5_master_e1aa9a467
+        % if 'containerRegistryBase' in values['global']:
+        imageName: ${values['global']['containerRegistryBase']}/cloudnative-pg/q-cnpg-timescale:15.7-1_7_master_b0ee48eda
+        % else:
+        imageName: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.7-1_7_master_b0ee48eda
+        % endif
         % if values['global']['configurationProfile'] in {'dev'}: 
         instances: 1
         % else:

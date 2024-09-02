@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:25:09.047682372Z"
+  generatedAt: "2024-09-02T08:44:20.676452987Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: cnpg-postgres-platform
@@ -9,20 +9,20 @@ chart:
   appVersion: ""
 images:
   - name: q-cnpg-timescale-15
-    image: artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.7-1_6_master_a9bf1686f
+    image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.7-1_7_master_b0ee48eda
     chart: cnpg-postgres-platform
     digests:
-      - digest: sha256:993eb4145adbe93abaf08d6b9475646315d314ec351266b8d0155dc6a3e31aa8
+      - digest: sha256:cc93e5fc54bb9ca312efb224872c0e200ed098038fc6117d82e5177c84fe5a1d
         arch: linux/arm64
-      - digest: sha256:bbbc656d96ea3bfbe6f37556c1d56f6150ab7b3d30ca901ea2f1ffdfec585b49
+      - digest: sha256:243f72b2f451f44b94f746eb57ba0851b7221f53a5b3766bf76125c334bcd18e
         arch: linux/amd64
   - name: q-cnpg-timescale-16
-    image: artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.3-1_6_master_a9bf1686f
+    image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.3-1_7_master_b0ee48eda
     chart: cnpg-postgres-platform
     digests:
-      - digest: sha256:f0197457c4480c57f979510d661a25d14a6a1a87566ed83a858079af9329bec3
+      - digest: sha256:1f3d19bee63cf1f428c36fa5f234154002560746819c645dbf6683f73937f0ef
         arch: linux/arm64
-      - digest: sha256:c14b7735f6680b00311f6e6af517974f4c95a8835204765a4176bb8a90881703
+      - digest: sha256:efe9f77f8146ab90d3e9aa861e62f3c599497a71bb22052163c48df2d66e9020
         arch: linux/amd64
   - name: cloudnative-pg
     image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2

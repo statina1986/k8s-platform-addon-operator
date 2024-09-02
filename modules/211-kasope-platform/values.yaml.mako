@@ -1,24 +1,36 @@
 kasopePlatform:
   k8ssandra-operator:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     client:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        tag: "1.6.0-20240506112248-96d77628"
+        % endif
+        tag: "1.6.0-20240506112248-96d77628"        
     cleaner:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
     cass-operator:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
         repositoryOverride: 
           cassandra:
+            % if 'containerRegistryBase' in values['global']:
             "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13
+            % endif
       imageConfig:
+        % if 'containerRegistryBase' in values['global']:
         systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.19.1
         configBuilder: ${values['global']['containerRegistryBase']}/datastax/cass-config-builder:1.0-ubi8
         k8ssandraClient: ${values['global']['containerRegistryBase']}/k8ssandra/k8ssandra-client/v0.2.2
+        % endif
       admissionWebhooks:
         enabled: false
     disableCrdUpgraderJob: true
@@ -88,8 +100,12 @@ kasopePlatform:
               size: 1
               % else:
               size: 3
-              % endif              
+              % endif
+              % if 'containerRegistryBase' in values['global']:              
               perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+              % else:
+              perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+              % endif
               racks:
                 - name: default
                   % if values['global']['platformMasters']:
@@ -121,9 +137,13 @@ kasopePlatform:
             enabled: true
           containerImage:
             name: "cassandra-reaper"
+            % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
             tag: "3.5.0"
+            % endif
           initContainerImage:
             name: "cassandra-reaper"
+            % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
             tag: "3.5.0"
+            % endif

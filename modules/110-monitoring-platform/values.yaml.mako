@@ -32,7 +32,9 @@ monitoringPlatform:
   x509-certificate-exporter:
     enabled: true
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -67,7 +69,9 @@ monitoringPlatform:
   kafka-lag-exporter:
     enabled: true
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/seglo/kafka-lag-exporter
+      % endif
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -96,7 +100,9 @@ monitoringPlatform:
   prometheus-blackbox-exporter:
     enabled: true
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     pspEnabled: false
     tolerations:
       - key: "dedicated-nodes"
@@ -139,7 +145,9 @@ monitoringPlatform:
   yet-another-cloudwatch-exporter:
     enabled: false
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % endif
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -161,7 +169,9 @@ monitoringPlatform:
   prometheus-consul-exporter:
     enabled: true
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/prom/consul-exporter
+      % endif
       tag: v0.5.0
     rbac:
       pspEnabled: false
@@ -200,36 +210,56 @@ monitoringPlatform:
     alertmanager:
       alertmanagerSpec:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
     prometheusOperator:
       image:
-        registry: ${values['global']['containerRegistryBase']}       
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}
+        % endif
       prometheusConfigReloader:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
       admissionWebhooks:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
         patch:
           image:
+            % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
+            % endif
       thanosImage:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
     grafana:    
       enabled: true
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
         repository: grafana/grafana-enterprise
       testFramework:
         image: 
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
       downloadDashboardsImage:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
       initChownData:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           repository: ubi9/ubi-minimal
           tag: 9.4-1194
+           % endif
       extraContainerVolumes:
         - name: grafana-plugins
           emptyDir: { }
@@ -238,7 +268,11 @@ monitoringPlatform:
           mountPath: /var/lib/grafana/plugins
       extraInitContainers: 
         - name: plugin-sidecar
+          % if 'containerRegistryBase' in values['global']:
           image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:0.0.1
+          % else:
+          image: platform.artifactory.qvantel.net/platform/grafana-plugins:0.0.1
+          % endif
           command: ["/bin/sh", "-c"]
           args:
           - unzip /tmp/yesoreyeram-infinity-datasource-2.9.5.linux_amd64.zip -d /var/lib/grafana/plugins
@@ -349,7 +383,9 @@ monitoringPlatform:
       envFromSecret: grafana-keycloak-client-secret
       sidecar:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
         datasources:
           enabled: true
           defaultDatasourceEnabled: true
@@ -366,10 +402,14 @@ monitoringPlatform:
             foldersFromFilesStructure: true
     prometheus-node-exporter:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
     kube-state-metrics:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % endif
       rbac:
         extraRules:
         % if addon_operator['kasopePlatformEnabled'] == 'true':
@@ -380,7 +420,9 @@ monitoringPlatform:
       kubeRBACProxy:
         enabled: false
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
       customResourceState:
         enabled: true
         config:
@@ -427,7 +469,9 @@ monitoringPlatform:
     thanosRuler:
       thanosRulerSpec:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
     prometheus:
       enabled: true
       tolerations:
@@ -441,7 +485,9 @@ monitoringPlatform:
       % endif
       prometheusSpec:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % endif
         podMonitorSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false

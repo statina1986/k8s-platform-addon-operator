@@ -9,9 +9,13 @@ vaultPlatform:
   useBackwardsCompatibilityService: true
   vault-secrets-webhook:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-secrets-webhook
+      % endif
     vaultEnv:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-env
+      % endif
     certificate:
       useCertManager: true
       generate: false
@@ -56,7 +60,9 @@ vaultPlatform:
       enabled: false
     server:
       image:
+        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/hashicorp/vault
+        % endif
       serviceAccount:
         create: false
         name: platform
@@ -117,7 +123,11 @@ vaultPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+          % if 'containerRegistryBase' in values['global']:
           image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          % else:
+          image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          % endif
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /init-script/

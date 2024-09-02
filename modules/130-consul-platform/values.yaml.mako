@@ -1,10 +1,14 @@
 consulPlatform:
   global:
+    % if 'containerRegistryBase' in values['global']:
     image: ${values['global']['containerRegistryBase']}/hashicorp/consul:1.14.4
     imageK8S: ${values['global']['containerRegistryBase']}/hashicorp/consul-k8s-control-plane:1.0.3
     imageConsulDataplane: ${values['global']['containerRegistryBase']}/hashicorp/consul-dataplane:1.0.1
+    % endif
   apiGateway:
+    % if 'containerRegistryBase' in values['global']:
     imageEnvoy: ${values['global']['containerRegistryBase']}/envoyproxy/envoy:v1.23.1
+    % endif
   updateCoreDns:    
     enabled: "true"
     configmapName: "coredns"

@@ -1,10 +1,16 @@
 elasticsearchPlatform:
+  % if 'containerRegistryBase' in values['global']:
   loggingSetupimage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+  % else:
+  loggingSetupimage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+  % endif
   eck-operator:
     # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/elastic/eck-operator
+      % endif
     nameOverride: "elastic-operator"
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
@@ -75,7 +81,9 @@ elasticsearchPlatform:
                 command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
               containers:
                 - name: elasticsearch
+                  % if 'containerRegistryBase' in values['global']:
                   image: ${values['global']['containerRegistryBase']}/library/elasticsearch:7.16.2
+                  % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.logsearch.resources | nindent 12  }}                    
                   env:
                   - name: ZONE
@@ -159,7 +167,9 @@ elasticsearchPlatform:
                       elasticsearch.k8s.elastic.co/statefulset-name: smartsearch-es-smartsearch
               containers:
                 - name: elasticsearch
+                  % if 'containerRegistryBase' in values['global']:
                   image: ${values['global']['containerRegistryBase']}/library/elasticsearch:7.16.2
+                  % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
     kibana:
@@ -182,7 +192,9 @@ elasticsearchPlatform:
           spec:
             containers:
               - name: kibana
+                % if 'containerRegistryBase' in values['global']:
                 image: ${values['global']['containerRegistryBase']}/library/kibana:7.16.2
+                % endif
                 resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
             % if values['global']['platformMasters']:
             nodeSelector:
@@ -352,7 +364,9 @@ elasticsearchPlatform:
         value: logsearch-es-http.platform.svc.cluster.local
       - name: ELASTICSEARCH_PORT
         value: "9200"
+    % if 'containerRegistryBase' in values['global']:
     image:  ${values['global']['containerRegistryBase']}/library/logstash
+    % endif
     imageTag: "7.16.2"
     imagePullPolicy: "IfNotPresent"
     logstashJavaOpts: "-Xmx1g -Xms1g"
@@ -431,7 +445,9 @@ elasticsearchPlatform:
           cpu: "100"
           memory: 1Gi
       tolerations: []
+    % if 'containerRegistryBase' in values['global']:
     image:  ${values['global']['containerRegistryBase']}/library/filebeat
+    % endif
     imageTag: "7.16.2"
     imagePullPolicy: "IfNotPresent"
     imagePullSecrets: []

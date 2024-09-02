@@ -2,24 +2,34 @@
 certPlatform:
   cert-manager:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
       repository: jetstack/cert-manager-controller
+      % endif
     cainjector:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-cainjector
+        % endif
     webhook:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-webhook
+        % endif
     startupapicheck:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-ctl
+        % endif
     acmesolver:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-acmesolver
+        % endif
     serviceAccount:
       create: false
       name: platform

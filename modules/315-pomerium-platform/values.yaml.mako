@@ -3,12 +3,16 @@ pomeriumPlatform:
   pomerium:
     baseUrl: ${values['global']['ingressBaseUrl']}
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/pomerium/pomerium
+      % endif
     ingress:
       enabled: false
     ingressController:
       image:
+        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/pomerium/ingress-controller
+        % endif
     extraVolumeMounts:
       - name: trusted-ca-tls
         mountPath: /etc/ssl/certs

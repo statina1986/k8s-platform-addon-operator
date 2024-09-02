@@ -1,10 +1,14 @@
 metricsPlatform:
   metrics-server:
     image:
+      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/metrics-server/metrics-server
+      % endif
     addonResizer:
       image:
-        repository: ${values['global']['containerRegistryBase']}/autoscaling/addon-resizer 
+        % if 'containerRegistryBase' in values['global']:
+        repository: ${values['global']['containerRegistryBase']}/autoscaling/addon-resizer
+        % endif
     tolerations:
         - key: "dedicated-nodes"
           value: "platform-masters"
