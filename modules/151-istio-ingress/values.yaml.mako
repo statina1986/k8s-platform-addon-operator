@@ -420,7 +420,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: cdt-frontend.qvantel.svc.${values['global']['appsNamespace']}.local.
+              host: cdt-frontend.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 3001
       document-manager:
