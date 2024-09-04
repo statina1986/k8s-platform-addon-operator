@@ -61,7 +61,7 @@ mariadbOperatorPlatform:
           enabled: false
         replicas: 1
         % else:
-        replicas: 2
+        replicas: 1
         replication:
           enabled: true
         % endif        
