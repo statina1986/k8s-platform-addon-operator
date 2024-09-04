@@ -59,12 +59,12 @@ mariadbOperatorPlatform:
         % if values['global']['configurationProfile'] in {'dev'}: 
         replication:
           enabled: false
-        replicas: 1
+        replicas: 0
         % else:
         replicas: 1
         replication:
           enabled: true
-        % endif        
+        % endif
         % if addon_operator['monitoringPlatformEnabled'] == 'true':
         metrics:
           enabled: true
