@@ -59,8 +59,9 @@ mariadbOperatorPlatform:
         % if values['global']['configurationProfile'] in {'dev'}: 
         replication:
           enabled: false
-        % else:
         replicas: 1
+        % else:
+        replicas: 3
         replication:
           enabled: true
         % endif
