@@ -51,6 +51,6 @@ annotations:
     - name: kube-state-metrics
       image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0
     - name: grafana-plugins
-      image: artifactory.qvantel.net/platform/grafana-plugins:0.0.1
+      image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
       
 

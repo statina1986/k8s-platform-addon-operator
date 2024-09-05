@@ -269,13 +269,13 @@ monitoringPlatform:
       extraInitContainers: 
         - name: plugin-sidecar
           % if 'containerRegistryBase' in values['global']:
-          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:0.0.1
+          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:1.2.0_4_f26bb6e90
           % else:
-          image: platform.artifactory.qvantel.net/platform/grafana-plugins:0.0.1
+          image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
           % endif
           command: ["/bin/sh", "-c"]
           args:
-          - unzip /tmp/yesoreyeram-infinity-datasource-2.9.5.linux_amd64.zip -d /var/lib/grafana/plugins
+          - unzip /tmp/*.zip -d /var/lib/grafana/plugins
           volumeMounts:
             - name: grafana-plugins
               mountPath: /var/lib/grafana/plugins

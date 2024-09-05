@@ -7,3 +7,4 @@ Dependencies:
 
 Customizations:
 - 'initChownData' image is replaced from 'busybox' to 'ubi9/ubi-minimal'
+- 'grafana-plugins' image to load Grafana Plugins in different architectures for air/non air gapped environments

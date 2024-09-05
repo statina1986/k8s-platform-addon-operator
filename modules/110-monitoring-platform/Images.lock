@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-08T07:13:44.960176235Z"
+  generatedAt: "2024-09-05T10:58:34.1142455Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -154,9 +154,9 @@ images:
     image: docker.io/grafana/grafana-image-renderer:latest
     chart: monitoring-platform
     digests:
-      - digest: sha256:47e75ed1c8d6704f4ceb5c2e9f27fe5d9f3f8ecdcd8b2b85254e6bddbbcbea30
+      - digest: sha256:9975402ecc5565fb6c6deb539c2f7c85170a5d68ee2b022de5d2f6b707fdeb35
         arch: linux/amd64
-      - digest: sha256:ae0725339d463c6a4e9947412fea6da5d20326ebe8a8d63bb7f420d40f0d155f
+      - digest: sha256:c752d37fd9543342dfd21d1267b3af19dddfe9b76f179d22a3be31822bc51751
         arch: linux/arm64
   - name: prometheus-node-exporter
     image: quay.io/prometheus/node-exporter:v1.8.1
@@ -183,8 +183,10 @@ images:
       - digest: sha256:0b849c2a1fd2a8e3a8465803c0e0853e063fd89b33ad10847f82152b8f1f7066
         arch: linux/arm64
   - name: grafana-plugins
-    image: artifactory.qvantel.net/platform/grafana-plugins:0.0.1
+    image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
     chart: monitoring-platform
     digests:
-      - digest: sha256:69b58876573bdcc2421bf4ef8b937e3ad2d4f8c8c6d5eea2b350cb6dbc193401
+      - digest: sha256:df171b61de00d913db12992bc6005989ded8215454980bce264608b39fffe88a
+        arch: linux/arm64
+      - digest: sha256:632831c45ad02a28f0309866f100351ca94201f09704431d0f05e6a111288f27
         arch: linux/amd64
