@@ -76,27 +76,22 @@ spec:
       annotations:
         brief: "Kafka cluster {{` {{ $labels.job }} `}} has {{` {{ $value }} `}} failed produce requests for {{` {{ $labels.topic }} `}}"
         procedure: "Escalate to L2 after verifying."
-#kafka lags alerts could be removed after verifying kafa lag exporter alert works better in real (traffic) environment
-    - alert: KafkaWarningConsumerLag
-      expr: sum by (topic, partition, app) (kafka_consumer_fetch_manager_records_lag_max{topic!=""}) > 5000
+    - alert: LargeConsumerGroupLag
+      expr: sum(kafka_consumergroup_lag) by(topic,consumergroup) > 5000
       for: 15m
       labels:
         severity: warning
-        level: application
-        package: base
       annotations:
-        brief: "Consumer Lag detected for topic {{` {{ $labels.topic }} `}} on partition {{` {{ $labels.partition }} `}} in app {{` {{ $labels.app }} `}}"
-        procedure: "Escalate to L2 after verifying."
-    - alert: KafkaSevereConsumerLag
-      expr: sum by (topic, partition, app) (kafka_consumer_fetch_manager_records_lag_max{topic!=""}) > 10000
+        summary: 'Consumer group lag is big'
+        description: 'Consumer group {{` {{ $labels.consumergroup}} `}} lag is big ({{` {{ $value }} `}}) on topic {{` {{ $labels.topic }} `}}'
+    - alert: TooBigConsumerGroupLag
+      expr: sum(kafka_consumergroup_lag) by(topic,consumergroup) > 10000
       for: 15m
       labels:
         severity: critical
-        level: application
-        package: base
       annotations:
-        brief: "Consumer Lag detected for topic {{` {{ $labels.topic }} `}} on partition {{` {{ $labels.partition }} `}} in app {{` {{ $labels.app }} `}}"
-        procedure: "Escalate to L2 ASAP after verifying." 
+        summary: 'Consumer group lag is too big'
+        description: 'Consumer group {{` {{ $labels.consumergroup}} `}} lag is too big ({{` {{ $value }} `}}) on topic {{` {{ $labels.topic }} `}}'
     - alert: KafkaBrokerExceededPartitionLimit
       expr: kafka_server_replicamanager_partitioncount >= 4000
       labels:
