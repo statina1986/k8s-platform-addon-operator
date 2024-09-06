@@ -863,7 +863,27 @@ istioIngress:
           - destination:
               host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
               port:
-                number: 80                
+                number: 80
+      artifactory-oss:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: artifactory-oss.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 8082
+      artifactory-jcr:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: artifactory-jcr.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 8082             
       consul-ui:
         enabled: false
         pomeriumProtected: true

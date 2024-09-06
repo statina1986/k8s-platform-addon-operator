@@ -18,6 +18,7 @@ artifactoryPlatform:
     artifactory:
       fullnameOverride: artifactory-oss
       artifactory:
+        name: "artifactory-oss"
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
@@ -63,6 +64,7 @@ artifactoryPlatform:
     artifactory:
       fullnameOverride: artifactory-jcr
       artifactory:
+        name: "artifactory-jcr"
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
