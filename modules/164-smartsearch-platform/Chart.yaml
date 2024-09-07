@@ -1,7 +1,0 @@
-apiVersion: v2
-name: smartsearch-platform
-version: 0.0.1
-dependencies:
-  - name: smartsearchPlatform
-    version: 0.0.1
-    condition: elasticsearch-platform.enabled
