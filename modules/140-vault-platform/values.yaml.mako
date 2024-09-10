@@ -5,7 +5,10 @@
 # vaultPlatformNamespace: vault
 vaultPlatform:
   vaultWebhooksEnabled: true
+  # autoUnseal is when a cloud service (KMS) is used to unseal vault
   autoUnseal: false
+  # k8sUnseal is when unseal secret is stored in kubernetes secrets, and is automatically unsealed using that
+  k8sUnseal: false
   useBackwardsCompatibilityService: true
   vault-secrets-webhook:
     image:
@@ -107,7 +110,7 @@ vaultPlatform:
           name: vault-auto-init-config
           defaultMode: 0777
       extraContainers:
-        - name: auto-init-sidecar
+        - name: auto-init-and-unseal-sidecar
           args:
             - /init-script/init.sh
           command:
