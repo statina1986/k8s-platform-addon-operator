@@ -8,8 +8,6 @@ kafkaPlatform:
       name: "kafbat-ui-configmap"
       keyName: "config.yml"
     env:
-      - name: SPRING_CONFIG_ADDITIONAL-LOCATION
-        value: /kafka-ui/config.yml
       - name: JAVA_OPTS
         value: >-
           -Dreactor.netty.pool.maxIdleTime=30000
