@@ -45,6 +45,9 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
+        % if 'clusterName' in values['global']:
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-public
+        % endif
   publicIngressGateways:
   - name: public-ingress
     spec:
@@ -111,6 +114,9 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
+        % if 'clusterName' in values['global']:
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-private
+        % endif
   privateIngressGateways:
   - name: private-ingress
     spec:
@@ -177,6 +183,9 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
+        % if 'clusterName' in values['global']:
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-http
+        % endif
   integrationsHttpIngressGateways:
   - name: integrations-http-ingress
     spec:
@@ -242,6 +251,9 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        % if 'clusterName' in values['global']:
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-nonhttp
+        % endif
       ports:
       - name: status-port
         port: 15021

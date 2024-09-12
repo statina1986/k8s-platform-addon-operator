@@ -44,7 +44,11 @@ awsPlatform:
   apiServerEndpoint: https://172.20.0.1:443 # override EKS API server endpoint
   aws-load-balancer-controller-enabled: false
   aws-load-balancer-controller:
+    % if 'clusterName' in values['global']:
+    clusterName: ${values['global']['clusterName']}
+    % else:
     clusterName: ${clusterName}
+    % endif
     serviceAccount:
       name: platform
       create: false
