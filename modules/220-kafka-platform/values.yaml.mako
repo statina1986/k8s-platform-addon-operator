@@ -7,6 +7,13 @@ kafkaPlatform:
     yamlApplicationConfigConfigMap:
       name: "kafbat-ui-configmap"
       keyName: "config.yml"
+    env:
+      - name: SPRING_CONFIG_ADDITIONAL-LOCATION
+        value: /kafka-ui/config.yml
+      - name: JAVA_OPTS
+        value: >-
+          -Dreactor.netty.pool.maxIdleTime=30000
+          -Dreactor.netty.pool.maxLifeTime=60000
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
