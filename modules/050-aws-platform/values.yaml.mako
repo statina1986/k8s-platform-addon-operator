@@ -1,6 +1,5 @@
 <%
   region = values.get('awsPlatform', {}).get('region','eu-central-1')
-  clusterName = values.get('awsPlatform', {}).get('clusterName','cluster-name')
   awsRegistryAccount = {}
   awsRegistryAccount['af-south-1']     = '877085696533'
   awsRegistryAccount['ap-east-1']      = '800184023465'
@@ -39,16 +38,12 @@
 
 awsPlatform:
   region: eu-central-1
-  clusterName: cluster-name
+  clusterName: ${values['global']['clusterName']}
   awsRegistry: ${awsRegistryAccount[region]}.dkr.ecr.${region}.amazonaws.com
   apiServerEndpoint: https://172.20.0.1:443 # override EKS API server endpoint
   aws-load-balancer-controller-enabled: false
   aws-load-balancer-controller:
-    % if 'clusterName' in values['global']:
     clusterName: ${values['global']['clusterName']}
-    % else:
-    clusterName: ${clusterName}
-    % endif
     serviceAccount:
       name: platform
       create: false
