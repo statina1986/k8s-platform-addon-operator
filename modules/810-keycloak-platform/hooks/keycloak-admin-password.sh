@@ -12,9 +12,19 @@ hook::config() {
 hook::trigger() {
   qlog "Inserting keycloak admin password to vault for system-spec qinstaller"
   token="$(vault::get_vault_token)"
-  password="$(kubectl::get_secret_opaque_kv keycloak-admin-secret KEYCLOAK_ADMIN_PASSWORD platform)"
-  # note, this overwrites any other secrets in the location. don't put anything else there!
-  curl::post_data '{"keycloak-password":"'"$password"'"}' "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/installer/qvaa/keycloak'" 204
+  password="$(kubectl::get_secret_opaque_kv keycloak-admin-secret KEYCLOAK_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
+  OLD=`mktemp`
+  ADD=`mktemp`
+  NEW=`mktemp`
+  # read old data from vault, accept also not found
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/installer/qvaa/keycloak'" '200|404'
+  jq -r .data $CURL_RESULT > $OLD
+  echo '{"keycloak-password":"'"$password"'"}' > $ADD
+  # combine old data (possibly null) with new
+  jq -s add $OLD $ADD > $NEW
+  # put new data to vault
+  curl::execute "-d @$NEW --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/installer/qvaa/keycloak'" 204
+  rm -f $OLD $ADD $NEW
 }
 
 common::run_hook "$@"
