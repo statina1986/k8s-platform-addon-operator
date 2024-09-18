@@ -520,8 +520,8 @@ monitoringPlatform:
               - targets:
                   - "alertmanager.alert.k8s.qvantel.net:9096"
         % endif
-        additionalScrapeConfigs: |
-          - job_name: 'kubernetes-pods'
+        additionalScrapeConfigsAsMap:
+          kubernetes-pods:
             kubernetes_sd_configs:
             - role: pod
             relabel_configs:  # If first two labels are present, pod should be scraped  by the istio-secure job.
@@ -558,7 +558,7 @@ monitoringPlatform:
               target_label: node
               replacement: $1
               action: replace
-          - job_name: podMonitor/metrics/kafka-resources-metrics/0
+          'podMonitor/metrics/kafka-resources-metrics/0' :
             honor_timestamps: true
             scrape_interval: 30s
             scrape_timeout: 10s
@@ -656,4 +656,9 @@ monitoringPlatform:
               follow_redirects: true
               namespaces:
                 names:
-                - platform
+                - platform     
+        additionalScrapeConfigs: |
+          {{- range $k, $v := .Values.prometheus.prometheusSpec.additionalScrapeConfigsAsMap }}
+          - job_name: '{{ $k }}'
+          {{ $v | toYaml | indent 2}}
+          {{- end }}
