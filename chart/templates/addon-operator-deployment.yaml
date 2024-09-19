@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: ADDON_OPERATOR_DEPLOY_RESOURCES
-            value: {{ .Values.deployResources }}
+            value: "{{ .Values.deployResources }}"
           - name: ADDON_OPERATOR_NAMESPACE
             value: {{ .Values.addonOperatorNamespace }}
           - name: LOG_LEVEL
