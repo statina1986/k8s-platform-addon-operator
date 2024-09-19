@@ -1,4 +1,0 @@
-VAULT_ADDR=${VAULT_ADDR:-"http://vault.platform.svc.cluster.local:8200"}
-VAULT_SECRET_NAME=${VAULT_SECRET_NAME:-"vault-dev-keys"}
-VAULT_SECRET_NAMESPACE=${VAULT_SECRET_NAMESPACE:-"platform"}
-VAULT_SECRET_ROOT_TOKEN=${VAULT_SECRET_ROOT_TOKEN:-"vault-dev-root-token"}

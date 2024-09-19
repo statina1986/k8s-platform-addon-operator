@@ -23,14 +23,16 @@ spec:
         image: {{ .Values.imageBase }}:{{ .Values.imageVersion | default .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
         env:
+          - name: ADDON_OPERATOR_DEPLOY_RESOURCES
+            value: {{ .Values.deployResources }}
           - name: ADDON_OPERATOR_NAMESPACE
-            value: {{ .Values.addonOperatorNamespace}}
+            value: {{ .Values.addonOperatorNamespace }}
           - name: LOG_LEVEL
-            value: {{ .Values.logLevel}}
+            value: {{ .Values.logLevel }}
           - name: HELM_IGNORE_RELEASE
-            value: {{ .Values.helmIgnoreRelease}}
+            value: {{ .Values.helmIgnoreRelease }}
           - name: HELM_RELEASE_NAME_PREFIX
-            value: {{ .Values.globalConfig.helmReleaseNamePrefix}}
+            value: {{ .Values.globalConfig.helmReleaseNamePrefix }}
           - name: INSIDE_CLUSTER
             value: "true"
           {{- range .Values.deployment.additionalEnvironmentVars }}
