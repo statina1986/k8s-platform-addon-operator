@@ -4,3 +4,9 @@ version: 0.0.1
 dependencies:
   - name: sftpgoPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: sftpgo
+      image: ghcr.io/drakkan/sftpgo:v2.5.4
+    - name: sftpgo-alpine
+      image: ghcr.io/drakkan/sftpgo:v2.5.4-alpine

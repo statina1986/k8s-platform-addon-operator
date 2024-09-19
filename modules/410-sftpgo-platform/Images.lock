@@ -1,10 +1,34 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:05:42.984440394Z"
+  generatedAt: "2024-09-19T11:11:14.641833107Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: sftpgo-platform
   version: 0.0.1
   appVersion: ""
-images: []
+images:
+  - name: sftpgo
+    image: ghcr.io/drakkan/sftpgo:v2.5.4
+    chart: sftpgo-platform
+    digests:
+      - digest: sha256:432700195d5b163f149af47d86be4e294e032e5cf57a88df3f51e2ab0a08258e
+        arch: linux/amd64
+      - digest: sha256:f3ddf08c355335dedbd189a618a1f219eecca635781bc44a6f4fc95e35979e23
+        arch: linux/arm64
+      - digest: sha256:43feaa299798ee79f336bcd3f9d3f51d9257d5a3b02218a95b5139d4db511d77
+        arch: linux/ppc64le
+      - digest: sha256:cf6385d610b191fa6de2a50d512ccf684b777a78af1aa9f05eda0b6436885f61
+        arch: linux/arm
+  - name: sftpgo-alpine
+    image: ghcr.io/drakkan/sftpgo:v2.5.4-alpine
+    chart: sftpgo-platform
+    digests:
+      - digest: sha256:4fac9b1244283c8fda39a7456909afd803ffc3dba1f3873cc48fe8fe3332acaa
+        arch: linux/amd64
+      - digest: sha256:1e729fc6b896e928c6945baeb4478d30def2819b4355fc13c83e5c8ac044ba51
+        arch: linux/arm64
+      - digest: sha256:dc26554fd163bbc4074ae37b7ece1b6a693de696edf9ccb9749266b692792594
+        arch: linux/ppc64le
+      - digest: sha256:9778f0bcc141663cbfc4a30503760afb804ae067bcc5be23e032c1f08e7190a7
+        arch: linux/arm
