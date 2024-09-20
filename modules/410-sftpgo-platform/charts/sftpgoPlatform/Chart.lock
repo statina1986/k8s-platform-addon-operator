@@ -1,0 +1,6 @@
+dependencies:
+- name: sftpgo
+  repository: https://charts.sagikazarmark.dev
+  version: 0.22.0
+digest: sha256:4973c7dac65c99ecafb10c9aecee22977d1954faf0d762a39f02fba671b275e7
+generated: "2024-09-19T14:14:08.912076641+03:00"

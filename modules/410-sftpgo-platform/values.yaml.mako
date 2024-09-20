@@ -1,7 +1,4 @@
 sftpgoPlatform:
-  storage:
-    storageClass: gp3
-    storageSize: 10Gi
   secrets:
     existingSecretName: sftpgo-shared-secrets
     forceGenerateServiceSecrets: false
@@ -18,6 +15,9 @@ sftpgoPlatform:
       dedicated-nodes: platform-masters
     % endif
     image:
+      % if 'containerRegistryBase' in values['global']:
+      repository: ${values['global']['containerRegistryBase']}/drakkan/sftpgo
+      % endif
       tag: v2.5.4
     sftpd:
       enabled: true
@@ -35,18 +35,22 @@ sftpgoPlatform:
     envFrom:
       - secretRef:
           name: sftpgo-shared-secrets
-    volumes:  
-      - name: sftpgo-pvc-volume
-        persistentVolumeClaim:
-          claimName: sftpgo-pvc
+    persistence:
+      enabled: true
+      pvc:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: gp3
+    volumes:
       - name: trusted-ca-tls
         secret:
           defaultMode: 420
           optional: true
           secretName: qvantel-root-ca
     volumeMounts:
-      - name: sftpgo-pvc-volume
-        mountPath: /var/lib/sftpgo
       - name: trusted-ca-tls
         mountPath: /etc/ssl/certs          
     podSecurityContext:
@@ -72,4 +76,3 @@ sftpgoPlatform:
       sftpd:
         enabled_ssh_commands:
           ["md5sum", "sha1sum", "sha256sum", "cd", "pwd", "scp", "rsync"]
-
