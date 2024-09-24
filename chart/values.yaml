@@ -29,7 +29,6 @@ globalConfig:
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"
-  QvantelManagedCluster: "true"
   appsNamespace: "qvantel"
   platformNamespace: "platform"
   kubernetesVersion: "1.25"
