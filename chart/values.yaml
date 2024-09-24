@@ -3,7 +3,7 @@ addonOperatorNamespace: "platform"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 deployResources: "true"
-ClusterWideResources: "true"
+clusterwideResources: "true"
 imageBase: "platform.artifactory.qvantel.net/platform/k8s-platform-addon-operator"
 deployment:
   replicas: 1
