@@ -1,0 +1,72 @@
+{{- $root := . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafbat-ui-roles
+data:
+  roles.yml: |-
+    {{- if eq (index .Values.kafkaPlatform "kafka-ui" "auth") "oauth2"}}
+    rbac:
+      roles:
+    {{- range keys .Values.kafkaPlatform.clusters }}
+    {{- $current := get $.Values.kafkaPlatform.clusters . }}
+    {{- if $current.enabled }}
+    {{- $cluster_name := . }}
+        - name: "kafka-ui-admin"
+          clusters:
+            - {{ $cluster_name }}
+          subjects:
+            - provider: keycloak
+              type: role
+              value: "kafka-ui-admin"
+          permissions:
+            - resource: applicationconfig
+              actions: all
+            - resource: clusterconfig
+              actions: all
+            - resource: topic
+              value: ".*"
+              actions: all
+            - resource: consumer
+              value: ".*"
+              actions: all
+            - resource: schema
+              value: ".*"
+              actions: all
+            - resource: connect
+              value: ".*"
+              actions: all
+            - resource: ksql
+              actions: all
+            - resource: acl
+              actions: [ view ]
+
+        - name: "kafka-ui-read"
+          clusters:
+            - {{ $cluster_name }}
+          subjects:
+            - provider: keycloak
+              type: role
+              value: "kafka-ui-read"
+          permissions:
+            - resource: clusterconfig
+              actions: [ "view" ]
+            - resource: topic
+              value: ".*"
+              actions: 
+                - VIEW
+                - MESSAGES_READ
+            - resource: consumer
+              value: ".*"
+              actions: [ view ]
+            - resource: schema
+              value: ".*"
+              actions: [ view ]
+            - resource: connect
+              value: ".*"
+              actions: [ view ]
+            - resource: acl
+              actions: [ view ]
+    {{- end }}
+    {{- end }}
+    {{- end }}

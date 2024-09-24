@@ -17,6 +17,15 @@ kafkaPlatform:
           secretKeyRef:
             name: kafka-ui-client-secret
             key: KAFKA_UI_CLIENT_SECRET
+      - name: SPRING_CONFIG_ADDITIONAL-LOCATION
+        value: /kafka-ui-roles/roles.yml
+    volumes:
+      - name: roles-config
+        configMap:
+          name: kafbat-ui-roles
+    volumeMounts:
+    - name: roles-config
+      mountPath: /kafka-ui-roles
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:

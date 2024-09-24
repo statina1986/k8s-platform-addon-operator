@@ -23,7 +23,7 @@ data:
         client:
           keycloak:
             clientId: kafbat
-            clientSecret: "$KAFKA_UI_CLIENT_SECRET"
+            clientSecret: ${KAFKA_UI_CLIENT_SECRET}
             scope: openid
             client-name: keycloak
             provider: keycloak
