@@ -65,6 +65,14 @@ keycloakPlatform:
                     name: {{ .Values.keycloakPlatform.pomeriumSecretName }}
                     key: IDP_CLIENT_SECRET
               % endif
+              % if addon_operator['kafkaPlatformEnabled'] == 'true':
+              - name: KAFKA_UI_CLIENT_SECRET
+                # https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/220-kafka-platform/templates/kafka-ui-client-secret.yaml?at=b6ec5cfebbcc33b11b0c9e75a8a15bfabf303bfa
+                valueFrom:
+                  secretKeyRef:
+                    name: kafka-ui-client-secret
+                    key: KAFKA_UI_CLIENT_SECRET
+              % endif
               % if addon_operator['monitoringPlatformEnabled'] == 'true':
               - name: GRAFANA_CLIENT_SECRET
                 # https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/110-monitoring-platform/templates/secrets/grafana_keycloak_client_secret.yaml
@@ -122,6 +130,13 @@ keycloakPlatform:
                 pkce: S256
                 redirect_uris:
                   - https://grafana-${values['global']['ingressBaseUrl']}/*
+              kafbat:
+                % if addon_operator['kafkaPlatformEnabled'] == 'true':
+                secret: $KAFKA_UI_CLIENT_SECRET
+                % endif
+                roles_claim: roles
+                redirect_uris:
+                  - https://kafka-ui-${values['global']['ingressBaseUrl']}/*
               sftpgo:
                 % if addon_operator['sftpgoPlatformEnabled'] == 'true':
                 secret: $SFTPGO_CLIENT_SECRET
