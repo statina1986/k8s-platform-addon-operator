@@ -9,8 +9,7 @@ metadata:
     eks.amazonaws.com/role-arn: {{ .Values.platformCore.awsRole }}
   {{- end }}
 
----
-{{- if eq .Values.globalConfig.QvantelManagedCluster "true" }}
+{{- if eq .Values.globalConfig.ClusterWideResources "true" }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

@@ -49,6 +49,8 @@ beforeAll: 1
                 except ApiException as e:
                     if e.status == 409:  # if the CRD already exists the K8s API will respond with a 409 Conflict
                         logger.info("Deployment resource already exist")
+                    if e.status == 404:  # if the CRD does not exist the K8s API will respond with a 404 Conflict
+                        logger.info("Deployment resource does not exist, make sure CRDs are deployed first")
                     else:
                         raise e
 
