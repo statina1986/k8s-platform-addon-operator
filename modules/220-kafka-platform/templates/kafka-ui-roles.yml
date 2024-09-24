@@ -16,7 +16,7 @@ data:
           clusters:
             - {{ $cluster_name }}
           subjects:
-            - provider: keycloak
+            - provider: oauth
               type: role
               value: "kafka-ui-admin"
           permissions:
@@ -45,7 +45,7 @@ data:
           clusters:
             - {{ $cluster_name }}
           subjects:
-            - provider: keycloak
+            - provider: oauth
               type: role
               value: "kafka-ui-read"
           permissions:
