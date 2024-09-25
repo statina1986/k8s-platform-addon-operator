@@ -2,7 +2,6 @@ istioIngress:
   pomeriumEnabled: false
   # Public Ingress
   publicIngressEnabled: false
-  publicIngressProxyProtocolEnabled: false
   publicIngressLogFullRequest: false
   publicIngressLogFullResponse: false
   publicIngressBufferHttpRequestSize: 0
@@ -43,7 +42,6 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-public
@@ -71,7 +69,6 @@ istioIngress:
           credentialName: qvantel-wildcard
           # Private Ingress
   privateIngressEnabled: false
-  privateIngressProxyProtocolEnabled: false
   privateIngressLogFullRequest: false
   privateIngressLogFullResponse: false
   privateIngressBufferHttpRequestSize: 0
@@ -112,7 +109,6 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-private
@@ -140,7 +136,6 @@ istioIngress:
           credentialName: qvantel-wildcard
           # IntegrationsHttp Ingress
   integrationsHttpIngressEnabled: false
-  integrationsHttpIngressProxyProtocolEnabled: false
   integrationsHttpIngressLogFullRequest: false
   integrationsHttpIngressLogFullResponse: false
   integrationsHttpIngressBufferHttpRequestSize: 0
@@ -181,7 +176,6 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-http
@@ -209,7 +203,6 @@ istioIngress:
           credentialName: qvantel-wildcard
           # IntegrationsNonHttp Ingress
   integrationsNonHttpIngressEnabled: false
-  integrationsNonHttpIngressProxyProtocolEnabled: false
   integrationsNonHttpIngressLogFullRequest: false
   integrationsNonHttpIngressLogFullResponse: false
   integrationsNonHttpIngressBufferHttpRequestSize: 0
