@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{.Values.global.helmReleaseNamePrefix}}consul-consul-server
+  name: consul-consul-server
 spec:
   type: ExternalName
   externalName: {{.Values.global.helmReleaseNamePrefix}}consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local
