@@ -3,7 +3,6 @@ addonOperatorNamespace: "platform"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 deployResources: "true"
-clusterwideResources: "true"
 imageBase: "platform.artifactory.qvantel.net/platform/k8s-platform-addon-operator"
 deployment:
   replicas: 1
@@ -34,6 +33,7 @@ globalConfig:
   kubernetesVersion: "1.25"
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
   helmReleaseNamePrefix: ""
+  clusterwideResources: "true"
 modulesConfig:
   apisixPlatformEnabled: "false"
   artifactoryPlatformEnabled: "false"

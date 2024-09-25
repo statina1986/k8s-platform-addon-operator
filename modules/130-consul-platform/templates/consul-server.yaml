@@ -1960,8 +1960,8 @@ data:
           {
             "current": {
               "selected": false,
-              "text": "consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local:8500",
-              "value": "consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local:8500"
+              "text": "{{.Values.global.helmReleaseNamePrefix}}consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local:8500",
+              "value": "{{.Values.global.helmReleaseNamePrefix}}consul-platform-consul-server.{{.Release.Namespace}}.svc.cluster.local:8500"
             },
             "datasource": {
               "type": "prometheus",
