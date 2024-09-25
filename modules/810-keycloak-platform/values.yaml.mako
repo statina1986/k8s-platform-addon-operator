@@ -138,6 +138,24 @@ keycloakPlatform:
                 redirect_uris:
                   - http://localhost:8250/oidc/callback
                   - https://vault-ui-${values['global']['ingressBaseUrl']}/*
+            roles:
+              kafka-admins: {}
+              kafka-readonly: {}
+              consul-admins: {}
+              consul-readonly: {}
+              prometheus-admins: {}
+              prometheus-readonly: {}
+              sftpgo-admins: {}
+              vault-admins: {}
+              vault-readonly: {}
+              grafana_server_admin:
+                description: "Grafana server administrator permissions: Manage Grafana server-wide settings and resources"
+              grafana_admin:
+                description: "Organization administrator: Has access to all organization resources, including dashboards, users, and teams."
+              grafana_editor:
+                description: "Editor: Can view and edit dashboards, folders, and playlists."
+              grafana_viewer:
+                description: "Viewer: Can view dashboards and playlists."
   deployment:
     additionalLabels: null
     replicaCount: 1
