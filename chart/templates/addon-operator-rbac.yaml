@@ -10,6 +10,17 @@ metadata:
   {{- end }}
 
 {{- if eq .Values.globalConfig.clusterwideResources "true" }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: platform
+  namespace: {{ .Release.Namespace }}
+  annotations:
+  {{- if .Values.platformCore.awsRole}}
+    eks.amazonaws.com/role-arn: {{ .Values.platformCore.awsRole }}
+  {{- end }}
+  
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
