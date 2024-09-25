@@ -374,8 +374,8 @@ monitoringPlatform:
           name_attribute_path: full_name
           auth_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/auth # override if needed in the target environment values file
           signout_redirect_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/logout # override if needed in the target environment values file
-          token_url: http://qvaa-proxy-80.qvantel.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
-          api_url: http://qvaa-proxy-80.qvantel.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
+          token_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
+          api_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
           role_attribute_path: contains(realm_access.roles[*], 'grafana_admin') && 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') && 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') && 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') && 'Viewer'
           allow_assign_grafana_admin: true
           role_attribute_strict: true
