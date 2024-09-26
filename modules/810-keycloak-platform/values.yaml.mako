@@ -8,7 +8,7 @@ keycloakPlatform:
     # an issue with vault keycloak integration is, vault needs to contact to the "external" url of
     # keycloak, https://auth-... because it expects to "issuer" to match the url.
     # because of this, keycloak integration is not enabled by default.
-    discovery_url: https://auth-${values['global']['ingressBaseUrl']}/realms/qvantel/.well-known/openid-configuration
+    discovery_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel
     vault_url: https://vault-ui-${values['global']['ingressBaseUrl']}/ui/vault/auth/oidc/oidc/callback
     oidc_discovery_ca_pem: false
     policies:
