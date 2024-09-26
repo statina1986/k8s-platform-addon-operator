@@ -26,6 +26,72 @@ kafkaPlatform:
     volumeMounts:
     - name: roles-config
       mountPath: /kafka-ui-roles
+    
+    roleconfig: |
+      % if 'oauth2' in values['kafkaPlatform']['kafka-ui']['auth']:
+      rbac:
+        roles: 
+          {{- range keys .Values.kafkaPlatform.clusters }}
+          {{- $current := get $.Values.kafkaPlatform.clusters . }}
+          {{- if $current.enabled }}
+          {{- $cluster_name := . }}
+          - name: "kafka-admins-{{ $cluster_name }}"
+            clusters:
+              - {{ $cluster_name }}
+            subjects:
+              - provider: keycloak
+                type: role
+                value: "kafka-admins"
+            permissions:
+              - resource: applicationconfig
+                actions: all
+              - resource: clusterconfig
+                actions: all
+              - resource: topic
+                value: ".*"
+                actions: all
+              - resource: consumer
+                value: ".*"
+                actions: all
+              - resource: schema
+                value: ".*"
+                actions: all
+              - resource: connect
+                value: ".*"
+                actions: all
+              - resource: ksql
+                actions: all
+              - resource: acl
+                actions: [ view ]
+          - name: "kafka-readonly-{{ $cluster_name }}"
+            clusters:
+              - {{ $cluster_name }}
+            subjects:
+              - provider: keycloak
+                type: role
+                value: "kafka-readonly"
+            permissions:
+              - resource: clusterconfig
+                actions: [ "view" ]
+              - resource: topic
+                value: ".*"
+                actions: 
+                  - VIEW
+                  - MESSAGES_READ
+              - resource: consumer
+                value: ".*"
+                actions: [ view ]
+              - resource: schema
+                value: ".*"
+                actions: [ view ]
+              - resource: connect
+                value: ".*"
+                actions: [ view ]
+              - resource: acl
+                actions: [ view ]
+        {{- end }}
+        {{- end }}
+      % endif 
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
