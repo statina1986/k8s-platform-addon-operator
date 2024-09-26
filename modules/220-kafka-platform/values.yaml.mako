@@ -27,6 +27,7 @@ kafkaPlatform:
     - name: roles-config
       mountPath: /kafka-ui-roles
     
+    additionalroles: null    
     roleconfig: |
       % if 'oauth2' in values['kafkaPlatform']['kafka-ui']['auth']:
       rbac:
@@ -39,7 +40,7 @@ kafkaPlatform:
             clusters:
               - {{ $cluster_name }}
             subjects:
-              - provider: keycloak
+              - provider: oauth
                 type: role
                 value: "kafka-admins"
             permissions:
@@ -67,7 +68,7 @@ kafkaPlatform:
             clusters:
               - {{ $cluster_name }}
             subjects:
-              - provider: keycloak
+              - provider: oauth
                 type: role
                 value: "kafka-readonly"
             permissions:
@@ -89,9 +90,32 @@ kafkaPlatform:
                 actions: [ view ]
               - resource: acl
                 actions: [ view ]
+          {{- range $roleName, $role := (index $.Values.kafkaPlatform "kafka-ui" "additionalroles") }}
+          - name: {{ printf "%s%s%s" $roleName "-" $cluster_name | quote }}
+            clusters:
+              - {{ $cluster_name}}
+            subjects:
+              {{- range $subject := $role.subjects }}
+              - provider: {{ $subject.provider }}
+                type: {{ $subject.type }}
+                value: {{ $subject.value }}
+              {{- end }}
+            permissions:
+              {{- range $permission := $role.permissions }}
+              - resource: {{ $permission.resource }}
+                {{- if $permission.value }}
+                value: {{ $permission.value | quote }}
+                {{- end }}
+                actions:
+                  {{- $actions := default (list "VIEW") $permission.actions }}
+                  {{- range $action := $actions }}
+                  - {{ $action }}
+                  {{- end }}
+              {{- end }}
+          {{- end }}
         {{- end }}
         {{- end }}
-      % endif 
+      % endif
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
