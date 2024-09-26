@@ -984,6 +984,28 @@ istioIngress:
               host: loki-read.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 3100
+      sftp:
+        enabled: false
+        gateways:
+        - integrations-non-http-ingress
+        tcp:
+        - match:
+            - port: 22
+          route:
+            - destination:
+                host: sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 22
+      sftp-ui:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 80
       pmm:
         enabled: false
         gateways:
