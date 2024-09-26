@@ -48,6 +48,7 @@ istioIngress:
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-public
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-public
   publicIngressGateways:
   - name: public-ingress
     spec:
@@ -117,6 +118,7 @@ istioIngress:
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-private
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-private
   privateIngressGateways:
   - name: private-ingress
     spec:
@@ -186,6 +188,7 @@ istioIngress:
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-http
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-http
   integrationsHttpIngressGateways:
   - name: integrations-http-ingress
     spec:
@@ -254,6 +257,7 @@ istioIngress:
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-nonhttp
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-nonhttp
       ports:
       - name: status-port
         port: 15021

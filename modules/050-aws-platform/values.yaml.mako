@@ -37,12 +37,48 @@
 %>
 
 awsPlatform:
+  tags:
+    % if not values.get('awsPlatform', {}).get('tags'):
+      <% raise ValueError("List of valid tags is required!") %>
+    % else:
+      % if not values['awsPlatform']['tags'].get('WO_Desc'):
+        <% raise ValueError("Tag WO_Desc is required!") %>
+      % elif not values['awsPlatform']['tags'].get('Workorder'):
+        <% raise ValueError("Tag Workorder is required!") %>
+      % elif not values['awsPlatform']['tags'].get('JIRA'):
+        <% raise ValueError("Tag JIRA is required!") %>
+      % elif not values['awsPlatform']['tags'].get('Owner_Infra'):
+        <% raise ValueError("Tag Owner_Infra is required!") %>
+      % elif not values['awsPlatform']['tags'].get('Owner_Release'):
+        <% raise ValueError("Tag Owner_Release is required!") %>
+      % elif not values['awsPlatform']['tags'].get('Owner_Business'):
+        <% raise ValueError("Tag Owner_Business is required!") %>
+      % elif not values['awsPlatform']['tags'].get('Terraform'):
+        <% raise ValueError("Tag Terraform is required!") %>
+      % elif not values['awsPlatform']['tags'].get('Jenkins'):
+        <% raise ValueError("Tag Jenkins is required!") %>
+      % elif not values['awsPlatform']['tags'].get('SpotFleet'):
+        <% raise ValueError("Tag SpotFleet is required!") %>
+      % elif not values['awsPlatform']['tags'].get('QvEKS'):
+        <% raise ValueError("Tag QvEKS is required!") %>
+      % else:
+        <% print("List of valid tags has been given.") %>
+      % endif
+    % endif
+
   region: eu-central-1
   clusterName: ${values['global']['clusterName']}
   awsRegistry: ${awsRegistryAccount[region]}.dkr.ecr.${region}.amazonaws.com
   apiServerEndpoint: https://172.20.0.1:443 # override EKS API server endpoint
   aws-load-balancer-controller-enabled: false
   aws-load-balancer-controller:
+
+
+    defaultTags:
+      ${values['awsPlatform']['tags']}
+
+    
+    
     clusterName: ${values['global']['clusterName']}
     serviceAccount:
       name: platform
@@ -157,6 +193,8 @@ awsPlatform:
           repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/volume-modifier-for-k8s
           % endif
     controller:
+      extraVolumeTags:
+        ${values['awsPlatform']['tags']}
       serviceAccount:
         create: false
         name: platform
@@ -176,6 +214,7 @@ awsPlatform:
         allowVolumeExpansion: true
         parameters:
           type: gp3
+          tagSpecification_name: "Name=${values['global']['clusterName']}-{{ .PVCName }}"
   aws-vpc-cni-enabled: false
   aws-vpc-cni:
     eniConfig:
