@@ -1,0 +1,64 @@
+global:
+  # one of  'dev', 'test', 'perf', 'prod'
+  configurationProfile: "test"
+  platformMasters: false
+  multiZone:
+    enabled: false
+  ingressBaseUrl: "some-env.qvantel.solutions"
+  appsNamespace: "qvantel"
+  platformNamespace: "platform"
+  kubernetesVersion: "1.25"
+  containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
+  helmReleaseNamePrefix: ""
+  clusterName: "some-cluster"
+
+apisixPlatformEnabled: true
+artifactoryPlatformEnabled: true
+awsPlatform: {}
+awsPlatformEnabled: true
+certPlatform: {}
+certPlatformEnabled: true
+cnpgPostgresPlatform: {}
+cnpgPostgresPlatformEnabled: true
+consulPlatformEnabled: true
+elasticsearchPlatform: {}
+elasticsearchPlatformEnabled: true
+externalDns: {}
+externalDnsEnabled: true  
+instanaPlatformEnabled: true
+istioIngress: {}
+istioIngressEnabled: true
+istioPlatformEnabled: true
+kafkaPlatform: {}
+kafkaPlatformEnabled: true
+kasopePlatform: {}
+kasopePlatformEnabled: true
+keycloakPlatform: {}
+keycloakPlatformEnabled: true
+ksixPlatformEnabled: true
+kyvernoPlatform: {}
+kyvernoPlatformEnabled: true
+lokiPlatform: {}
+lokiPlatformEnabled: true
+mariadbOperatorPlatform: {}
+mariadbOperatorPlatformEnabled: true
+mariadbPlatformEnabled: true
+metricsPlatformEnabled: true
+mongodbPlatform: {}
+mongodbPlatformEnabled: true
+monitoringPlatform: {}
+monitoringPlatformEnabled: true
+perconaPmmPlatformEnabled: true
+platformCoreEnabled: true
+pomeriumPlatformEnabled: true
+postgresPlatformEnabled: true
+qvantelGlueEnabled: true
+rabbitmqPlatformEnabled: true
+rancherPlatformEnabled: true
+redisPlatform: {}
+redisPlatformEnabled: true
+sftpEnabled: true
+sftpgoPlatformEnabled: true
+vaultPlatform: {}
+vaultPlatformEnabled: true
+vectorPlatformEnabled: true
