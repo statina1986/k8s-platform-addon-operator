@@ -1,5 +1,7 @@
 # certPlatformNamespace: cert-manager
 certPlatform:
+
+  # -- Configuration for underlying cert-manager helm-chart. See https://artifacthub.io/packages/helm/cert-manager/cert-manager/1.12.13#configuration
   cert-manager:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -43,20 +45,36 @@ certPlatform:
       nodeSelector:
         dedicated-nodes: platform-masters
       % endif
-  issuers: []
+
+  # -- List of Issuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `Issuer` resource details.
+  issuers:
+    # -- Example Issuer used for documentation
+    example-issuer:
+      # -- If Issuer is enabled and hence will be deployed to the cluster.
+      enabled: false
+      # -- Configure `spec` property of `Issuer` resource.
+      spec: {}
+  # -- List of ClusterIssuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `ClusterIssuer` resource details.
   clusterIssuers:
-    # This issuer is used to generate self-signed certificate for Simple Qvantel CA
+    # -- Example ClusterIssuer used for documentation
+    example-cluster-issuer:
+      # -- If ClusterIssuers is enabled and hence will be deployed to the cluster.
+      enabled: false
+      # -- Configure `spec` property of `ClusterIssuers` resource.
+      spec: {}
+
+    # -- This issuer is used to generate self-signed certificate for Simple Qvantel CA
     qvantel-selfsigned-issuer:
       enabled: true
       spec:
         selfSigned: {}
-    # This issuer is Simple Qvantel CA issuer
+    # -- This issuer is Simple Qvantel CA issuer
     qvantel-ca-issuer:
       enabled: true
       spec:
         ca:
           secretName: qvantel-root-ca
-    # This issuer is used for *.qvantel.systems certificates issuing with letsencrypt
+    # -- This issuer is used for *.qvantel.systems certificates issued with letsencrypt
     qvantel-dot-systems:
       enabled: false
       spec:
@@ -74,7 +92,7 @@ certPlatform:
                   region: eu-central-1
                   hostedZoneID: ZJ7W7ERY57J33
                   role: "arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account"
-      # This issuer is used for *.qvantel.solutions certificates issuing with letsencrypt
+    # -- This issuer is used for *.qvantel.solutions certificates issued with letsencrypt
     qvantel-dot-solutions:
       enabled: false
       spec:
@@ -92,8 +110,9 @@ certPlatform:
                   region: eu-central-1
                   hostedZoneID: ZPXWBK7RK86EX
                   role: "arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"
+  # -- List of Certificates to provision. See https://cert-manager.io/docs/usage/certificate/ for `Certificate` resource details.
   certificates:
-    # This is the root CA certificate for Simple Qvantel CA
+    # -- This is the root CA certificate for Simple Qvantel CA
     qvantel-ca:
       enabled: true
       spec:
@@ -112,7 +131,7 @@ certPlatform:
           name: qvantel-selfsigned-issuer
           kind: ClusterIssuer
           group: cert-manager.io
-    # This is the wildcard certificate issued for *.qvantel.systems name
+    # -- This is the wildcard certificate issued for *.qvantel.systems name
     qvantel-dot-systems-wildcard:
       enabled: false
       spec:
@@ -127,7 +146,7 @@ certPlatform:
           kind: ClusterIssuer
           group: cert-manager.io
         renewBefore: 720h
-    # This is the wildcard certificate issued for *.qvantel.solutions name
+    # -- This is the wildcard certificate issued for *.qvantel.solutions name
     qvantel-dot-solutions-wildcard:
       enabled: false
       spec:

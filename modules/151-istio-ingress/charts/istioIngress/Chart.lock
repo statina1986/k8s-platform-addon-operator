@@ -1,15 +1,15 @@
 dependencies:
 - name: gateway
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.17.6
+  repository: https://istio-release.storage.googleapis.com/charts
+  version: 1.23.2
 - name: gateway
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.17.6
+  repository: https://istio-release.storage.googleapis.com/charts
+  version: 1.23.2
 - name: gateway
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.17.6
+  repository: https://istio-release.storage.googleapis.com/charts
+  version: 1.23.2
 - name: gateway
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.17.6
-digest: sha256:4d411d8e68f99859234204af77d09227238830e4a49fa0a90f3439906ba338ca
-generated: "2023-09-24T16:30:17.722947764+03:00"
+  repository: https://istio-release.storage.googleapis.com/charts
+  version: 1.23.2
+digest: sha256:4d5418daed0ad9e74e5d0181240887a38069a49df25635614ecd7665c64148ea
+generated: "2024-09-25T17:47:58.440245451+03:00"

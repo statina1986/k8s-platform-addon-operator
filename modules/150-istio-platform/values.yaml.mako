@@ -3,7 +3,7 @@ istioPlatform:
   global:
     proxy:
       % if 'containerRegistryBase' in values['global']:
-      image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.17.6
+      image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.23.2
       % endif
   base:
     global:
@@ -11,7 +11,7 @@ istioPlatform:
   istiod:
     pilot:
       % if 'containerRegistryBase' in values['global']:
-      image: ${values['global']['containerRegistryBase']}/istio/pilot:1.17.6
+      image: ${values['global']['containerRegistryBase']}/istio/pilot:1.23.2
       % endif
       tolerations:
         - key: "dedicated-nodes"

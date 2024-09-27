@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-09-05T10:58:34.1142455Z"
+  generatedAt: "2024-09-20T13:04:45.337134663Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -151,12 +151,12 @@ images:
       - digest: sha256:b2e05106a897584f31a33dbd9f3efd1a5153f2197d2bd3213d94e23a6f32f725
         arch: linux/arm64
   - name: imageRenderer
-    image: docker.io/grafana/grafana-image-renderer:latest
+    image: docker.io/grafana/grafana-image-renderer:3.11.5
     chart: monitoring-platform
     digests:
-      - digest: sha256:9975402ecc5565fb6c6deb539c2f7c85170a5d68ee2b022de5d2f6b707fdeb35
+      - digest: sha256:b870676b66ef43989966e1a23cb101aa465dce32450f49b574818276983473b2
         arch: linux/amd64
-      - digest: sha256:c752d37fd9543342dfd21d1267b3af19dddfe9b76f179d22a3be31822bc51751
+      - digest: sha256:774b8469f6cd581922addff23ad1d21fdf447546ad2857830d828bc051c08727
         arch: linux/arm64
   - name: prometheus-node-exporter
     image: quay.io/prometheus/node-exporter:v1.8.1

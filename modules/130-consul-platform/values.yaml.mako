@@ -4,6 +4,8 @@ consulPlatform:
     image: ${values['global']['containerRegistryBase']}/hashicorp/consul:1.14.4
     imageK8S: ${values['global']['containerRegistryBase']}/hashicorp/consul-k8s-control-plane:1.0.3
     imageConsulDataplane: ${values['global']['containerRegistryBase']}/hashicorp/consul-dataplane:1.0.1
+    openshift:
+      enabled: false
     % endif
   apiGateway:
     % if 'containerRegistryBase' in values['global']:

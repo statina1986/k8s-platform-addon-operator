@@ -33,6 +33,7 @@ globalConfig:
   kubernetesVersion: "1.25"
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
   helmReleaseNamePrefix: ""
+  clusterwideResources: "true"
 modulesConfig:
   apisixPlatformEnabled: "false"
   artifactoryPlatformEnabled: "false"

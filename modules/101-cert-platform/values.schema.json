@@ -1,0 +1,882 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "certPlatform": {
+      "description": "certPlatformNamespace: cert-manager",
+      "properties": {
+        "cert-manager": {
+          "description": "Configuration for underlying cert-manager helm-chart. See https://artifacthub.io/packages/helm/cert-manager/cert-manager/1.12.13#configuration",
+          "properties": {
+            "acmesolver": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "jetstack/cert-manager-acmesolver",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "acmesolver",
+              "type": "object"
+            },
+            "cainjector": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "jetstack/cert-manager-cainjector",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "cainjector",
+              "type": "object"
+            },
+            "global": {
+              "properties": {
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "global",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                },
+                "repository": {
+                  "default": "jetstack/cert-manager-controller",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "startupapicheck": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "jetstack/cert-manager-ctl",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "startupapicheck",
+              "type": "object"
+            },
+            "webhook": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "jetstack/cert-manager-webhook",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "webhook",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "cert-manager",
+          "type": "object"
+        },
+        "certificates": {
+          "description": "List of Certificates to provision. See https://cert-manager.io/docs/usage/certificate/ for `Certificate` resource details.",
+          "properties": {
+            "qvantel-ca": {
+              "description": "This is the root CA certificate for Simple Qvantel CA",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "commonName": {
+                      "default": "qvantel.com",
+                      "required": [],
+                      "title": "commonName",
+                      "type": "string"
+                    },
+                    "duration": {
+                      "default": "87660h",
+                      "required": [],
+                      "title": "duration",
+                      "type": "string"
+                    },
+                    "isCA": {
+                      "default": true,
+                      "required": [],
+                      "title": "isCA",
+                      "type": "boolean"
+                    },
+                    "issuerRef": {
+                      "properties": {
+                        "group": {
+                          "default": "cert-manager.io",
+                          "required": [],
+                          "title": "group",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "default": "ClusterIssuer",
+                          "required": [],
+                          "title": "kind",
+                          "type": "string"
+                        },
+                        "name": {
+                          "default": "qvantel-selfsigned-issuer",
+                          "required": [],
+                          "title": "name",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "issuerRef",
+                      "type": "object"
+                    },
+                    "privateKey": {
+                      "properties": {
+                        "algorithm": {
+                          "default": "ECDSA",
+                          "required": [],
+                          "title": "algorithm",
+                          "type": "string"
+                        },
+                        "size": {
+                          "default": 256,
+                          "required": [],
+                          "title": "size",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [],
+                      "title": "privateKey",
+                      "type": "object"
+                    },
+                    "renewBefore": {
+                      "default": "360h",
+                      "required": [],
+                      "title": "renewBefore",
+                      "type": "string"
+                    },
+                    "secretName": {
+                      "default": "qvantel-root-ca",
+                      "required": [],
+                      "title": "secretName",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "properties": {
+                        "organizations": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "organizations",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "subject",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-ca",
+              "type": "object"
+            },
+            "qvantel-dot-solutions-wildcard": {
+              "description": "This is the wildcard certificate issued for *.qvantel.solutions name",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "dnsNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "dnsNames",
+                      "type": "array"
+                    },
+                    "issuerRef": {
+                      "properties": {
+                        "group": {
+                          "default": "cert-manager.io",
+                          "required": [],
+                          "title": "group",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "default": "ClusterIssuer",
+                          "required": [],
+                          "title": "kind",
+                          "type": "string"
+                        },
+                        "name": {
+                          "default": "qvantel-dot-solutions",
+                          "required": [],
+                          "title": "name",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "issuerRef",
+                      "type": "object"
+                    },
+                    "privateKey": {
+                      "properties": {
+                        "rotationPolicy": {
+                          "default": "Always",
+                          "required": [],
+                          "title": "rotationPolicy",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "privateKey",
+                      "type": "object"
+                    },
+                    "renewBefore": {
+                      "default": "720h",
+                      "required": [],
+                      "title": "renewBefore",
+                      "type": "string"
+                    },
+                    "secretName": {
+                      "default": "qvantel-wildcard",
+                      "required": [],
+                      "title": "secretName",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-dot-solutions-wildcard",
+              "type": "object"
+            },
+            "qvantel-dot-systems-wildcard": {
+              "description": "This is the wildcard certificate issued for *.qvantel.systems name",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "dnsNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "dnsNames",
+                      "type": "array"
+                    },
+                    "issuerRef": {
+                      "properties": {
+                        "group": {
+                          "default": "cert-manager.io",
+                          "required": [],
+                          "title": "group",
+                          "type": "string"
+                        },
+                        "kind": {
+                          "default": "ClusterIssuer",
+                          "required": [],
+                          "title": "kind",
+                          "type": "string"
+                        },
+                        "name": {
+                          "default": "qvantel-dot-systems",
+                          "required": [],
+                          "title": "name",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "issuerRef",
+                      "type": "object"
+                    },
+                    "privateKey": {
+                      "properties": {
+                        "rotationPolicy": {
+                          "default": "Always",
+                          "required": [],
+                          "title": "rotationPolicy",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "privateKey",
+                      "type": "object"
+                    },
+                    "renewBefore": {
+                      "default": "720h",
+                      "required": [],
+                      "title": "renewBefore",
+                      "type": "string"
+                    },
+                    "secretName": {
+                      "default": "qvantel-wildcard",
+                      "required": [],
+                      "title": "secretName",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-dot-systems-wildcard",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "certificates",
+          "type": "object"
+        },
+        "clusterIssuers": {
+          "description": "List of ClusterIssuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `ClusterIssuer` resource details.",
+          "properties": {
+            "example-cluster-issuer": {
+              "description": "Example ClusterIssuer used for documentation",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "description": "If ClusterIssuers is enabled and hence will be deployed to the cluster.",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "description": "Configure `spec` property of `ClusterIssuers` resource.",
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "example-cluster-issuer",
+              "type": "object"
+            },
+            "qvantel-ca-issuer": {
+              "description": "This issuer is Simple Qvantel CA issuer",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "ca": {
+                      "properties": {
+                        "secretName": {
+                          "default": "qvantel-root-ca",
+                          "required": [],
+                          "title": "secretName",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "ca",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-ca-issuer",
+              "type": "object"
+            },
+            "qvantel-dot-solutions": {
+              "description": "This issuer is used for *.qvantel.solutions certificates issued with letsencrypt",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "acme": {
+                      "properties": {
+                        "email": {
+                          "default": "infra.finland@qvantel.com",
+                          "required": [],
+                          "title": "email",
+                          "type": "string"
+                        },
+                        "privateKeySecretRef": {
+                          "properties": {
+                            "name": {
+                              "default": "qvantel-dot-solutions-private-key-letsencrypt",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "privateKeySecretRef",
+                          "type": "object"
+                        },
+                        "server": {
+                          "default": "https://acme-v02.api.letsencrypt.org/directory",
+                          "required": [],
+                          "title": "server",
+                          "type": "string"
+                        },
+                        "solvers": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "dns01": {
+                                    "properties": {
+                                      "route53": {
+                                        "properties": {
+                                          "hostedZoneID": {
+                                            "default": "ZPXWBK7RK86EX",
+                                            "required": [],
+                                            "title": "hostedZoneID",
+                                            "type": "string"
+                                          },
+                                          "region": {
+                                            "default": "eu-central-1",
+                                            "required": [],
+                                            "title": "region",
+                                            "type": "string"
+                                          },
+                                          "role": {
+                                            "default": "arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts",
+                                            "required": [],
+                                            "title": "role",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "route53",
+                                        "type": "object"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "dns01",
+                                    "type": "object"
+                                  },
+                                  "selector": {
+                                    "properties": {
+                                      "dnsZones": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "dnsZones",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "selector",
+                                    "type": "object"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "solvers",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "acme",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-dot-solutions",
+              "type": "object"
+            },
+            "qvantel-dot-systems": {
+              "description": "This issuer is used for *.qvantel.systems certificates issued with letsencrypt",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "acme": {
+                      "properties": {
+                        "email": {
+                          "default": "infra.finland@qvantel.com",
+                          "required": [],
+                          "title": "email",
+                          "type": "string"
+                        },
+                        "privateKeySecretRef": {
+                          "properties": {
+                            "name": {
+                              "default": "letsencrypt-platform-dns",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "privateKeySecretRef",
+                          "type": "object"
+                        },
+                        "server": {
+                          "default": "https://acme-v02.api.letsencrypt.org/directory",
+                          "required": [],
+                          "title": "server",
+                          "type": "string"
+                        },
+                        "solvers": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "dns01": {
+                                    "properties": {
+                                      "route53": {
+                                        "properties": {
+                                          "hostedZoneID": {
+                                            "default": "ZJ7W7ERY57J33",
+                                            "required": [],
+                                            "title": "hostedZoneID",
+                                            "type": "string"
+                                          },
+                                          "region": {
+                                            "default": "eu-central-1",
+                                            "required": [],
+                                            "title": "region",
+                                            "type": "string"
+                                          },
+                                          "role": {
+                                            "default": "arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account",
+                                            "required": [],
+                                            "title": "role",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "route53",
+                                        "type": "object"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "dns01",
+                                    "type": "object"
+                                  },
+                                  "selector": {
+                                    "properties": {
+                                      "dnsZones": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "dnsZones",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "selector",
+                                    "type": "object"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "solvers",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "acme",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-dot-systems",
+              "type": "object"
+            },
+            "qvantel-selfsigned-issuer": {
+              "description": "This issuer is used to generate self-signed certificate for Simple Qvantel CA",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "selfSigned": {
+                      "required": [],
+                      "title": "selfSigned",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "qvantel-selfsigned-issuer",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "clusterIssuers",
+          "type": "object"
+        },
+        "issuers": {
+          "description": "List of Issuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `Issuer` resource details.",
+          "properties": {
+            "example-issuer": {
+              "description": "Example Issuer used for documentation",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "description": "If Issuer is enabled and hence will be deployed to the cluster.",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "description": "Configure `spec` property of `Issuer` resource.",
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "example-issuer",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "issuers",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "certPlatform",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

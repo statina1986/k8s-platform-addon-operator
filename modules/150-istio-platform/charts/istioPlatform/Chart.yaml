@@ -3,8 +3,8 @@ name: istioPlatform
 version: 0.0.1
 dependencies:
   - name: base
-    version: "1.17.6"
+    version: "1.23.2"
     repository: https://istio-release.storage.googleapis.com/charts
   - name: istiod
-    version: "1.17.6"
+    version: "1.23.2"
     repository: https://istio-release.storage.googleapis.com/charts
