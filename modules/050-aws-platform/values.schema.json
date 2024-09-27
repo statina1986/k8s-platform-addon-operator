@@ -14,6 +14,11 @@
           "properties": {
             "controller": {
               "properties": {
+                "extraVolumeTags": {
+                  "required": [],
+                  "title": "extraVolumeTags",
+                  "type": "object"
+                },
                 "serviceAccount": {
                   "properties": {
                     "create": {
@@ -257,6 +262,12 @@
                       },
                       "parameters": {
                         "properties": {
+                          "tagSpecification_name": {
+                            "default": "Name=some-cluster-{{ .PVCName }}",
+                            "required": [],
+                            "title": "tagSpecification_name",
+                            "type": "string"
+                          },
                           "type": {
                             "default": "gp3",
                             "required": [],
@@ -594,6 +605,11 @@
               "title": "clusterName",
               "type": "string"
             },
+            "defaultTags": {
+              "required": [],
+              "title": "defaultTags",
+              "type": "object"
+            },
             "serviceAccount": {
               "properties": {
                 "create": {
@@ -817,11 +833,18 @@
           "description": "**Required.** AWS Region where cluster is deployed. ",
           "required": [],
           "title": "region"
+        },
+        "tags": {
+          "default": "null",
+          "description": "**Required.** Default tags to be added for AWS Resources provisioned by this module (loadbalancers, ebs volumes, etc). If you do not want to add tags, provide `{}`.",
+          "required": [],
+          "title": "tags"
         }
       },
       "required": [
         "region",
-        "apiServerEndpoint"
+        "apiServerEndpoint",
+        "tags"
       ],
       "title": "awsPlatform",
       "type": "object"

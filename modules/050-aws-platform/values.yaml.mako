@@ -51,6 +51,11 @@ awsPlatform:
   # @schema
   # -- **Required.** EKS API server endpoint.
   apiServerEndpoint: null
+  # @schema
+  # required: true
+  # @schema
+  # -- **Required.** Default tags to be added for AWS Resources provisioned by this module (loadbalancers, ebs volumes, etc). If you do not want to add tags, provide `{}`.
+  tags: null
   
   # -- Deploy aws-load-balancer-controller helm-chart. 
   aws-load-balancer-controller-enabled: false

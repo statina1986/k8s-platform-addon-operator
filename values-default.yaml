@@ -14,7 +14,8 @@ global:
 
 apisixPlatformEnabled: true
 artifactoryPlatformEnabled: true
-awsPlatform: {}
+awsPlatform:
+  tags: {}
 awsPlatformEnabled: true
 certPlatform: {}
 certPlatformEnabled: true
