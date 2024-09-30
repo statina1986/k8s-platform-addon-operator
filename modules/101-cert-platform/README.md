@@ -34,4 +34,3 @@ Respective issuers and certificates should be enabled in the configuration. See 
 | certPlatform.issuers.example-issuer | object | `{"enabled":false,"spec":{}}` | Example Issuer used for documentation |
 | certPlatform.issuers.example-issuer.enabled | bool | `false` | If Issuer is enabled and hence will be deployed to the cluster. |
 | certPlatform.issuers.example-issuer.spec | object | `{}` | Configure `spec` property of `Issuer` resource. |
-

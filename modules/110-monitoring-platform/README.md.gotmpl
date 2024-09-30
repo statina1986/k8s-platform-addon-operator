@@ -1,0 +1,22 @@
+{{ template "chart.header" . }}
+
+This module configures needed plugins and services to run Qvantel K8S Platfrom on AWS EKS clusters and within AWS Cloud
+
+Depends on modules:
+- no dependencies
+
+Used helm-charts:
+- `kube-prometheus-stack`
+- `prometheus-blackbox-exporter`
+- `x509-certificate-exporter`
+- `yet-another-cloudwatch-exporter`
+
+Provides:
+- `kube-prometheus-stack` deployment
+- `prometheus-blackbox-exporter` deployment
+- `x509-certificate-exporter` deployment
+- `yet-another-cloudwatch-exporter` deployment
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
