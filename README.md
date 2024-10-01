@@ -14,6 +14,8 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 - [monitoring-platform](modules/110-monitoring-platform/README.md) for Prometheus/Grafana monitoring stack
 - [consul-platform](modules/130-consul-platform/README.md) for **consul** deployment
 - [vault-platform](modules/140-vault-platform/README.md) for **vault** deployment and configuration via CRDs
+- [istio-platform](modules/150-istio-platform/README.md) for **istio** control-plane deployment and configuration
+- [istio-ingress](modules/151-istio-ingress/README.md) for **istio** Ingress Gateways deployment and configuration
 
 ## Modules Order
 Modules are ordered alphanumerically based on their folder names. This is the order of the deployment.
