@@ -1,6 +1,6 @@
 dependencies:
 - name: loki
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 5.32.0
-digest: sha256:0e75a689df5f6934eeade067ff03031f2962200e71e419d2ea1cd27c69402190
-generated: "2023-10-17T20:16:50.595431251+03:00"
+  repository: https://grafana.github.io/helm-charts
+  version: 6.16.0
+digest: sha256:efe7f76481b1d768390c95ed7ad578995fcfb046fd2cbac6f5dfba02c88e5c1f
+generated: "2024-10-01T18:23:59.821601906+03:00"

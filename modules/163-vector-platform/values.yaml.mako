@@ -27,6 +27,15 @@ vectorPlatform:
         vector_metrics:
           type: internal_metrics
       transforms:
+        kubernetes_logs_transform:
+          type: remap
+          inputs:
+            - kubernetes
+          source: |
+            .log_source = "kubernetes_logs"      
+            if exists(.kubernetes.namespace_labels) {
+              del(.kubernetes.namespace_labels)
+            }
         vector_logs_transform:
           type: remap
           inputs:
@@ -48,7 +57,7 @@ vectorPlatform:
         vector:
           type: vector
           inputs:
-            - kubernetes
+            - kubernetes_logs_transform
             - vector_logs_transform
           address: vector-platform-aggregator.platform.svc:6000
   fluent-bit-events-collector:
@@ -271,6 +280,44 @@ vectorPlatform:
             - log_types.rbs
           source: |
             .log_source = "rbs_logs"
+        cleanup_transform:
+          type: remap
+          inputs:
+            - log_types._unmatched
+            - qvantel_apps_transform
+            - istio_gateway_transform
+            - vault_transform
+            - tibco_transform
+            - rbs_transform
+            - nodes_messages_transform
+            - nodes_container_transform
+            - vector_logs_transform
+            - k8s_events_transform
+          source: |
+            if exists(.kubernetes.namespace_labels) {
+              del(.kubernetes.namespace_labels)
+            }
+            if exists(.kubernetes.pod_labels.app) {
+              .kubernetes.pod_labels_app = .kubernetes.pod_labels.app
+            }
+            if exists(.kubernetes.pod_labels."app.kubernetes.io/instance") {
+              .kubernetes.pod_labels_instance = .kubernetes.pod_labels."app.kubernetes.io/instance"
+            }
+            if exists(.kubernetes.pod_labels."app.kubernetes.io/name") {
+              .kubernetes.pod_labels_name = .kubernetes.pod_labels."app.kubernetes.io/name"
+            }
+            if exists(.kubernetes.pod_labels."app.kubernetes.io/component") {
+              .kubernetes.pod_labels_component = .kubernetes.pod_labels."app.kubernetes.io/component"
+            }
+            if exists(.kubernetes.pod_labels) {
+              del(.kubernetes.pod_labels)
+            }
+            if exists(.kubernetes.node_labels) {
+              del(.kubernetes.node_labels)
+            }
+            if exists(.kubernetes.pod_annotations) {
+              del(.kubernetes.pod_annotations)
+            }
       sinks:
         prometheus:
           type: prometheus_exporter
@@ -284,16 +331,7 @@ vectorPlatform:
         loki:
           type: loki
           inputs:
-            - log_types._unmatched
-            - qvantel_apps_transform
-            - istio_gateway_transform
-            - vault_transform
-            - tibco_transform
-            - rbs_transform
-            - nodes_messages_transform
-            - nodes_container_transform
-            - vector_logs_transform
-            - k8s_events_transform
+            - cleanup_transform
           % if values['global']['configurationProfile'] == 'dev':
           endpoint: http://loki-platform.platform.svc:3100
           % else:
@@ -312,18 +350,28 @@ vectorPlatform:
               {{ print "{{ kubernetes.pod_namespace }}" }}
             pod_name: |-
               {{ print "{{ kubernetes.pod_name }}" }}
-            pod_labels_*: |-
-              {{ print "{{ kubernetes.pod_labels }}" }}
+            app: |-
+              {{ print "{{ kubernetes.pod_labels_app }}" }}
+            # we have to keep this line without spaces otherwise bad toYaml behavior (https://github.com/helm/helm/issues/8789) will wrap this line and break template
+            instance: |-
+              {{ print "{{ kubernetes.pod_labels_instance }}" }}
+            # we have to keep this line without spaces otherwise bad toYaml behavior (https://github.com/helm/helm/issues/8789) will wrap this line and break template
+            name: |-
+              {{ print "{{ kubernetes.pod_labels_name }}" }}
+            # we have to keep this line without spaces otherwise bad toYaml behavior (https://github.com/helm/helm/issues/8789) will wrap this line and break template
+            component: |-
+              {{ print "{{ kubernetes.pod_labels_component }}" }}
             log_type: |-
               {{ print "{{ log_type }}" }}
             service_name: |-
               {{ print "{{ service_name }}" }}
             artifact_id: |-
               {{ print "{{ artifact_id }}" }}
-            log_level: |-
-              {{ print "{{ log_level }}" }}
             level: |-
               {{ print "{{ log_level }}" }}
+            hostname: |-
+              {{ print "{{ kubernetes.pod_node_name }}" }}              
+            pod_node_name:
           compression: snappy
           encoding:
             codec: json
