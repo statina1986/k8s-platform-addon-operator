@@ -13,7 +13,7 @@ data:
     [ -z "${KUBE_SECRETS_KEY}" ] && KUBE_SECRETS_KEY=vault-keys
     [ -z "${VAULT_INIT_NODE}" ] && VAULT_INIT_NODE="vault-platform-0"
     [ -z "${VAULT_K8S_POD_NAME}" ] && VAULT_K8S_POD_NAME="vault-platform-0"
-    # VAULT_K8S_POD_NAME and VAULT_K8S_NAMESPACE are set in pod spec in values.yaml.mako
+    # VAULT_K8S_POD_NAME, VAULT_INIT_NODE and VAULT_K8S_NAMESPACE are set in pod spec in values.yaml.mako
 
     qlog () {
         echo "$(date -Iseconds) [vault-init] ${@}"
@@ -116,4 +116,4 @@ data:
 kind: ConfigMap
 metadata:
   name: vault-auto-init-config
-  namespace: platform
+  namespace: {{.Release.Namespace}}

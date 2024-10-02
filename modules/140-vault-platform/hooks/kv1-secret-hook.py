@@ -5,6 +5,7 @@ from kubernetes import client, config
 from common.python.hooks import *
 from common.python.utils import get_exception_string
 from common.python.vault import *
+from common.python.variables import *
 import hvac
 
 config.load_incluster_config()
@@ -36,11 +37,11 @@ kubernetes:
                         path = path.replace("secret/", "", 1)
 
                     secret = v1.read_namespaced_secret(
-                        "vault-keys", "platform").data
+                        VAULT_SECRET_NAME, VAULT_SECRET_NAMESPACE).data
                     token = base64.b64decode(
                         secret["root_token"]).decode('utf-8')
                     vault_client = hvac.Client(
-                        url='http://vault-platform.platform.svc.cluster.local:8200', token=token)
+                        url=VAULT_ADDR, token=token)
 
                     if eventName == "Deleted":
                         # vault_client.secrets.kv.v1.delete_secret(path)

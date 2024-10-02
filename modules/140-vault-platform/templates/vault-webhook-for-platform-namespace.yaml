@@ -1,17 +1,18 @@
+{{- if eq .Values.global.clusterwideResources "true" }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   annotations:    
-    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/vault-platform-vault-secrets-webhook-ca"
-  name: vault-platform-vault-secrets-webhook-for-platform
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/{{ .Values.global.helmReleaseNamePrefix }}vault-platform-vault-secrets-webhook-ca"
+  name: vault-platform-vault-secrets-webhook-for-{{.Release.Namespace}}
 webhooks:
 - admissionReviewVersions:
   - v1beta1
   clientConfig:
     caBundle: ""
     service:
-      name: vault-platform-vault-secrets-webhook
-      namespace: platform
+      name: {{ .Values.global.helmReleaseNamePrefix }}vault-platform-vault-secrets-webhook
+      namespace: {{.Release.Namespace}}
       path: /pods
       port: 443
   failurePolicy: Fail
@@ -46,3 +47,4 @@ webhooks:
     scope: '*'
   sideEffects: NoneOnDryRun
   timeoutSeconds: 10
+{{- end }} 
