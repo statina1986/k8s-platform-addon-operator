@@ -159,7 +159,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     replicaCount: 1
-    image: ${values['global']['containerRegistryBase']}/library/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.4.20240819100502_hotfix-24_d5c69cea
+    image: ${values['global']['containerRegistryBase']}/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.4.20240819100502_hotfix-24_d5c69cea
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
