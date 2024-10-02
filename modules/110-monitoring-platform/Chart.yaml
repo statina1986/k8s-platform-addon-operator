@@ -8,8 +8,6 @@ annotations:
   images: |
     - name: x509-certificate-exporter
       image: docker.io/enix/x509-certificate-exporter:3.14.0
-    - name: kafka-lag-exporter
-      image: seglo/kafka-lag-exporter:0.8.2
     - name: prometheus-blackbox-exporter
       image: quay.io/prometheus/blackbox-exporter:v0.25.0
     - name: prometheus-consul-exporter
@@ -19,21 +17,21 @@ annotations:
     - name: alertmanager
       image: quay.io/prometheus/alertmanager:v0.27.0
     - name: prometheus-operator-webhook
-      image: quay.io/prometheus-operator/admission-webhook:v0.75.0
+      image: quay.io/prometheus-operator/admission-webhook:v0.76.1
     - name: admissionWebhooks
       image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
     - name: prometheus-operator
-      image: quay.io/prometheus-operator/prometheus-operator:v0.75.0
+      image: quay.io/prometheus-operator/prometheus-operator:v0.76.1
     - name: prometheusConfigReloader
-      image: quay.io/prometheus-operator/prometheus-config-reloader:v0.75.0
+      image: quay.io/prometheus-operator/prometheus-config-reloader:v0.76.1
     - name: thanos
-      image: quay.io/thanos/thanos:v0.35.1
+      image: quay.io/thanos/thanos:v0.36.1
     - name: prometheus
-      image: quay.io/prometheus/prometheus:v2.53.0
+      image: quay.io/prometheus/prometheus:v2.54.1
     - name: thanos-rules
-      image: quay.io/thanos/thanos:v0.35.1
+      image: quay.io/thanos/thanos:v0.36.1
     - name: grafana
-      image: docker.io/grafana/grafana-enterprise:11.1.0
+      image: docker.io/grafana/grafana-enterprise:11.2.0
     - name: testFramework
       image: docker.io/bats/bats:v1.4.1
     - name: downloadDashboardsImage
@@ -41,15 +39,15 @@ annotations:
     - name: initChownData
       image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
     - name: grafana-sidecar
-      image: quay.io/kiwigrid/k8s-sidecar:1.26.1
+      image: quay.io/kiwigrid/k8s-sidecar:1.27.4
     - name: imageRenderer
       image: docker.io/grafana/grafana-image-renderer:3.11.5
     - name: prometheus-node-exporter
-      image: quay.io/prometheus/node-exporter:v1.8.1
+      image: quay.io/prometheus/node-exporter:v1.8.2
     - name: kubeRBACProxy
       image: quay.io/brancz/kube-rbac-proxy:v0.18.0
     - name: kube-state-metrics
-      image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.12.0
+      image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.13.0
     - name: grafana-plugins
       image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
       

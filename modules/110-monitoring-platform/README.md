@@ -1,10 +1,360 @@
-# monitoring-platform module
-This module is responsible for deployment of Qvantel Monitoring Stack which is based on Prometheus and Grafana
-
-Dependencies:
-- Kubernetes version 1.26+
+# monitoring-platform
 
 
-Customizations:
-- 'initChownData' image is replaced from 'busybox' to 'ubi9/ubi-minimal'
-- 'grafana-plugins' image to load Grafana Plugins in different architectures for air/non air gapped environments
+This module configures needed plugins and services to run Qvantel K8S Platfrom on AWS EKS clusters and within AWS Cloud
+
+Depends on modules:
+- no dependencies
+
+Used helm-charts:
+- `kube-prometheus-stack`
+- `prometheus-blackbox-exporter`
+- `x509-certificate-exporter`
+- `yet-another-cloudwatch-exporter`
+
+Provides:
+- `kube-prometheus-stack` deployment
+- `prometheus-blackbox-exporter` deployment
+- `x509-certificate-exporter` deployment
+- `yet-another-cloudwatch-exporter` deployment
+
+## Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| monitoringPlatform.kube-prometheus-stack.alertmanager.alertmanagerSpec.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.defaultRules.create | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.defaultRules.rules.kubeApiserverSlos | bool | `false` |  |
+| monitoringPlatform.kube-prometheus-stack.defaultRules.rules.kubernetesStorage | bool | `false` |  |
+| monitoringPlatform.kube-prometheus-stack.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".org_role | string | `"Viewer"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".allow_assign_grafana_admin | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".allow_sign_up | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".api_url | string | `"http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".auth_url | string | `"https://auth-some-env.qvantel.solutions/auth/realms/qvantel/protocol/openid-connect/auth"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".client_id | string | `"grafana"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".email_attribute_path | string | `"email"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".icon | string | `"signin"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".login_attribute_path | string | `"username"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".name | string | `"Keycloak-OAuth"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".name_attribute_path | string | `"full_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".role_attribute_path | string | `"contains(realm_access.roles[*], 'grafana_admin') && 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') && 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') && 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') && 'Viewer'"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".role_attribute_strict | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".scopes | string | `"openid email profile offline_access roles"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".signout_redirect_url | string | `"https://auth-some-env.qvantel.solutions/auth/realms/qvantel/protocol/openid-connect/logout"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".token_url | string | `"http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".use_pkce | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini".dataproxy.timeout | int | `310` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini".server.root_url | string | `"https://grafana-some-env.qvantel.solutions"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini".users.viewers_can_edit | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.admin.existingSecret | string | `"grafana-admin-pass-secret"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.admin.passwordKey | string | `"grafanaAdminPassword"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.admin.userKey | string | `"adminUser"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."business.yaml".apiVersion | int | `1` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."business.yaml".datasources[0].isDefault | bool | `false` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."business.yaml".datasources[0].name | string | `"kpitool"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."business.yaml".datasources[0].type | string | `"yesoreyeram-infinity-datasource"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."business.yaml".datasources[0].uid | string | `"jEggJhu4k"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."platform.yaml".apiVersion | int | `1` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."platform.yaml".datasources[0].name | string | `"Loki"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."platform.yaml".datasources[0].type | string | `"loki"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.datasources."platform.yaml".datasources[0].url | string | `"http://loki-read.platform.svc:3100"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.deploymentStrategy.type | string | `"Recreate"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.downloadDashboardsImage.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.envFromSecret | string | `"grafana-keycloak-client-secret"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraContainerVolumes[0].emptyDir | object | `{}` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraContainerVolumes[0].name | string | `"grafana-plugins"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].args[0] | string | `"unzip /tmp/*.zip -d /var/lib/grafana/plugins"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].command[0] | string | `"/bin/sh"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].command[1] | string | `"-c"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].image | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:1.2.0_4_f26bb6e90"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].name | string | `"plugin-sidecar"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].volumeMounts[0].mountPath | string | `"/var/lib/grafana/plugins"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraInitContainers[0].volumeMounts[0].name | string | `"grafana-plugins"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraVolumeMounts[0].mountPath | string | `"/var/lib/grafana/plugins"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.extraVolumeMounts[0].name | string | `"grafana-plugins"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.image.repository | string | `"grafana/grafana-enterprise"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.initChownData.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.initChownData.image.repository | string | `"ubi9/ubi-minimal"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.initChownData.image.tag | string | `"9.4-1194"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.persistence.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.persistence.finalizers[0] | string | `"kubernetes.io/pvc-protection"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.persistence.size | string | `"30Gi"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.persistence.type | string | `"pvc"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.serviceMonitor.labels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.folder | string | `"/tmp/dashboards"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.label | string | `"grafana_dashboard"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.labelValue | string | `"1"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.provider.allowUiUpdates | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.provider.foldersFromFilesStructure | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.datasources.defaultDatasourceEnabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.datasources.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.datasources.maxLines | int | `1000` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.testFramework.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.customResourceState.config.kind | string | `"CustomResourceStateMetrics"` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.customResourceState.config.spec.resources | string | `nil` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.customResourceState.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.kubeRBACProxy.enabled | bool | `false` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.kubeRBACProxy.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.kube-state-metrics.rbac.extraRules | string | `nil` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus-node-exporter.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.enabled | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalAlertManagerConfigs[0].static_configs[0].targets[0] | string | `"alertmanager.alert.k8s.qvantel.net:9096"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigs | string | `"{{- range $k, $v := .Values.prometheus.prometheusSpec.additionalScrapeConfigsAsMap }}\n- job_name: '{{ $k }}'\n{{ $v | toYaml | indent 2}}\n{{- end }}"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.kubernetes_sd_configs[0].role | string | `"pod"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[0].action | string | `"keep"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[0].regex | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[0].source_labels[0] | string | `"__meta_kubernetes_pod_annotation_prometheus_io_scrape"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[1].action | string | `"keep"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[1].regex | string | `"((;.*)|(.*;http))"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[1].source_labels[0] | string | `"__meta_kubernetes_pod_annotation_sidecar_istio_io_status"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[1].source_labels[1] | string | `"__meta_kubernetes_pod_annotation_prometheus_io_scheme"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[2].action | string | `"drop"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[2].regex | string | `"(true)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[2].source_labels[0] | string | `"__meta_kubernetes_pod_annotation_istio_mtls"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[3].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[3].regex | string | `"(.+)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[3].source_labels[0] | string | `"__meta_kubernetes_pod_annotation_prometheus_io_path"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[3].target_label | string | `"__metrics_path__"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[4].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[4].regex | string | `"([^:]+)(?::\\d+)?;(\\d+)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[4].replacement | string | `"$1:$2"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[4].source_labels[0] | string | `"__address__"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[4].source_labels[1] | string | `"__meta_kubernetes_pod_annotation_prometheus_io_port"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[4].target_label | string | `"__address__"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[5].action | string | `"labelmap"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[5].regex | string | `"__meta_kubernetes_pod_label_(.+)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[6].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[6].source_labels[0] | string | `"__meta_kubernetes_namespace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[6].target_label | string | `"namespace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[7].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[7].source_labels[0] | string | `"__meta_kubernetes_pod_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[7].target_label | string | `"pod_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[8].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[8].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[8].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[8].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[8].source_labels[0] | string | `"__meta_consul_node"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.kubernetes-pods.relabel_configs[8].target_label | string | `"node"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.follow_redirects | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.honor_timestamps | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.kubernetes_sd_configs[0].follow_redirects | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.kubernetes_sd_configs[0].kubeconfig_file | string | `""` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.kubernetes_sd_configs[0].namespaces.names[0] | string | `"platform"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.kubernetes_sd_configs[0].role | string | `"pod"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.metrics_path | string | `"/metrics"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[0].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[0].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[0].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[0].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[0].source_labels[0] | string | `"job"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[0].target_label | string | `"__tmp_prometheus_job_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[10].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[10].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[10].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[10].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[10].source_labels[0] | string | `"__meta_kubernetes_pod_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[10].target_label | string | `"kubernetes_pod_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[11].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[11].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[11].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[11].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[11].source_labels[0] | string | `"__meta_kubernetes_pod_node_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[11].target_label | string | `"node_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[12].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[12].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[12].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[12].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[12].source_labels[0] | string | `"__meta_kubernetes_pod_host_ip"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[12].target_label | string | `"node_ip"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].action | string | `"hashmod"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].modulus | int | `1` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].source_labels[0] | string | `"__address__"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[13].target_label | string | `"__tmp_hash"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[14].action | string | `"keep"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[14].regex | string | `"0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[14].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[14].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[14].source_labels[0] | string | `"__tmp_hash"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[1].action | string | `"keep"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[1].regex | string | `"Kafka|KafkaConnect|KafkaMirrorMaker|KafkaMirrorMaker2"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[1].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[1].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[1].source_labels[0] | string | `"__meta_kubernetes_pod_label_strimzi_io_kind"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[2].action | string | `"keep"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[2].regex | string | `"tcp-prometheus"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[2].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[2].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[2].source_labels[0] | string | `"__meta_kubernetes_pod_container_port_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[3].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[3].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[3].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[3].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[3].source_labels[0] | string | `"__meta_kubernetes_namespace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[3].target_label | string | `"namespace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[4].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[4].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[4].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[4].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[4].source_labels[0] | string | `"__meta_kubernetes_pod_container_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[4].target_label | string | `"container"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[5].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[5].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[5].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[5].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[5].source_labels[0] | string | `"__meta_kubernetes_pod_name"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[5].target_label | string | `"pod"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[6].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[6].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[6].replacement | string | `"metrics/kafka-resources-metrics"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[6].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[6].target_label | string | `"job"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[7].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[7].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[7].replacement | string | `"tcp-prometheus"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[7].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[7].target_label | string | `"endpoint"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[8].action | string | `"labelmap"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[8].regex | string | `"__meta_kubernetes_pod_label_(strimzi_io_.+)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[8].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[8].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[9].action | string | `"replace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[9].regex | string | `"(.*)"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[9].replacement | string | `"$1"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[9].separator | string | `";"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[9].source_labels[0] | string | `"__meta_kubernetes_namespace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.relabel_configs[9].target_label | string | `"namespace"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.scheme | string | `"http"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.scrape_interval | string | `"30s"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.additionalScrapeConfigsAsMap.podMonitor/metrics/kafka-resources-metrics/0.scrape_timeout | string | `"10s"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.enableRemoteWriteReceiver | bool | `true` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.externalLabels.country | string | `"need-to-define"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.externalLabels.customer | string | `"need-to-define"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.externalLabels.datacenter | string | `"need-to-define"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.externalLabels.environment | string | `"need-to-define"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.podMonitorSelector.matchLabels | string | `nil` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.probeSelector.matchLabels | string | `nil` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"12d"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.ruleSelector.matchLabels | string | `nil` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelector.matchLabels | string | `nil` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"50Gi"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheus.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheusOperator.admissionWebhooks.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheusOperator.admissionWebhooks.patch.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheusOperator.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheusOperator.prometheusConfigReloader.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.prometheusOperator.thanosImage.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.thanosRuler.thanosRulerSpec.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.kube-prometheus-stack.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.kube-prometheus-stack.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.kube-prometheus-stack.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.kube-prometheus-stack.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx.http.follow_redirects | bool | `true` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx.http.preferred_ip_protocol | string | `"ip4"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx.http.valid_http_versions[0] | string | `"HTTP/1.1"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx.http.valid_http_versions[1] | string | `"HTTP/2.0"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx.prober | string | `"http"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx.timeout | string | `"5s"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx_json.http.body | string | `"{\"ResultText\": \"OK}"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx_json.http.headers.Content-Type | string | `"application/json"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx_json.http.preferred_ip_protocol | string | `"ip4"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx_json.prober | string | `"http"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xx_json.timeout | string | `"5s"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.http.method | string | `"POST"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.http.no_follow_redirects | bool | `false` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.http.preferred_ip_protocol | string | `"ip4"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.http.tls_config.insecure_skip_verify | bool | `true` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.http.valid_status_codes[0] | int | `200` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.http.valid_status_codes[1] | int | `403` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.prober | string | `"http"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.config.modules.http_2xxs_post.timeout | string | `"5s"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.enabled | bool | `true` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.pspEnabled | bool | `false` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.prometheus-blackbox-exporter.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.prometheus-consul-exporter.consulServer | string | `"consul-consul-server:8500"` |  |
+| monitoringPlatform.prometheus-consul-exporter.enabled | bool | `true` |  |
+| monitoringPlatform.prometheus-consul-exporter.image.repository | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0/prom/consul-exporter"` |  |
+| monitoringPlatform.prometheus-consul-exporter.image.tag | string | `"v0.5.0"` |  |
+| monitoringPlatform.prometheus-consul-exporter.rbac.pspEnabled | bool | `false` |  |
+| monitoringPlatform.prometheus-consul-exporter.serviceMonitor.enabled | bool | `true` |  |
+| monitoringPlatform.prometheus-consul-exporter.serviceMonitor.interval | string | `"30s"` |  |
+| monitoringPlatform.prometheus-consul-exporter.serviceMonitor.labels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.prometheus-consul-exporter.serviceMonitor.telemetryPath | string | `"/metrics"` |  |
+| monitoringPlatform.prometheus-consul-exporter.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.prometheus-consul-exporter.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.prometheus-consul-exporter.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.prometheus-consul-exporter.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.qvantelMonitoring.applications.bssapi | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.applications.commonOnePointZero | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.applications.commonZeroPointSix | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.applications.flex | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.applications.ordersManager | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.integrations.opsgenie | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.consul | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.elasticsearch | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.istio | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.kafka | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.kasope | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.loki | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.mariadb | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.mongo | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.postgres | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.rabbitmq | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.redis | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.vault | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.modules.vector | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.programs.mmlyle | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.programs.sayco | bool | `false` |  |
+| monitoringPlatform.qvantelMonitoring.programs.windtre | bool | `false` |  |
+| monitoringPlatform.x509-certificate-exporter.enabled | bool | `true` |  |
+| monitoringPlatform.x509-certificate-exporter.hostPathsExporter.podExtraLabels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.x509-certificate-exporter.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.x509-certificate-exporter.prometheusRules.extraLabels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.x509-certificate-exporter.prometheusServiceMonitor.extraLabels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.x509-certificate-exporter.secretsExporter.podExtraLabels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.x509-certificate-exporter.secretsExporter.resources.limits.cpu | string | `"250m"` |  |
+| monitoringPlatform.x509-certificate-exporter.secretsExporter.resources.limits.memory | string | `"300Mi"` |  |
+| monitoringPlatform.x509-certificate-exporter.secretsExporter.resources.requests.cpu | string | `"20m"` |  |
+| monitoringPlatform.x509-certificate-exporter.secretsExporter.resources.requests.memory | string | `"20Mi"` |  |
+| monitoringPlatform.x509-certificate-exporter.service.extraLabels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.x509-certificate-exporter.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.x509-certificate-exporter.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.x509-certificate-exporter.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.x509-certificate-exporter.tolerations[0].value | string | `"platform-masters"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.enabled | bool | `false` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.extraArgs.scraping-interval | int | `60` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.serviceAccount.create | bool | `false` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.serviceAccount.name | string | `"platform"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.serviceMonitor.enabled | bool | `true` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.serviceMonitor.labels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.tolerations[0].effect | string | `"NoSchedule"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.tolerations[0].key | string | `"dedicated-nodes"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.tolerations[0].operator | string | `"Equal"` |  |
+| monitoringPlatform.yet-another-cloudwatch-exporter.tolerations[0].value | string | `"platform-masters"` |  |

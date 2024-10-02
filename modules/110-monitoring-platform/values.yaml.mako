@@ -66,37 +66,6 @@ monitoringPlatform:
     prometheusRules:
       extraLabels:
         "release": "monitoring-platform"
-  kafka-lag-exporter:
-    enabled: true
-    image:
-      % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/seglo/kafka-lag-exporter
-      % endif
-    tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
-        operator: "Equal"
-        effect: "NoSchedule"
-    % if values['global']['platformMasters']:
-    nodeSelector:
-      dedicated-nodes: platform-masters
-    % endif
-    clusters:
-      - name: "kafka-cluster"
-        bootstrapBrokers: kafka-cluster-kafka-bootstrap.platform.svc:9092
-        groupWhitelist:
-          - .*
-        topicWhitelist:
-          - .*
-    prometheus:
-      serviceMonitor:
-        enabled: true
-        additionalLabels:
-          "release": "monitoring-platform"
-    deploymentExtraLabels:
-      "release": "monitoring-platform"
-    podExtraLabels:
-      "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
     image:
@@ -354,8 +323,7 @@ monitoringPlatform:
 
       grafana.ini:
         auth.anonymous:
-          enabled: true
-          org_role: Viewer
+          enabled: false
         dataproxy:
           timeout: 310
         server:
@@ -488,10 +456,14 @@ monitoringPlatform:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           % endif
-        podMonitorSelectorNilUsesHelmValues: false
-        ruleSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
-        probeSelectorNilUsesHelmValues: false    
+        podMonitorSelector:
+          matchLabels: null
+        ruleSelector:
+          matchLabels: null
+        serviceMonitorSelector:
+          matchLabels: null
+        probeSelector:
+          matchLabels: null    
         retention: 12d
         externalLabels:
           country: need-to-define
