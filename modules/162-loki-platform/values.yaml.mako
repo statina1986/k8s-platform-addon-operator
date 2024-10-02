@@ -1,6 +1,11 @@
 lokiPlatform:
   loki:    
     enabled: true
+    memcached:
+      % if 'containerRegistryBase' in values['global']:
+      image:
+        repository: ${values['global']['containerRegistryBase']}/library/memcached
+      % endif  
     % if values['global']['configurationProfile'] == 'dev':      
     deploymentMode: SingleBinary
     % else:
@@ -159,6 +164,16 @@ lokiPlatform:
       nodeSelector:
         dedicated-nodes: platform-masters
       % endif
+      % if values['global']['multiZone']['enabled']:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              'app.kubernetes.io/name': loki
+              'app.kubernetes.io/component': read
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+      % endif
     write:
       replicas: 3
       persistence:
@@ -172,6 +187,16 @@ lokiPlatform:
       nodeSelector:
         dedicated-nodes: platform-masters
       % endif
+      % if values['global']['multiZone']['enabled']:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              'app.kubernetes.io/name': loki
+              'app.kubernetes.io/component': write
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+      % endif
     backend:
       replicas: 3
       tolerations:
@@ -182,6 +207,16 @@ lokiPlatform:
       % if values['global']['platformMasters']:
       nodeSelector:
         dedicated-nodes: platform-masters
+      % endif
+      % if values['global']['multiZone']['enabled']:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              'app.kubernetes.io/name': loki
+              'app.kubernetes.io/component': backend
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
       % endif
     % endif
     

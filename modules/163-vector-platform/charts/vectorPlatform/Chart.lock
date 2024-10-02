@@ -1,12 +1,12 @@
 dependencies:
 - name: vector
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 0.18.0
+  repository: https://helm.vector.dev
+  version: 0.36.1
 - name: vector
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 0.18.0
+  repository: https://helm.vector.dev
+  version: 0.36.1
 - name: fluent-bit
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 0.44.0
-digest: sha256:035cdec11190889019dfd802b5daa2d8ee4a203503cc7810069cc9e27e9eeba3
-generated: "2023-03-13T21:28:34.153887056+02:00"
+  repository: https://fluent.github.io/helm-charts
+  version: 0.47.10
+digest: sha256:4baf95c6d9324e4907ab6773c997caa3062d31098b5ed956134f5f834924e994
+generated: "2024-10-02T09:30:16.537872486+03:00"

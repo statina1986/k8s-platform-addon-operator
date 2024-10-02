@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-09-30T12:25:35.973309802Z"
+  generatedAt: "2024-10-02T05:47:35.950813822Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: loki-platform
@@ -9,10 +9,18 @@ chart:
   appVersion: ""
 images:
   - name: loki
-    image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/grafana/loki:3.2.0
+    image: docker.io/grafana/loki:3.2.0
     chart: loki-platform
     digests:
       - digest: sha256:f9e882734526722e173b9c2c6694a0880f22a815229c497ccb4e9a9e32ebbf15
         arch: linux/amd64
       - digest: sha256:ad96f64845f664700caddc642c0621467603c12887fb649c66e3082768a1c755
+        arch: linux/arm64
+  - name: memcached
+    image: docker.io/library/memcached:1.6.23-alpine
+    chart: loki-platform
+    digests:
+      - digest: sha256:56b3526ad7eba067730ca64ab7a9062327160c9ff6dd9bc6d84fe0cd36b9005b
+        arch: linux/amd64
+      - digest: sha256:bf184a14585ef27c8248c86fc4b7720d470388144f78d47be37fe579906fae6e
         arch: linux/arm64

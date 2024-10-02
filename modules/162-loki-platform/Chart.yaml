@@ -7,4 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: loki
-      image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/grafana/loki:3.2.0
+      image: docker.io/grafana/loki:3.2.0
+    - name: memcached
+      image: docker.io/library/memcached:1.6.23-alpine

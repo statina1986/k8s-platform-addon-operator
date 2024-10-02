@@ -7,12 +7,7 @@ vectorPlatform:
     role: "Agent"
     enabled: true
     tolerations:
-        - operator: Exists
-    hotReload: 
-      image:
-        % if 'containerRegistryBase' in values['global']:
-        repository: ${values['global']['containerRegistryBase']}/jimmidyson/configmap-reload
-        % endif
+        - operator: Exists    
     customConfig:
       data_dir: /vector-data-dir
       api:
