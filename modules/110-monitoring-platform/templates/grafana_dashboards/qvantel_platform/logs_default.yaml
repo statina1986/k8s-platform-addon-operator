@@ -30,12 +30,13 @@ data:
           "editable": true,
           "fiscalYearStartMonth": 0,
           "graphTooltip": 0,
-          "id": 146,
+          "id": 165,
           "links": [],
           "liveNow": false,
           "panels": [
             {
               "datasource": {
+                "default": false,
                 "type": "loki",
                 "uid": "P8E80F9AEF21F6940"
               },
@@ -46,11 +47,13 @@ data:
                     "mode": "palette-classic"
                   },
                   "custom": {
+                    "axisBorderShow": false,
                     "axisCenteredZero": false,
                     "axisColorMode": "text",
                     "axisLabel": "",
                     "axisPlacement": "auto",
                     "barAlignment": 0,
+                    "barWidthFactor": 0.6,
                     "drawStyle": "bars",
                     "fillOpacity": 100,
                     "gradientMode": "hue",
@@ -120,7 +123,7 @@ data:
                     "uid": "P8E80F9AEF21F6940"
                   },
                   "editorMode": "code",
-                  "expr": "sum by(pod_name)(count_over_time({service_name=\"$service_name\", pod_name=\"$pod\"} |~ \"$search_string\" [1s]))  ",
+                  "expr": "sum by(pod_name)(count_over_time({service_name=\"$service_name\", pod_name=~\"$pod\"} |= \"$search1\" |= \"$search2\" |= \"$search3\" [$__auto]))  ",
                   "legendFormat": "{{ "{{pod_name}}" }}",
                   "queryType": "range",
                   "refId": "A"
@@ -131,6 +134,7 @@ data:
             },
             {
               "datasource": {
+                "default": false,
                 "type": "loki",
                 "uid": "P8E80F9AEF21F6940"
               },
@@ -159,7 +163,7 @@ data:
                     "uid": "P8E80F9AEF21F6940"
                   },
                   "editorMode": "code",
-                  "expr": "{service_name=\"$service_name\", pod_name=\"$pod\" } | json | label_format level=kubernetes_pod_annotations_vault_security_banzaicloud_io_log_level | line_format `{{` {{__timestamp__}} `}} {{` {{.pod_name}} `}}: {{` {{.level}} `}}: {{` {{.log_type}} `}}: {{` {{.message}} `}}` |~  \"$search_string\"",
+                  "expr": "{service_name=\"$service_name\", pod_name=~\"$pod\" } |= \"$search1\" |= \"$search2\" |= \"$search3\" | json  | line_format `{{` {{__timestamp__}} `}} {{` {{.pod_name}} `}}: {{` {{.level}} `}}: {{` {{.log_type}} `}}: {{` {{.message}} `}}`",
                   "queryType": "range",
                   "refId": "A"
                 }
@@ -169,16 +173,13 @@ data:
             }
           ],
           "refresh": "",
-          "schemaVersion": 38,
-          "style": "dark",
+          "schemaVersion": 39,
           "tags": [],
           "templating": {
             "list": [
               {
                 "current": {
-                  "selected": false,
-                  "text": "bssapi-aggregator",
-                  "value": "bssapi-aggregator"
+                  "selected": false
                 },
                 "datasource": {
                   "type": "loki",
@@ -186,7 +187,7 @@ data:
                 },
                 "definition": "",
                 "hide": 0,
-                "includeAll": true,
+                "includeAll": false,
                 "multi": false,
                 "name": "service_name",
                 "options": [],
@@ -203,10 +204,9 @@ data:
                 "type": "query"
               },
               {
+                "allValue": " ",
                 "current": {
-                  "selected": false,
-                  "text": "bssapi-aggregator-c7bf75995-grf2m",
-                  "value": "bssapi-aggregator-c7bf75995-grf2m"
+                  "selected": false
                 },
                 "datasource": {
                   "type": "loki",
@@ -215,7 +215,7 @@ data:
                 "definition": "",
                 "hide": 0,
                 "includeAll": false,
-                "multi": false,
+                "multi": true,
                 "name": "pod",
                 "options": [],
                 "query": {
@@ -232,14 +232,44 @@ data:
               },
               {
                 "current": {
-                  "selected": true,
+                  "selected": false,
                   "text": "",
                   "value": ""
                 },
                 "description": "Search the logs with parameters",
                 "hide": 0,
-                "label": "Search",
-                "name": "search_string",
+                "label": "Search 1",
+                "name": "search1",
+                "options": [
+                  {
+                    "selected": true,
+                    "text": "",
+                    "value": ""
+                  }
+                ],
+                "query": "",
+                "skipUrlSync": false,
+                "type": "textbox"
+              },
+              {
+                "current": {},
+                "hide": 0,
+                "label": "Search 2",
+                "name": "search2",
+                "options": [],
+                "query": "",
+                "skipUrlSync": false,
+                "type": "textbox"
+              },
+              {
+                "current": {
+                  "selected": false,
+                  "text": "",
+                  "value": ""
+                },
+                "hide": 0,
+                "label": "Search 3",
+                "name": "search3",
                 "options": [
                   {
                     "selected": true,
@@ -254,13 +284,13 @@ data:
             ]
           },
           "time": {
-            "from": "now-30m",
+            "from": "now-5m",
             "to": "now"
           },
           "timepicker": {},
           "timezone": "",
           "title": "Logs default",
           "uid": "d81529f1-1122-4dfa-aa31-bad221e84a7c",
-          "version": 1,
+          "version": 20,
           "weekStart": ""
         }
