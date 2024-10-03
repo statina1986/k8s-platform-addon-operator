@@ -4,7 +4,11 @@
 %>
 # vaultPlatformNamespace: vault
 vaultPlatform:
+  % if values['global']['clusterwideResources'] == "true":
   vaultWebhooksEnabled: true
+  % else:
+  vaultWebhooksEnabled: false
+  % endif
   # autoUnseal is when a cloud service (KMS) is used to unseal vault
   autoUnseal: false
   # k8sUnseal is when unseal secret is stored in kubernetes secrets, and is automatically unsealed using that
@@ -35,7 +39,7 @@ vaultPlatform:
     topologySpreadConstraints:
       - labelSelector:
           matchLabels:
-            app.kubernetes.io/instance: vault-platform
+            app.kubernetes.io/instance: "{{ .Release.Name }}"
             app.kubernetes.io/name: vault
         maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
@@ -49,13 +53,13 @@ vaultPlatform:
     # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     secretsFailurePolicy: Fail
 
-    # Limit Vault secrets to Qvantel namespace only by default
+    # Limit Vault secrets to apps namespace only by default
     namespaceSelector:      
       matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-            - qvantel
+            - ${values['global']['appsNamespace']}
   vault:
     global:
       enabled: true
@@ -91,13 +95,13 @@ vaultPlatform:
       topologySpreadConstraints: |
         - labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: vault-platform
+              app.kubernetes.io/instance: "{{ .Release.Name }}"
               app.kubernetes.io/name: vault
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      resources:
+      resources: {}
       readinessProbe:
         enabled: true
         path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
@@ -126,6 +130,9 @@ vaultPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            - name: VAULT_INIT_NODE
+              value: ${values['global']['helmReleaseNamePrefix']}vault-platform-0
+
           % if 'containerRegistryBase' in values['global']:
           image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
           % else:
@@ -159,13 +166,13 @@ vaultPlatform:
             storage "raft" {
               path = "/vault/data"
                 retry_join {
-                leader_api_addr = "http://vault-platform-0.vault-platform-internal:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-0.${values['global']['helmReleaseNamePrefix']}vault-platform-internal:8200"
               }
               retry_join {
-                leader_api_addr = "http://vault-platform-1.vault-platform-internal:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-1.${values['global']['helmReleaseNamePrefix']}vault-platform-internal:8200"
               }
               retry_join {
-                leader_api_addr = "http://vault-platform-2.vault-platform-internal:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-2.${values['global']['helmReleaseNamePrefix']}vault-platform-internal:8200"
               }
 
               autopilot {

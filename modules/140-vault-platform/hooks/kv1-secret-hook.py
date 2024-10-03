@@ -29,19 +29,12 @@ kubernetes:
             case EventHook(eventName, context):
                 name = context['object']['metadata']['name']
                 namespace = context['object']['metadata']['namespace']
+                vault_client = get_vault_client()
                 try:
                     path = context['object']['spec']['path']
                     # compatibility with qdeployer 3.80.0
                     if path.startswith("secret/"):
                         path = path.replace("secret/", "", 1)
-
-                    secret = v1.read_namespaced_secret(
-                        "vault-keys", "platform").data
-                    token = base64.b64decode(
-                        secret["root_token"]).decode('utf-8')
-                    vault_client = hvac.Client(
-                        url='http://vault-platform.platform.svc.cluster.local:8200', token=token)
-
                     if eventName == "Deleted":
                         # vault_client.secrets.kv.v1.delete_secret(path)
                         return

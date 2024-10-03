@@ -29,16 +29,10 @@ kubernetes:
                 case EventHook(eventName, context):
                     name = context['object']['metadata']['name']  
                     namespace = context['object']['metadata']['namespace']
+                    vault_client = get_vault_client()
                     try:
                         policy_name = context.get('object', {}).get(
                             'spec', {}).get('policy-name')
-
-                        secret = v1.read_namespaced_secret(
-                            "vault-keys", "platform").data
-                        token = base64.b64decode(secret["root_token"]).decode('utf-8')
-                        vault_client = hvac.Client(
-                            url='http://vault-platform.platform.svc.cluster.local:8200', token=token)
-
                         if eventName == "Deleted":
                             vault_client.sys.delete_policy(name=(policy_name or name))
                             return

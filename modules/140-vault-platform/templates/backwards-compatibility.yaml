@@ -5,10 +5,10 @@ metadata:
   annotations:
     consul.hashicorp.com/service-port: http
   labels:
-    app.kubernetes.io/instance: vault-platform
+    app.kubernetes.io/instance: {{.Release.Name}}
     app.kubernetes.io/name: vault
   name: vault
-  namespace: platform
+  namespace: {{.Release.Namespace}}
 spec:
   ports:
   - name: http
@@ -20,7 +20,7 @@ spec:
     protocol: TCP
     targetPort: 8201
   selector:
-    app.kubernetes.io/instance: vault-platform
+    app.kubernetes.io/instance: {{.Release.Name}}
     app.kubernetes.io/name: vault
     component: server
   sessionAffinity: None
