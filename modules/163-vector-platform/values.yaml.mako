@@ -221,6 +221,9 @@ vectorPlatform:
           inputs:
           - istio_gateway_transform
           source: |
+            if exists(.kubernetes.pod_labels.app) {
+              .app = .kubernetes.pod_labels.app
+            }
             del(.kubernetes)
             .@timestamp = del(.timestamp)
           type: remap
