@@ -1,15 +1,21 @@
 lokiPlatform:
-  loki:
+  loki:    
     enabled: true
+    memcached:
+      % if 'containerRegistryBase' in values['global']:
+      image:
+        repository: ${values['global']['containerRegistryBase']}/library/memcached
+      % endif  
+    % if values['global']['configurationProfile'] == 'dev':      
+    deploymentMode: SingleBinary
+    % else:
+    deploymentMode: SimpleScalable
+    % endif
+    lokiCanary:
+        enabled: false
     test:
       enabled: false
     monitoring:
-      lokiCanary:
-        enabled: false
-      selfMonitoring:
-        enabled: false
-        grafanaAgent:
-          installOperator: false
       dashboards:
         annotations:
           k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
@@ -22,8 +28,9 @@ lokiPlatform:
     loki:
       image:
         % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}
+        registry: ${values['global']['containerRegistryBase']}        
         % endif
+        tag: 3.2.0
       analytics:
         reporting_enabled: false
       auth_enabled: false
@@ -42,12 +49,12 @@ lokiPlatform:
         % endif
 
       compactor:
-        working_directory: /var/loki/compactor
         % if values['global']['configurationProfile'] == 'dev':
-        shared_store: filesystem
+        delete_request_store: filesystem
         % else:
-        shared_store: s3
+        delete_request_store: s3
         % endif
+        working_directory: /var/loki/compactor
         compaction_interval: 10m
         retention_enabled: true
         retention_delete_delay: 2h
@@ -57,7 +64,7 @@ lokiPlatform:
         max_look_back_period: 672h
         
       limits_config:
-        enforce_metric_name: false
+        allow_structured_metadata: false
         reject_old_samples: true
         reject_old_samples_max_age: "168h"
         max_query_length: "2160h" # 90 days
@@ -120,13 +127,6 @@ lokiPlatform:
         type: s3
         % endif
 
-      storage_config:
-        tsdb_shipper:
-          % if values['global']['configurationProfile'] == 'dev':
-          shared_store: filesystem
-          % else:
-          shared_store: s3
-          % endif
       tracing:
         enabled: false
 
@@ -137,13 +137,23 @@ lokiPlatform:
     gateway:
       enabled: false
       replicas: 0
-
+    chunksCache:
+      enabled: false
+      replicas: 0
+    resultsCache:
+      enabled: false
+      replicas: 0
     % if values['global']['configurationProfile'] == 'dev':
     singleBinary:
         replicas: 1
+    write:
+      replicas: 0
+    read:
+      replicas: 0
+    backend:
+      replicas: 0
     % else:
     read:
-      legacyReadTarget: true
       replicas: 3
       tolerations:
         - key: "dedicated-nodes"
@@ -153,6 +163,16 @@ lokiPlatform:
       % if values['global']['platformMasters']:
       nodeSelector:
         dedicated-nodes: platform-masters
+      % endif
+      % if values['global']['multiZone']['enabled']:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              'app.kubernetes.io/name': loki
+              'app.kubernetes.io/component': read
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
       % endif
     write:
       replicas: 3
@@ -166,6 +186,37 @@ lokiPlatform:
       % if values['global']['platformMasters']:
       nodeSelector:
         dedicated-nodes: platform-masters
+      % endif
+      % if values['global']['multiZone']['enabled']:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              'app.kubernetes.io/name': loki
+              'app.kubernetes.io/component': write
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+      % endif
+    backend:
+      replicas: 3
+      tolerations:
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"
+      % if values['global']['platformMasters']:
+      nodeSelector:
+        dedicated-nodes: platform-masters
+      % endif
+      % if values['global']['multiZone']['enabled']:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              'app.kubernetes.io/name': loki
+              'app.kubernetes.io/component': backend
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
       % endif
     % endif
     

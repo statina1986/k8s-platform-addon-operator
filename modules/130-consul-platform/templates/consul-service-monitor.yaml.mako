@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    release: monitoring-platform
+    release: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
   name: consul-service-monitor
 spec:
   endpoints:
@@ -17,6 +17,6 @@ spec:
   selector:
     matchLabels:
       app: consul
-      release: consul-platform
+      release: "{{ .Release.Name }}"
       component: server
 % endif 

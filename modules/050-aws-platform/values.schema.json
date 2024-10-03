@@ -1,0 +1,861 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "awsPlatform": {
+      "properties": {
+        "apiServerEndpoint": {
+          "default": "null",
+          "description": "**Required.** EKS API server endpoint.",
+          "required": [],
+          "title": "apiServerEndpoint"
+        },
+        "aws-ebs-csi-driver": {
+          "description": "Configuration for underlying aws-ebs-csi-driver helm-chart. See https://github.com/kubernetes-sigs/aws-ebs-csi-driver for details.",
+          "properties": {
+            "controller": {
+              "properties": {
+                "extraVolumeTags": {
+                  "required": [],
+                  "title": "extraVolumeTags",
+                  "type": "object"
+                },
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "controller",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/ebs-csi-driver/aws-ebs-csi-driver",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "node": {
+              "properties": {
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "node",
+              "type": "object"
+            },
+            "sidecars": {
+              "properties": {
+                "attacher": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-attacher",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "attacher",
+                  "type": "object"
+                },
+                "livenessProbe": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "livenessProbe",
+                  "type": "object"
+                },
+                "nodeDriverRegistrar": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "nodeDriverRegistrar",
+                  "type": "object"
+                },
+                "provisioner": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "provisioner",
+                  "type": "object"
+                },
+                "resizer": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-resizer",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resizer",
+                  "type": "object"
+                },
+                "snapshotter": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/external-snapshotter/csi-snapshotter",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "snapshotter",
+                  "type": "object"
+                },
+                "volumemodifier": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/ebs-csi-driver/volume-modifier-for-k8s",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "volumemodifier",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "sidecars",
+              "type": "object"
+            },
+            "storageClasses": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "allowVolumeExpansion": {
+                        "default": true,
+                        "required": [],
+                        "title": "allowVolumeExpansion",
+                        "type": "boolean"
+                      },
+                      "annotations": {
+                        "description": "annotation metadata",
+                        "properties": {
+                          "storageclass.kubernetes.io/is-default-class": {
+                            "default": "true",
+                            "required": [],
+                            "title": "storageclass.kubernetes.io/is-default-class",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "title": "annotations",
+                        "type": "object"
+                      },
+                      "name": {
+                        "default": "gp3",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "properties": {
+                          "tagSpecification_name": {
+                            "default": "Name=some-cluster-{{ .PVCName }}",
+                            "required": [],
+                            "title": "tagSpecification_name",
+                            "type": "string"
+                          },
+                          "type": {
+                            "default": "gp3",
+                            "required": [],
+                            "title": "type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "title": "parameters",
+                        "type": "object"
+                      },
+                      "reclaimPolicy": {
+                        "default": "Delete",
+                        "description": "defaults to Delete",
+                        "required": [],
+                        "title": "reclaimPolicy",
+                        "type": "string"
+                      },
+                      "volumeBindingMode": {
+                        "default": "WaitForFirstConsumer",
+                        "description": "defaults to WaitForFirstConsumer",
+                        "required": [],
+                        "title": "volumeBindingMode",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "storageClasses",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "aws-ebs-csi-driver",
+          "type": "object"
+        },
+        "aws-ebs-csi-driver-enabled": {
+          "default": false,
+          "description": "Deploy aws-ebs-csi-driver helm-chart.",
+          "required": [],
+          "title": "aws-ebs-csi-driver-enabled",
+          "type": "boolean"
+        },
+        "aws-efs-csi-driver": {
+          "description": "Configuration for underlying aws-efs-csi-driver helm-chart. See https://github.com/kubernetes-sigs/aws-efs-csi-driver for details.",
+          "properties": {
+            "controller": {
+              "properties": {
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "controller",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/amazon/aws-efs-csi-driver",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "node": {
+              "properties": {
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "node",
+              "type": "object"
+            },
+            "sidecars": {
+              "properties": {
+                "csiProvisioner": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "csiProvisioner",
+                  "type": "object"
+                },
+                "livenessProbe": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "livenessProbe",
+                  "type": "object"
+                },
+                "nodeDriverRegistrar": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "repository": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "nodeDriverRegistrar",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "sidecars",
+              "type": "object"
+            },
+            "storageClasses": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "mountOptions": {
+                        "description": "  annotations:\n    # Use that annotation if you want this to your default storageclass\n    storageclass.kubernetes.io/is-default-class: \"true\"",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "mountOptions",
+                        "type": "array"
+                      },
+                      "name": {
+                        "default": "efs-sc",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "properties": {
+                          "basePath": {
+                            "default": "/dynamic_provisioning",
+                            "required": [],
+                            "title": "basePath",
+                            "type": "string"
+                          },
+                          "directoryPerms": {
+                            "default": "700",
+                            "required": [],
+                            "title": "directoryPerms",
+                            "type": "string"
+                          },
+                          "fileSystemId": {
+                            "default": "SYSTEM_EFS_VALUE_HERE",
+                            "required": [],
+                            "title": "fileSystemId",
+                            "type": "string"
+                          },
+                          "gid": {
+                            "default": "0",
+                            "required": [],
+                            "title": "gid",
+                            "type": "string"
+                          },
+                          "provisioningMode": {
+                            "default": "efs-ap",
+                            "required": [],
+                            "title": "provisioningMode",
+                            "type": "string"
+                          },
+                          "uid": {
+                            "default": "0",
+                            "description": "gidRangeStart: \"1000\"\ngidRangeEnd: \"2000\"",
+                            "required": [],
+                            "title": "uid",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "title": "parameters",
+                        "type": "object"
+                      },
+                      "reclaimPolicy": {
+                        "default": "Delete",
+                        "required": [],
+                        "title": "reclaimPolicy",
+                        "type": "string"
+                      },
+                      "volumeBindingMode": {
+                        "default": "Immediate",
+                        "required": [],
+                        "title": "volumeBindingMode",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "storageClasses",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "aws-efs-csi-driver",
+          "type": "object"
+        },
+        "aws-efs-csi-driver-enabled": {
+          "default": false,
+          "description": "Deploy aws-efs-csi-driver helm-chart. ",
+          "required": [],
+          "title": "aws-efs-csi-driver-enabled",
+          "type": "boolean"
+        },
+        "aws-load-balancer-controller": {
+          "description": "Configuration for underlying aws-load-balancer-controller helm-chart. See https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/helm/aws-load-balancer-controller/README.md#configuration for details.",
+          "properties": {
+            "clusterName": {
+              "default": "some-cluster",
+              "required": [],
+              "title": "clusterName",
+              "type": "string"
+            },
+            "defaultTags": {
+              "required": [],
+              "title": "defaultTags",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "aws-load-balancer-controller",
+          "type": "object"
+        },
+        "aws-load-balancer-controller-enabled": {
+          "default": false,
+          "description": "Deploy aws-load-balancer-controller helm-chart. ",
+          "required": [],
+          "title": "aws-load-balancer-controller-enabled",
+          "type": "boolean"
+        },
+        "aws-vpc-cni": {
+          "description": "Configuration for underlying aws-vpc-cni helm-chart. See https://github.com/aws/amazon-vpc-cni-k8s/tree/master/charts/aws-vpc-cni#configuration for details.",
+          "properties": {
+            "eniConfig": {
+              "properties": {
+                "region": {
+                  "default": "eu-central-1",
+                  "required": [],
+                  "title": "region",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "eniConfig",
+              "type": "object"
+            },
+            "env": {
+              "properties": {
+                "ENABLE_PREFIX_DELEGATION": {
+                  "default": "true",
+                  "required": [],
+                  "title": "ENABLE_PREFIX_DELEGATION",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "env",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "account": {
+                  "default": "602401143452",
+                  "required": [],
+                  "title": "account",
+                  "type": "string"
+                },
+                "region": {
+                  "default": "eu-central-1",
+                  "required": [],
+                  "title": "region",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "init": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "account": {
+                      "default": "602401143452",
+                      "required": [],
+                      "title": "account",
+                      "type": "string"
+                    },
+                    "region": {
+                      "default": "eu-central-1",
+                      "required": [],
+                      "title": "region",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "init",
+              "type": "object"
+            },
+            "nodeAgent": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "account": {
+                      "default": "602401143452",
+                      "required": [],
+                      "title": "account",
+                      "type": "string"
+                    },
+                    "region": {
+                      "default": "eu-central-1",
+                      "required": [],
+                      "title": "region",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "nodeAgent",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "aws-vpc-cni",
+          "type": "object"
+        },
+        "aws-vpc-cni-enabled": {
+          "default": false,
+          "description": "Deploy aws-vpc-cni helm-chart.",
+          "required": [],
+          "title": "aws-vpc-cni-enabled",
+          "type": "boolean"
+        },
+        "awsKubeProxy": {
+          "description": "Configuration for EKS kube-proxy. ",
+          "properties": {
+            "image": {
+              "default": "v1.25.16-minimal-eksbuild.1",
+              "required": [],
+              "title": "image",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "awsKubeProxy",
+          "type": "object"
+        },
+        "awsKubeProxyEnabled": {
+          "default": false,
+          "description": "Deploy EKS kube-proxy.",
+          "required": [],
+          "title": "awsKubeProxyEnabled",
+          "type": "boolean"
+        },
+        "awsRegistry": {
+          "default": "602401143452.dkr.ecr.eu-central-1.amazonaws.com",
+          "description": "ECR registry for AWS images. By default is automatically assigned based on configured `region`",
+          "required": [],
+          "title": "awsRegistry",
+          "type": "string"
+        },
+        "clusterName": {
+          "default": "some-cluster",
+          "description": "EKS cluster name. Defaults to the name from `global.clusterName`",
+          "required": [],
+          "title": "clusterName",
+          "type": "string"
+        },
+        "region": {
+          "default": "eu-central-1",
+          "description": "**Required.** AWS Region where cluster is deployed. ",
+          "required": [],
+          "title": "region"
+        },
+        "tags": {
+          "default": "null",
+          "description": "**Required.** Default tags to be added for AWS Resources provisioned by this module (loadbalancers, ebs volumes, etc). If you do not want to add tags, provide `{}`.",
+          "required": [],
+          "title": "tags"
+        }
+      },
+      "required": [
+        "region",
+        "apiServerEndpoint",
+        "tags"
+      ],
+      "title": "awsPlatform",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

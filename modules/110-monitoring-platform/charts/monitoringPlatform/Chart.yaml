@@ -4,7 +4,7 @@ version: 0.0.1
 dependencies:
   - name: kube-prometheus-stack
     condition: kube-prometheus-stack.enabled
-    version: "61.2.0"
+    version: "63.1.0"
     repository: "https://prometheus-community.github.io/helm-charts"
   - name: prometheus-blackbox-exporter
     condition: prometheus-blackbox-exporter.enabled
@@ -18,10 +18,6 @@ dependencies:
     condition: x509-certificate-exporter.enabled
     version: "v3.14.0"
     repository: "https://charts.enix.io"
-  - name: kafka-lag-exporter
-    condition: kafka-lag-exporter.enabled
-    version: "v0.8.2"
-    repository: "https://seglo.github.io/kafka-lag-exporter/repo/"
   - name: yet-another-cloudwatch-exporter
     condition: yet-another-cloudwatch-exporter.enabled
     version: "0.38.0"

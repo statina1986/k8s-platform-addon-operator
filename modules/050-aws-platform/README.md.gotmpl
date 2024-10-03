@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+
+This module configures needed plugins and services to run Qvantel K8S Platfrom on AWS EKS clusters and within AWS Cloud
+
+Depends on modules:
+- no dependencies
+
+Used helm-charts:
+- `aws-ebs-csi-driver`
+- `aws-efs-csi-driver`
+- `aws-load-balancer-controller`
+- `aws-vpc-cni`
+
+Provides:
+- `aws-ebs-csi-driver` deployment
+- `aws-efs-csi-driver` deployment
+- `aws-load-balancer-controller` deployment
+- `aws-vpc-cni` deployment
+- `kube-proxy` deployment
+- AWS resource tagging
+- EKS clusters scaledown/scaleup support
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

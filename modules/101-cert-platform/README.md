@@ -1,112 +1,36 @@
-# cert-platform module
+# cert-platform
+
 This module is responsible for deployment of [cert-manager](https://cert-manager.io/docs/) in the cluster and configuration of required platform certificates
 
 Depends on modules:
 - no dependencies
 
-# qvantel.systems certificates
+Used helm-charts:
+- cert-manager : v1.12.13
 
-The qvantel.systems certificate is created using the clusterIssuer and certificate definitions found in templates. The required AWS configurations need to be done using this documentation https://cert-manager.io/docs/configuration/acme/dns01/route53/ and below you can find the examples to Qvantel specific deployments.
+# Qvantel AWS Usage
 
-# AWS IT configurations
+When runnig in Qvantel Managed AWS environments this module is capable to automatically provision LetsEncrypt certificates for Qvantel domains `*.qvantel.systems` or `*.qvantel.solutions`.
+Respective issuers and certificates should be enabled in the configuration. See available configuration options below.
 
-Our configuration is done with the Route 53 and that requires a role that has the rights to access the required services. Below you can find the role example that is required for the platform mumbai environment.
+## Values
 
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::386844351831:role/qv-mumbai-platform-1-certmanager"
-            },
-            "Action": "sts:AssumeRole",
-            "Condition": {}
-        }
-    ]
-}
-```
-The forementioned role requires a access policy that allows it to access the Route 53 and here we need to make sure that the hostedzone is pointing to the correct route53 resource. The example below is pointed towards the qvante.systems domain.
-
-```json
-{
-    "Statement": [
-        {
-            "Action": "route53:GetChange",
-            "Effect": "Allow",
-            "Resource": "arn:aws:route53:::change/*"
-        },
-        {
-            "Action": [
-                "route53:ChangeResourceRecordSets",
-                "route53:ListResourceRecordSets"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:route53:::hostedzone/ZJ7W7ERY57J33"
-        },
-        {
-            "Action": "route53:ListHostedZonesByName",
-            "Effect": "Allow",
-            "Resource": "*"
-        }
-    ],
-    "Version": "2012-10-17"
-}
-```
-
-These configurations allow the cert-manager in AWS Development to manage Route 53 DNS zones in AWS IT.
-
-# AWS Development configurations
-
-The cert-manager pods running in our cluster require a credentials source in order to connect to the Route 53. The following policy was used in our mumbai platform cluster.
-
-```json
-{
-    "Statement": [
-        {
-            "Action": [
-                "sts:AssumeRole"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:iam::067412573140:role/qv-mumbai-platform-1-dns-manager"
-        }
-    ],
-    "Version": "2012-10-17"
-}
-```
-
-The cert-manager role requires the following trust releationship in order to use the IRSA method. More information on everything that needs to be changed can be found on the official documentation that was linked before.
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Federated": "arn:aws:iam::386844351831:oidc-provider/oidc.eks.ap-south-1.amazonaws.com/id/4C1BD9CECF5F6A3152F0ED938E8A21AA"
-            },
-            "Action": "sts:AssumeRoleWithWebIdentity",
-            "Condition": {
-                "StringEquals": {
-                    "oidc.eks.ap-south-1.amazonaws.com/id/4C1BD9CECF5F6A3152F0ED938E8A21AA:sub": "system:serviceaccount:platform:cert-platform-cert-manager"
-                }
-            }
-        }
-    ]
-}
-```
-
-# Addon-operator configurations
-
-After these steps are done the created role needs to be added to the service account as a annotation. The file system permissions also need to be updated so that the ServiceAccount token can be read. Example configuration of this can be found below.
-
-```markdown
-cert-manager:
-    serviceAccount:
-    annotations:
-        eks.amazonaws.com/role-arn: "arn:aws:iam::386844351831:role/qv-mumbai-platform-1-certmanager"
-    securityContext:
-    fsGroup: 1001
-```
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| certPlatform.cert-manager | object | `{"acmesolver":{"image":{"registry":"platform.artifactory.qvantel.net/k8s-platform-1-2-0","repository":"jetstack/cert-manager-acmesolver"}},"cainjector":{"image":{"registry":"platform.artifactory.qvantel.net/k8s-platform-1-2-0","repository":"jetstack/cert-manager-cainjector"}},"global":{"tolerations":[{"effect":"NoSchedule","key":"dedicated-nodes","operator":"Equal","value":"platform-masters"}]},"image":{"registry":"platform.artifactory.qvantel.net/k8s-platform-1-2-0","repository":"jetstack/cert-manager-controller"},"serviceAccount":{"create":false,"name":"platform"},"startupapicheck":{"image":{"registry":"platform.artifactory.qvantel.net/k8s-platform-1-2-0","repository":"jetstack/cert-manager-ctl"}},"webhook":{"image":{"registry":"platform.artifactory.qvantel.net/k8s-platform-1-2-0","repository":"jetstack/cert-manager-webhook"}}}` | Configuration for underlying cert-manager helm-chart. See https://artifacthub.io/packages/helm/cert-manager/cert-manager/1.12.13#configuration |
+| certPlatform.certificates | object | `{"qvantel-ca":{"enabled":true,"spec":{"commonName":"qvantel.com","duration":"87660h","isCA":true,"issuerRef":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"qvantel-selfsigned-issuer"},"privateKey":{"algorithm":"ECDSA","size":256},"renewBefore":"360h","secretName":"qvantel-root-ca","subject":{"organizations":["Qvantel Oy"]}}},"qvantel-dot-solutions-wildcard":{"enabled":false,"spec":{"dnsNames":["*.qvantel.solutions","qvantel.solutions"],"issuerRef":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"qvantel-dot-solutions"},"privateKey":{"rotationPolicy":"Always"},"renewBefore":"720h","secretName":"qvantel-wildcard"}},"qvantel-dot-systems-wildcard":{"enabled":false,"spec":{"dnsNames":["*.qvantel.systems","qvantel.systems"],"issuerRef":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"qvantel-dot-systems"},"privateKey":{"rotationPolicy":"Always"},"renewBefore":"720h","secretName":"qvantel-wildcard"}}}` | List of Certificates to provision. See https://cert-manager.io/docs/usage/certificate/ for `Certificate` resource details. |
+| certPlatform.certificates.qvantel-ca | object | `{"enabled":true,"spec":{"commonName":"qvantel.com","duration":"87660h","isCA":true,"issuerRef":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"qvantel-selfsigned-issuer"},"privateKey":{"algorithm":"ECDSA","size":256},"renewBefore":"360h","secretName":"qvantel-root-ca","subject":{"organizations":["Qvantel Oy"]}}}` | This is the root CA certificate for Simple Qvantel CA |
+| certPlatform.certificates.qvantel-dot-solutions-wildcard | object | `{"enabled":false,"spec":{"dnsNames":["*.qvantel.solutions","qvantel.solutions"],"issuerRef":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"qvantel-dot-solutions"},"privateKey":{"rotationPolicy":"Always"},"renewBefore":"720h","secretName":"qvantel-wildcard"}}` | This is the wildcard certificate issued for *.qvantel.solutions name |
+| certPlatform.certificates.qvantel-dot-systems-wildcard | object | `{"enabled":false,"spec":{"dnsNames":["*.qvantel.systems","qvantel.systems"],"issuerRef":{"group":"cert-manager.io","kind":"ClusterIssuer","name":"qvantel-dot-systems"},"privateKey":{"rotationPolicy":"Always"},"renewBefore":"720h","secretName":"qvantel-wildcard"}}` | This is the wildcard certificate issued for *.qvantel.systems name |
+| certPlatform.clusterIssuers | object | `{"example-cluster-issuer":{"enabled":false,"spec":{}},"qvantel-ca-issuer":{"enabled":true,"spec":{"ca":{"secretName":"qvantel-root-ca"}}},"qvantel-dot-solutions":{"enabled":false,"spec":{"acme":{"email":"infra.finland@qvantel.com","privateKeySecretRef":{"name":"qvantel-dot-solutions-private-key-letsencrypt"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"dns01":{"route53":{"hostedZoneID":"ZPXWBK7RK86EX","region":"eu-central-1","role":"arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"}},"selector":{"dnsZones":["qvantel.solutions"]}}]}}},"qvantel-dot-systems":{"enabled":false,"spec":{"acme":{"email":"infra.finland@qvantel.com","privateKeySecretRef":{"name":"letsencrypt-platform-dns"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"dns01":{"route53":{"hostedZoneID":"ZJ7W7ERY57J33","region":"eu-central-1","role":"arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account"}},"selector":{"dnsZones":["qvantel.systems"]}}]}}},"qvantel-selfsigned-issuer":{"enabled":true,"spec":{"selfSigned":{}}}}` | List of ClusterIssuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `ClusterIssuer` resource details. |
+| certPlatform.clusterIssuers.example-cluster-issuer | object | `{"enabled":false,"spec":{}}` | Example ClusterIssuer used for documentation |
+| certPlatform.clusterIssuers.example-cluster-issuer.enabled | bool | `false` | If ClusterIssuers is enabled and hence will be deployed to the cluster. |
+| certPlatform.clusterIssuers.example-cluster-issuer.spec | object | `{}` | Configure `spec` property of `ClusterIssuers` resource. |
+| certPlatform.clusterIssuers.qvantel-ca-issuer | object | `{"enabled":true,"spec":{"ca":{"secretName":"qvantel-root-ca"}}}` | This issuer is Simple Qvantel CA issuer |
+| certPlatform.clusterIssuers.qvantel-dot-solutions | object | `{"enabled":false,"spec":{"acme":{"email":"infra.finland@qvantel.com","privateKeySecretRef":{"name":"qvantel-dot-solutions-private-key-letsencrypt"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"dns01":{"route53":{"hostedZoneID":"ZPXWBK7RK86EX","region":"eu-central-1","role":"arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"}},"selector":{"dnsZones":["qvantel.solutions"]}}]}}}` | This issuer is used for *.qvantel.solutions certificates issued with letsencrypt |
+| certPlatform.clusterIssuers.qvantel-dot-systems | object | `{"enabled":false,"spec":{"acme":{"email":"infra.finland@qvantel.com","privateKeySecretRef":{"name":"letsencrypt-platform-dns"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"dns01":{"route53":{"hostedZoneID":"ZJ7W7ERY57J33","region":"eu-central-1","role":"arn:aws:iam::067412573140:role/Qvantel-Update-DNS-From-Development-Account"}},"selector":{"dnsZones":["qvantel.systems"]}}]}}}` | This issuer is used for *.qvantel.systems certificates issued with letsencrypt |
+| certPlatform.clusterIssuers.qvantel-selfsigned-issuer | object | `{"enabled":true,"spec":{"selfSigned":{}}}` | This issuer is used to generate self-signed certificate for Simple Qvantel CA |
+| certPlatform.issuers | object | `{"example-issuer":{"enabled":false,"spec":{}}}` | List of Issuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `Issuer` resource details. |
+| certPlatform.issuers.example-issuer | object | `{"enabled":false,"spec":{}}` | Example Issuer used for documentation |
+| certPlatform.issuers.example-issuer.enabled | bool | `false` | If Issuer is enabled and hence will be deployed to the cluster. |
+| certPlatform.issuers.example-issuer.spec | object | `{}` | Configure `spec` property of `Issuer` resource. |

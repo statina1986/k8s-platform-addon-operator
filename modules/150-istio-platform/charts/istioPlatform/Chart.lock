@@ -1,9 +1,9 @@
 dependencies:
 - name: base
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.17.6
+  repository: https://istio-release.storage.googleapis.com/charts
+  version: 1.23.2
 - name: istiod
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.17.6
-digest: sha256:ef76f630a8ba280b952e165dc0c08755f6379967f85585c1374435cc6f84ba8a
-generated: "2023-09-22T23:32:42.250279367+03:00"
+  repository: https://istio-release.storage.googleapis.com/charts
+  version: 1.23.2
+digest: sha256:6c85f49b57a9bca23679b20d82adf590712bf84212865e4553a8b0e3b975b8e2
+generated: "2024-09-25T17:41:46.691122662+03:00"

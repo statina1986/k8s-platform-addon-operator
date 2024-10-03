@@ -66,37 +66,6 @@ monitoringPlatform:
     prometheusRules:
       extraLabels:
         "release": "monitoring-platform"
-  kafka-lag-exporter:
-    enabled: true
-    image:
-      % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/seglo/kafka-lag-exporter
-      % endif
-    tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
-        operator: "Equal"
-        effect: "NoSchedule"
-    % if values['global']['platformMasters']:
-    nodeSelector:
-      dedicated-nodes: platform-masters
-    % endif
-    clusters:
-      - name: "kafka-cluster"
-        bootstrapBrokers: kafka-cluster-kafka-bootstrap.platform.svc:9092
-        groupWhitelist:
-          - .*
-        topicWhitelist:
-          - .*
-    prometheus:
-      serviceMonitor:
-        enabled: true
-        additionalLabels:
-          "release": "monitoring-platform"
-    deploymentExtraLabels:
-      "release": "monitoring-platform"
-    podExtraLabels:
-      "release": "monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
     image:
@@ -354,8 +323,7 @@ monitoringPlatform:
 
       grafana.ini:
         auth.anonymous:
-          enabled: true
-          org_role: Viewer
+          enabled: false
         dataproxy:
           timeout: 310
         server:
@@ -374,8 +342,8 @@ monitoringPlatform:
           name_attribute_path: full_name
           auth_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/auth # override if needed in the target environment values file
           signout_redirect_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/logout # override if needed in the target environment values file
-          token_url: http://qvaa-proxy-80.qvantel.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
-          api_url: http://qvaa-proxy-80.qvantel.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
+          token_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
+          api_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
           role_attribute_path: contains(realm_access.roles[*], 'grafana_admin') && 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') && 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') && 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') && 'Viewer'
           allow_assign_grafana_admin: true
           role_attribute_strict: true
@@ -488,10 +456,14 @@ monitoringPlatform:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           % endif
-        podMonitorSelectorNilUsesHelmValues: false
-        ruleSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
-        probeSelectorNilUsesHelmValues: false    
+        podMonitorSelector:
+          matchLabels: null
+        ruleSelector:
+          matchLabels: null
+        serviceMonitorSelector:
+          matchLabels: null
+        probeSelector:
+          matchLabels: null    
         retention: 12d
         externalLabels:
           country: need-to-define

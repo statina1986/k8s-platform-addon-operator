@@ -1,14 +1,24 @@
 istioIngress:
+  # -- Enables Pomerium Authorization proxy. This will affect only VirtualServices which have `pomeriumProtected: true` attributes
   pomeriumEnabled: false
-  # Public Ingress
+  
+  # -- Enables Public Ingress gateway
   publicIngressEnabled: false
-  publicIngressProxyProtocolEnabled: false
+  # -- Enable full request logging for Public Ingress gateway
   publicIngressLogFullRequest: false
+  # -- Enable full response logging for Public Ingress gateway
   publicIngressLogFullResponse: false
+  # -- Configure request buffering (in bytes) for Public Ingress gateway. Set to 0 for disabling buffering.
   publicIngressBufferHttpRequestSize: 0
+  # -- Configuration for underlying `gateway` helm-chart for Public Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   publicIngress:
     name: public-ingress
     replicaCount: 3
+    podAnnotations:
+      # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
+      proxy.istio.io/config: |
+        drainDuration: 30s
+        terminationDrainDuration: 31s
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -18,15 +28,19 @@ istioIngress:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    % if values['global']['multiZone']['enabled']:
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
+        matchLabelKeys:
+          - pod-template-hash
         labelSelector:
           matchLabels:
             istio: public-ingress
+    % endif
     autoscaling:
-      enabled: true
+      enabled: false
       minReplicas: 3
       maxReplicas: 9
       targetCPUUtilizationPercentage: 80
@@ -43,11 +57,13 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
+        service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-public
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-public
+  # -- List of  `Gateway` resources provisioned for Public Ingress gateway.
   publicIngressGateways:
   - name: public-ingress
     spec:
@@ -69,15 +85,24 @@ istioIngress:
         tls:
           mode: SIMPLE
           credentialName: qvantel-wildcard
-          # Private Ingress
+
+  # -- Enables Private Ingress gateway
   privateIngressEnabled: false
-  privateIngressProxyProtocolEnabled: false
+  # -- Enable full request logging for Private Ingress gateway
   privateIngressLogFullRequest: false
+  # -- Enable full response logging for Private Ingress gateway
   privateIngressLogFullResponse: false
+  # -- Configure request buffering (in bytes) for Private Ingress gateway. Set to 0 for disabling buffering.
   privateIngressBufferHttpRequestSize: 0
+  # -- Configuration for underlying `gateway` helm-chart for Private Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   privateIngress:
     name: private-ingress
     replicaCount: 3
+    podAnnotations:
+      # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
+      proxy.istio.io/config: |
+        drainDuration: 30s
+        terminationDrainDuration: 31s
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -87,15 +112,19 @@ istioIngress:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    % if values['global']['multiZone']['enabled']:
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
+        matchLabelKeys:
+          - pod-template-hash
         labelSelector:
           matchLabels:
             istio: private-ingress
+    % endif
     autoscaling:
-      enabled: true
+      enabled: false
       minReplicas: 3
       maxReplicas: 9
       targetCPUUtilizationPercentage: 80
@@ -112,11 +141,13 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
+        service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-private
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-private
+  # -- List of  `Gateway` resources provisioned for Private Ingress gateway.
   privateIngressGateways:
   - name: private-ingress
     spec:
@@ -138,15 +169,24 @@ istioIngress:
         tls:
           mode: SIMPLE
           credentialName: qvantel-wildcard
-          # IntegrationsHttp Ingress
+
+  # -- Enables Integrations Http Ingress gateway
   integrationsHttpIngressEnabled: false
-  integrationsHttpIngressProxyProtocolEnabled: false
+  # -- Enable full request logging for Integrations Http Ingress gateway
   integrationsHttpIngressLogFullRequest: false
+  # -- Enable full response logging for Integrations Http Ingress gateway
   integrationsHttpIngressLogFullResponse: false
+  # -- Configure request buffering (in bytes) for Integrations Http Ingress gateway. Set to 0 for disabling buffering.
   integrationsHttpIngressBufferHttpRequestSize: 0
+  # -- Configuration for underlying `gateway` helm-chart for Integrations Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsHttpIngress:
     name: integrations-http-ingress
     replicaCount: 3
+    podAnnotations:
+      # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
+      proxy.istio.io/config: |
+        drainDuration: 30s
+        terminationDrainDuration: 31s
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -156,15 +196,19 @@ istioIngress:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    % if values['global']['multiZone']['enabled']:
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
+        matchLabelKeys:
+          - pod-template-hash
         labelSelector:
           matchLabels:
             istio: integrations-http-ingress
+    % endif
     autoscaling:
-      enabled: true
+      enabled: false
       minReplicas: 3
       maxReplicas: 9
       targetCPUUtilizationPercentage: 80
@@ -181,11 +225,13 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
+        service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-http
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-http
+  # -- List of  `Gateway` resources provisioned for Integrations Http Ingress gateway.
   integrationsHttpIngressGateways:
   - name: integrations-http-ingress
     spec:
@@ -207,15 +253,24 @@ istioIngress:
         tls:
           mode: SIMPLE
           credentialName: qvantel-wildcard
-          # IntegrationsNonHttp Ingress
+
+  # -- Enables Integrations Non Http Ingress gateway
   integrationsNonHttpIngressEnabled: false
-  integrationsNonHttpIngressProxyProtocolEnabled: false
+  # -- Enable full request logging for Integrations Non Http Ingress gateway
   integrationsNonHttpIngressLogFullRequest: false
+  # -- Enable full response logging for Integrations Non Http Ingress gateway
   integrationsNonHttpIngressLogFullResponse: false
+  # -- Configure request buffering (in bytes) for Integrations Non Http Ingress gateway. Set to 0 for disabling buffering.
   integrationsNonHttpIngressBufferHttpRequestSize: 0
+  # -- Configuration for underlying `gateway` helm-chart for Integrations Non Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsNonHttpIngress:
     name: integrations-non-http-ingress
     replicaCount: 3
+    podAnnotations:
+      # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
+      proxy.istio.io/config: |
+        drainDuration: 30s
+        terminationDrainDuration: 31s
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
@@ -225,15 +280,19 @@ istioIngress:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    % if values['global']['multiZone']['enabled']:
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
+        matchLabelKeys:
+          - pod-template-hash
         labelSelector:
           matchLabels:
             istio: integrations-non-http-ingress
+    % endif
     autoscaling:
-      enabled: true
+      enabled: false
       minReplicas: 3
       maxReplicas: 9
       targetCPUUtilizationPercentage: 80
@@ -251,9 +310,11 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+        service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-nonhttp
         % endif
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-nonhttp
       ports:
       - name: status-port
         port: 15021
@@ -263,6 +324,7 @@ istioIngress:
         port: 22
         protocol: TCP
         targetPort: 22
+  # -- List of  `Gateway` resources provisioned for Integrations Non Http Ingress gateway.
   integrationsNonHttpIngressGateways:
   - name: integrations-non-http-ingress
     spec:
@@ -275,12 +337,18 @@ istioIngress:
           name: sftp
           number: 22
           protocol: TCP
+  # -- VirtualServices to be provisioned.
   virtualServices:
+    # -- Common annotations for all VirtualServices resources provisioned
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
+    # -- Common base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to <virtual-service-name>-<dnsBase>. By default value is taken from `global.ingressBaseUrl`
     dnsBase: ${values['global']['ingressBaseUrl']}
+    # -- Qvantel applications namespace name. By default value is taken from `global.appsNamespace` and equal to `qvantel`
     appsNamespace: ${values['global']['appsNamespace']}
+    # -- Qvantel platform namespace name. By default value is taken from `global.appsNamespace` and equal to `platform`
     platformNamespace: ${values['global']['platformNamespace']}
+    # -- List of  `VirtualService` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  
     instances: 
       # Product managed services    
       address-manager:
@@ -999,6 +1067,28 @@ istioIngress:
         - route:
           - destination:
               host: pmm.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      sftp:
+        enabled: false
+        gateways:
+        - integrations-non-http-ingress
+        tcp:
+        - match:
+            - port: 22
+          route:
+            - destination:
+                host: sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 22
+      sftp-ui:
+        enabled: false
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
       vault-ui:

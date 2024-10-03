@@ -37,12 +37,32 @@
 %>
 
 awsPlatform:
+  # @schema
+  # required: true
+  # @schema
+  # -- **Required.** AWS Region where cluster is deployed. 
   region: eu-central-1
+  # -- EKS cluster name. Defaults to the name from `global.clusterName`
   clusterName: ${values['global']['clusterName']}
+  # -- ECR registry for AWS images. By default is automatically assigned based on configured `region`
   awsRegistry: ${awsRegistryAccount[region]}.dkr.ecr.${region}.amazonaws.com
-  apiServerEndpoint: https://172.20.0.1:443 # override EKS API server endpoint
+  # @schema
+  # required: true
+  # @schema
+  # -- **Required.** EKS API server endpoint.
+  apiServerEndpoint: null
+  # @schema
+  # required: true
+  # @schema
+  # -- **Required.** Default tags to be added for AWS Resources provisioned by this module (loadbalancers, ebs volumes, etc). If you do not want to add tags, provide `{}`.
+  tags: null
+  
+  # -- Deploy aws-load-balancer-controller helm-chart. 
   aws-load-balancer-controller-enabled: false
+  # -- Configuration for underlying aws-load-balancer-controller helm-chart. See https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/helm/aws-load-balancer-controller/README.md#configuration for details.
   aws-load-balancer-controller:
+    defaultTags:
+      ${values['awsPlatform']['tags']}
     clusterName: ${values['global']['clusterName']}
     serviceAccount:
       name: platform
@@ -56,7 +76,10 @@ awsPlatform:
     nodeSelector:
       dedicated-nodes: platform-masters
     % endif
+    
+  # -- Deploy aws-efs-csi-driver helm-chart. 
   aws-efs-csi-driver-enabled: false
+  # -- Configuration for underlying aws-efs-csi-driver helm-chart. See https://github.com/kubernetes-sigs/aws-efs-csi-driver for details.
   aws-efs-csi-driver:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -114,7 +137,10 @@ awsPlatform:
           basePath: "/dynamic_provisioning"
         reclaimPolicy: Delete
         volumeBindingMode: Immediate
+
+  # -- Deploy aws-ebs-csi-driver helm-chart.
   aws-ebs-csi-driver-enabled: false
+  # -- Configuration for underlying aws-ebs-csi-driver helm-chart. See https://github.com/kubernetes-sigs/aws-ebs-csi-driver for details.
   aws-ebs-csi-driver:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -157,6 +183,8 @@ awsPlatform:
           repository: ${values['global']['containerRegistryBase']}/ebs-csi-driver/volume-modifier-for-k8s
           % endif
     controller:
+      extraVolumeTags:
+        ${values['awsPlatform']['tags']}
       serviceAccount:
         create: false
         name: platform
@@ -176,7 +204,10 @@ awsPlatform:
         allowVolumeExpansion: true
         parameters:
           type: gp3
+          tagSpecification_name: "Name=${values['global']['clusterName']}-{{ .PVCName }}"
+  # -- Deploy aws-vpc-cni helm-chart.
   aws-vpc-cni-enabled: false
+  # -- Configuration for underlying aws-vpc-cni helm-chart. See https://github.com/aws/amazon-vpc-cni-k8s/tree/master/charts/aws-vpc-cni#configuration for details.
   aws-vpc-cni:
     eniConfig:
       region: ${region}
@@ -193,7 +224,9 @@ awsPlatform:
       image:
         region: ${region}
         account: '${awsRegistryAccount[region]}'
+  # -- Deploy EKS kube-proxy.
   awsKubeProxyEnabled: false
+  # -- Configuration for EKS kube-proxy. 
   awsKubeProxy:      
     % if values['global']['kubernetesVersion'] in {'1.25'}: 
     image: "v1.25.16-minimal-eksbuild.1"
