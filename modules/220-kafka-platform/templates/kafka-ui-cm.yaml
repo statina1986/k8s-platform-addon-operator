@@ -8,16 +8,18 @@ data:
     kafka:
       clusters:
         {{- if .Values.kafkaPlatform.clusters }}
-        {{- range keys .Values.kafkaPlatform.clusters  }}
+        {{- range keys .Values.kafkaPlatform.clusters }}
         {{- $current := get $.Values.kafkaPlatform.clusters . }}
         {{- if $current.enabled }}
         - name: {{ . }}
           bootstrapServers: {{ . }}-kafka-bootstrap.{{ $root.Release.Namespace }}.svc.cluster.local.:9092
         {{- end }}
         {{- end }}
-        {{- end }}        
+        {{- end }}
     auth:
-      type: disabled
+      {{ tpl (index .Values.kafkaPlatform "kafka-ui" "authConfig") . | nindent 6 }}
+    rbac:          
+      {{ tpl (index .Values.kafkaPlatform "kafka-ui" "rolesConfig") . | nindent 6 }}      
     management:
       health:
         ldap:

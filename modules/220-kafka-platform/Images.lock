@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:04:43.979022872Z"
+  generatedAt: "2024-10-03T09:05:25.675356645Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kafka-platform
@@ -48,11 +48,11 @@ images:
         arch: linux/amd64
       - digest: sha256:e98dfbe7bbf8d99c3ce649abe249fd1e1b5f2e5f91c77bf0af551ff2f71dd358
         arch: linux/arm64
-  - name: kafka-uid
-    image: ghcr.io/kafbat/kafka-ui:v1.0.0
+  - name: kafka-ui
+    image: ghcr.io/kafbat/kafka-ui:126980339425e4bff3d98b020fe606778d3c45b1
     chart: kafka-platform
     digests:
-      - digest: sha256:7272cbc8696669cce6294883d692af17baffa5ba3e96eb9cbff79842dbaac0c5
+      - digest: sha256:cc86297eeab7963056ac7bdcf8f96fb275570e9aa505fd8004c00ea4dc20839f
         arch: linux/amd64
-      - digest: sha256:371775cacaa32fe2e2e20a1000c918f1c135d05fc5953fda93ceed173cbb56c7
+      - digest: sha256:ccf3db646533f4bb76845f4e032d4facd40e012fd87cea08c6bfd780d1831814
         arch: linux/arm64
