@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kafbat-ui-roles
-data:
-  roles.yml: |-
-    {{ tpl  (index .Values.kafkaPlatform "kafka-ui" "roleconfig") . | nindent 4 }}

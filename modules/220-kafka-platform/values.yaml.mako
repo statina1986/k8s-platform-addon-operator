@@ -2,8 +2,9 @@ kafkaPlatform:
   kafka-ui:
     image:
       % if 'containerRegistryBase' in values['global']:
-      registry: ${values['global']['containerRegistryBase']}
+      registry: ${values['global']['containerRegistryBase']}      
       % endif
+      tag: "126980339425e4bff3d98b020fe606778d3c45b1"
     yamlApplicationConfigConfigMap:
       name: "kafbat-ui-configmap"
       keyName: "config.yml"
@@ -16,106 +17,88 @@ kafkaPlatform:
         valueFrom:
           secretKeyRef:
             name: kafka-ui-client-secret
-            key: KAFKA_UI_CLIENT_SECRET
-      - name: SPRING_CONFIG_ADDITIONAL-LOCATION
-        value: /kafka-ui-roles/roles.yml
-    volumes:
-      - name: roles-config
-        configMap:
-          name: kafbat-ui-roles
-    volumeMounts:
-    - name: roles-config
-      mountPath: /kafka-ui-roles
-    
-    additionalroles: null    
-    roleconfig: |
-      % if 'oauth2' in values['kafkaPlatform']['kafka-ui']['auth']:
-      rbac:
-        roles: 
-          {{- range keys .Values.kafkaPlatform.clusters }}
-          {{- $current := get $.Values.kafkaPlatform.clusters . }}
-          {{- if $current.enabled }}
-          {{- $cluster_name := . }}
-          - name: "kafka-admins-{{ $cluster_name }}"
-            clusters:
-              - {{ $cluster_name }}
-            subjects:
-              - provider: oauth
-                type: role
-                value: "kafka-admins"
-            permissions:
-              - resource: applicationconfig
-                actions: all
-              - resource: clusterconfig
-                actions: all
-              - resource: topic
-                value: ".*"
-                actions: all
-              - resource: consumer
-                value: ".*"
-                actions: all
-              - resource: schema
-                value: ".*"
-                actions: all
-              - resource: connect
-                value: ".*"
-                actions: all
-              - resource: ksql
-                actions: all
-              - resource: acl
-                actions: [ view ]
-          - name: "kafka-readonly-{{ $cluster_name }}"
-            clusters:
-              - {{ $cluster_name }}
-            subjects:
-              - provider: oauth
-                type: role
-                value: "kafka-readonly"
-            permissions:
-              - resource: clusterconfig
-                actions: [ "view" ]
-              - resource: topic
-                value: ".*"
-                actions: 
-                  - VIEW
-                  - MESSAGES_READ
-              - resource: consumer
-                value: ".*"
-                actions: [ view ]
-              - resource: schema
-                value: ".*"
-                actions: [ view ]
-              - resource: connect
-                value: ".*"
-                actions: [ view ]
-              - resource: acl
-                actions: [ view ]
-          {{- range $roleName, $role := (index $.Values.kafkaPlatform "kafka-ui" "additionalroles") }}
-          - name: {{ printf "%s%s%s" $roleName "-" $cluster_name | quote }}
-            clusters:
-              - {{ $cluster_name}}
-            subjects:
-              {{- range $subject := $role.subjects }}
-              - provider: {{ $subject.provider }}
-                type: {{ $subject.type }}
-                value: {{ $subject.value }}
-              {{- end }}
-            permissions:
-              {{- range $permission := $role.permissions }}
-              - resource: {{ $permission.resource }}
-                {{- if $permission.value }}
-                value: {{ $permission.value | quote }}
-                {{- end }}
-                actions:
-                  {{- $actions := default (list "VIEW") $permission.actions }}
-                  {{- range $action := $actions }}
-                  - {{ $action }}
-                  {{- end }}
-              {{- end }}
-          {{- end }}
+            key: KAFKA_UI_CLIENT_SECRET    
+    authConfig: |
+      type: OAUTH2
+      oauth2:
+        client:
+          keycloak:
+            clientId: kafbat
+            clientSecret: <%text>${KAFKA_UI_CLIENT_SECRET}</%text>
+            scope: openid
+            client-name: keycloak
+            provider: keycloak
+            authorization-grant-type: authorization_code
+            issuer-uri: https://auth-{{ $.Values.global.ingressBaseUrl }}/auth/realms/qvantel
+            jwk-set-uri: http://qvaa-proxy-80/auth/realms/qvantel/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
+            custom-params:
+              type: oauth
+              roles-field: roles
+    additionalRoles: ""
+    rolesConfig: |      
+      roles: 
+        {{- range keys .Values.kafkaPlatform.clusters }}
+        {{- $current := get $.Values.kafkaPlatform.clusters . }}
+        {{- if $current.enabled }}
+        {{- $cluster_name := . }}
+        - name: "kafka-admins-{{ $cluster_name }}"
+          clusters:
+            - {{ $cluster_name }}
+          subjects:
+            - provider: oauth
+              type: role
+              value: "kafka-admins"
+          permissions:
+            - resource: applicationconfig
+              actions: all
+            - resource: clusterconfig
+              actions: all
+            - resource: topic
+              value: ".*"
+              actions: all
+            - resource: consumer
+              value: ".*"
+              actions: all
+            - resource: schema
+              value: ".*"
+              actions: all
+            - resource: connect
+              value: ".*"
+              actions: all
+            - resource: ksql
+              actions: all
+            - resource: acl
+              actions: [ view ]
+        - name: "kafka-readonly-{{ $cluster_name }}"
+          clusters:
+            - {{ $cluster_name }}
+          subjects:
+            - provider: oauth
+              type: role
+              value: "kafka-readonly"
+          permissions:
+            - resource: clusterconfig
+              actions: [ "view" ]
+            - resource: topic
+              value: ".*"
+              actions: 
+                - VIEW
+                - MESSAGES_READ
+            - resource: consumer
+              value: ".*"
+              actions: [ view ]
+            - resource: schema
+              value: ".*"
+              actions: [ view ]
+            - resource: connect
+              value: ".*"
+              actions: [ view ]
+            - resource: acl
+              actions: [ view ]          
         {{- end }}
         {{- end }}
-      % endif
+        {{ tpl  (index .Values.kafkaPlatform "kafka-ui" "additionalRoles") . | nindent 8 }}
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:

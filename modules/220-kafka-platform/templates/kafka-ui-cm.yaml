@@ -17,26 +17,9 @@ data:
         {{- end }}
         {{- end }}
     auth:
-      {{- if eq (index .Values.kafkaPlatform "kafka-ui" "auth") "oauth2"}}
-      type: OAUTH2
-      oauth2:
-        client:
-          keycloak:
-            clientId: kafbat
-            clientSecret: ${KAFKA_UI_CLIENT_SECRET}
-            scope: openid
-            client-name: keycloak
-            provider: keycloak
-            authorization-grant-type: authorization_code
-            issuer-uri: https://auth-{{ $.Values.global.ingressBaseUrl }}/auth/realms/qvantel
-            jwk-set-uri: http://qvaa-proxy-80/auth/realms/qvantel/protocol/openid-connect/certs
-            user-name-attribute: preferred_username
-            custom-params:
-              type: oauth
-              roles-field: roles
-      {{- else }}
-      type: disabled
-      {{- end }} 
+      {{ tpl (index .Values.kafkaPlatform "kafka-ui" "authConfig") . | nindent 6 }}
+    rbac:          
+      {{ tpl (index .Values.kafkaPlatform "kafka-ui" "rolesConfig") . | nindent 6 }}      
     management:
       health:
         ldap:

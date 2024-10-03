@@ -17,6 +17,6 @@ annotations:
     - name: maven-builder
       image: quay.io/strimzi/maven-builder:0.37.0
     # Kafka UI
-    - name: kafka-uid
-      image: ghcr.io/kafbat/kafka-ui:v1.0.0
+    - name: kafka-ui
+      image: ghcr.io/kafbat/kafka-ui:126980339425e4bff3d98b020fe606778d3c45b1
     
