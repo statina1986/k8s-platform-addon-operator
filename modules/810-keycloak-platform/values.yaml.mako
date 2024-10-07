@@ -114,6 +114,7 @@ keycloakPlatform:
                 redirect_uris:
                   # pomerium shares domain name with keycloak
                   - https://auth-${values['global']['ingressBaseUrl']}/*
+                roles_claim: realm_access.roles
               grafana:
                 % if addon_operator['pomeriumPlatformEnabled'] == 'true':
                 secret: $GRAFANA_CLIENT_SECRET
