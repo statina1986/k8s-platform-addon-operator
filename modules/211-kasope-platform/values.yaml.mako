@@ -23,7 +23,7 @@ kasopePlatform:
         repositoryOverride: 
           cassandra:
             % if 'containerRegistryBase' in values['global']:
-            "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13-ubi8
+            "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13
             % endif
       imageConfig:
         % if 'containerRegistryBase' in values['global']:

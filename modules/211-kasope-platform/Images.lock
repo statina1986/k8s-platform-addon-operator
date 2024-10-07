@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-07T16:02:38.604810515Z"
+  generatedAt: "2024-10-07T16:50:29.954537478Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kasope-platform
@@ -17,12 +17,12 @@ images:
       - digest: sha256:06dd8718c64cace3e32e2b5c024e134e490c7a983c004bee5229d7e549c6952c
         arch: linux/arm64
   - name: cassandra
-    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13-ubi8
+    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
     chart: kasope-platform
     digests:
-      - digest: sha256:db4e7c95085e6497760f93ab12854e2c4d9bcfc75b4fc4b120496cb21c8354ad
+      - digest: sha256:438c7d706177109f35de3c7260dc888a3549c5c35593e194dcb9ceb34ace046f
         arch: linux/amd64
-      - digest: sha256:4301fdbe8b7fc26e0f8b743e878bae247fb0c31c70c396d7b05d94bc0e90b999
+      - digest: sha256:c7b894c4ddaf279aa063b67bd13b807f711c9bf8dd78eb645fd75783ec8f3a0e
         arch: linux/arm64
   - name: systemLogger
     image: cr.k8ssandra.io/k8ssandra/system-logger:v1.22.4
