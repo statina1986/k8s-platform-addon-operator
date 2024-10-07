@@ -7,11 +7,11 @@ dependencies:
 annotations:
   images: |
     - name: cass-operator
-      image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.19.1
+      image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.22.4
     - name: cassandra
-      image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
+      image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13-ubi8
     - name: systemLogger
-      image: cr.k8ssandra.io/k8ssandra/system-logger:v1.19.1
+      image: cr.k8ssandra.io/k8ssandra/system-logger:v1.22.4
     - name: configBuilder
       image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
     - name: per-node-config
@@ -21,8 +21,8 @@ annotations:
     - name: k8ssandra-tools
       image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
     - name: k8ssandra-operator
-      image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.15.0
+      image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.20.1
     - name: reaper
-      image: thelastpickle/cassandra-reaper:3.5.0
+      image: thelastpickle/cassandra-reaper:3.6.1
     - name: medusa
-      image: artifactory.qvantel.net/qmedusa/medusa:0.18.0_2_MMLYLE_bc4ab56a6
+      image: docker.io/k8ssandra/medusa:0.22.2

@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-20T15:29:35.787031695Z"
+  generatedAt: "2024-10-07T16:02:38.604810515Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kasope-platform
@@ -9,28 +9,28 @@ chart:
   appVersion: ""
 images:
   - name: cass-operator
-    image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.19.1
+    image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.22.4
     chart: kasope-platform
     digests:
-      - digest: sha256:b8d15191468b0d7fc4df65872b50008bf8cc20594a46a0898e69e4acb2fc6637
+      - digest: sha256:77a894b552aa3289bfced92452f9dc6f5ef6e4c179009fa8a67d6c1c3c448371
         arch: linux/amd64
-      - digest: sha256:7c330f15cff09c360fdb0627f920e6161626bf860252ee809cf77e47f9b04498
+      - digest: sha256:06dd8718c64cace3e32e2b5c024e134e490c7a983c004bee5229d7e549c6952c
         arch: linux/arm64
   - name: cassandra
-    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
+    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13-ubi8
     chart: kasope-platform
     digests:
-      - digest: sha256:fe7649ded0c2239ce6bef75c7e29006a68ab7cbaf82bfac1f5f437b058b7eeaa
+      - digest: sha256:db4e7c95085e6497760f93ab12854e2c4d9bcfc75b4fc4b120496cb21c8354ad
         arch: linux/amd64
-      - digest: sha256:feabfe15c8c99e6cf59ad49306e2b6d37a94b770d3be27475bfbbfdf4993b07f
+      - digest: sha256:4301fdbe8b7fc26e0f8b743e878bae247fb0c31c70c396d7b05d94bc0e90b999
         arch: linux/arm64
   - name: systemLogger
-    image: cr.k8ssandra.io/k8ssandra/system-logger:v1.19.1
+    image: cr.k8ssandra.io/k8ssandra/system-logger:v1.22.4
     chart: kasope-platform
     digests:
-      - digest: sha256:3c81b31f57e901185a900f7b1032bce4b1d3f10507bae58ff45a5edb804e180a
+      - digest: sha256:1337e443605b3cab84107311a572f87d14f44080bf2870f3e558b0ad456ffc2c
         arch: linux/amd64
-      - digest: sha256:652067f80dd0dc232f1750c2362166ba6e7c511c6ac6483441665f82497c4be2
+      - digest: sha256:052c0f28214e4e72e897d71e7f6c41ad8ab51883ce95d4e3543c73a9193cf8e1
         arch: linux/arm64
   - name: configBuilder
     image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
@@ -65,24 +65,26 @@ images:
       - digest: sha256:82fa0c265f3e21613123e9bb52e16146be6f59aa66494ed6c3e964cea5a53cd1
         arch: linux/arm64
   - name: k8ssandra-operator
-    image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.15.0
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.20.1
     chart: kasope-platform
     digests:
-      - digest: sha256:d0a7760f2b68017b41c25bf00c108357291c5941a9a784a1ed4bfb87ee9a8d46
+      - digest: sha256:e49ee84763267fe3dc6061bf34077aee4471a17c740c1e724ebfb85fb1e5c322
         arch: linux/amd64
-      - digest: sha256:d2f6f249aca74e0c87973de08be9fd6de4a71613bf266a7b17e19082c43fc2d3
+      - digest: sha256:614dadb3a896d4c4c56d208ace6e1dbe832e885000c9fbec14cce897535ab042
         arch: linux/arm64
   - name: reaper
-    image: thelastpickle/cassandra-reaper:3.5.0
+    image: thelastpickle/cassandra-reaper:3.6.1
     chart: kasope-platform
     digests:
-      - digest: sha256:01bf9c6d0107b029c0de3a7c85db3b566a162d0873852118e4670d9f0dcca106
+      - digest: sha256:524f03675179843ba9678e6d308de866bb88dd8b73e0d18920da1862a70c227e
         arch: linux/amd64
-      - digest: sha256:39aa611226150a98386f4efc40a1a2a628cc09a637153ff18f58a8ef8b57c311
+      - digest: sha256:751bb941d2f7d3588d7b84b917faba8a2d1f436971690e19b3ea7b67c40e6c83
         arch: linux/arm64
   - name: medusa
-    image: artifactory.qvantel.net/qmedusa/medusa:0.18.0_2_MMLYLE_bc4ab56a6
+    image: docker.io/k8ssandra/medusa:0.22.2
     chart: kasope-platform
     digests:
-      - digest: sha256:9d8f02c24f3936ef550ce558a3e0825e2412dcead983f7ff91fc0695d30b7026
+      - digest: sha256:42c5fe056b78803874e0384ebc150b00bfc197a271da5906d816bb1cb5df2f79
         arch: linux/amd64
+      - digest: sha256:845adc2c9e62830510344f3bd810b502d7030ca9aa6ddf5eab2a53f7fd079834
+        arch: linux/arm64

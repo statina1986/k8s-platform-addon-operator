@@ -23,11 +23,11 @@ kasopePlatform:
         repositoryOverride: 
           cassandra:
             % if 'containerRegistryBase' in values['global']:
-            "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13
+            "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13-ubi8
             % endif
       imageConfig:
         % if 'containerRegistryBase' in values['global']:
-        systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.19.1
+        systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.22.4
         configBuilder: ${values['global']['containerRegistryBase']}/datastax/cass-config-builder:1.0-ubi8
         k8ssandraClient: ${values['global']['containerRegistryBase']}/k8ssandra/k8ssandra-client/v0.2.2
         % endif
@@ -139,11 +139,11 @@ kasopePlatform:
             name: "cassandra-reaper"
             % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
-            tag: "3.5.0"
+            tag: "3.6.1"
             % endif
           initContainerImage:
             name: "cassandra-reaper"
             % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
-            tag: "3.5.0"
+            tag: "3.6.1"
             % endif
