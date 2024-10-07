@@ -7,10 +7,10 @@ dependencies:
 annotations:
   images: |
     - name: vault
-      image: docker.io/hashicorp/vault:1.12.1
+      image: docker.io/hashicorp/vault:1.17.2
     - name: vault-secrets-webhook
-      image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
+      image: ghcr.io/bank-vaults/vault-secrets-webhook:v1.21.3
     - name: vault-env
-      image: ghcr.io/banzaicloud/vault-env:1.18.0
+      image: ghcr.io/bank-vaults/vault-env:v1.21.6
     - name: platform-tools
       image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5

@@ -1,9 +1,9 @@
 dependencies:
 - name: vault-secrets-webhook
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.18.2
+  repository: oci://ghcr.io/bank-vaults/helm-charts
+  version: 1.21.3
 - name: vault
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 0.23.0
-digest: sha256:7273d5e0ecb9c4bd16318206f22a609f2d58515b0619b6b05e2ef923eb99a1c3
-generated: "2023-03-13T21:25:57.822787216+02:00"
+  repository: https://helm.releases.hashicorp.com
+  version: 0.28.1
+digest: sha256:9498b90bf8f32ccb24e153e76e39f16462c85c850d2caaed230e768581840133
+generated: "2024-10-04T10:44:53.948965133+03:00"

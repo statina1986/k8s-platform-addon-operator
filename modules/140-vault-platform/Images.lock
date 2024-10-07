@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-20T15:29:24.282912671Z"
+  generatedAt: "2024-10-04T08:46:24.681350314Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: vault-platform
@@ -9,28 +9,28 @@ chart:
   appVersion: ""
 images:
   - name: vault
-    image: docker.io/hashicorp/vault:1.12.1
+    image: docker.io/hashicorp/vault:1.17.2
     chart: vault-platform
     digests:
-      - digest: sha256:826e463c73e677aad34c71cae94d54a55985a23488fd28fb45bfca0d0ef58a60
+      - digest: sha256:10d7ebc9b405c01ffdeedfd5b9b6a41edbe4519b7b5834ab4bc36b849204ac3d
         arch: linux/amd64
-      - digest: sha256:f6f3a5fd9ddca47e3dbbe25ae49053fc5500e0bbecb35e7ad50de27a5a476cbf
+      - digest: sha256:2d2d928c3a0d68145f94eca249283a975f94d19ac8a46f564e5922ae0d46f53b
         arch: linux/arm64
   - name: vault-secrets-webhook
-    image: ghcr.io/banzaicloud/vault-secrets-webhook:1.18.0
+    image: ghcr.io/bank-vaults/vault-secrets-webhook:v1.21.3
     chart: vault-platform
     digests:
-      - digest: sha256:96dfd411856ad7efd84393fcf14aa00432b6d82d73052d9078dc837412532a03
+      - digest: sha256:ccffc89e423c211e2ad797e15e5e4a88a7a3a3b876358dea963fb16b697cbfc3
         arch: linux/amd64
-      - digest: sha256:1483685e0ec0eb25dd86bda57fed98a6e4c9dc6483dd67483c09a8c50e8be7df
+      - digest: sha256:1bb9f0688753adbdc9ae563129fcca84c464346e29fac5cab2f62d3016646b65
         arch: linux/arm64
   - name: vault-env
-    image: ghcr.io/banzaicloud/vault-env:1.18.0
+    image: ghcr.io/bank-vaults/vault-env:v1.21.6
     chart: vault-platform
     digests:
-      - digest: sha256:55bb549526a1a4dfa7c42f0dc8ed32ee6198e7f4564642e3a2e29883b71e6bd5
+      - digest: sha256:ba99d5178db6bbd536fd35dc0d07c84ccc254855c16f4ad446f6402ecde94178
         arch: linux/amd64
-      - digest: sha256:782bb1ed1f2fec26e8ac1da615c0d2607db49e6bec5648546a4fe6f070f43ef9
+      - digest: sha256:0fea8271e2f8ec09706f6541c180b52888d93016ea60e50e4c7c14d739b82d05
         arch: linux/arm64
   - name: platform-tools
     image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
