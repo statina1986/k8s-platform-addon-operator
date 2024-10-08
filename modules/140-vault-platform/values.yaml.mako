@@ -17,11 +17,11 @@ vaultPlatform:
   vault-secrets-webhook:
     image:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-secrets-webhook
+      repository: ${values['global']['containerRegistryBase']}/bank-vaults/vault-secrets-webhook
       % endif
     vaultEnv:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/banzaicloud/vault-env
+      repository: ${values['global']['containerRegistryBase']}/bank-vaults/vault-env
       % endif
     certificate:
       useCertManager: true
@@ -39,7 +39,7 @@ vaultPlatform:
     topologySpreadConstraints:
       - labelSelector:
           matchLabels:
-            app.kubernetes.io/instance: "{{ .Release.Name }}"
+            app.kubernetes.io/instance: ${values['global']['helmReleaseNamePrefix']}vault-platform
             app.kubernetes.io/name: vault
         maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
