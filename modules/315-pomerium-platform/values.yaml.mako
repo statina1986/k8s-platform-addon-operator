@@ -25,18 +25,6 @@ pomeriumPlatform:
       generateTLS: false
       generateSigningKey: true
       routes: |
-        - from: https://kafka-ui-${values['global']['ingressBaseUrl']}
-          to: http://kafka-ui.platform.svc.cluster.local:8080
-          timeout: 30s
-          policy:
-            - allow:
-                and:
-                  - claim/realm_access.roles: kafka-readonly
-                  - http_method:
-                      is: GET
-            - allow:
-                and:
-                  - claim/realm_access.roles: kafka-admins
         - from: https://prometheus-${values['global']['ingressBaseUrl']}
           to: http://monitoring-platform-kube-p-prometheus.platform.svc.cluster.local:9090
           timeout: 30s

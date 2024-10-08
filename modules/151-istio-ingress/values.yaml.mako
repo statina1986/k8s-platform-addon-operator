@@ -998,7 +998,6 @@ istioIngress:
                 number: 9090
       kafka-ui:
         enabled: false
-        pomeriumProtected: true
         gateways:
         - private-ingress
         http:
