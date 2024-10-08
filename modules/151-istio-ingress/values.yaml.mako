@@ -890,6 +890,30 @@ istioIngress:
         http:
         - match:
           - uri:
+              prefix: /.pomerium/
+          route:
+          - destination:
+              host: pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /.well-known/
+          route:
+          - destination:
+              host: pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
+              prefix: /oauth2/
+          route:
+          - destination:
+              host: pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 80
+        - match:
+          - uri:
               prefix: /auth/admin/realms/qvantel
           route:
           - destination:
