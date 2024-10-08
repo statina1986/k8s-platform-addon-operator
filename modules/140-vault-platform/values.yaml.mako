@@ -40,7 +40,7 @@ vaultPlatform:
       - labelSelector:
           matchLabels:
             app.kubernetes.io/instance: ${values['global']['helmReleaseNamePrefix']}vault-platform
-            app.kubernetes.io/name: vault
+            app.kubernetes.io/name: vault-secrets-webhook
         maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
