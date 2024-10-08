@@ -128,7 +128,7 @@ kafkaPlatform:
       enabled: true
       spec:
         kafka:
-          version: 3.5.1
+          version: 3.8.0
           % if values['global']['configurationProfile'] in {'dev'}:
           replicas: 1
           % else:

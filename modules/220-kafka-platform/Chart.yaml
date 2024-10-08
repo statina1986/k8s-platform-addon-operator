@@ -6,16 +6,26 @@ dependencies:
     version: 0.0.1
 annotations:
   images: |
-    - name: operator
+    - name: operator-037
       image: quay.io/strimzi/operator:0.37.0
-    - name: kafka
+    - name: operator-043
+      image: quay.io/strimzi/operator:0.43.0
+    - name: kafka-037-351
       image: quay.io/strimzi/kafka:0.37.0-kafka-3.5.1
-    - name: kafka-bridge
+    - name: kafka-043-380
+      image: quay.io/strimzi/kafka:0.43.0-kafka-3.8.0
+    - name: kafka-bridge-026
       image: quay.io/strimzi/kafka-bridge:0.26.1
-    - name: kaniko-executor
+    - name: kafka-bridge-030
+      image: quay.io/strimzi/kafka-bridge:0.30.0
+    - name: kaniko-executor-037
       image: quay.io/strimzi/kaniko-executor:0.37.0
-    - name: maven-builder
+    - name: kaniko-executor-043
+      image: quay.io/strimzi/kaniko-executor:0.43.0
+    - name: maven-builder-037
       image: quay.io/strimzi/maven-builder:0.37.0
+    - name: maven-builder-043
+      image: quay.io/strimzi/maven-builder:0.43.0
     # Kafka UI
     - name: kafka-ui
       image: ghcr.io/kafbat/kafka-ui:126980339425e4bff3d98b020fe606778d3c45b1

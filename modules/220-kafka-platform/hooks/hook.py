@@ -15,21 +15,26 @@ beforeHelm: 2
 
     def handle_binding(self, binding):
         pass
-        # match(binding):
-        #     case BeforeHelmHook(values_json, configValues_json):
-        #         path = os.path.dirname(__file__) + \
-        #             "/../charts/kafkaPlatform/charts/"
-        #         files = glob.glob(path+'/*')
-        #         for f in files:
-        #             os.remove(f)                
-        #         if (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.37.0'):
-        #             source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.37.0.tgz"
-        #             os.popen('cp ' + source + ' ' + path)                     
-        #         if (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.27.1'):
-        #             source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.27.1.tgz"
-        #             os.popen('cp ' + source + ' ' + path)      
-        #     case _:
-        #         print("Unknown hook data")
+        match(binding):
+            case BeforeHelmHook(values_json, configValues_json):
+                path = os.path.dirname(__file__) + \
+                    "/../charts/kafkaPlatform/charts/"
+                files = glob.glob(path+'/*')
+                for f in files:
+                    if "strimzi-kafka-operator-helm-3-chart" in f:
+                        os.remove(f)
+                        
+                if (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.27.1'):
+                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.27.1.tgz"
+                    os.popen('cp ' + source + ' ' + path)
+                elif (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.37.0'):
+                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.37.0.tgz"
+                    os.popen('cp ' + source + ' ' + path)
+                else:
+                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.43.0.tgz"
+                    os.popen('cp ' + source + ' ' + path)
+            case _:
+                print("Unknown hook data")
 
 
 hook = MyHook()

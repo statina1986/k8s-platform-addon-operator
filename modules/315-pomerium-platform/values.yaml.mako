@@ -13,15 +13,6 @@ pomeriumPlatform:
         % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/pomerium/ingress-controller
         % endif
-    extraVolumeMounts:
-      - name: trusted-ca-tls
-        mountPath: /etc/ssl/certs
-    extraVolumes:
-      - name: trusted-ca-tls
-        secret:
-          defaultMode: 420
-          optional: true
-          secretName: qvantel-root-ca
     proxy:
       authenticateServiceUrl: https://auth-${values['global']['ingressBaseUrl']}
     config:
