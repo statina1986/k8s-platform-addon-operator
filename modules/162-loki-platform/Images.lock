@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-02T05:47:35.950813822Z"
+  generatedAt: "2024-10-09T17:42:11.471458916Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: loki-platform
@@ -15,6 +15,14 @@ images:
       - digest: sha256:f9e882734526722e173b9c2c6694a0880f22a815229c497ccb4e9a9e32ebbf15
         arch: linux/amd64
       - digest: sha256:ad96f64845f664700caddc642c0621467603c12887fb649c66e3082768a1c755
+        arch: linux/arm64
+  - name: loki-sidecar
+    image: kiwigrid/k8s-sidecar:1.27.5
+    chart: loki-platform
+    digests:
+      - digest: sha256:afb4e8f23ebe3057130d9ee58176ec6c8e168f530e4300cf1a971db8daba5ab1
+        arch: linux/amd64
+      - digest: sha256:901073c75e53ca3f266a7e089a9e59acbb9182fc15d008cf80390e7f3f596b97
         arch: linux/arm64
   - name: memcached
     image: docker.io/library/memcached:1.6.23-alpine

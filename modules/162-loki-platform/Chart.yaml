@@ -8,5 +8,7 @@ annotations:
   images: |
     - name: loki
       image: docker.io/grafana/loki:3.2.0
+    - name: loki-sidecar
+      image: kiwigrid/k8s-sidecar:1.27.5    
     - name: memcached
       image: docker.io/library/memcached:1.6.23-alpine

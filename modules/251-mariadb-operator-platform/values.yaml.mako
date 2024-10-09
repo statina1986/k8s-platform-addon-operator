@@ -70,7 +70,7 @@ mariadbOperatorPlatform:
           enabled: true
         % endif  
         affinity:
-          antiAffinityEnabled: true          
+          antiAffinityEnabled: true      
         % if values['global']['platformMasters']:
         nodeSelector:
           dedicated-nodes: platform-masters

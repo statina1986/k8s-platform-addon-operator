@@ -5,7 +5,12 @@ lokiPlatform:
       % if 'containerRegistryBase' in values['global']:
       image:
         repository: ${values['global']['containerRegistryBase']}/library/memcached
-      % endif  
+      % endif
+    sidecar:
+      % if 'containerRegistryBase' in values['global']:
+      image:
+        repository: ${values['global']['containerRegistryBase']}/kiwigrid/k8s-sidecar
+      % endif
     % if values['global']['configurationProfile'] == 'dev':      
     deploymentMode: SingleBinary
     % else:
