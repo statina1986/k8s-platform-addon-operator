@@ -22,7 +22,7 @@ metadata:
 spec:
   {{- toYaml $current.spec | nindent 2 }}
 
-{{- if $current.podMonitorEnabled }}
+{{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

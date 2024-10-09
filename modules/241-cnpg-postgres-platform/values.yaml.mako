@@ -1,4 +1,5 @@
 cnpgPostgresPlatform:
+  monitoringPlatformEnabled: ${addon_operator['monitoringPlatformEnabled']}
   cloudnative-pg:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -34,9 +35,6 @@ cnpgPostgresPlatform:
     qvt-postgredb:
       enabled: true
       vaultConfiguration: true
-      % if addon_operator['monitoringPlatformEnabled'] == 'true':
-      podMonitorEnabled: true
-      % endif
       spec:
         affinity:
           % if values['global']['multiZone']['enabled']:
