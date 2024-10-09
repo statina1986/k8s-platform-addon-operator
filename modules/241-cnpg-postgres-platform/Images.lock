@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-09-02T08:44:20.676452987Z"
+  generatedAt: "2024-10-09T08:53:47.383930337Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: cnpg-postgres-platform
@@ -25,10 +25,10 @@ images:
       - digest: sha256:efe9f77f8146ab90d3e9aa861e62f3c599497a71bb22052163c48df2d66e9020
         arch: linux/amd64
   - name: cloudnative-pg
-    image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2
+    image: ghcr.io/cloudnative-pg/cloudnative-pg:1.24.0
     chart: cnpg-postgres-platform
     digests:
-      - digest: sha256:deb8a9cbd7d5c9f945ba88aab278191714a103efa8a124c4f22829ed2817c0cb
+      - digest: sha256:ad0a3feaa80a90c6ce18fe6c29627c7f3250638d93eae4d1ee0be4029212f368
         arch: linux/amd64
-      - digest: sha256:9f253f89790df21e1781900a88bb845476a96741a366e4d423add3caf9138484
+      - digest: sha256:0a569c2cc646462a51615f537549d48c3ee88537325ec147b7002655984fe036
         arch: linux/arm64

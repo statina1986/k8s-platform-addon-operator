@@ -11,4 +11,4 @@ annotations:
     - name: q-cnpg-timescale-16
       image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.3-1_7_master_b0ee48eda
     - name: cloudnative-pg
-      image: ghcr.io/cloudnative-pg/cloudnative-pg:1.22.2
+      image: ghcr.io/cloudnative-pg/cloudnative-pg:1.24.0
