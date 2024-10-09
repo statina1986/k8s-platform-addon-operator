@@ -1,9 +1,9 @@
 {{- if .Values.cnpgPostgresPlatform }}
+{{- $root := . }}
 {{- range keys .Values.cnpgPostgresPlatform.clusters  }}
 {{- $current := get $.Values.cnpgPostgresPlatform.clusters . }}
 {{- if $current.enabled }}
 ---
-
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -21,6 +21,23 @@ metadata:
   {{- end }}
 spec:
   {{- toYaml $current.spec | nindent 2 }}
+
+{{- if $current.podMonitorEnabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    cnpg.io/cluster: {{ . }}
+    release: "{{ $root.Values.global.helmReleaseNamePrefix }}monitoring-platform"
+  name: {{ . }}-monitor
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: {{ . }}
+{{- end }}
 
 {{- end }}
 {{- end }}

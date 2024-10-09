@@ -456,14 +456,6 @@ monitoringPlatform:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           % endif
-        podMonitorSelector:
-          matchLabels: null
-        ruleSelector:
-          matchLabels: null
-        serviceMonitorSelector:
-          matchLabels: null
-        probeSelector:
-          matchLabels: null    
         retention: 12d
         externalLabels:
           country: need-to-define

@@ -21,6 +21,8 @@ cnpgPostgresPlatform:
     % if addon_operator['monitoringPlatformEnabled'] == 'true':
     monitoring:
       podMonitorEnabled: true
+      podMonitorAdditionalLabels: 
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
       grafanaDashboard:
         create: true
         labels:
@@ -32,6 +34,9 @@ cnpgPostgresPlatform:
     qvt-postgredb:
       enabled: true
       vaultConfiguration: true
+      % if addon_operator['monitoringPlatformEnabled'] == 'true':
+      podMonitorEnabled: true
+      % endif
       spec:
         affinity:
           % if values['global']['multiZone']['enabled']:
@@ -47,10 +52,6 @@ cnpgPostgresPlatform:
         instances: 1
         % else:
         instances: 2
-        % endif
-        % if addon_operator['monitoringPlatformEnabled'] == 'true':
-        monitoring:
-          enablePodMonitor: true
         % endif
         postgresql:
           parameters:
