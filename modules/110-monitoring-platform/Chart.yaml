@@ -17,13 +17,13 @@ annotations:
     - name: alertmanager
       image: quay.io/prometheus/alertmanager:v0.27.0
     - name: prometheus-operator-webhook
-      image: quay.io/prometheus-operator/admission-webhook:v0.76.1
+      image: quay.io/prometheus-operator/admission-webhook:v0.77.1
     - name: admissionWebhooks
       image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
     - name: prometheus-operator
-      image: quay.io/prometheus-operator/prometheus-operator:v0.76.1
+      image: quay.io/prometheus-operator/prometheus-operator:v0.77.1
     - name: prometheusConfigReloader
-      image: quay.io/prometheus-operator/prometheus-config-reloader:v0.76.1
+      image: quay.io/prometheus-operator/prometheus-config-reloader:v0.77.1
     - name: thanos
       image: quay.io/thanos/thanos:v0.36.1
     - name: prometheus
@@ -31,7 +31,7 @@ annotations:
     - name: thanos-rules
       image: quay.io/thanos/thanos:v0.36.1
     - name: grafana
-      image: docker.io/grafana/grafana-enterprise:11.2.0
+      image: docker.io/grafana/grafana-enterprise:11.2.1
     - name: testFramework
       image: docker.io/bats/bats:v1.4.1
     - name: downloadDashboardsImage

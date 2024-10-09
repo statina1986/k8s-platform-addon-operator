@@ -27,8 +27,7 @@ Provides:
 | monitoringPlatform.kube-prometheus-stack.defaultRules.rules.kubeApiserverSlos | bool | `false` |  |
 | monitoringPlatform.kube-prometheus-stack.defaultRules.rules.kubernetesStorage | bool | `false` |  |
 | monitoringPlatform.kube-prometheus-stack.enabled | bool | `true` |  |
-| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `true` |  |
-| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".org_role | string | `"Viewer"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.anonymous".enabled | bool | `false` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".allow_assign_grafana_admin | bool | `true` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".allow_sign_up | bool | `true` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana."grafana.ini"."auth.generic_oauth".api_url | string | `"http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo"` |  |
@@ -247,11 +246,7 @@ Provides:
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.externalLabels.datacenter | string | `"need-to-define"` |  |
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.externalLabels.environment | string | `"need-to-define"` |  |
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.image.registry | string | `"platform.artifactory.qvantel.net/k8s-platform-1-2-0"` |  |
-| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.podMonitorSelector.matchLabels | string | `nil` |  |
-| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.probeSelector.matchLabels | string | `nil` |  |
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.retention | string | `"12d"` |  |
-| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.ruleSelector.matchLabels | string | `nil` |  |
-| monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.serviceMonitorSelector.matchLabels | string | `nil` |  |
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage | string | `"50Gi"` |  |
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.tolerations[0].effect | string | `"NoSchedule"` |  |
 | monitoringPlatform.kube-prometheus-stack.prometheus.prometheusSpec.tolerations[0].key | string | `"dedicated-nodes"` |  |

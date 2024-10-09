@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-01T08:48:02.7719816Z"
+  generatedAt: "2024-10-09T15:13:40.9205703Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -49,12 +49,12 @@ images:
       - digest: sha256:2fbdd4c66d91e740fe3fd462d8f52fc3d305a5b403bab3a58feb62be237a84fb
         arch: linux/arm64
   - name: prometheus-operator-webhook
-    image: quay.io/prometheus-operator/admission-webhook:v0.76.1
+    image: quay.io/prometheus-operator/admission-webhook:v0.77.1
     chart: monitoring-platform
     digests:
-      - digest: sha256:0426b77ee7d80c233c247ad7df651407f9918f97eccb527a3aeed36480767791
+      - digest: sha256:e4917246fac89d0b8f51e943212c3cb838e01c8df37e26b8795176eab41d6977
         arch: linux/amd64
-      - digest: sha256:fbb3bfcf5b17755d25c90d617224900ec3b3b5ccb9b47e99938ab53d20fbf846
+      - digest: sha256:55680ec342111352dbe419bcc6a81424c313c590ba86bcff75989d20b0f1ad7d
         arch: linux/arm64
   - name: admissionWebhooks
     image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
@@ -65,20 +65,20 @@ images:
       - digest: sha256:b9c3b341fdb5203284c2d8b91afdc82c7dd350531a6b229bdc72de045841cc4e
         arch: linux/arm64
   - name: prometheus-operator
-    image: quay.io/prometheus-operator/prometheus-operator:v0.76.1
+    image: quay.io/prometheus-operator/prometheus-operator:v0.77.1
     chart: monitoring-platform
     digests:
-      - digest: sha256:1db0874269b1dfab511f80d2569440b5cee245088c5de6c89d5b0a6c150fe3f3
+      - digest: sha256:f384fc6a6b8d549cdb1574acc24dfcf8b4870a74dba48407989be481b04ca811
         arch: linux/amd64
-      - digest: sha256:f4ff3adc972c0e48fc34900b2edc3823a64e5b4dcd0ad1c9b30eead11dd69aa9
+      - digest: sha256:588201c912a2b083d9fdd3714a19f38e2b3ce135e5f7947f9d39f80fc70d363d
         arch: linux/arm64
   - name: prometheusConfigReloader
-    image: quay.io/prometheus-operator/prometheus-config-reloader:v0.76.1
+    image: quay.io/prometheus-operator/prometheus-config-reloader:v0.77.1
     chart: monitoring-platform
     digests:
-      - digest: sha256:bf9a1bdfd6d3b1b5927b9825d53d9e13f407645278ede0fdc7ab311080a4bf99
+      - digest: sha256:6468dc535b72de1e047eed715ede9a241749896f75aa27351eab98e9962e544a
         arch: linux/amd64
-      - digest: sha256:c9deb9151e907bbfe7e390dfaf808765aa3440a9998ae26e07af4d394b4e478b
+      - digest: sha256:c5f2f26cca1fdbb1de8278b7de9227bd36b5bac18c6a116a4e247a2fd2ea0874
         arch: linux/arm64
   - name: thanos
     image: quay.io/thanos/thanos:v0.36.1
@@ -105,12 +105,12 @@ images:
       - digest: sha256:caa36584993838c4b01b20cd7f6fb4543393e01738c91d134a39f1d1d4098b40
         arch: linux/arm64
   - name: grafana
-    image: docker.io/grafana/grafana-enterprise:11.2.0
+    image: docker.io/grafana/grafana-enterprise:11.2.1
     chart: monitoring-platform
     digests:
-      - digest: sha256:c2385aa9c42e787be12a1fb41705c2e7cb98f6b085db24efb70b814062ab18a1
+      - digest: sha256:494ca6e9981c6d01792083722cb9eef44f80c429390e18517500de2b9ba4beef
         arch: linux/amd64
-      - digest: sha256:94fff072b67bcc29acebf2656ec4db83ef5214cee9347897ef7810fb0e2baf76
+      - digest: sha256:13e57e26a027e21a9f084aa871515fd0e98c6b3e97d20b373a08e4368a4ade61
         arch: linux/arm64
   - name: testFramework
     image: docker.io/bats/bats:v1.4.1
