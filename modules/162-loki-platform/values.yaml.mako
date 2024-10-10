@@ -22,14 +22,17 @@ lokiPlatform:
       enabled: false
     monitoring:
       dashboards:
+        enabled: true
         annotations:
           k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
       serviceMonitor:
+        enabled: true
         labels:
-          release: monitoring-platform
+          release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
       rules:
+        enabled: true
         labels:
-          release: monitoring-platform
+          release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     loki:
       image:
         % if 'containerRegistryBase' in values['global']:
