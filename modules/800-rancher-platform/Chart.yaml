@@ -4,19 +4,3 @@ version: 0.0.1
 dependencies:
   - name: rancherPlatform
     version: 0.0.1
-annotations:
-  images: |
-    - name: mirrored-bci-micro
-      image: rancher/mirrored-bci-micro:15.4.14.3
-    - name: rancher
-      image: rancher/rancher:v2.8.1
-    - name: rancher-shell
-      image: rancher/shell:v0.1.22
-    - name: rancher-webhook
-      image: rancher/rancher-webhook:v0.4.2
-    - name: fleet
-      image: rancher/fleet:v0.9.0
-    - name: gitjob
-      image: rancher/gitjob:v0.1.96
-    - name: capi-controller
-      image: rancher/mirrored-cluster-api-controller:v1.4.4
