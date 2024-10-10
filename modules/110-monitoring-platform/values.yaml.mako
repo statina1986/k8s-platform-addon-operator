@@ -362,7 +362,10 @@ monitoringPlatform:
           enabled: true
           label: grafana_dashboard
           labelValue: "1"
+          annotations:
+            grafana_folder: "Kubernetes"
           folder: /tmp/dashboards
+          folderAnnotation: grafana_folder
           provider:
             # enabling UI dashboards updated
             allowUiUpdates: true

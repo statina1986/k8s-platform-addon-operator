@@ -8,7 +8,7 @@ metadata:
   labels:
     grafana_dashboard: '1'
   annotations:
-    k8s-sidecar-target-directory: /tmp/dashboards/AWS
+    grafana_folder: /tmp/dashboards/AWS
 data:
   aws-rds.json: |-
     {

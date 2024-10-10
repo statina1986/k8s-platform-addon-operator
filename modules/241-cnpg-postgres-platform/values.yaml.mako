@@ -29,7 +29,7 @@ cnpgPostgresPlatform:
         labels:
           grafana_dashboard: "1"
         annotations:
-          k8s-sidecar-target-directory: /tmp/dashboards/Postgres
+          grafana_folder: /tmp/dashboards/Qvantel_platform
     % endif
   clusters:
     qvt-postgredb:
