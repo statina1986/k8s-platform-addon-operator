@@ -1,4 +1,4 @@
-rancherHelmVersion: "2.7.7"
+rancherHelmVersion: "2.8.1"
 rancherPlatformNamespace: cattle-system
 rancherPlatform:
   rancher:    
@@ -6,5 +6,4 @@ rancherPlatform:
     hostname: ""    
     ingress:
       enabled: false
-
     privateCA: false
