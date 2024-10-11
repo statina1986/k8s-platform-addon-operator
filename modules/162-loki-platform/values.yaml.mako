@@ -24,7 +24,7 @@ lokiPlatform:
       dashboards:
         enabled: true
         annotations:
-          k8s-sidecar-target-directory: /tmp/dashboards/Qvantel_platform
+          grafana_folder: /tmp/dashboards/Qvantel_platform
       serviceMonitor:
         enabled: true
         labels:
