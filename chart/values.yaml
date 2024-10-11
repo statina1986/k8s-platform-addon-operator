@@ -34,6 +34,7 @@ globalConfig:
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
   helmReleaseNamePrefix: ""
   clusterwideResources: "true"
+  deployOperators: "true"
 modulesConfig:
   apisixPlatformEnabled: "false"
   artifactoryPlatformEnabled: "false"

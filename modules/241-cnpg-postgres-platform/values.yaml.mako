@@ -1,6 +1,11 @@
 cnpgPostgresPlatform:
   monitoringPlatformEnabled: ${addon_operator['monitoringPlatformEnabled']}
   cloudnative-pg:
+    % if values['global']['deployOperators'] == "true":
+    enabled: true
+    % else:
+    enabled: false
+    % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/cloudnative-pg/cloudnative-pg

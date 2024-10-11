@@ -42,7 +42,7 @@ spec:
   - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-url: >-
-    {{ printf "postgresql://{{username}}:{{password}}@%s.platform.svc:5432/postgres" . }}
+    {{ printf "postgresql://{{username}}:{{password}}@%s.%s.svc:5432/postgres" . $.Release.Namespace }}
   db-username: '{secret-username}'
   db-password: '{secret-password}'
 {{- end }}
