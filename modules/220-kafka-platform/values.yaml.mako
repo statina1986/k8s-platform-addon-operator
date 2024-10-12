@@ -18,7 +18,7 @@ kafkaPlatform:
           secretKeyRef:
             name: kafka-ui-client-secret
             key: KAFKA_UI_CLIENT_SECRET    
-    authConfig: |
+    authConfig:
       type: OAUTH2
       oauth2:
         client:

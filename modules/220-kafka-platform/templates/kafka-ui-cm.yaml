@@ -17,7 +17,7 @@ data:
         {{- end }}
         {{- end }}
     auth:
-      {{ tpl (index .Values.kafkaPlatform "kafka-ui" "authConfig") . | nindent 6 }}
+      {{ tpl (toYaml (index .Values.kafkaPlatform "kafka-ui" "authConfig")) . | nindent 6 }}
     rbac:          
       {{ tpl (index .Values.kafkaPlatform "kafka-ui" "rolesConfig") . | nindent 6 }}      
     management:
