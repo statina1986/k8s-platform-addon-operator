@@ -11,14 +11,14 @@ else
             yamls=(${0%/*}/../post-resources/*)
             for val in "${yamls[@]}"; do
                 if [[ $val == *.yaml ]] ; then
-                    kubectl apply --server-side --force-conflicts=true -f $val &> ensure_resources.log || { 
+                    kubectl apply --server-side --force-conflicts=true -f $val &> /tmp/ensure_resources.log || { 
                         cat ensure_resources.log && exit 1 
                     }
                 fi
             done
         fi
-        if [[ -f "ensure_resources.log" ]] ; then
-            cat ensure_resources.log
+        if [[ -f "/tmp/ensure_resources.log" ]] ; then
+            cat /tmp/ensure_resources.log
         fi 
     else
         echo "Skipping resources"

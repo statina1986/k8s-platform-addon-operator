@@ -6,10 +6,19 @@ RUN pip3 install boto3
 RUN pip3 install python-json-logger
 RUN pip3 install pyyaml
 RUN pip3 install mako
-ADD common /common
-ADD modules /modules
-ADD global-hooks /global-hooks
-ADD resources /resources
+
 ENV PYTHONPATH=/
 ARG BUILD_TAG=latest
 ENV BUILD_TAG=${BUILD_TAG}
+
+RUN mkdir /var/run/addon-operator
+RUN chown -R 1001:0 /var/run/addon-operator
+
+USER 1001
+
+ADD --chown=1001:0 common /common
+ADD --chown=1001:0 global-hooks /global-hooks
+ADD --chown=1001:0 resources /resources
+ADD --chown=1001:0 modules /modules
+
+
