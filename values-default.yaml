@@ -11,6 +11,7 @@ global:
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
   helmReleaseNamePrefix: ""
   clusterName: "some-cluster"
+  clusterwideResources: "true"
 
 apisixPlatformEnabled: true
 artifactoryPlatformEnabled: true

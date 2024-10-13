@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-04T08:46:24.681350314Z"
+  generatedAt: "2024-10-13T07:27:04.470167587Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: vault-platform
@@ -17,13 +17,13 @@ images:
       - digest: sha256:2d2d928c3a0d68145f94eca249283a975f94d19ac8a46f564e5922ae0d46f53b
         arch: linux/arm64
   - name: vault-secrets-webhook
-    image: ghcr.io/bank-vaults/vault-secrets-webhook:v1.21.3
+    image: platform.artifactory.qvantel.net/platform/qvantel-vault-secrets-webhook:1.0.0.1_master_e5e0236d8
     chart: vault-platform
     digests:
-      - digest: sha256:ccffc89e423c211e2ad797e15e5e4a88a7a3a3b876358dea963fb16b697cbfc3
-        arch: linux/amd64
-      - digest: sha256:1bb9f0688753adbdc9ae563129fcca84c464346e29fac5cab2f62d3016646b65
+      - digest: sha256:ca84ff33db3e42d8799683f5f048a2979f820887e66f4615c580ef07bd94abca
         arch: linux/arm64
+      - digest: sha256:7a743ec9d43dcfcb2bbc0bcee1936e7d657be2f2b3ccbc880d3ffd24e760602f
+        arch: linux/amd64
   - name: vault-env
     image: ghcr.io/bank-vaults/vault-env:v1.21.6
     chart: vault-platform

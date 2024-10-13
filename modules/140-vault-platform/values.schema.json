@@ -1,0 +1,664 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "vaultPlatform": {
+      "description": "vaultPlatformNamespace: vault",
+      "properties": {
+        "autoUnseal": {
+          "default": false,
+          "description": "Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal",
+          "required": [],
+          "title": "autoUnseal",
+          "type": "boolean"
+        },
+        "k8sUnseal": {
+          "default": false,
+          "description": "Enable auto unseal with local Shamir keys stored in local K8S secret",
+          "required": [],
+          "title": "k8sUnseal",
+          "type": "boolean"
+        },
+        "useBackwardsCompatibilityService": {
+          "default": true,
+          "description": "Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps",
+          "required": [],
+          "title": "useBackwardsCompatibilityService",
+          "type": "boolean"
+        },
+        "vault": {
+          "description": "Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration",
+          "properties": {
+            "global": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "global",
+              "type": "object"
+            },
+            "injector": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "injector",
+              "type": "object"
+            },
+            "server": {
+              "properties": {
+                "affinity": {
+                  "default": "podAntiAffinity:\n  requiredDuringSchedulingIgnoredDuringExecution:\n    - labelSelector:\n        matchLabels:\n          app.kubernetes.io/name: {{ template \"vault.name\" . }}\n          app.kubernetes.io/instance: \"{{ .Release.Name }}\"\n          component: server\n      topologyKey: kubernetes.io/hostname\n",
+                  "required": [],
+                  "title": "affinity",
+                  "type": "string"
+                },
+                "extraContainers": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "args": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "required": [],
+                                  "type": "string"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "args",
+                            "type": "array"
+                          },
+                          "command": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "required": [],
+                                  "type": "string"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "command",
+                            "type": "array"
+                          },
+                          "env": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "properties": {
+                                    "name": {
+                                      "default": "VAULT_K8S_POD_NAME",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "valueFrom": {
+                                      "properties": {
+                                        "fieldRef": {
+                                          "properties": {
+                                            "apiVersion": {
+                                              "default": "v1",
+                                              "required": [],
+                                              "title": "apiVersion",
+                                              "type": "string"
+                                            },
+                                            "fieldPath": {
+                                              "default": "metadata.name",
+                                              "required": [],
+                                              "title": "fieldPath",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "fieldRef",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "valueFrom",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "required": [],
+                                  "type": "object"
+                                },
+                                {
+                                  "properties": {
+                                    "name": {
+                                      "default": "VAULT_K8S_NAMESPACE",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "valueFrom": {
+                                      "properties": {
+                                        "fieldRef": {
+                                          "properties": {
+                                            "apiVersion": {
+                                              "default": "v1",
+                                              "required": [],
+                                              "title": "apiVersion",
+                                              "type": "string"
+                                            },
+                                            "fieldPath": {
+                                              "default": "metadata.namespace",
+                                              "required": [],
+                                              "title": "fieldPath",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "fieldRef",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "valueFrom",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "required": [],
+                                  "type": "object"
+                                },
+                                {
+                                  "properties": {
+                                    "name": {
+                                      "default": "VAULT_INIT_NODE",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "default": "vault-platform-0",
+                                      "required": [],
+                                      "title": "value",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "type": "object"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "env",
+                            "type": "array"
+                          },
+                          "image": {
+                            "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5",
+                            "required": [],
+                            "title": "image",
+                            "type": "string"
+                          },
+                          "imagePullPolicy": {
+                            "default": "IfNotPresent",
+                            "required": [],
+                            "title": "imagePullPolicy",
+                            "type": "string"
+                          },
+                          "name": {
+                            "default": "auto-init-and-unseal-sidecar",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "volumeMounts": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "properties": {
+                                    "mountPath": {
+                                      "default": "/init-script/",
+                                      "required": [],
+                                      "title": "mountPath",
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "default": "userconfig-vault-auto-init-config",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "type": "object"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "volumeMounts",
+                            "type": "array"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "extraContainers",
+                  "type": "array"
+                },
+                "extraVolumes": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "defaultMode": {
+                            "default": 777,
+                            "required": [],
+                            "title": "defaultMode",
+                            "type": "integer"
+                          },
+                          "name": {
+                            "default": "vault-auto-init-config",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "type": {
+                            "default": "configMap",
+                            "required": [],
+                            "title": "type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "extraVolumes",
+                  "type": "array"
+                },
+                "ha": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "limits": {
+                      "properties": {
+                        "memory": {
+                          "default": "1Gi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "raft": {
+                      "properties": {
+                        "additionalConfig": {
+                          "default": "",
+                          "required": [],
+                          "title": "additionalConfig",
+                          "type": "string"
+                        },
+                        "config": {
+                          "default": "ui = true\n\nlistener \"tcp\" {\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  tls_disable = \"true\"\n}\n\nstorage \"raft\" {\n  path = \"/vault/data\"\n    retry_join {\n    leader_api_addr = \"http://vault-platform-0.vault-platform-internal:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-1.vault-platform-internal:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-2.vault-platform-internal:8200\"\n  }\n\n  autopilot {\n    cleanup_dead_servers = \"true\"\n    last_contact_threshold = \"200ms\"\n    last_contact_failure_threshold = \"10m\"\n    max_trailing_logs = 250000\n    min_quorum = 5\n    server_stabilization_time = \"10s\"\n  }\n\n}\n\nservice_registration \"kubernetes\" {}\n{{ .Values.server.ha.raft.additionalConfig}}\n",
+                          "required": [],
+                          "title": "config",
+                          "type": "string"
+                        },
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "setNodeId": {
+                          "default": true,
+                          "required": [],
+                          "title": "setNodeId",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "raft",
+                      "type": "object"
+                    },
+                    "replicas": {
+                      "default": 3,
+                      "required": [],
+                      "title": "replicas",
+                      "type": "integer"
+                    },
+                    "requests": {
+                      "properties": {
+                        "cpu": {
+                          "default": "100m",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "100Mi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "ha",
+                  "type": "object"
+                },
+                "image": {
+                  "properties": {
+                    "repository": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/vault",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                },
+                "livenessProbe": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "initialDelaySeconds": {
+                      "default": 60,
+                      "required": [],
+                      "title": "initialDelaySeconds",
+                      "type": "integer"
+                    },
+                    "path": {
+                      "default": "/v1/sys/health?standbyok=true\u0026sealedcode=204",
+                      "required": [],
+                      "title": "path",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "livenessProbe",
+                  "type": "object"
+                },
+                "readinessProbe": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "path": {
+                      "default": "/v1/sys/health?standbyok=true\u0026sealedcode=204\u0026uninitcode=204",
+                      "required": [],
+                      "title": "path",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "readinessProbe",
+                  "type": "object"
+                },
+                "resources": {
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "default": "- key: \"dedicated-nodes\"\n  value: \"platform-masters\"\n  operator: \"Equal\"\n  effect: \"NoSchedule\"\n",
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "server",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "vault",
+          "type": "object"
+        },
+        "vault-secrets-webhook": {
+          "description": "Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values",
+          "properties": {
+            "certificate": {
+              "properties": {
+                "generate": {
+                  "default": false,
+                  "required": [],
+                  "title": "generate",
+                  "type": "boolean"
+                },
+                "useCertManager": {
+                  "default": true,
+                  "required": [],
+                  "title": "useCertManager",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "certificate",
+              "type": "object"
+            },
+            "configMapFailurePolicy": {
+              "default": "Fail",
+              "description": "This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. \"Ignore\" is recommended with Vault without auto-unsealing.",
+              "required": [],
+              "title": "configMapFailurePolicy",
+              "type": "string"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/qvantel-vault-secrets-webhook",
+                  "description": "Original vault-secrets-webhook image is replaced with Qvantel fork https://stash.qvantel.net/projects/CP/repos/qvantel-vault-secrets-webhook/browse",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "1.0.0.1_master_e5e0236d8",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "namespaceSelector": {
+              "description": "Limit Vault secrets to apps namespace only by default",
+              "properties": {
+                "matchExpressions": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "key": {
+                            "default": "kubernetes.io/metadata.name",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "In",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "values": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "required": [],
+                                  "type": "string"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "values",
+                            "type": "array"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "matchExpressions",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "namespaceSelector",
+              "type": "object"
+            },
+            "podsFailurePolicy": {
+              "default": "Fail",
+              "description": "This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. \"Ignore\" is recommended with Vault without auto-unsealing.",
+              "required": [],
+              "title": "podsFailurePolicy",
+              "type": "string"
+            },
+            "secretsFailurePolicy": {
+              "default": "Fail",
+              "description": "This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. \"Ignore\" is recommended with Vault without auto-unsealing.",
+              "required": [],
+              "title": "secretsFailurePolicy",
+              "type": "string"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            },
+            "vaultEnv": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/bank-vaults/vault-env",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "vaultEnv",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "vault-secrets-webhook",
+          "type": "object"
+        },
+        "vaultWebhooksEnabled": {
+          "default": true,
+          "description": "Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag",
+          "required": [],
+          "title": "vaultWebhooksEnabled",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "vaultPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

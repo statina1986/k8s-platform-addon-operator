@@ -66,6 +66,7 @@
               "properties": {
                 "proxy.istio.io/config": {
                   "default": "drainDuration: 30s\nterminationDrainDuration: 31s\n",
+                  "description": "this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. ",
                   "required": [],
                   "title": "proxy.istio.io/config",
                   "type": "string"
@@ -468,6 +469,7 @@
               "properties": {
                 "proxy.istio.io/config": {
                   "default": "drainDuration: 30s\nterminationDrainDuration: 31s\n",
+                  "description": "this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. ",
                   "required": [],
                   "title": "proxy.istio.io/config",
                   "type": "string"
@@ -883,6 +885,7 @@
               "properties": {
                 "proxy.istio.io/config": {
                   "default": "drainDuration: 30s\nterminationDrainDuration: 31s\n",
+                  "description": "this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. ",
                   "required": [],
                   "title": "proxy.istio.io/config",
                   "type": "string"
@@ -1285,6 +1288,7 @@
               "properties": {
                 "proxy.istio.io/config": {
                   "default": "drainDuration: 30s\nterminationDrainDuration: 31s\n",
+                  "description": "this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. ",
                   "required": [],
                   "title": "proxy.istio.io/config",
                   "type": "string"
@@ -1939,6 +1943,237 @@
                     "http": {
                       "items": {
                         "anyOf": [
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "uri": {
+                                          "properties": {
+                                            "prefix": {
+                                              "default": "/.pomerium/",
+                                              "required": [],
+                                              "title": "prefix",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "uri",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "pomerium-platform-authenticate.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 80,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "uri": {
+                                          "properties": {
+                                            "prefix": {
+                                              "default": "/.well-known/",
+                                              "required": [],
+                                              "title": "prefix",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "uri",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "pomerium-platform-authenticate.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 80,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "uri": {
+                                          "properties": {
+                                            "prefix": {
+                                              "default": "/oauth2/",
+                                              "required": [],
+                                              "title": "prefix",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "uri",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "pomerium-platform-authenticate.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 80,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
                           {
                             "properties": {
                               "match": {
@@ -4970,12 +5205,6 @@
                       "required": [],
                       "title": "http",
                       "type": "array"
-                    },
-                    "pomeriumProtected": {
-                      "default": true,
-                      "required": [],
-                      "title": "pomeriumProtected",
-                      "type": "boolean"
                     }
                   },
                   "required": [],

@@ -39,4 +39,3 @@ Provides:
 | awsPlatform.clusterName | string | `"some-cluster"` | EKS cluster name. Defaults to the name from `global.clusterName` |
 | awsPlatform.region | string | `"eu-central-1"` | **Required.** AWS Region where cluster is deployed.  |
 | awsPlatform.tags | string | `nil` | **Required.** Default tags to be added for AWS Resources provisioned by this module (loadbalancers, ebs volumes, etc). If you do not want to add tags, provide `{}`. |
-

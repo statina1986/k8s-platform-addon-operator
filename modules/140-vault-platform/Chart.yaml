@@ -9,7 +9,8 @@ annotations:
     - name: vault
       image: docker.io/hashicorp/vault:1.17.2
     - name: vault-secrets-webhook
-      image: ghcr.io/bank-vaults/vault-secrets-webhook:v1.21.3
+      # Original vault-secrets-webhook image is replaced with Qvantel fork https://stash.qvantel.net/projects/CP/repos/qvantel-vault-secrets-webhook/browse
+      image: platform.artifactory.qvantel.net/platform/qvantel-vault-secrets-webhook:1.0.0.1_master_e5e0236d8
     - name: vault-env
       image: ghcr.io/bank-vaults/vault-env:v1.21.6
     - name: platform-tools

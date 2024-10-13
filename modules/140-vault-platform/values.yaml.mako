@@ -4,20 +4,28 @@
 %>
 # vaultPlatformNamespace: vault
 vaultPlatform:
-  % if values['global']['clusterwideResources'] == "true":
+  
+  # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
+  % if values['global']['clusterwideResources'] == "true":  
   vaultWebhooksEnabled: true
   % else:
   vaultWebhooksEnabled: false
   % endif
-  # autoUnseal is when a cloud service (KMS) is used to unseal vault
+
+  # -- Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal
   autoUnseal: false
-  # k8sUnseal is when unseal secret is stored in kubernetes secrets, and is automatically unsealed using that
+  # -- Enable auto unseal with local Shamir keys stored in local K8S secret
   k8sUnseal: false
+  # -- Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps
   useBackwardsCompatibilityService: true
+  
+  # -- Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
   vault-secrets-webhook:
     image:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/bank-vaults/vault-secrets-webhook
+      # Original vault-secrets-webhook image is replaced with Qvantel fork https://stash.qvantel.net/projects/CP/repos/qvantel-vault-secrets-webhook/browse
+      repository: ${values['global']['containerRegistryBase']}/platform/qvantel-vault-secrets-webhook
+      tag: "1.0.0.1_master_e5e0236d8"
       % endif
     vaultEnv:
       % if 'containerRegistryBase' in values['global']:
@@ -46,11 +54,11 @@ vaultPlatform:
         whenUnsatisfiable: DoNotSchedule
     % endif
 
-    # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+    # -- This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     configMapFailurePolicy: Fail
-    # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+    # -- This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     podsFailurePolicy: Fail
-    # This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+    # -- This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     secretsFailurePolicy: Fail
 
     # Limit Vault secrets to apps namespace only by default
@@ -60,6 +68,8 @@ vaultPlatform:
           operator: In
           values:
             - ${values['global']['appsNamespace']}
+  
+  # -- Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
   vault:
     global:
       enabled: true

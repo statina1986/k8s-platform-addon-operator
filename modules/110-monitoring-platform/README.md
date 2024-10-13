@@ -85,8 +85,10 @@ Provides:
 | monitoringPlatform.kube-prometheus-stack.grafana.persistence.size | string | `"30Gi"` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.persistence.type | string | `"pvc"` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.serviceMonitor.labels.release | string | `"monitoring-platform"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.annotations.grafana_folder | string | `"Kubernetes"` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.enabled | bool | `true` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.folder | string | `"/tmp/dashboards"` |  |
+| monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.folderAnnotation | string | `"grafana_folder"` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.label | string | `"grafana_dashboard"` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.labelValue | string | `"1"` |  |
 | monitoringPlatform.kube-prometheus-stack.grafana.sidecar.dashboards.provider.allowUiUpdates | bool | `true` |  |

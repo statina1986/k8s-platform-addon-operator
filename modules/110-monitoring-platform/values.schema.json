@@ -1,0 +1,3457 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "monitoringPlatform": {
+      "properties": {
+        "kube-prometheus-stack": {
+          "properties": {
+            "alertmanager": {
+              "properties": {
+                "alertmanagerSpec": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "alertmanagerSpec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "alertmanager",
+              "type": "object"
+            },
+            "defaultRules": {
+              "properties": {
+                "create": {
+                  "default": true,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "rules": {
+                  "properties": {
+                    "kubeApiserverSlos": {
+                      "default": false,
+                      "required": [],
+                      "title": "kubeApiserverSlos",
+                      "type": "boolean"
+                    },
+                    "kubernetesStorage": {
+                      "default": false,
+                      "required": [],
+                      "title": "kubernetesStorage",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "rules",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "defaultRules",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "grafana": {
+              "properties": {
+                "admin": {
+                  "properties": {
+                    "existingSecret": {
+                      "default": "grafana-admin-pass-secret",
+                      "required": [],
+                      "title": "existingSecret",
+                      "type": "string"
+                    },
+                    "passwordKey": {
+                      "default": "grafanaAdminPassword",
+                      "required": [],
+                      "title": "passwordKey",
+                      "type": "string"
+                    },
+                    "userKey": {
+                      "default": "adminUser",
+                      "required": [],
+                      "title": "userKey",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "admin",
+                  "type": "object"
+                },
+                "datasources": {
+                  "properties": {
+                    "business.yaml": {
+                      "properties": {
+                        "apiVersion": {
+                          "default": 1,
+                          "required": [],
+                          "title": "apiVersion",
+                          "type": "integer"
+                        },
+                        "datasources": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "isDefault": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "isDefault",
+                                    "type": "boolean"
+                                  },
+                                  "name": {
+                                    "default": "kpitool",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "default": "yesoreyeram-infinity-datasource",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  },
+                                  "uid": {
+                                    "default": "jEggJhu4k",
+                                    "required": [],
+                                    "title": "uid",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "datasources",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "business.yaml",
+                      "type": "object"
+                    },
+                    "platform.yaml": {
+                      "properties": {
+                        "apiVersion": {
+                          "default": 1,
+                          "required": [],
+                          "title": "apiVersion",
+                          "type": "integer"
+                        },
+                        "datasources": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "name": {
+                                    "default": "Loki",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "default": "loki",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "default": "http://loki-read.platform.svc:3100",
+                                    "required": [],
+                                    "title": "url",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "datasources",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "platform.yaml",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "datasources",
+                  "type": "object"
+                },
+                "deploymentStrategy": {
+                  "properties": {
+                    "type": {
+                      "default": "Recreate",
+                      "required": [],
+                      "title": "type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "deploymentStrategy",
+                  "type": "object"
+                },
+                "downloadDashboardsImage": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "downloadDashboardsImage",
+                  "type": "object"
+                },
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "envFromSecret": {
+                  "default": "grafana-keycloak-client-secret",
+                  "required": [],
+                  "title": "envFromSecret",
+                  "type": "string"
+                },
+                "extraContainerVolumes": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "emptyDir": {
+                            "required": [],
+                            "title": "emptyDir",
+                            "type": "object"
+                          },
+                          "name": {
+                            "default": "grafana-plugins",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "extraContainerVolumes",
+                  "type": "array"
+                },
+                "extraInitContainers": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "args": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "required": [],
+                                  "type": "string"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "args",
+                            "type": "array"
+                          },
+                          "command": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "required": [],
+                                  "type": "string"
+                                },
+                                {
+                                  "required": [],
+                                  "type": "string"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "command",
+                            "type": "array"
+                          },
+                          "image": {
+                            "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:1.2.0_4_f26bb6e90",
+                            "required": [],
+                            "title": "image",
+                            "type": "string"
+                          },
+                          "name": {
+                            "default": "plugin-sidecar",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "volumeMounts": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "properties": {
+                                    "mountPath": {
+                                      "default": "/var/lib/grafana/plugins",
+                                      "required": [],
+                                      "title": "mountPath",
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "default": "grafana-plugins",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "type": "object"
+                                }
+                              ],
+                              "required": []
+                            },
+                            "required": [],
+                            "title": "volumeMounts",
+                            "type": "array"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "extraInitContainers",
+                  "type": "array"
+                },
+                "extraVolumeMounts": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "mountPath": {
+                            "default": "/var/lib/grafana/plugins",
+                            "required": [],
+                            "title": "mountPath",
+                            "type": "string"
+                          },
+                          "name": {
+                            "default": "grafana-plugins",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "extraVolumeMounts",
+                  "type": "array"
+                },
+                "grafana.ini": {
+                  "properties": {
+                    "auth.anonymous": {
+                      "properties": {
+                        "enabled": {
+                          "default": false,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "auth.anonymous",
+                      "type": "object"
+                    },
+                    "auth.generic_oauth": {
+                      "properties": {
+                        "allow_assign_grafana_admin": {
+                          "default": true,
+                          "required": [],
+                          "title": "allow_assign_grafana_admin",
+                          "type": "boolean"
+                        },
+                        "allow_sign_up": {
+                          "default": true,
+                          "required": [],
+                          "title": "allow_sign_up",
+                          "type": "boolean"
+                        },
+                        "api_url": {
+                          "default": "http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo",
+                          "required": [],
+                          "title": "api_url",
+                          "type": "string"
+                        },
+                        "auth_url": {
+                          "default": "https://auth-some-env.qvantel.solutions/auth/realms/qvantel/protocol/openid-connect/auth",
+                          "required": [],
+                          "title": "auth_url",
+                          "type": "string"
+                        },
+                        "client_id": {
+                          "default": "grafana",
+                          "required": [],
+                          "title": "client_id",
+                          "type": "string"
+                        },
+                        "email_attribute_path": {
+                          "default": "email",
+                          "required": [],
+                          "title": "email_attribute_path",
+                          "type": "string"
+                        },
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "icon": {
+                          "default": "signin",
+                          "required": [],
+                          "title": "icon",
+                          "type": "string"
+                        },
+                        "login_attribute_path": {
+                          "default": "username",
+                          "required": [],
+                          "title": "login_attribute_path",
+                          "type": "string"
+                        },
+                        "name": {
+                          "default": "Keycloak-OAuth",
+                          "required": [],
+                          "title": "name",
+                          "type": "string"
+                        },
+                        "name_attribute_path": {
+                          "default": "full_name",
+                          "required": [],
+                          "title": "name_attribute_path",
+                          "type": "string"
+                        },
+                        "role_attribute_path": {
+                          "default": "contains(realm_access.roles[*], 'grafana_admin') \u0026\u0026 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') \u0026\u0026 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') \u0026\u0026 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') \u0026\u0026 'Viewer'",
+                          "required": [],
+                          "title": "role_attribute_path",
+                          "type": "string"
+                        },
+                        "role_attribute_strict": {
+                          "default": true,
+                          "required": [],
+                          "title": "role_attribute_strict",
+                          "type": "boolean"
+                        },
+                        "scopes": {
+                          "default": "openid email profile offline_access roles",
+                          "required": [],
+                          "title": "scopes",
+                          "type": "string"
+                        },
+                        "signout_redirect_url": {
+                          "default": "https://auth-some-env.qvantel.solutions/auth/realms/qvantel/protocol/openid-connect/logout",
+                          "required": [],
+                          "title": "signout_redirect_url",
+                          "type": "string"
+                        },
+                        "token_url": {
+                          "default": "http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token",
+                          "required": [],
+                          "title": "token_url",
+                          "type": "string"
+                        },
+                        "use_pkce": {
+                          "default": true,
+                          "required": [],
+                          "title": "use_pkce",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "auth.generic_oauth",
+                      "type": "object"
+                    },
+                    "dataproxy": {
+                      "properties": {
+                        "timeout": {
+                          "default": 310,
+                          "required": [],
+                          "title": "timeout",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [],
+                      "title": "dataproxy",
+                      "type": "object"
+                    },
+                    "server": {
+                      "properties": {
+                        "root_url": {
+                          "default": "https://grafana-some-env.qvantel.solutions",
+                          "required": [],
+                          "title": "root_url",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "server",
+                      "type": "object"
+                    },
+                    "users": {
+                      "properties": {
+                        "viewers_can_edit": {
+                          "default": true,
+                          "required": [],
+                          "title": "viewers_can_edit",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "users",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "grafana.ini",
+                  "type": "object"
+                },
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "grafana/grafana-enterprise",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                },
+                "initChownData": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "ubi9/ubi-minimal",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "9.4-1194",
+                          "required": [],
+                          "title": "tag",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "initChownData",
+                  "type": "object"
+                },
+                "persistence": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "finalizers": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "finalizers",
+                      "type": "array"
+                    },
+                    "size": {
+                      "default": "30Gi",
+                      "required": [],
+                      "title": "size",
+                      "type": "string"
+                    },
+                    "type": {
+                      "default": "pvc",
+                      "required": [],
+                      "title": "type",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "persistence",
+                  "type": "object"
+                },
+                "serviceMonitor": {
+                  "properties": {
+                    "labels": {
+                      "properties": {
+                        "release": {
+                          "default": "monitoring-platform",
+                          "required": [],
+                          "title": "release",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "labels",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceMonitor",
+                  "type": "object"
+                },
+                "sidecar": {
+                  "properties": {
+                    "dashboards": {
+                      "properties": {
+                        "annotations": {
+                          "properties": {
+                            "grafana_folder": {
+                              "default": "Kubernetes",
+                              "required": [],
+                              "title": "grafana_folder",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "annotations",
+                          "type": "object"
+                        },
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "folder": {
+                          "default": "/tmp/dashboards",
+                          "required": [],
+                          "title": "folder",
+                          "type": "string"
+                        },
+                        "folderAnnotation": {
+                          "default": "grafana_folder",
+                          "required": [],
+                          "title": "folderAnnotation",
+                          "type": "string"
+                        },
+                        "label": {
+                          "default": "grafana_dashboard",
+                          "required": [],
+                          "title": "label",
+                          "type": "string"
+                        },
+                        "labelValue": {
+                          "default": "1",
+                          "required": [],
+                          "title": "labelValue",
+                          "type": "string"
+                        },
+                        "provider": {
+                          "properties": {
+                            "allowUiUpdates": {
+                              "default": true,
+                              "description": "enabling UI dashboards updated",
+                              "required": [],
+                              "title": "allowUiUpdates",
+                              "type": "boolean"
+                            },
+                            "foldersFromFilesStructure": {
+                              "default": true,
+                              "description": "enabling to structure dashboards folder based on the k8s-sidecar-target-directory",
+                              "required": [],
+                              "title": "foldersFromFilesStructure",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "provider",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "dashboards",
+                      "type": "object"
+                    },
+                    "datasources": {
+                      "properties": {
+                        "defaultDatasourceEnabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "defaultDatasourceEnabled",
+                          "type": "boolean"
+                        },
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "maxLines": {
+                          "default": 1000,
+                          "required": [],
+                          "title": "maxLines",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [],
+                      "title": "datasources",
+                      "type": "object"
+                    },
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "sidecar",
+                  "type": "object"
+                },
+                "testFramework": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "testFramework",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "grafana",
+              "type": "object"
+            },
+            "kube-state-metrics": {
+              "properties": {
+                "customResourceState": {
+                  "properties": {
+                    "config": {
+                      "properties": {
+                        "kind": {
+                          "default": "CustomResourceStateMetrics",
+                          "required": [],
+                          "title": "kind",
+                          "type": "string"
+                        },
+                        "spec": {
+                          "properties": {
+                            "resources": {
+                              "default": "",
+                              "required": [],
+                              "title": "resources",
+                              "type": "null"
+                            }
+                          },
+                          "required": [],
+                          "title": "spec",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "config",
+                      "type": "object"
+                    },
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "customResourceState",
+                  "type": "object"
+                },
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                },
+                "kubeRBACProxy": {
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "kubeRBACProxy",
+                  "type": "object"
+                },
+                "rbac": {
+                  "properties": {
+                    "extraRules": {
+                      "default": "",
+                      "required": [],
+                      "title": "extraRules",
+                      "type": "null"
+                    }
+                  },
+                  "required": [],
+                  "title": "rbac",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "kube-state-metrics",
+              "type": "object"
+            },
+            "prometheus": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "prometheusSpec": {
+                  "properties": {
+                    "additionalAlertManagerConfigs": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "static_configs": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "targets": {
+                                          "items": {
+                                            "anyOf": [
+                                              {
+                                                "required": [],
+                                                "type": "string"
+                                              }
+                                            ],
+                                            "required": []
+                                          },
+                                          "required": [],
+                                          "title": "targets",
+                                          "type": "array"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "static_configs",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "additionalAlertManagerConfigs",
+                      "type": "array"
+                    },
+                    "additionalScrapeConfigs": {
+                      "default": "{{- range $k, $v := .Values.prometheus.prometheusSpec.additionalScrapeConfigsAsMap }}\n- job_name: '{{ $k }}'\n{{ $v | toYaml | indent 2}}\n{{- end }}",
+                      "required": [],
+                      "title": "additionalScrapeConfigs",
+                      "type": "string"
+                    },
+                    "additionalScrapeConfigsAsMap": {
+                      "properties": {
+                        "kubernetes-pods": {
+                          "properties": {
+                            "kubernetes_sd_configs": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "role": {
+                                        "default": "pod",
+                                        "required": [],
+                                        "title": "role",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "kubernetes_sd_configs",
+                              "type": "array"
+                            },
+                            "relabel_configs": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "keep",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": true,
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "boolean"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "keep",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "((;.*)|(.*;http))",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            },
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "drop",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(true)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.+)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "__metrics_path__",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "([^:]+)(?::\\d+)?;(\\d+)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1:$2",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            },
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "__address__",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "labelmap",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "__meta_kubernetes_pod_label_(.+)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "namespace",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "pod_name",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "node",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "relabel_configs",
+                              "type": "array"
+                            }
+                          },
+                          "required": [],
+                          "title": "kubernetes-pods",
+                          "type": "object"
+                        },
+                        "podMonitor/metrics/kafka-resources-metrics/0": {
+                          "properties": {
+                            "follow_redirects": {
+                              "default": true,
+                              "required": [],
+                              "title": "follow_redirects",
+                              "type": "boolean"
+                            },
+                            "honor_timestamps": {
+                              "default": true,
+                              "required": [],
+                              "title": "honor_timestamps",
+                              "type": "boolean"
+                            },
+                            "kubernetes_sd_configs": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "follow_redirects": {
+                                        "default": true,
+                                        "required": [],
+                                        "title": "follow_redirects",
+                                        "type": "boolean"
+                                      },
+                                      "kubeconfig_file": {
+                                        "default": "",
+                                        "required": [],
+                                        "title": "kubeconfig_file",
+                                        "type": "string"
+                                      },
+                                      "namespaces": {
+                                        "properties": {
+                                          "names": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "names",
+                                            "type": "array"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "namespaces",
+                                        "type": "object"
+                                      },
+                                      "role": {
+                                        "default": "pod",
+                                        "required": [],
+                                        "title": "role",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "kubernetes_sd_configs",
+                              "type": "array"
+                            },
+                            "metrics_path": {
+                              "default": "/metrics",
+                              "required": [],
+                              "title": "metrics_path",
+                              "type": "string"
+                            },
+                            "relabel_configs": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "__tmp_prometheus_job_name",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "keep",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "Kafka|KafkaConnect|KafkaMirrorMaker|KafkaMirrorMaker2",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "keep",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "tcp-prometheus",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "namespace",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "container",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "pod",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "metrics/kafka-resources-metrics",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "target_label": {
+                                        "default": "job",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "tcp-prometheus",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "target_label": {
+                                        "default": "endpoint",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "labelmap",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "__meta_kubernetes_pod_label_(strimzi_io_.+)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "namespace",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "kubernetes_pod_name",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "node_name",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "replace",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "node_ip",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "hashmod",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "modulus": {
+                                        "default": 1,
+                                        "required": [],
+                                        "title": "modulus",
+                                        "type": "integer"
+                                      },
+                                      "regex": {
+                                        "default": "(.*)",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      },
+                                      "target_label": {
+                                        "default": "__tmp_hash",
+                                        "required": [],
+                                        "title": "target_label",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "keep",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": "0",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "replacement": {
+                                        "default": "$1",
+                                        "required": [],
+                                        "title": "replacement",
+                                        "type": "string"
+                                      },
+                                      "separator": {
+                                        "default": ";",
+                                        "required": [],
+                                        "title": "separator",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "relabel_configs",
+                              "type": "array"
+                            },
+                            "scheme": {
+                              "default": "http",
+                              "required": [],
+                              "title": "scheme",
+                              "type": "string"
+                            },
+                            "scrape_interval": {
+                              "default": "30s",
+                              "required": [],
+                              "title": "scrape_interval",
+                              "type": "string"
+                            },
+                            "scrape_timeout": {
+                              "default": "10s",
+                              "required": [],
+                              "title": "scrape_timeout",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "podMonitor/metrics/kafka-resources-metrics/0",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "additionalScrapeConfigsAsMap",
+                      "type": "object"
+                    },
+                    "enableRemoteWriteReceiver": {
+                      "default": true,
+                      "required": [],
+                      "title": "enableRemoteWriteReceiver",
+                      "type": "boolean"
+                    },
+                    "externalLabels": {
+                      "properties": {
+                        "country": {
+                          "default": "need-to-define",
+                          "required": [],
+                          "title": "country",
+                          "type": "string"
+                        },
+                        "customer": {
+                          "default": "need-to-define",
+                          "required": [],
+                          "title": "customer",
+                          "type": "string"
+                        },
+                        "datacenter": {
+                          "default": "need-to-define",
+                          "required": [],
+                          "title": "datacenter",
+                          "type": "string"
+                        },
+                        "environment": {
+                          "default": "need-to-define",
+                          "required": [],
+                          "title": "environment",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "externalLabels",
+                      "type": "object"
+                    },
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    },
+                    "retention": {
+                      "default": "12d",
+                      "required": [],
+                      "title": "retention",
+                      "type": "string"
+                    },
+                    "storageSpec": {
+                      "properties": {
+                        "volumeClaimTemplate": {
+                          "properties": {
+                            "spec": {
+                              "properties": {
+                                "resources": {
+                                  "properties": {
+                                    "requests": {
+                                      "properties": {
+                                        "storage": {
+                                          "default": "50Gi",
+                                          "required": [],
+                                          "title": "storage",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "requests",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "resources",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "spec",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "volumeClaimTemplate",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "storageSpec",
+                      "type": "object"
+                    },
+                    "tolerations": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "effect": {
+                                "default": "NoSchedule",
+                                "required": [],
+                                "title": "effect",
+                                "type": "string"
+                              },
+                              "key": {
+                                "default": "dedicated-nodes",
+                                "required": [],
+                                "title": "key",
+                                "type": "string"
+                              },
+                              "operator": {
+                                "default": "Equal",
+                                "required": [],
+                                "title": "operator",
+                                "type": "string"
+                              },
+                              "value": {
+                                "default": "platform-masters",
+                                "required": [],
+                                "title": "value",
+                                "type": "string"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "tolerations",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "prometheusSpec",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "prometheus",
+              "type": "object"
+            },
+            "prometheus-node-exporter": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "prometheus-node-exporter",
+              "type": "object"
+            },
+            "prometheusOperator": {
+              "properties": {
+                "admissionWebhooks": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    },
+                    "patch": {
+                      "properties": {
+                        "image": {
+                          "properties": {
+                            "registry": {
+                              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                              "required": [],
+                              "title": "registry",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "image",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "patch",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "admissionWebhooks",
+                  "type": "object"
+                },
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                },
+                "prometheusConfigReloader": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "prometheusConfigReloader",
+                  "type": "object"
+                },
+                "thanosImage": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "thanosImage",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "prometheusOperator",
+              "type": "object"
+            },
+            "thanosRuler": {
+              "properties": {
+                "thanosRulerSpec": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "thanosRulerSpec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "thanosRuler",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "kube-prometheus-stack",
+          "type": "object"
+        },
+        "prometheus-blackbox-exporter": {
+          "properties": {
+            "config": {
+              "properties": {
+                "modules": {
+                  "properties": {
+                    "http_2xx": {
+                      "properties": {
+                        "http": {
+                          "properties": {
+                            "follow_redirects": {
+                              "default": true,
+                              "required": [],
+                              "title": "follow_redirects",
+                              "type": "boolean"
+                            },
+                            "preferred_ip_protocol": {
+                              "default": "ip4",
+                              "required": [],
+                              "title": "preferred_ip_protocol",
+                              "type": "string"
+                            },
+                            "valid_http_versions": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  },
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "valid_http_versions",
+                              "type": "array"
+                            }
+                          },
+                          "required": [],
+                          "title": "http",
+                          "type": "object"
+                        },
+                        "prober": {
+                          "default": "http",
+                          "required": [],
+                          "title": "prober",
+                          "type": "string"
+                        },
+                        "timeout": {
+                          "default": "5s",
+                          "required": [],
+                          "title": "timeout",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "http_2xx",
+                      "type": "object"
+                    },
+                    "http_2xx_json": {
+                      "properties": {
+                        "http": {
+                          "properties": {
+                            "body": {
+                              "default": "{\"ResultText\": \"OK}",
+                              "required": [],
+                              "title": "body",
+                              "type": "string"
+                            },
+                            "headers": {
+                              "properties": {
+                                "Content-Type": {
+                                  "default": "application/json",
+                                  "required": [],
+                                  "title": "Content-Type",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "headers",
+                              "type": "object"
+                            },
+                            "preferred_ip_protocol": {
+                              "default": "ip4",
+                              "required": [],
+                              "title": "preferred_ip_protocol",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "http",
+                          "type": "object"
+                        },
+                        "prober": {
+                          "default": "http",
+                          "required": [],
+                          "title": "prober",
+                          "type": "string"
+                        },
+                        "timeout": {
+                          "default": "5s",
+                          "required": [],
+                          "title": "timeout",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "http_2xx_json",
+                      "type": "object"
+                    },
+                    "http_2xxs_post": {
+                      "properties": {
+                        "http": {
+                          "properties": {
+                            "method": {
+                              "default": "POST",
+                              "required": [],
+                              "title": "method",
+                              "type": "string"
+                            },
+                            "no_follow_redirects": {
+                              "default": false,
+                              "required": [],
+                              "title": "no_follow_redirects",
+                              "type": "boolean"
+                            },
+                            "preferred_ip_protocol": {
+                              "default": "ip4",
+                              "required": [],
+                              "title": "preferred_ip_protocol",
+                              "type": "string"
+                            },
+                            "tls_config": {
+                              "properties": {
+                                "insecure_skip_verify": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "insecure_skip_verify",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [],
+                              "title": "tls_config",
+                              "type": "object"
+                            },
+                            "valid_status_codes": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "required": [],
+                                    "type": "integer"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "valid_status_codes",
+                              "type": "array"
+                            }
+                          },
+                          "required": [],
+                          "title": "http",
+                          "type": "object"
+                        },
+                        "prober": {
+                          "default": "http",
+                          "required": [],
+                          "title": "prober",
+                          "type": "string"
+                        },
+                        "timeout": {
+                          "default": "5s",
+                          "required": [],
+                          "title": "timeout",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "http_2xxs_post",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "modules",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "config",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "image": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "pspEnabled": {
+              "default": false,
+              "required": [],
+              "title": "pspEnabled",
+              "type": "boolean"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "prometheus-blackbox-exporter",
+          "type": "object"
+        },
+        "prometheus-consul-exporter": {
+          "properties": {
+            "consulServer": {
+              "default": "consul-consul-server:8500",
+              "required": [],
+              "title": "consulServer",
+              "type": "string"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/prom/consul-exporter",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "v0.5.0",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "rbac": {
+              "properties": {
+                "pspEnabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "pspEnabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "rbac",
+              "type": "object"
+            },
+            "serviceMonitor": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "interval": {
+                  "default": "30s",
+                  "required": [],
+                  "title": "interval",
+                  "type": "string"
+                },
+                "labels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "labels",
+                  "type": "object"
+                },
+                "telemetryPath": {
+                  "default": "/metrics",
+                  "required": [],
+                  "title": "telemetryPath",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceMonitor",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "prometheus-consul-exporter",
+          "type": "object"
+        },
+        "qvantelMonitoring": {
+          "properties": {
+            "applications": {
+              "description": "Variable to control applications deployed in the environment",
+              "properties": {
+                "bssapi": {
+                  "default": false,
+                  "required": [],
+                  "title": "bssapi",
+                  "type": "boolean"
+                },
+                "commonOnePointZero": {
+                  "default": false,
+                  "required": [],
+                  "title": "commonOnePointZero",
+                  "type": "boolean"
+                },
+                "commonZeroPointSix": {
+                  "default": false,
+                  "required": [],
+                  "title": "commonZeroPointSix",
+                  "type": "boolean"
+                },
+                "flex": {
+                  "default": false,
+                  "required": [],
+                  "title": "flex",
+                  "type": "boolean"
+                },
+                "ordersManager": {
+                  "default": false,
+                  "required": [],
+                  "title": "ordersManager",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "applications",
+              "type": "object"
+            },
+            "integrations": {
+              "properties": {
+                "opsgenie": {
+                  "default": false,
+                  "required": [],
+                  "title": "opsgenie",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "integrations",
+              "type": "object"
+            },
+            "modules": {
+              "description": "Modules variables to control alerts and dashboards deployed based on the modules already deployed",
+              "properties": {
+                "consul": {
+                  "default": false,
+                  "required": [],
+                  "title": "consul",
+                  "type": "boolean"
+                },
+                "elasticsearch": {
+                  "default": false,
+                  "required": [],
+                  "title": "elasticsearch",
+                  "type": "boolean"
+                },
+                "istio": {
+                  "default": false,
+                  "required": [],
+                  "title": "istio",
+                  "type": "boolean"
+                },
+                "kafka": {
+                  "default": false,
+                  "required": [],
+                  "title": "kafka",
+                  "type": "boolean"
+                },
+                "kasope": {
+                  "default": false,
+                  "required": [],
+                  "title": "kasope",
+                  "type": "boolean"
+                },
+                "loki": {
+                  "default": false,
+                  "required": [],
+                  "title": "loki",
+                  "type": "boolean"
+                },
+                "mariadb": {
+                  "default": false,
+                  "required": [],
+                  "title": "mariadb",
+                  "type": "boolean"
+                },
+                "mongo": {
+                  "default": false,
+                  "required": [],
+                  "title": "mongo",
+                  "type": "boolean"
+                },
+                "postgres": {
+                  "default": false,
+                  "required": [],
+                  "title": "postgres",
+                  "type": "boolean"
+                },
+                "rabbitmq": {
+                  "default": false,
+                  "required": [],
+                  "title": "rabbitmq",
+                  "type": "boolean"
+                },
+                "redis": {
+                  "default": false,
+                  "required": [],
+                  "title": "redis",
+                  "type": "boolean"
+                },
+                "vault": {
+                  "default": false,
+                  "required": [],
+                  "title": "vault",
+                  "type": "boolean"
+                },
+                "vector": {
+                  "default": false,
+                  "required": [],
+                  "title": "vector",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "modules",
+              "type": "object"
+            },
+            "programs": {
+              "description": "Customer variable to control alerts and dashboards deployed per Program",
+              "properties": {
+                "mmlyle": {
+                  "default": false,
+                  "required": [],
+                  "title": "mmlyle",
+                  "type": "boolean"
+                },
+                "sayco": {
+                  "default": false,
+                  "required": [],
+                  "title": "sayco",
+                  "type": "boolean"
+                },
+                "windtre": {
+                  "default": false,
+                  "required": [],
+                  "title": "windtre",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "programs",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "qvantelMonitoring",
+          "type": "object"
+        },
+        "x509-certificate-exporter": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "hostPathsExporter": {
+              "properties": {
+                "podExtraLabels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "podExtraLabels",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "hostPathsExporter",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "prometheusRules": {
+              "properties": {
+                "extraLabels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "extraLabels",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "prometheusRules",
+              "type": "object"
+            },
+            "prometheusServiceMonitor": {
+              "properties": {
+                "extraLabels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "extraLabels",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "prometheusServiceMonitor",
+              "type": "object"
+            },
+            "secretsExporter": {
+              "properties": {
+                "podExtraLabels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "podExtraLabels",
+                  "type": "object"
+                },
+                "resources": {
+                  "properties": {
+                    "limits": {
+                      "properties": {
+                        "cpu": {
+                          "default": "250m",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "300Mi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "requests": {
+                      "properties": {
+                        "cpu": {
+                          "default": "20m",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "20Mi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "secretsExporter",
+              "type": "object"
+            },
+            "service": {
+              "properties": {
+                "extraLabels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "extraLabels",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "service",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "x509-certificate-exporter",
+          "type": "object"
+        },
+        "yet-another-cloudwatch-exporter": {
+          "properties": {
+            "enabled": {
+              "default": false,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "extraArgs": {
+              "properties": {
+                "scraping-interval": {
+                  "default": 60,
+                  "required": [],
+                  "title": "scraping-interval",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "extraArgs",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "serviceMonitor": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "labels": {
+                  "properties": {
+                    "release": {
+                      "default": "monitoring-platform",
+                      "required": [],
+                      "title": "release",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "labels",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "serviceMonitor",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "yet-another-cloudwatch-exporter",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "monitoringPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
