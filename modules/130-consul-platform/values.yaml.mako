@@ -6,16 +6,18 @@ consulPlatform:
     imageConsulDataplane: ${values['global']['containerRegistryBase']}/hashicorp/consul-dataplane:1.0.1
     openshift:
       enabled: false
-    % endif
-  apiGateway:
-    % if 'containerRegistryBase' in values['global']:
-    imageEnvoy: ${values['global']['containerRegistryBase']}/envoyproxy/envoy:v1.23.1
-    % endif
+    % endif  
+  enableServiceSyncForClusterIP: "false"
+  purgeHashicorpConsulSyncServicesOnStartup: "false"
   updateCoreDns:    
     enabled: "true"
     configmapName: "coredns"
     configmapNamespace: "kube-system"
   consul:
+    apiGateway:
+      % if 'containerRegistryBase' in values['global']:
+      imageEnvoy: ${values['global']['containerRegistryBase']}/envoyproxy/envoy:v1.23.1
+      % endif
     server:
       % if values['global']['configurationProfile'] in {'dev'}: 
       replicas: 1

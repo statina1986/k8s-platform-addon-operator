@@ -8,3 +8,7 @@ VAULT_ADDR = environ.get('VAULT_ADDR', 'http://' + HELM_RELEASE_NAME_PREFIX + 'v
 VAULT_SECRET_NAME = environ.get('VAULT_SECRET_NAME', 'vault-keys')
 VAULT_SECRET_NAMESPACE = environ.get('VAULT_SECRET_NAMESPACE', 'platform')
 VAULT_SECRET_ROOT_TOKEN = environ.get('VAULT_SECRET_ROOT_TOKEN', 'root_token')
+
+CONSUL_HOST = environ.get('CONSUL_HOST', 'consul-platform-consul-server.' + ADDON_OPERATOR_NAMESPACE + '.svc')
+CONSUL_PORT = environ.get('CONSUL_PORT', 8500)
+CONSUL_SCHEME = environ.get('CONSUL_SCHEME', 'http')

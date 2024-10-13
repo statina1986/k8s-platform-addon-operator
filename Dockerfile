@@ -6,6 +6,7 @@ RUN pip3 install boto3
 RUN pip3 install python-json-logger
 RUN pip3 install pyyaml
 RUN pip3 install mako
+RUN pip3 install py-consul
 
 ENV PYTHONPATH=/
 ARG BUILD_TAG=latest

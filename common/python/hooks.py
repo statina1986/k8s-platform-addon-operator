@@ -83,10 +83,12 @@ class GroupHook:
 
 
 class SynchronizationHook:
-    __match_args__ = ("context")
+    __match_args__ = ("context", "values", "configValues")
 
-    def __init__(self, context):
+    def __init__(self, context, values, configValues):
         self.context = context
+        self.values = values
+        self.configValues = configValues
 
 
 class Hook:
@@ -150,9 +152,9 @@ class Hook:
                 else:
                     type = bc['type']
                     if type == "Schedule":
-                        self.execute_with_retry(ScheduleHook(binding, values_json, configValues_json))
+                        self.execute_with_retry(ScheduleHook(bc, values_json, configValues_json))
                     if type == "Synchronization":
-                        self.execute_with_retry(SynchronizationHook(bc))
+                        self.execute_with_retry(SynchronizationHook(bc, values_json, configValues_json))
                     elif type == "Event":
                         event_type = bc['watchEvent']
                         self.retries = int(bc.get('object', {}).get('metadata', {}).get('annotations', {}).get('platform.qvantel.com/retry-count', str(self.retries)))

@@ -38,7 +38,7 @@ class ClusterScaledownScheduleHook(Hook):
 
     def handle_binding(self, binding):
         match (binding):
-            case ScheduleHook(scheduleName, values_json, configValues_json):
+            case ScheduleHook(context, values_json, configValues_json):
                 try:
                     res = get_or_create_crd(
                         init={
@@ -65,7 +65,7 @@ class ClusterScaledownScheduleHook(Hook):
                             "Phase",
                             "True",
                             "TriggeredTeardownOperation",
-                            "Teardown Operation has been triggered based on schedule '" + scheduleName + "'",
+                            "Teardown Operation has been triggered based on schedule '" + context['binding'] + "'",
                         ),
                         **args
                     )
@@ -75,7 +75,7 @@ class ClusterScaledownScheduleHook(Hook):
                             "Ready",
                             "False",
                             "TriggeredTeardownOperation",
-                            "Teardown Operation has been triggered based on schedule '" + scheduleName + "'",
+                            "Teardown Operation has been triggered based on schedule '" + context['binding'] + "'",
                             **args
                         ),
                     )
