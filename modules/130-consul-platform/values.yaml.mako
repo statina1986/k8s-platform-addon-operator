@@ -90,3 +90,4 @@ consulPlatform:
           memory: "50Mi"
     connectInject:
       enabled: false
+      
