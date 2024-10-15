@@ -113,13 +113,13 @@ kafkaPlatform:
         memory: 384Mi
         cpu: 200m
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     
   # List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource.
@@ -194,8 +194,8 @@ kafkaPlatform:
           template:
             pod:
               tolerations:
-                - key: "dedicated-nodes"
-                  value: "platform-masters"
+                - key: "${values['global']['platformMastersKey']}"
+                  value: "${values['global']['platformMastersValue']}"
                   operator: "Equal"
                   effect: "NoSchedule"
               affinity:
@@ -217,10 +217,10 @@ kafkaPlatform:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
                       - matchExpressions:
-                        - key: dedicated-nodes
+                        - key: ${values['global']['platformMastersKey']}
                           operator: In
                           values:
-                          - platform-masters
+                          - ${values['global']['platformMastersValue']}
                 % endif
               % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
@@ -257,8 +257,8 @@ kafkaPlatform:
           template:
             pod:
               tolerations:
-                - key: "dedicated-nodes"
-                  value: "platform-masters"
+                - key: "${values['global']['platformMastersKey']}"
+                  value: "${values['global']['platformMastersValue']}"
                   operator: "Equal"
                   effect: "NoSchedule"              
               affinity:
@@ -280,10 +280,10 @@ kafkaPlatform:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
                       - matchExpressions:
-                        - key: dedicated-nodes
+                        - key: ${values['global']['platformMastersKey']}
                           operator: In
                           values:
-                          - platform-masters
+                          - ${values['global']['platformMastersValue']}
                 % endif
               % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
@@ -301,8 +301,8 @@ kafkaPlatform:
           template:
             pod:
               tolerations:
-                - key: "dedicated-nodes"
-                  value: "platform-masters"
+                - key: "${values['global']['platformMastersKey']}"
+                  value: "${values['global']['platformMastersValue']}"
                   operator: "Equal"
                   effect: "NoSchedule"              
               % if values['global']['platformMasters']:
@@ -311,17 +311,17 @@ kafkaPlatform:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
                       - matchExpressions:
-                        - key: dedicated-nodes
+                        - key: ${values['global']['platformMastersKey']}
                           operator: In
                           values:
-                          - platform-masters
+                          - ${values['global']['platformMastersValue']}
               % endif
         kafkaExporter:
           template:
             pod:
               tolerations:
-                - key: "dedicated-nodes"
-                  value: "platform-masters"
+                - key: "${values['global']['platformMastersKey']}"
+                  value: "${values['global']['platformMastersValue']}"
                   operator: "Equal"
                   effect: "NoSchedule"              
               % if values['global']['platformMasters']:
@@ -330,10 +330,10 @@ kafkaPlatform:
                   requiredDuringSchedulingIgnoredDuringExecution:
                     nodeSelectorTerms:
                       - matchExpressions:
-                        - key: dedicated-nodes
+                        - key: ${values['global']['platformMastersKey']}
                           operator: In
                           values:
-                          - platform-masters
+                          - ${values['global']['platformMastersValue']}
               % endif
               % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:

@@ -6,13 +6,13 @@ sftpgoPlatform:
   sftpgo:
     replicaCount: 1
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     image:
       % if 'containerRegistryBase' in values['global']:

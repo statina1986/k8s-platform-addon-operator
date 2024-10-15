@@ -15,15 +15,15 @@ elasticsearchPlatform:
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
     createClusterScopedResources: true
-    % if values['global']['platformMasters']:
-    nodeSelector:
-      dedicated-nodes: platform-masters
-    % endif
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
+    % if values['global']['platformMasters']:
+    nodeSelector:
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
+    % endif
   logstashEnabled: false
   filebeatEnabled: false
   smartsearch:
@@ -91,13 +91,13 @@ elasticsearchPlatform:
                       fieldRef:
                         fieldPath: metadata.annotations['topology.kubernetes.io/zone']
               tolerations:
-                - key: "dedicated-nodes"
-                  value: "platform-masters"
+                - key: "${values['global']['platformMastersKey']}"
+                  value: "${values['global']['platformMastersValue']}"
                   operator: "Equal"
-                  effect: "NoSchedule"              
+                  effect: "NoSchedule"
               % if values['global']['platformMasters']:
               nodeSelector:
-                dedicated-nodes: platform-masters
+                ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
               % endif
               topologySpreadConstraints:
                 - maxSkew: 1
@@ -149,13 +149,13 @@ elasticsearchPlatform:
           podTemplate:
             spec:
               tolerations:
-                - key: "dedicated-nodes"
-                  value: "platform-masters"
+                - key: "${values['global']['platformMastersKey']}"
+                  value: "${values['global']['platformMastersValue']}"
                   operator: "Equal"
-                  effect: "NoSchedule"              
+                  effect: "NoSchedule"
               % if values['global']['platformMasters']:
               nodeSelector:
-                dedicated-nodes: platform-masters
+                ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
               % endif
               topologySpreadConstraints:
                 - maxSkew: 1
@@ -196,15 +196,15 @@ elasticsearchPlatform:
                 image: ${values['global']['containerRegistryBase']}/library/kibana:7.16.2
                 % endif
                 resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
-            % if values['global']['platformMasters']:
-            nodeSelector:
-              dedicated-nodes: platform-masters
-            % endif
             tolerations:
-              - key: "dedicated-nodes"
-                value: "platform-masters"
+              - key: "${values['global']['platformMastersKey']}"
+                value: "${values['global']['platformMastersValue']}"
                 operator: "Equal"
                 effect: "NoSchedule"
+            % if values['global']['platformMasters']:
+            nodeSelector:
+              ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
+            % endif
             affinity:
               podAntiAffinity:
                 requiredDuringSchedulingIgnoredDuringExecution:

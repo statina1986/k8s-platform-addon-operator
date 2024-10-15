@@ -10,11 +10,11 @@ metricsPlatform:
         repository: ${values['global']['containerRegistryBase']}/autoscaling/addon-resizer
         % endif
     tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
-          operator: "Equal"
-          effect: "NoSchedule"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
+        operator: "Equal"
+        effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif

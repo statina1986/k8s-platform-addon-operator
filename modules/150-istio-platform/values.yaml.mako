@@ -14,8 +14,8 @@ istioPlatform:
       image: ${values['global']['containerRegistryBase']}/istio/pilot:1.23.2
       % endif
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
       topologySpreadConstraints:
@@ -28,7 +28,7 @@ istioPlatform:
           whenUnsatisfiable: DoNotSchedule     
       % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run with 2 replicas
       autoscaleMin: 2     

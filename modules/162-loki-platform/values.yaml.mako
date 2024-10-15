@@ -164,13 +164,13 @@ lokiPlatform:
     read:
       replicas: 3
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
       % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints:
@@ -187,13 +187,13 @@ lokiPlatform:
       persistence:
         size: 50Gi
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
       % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints:
@@ -208,13 +208,13 @@ lokiPlatform:
     backend:
       replicas: 3
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
       % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints:
