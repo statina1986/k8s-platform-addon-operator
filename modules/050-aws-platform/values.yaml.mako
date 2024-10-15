@@ -68,13 +68,13 @@ awsPlatform:
       name: platform
       create: false
     tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     
   # -- Deploy aws-efs-csi-driver helm-chart. 
@@ -106,13 +106,13 @@ awsPlatform:
         create: false
         name: platform
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
       % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
     node:
       serviceAccount:

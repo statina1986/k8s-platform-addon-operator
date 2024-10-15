@@ -110,13 +110,13 @@ kasopePlatform:
                 - name: default
                   % if values['global']['platformMasters']:
                   nodeAffinityLabels:
-                    dedicated-nodes: platform-masters
+                    ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
                   % endif
               tolerations:
                 - effect: NoSchedule
-                  key: dedicated-nodes
+                  key: "${values['global']['platformMastersKey']}"
                   operator: Equal
-                  value: platform-masters
+                  value: "${values['global']['platformMastersValue']}"
           telemetry:
             cassandra:
               endpoint:

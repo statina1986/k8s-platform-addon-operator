@@ -90,7 +90,7 @@ vectorPlatform:
     role: "Aggregator"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     resources:
       requests:
         cpu: 1
@@ -102,8 +102,8 @@ vectorPlatform:
         size: 5Gi
     % endif
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if addon_operator['elasticsearchPlatformEnabled'] == 'true':

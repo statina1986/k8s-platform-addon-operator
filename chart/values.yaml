@@ -25,6 +25,8 @@ globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
   platformMasters: false
+  platformMastersKey: dedicated-nodes
+  platformMastersValue: platform-masters
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"

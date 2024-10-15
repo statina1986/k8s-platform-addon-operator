@@ -36,13 +36,13 @@ monitoringPlatform:
       registry: ${values['global']['containerRegistryBase']}
       % endif
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     secretsExporter:
       resources:
@@ -74,13 +74,13 @@ monitoringPlatform:
       % endif
     pspEnabled: false
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     config:
       modules:
@@ -118,13 +118,13 @@ monitoringPlatform:
       registry: ${values['global']['containerRegistryBase']}
       % endif
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     serviceAccount:
       create: false
@@ -145,13 +145,13 @@ monitoringPlatform:
     rbac:
       pspEnabled: false
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     consulServer: consul-consul-server:8500
     serviceMonitor:
@@ -163,13 +163,13 @@ monitoringPlatform:
   kube-prometheus-stack:
     enabled: true
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
-    % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+    % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     defaultRules:
       create: true
@@ -251,13 +251,13 @@ monitoringPlatform:
       deploymentStrategy:
         type: Recreate
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
-      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+      % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       admin:
         existingSecret: grafana-admin-pass-secret
@@ -446,13 +446,13 @@ monitoringPlatform:
     prometheus:
       enabled: true
       tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
-      % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+      % if values['global']['platformMasters']:
       nodeSelector:
-        dedicated-nodes: platform-masters
+        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       prometheusSpec:
         image:
@@ -467,13 +467,13 @@ monitoringPlatform:
           environment: need-to-define
         enableRemoteWriteReceiver: true
         tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
-          operator: "Equal"
-          effect: "NoSchedule"
-        % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run on dedicated platform-masters nodes
+          - key: "${values['global']['platformMastersKey']}"
+            value: "${values['global']['platformMastersValue']}"
+            operator: "Equal"
+            effect: "NoSchedule"
+        % if values['global']['platformMasters']:
         nodeSelector:
-          dedicated-nodes: platform-masters
+          ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
         % endif
         storageSpec:
           volumeClaimTemplate:

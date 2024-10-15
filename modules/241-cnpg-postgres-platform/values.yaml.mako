@@ -16,13 +16,13 @@ cnpgPostgresPlatform:
       create: false
       name: platform
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
-        effect: "NoSchedule"      
+        effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     % if addon_operator['monitoringPlatformEnabled'] == 'true':
     monitoring:

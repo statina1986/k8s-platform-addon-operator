@@ -3,23 +3,23 @@ postgresPlatform:
     configKubernetes:
       enable_pod_antiaffinity: true
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
-    % endif    
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
+    % endif   
   postgres-operator-ui:
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
-        effect: "NoSchedule"    
+        effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     envs:
       operatorApiUrl: "http://postgres-platform-postgres-operator:8080"
@@ -39,8 +39,8 @@ postgresPlatform:
           size: 100Gi
         numberOfInstances: 2
         tolerations:
-        - key: "dedicated-nodes"
-          value: "platform-masters"
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule" 
         % if values['global']['platformMasters']:
@@ -48,10 +48,10 @@ postgresPlatform:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: dedicated-nodes
+                - key: ${values['global']['platformMastersKey']}
                   operator: In
                   values:
-                  - platform-masters
+                  - ${values['global']['platformMastersValue']}
         % endif
         % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run postgres with higher CPU values
         resources:

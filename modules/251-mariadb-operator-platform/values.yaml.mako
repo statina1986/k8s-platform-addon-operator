@@ -23,13 +23,13 @@ mariadbOperatorPlatform:
       enabled: true
     % endif  
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
-      dedicated-nodes: platform-masters
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     % if 'containerRegistryBase' in values['global']:
     extraEnv:
@@ -73,14 +73,14 @@ mariadbOperatorPlatform:
           antiAffinityEnabled: true      
         % if values['global']['platformMasters']:
         nodeSelector:
-          dedicated-nodes: platform-masters
+          ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
         % endif
         tolerations:
           - key: "k8s.mariadb.com/ha"
             operator: "Exists"
             effect: "NoSchedule"
-          - key: "dedicated-nodes"
-            value: "platform-masters"
+          - key: "${values['global']['platformMastersKey']}"
+            value: "${values['global']['platformMastersValue']}"
             operator: "Equal"
             effect: "NoSchedule"
         podDisruptionBudget:
