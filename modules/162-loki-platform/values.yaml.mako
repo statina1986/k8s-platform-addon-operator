@@ -11,6 +11,12 @@ lokiPlatform:
       image:
         repository: ${values['global']['containerRegistryBase']}/kiwigrid/k8s-sidecar
       % endif
+      rules:
+        label: loki_rule
+        labelValue: 'true'
+        folder: /rules/fake
+        searchNamespace: { $.Release.Namespace }
+        resource: configmap
     % if values['global']['configurationProfile'] == 'dev':      
     deploymentMode: SingleBinary
     % else:
@@ -42,12 +48,7 @@ lokiPlatform:
       analytics:
         reporting_enabled: false
       auth_enabled: false
-      structuredConfig:
-        ruler:
-          storage:
-            type: local
-            local:
-              directory: /var/loki/ruler
+
       commonConfig:
         % if values['global']['configurationProfile'] == 'dev':
         replication_factor: 1
@@ -134,6 +135,27 @@ lokiPlatform:
         % else:
         type: s3
         % endif
+
+      structuredConfig:
+        ruler:
+          wal:
+            dir: /var/loki/ruler-wal
+          storage:
+            type: local
+            local:
+              directory: /rules
+          rule_path: /rules
+          ring:
+            kvstore:
+              store: inmemory
+          external_labels:
+            country: need-to-define
+            customer: need-to-define
+            datacenter: need-to-define
+            environment: need-to-define
+          alertmanager_url: http://alertmanager.alert.k8s.qvantel.net:9096
+          enable_api: true
+          enable_alertmanager_v2: true 
 
       tracing:
         enabled: false
