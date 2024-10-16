@@ -14,78 +14,32 @@ certPlatform:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-cainjector
         % endif
-      affinity:
-        tolerations:
-          - key: "${values['global']['platformMastersKey']}"
-            value: "${values['global']['platformMastersValue']}"
-            operator: "Equal"
-            effect: "NoSchedule"
-      % if values['global']['platformMasters']:
-      nodeSelector:
-        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
-      % endif
-
     webhook:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-webhook
         % endif
-      affinity:
-        tolerations:
-          - key: "${values['global']['platformMastersKey']}"
-            value: "${values['global']['platformMastersValue']}"
-            operator: "Equal"
-            effect: "NoSchedule"
-      % if values['global']['platformMasters']:
-      nodeSelector:
-        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
-      % endif
-
     startupapicheck:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-ctl
         % endif
-      affinity:
-        tolerations:
-          - key: "${values['global']['platformMastersKey']}"
-            value: "${values['global']['platformMastersValue']}"
-            operator: "Equal"
-            effect: "NoSchedule"
-      % if values['global']['platformMasters']:
-      nodeSelector:
-        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
-      % endif
-
     acmesolver:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-acmesolver
-        % endif
-      affinity:
-        tolerations:
-          - key: "${values['global']['platformMastersKey']}"
-            value: "${values['global']['platformMastersValue']}"
-            operator: "Equal"
-            effect: "NoSchedule"
-      % if values['global']['platformMasters']:
-      nodeSelector:
-        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
-      % endif
-
+        % endif   
     serviceAccount:
       create: false
       name: platform
-    global:
-    affinity:
-      tolerations:
-        - key: "${values['global']['platformMastersKey']}"
-          value: "${values['global']['platformMastersValue']}"
-          operator: "Equal"
-          effect: "NoSchedule"
+    tolerations:
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
+        operator: "Equal"
+        effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
