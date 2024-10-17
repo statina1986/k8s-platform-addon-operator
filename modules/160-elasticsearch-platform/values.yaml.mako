@@ -73,12 +73,6 @@ elasticsearchPlatform:
                     storage: {{ .Values.elasticsearchPlatform.clusters.logsearch.storageSize}}
           podTemplate:
             spec:
-              initContainers:
-              - name: sysctl
-                securityContext:
-                  privileged: true
-                  runAsUser: 0
-                command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
