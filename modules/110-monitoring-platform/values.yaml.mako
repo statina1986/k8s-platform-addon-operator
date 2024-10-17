@@ -16,19 +16,19 @@ monitoringPlatform:
       opsgenie: false
     #Modules variables to control alerts and dashboards deployed based on the modules already deployed
     modules:
-      kafka: false
-      loki: false
-      vector: false
-      kasope: false
-      consul: false
-      vault: false
-      istio: false
-      elasticsearch: false
-      postgres: false
-      mariadb: false
-      redis: false
-      rabbitmq: false
-      mongo: false            
+      cnpg: ${addon_operator['cnpgPostgresPlatformEnabled']}
+      kafka: ${addon_operator['kafkaPlatformEnabled']}
+      loki: ${addon_operator['lokiPlatformEnabled']}
+      vector: ${addon_operator['vectorPlatformEnabled']}
+      kasope: ${addon_operator['kasopePlatformEnabled']}
+      consul: ${addon_operator['consulPlatformEnabled']}
+      vault: ${addon_operator['vaultPlatformEnabled']}
+      istio: ${addon_operator['istioPlatformEnabled']}
+      elasticsearch: ${addon_operator['elasticsearchPlatformEnabled']}
+      mariadb: ${addon_operator['mariadbPlatformEnabled']}
+      redis: ${addon_operator['redisPlatformEnabled']}
+      rabbitmq: ${addon_operator['rabbitmqPlatformEnabled']}
+      mongodb: ${addon_operator['mongodbPlatformEnabled']}            
   x509-certificate-exporter:
     enabled: true
     image:

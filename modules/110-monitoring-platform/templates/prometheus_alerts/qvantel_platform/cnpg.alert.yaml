@@ -1,0 +1,290 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.cnpg }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: monitoring-platform-kube-p-cnpg.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  annotations:
+    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-namespace: {{.Release.Namespace}}
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring-platform
+spec:
+  groups:
+  - name: cnpg.alerts
+    rules:
+    - alert: PostgreSQLRamRequestedHigh
+      expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="postgres"}) / sum by (pod) (kube_pod_container_resource_requests{container="postgres",resource="memory"} > 0)) > 75'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
+    - alert: PostgreSQLRamRequestedCritical
+      expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="postgres"}) / sum by (pod) (kube_pod_container_resource_requests{container="postgres",resource="memory"} > 0)) > 90'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
+    - alert: PostgreSQLCpuRequestedHigh
+      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by (pod) / sum(kube_pod_container_resource_requests{container="postgres", resource="cpu"}) by (pod)) > 75'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of CPU requested."
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
+    - alert: PostgreSQLCpuRequestedCritical
+      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by (pod) / sum(kube_pod_container_resource_requests{container="postgres", resource="cpu"}) by (pod)) > 90'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
+    - alert: NodePostgreSQLRamRequestedHigh
+      expr: 'round(100 * sum by (instance) (container_memory_working_set_bytes{container="postgres"}) /  sum(machine_memory_bytes) by(instance)) > 75'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node RAM assigned."
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
+    - alert: NodePostgreSQLRamRequestedCritical
+      expr: 'round(100 * sum by (instance) (container_memory_working_set_bytes{container="postgres"}) /  sum(machine_memory_bytes) by(instance)) > 90'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node RAM assigned."
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL and raise the on call roster"
+    - alert: NodePostgreSQLCpuRequestedHigh
+      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by(instance) / sum(machine_cpu_cores) by(instance)) > 75'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node CPU assigned."
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
+    - alert: NodePostgreSQLCpuRequestedCritical
+      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by(instance) / sum(machine_cpu_cores) by(instance)) > 90'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node CPU assigned."
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL and raise the on call roster"
+    - alert: TotalIOPSHigh
+      expr: 'max by (pod)(rate(container_fs_reads_total{container="postgres"}[5m])) + max by (pod)(rate(container_fs_writes_total{container="postgres"}[5m])) > 2400'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is reading/writing {{` {{ $value }} `}} of total IOPS."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: TotalIOPSCritical
+      expr: 'max by (pod)(rate(container_fs_reads_total{container="postgres"}[5m])) + max by (pod)(rate(container_fs_writes_total{container="postgres"}[5m])) > 2700'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is reading/writing {{` {{ $value }} `}} of total IOPS."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: ReadIOPSHigh
+      expr: 'max by (pod)(rate(container_fs_reads_total{container="postgres"}[5m])) > 2400'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is reading {{` {{ $value }} `}} of total IOPS."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: ReadIOPSCritical
+      expr: 'max by (pod)(rate(container_fs_reads_total{container="postgres"}[5m])) > 2700'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is reading {{` {{ $value }} `}} of total IOPS."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: WriteIOPSHigh
+      expr: 'max by (pod)(rate(container_fs_writes_total{container="postgres"}[5m])) > 2400'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is writing {{` {{ $value }} `}} of total IOPS."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: WriteIOPSCritical
+      expr: 'max by (pod)(rate(container_fs_writes_total{container="postgres"}[5m])) > 2700'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is writing {{` {{ $value }} `}} of total IOPS."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLQPSHigh
+      expr: '(sum(rate(cnpg_pg_stat_database_xact_commit[10m])) by(pod) + sum(rate(cnpg_pg_stat_database_xact_rollback{}[10m])) by(pod)) > 2000 '
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is receiving {{` {{ $value }} `}} request for information per second."
+        procedure: "Create a ticket to SQL team to be reviewed during business hours"
+    - alert: PostgreSQLQPSCritical
+      expr: '(sum(rate(cnpg_pg_stat_database_xact_commit[10m])) by(pod) + sum(rate(cnpg_pg_stat_database_xact_rollback{}[10m])) by(pod)) > 2500 '
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is receiving {{` {{ $value }} `}} request for information per second."
+        procedure: "Create a ticket to SQL team and raise the on call to review the case"
+    - alert: PostgreSQLLongestTransactionsHigh
+      expr: 'cnpg_backends_max_tx_duration_seconds > 300'
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is taking more than 5 minutes (300 seconds) for a query."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLLongestTransactionsCritical
+      expr: 'cnpg_backends_max_tx_duration_seconds > 420'
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        brief: "PostgreSQL service {{` {{ $labels.pod }} `}} is taking more than 7 minutes (420 seconds) for a query."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLConflictsHigh
+      expr: 'round(sum(increase(cnpg_pg_stat_database_conflicts[30m])) by (pod)) > 5'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "There are over 5 conflicts in {{` {{ $labels.pod }} `}} in the last 30 minutes."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLConflictsCritical
+      expr: 'round(sum(increase(cnpg_pg_stat_database_conflicts[30m])) by (pod)) > 10'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "There are over 10 conflicts in {{` {{ $labels.pod }} `}} in the last 30 minutes."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLDeadlocksHigh
+      expr: 'round(sum(increase(cnpg_pg_stat_database_deadlocks[30m])) by (pod)) > 5'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "There are over 5 deadlocks in {{` {{ $labels.pod }} `}} in the last 30 minutes."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLDeadlocksCritical
+      expr: 'round(sum(increase(cnpg_pg_stat_database_deadlocks[30m])) by (pod)) > 10'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "There are over 10 deadlocks in {{` {{ $labels.pod }} `}} in the last 30 minutes."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLTempFilesHigh
+      expr: 'round(sum(increase(cnpg_pg_stat_database_temp_bytes[10m])) by (pod)) > 100000000'
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        brief: "Temp files bytes in {{` {{ $labels.pod }} `}} are over 100000000."
+        procedure: "TBD"
+    - alert: PostgreSQLTempFilesCritical
+      expr: 'round(sum(increase(cnpg_pg_stat_database_temp_bytes[10m])) by (pod)) > 150000000'
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Temp files bytes in {{` {{ $labels.pod }} `}} are over 150000000."
+        procedure: "TBD"
+    - alert: PostgreSQLConnectionsHigh
+      expr: '100 * sum by (pod) (cnpg_backends_total) / sum by (pod) (cnpg_pg_settings_setting{name="max_connections"}) > 75'
+      for: 5m
+      labels:
+        severity: "Create a ticket for SQL to be checked during business hours"
+      annotations:
+        brief: "Connections in {{` {{ $labels.pod }} `}} are over {{` {{ $value }} `}} percentage."
+        procedure: "TBD"
+    - alert: PostgreSQLConnectionsCritical
+      expr: '100 * sum by (pod) (cnpg_backends_total) / sum by (pod) (cnpg_pg_settings_setting{name="max_connections"}) > 90'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Connections in {{` {{ $labels.pod }} `}} are over {{` {{ $value }} `}} percentage."
+        procedure: "Create a ticket to SQL team and raise the on call to review the case"
+    - alert: PostgreSQLBackendWaitingHigh
+      expr: 'cnpg_backends_waiting_total > 180'
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        brief: "Pod {{` {{ $labels.pod }} `}} has been waiting for longer than 3 minutes."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLBackendWaitingCritical
+      expr: 'cnpg_backends_waiting_total > 300'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Pod {{` {{ $labels.pod }} `}} has been waiting for longer than 5 minutes."
+        procedure: "Create a ticket to SQL team and raise the on call to review the case"
+    - alert: PostgreSQLReplicationLagHigh
+      expr: 'cnpg_pg_replication_lag > 180'
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        brief: "Standby is lagging behind by over 3 minutes in Pod {{` {{ $labels.pod }} `}}."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLReplicationLagCritical
+      expr: 'cnpg_pg_replication_lag > 300'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Standby is lagging behind by over 5 minutes in Pod {{` {{ $labels.pod }} `}}."
+        procedure: "Create a ticket for SQL to be checked during business hours"
+    - alert: PostgreSQLRestartBusinessHours
+      expr: '1 <= (sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{container="postgres"}[15m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1)) AND ON() hour() > 8 < 20) < 3'
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        brief: "Instance service {{` {{ $labels.service_name }} `}} {{` {{ $labels.service_id}} `}} has been down for more than 1 minute"
+        procedure: "Create a ticket to Platform Team to be reviewed"
+    - alert: PostgreSQLSeveralRestartBusinessHours
+      expr: '(sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{container="postgres"}[15m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1)) AND ON() hour() > 8 < 20) >= 3'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Instance service {{` {{ $labels.service_name }} `}} {{` {{ $labels.service_id}} `}} has been down for more than 1 minute"
+        procedure: "Create a ticket to Platform Team to be reviewed ASAP"
+    - alert: PostgreSQLRestartNonBusinessHours
+      expr: '1 <= (sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{container="postgres"}[15m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1)) AND ON() hour() < 8  > 20)'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Instance service {{` {{ $labels.service_name }} `}} {{` {{ $labels.service_id}} `}} has been down for more than 1 minute"
+        procedure: "Create a ticket to SQL and raise the on call roster"
+    - alert: PostgreSQLMetricsAbsent
+      expr: 'absent(cnpg_pg_settings_setting) == 1'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "CNPG metrics are not being scrapped."
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
+{{- end }}
