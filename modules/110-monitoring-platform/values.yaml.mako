@@ -176,6 +176,8 @@ monitoringPlatform:
       rules:
         kubernetesStorage: false
         kubeApiserverSlos: false
+        kubeSchedulerAlerting: false
+        kubeControllerManager: false
     alertmanager:
       alertmanagerSpec:
         image:
@@ -481,7 +483,7 @@ monitoringPlatform:
               resources:
                 requests:
                   storage: 50Gi
-        % if values['global']['configurationProfile'] != 'dev':
+        % if values['global']['configurationProfile'] == 'prod':
         additionalAlertManagerConfigs:
           - static_configs:
               - targets:
