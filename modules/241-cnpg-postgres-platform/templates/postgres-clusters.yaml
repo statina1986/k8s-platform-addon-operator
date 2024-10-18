@@ -21,6 +21,12 @@ metadata:
   {{- end }}
 spec:
   {{- toYaml $current.spec | nindent 2 }}
+  {{- if $root.Values.global.awsRole}}
+  serviceAccountTemplate:
+    metadata:
+      annotations:
+        eks.amazonaws.com/role-arn: {{ $root.Values.global.awsRole }}
+  {{- end }}
 
 {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
 ---
@@ -37,6 +43,24 @@ spec:
   selector:
     matchLabels:
       cnpg.io/cluster: {{ . }}
+{{- end }}
+
+
+{{- if and $current.spec.backup $current.scheduledBackup }}
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: {{ . }}-scheduled-backups
+spec:
+  schedule: {{ $current.scheduledBackup }}
+  backupOwnerReference: self
+  cluster:
+    name: {{ . }}
+  immediate: true
+  target: {{ $current.spec.backup.target | default "prefer-standby" }}
+  
 {{- end }}
 
 {{- end }}

@@ -1,6 +1,6 @@
 cnpgPostgresPlatform:
   monitoringPlatformEnabled: ${addon_operator['monitoringPlatformEnabled']}
-  cloudnative-pg:
+  cloudnative-pg:            
     % if values['global']['deployOperators'] == "true":
     enabled: true
     % else:
@@ -15,6 +15,10 @@ cnpgPostgresPlatform:
     serviceAccount:
       create: false
       name: platform
+    additionalEnv:
+      # renew certificates 30 days before expiration to avoid alerts in monitoring
+      - name: EXPIRING_CHECK_THRESHOLD
+        value: "30"
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
@@ -40,6 +44,7 @@ cnpgPostgresPlatform:
     qvt-postgredb:
       enabled: true
       vaultConfiguration: true
+      scheduledBackup: "0 0 0 * * *" # every midnight
       spec:
         affinity:
           % if values['global']['multiZone']['enabled']:
@@ -71,3 +76,16 @@ cnpgPostgresPlatform:
             cpu: "0.1"
         storage:
           size: 10Gi
+        % if values['global']['configurationProfile'] not in {'dev'}:
+        backup:
+          retentionPolicy: "7d"
+          barmanObjectStore:
+            destinationPath: "s3://<your-S3-bucket-name-here>"
+            s3Credentials:
+              inheritFromIAMRole: true
+          wal:
+            compression: gzip
+            maxParallel: 8
+            encryption: AES256
+        % endif
+        
