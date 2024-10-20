@@ -80,24 +80,26 @@ kubernetes:
                 if values['consulPlatform'].get('enableServiceSyncForClusterIP', 'false') == 'false':
                     print("Skipping ClusterIP Service sync as it is disabled in configuration")
                     return
-                
+
                 consul_client = get_consul_client()
-                
+
                 if values['consulPlatform'].get('purgeHashicorpConsulSyncServicesOnStartup', 'false') == 'true':
                     consul_client.catalog.deregister('k8s-sync')
-                    return
-                
+
+                if values['consulPlatform'].get('purgeClusterIPConsulSyncServicesOnStartup', 'false') == 'true':
+                    consul_client.catalog.deregister('addon-operator-consul-sync')
+
                 for event in binding.get('snapshots', {}).get('monitor-clusterIP-services', []):
                     self.registerService(event, consul_client())
 
             case SynchronizationHook(binding, values):
                 if values['consulPlatform'].get('enableServiceSyncForClusterIP', 'false') == 'false':
                     print("Skipping ClusterIP Service sync as it is disabled in configuration")
-                    return                            
-                
+                    return
+
                 for event in binding.get('objects', []):
                     self.registerService(event, get_consul_client())
-            case _:    
+            case _:
                 print("Unknown hook data")
 
 
