@@ -11,6 +11,9 @@ if [[ $1 == "--config" ]] ; then
         "${0%/*}/../common/common_hooks/ensureResources.sh"
         "${0%/*}/../common/common_hooks/ensure-post-resources.sh"
     )
+
+    [ $ADDON_OPERATOR_OUTPUT_HELM_RESOURCES == "true" ] && commonHooks+=("${0%/*}/../common/common_hooks/output-helm-resources.sh")
+
     dirs=(${0%/*}/../modules/*/)
     for dir in "${dirs[@]}"; do
         for hook in "${commonHooks[@]}"; do            

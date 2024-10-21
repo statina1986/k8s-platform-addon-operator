@@ -1,4 +1,7 @@
 FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.4.12_qvantel-master_2e70c0a21
+
+ARG TARGETARCH
+
 RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2
 RUN pip3 install kubernetes
 RUN pip3 install "hvac[parser]"
@@ -7,6 +10,9 @@ RUN pip3 install python-json-logger
 RUN pip3 install pyyaml
 RUN pip3 install mako
 RUN pip3 install py-consul
+
+RUN curl -fvSL -o /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.2/yq_linux_${TARGETARCH} && \    
+    chmod +x /usr/bin/yq
 
 ENV PYTHONPATH=/
 ARG BUILD_TAG=latest
