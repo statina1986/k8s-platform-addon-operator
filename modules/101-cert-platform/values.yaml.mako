@@ -16,6 +16,8 @@ certPlatform:
     global:
       leaderElection:
         namespace: "${values['global']['platformNamespace']}"
+    extraArgs:
+      - --issuer-ambient-credentials
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
