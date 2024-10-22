@@ -3,6 +3,21 @@ certPlatform:
 
   # -- Configuration for underlying cert-manager helm-chart. See https://artifacthub.io/packages/helm/cert-manager/cert-manager/1.12.13#configuration
   cert-manager:
+    % if values['global']['deployOperators'] == "true":
+    enabled: true
+    % else:
+    enabled: false
+    % endif
+    % if values['global']['clusterwideResources'] == "false":
+    global:
+      rbac:
+        create: false
+    % endif
+    global:
+      leaderElection:
+        namespace: "${values['global']['platformNamespace']}"
+    extraArgs:
+      - --issuer-ambient-credentials
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -53,15 +68,6 @@ certPlatform:
       enabled: false
       # -- Configure `spec` property of `Issuer` resource.
       spec: {}
-  # -- List of ClusterIssuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `ClusterIssuer` resource details.
-  clusterIssuers:
-    # -- Example ClusterIssuer used for documentation
-    example-cluster-issuer:
-      # -- If ClusterIssuers is enabled and hence will be deployed to the cluster.
-      enabled: false
-      # -- Configure `spec` property of `ClusterIssuers` resource.
-      spec: {}
-
     # -- This issuer is used to generate self-signed certificate for Simple Qvantel CA
     qvantel-selfsigned-issuer:
       enabled: true
@@ -109,6 +115,14 @@ certPlatform:
                   region: eu-central-1
                   hostedZoneID: ZPXWBK7RK86EX
                   role: "arn:aws:iam::067412573140:role/Update-Qvantel-Solutions-DNS-From-Prod-Accounts"
+  # -- List of ClusterIssuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `ClusterIssuer` resource details.
+  clusterIssuers:
+    # -- Example ClusterIssuer used for documentation
+    example-cluster-issuer:
+      # -- If ClusterIssuers is enabled and hence will be deployed to the cluster.
+      enabled: false
+      # -- Configure `spec` property of `ClusterIssuers` resource.
+      spec: {}
   # -- List of Certificates to provision. See https://cert-manager.io/docs/usage/certificate/ for `Certificate` resource details.
   certificates:
     # -- This is the root CA certificate for Simple Qvantel CA
@@ -128,7 +142,7 @@ certPlatform:
           size: 256
         issuerRef:
           name: qvantel-selfsigned-issuer
-          kind: ClusterIssuer
+          kind: Issuer
           group: cert-manager.io
     # -- This is the wildcard certificate issued for *.qvantel.systems name
     qvantel-dot-systems-wildcard:
@@ -142,7 +156,7 @@ certPlatform:
           - qvantel.systems
         issuerRef:
           name: qvantel-dot-systems
-          kind: ClusterIssuer
+          kind: Issuer
           group: cert-manager.io
         renewBefore: 720h
     # -- This is the wildcard certificate issued for *.qvantel.solutions name
@@ -157,6 +171,6 @@ certPlatform:
           - qvantel.solutions
         issuerRef:
           name: qvantel-dot-solutions
-          kind: ClusterIssuer
+          kind: Issuer
           group: cert-manager.io
         renewBefore: 720h
