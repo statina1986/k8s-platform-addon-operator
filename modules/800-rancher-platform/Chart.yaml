@@ -4,3 +4,21 @@ version: 0.0.1
 dependencies:
   - name: rancherPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: fleet
+      image: rancher/fleet:v0.10.2
+    - name: fleet-agent
+      image: rancher/fleet-agent:v0.10.2
+    - name: rancher-webhook
+      image: rancher/rancher-webhook:v0.5.2
+    - name: rancher
+      image: rancher/rancher:v2.9.2
+    - name: shell
+      image: rancher/shell:v0.2.1
+    - name: rancher-agent
+      image: rancher/rancher-agent:v2.9.2
+    - name: kubectl
+      image: rancher/kubectl:v1.29.2
+    - name: mirrored-cluster-api-controller
+      image: rancher/mirrored-cluster-api-controller:v1.7.3

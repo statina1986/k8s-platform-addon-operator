@@ -59,6 +59,7 @@ modulesConfig:
   keycloakPlatformEnabled: "false"
   mariadbPlatformEnabled: "false"
   mariadbOperatorPlatformEnabled: "false"
+  metallbPlatformEnabled: "false"
   metricsPlatformEnabled: "false"
   mongodbPlatformEnabled: "false"
   monitoringPlatformEnabled: "false"

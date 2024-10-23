@@ -1,9 +1,0 @@
-rancherHelmVersion: "2.8.1"
-rancherPlatformNamespace: cattle-system
-rancherPlatform:
-  rancher:    
-    # Fully qualified name to reach your Rancher server
-    hostname: ""    
-    ingress:
-      enabled: false
-    privateCA: false

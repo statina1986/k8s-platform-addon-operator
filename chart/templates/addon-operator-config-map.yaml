@@ -107,6 +107,11 @@ data:
   mariadbOperatorPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbOperatorPlatform | toYaml | indent 4) }}
   {{- end }}
 
+  metallbPlatformEnabled: "{{ .Values.modulesConfig.metallbPlatformEnabled }}"
+  {{- if .Values.modulesConfig.metallbPlatform }}
+  metallbPlatform: {{ print "|\n" (.Values.modulesConfig.metallbPlatform | toYaml | indent 4) }}
+  {{- end }}
+
   metricsPlatformEnabled: "{{ .Values.modulesConfig.metricsPlatformEnabled }}"
   {{- if .Values.modulesConfig.metricsPlatform }}
   metricsPlatform: {{ print "|\n" (.Values.modulesConfig.metricsPlatform | toYaml | indent 4) }}

@@ -1,10 +1,74 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-13T07:27:07.119530591Z"
+  generatedAt: "2024-10-18T09:34:11.196565897Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: rancher-platform
   version: 0.0.1
   appVersion: ""
-images: []
+images:
+  - name: fleet
+    image: rancher/fleet:v0.10.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:57ae9967af7413642b609c737e4710f90512c8042193ba5c32825ae85d0ac213
+        arch: linux/amd64
+      - digest: sha256:5f0b009ecc2ab8bf08c352356f750c9766b44fa74c3a62b98cf9d07fd30e9138
+        arch: linux/arm64
+  - name: fleet-agent
+    image: rancher/fleet-agent:v0.10.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:c250c21701a7132fb3404298b6799f39992246c5e073aa582d08e7ac970f4dc5
+        arch: linux/amd64
+      - digest: sha256:c7284e766258f184f6a64ccde7745e0297371085478be9655f7d13f72b5133e0
+        arch: linux/arm64
+  - name: rancher-webhook
+    image: rancher/rancher-webhook:v0.5.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:3f916cdce0a3507aec0a91733fbfb0c2f1a81a265ded5d18e08a234736e75690
+        arch: linux/amd64
+      - digest: sha256:43a4c8689e5d4f6126fac2962e08ca46b493b8ca7f816598203e8367a8908bbb
+        arch: linux/arm64
+  - name: rancher
+    image: rancher/rancher:v2.9.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:4a86c71bef5914edf011fbfca8cc49898672db4e1a5db04d4037bbf4effeb009
+        arch: linux/amd64
+      - digest: sha256:567734a6ae6a5eaa71750e8aecffc58c8592aaf10892406c50f872cc2d35cb97
+        arch: linux/arm64
+  - name: shell
+    image: rancher/shell:v0.2.1
+    chart: rancher-platform
+    digests:
+      - digest: sha256:efcc110ddf0a3ae0d5585c90855620343005fddb138a9c498e3f30f23b9ff7ef
+        arch: linux/amd64
+      - digest: sha256:f72d12f60ec32cb06eeb7cbe05974c243dd7fc6c79604383415e4282ec4470cc
+        arch: linux/arm64
+  - name: rancher-agent
+    image: rancher/rancher-agent:v2.9.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:60447248e44d41b3c0217bcc4284347192225519ff0b94e5b73860e1a3f9f79b
+        arch: linux/amd64
+      - digest: sha256:678d5abe28e59aac26d83d35efa0dd220ab847175eb2504d2e4d7b8a04ef4149
+        arch: linux/arm64
+  - name: kubectl
+    image: rancher/kubectl:v1.29.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:8002f3dce7150b167c978c69cd3c1fdbbd4c9eeddd1905700003dd13b9c94d96
+        arch: linux/amd64
+      - digest: sha256:eb89fb2becb94c50345d17ea3ecadd236ac313705933365812ce12e4c578c0f9
+        arch: linux/arm64
+  - name: mirrored-cluster-api-controller
+    image: rancher/mirrored-cluster-api-controller:v1.7.3
+    chart: rancher-platform
+    digests:
+      - digest: sha256:69cc8975f61483d94e9726a43270ac0102cdebd35ac75151025c0e8164fc647c
+        arch: linux/amd64
+      - digest: sha256:c87794e7893c596e5aac1bfa6c8aaf8db685cc4c3049617ee9773b35501c9942
+        arch: linux/arm64
