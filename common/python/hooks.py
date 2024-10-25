@@ -2,8 +2,11 @@ import sys
 import os
 import json
 import time
+
+import yaml
 from common.python.logger import logger
 from common.python.k8s import *
+from common.python.variables import *
 
 
 def getModuleNameFromValues(values):
@@ -110,6 +113,14 @@ class Hook:
                 time.sleep(self.retryDelay)
             else:
                 break
+
+    def get_addon_operator_config(self, node):
+        cm = get_config_map(ADDON_OPERATOR_NAMESPACE, ADDON_OPERATOR_CONFIG_MAP)
+        try: 
+            config = yaml.safe_load(cm.data[node])
+        except:
+            config = {}
+        return config
 
     def handle_hook(self):
 

@@ -583,18 +583,6 @@ istioIngress:
               host: flex-app-store.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 21090
-      flex-content-provider:
-        enabled: false
-        gateways:
-          - private-ingress
-        http:
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: flex-content-provider.${values['global']['appsNamespace']}.svc.cluster.local
-                  port:
-                    number: 21210
       flex-bpmn-executor:
         enabled: false
         gateways:
@@ -616,22 +604,7 @@ istioIngress:
           - destination:
               host: graphql-graphql-bssapi.${values['global']['appsNamespace']}.svc.cluster.local
               port:
-                number: 8180      
-      knowledge:
-        enabled: false
-        gateways:
-        - private-ingress
-        http:
-        - match:
-          - uri:
-              exact: /
-          redirect:
-            uri: /knowledge_wiki/
-        - route:
-          - destination:
-              host: knowledge-wiki.${values['global']['appsNamespace']}.svc.cluster.local
-              port:
-                number: 8080
+                number: 8180
       kpitool:
         enabled: false
         gateways:
@@ -723,28 +696,28 @@ istioIngress:
               host: message-manager-wui.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 3003
-      mobile-ui-builder:
-        enabled: false
-        gateways:
-          - private-ingress
-        http:
-          - retries:
-              attempts: 0
-            route:
-              - destination:
-                  host: mobile-ui-builder.${values['global']['appsNamespace']}.svc.cluster.local
-                  port:
-                    number: 21080
-      mockbank:
-        enabled: false
-        gateways:
-        - private-ingress
-        http:
-        - route:
-          - destination:
-              host: omnichannel-bank.${values['global']['appsNamespace']}.svc.cluster.local
-              port:
-                number: 3500
+      # mobile-ui-builder:
+      #   enabled: false
+      #   gateways:
+      #     - private-ingress
+      #   http:
+      #     - retries:
+      #         attempts: 0
+      #       route:
+      #         - destination:
+      #             host: mobile-ui-builder.${values['global']['appsNamespace']}.svc.cluster.local
+      #             port:
+      #               number: 21080
+      # mockbank:
+      #   enabled: false
+      #   gateways:
+      #   - private-ingress
+      #   http:
+      #   - route:
+      #     - destination:
+      #         host: omnichannel-bank.${values['global']['appsNamespace']}.svc.cluster.local
+      #         port:
+      #           number: 3500
       mockoss:
         enabled: false
         gateways:
@@ -755,34 +728,34 @@ istioIngress:
               host: mockoss.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 8000
-      pcb:
-        enabled: false
-        gateways:
-        - private-ingress
-        http:
-        - route:
-          - destination:
-              host: pcb.${values['global']['appsNamespace']}.svc.cluster.local
-              port:
-                number: 8095
-      pos:
-        enabled: false
-        gateways:
-        - private-ingress
-        http:
-        - match:
-          - uri:
-              prefix: /images/
-          route:
-          - destination:
-              host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local
-              port:
-                number: 80
-        - route:
-          - destination:
-              host: omnichannel-pos.${values['global']['appsNamespace']}.svc.cluster.local
-              port:
-                number: 5010
+      # pcb:
+      #   enabled: false
+      #   gateways:
+      #   - private-ingress
+      #   http:
+      #   - route:
+      #     - destination:
+      #         host: pcb.${values['global']['appsNamespace']}.svc.cluster.local
+      #         port:
+      #           number: 8095
+      # pos:
+      #   enabled: false
+      #   gateways:
+      #   - private-ingress
+      #   http:
+      #   - match:
+      #     - uri:
+      #         prefix: /images/
+      #     route:
+      #     - destination:
+      #         host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local
+      #         port:
+      #           number: 80
+      #   - route:
+      #     - destination:
+      #         host: omnichannel-pos.${values['global']['appsNamespace']}.svc.cluster.local
+      #         port:
+      #           number: 5010
       rbs-ui:
         enabled: false
         gateways:
@@ -1008,18 +981,7 @@ istioIngress:
           - destination:
               host: monitoring-platform-grafana.${values['global']['platformNamespace']}.svc.cluster.local
               port:
-                number: 80
-      prometheus:
-        enabled: false
-        pomeriumProtected: true
-        gateways:
-        - private-ingress
-        http:
-        - route:
-          - destination:
-              host: monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc.cluster.local
-              port:
-                number: 9090
+                number: 80      
       kafka-ui:
         enabled: false
         gateways:
@@ -1040,16 +1002,6 @@ istioIngress:
               host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
-      reaper:
-        enabled: true
-        gateways:
-        - private-ingress
-        http:
-        - route:
-          - destination:
-              host: reaper.${values['global']['platformNamespace']}.svc.cluster.local
-              port:
-                number: 8080
       kibana:
         enabled: false
         gateways:
@@ -1069,8 +1021,6 @@ istioIngress:
         - route:
           - destination:
               host: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
-              port:
-                number: 9200
       loki-read:
         enabled: false
         pomeriumProtected: false
@@ -1092,6 +1042,32 @@ istioIngress:
               host: pmm.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
+      prometheus:
+        enabled: false
+        pomeriumProtected: true
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 9090
+      reaper:
+        enabled: true
+        gateways:
+        - private-ingress
+        http:
+        - route:
+          - destination:
+              host: reaper.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 8080      
+      
+              port:
+                number: 9200
+      
+      
       sftp:
         enabled: false
         gateways:

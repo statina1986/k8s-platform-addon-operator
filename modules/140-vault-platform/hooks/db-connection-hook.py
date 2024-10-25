@@ -9,17 +9,97 @@ from common.python.inline import *
 
 class DbConnectionHook(Hook):
     def __init__(self):
-        super().__init__("""
-configVersion: v1
-kubernetes:
-- name: "Monitor Vault DbConnections"
-  apiVersion: platform-vault.qvantel.com/v1
-  kind: DbConnection
-  executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
-  queue: DbConnectionQueue
-  allowFailure: true
-  jqFilter: '.spec'
-""")
+        vaultPlatform = self.get_addon_operator_config("vaultPlatform")
+        super().__init__(str(
+            {
+                "configVersion": "v1",
+                "schedule": [
+                    {
+                        "name": "dbconnections-periodic-checking",
+                        "crontab": vaultPlatform.get("vaultCrdSync", {}).get("schedule", "*/5 * * * *"),
+                        "includeSnapshotsFrom": ["monitor-vault-dbconnections"]
+                    }
+                ],
+                "kubernetes": [
+                    {
+                        "name": "monitor-vault-dbconnections",
+                        "apiVersion": "platform-vault.qvantel.com/v1",
+                        "kind": "DbConnection",
+                        "executeHookOnEvent": ["Added", "Modified", "Deleted"],
+                        "queue": "VaultDbConnectionQueue",
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                            "labelSelector": {
+                                "matchLabels": {
+                                    "platform.qvantel.com/vault-crd-sync": "true"
+                                }
+                            }
+                        }),
+                        "allowFailure": True,
+                        "jqFilter": '.spec'
+                    }
+                ]
+            })
+        )
+
+    def registerResource(self, event, vault_client):
+        try:
+            name = event['object']['metadata']['name']
+            connection_name = event['object']['spec']['connection-name']
+            namespace = event['object']['metadata']['namespace']
+            plugin_name = event['object']['spec']['plugin-name']
+            allowed_roles = event['object']['spec']['allowed-roles']
+            additional_params = event['object']['spec'].get(
+                'additional-params', {})
+            computed_values = event['object']['spec'].get(
+                'computed-values', {})
+            post_actions = event['object']['spec'].get(
+                'post-actions', {})
+            db_username = event['object']['spec'].get(
+                'db-username', '')
+            db_password = event['object']['spec'].get(
+                'db-password', '')
+            db_url = event['object']['spec'].get(
+                'db-url', '')
+
+            vals = get_computed_values(computed_values)
+
+            db_url = replace_computed_values(db_url, vals)
+            db_username = replace_computed_values(
+                db_username, vals)
+            db_password = replace_computed_values(
+                db_password, vals)
+
+            vault_client.secrets.database.configure(
+                name=connection_name,
+                plugin_name=plugin_name,
+                allowed_roles=allowed_roles,
+                connection_url=db_url,
+                username=db_username,
+                password=db_password,
+                **additional_params)
+
+            execute_post_actions(post_actions, vals)
+
+            update_crd_status(
+                group="platform-vault.qvantel.com",
+                version="v1",
+                name=name,
+                namespace=namespace,
+                plural="dbconnections",
+                update=lambda response: updateCrdStatusCondition(
+                        response, "Ready", "True", "DbConnectionProvisioned")
+            )
+        except:
+            update_crd_status(
+                group="platform-vault.qvantel.com",
+                version="v1",
+                name=name,
+                namespace=namespace,
+                plural="dbconnections",
+                update=lambda response: updateCrdStatusCondition(
+                    response, "Ready", "False", "DbConnectionFailed", get_exception_string())
+            )
+            raise
 
     def handle_binding(self, binding):
         match(binding):
@@ -34,62 +114,27 @@ kubernetes:
                         connection_name)
                     return
                 else:
-                    try:
-                        plugin_name = event['object']['spec']['plugin-name']
-                        allowed_roles = event['object']['spec']['allowed-roles']
-                        additional_params = event['object']['spec'].get(
-                            'additional-params', {})
-                        computed_values = event['object']['spec'].get(
-                            'computed-values', {})
-                        post_actions = event['object']['spec'].get(
-                            'post-actions', {})
-                        db_username = event['object']['spec'].get(
-                            'db-username', '')
-                        db_password = event['object']['spec'].get(
-                            'db-password', '')
-                        db_url = event['object']['spec'].get(
-                            'db-url', '')
+                    self.registerResource(event, vault_client)
 
-                        vals = get_computed_values(computed_values)
+            case ScheduleHook(binding, values):
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
+                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                    return
 
-                        db_url = replace_computed_values(db_url, vals)
-                        db_username = replace_computed_values(
-                            db_username, vals)
-                        db_password = replace_computed_values(
-                            db_password, vals)
+                vault_client = get_vault_client()
 
-                        
-                        vault_client.secrets.database.configure(
-                            name=connection_name,
-                            plugin_name=plugin_name,
-                            allowed_roles=allowed_roles,
-                            connection_url=db_url,
-                            username=db_username,
-                            password=db_password,
-                            **additional_params)
+                for event in binding.get('snapshots', {}).get('monitor-vault-dbconnections', []):
+                    self.registerResource(event, vault_client)
 
-                        execute_post_actions(post_actions, vals)
+            case SynchronizationHook(binding, values):
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
+                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                    return
 
-                        update_crd_status(
-                            group="platform-vault.qvantel.com",
-                            version="v1",
-                            name=name,
-                            namespace=namespace,
-                            plural="dbconnections",
-                            update=lambda response: updateCrdStatusCondition(
-                                    response, "Ready", "True", "DbConnectionProvisioned")
-                        )
-                    except:
-                        update_crd_status(
-                            group="platform-vault.qvantel.com",
-                            version="v1",
-                            name=name,
-                            namespace=namespace,
-                            plural="dbconnections",
-                            update=lambda response: updateCrdStatusCondition(
-                                response, "Ready", "False", "DbConnectionFailed", get_exception_string())
-                        )
-                        raise
+                vault_client = get_vault_client()
+
+                for event in binding.get('objects', []):
+                    self.registerResource(event, vault_client)
             case _:
                 print("Unknown hook data")
 

@@ -1,9 +1,15 @@
-<%!
-    import os
-    build_tag = os.environ.get('BUILD_TAG','latest')
-%>
 # vaultPlatformNamespace: vault
 vaultPlatform:
+  vaultCrdSync:
+    enabled: true
+    # -- Schedule for reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+    schedule: "*/5 * * * *"
+    # -- Selector for namespaces from which sync crd resources.
+    namespaceSelector:
+      labelSelector:
+        matchLabels:
+          "platform.qvantel.com/vault-crd-sync": "true"
+    
   
   # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
   % if values['global']['clusterwideResources'] == "true":  
