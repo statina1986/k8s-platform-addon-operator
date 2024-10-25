@@ -55,7 +55,7 @@ class Kv1SecretsHook(Hook):
             if path.startswith("secret/"):
                 path = path.replace("secret/", "", 1)
 
-            values = context['object']['spec']['secret']
+            values = event['object']['spec']['secret']
             # Merge data from CRD with existing values. Existing values takes priority.
             try:
                 existing = vault_client.secrets.kv.v1.read_secret(path)['data']
