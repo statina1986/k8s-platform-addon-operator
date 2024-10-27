@@ -232,7 +232,7 @@ vectorPlatform:
           inputs:
             - qvantel_apps_transform
           condition: |
-            .log_level != "DEBUG" && .log_level != "TRACE"
+            .log_level != "DEBUG" && .log_level != "TRACE" && !exists(.parse_error)
         % endif
         vault_transform:
           type: remap
