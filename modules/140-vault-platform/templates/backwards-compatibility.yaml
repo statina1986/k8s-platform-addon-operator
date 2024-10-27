@@ -4,6 +4,7 @@ kind: Service
 metadata:
   annotations:
     consul.hashicorp.com/service-port: http
+    platform.qvantel.com/consul-service-port: "8200"
   labels:
     app.kubernetes.io/instance: {{.Release.Name}}
     app.kubernetes.io/name: vault

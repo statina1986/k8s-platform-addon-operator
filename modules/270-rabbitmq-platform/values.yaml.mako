@@ -35,6 +35,7 @@ rabbitmqPlatform:
     service:
       annotations:
         consul.hashicorp.com/service-port: amqp
+        platform.qvantel.com/consul-service-port: "5672"
       extraPorts:
       - name: web-stomp
         port: 15674

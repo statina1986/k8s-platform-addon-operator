@@ -8,6 +8,7 @@ kind: Service
 metadata:
   annotations:
     consul.hashicorp.com/service-port: native
+    platform.qvantel.com/consul-service-port: "9042"
   labels:
     app: main-cassandra-service-0-headless
   name: main-cassandra-service-0-headless

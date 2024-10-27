@@ -50,9 +50,9 @@ class ConsulServiceSyncHook(Hook):
         address = event['object']['spec'].get('clusterIP', "None")
 
         if address != "None":
-            service_port_annotation = event['object']['metadata'].get('annotations', {}).get('platform.qvantel.com/consul-service-port', 0)
-            if (service_port_annotation > 0):
-                port = service_port_annotation
+            service_port_annotation = event['object']['metadata'].get('annotations', {}).get('platform.qvantel.com/consul-service-port', "")
+            if (service_port_annotation != ""):
+                port = int(service_port_annotation)
             else:
                 ports = event['object']['spec'].get('ports', [{'port': 8080}])
                 port = ports[0].get('port', 8080)
