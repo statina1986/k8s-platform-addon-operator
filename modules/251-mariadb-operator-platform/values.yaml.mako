@@ -15,12 +15,22 @@ mariadbOperatorPlatform:
       image:
         repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator
       % endif
+      % if addon_operator['monitoringPlatformEnabled'] == 'true':
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+       % endif
       cert:
         certManager:
           enabled: true
     % if addon_operator['monitoringPlatformEnabled'] == 'true':
     metrics:
       enabled: true
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     % endif  
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
@@ -68,6 +78,8 @@ mariadbOperatorPlatform:
         % if addon_operator['monitoringPlatformEnabled'] == 'true':
         metrics:
           enabled: true
+          serviceMonitor:
+            prometheusRelease: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
         % endif  
         affinity:
           antiAffinityEnabled: true      
