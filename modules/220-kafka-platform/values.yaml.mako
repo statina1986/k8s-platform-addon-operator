@@ -18,6 +18,11 @@ kafkaPlatform:
           secretKeyRef:
             name: kafka-ui-client-secret
             key: KAFKA_UI_CLIENT_SECRET    
+    % if values['global']['configurationProfile'] == 'dev':
+    authConfig: |
+        type: disabled
+    rolesConfig: ""
+    % else:
     authConfig:
       type: OAUTH2
       oauth2:
@@ -35,8 +40,7 @@ kafkaPlatform:
             custom-params:
               type: oauth
               roles-field: roles
-    additionalRoles: ""
-    rolesConfig: |      
+    rolesConfig: |
       roles: 
         {{- range keys .Values.kafkaPlatform.clusters }}
         {{- $current := get $.Values.kafkaPlatform.clusters . }}
@@ -99,6 +103,8 @@ kafkaPlatform:
         {{- end }}
         {{- end }}
         {{ tpl  (index .Values.kafkaPlatform "kafka-ui" "additionalRoles") . | nindent 8 }}
+    % endif
+    additionalRoles: ""    
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
