@@ -13,7 +13,6 @@ metadata:
     app: main-cassandra-service-0-headless
   name: main-cassandra-service-0-headless
 spec:
-  clusterIP: None
   ports:
   - name: native
     port: 9042
