@@ -756,6 +756,16 @@ istioIngress:
       #         host: omnichannel-pos.${values['global']['appsNamespace']}.svc.cluster.local
       #         port:
       #           number: 5010
+      prm:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - route:
+              - destination:
+                  host: partner-management.${values['global']['appsNamespace']}.svc.cluster.local
+                  port:
+                    number: 8000
       rbs-ui:
         enabled: false
         gateways:
