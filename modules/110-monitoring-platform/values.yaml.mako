@@ -155,6 +155,11 @@ monitoringPlatform:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     secretsExporter:
+      % if values['global']['clusterwideResources'] == "false":
+      includeNamespaces:
+        - ${values['global']['platformNamespace']}
+        - ${values['global']['appsNamespace']}
+      % endif
       resources:
         limits:
           cpu: 250m
@@ -272,6 +277,13 @@ monitoringPlatform:
       telemetryPath: /metrics
   kube-prometheus-stack:
     enabled: true
+    fullnameOverride: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
+    % if values['global']['clusterwideResources'] == "false":
+    crds:
+      enabled: false
+    kubernetesServiceMonitors:
+      enabled: false
+    % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
@@ -295,6 +307,11 @@ monitoringPlatform:
           registry: ${values['global']['containerRegistryBase']}
           % endif
     prometheusOperator:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
+      enabled: true
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -305,6 +322,9 @@ monitoringPlatform:
           registry: ${values['global']['containerRegistryBase']}
           % endif
       admissionWebhooks:
+        % if values['global']['clusterwideResources'] == "false":
+        enabled: false
+        % endif
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
@@ -457,8 +477,8 @@ monitoringPlatform:
           name_attribute_path: full_name
           auth_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/auth # override if needed in the target environment values file
           signout_redirect_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/logout # override if needed in the target environment values file
-          token_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
-          api_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
+          token_url: http://qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
+          api_url: http://qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
           role_attribute_path: contains(realm_access.roles[*], 'grafana_admin') && 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') && 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') && 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') && 'Viewer'
           allow_assign_grafana_admin: true
           role_attribute_strict: true
@@ -475,6 +495,11 @@ monitoringPlatform:
           maxLines: 1000
         dashboards:
           enabled: true
+          % if values['global']['clusterwideResources'] == "false":
+          searchNamespace: 
+            - ${values['global']['platformNamespace']}
+            - ${values['global']['appsNamespace']}
+          % endif
           label: grafana_dashboard
           labelValue: "1"
           annotations:
@@ -486,12 +511,31 @@ monitoringPlatform:
             allowUiUpdates: true
             # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
             foldersFromFilesStructure: true
+    % if values['global']['deployOperators'] == "false":
+    nodeExporter:
+      enabled: false
+    % endif
     prometheus-node-exporter:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
     kube-state-metrics:
+      prometheus:
+      % if values['global']['clusterwideResources'] == "false":
+        monitor:
+          metricRelabelings:
+          - sourceLabels: [ namespace ]
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
+            action: keep
+          relabelings:
+          - sourceLabels: [__meta_kubernetes_namespace]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: namespace
+            replacement: $1
+            action: replace
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -581,6 +625,9 @@ monitoringPlatform:
           datacenter: need-to-define
           environment: need-to-define
         enableRemoteWriteReceiver: true
+        ruleNamespaceSelector:
+          matchLabels:
+            "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
         tolerations:
           - key: "${values['global']['platformMastersKey']}"
             value: "${values['global']['platformMastersValue']}"
@@ -738,7 +785,7 @@ monitoringPlatform:
               follow_redirects: true
               namespaces:
                 names:
-                - platform     
+                - ${values['global']['platformNamespace']}
         additionalScrapeConfigs: |
           {{- range $k, $v := .Values.prometheus.prometheusSpec.additionalScrapeConfigsAsMap }}
           - job_name: '{{ $k }}'

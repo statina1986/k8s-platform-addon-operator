@@ -6,11 +6,11 @@ metadata:
   namespace: {{.Release.Namespace}}
   generation: 1
   annotations:
-    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-name: {{.Release.Name}}
     meta.helm.sh/release-namespace: {{.Release.Namespace}}
   labels:
     app: kube-prometheus-stack
-    release: monitoring-platform
+    release: {{.Release.Name}}
 spec:
   groups:
     - name: message-manager-lag.alerts

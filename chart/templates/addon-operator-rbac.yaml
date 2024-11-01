@@ -40,4 +40,33 @@ subjects:
   - kind: ServiceAccount
     name: platform
     namespace: {{ .Release.Namespace }}
+{{- else}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-operator-{{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+    - "*"
+  resources:
+    - "*"
+  verbs:
+    - "*"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-operator-{{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-operator-{{ .Release.Namespace }}
+subjects:
+  - kind: ServiceAccount
+    name: platform
+    namespace: {{ .Release.Namespace }}
 {{- end }} 
