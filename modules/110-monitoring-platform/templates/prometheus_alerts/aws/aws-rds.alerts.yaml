@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{.Release.Name}}-kube-p-aws-rds.rules
+  name: {{.Release.Name}}-aws-rds.rules
   namespace: {{.Release.Namespace}}
   generation: 1
   annotations:
