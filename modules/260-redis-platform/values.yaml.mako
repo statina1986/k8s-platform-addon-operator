@@ -86,6 +86,7 @@ redisPlatform:
         requests: {}
       service:
         annotations:
+          platform.qvantel.com/consul-service-port: "26379"
           consul.hashicorp.com/service-port: tcp-sentinel
     metrics:
       enabled: true

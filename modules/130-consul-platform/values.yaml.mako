@@ -7,12 +7,22 @@ consulPlatform:
     % endif
     openshift:
       enabled: false
-  # -- Enables services sync to Consul with ClusterIPs. Instead of 'original' Hashicorp services sync in this case ClusterIPs will be registered in Consul instead of individual pod IPs.
-  enableServiceSyncForClusterIP: "false"
-  # -- Purge services in Consul from Hashicorp services sync
-  purgeHashicorpConsulSyncServicesOnStartup: "false"
-  # -- Purge services in Consul from ClusterIP services sync
-  purgeClusterIPConsulSyncServicesOnStartup: "false"
+  
+  serviceSyncForClusterIP:
+    # -- Enables services sync to Consul with ClusterIPs. Instead of 'original' Hashicorp services sync in this case ClusterIPs will be registered in Consul instead of individual pod IPs.
+    enabled: "false"
+    # -- Purge services in Consul from Hashicorp services sync
+    purgeHashicorpConsulSyncServicesOnStartup: "false"
+    # -- Purge services in Consul from ClusterIP services sync
+    purgeClusterIPConsulSyncServicesOnStartup: "false"
+    # -- Schedule for reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+    schedule: "*/5 * * * *"
+    # -- Selector for namespaces from which sync services.
+    namespaceSelector:
+      labelSelector:
+        matchLabels:
+          "platform.qvantel.com/clusterip-service-consul-sync": "true"      
+            
   updateCoreDns:    
     enabled: "true"
     configmapName: "coredns"

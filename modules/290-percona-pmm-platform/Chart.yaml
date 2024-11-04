@@ -4,3 +4,7 @@ version: 0.0.1
 dependencies:
   - name: perconaPmmPlatform
     version: 0.0.1
+annotations:
+  images: |
+    - name: pmm-server
+      image: percona/pmm-server:2.41.2

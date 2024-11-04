@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
+
+import yaml
 from common.python.hooks import *
 from common.python.utils import get_exception_string
 from common.python.consul import *
@@ -9,23 +11,35 @@ from common.python.inline import *
 
 class ConsulServiceSyncHook(Hook):
     def __init__(self):
-        super().__init__("""
-configVersion: v1
-schedule:
-- name: periodic-checking
-  crontab: "*/5 * * * *"
-  includeSnapshotsFrom: ["monitor-clusterIP-services"]                         
-kubernetes:
-- name: "monitor-clusterIP-services"
-  apiVersion: v1
-  kind: Service
-  executeHookOnEvent: [ "Added", "Modified", "Deleted" ]                       
-  namespace:
-    labelSelector:
-      matchLabels:
-        "platform.qvantel.com/clusterip-service-consul-sync": "true"
-  allowFailure: true
-""")
+        consulPlatform = self.get_addon_operator_config("consulPlatform")
+        super().__init__(str(
+            {
+                "configVersion": "v1",
+                "schedule": [
+                    {
+                        "name": "consul-sync-periodic-checking",
+                        "crontab": consulPlatform.get("serviceSyncForClusterIP", {}).get("schedule", "*/5 * * * *"),
+                        "includeSnapshotsFrom": ["monitor-clusterIP-services"]
+                    }
+                ],
+                "kubernetes": [
+                    {
+                        "name": "monitor-clusterIP-services",
+                        "apiVersion": "v1",
+                        "kind": "Service",
+                        "executeHookOnEvent": ["Added", "Modified", "Deleted"],
+                        "namespace": consulPlatform.get("serviceSyncForClusterIP", {}).get("namespaceSelector", {
+                            "labelSelector": {
+                                "matchLabels": {
+                                    "platform.qvantel.com/clusterip-service-consul-sync": "true"
+                                }
+                            }
+                        }),
+                        "allowFailure": True
+                    }
+                ]
+            })
+        )
 
     def registerService(self, event, consul_client):
         if event['object']['spec'].get('type', '') != 'ClusterIP':
@@ -36,9 +50,9 @@ kubernetes:
         address = event['object']['spec'].get('clusterIP', "None")
 
         if address != "None":
-            service_port_annotation = event['object']['metadata'].get('annotations', {}).get('platform.qvantel.com/consul-service-port', 0)
-            if (service_port_annotation > 0):
-                port = service_port_annotation
+            service_port_annotation = event['object']['metadata'].get('annotations', {}).get('platform.qvantel.com/consul-service-port', "")
+            if (service_port_annotation != ""):
+                port = int(service_port_annotation)
             else:
                 ports = event['object']['spec'].get('ports', [{'port': 8080}])
                 port = ports[0].get('port', 8080)
@@ -48,15 +62,29 @@ kubernetes:
                 "Tags": [
                     "k8s"
                 ],
-                "Port": port
+                "Port": port,
+                "Address": address
             }
-            consul_client.catalog.register('addon-operator-consul-sync', address, service=service)
+            check = {
+                "Node": "addon-operator-consul-sync",
+                "CheckID": namespace+"/"+name,
+                "Name": "Kubernetes Readiness Check",
+                "Notes": "",
+                "Status": "passing",
+                "ServiceID": id,
+                "Type": "kubernetes-readiness",
+                "Interval": "",
+                "Timeout": "",
+                "ExposedPort": 0,
+                "Definition": {}
+            }
+            consul_client.catalog.register('addon-operator-consul-sync', address, service=service, check=check)
 
     def handle_binding(self, binding):
 
         match(binding):
             case EventHook(eventName, event, values):
-                if values['consulPlatform'].get('enableServiceSyncForClusterIP', 'false') == 'false':
+                if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('enabled', 'false') == 'false':
                     print("Skipping ClusterIP Service sync as it is disabled in configuration")
                     return
 
@@ -77,23 +105,23 @@ kubernetes:
                         self.registerService(event, consul_client)
 
             case ScheduleHook(binding, values):
-                if values['consulPlatform'].get('enableServiceSyncForClusterIP', 'false') == 'false':
+                if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('enabled', 'false') == 'false':
                     print("Skipping ClusterIP Service sync as it is disabled in configuration")
                     return
 
                 consul_client = get_consul_client()
 
-                if values['consulPlatform'].get('purgeHashicorpConsulSyncServicesOnStartup', 'false') == 'true':
+                if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('purgeHashicorpConsulSyncServicesOnStartup', 'false') == 'true':
                     consul_client.catalog.deregister('k8s-sync')
 
-                if values['consulPlatform'].get('purgeClusterIPConsulSyncServicesOnStartup', 'false') == 'true':
+                if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('purgeClusterIPConsulSyncServicesOnStartup', 'false') == 'true':
                     consul_client.catalog.deregister('addon-operator-consul-sync')
 
                 for event in binding.get('snapshots', {}).get('monitor-clusterIP-services', []):
-                    self.registerService(event, consul_client())
+                    self.registerService(event, consul_client)
 
             case SynchronizationHook(binding, values):
-                if values['consulPlatform'].get('enableServiceSyncForClusterIP', 'false') == 'false':
+                if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('enabled', 'false') == 'false':
                     print("Skipping ClusterIP Service sync as it is disabled in configuration")
                     return
 

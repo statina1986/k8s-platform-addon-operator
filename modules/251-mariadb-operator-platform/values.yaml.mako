@@ -15,12 +15,22 @@ mariadbOperatorPlatform:
       image:
         repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator
       % endif
+      % if addon_operator['monitoringPlatformEnabled'] == 'true':
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+       % endif
       cert:
         certManager:
           enabled: true
     % if addon_operator['monitoringPlatformEnabled'] == 'true':
     metrics:
       enabled: true
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     % endif  
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
@@ -34,11 +44,11 @@ mariadbOperatorPlatform:
     % if 'containerRegistryBase' in values['global']:
     extraEnv:
       - name: MARIADB_GALERA_AGENT_IMAGE
-        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:v0.0.30
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.35.1
       - name: MARIADB_GALERA_INIT_IMAGE
-        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:v0.0.30
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.35.1
       - name: MARIADB_OPERATOR_IMAGE
-        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:v0.0.30
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.35.1
       - name: RELATED_IMAGE_EXPORTER
         value: ${values['global']['containerRegistryBase']}/prom/mysqld-exporter:v0.15.1
       - name: RELATED_IMAGE_EXPORTER_MAXSCALE
@@ -68,6 +78,8 @@ mariadbOperatorPlatform:
         % if addon_operator['monitoringPlatformEnabled'] == 'true':
         metrics:
           enabled: true
+          serviceMonitor:
+            prometheusRelease: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
         % endif  
         affinity:
           antiAffinityEnabled: true      

@@ -9,11 +9,11 @@ kind: Service
 metadata:
   annotations:
     consul.hashicorp.com/service-port: native
+    platform.qvantel.com/consul-service-port: "9042"
   labels:
     app: main-cassandra-service
   name: main-cassandra-service
 spec:
-  clusterIP: None
   ports:
     - name: native
       port: 9042
