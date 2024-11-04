@@ -283,6 +283,8 @@ monitoringPlatform:
       enabled: false
     kubernetesServiceMonitors:
       enabled: false
+    rbac:
+      create: false
     % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
