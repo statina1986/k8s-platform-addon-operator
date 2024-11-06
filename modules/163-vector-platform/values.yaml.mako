@@ -6,6 +6,10 @@ vectorPlatform:
       % endif
     role: "Agent"
     enabled: true
+    % if values['global']['clusterwideResources'] == "false":
+    rbac:
+      create: false
+    % endif
     tolerations:
         - operator: Exists    
     customConfig:
@@ -54,7 +58,7 @@ vectorPlatform:
           inputs:
             - kubernetes_logs_transform
             - vector_logs_transform
-          address: vector-platform-aggregator.platform.svc:6000
+          address: vector-platform-aggregator.${values['global']['platformNamespace']}.svc:6000
   fluent-bit-events-collector:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -66,7 +70,11 @@ vectorPlatform:
     testFramework:
       enabled: false
     rbac:
+      % if values['global']['clusterwideResources'] == "false":
+      create: false
+      % else:
       create: true
+      % endif
       eventsAccess: true
     config:
         inputs: |
@@ -79,7 +87,7 @@ vectorPlatform:
           [OUTPUT]
               name forward
               match k8s_events
-              host vector-platform-aggregator.platform.svc
+              host vector-platform-aggregator.${values['global']['platformNamespace']}.svc
               port 9002
   aggregator:
     image:
@@ -165,7 +173,7 @@ vectorPlatform:
             - vector
             - logstash
           route:
-            qvantel_apps: .kubernetes.pod_namespace == "qvantel"
+            qvantel_apps: .kubernetes.pod_namespace == "${values['global']['appsNamespace']}"
             istio_gateway: .kubernetes.pod_annotations."inject.istio.io/templates" == "gateway"
             loki: .kubernetes.pod_labels."app.kubernetes.io/name" == "loki"
             vault: .kubernetes.pod_labels."app.kubernetes.io/name" == "vault"
@@ -331,9 +339,9 @@ vectorPlatform:
           inputs:
             - cleanup_transform
           % if values['global']['configurationProfile'] == 'dev':
-          endpoint: http://loki-platform.platform.svc:3100
+          endpoint: http://loki-platform.${values['global']['platformNamespace']}.svc:3100
           % else:
-          endpoint: http://loki-write.platform.svc:3100
+          endpoint: http://loki-write.${values['global']['platformNamespace']}.svc:3100
           % endif
           out_of_order_action: accept
           labels:
@@ -381,7 +389,7 @@ vectorPlatform:
         elk_tibco:
           compression: none
           endpoints: 
-            - "http://logsearch-es-http.platform.svc:9200"
+            - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - tibco_transform
           type: elasticsearch
@@ -401,7 +409,7 @@ vectorPlatform:
         elk_apps:
           compression: none
           endpoints: 
-            - "http://logsearch-es-http.platform.svc:9200"
+            - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - qvantel_apps_no_debug
             - rbs_transform
@@ -422,7 +430,7 @@ vectorPlatform:
         elk_ingress:
           compression: none
           endpoints: 
-            - "http://logsearch-es-http.platform.svc:9200"
+            - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - istio_to_elk_transform
           type: elasticsearch
