@@ -23,7 +23,8 @@ consulPlatform:
     namespaceSelector:
       labelSelector:
         matchLabels:
-          "platform.qvantel.com/clusterip-service-consul-sync": "true"      
+          "platform.qvantel.com/clusterip-service-consul-sync": "true"
+          "kubernetes.io/metadata.name": ${values['global']['platformNamespace']}
             
   updateCoreDns:    
     enabled: "true"
@@ -97,6 +98,11 @@ consulPlatform:
       k8sPrefix: null
       nodePortSyncType: InternalOnly
       addK8SNamespaceSuffix: false
+      % if values['global']['clusterwideResources'] == "false":
+      k8sAllowNamespaces:
+        - ${values['global']['platformNamespace']}
+        - ${values['global']['appsNamespace']}
+      % endif
       resources:
         limits:
           cpu: "100"
