@@ -2,15 +2,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: monitoring-platform-kube-p-redis.rules
+  name: ${values['global']['helmReleaseNamePrefix']}monitoring-platform-redis.rules
   namespace: {{.Release.Namespace}}
   generation: 1
   annotations:
-    meta.helm.sh/release-name: monitoring-platform
+    meta.helm.sh/release-name: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
     meta.helm.sh/release-namespace: {{.Release.Namespace}}
   labels:
     app: kube-prometheus-stack
-    release: monitoring-platform
+    release: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
 spec:
   groups:
   - name: redis.alerts
