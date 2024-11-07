@@ -1,4 +1,4 @@
-FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.4.12_qvantel-master_2e70c0a21
+FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.4.13_qvantel-master_04ac6cfe6
 
 ARG TARGETARCH
 
