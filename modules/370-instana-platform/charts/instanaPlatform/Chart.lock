@@ -1,6 +1,6 @@
 dependencies:
 - name: instana-agent
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
+  repository: https://agents.instana.io/helm
   version: 1.2.72
-digest: sha256:f3dbba0ee68b8c1a76d67636be921b45c9c1d1a6641c940d111696045522ae1f
-generated: "2024-06-18T12:07:15.380396+02:00"
+digest: sha256:6d2b1829649a1a8ffd231e76c5a12c81679b642302bcc86e1eee23f0eafc2557
+generated: "2024-11-05T10:46:39.23333+01:00"

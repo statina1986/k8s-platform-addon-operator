@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:05:36.840736149Z"
+  generatedAt: "2024-11-06T15:28:39.6884256Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: instana-platform
@@ -9,15 +9,15 @@ chart:
   appVersion: ""
 images:
   - name: agent-static
-    image: platform-artifactory.qvantel.net/agent/static:1.276.0
+    image: icr.io/instana/agent:1.276.0
     chart: instana-platform
     digests:
-      - digest: sha256:8dc3acc9430cec29c5dd3d906cbe87e9ea3033768f3d5e0596590781c6f2a07b
+      - digest: sha256:933ac2ebaa67687b6cdef755ed30825f2fc31592960683e6b96c07fe33670f2d
         arch: linux/amd64
-      - digest: sha256:931153aad20d7ec99b349536bbe6d4e2240cbcd1ef76d4c1bf173aa1e7d6afda
+      - digest: sha256:dfd0d5cdf929a702782edc765ebef456f49e8500406ac3df0753fed5a91308f8
         arch: linux/arm64
   - name: leader-elector
-    image: platform-artifactory.qvantel.net/instana/leader-elector:0.5.19
+    image: icr.io/instana/leader-elector:0.5.19
     chart: instana-platform
     digests:
       - digest: sha256:0e849dd3903cced2d19e73390a5ffc70b0aa35d1f3b2e4b567e64850bcdf70d5
@@ -25,10 +25,10 @@ images:
       - digest: sha256:1af592691975d10be8f30c8bf9030670e5f4ad4cd1b0ed83ee5ff7c09ac74466
         arch: linux/arm64
   - name: k8sensor
-    image: platform-artifactory.qvantel.net/instana/k8sensor:Q-1.0.0
+    image: icr.io/instana/k8sensor:ffb74e9
     chart: instana-platform
     digests:
-      - digest: sha256:6ddf769fe58dd8071107444cbf0db2800d3ef74538b363d64bcdc5df0cb18b3a
+      - digest: sha256:e7f5bbefa6079992ed5e4c8d858b7306f7545c9c621ff99fbe74a9143e56f569
         arch: linux/amd64
-      - digest: sha256:f9d72e3c61137aec24b4805365493cadf46b5a2ac3215a902b7baab0b3493048
+      - digest: sha256:7ecbf1ad70a073f38e6c9603783f918b4a64e6874a8746cf1d8ebed118bbe26b
         arch: linux/arm64

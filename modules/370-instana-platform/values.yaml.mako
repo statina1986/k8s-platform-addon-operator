@@ -5,6 +5,7 @@ instanaPlatform:
       image:
         % if 'containerRegistryBase' in values['global']:
         name: ${values['global']['containerRegistryBase']}/agent/static
+        tag: 1.276.0
         % endif
       keysSecret: instana-agent-key
       endpointHost: ingress-green-saas.instana.io
@@ -53,4 +54,5 @@ instanaPlatform:
       image:
         % if 'containerRegistryBase' in values['global']:
         name: ${values['global']['containerRegistryBase']}/instana/k8sensor
+        tag: ffb74e9
         % endif
