@@ -1,0 +1,595 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "artifactoryPlatform": {
+      "properties": {
+        "artifactory-jcr": {
+          "properties": {
+            "artifactory": {
+              "properties": {
+                "artifactory": {
+                  "properties": {
+                    "admin": {
+                      "description": "Defines admin secrets. ",
+                      "properties": {
+                        "dataKey": {
+                          "default": "bootstrap.creds",
+                          "required": [],
+                          "title": "dataKey",
+                          "type": "string"
+                        },
+                        "secret": {
+                          "default": "artifactory-jcr-admin-secret",
+                          "required": [],
+                          "title": "secret",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "admin",
+                      "type": "object"
+                    },
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "jfrog/artifactory-jcr",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    },
+                    "name": {
+                      "default": "artifactory-jcr",
+                      "description": "'name' must be same with the 'fullnameOverride'.",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "artifactory",
+                  "type": "object"
+                },
+                "database": {
+                  "description": "Kube secret name ",
+                  "properties": {
+                    "driver": {
+                      "default": "org.postgresql.Driver",
+                      "required": [],
+                      "title": "driver",
+                      "type": "string"
+                    },
+                    "secrets": {
+                      "description": "Define DB secret names that are created by the deployment.",
+                      "properties": {
+                        "password": {
+                          "properties": {
+                            "key": {
+                              "default": "password",
+                              "required": [],
+                              "title": "key",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "qvt-postgredb-artifactory-jcr",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "password",
+                          "type": "object"
+                        },
+                        "url": {
+                          "properties": {
+                            "key": {
+                              "default": "db-url",
+                              "required": [],
+                              "title": "key",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "qvt-postgredb-artifactory-jcr",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "url",
+                          "type": "object"
+                        },
+                        "user": {
+                          "properties": {
+                            "key": {
+                              "default": "username",
+                              "required": [],
+                              "title": "key",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "qvt-postgredb-artifactory-jcr",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "user",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "secrets",
+                      "type": "object"
+                    },
+                    "type": {
+                      "default": "postgresql",
+                      "required": [],
+                      "title": "type",
+                      "type": "string"
+                    },
+                    "url": {
+                      "default": "jdbc:postgresql://qvt-postgredb.platform.svc.cluster.local.:5432/artifactory-jcr",
+                      "description": "Define existing postgredb cluster. CNPG module default cluster name used.",
+                      "required": [],
+                      "title": "url",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "database",
+                  "type": "object"
+                },
+                "fullnameOverride": {
+                  "default": "artifactory-jcr",
+                  "description": "'fullnameOverride' fully overrides the deployment name.",
+                  "required": [],
+                  "title": "fullnameOverride",
+                  "type": "string"
+                },
+                "nginx": {
+                  "description": "Enable separate nginx container.",
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "nginx",
+                  "type": "object"
+                },
+                "postgresql": {
+                  "description": "Enable PostgreSQL dependency sub-chart. Not required in qvantel platform.",
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "postgresql",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "artifactory",
+              "type": "object"
+            },
+            "enabled": {
+              "default": false,
+              "description": "Enable deployment of JCR Artifactory.",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "initContainers": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "ubi9/ubi-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "9.4-1194",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "initContainers",
+              "type": "object"
+            },
+            "router": {
+              "description": "Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router",
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "jfrog/router",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "7.118.0",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "router",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "artifactory-jcr",
+          "type": "object"
+        },
+        "artifactory-oss": {
+          "properties": {
+            "artifactory": {
+              "properties": {
+                "artifactory": {
+                  "properties": {
+                    "admin": {
+                      "description": "Defines admin secrets. ",
+                      "properties": {
+                        "dataKey": {
+                          "default": "bootstrap.creds",
+                          "description": "Key identifier set in the kube 'secret'",
+                          "required": [],
+                          "title": "dataKey",
+                          "type": "string"
+                        },
+                        "secret": {
+                          "default": "artifactory-oss-admin-secret",
+                          "description": "Kube secret name ",
+                          "required": [],
+                          "title": "secret",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "admin",
+                      "type": "object"
+                    },
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "jfrog/artifactory-oss",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    },
+                    "name": {
+                      "default": "artifactory-oss",
+                      "description": "'name' must be same with the 'fullnameOverride'.",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "artifactory",
+                  "type": "object"
+                },
+                "database": {
+                  "description": "Main DB configuration",
+                  "properties": {
+                    "driver": {
+                      "default": "org.postgresql.Driver",
+                      "required": [],
+                      "title": "driver",
+                      "type": "string"
+                    },
+                    "secrets": {
+                      "description": "Define DB secret names that are created by the deployment.",
+                      "properties": {
+                        "password": {
+                          "properties": {
+                            "key": {
+                              "default": "password",
+                              "required": [],
+                              "title": "key",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "qvt-postgredb-artifactory-oss",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "password",
+                          "type": "object"
+                        },
+                        "url": {
+                          "properties": {
+                            "key": {
+                              "default": "db-url",
+                              "required": [],
+                              "title": "key",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "qvt-postgredb-artifactory-oss",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "url",
+                          "type": "object"
+                        },
+                        "user": {
+                          "properties": {
+                            "key": {
+                              "default": "username",
+                              "required": [],
+                              "title": "key",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "qvt-postgredb-artifactory-oss",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "user",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "secrets",
+                      "type": "object"
+                    },
+                    "type": {
+                      "default": "postgresql",
+                      "required": [],
+                      "title": "type",
+                      "type": "string"
+                    },
+                    "url": {
+                      "default": "jdbc:postgresql://qvt-postgredb.platform.svc.cluster.local.:5432/artifactory-oss",
+                      "description": "Define existing postgredb cluster. CNPG module default cluster name used.",
+                      "required": [],
+                      "title": "url",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "database",
+                  "type": "object"
+                },
+                "fullnameOverride": {
+                  "default": "artifactory-oss",
+                  "description": "'fullnameOverride' fully overrides the deployment name.",
+                  "required": [],
+                  "title": "fullnameOverride",
+                  "type": "string"
+                },
+                "nginx": {
+                  "description": "Enable separate nginx container.",
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "nginx",
+                  "type": "object"
+                },
+                "postgresql": {
+                  "description": "Enable PostgreSQL dependency sub-chart. Not required in qvantel platform.",
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "postgresql",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "artifactory",
+              "type": "object"
+            },
+            "enabled": {
+              "default": false,
+              "description": "Enable deployment of OSS Artifactory.",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "initContainers": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "ubi9/ubi-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "9.4-1194",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "initContainers",
+              "type": "object"
+            },
+            "router": {
+              "description": "Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router",
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "jfrog/router",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "7.118.0",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "router",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "artifactory-oss",
+          "type": "object"
+        },
+        "databaseJCR": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "name": {
+              "default": "qvt-postgredb",
+              "description": "PostgreSQL cluster name override.",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "databaseJCR",
+          "type": "object"
+        },
+        "databaseOSS": {
+          "description": "Qvantel CNPG module database override. ",
+          "properties": {
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "name": {
+              "default": "qvt-postgredb",
+              "description": "PostgreSQL cluster name override.",
+              "required": [],
+              "title": "name",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "databaseOSS",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "artifactoryPlatform",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
