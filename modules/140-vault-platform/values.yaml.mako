@@ -82,6 +82,10 @@ vaultPlatform:
     injector:
       enabled: false
     server:
+      % if values['global']['clusterwideResources'] == "false":
+      authDelegator:
+        enabled: false
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/hashicorp/vault

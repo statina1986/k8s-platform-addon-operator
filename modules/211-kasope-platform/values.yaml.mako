@@ -129,7 +129,7 @@ kasopePlatform:
             prometheus:
               enabled: true
               commonLabels:
-                release: monitoring-platform
+                release: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
             mcac:
               enabled: false
         reaper:
