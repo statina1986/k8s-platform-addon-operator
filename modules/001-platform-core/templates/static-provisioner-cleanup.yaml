@@ -1,0 +1,36 @@
+{{- if .Values.platformCore.cleanUpControllerEnabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-volume-node-cleanup-controller
+  namespace: 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-volume-node-cleanup
+  template:
+    metadata:
+        labels:
+          app: local-volume-node-cleanup
+    spec:
+      serviceAccount: platform
+      nodeSelector:
+        {{- range $key, $value := .Values.platformCore.localStaticProvisioner.nodeSelector }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      tolerations:
+        {{- toYaml .Values.platformCore.localStaticProvisioner.tolerations | nindent 8 }}
+      containers:
+      - name: local-volume-node-cleanup-controller
+        image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
+        args:
+          - "--storageclass-names=nvme-ssd"
+          - "--pvc-deletion-delay=60s"
+          - "--stale-pv-discovery-interval=10s"
+        ports:
+          - name: metrics
+            containerPort: 8080
+---
+{{- end }}
