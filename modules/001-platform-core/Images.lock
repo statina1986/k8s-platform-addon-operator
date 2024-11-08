@@ -1,10 +1,58 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:03:18.779533838Z"
+  generatedAt: "2024-11-08T10:09:56.171317337Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: platform-core
   version: 0.0.1
   appVersion: ""
-images: []
+images:
+  - name: coredns
+    image: coredns/coredns:1.11.1
+    chart: platform-core
+    digests:
+      - digest: sha256:2169b3b96af988cf69d7dd69efbcc59433eb027320eb185c6110e0850b997870
+        arch: linux/amd64
+      - digest: sha256:ba9e70dbdf0ff8a77ea63451bb1241d08819471730fe7a35a218a8db2ef7890c
+        arch: linux/arm64
+  - name: coredns-autoscaler
+    image: registry.k8s.io/cpa/cluster-proportional-autoscaler:1.8.5
+    chart: platform-core
+    digests:
+      - digest: sha256:8ac5e2d7650f3767dac4925581ef14de51eaf27ad554bc7fb8af2be77b9e9b15
+        arch: linux/amd64
+      - digest: sha256:260ba0a774e8419e006f2a5fde05d2b7ec3da8dec59b5caad578813848c09e31
+        arch: linux/arm64
+  - name: local-volume-node-cleanup-controller
+    image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
+    chart: platform-core
+    digests:
+      - digest: sha256:8c40cc2a1ddc3069e3f80c76b4afa4f313953cb1b1df5bf3eda50800b0b3541a
+        arch: linux/amd64
+      - digest: sha256:0399b0791f3ecbbb4af8ea6bd4c1ddc1a25c93f87cd5b7f133162e84dae59cb1
+        arch: linux/arm64
+  - name: local-static-provisioner
+    image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
+    chart: platform-core
+    digests:
+      - digest: sha256:a854dffa0a63a2f7ed15c955a117c8fd94fbcbfc6df2a6db7f737b04603b2a13
+        arch: linux/amd64
+      - digest: sha256:6124b5c17a188c753c7d6eaf2c48bc91b513e0ec6489a744d2521458fe31c3e0
+        arch: linux/arm64
+  - name: init-udev-rule
+    image: alpine:3.15
+    chart: platform-core
+    digests:
+      - digest: sha256:6a0657acfef760bd9e293361c9b558e98e7d740ed0dffca823d17098a4ffddf5
+        arch: linux/amd64
+      - digest: sha256:7c6e5d0d2629587d81f812992ec08f9cbe1590e1f2571acec6b7335acb812717
+        arch: linux/arm64
+  - name: dummy-container
+    image: alpine:3.15
+    chart: platform-core
+    digests:
+      - digest: sha256:6a0657acfef760bd9e293361c9b558e98e7d740ed0dffca823d17098a4ffddf5
+        arch: linux/amd64
+      - digest: sha256:7c6e5d0d2629587d81f812992ec08f9cbe1590e1f2571acec6b7335acb812717
+        arch: linux/arm64

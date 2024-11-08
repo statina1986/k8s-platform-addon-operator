@@ -7,7 +7,7 @@ dependencies:
 annotations:
   images: |
     - name: coredns
-      image: coredns/coredns:
+      image: coredns/coredns:1.11.1
     - name: coredns-autoscaler
       image: registry.k8s.io/cpa/cluster-proportional-autoscaler:1.8.5
     - name: local-volume-node-cleanup-controller
