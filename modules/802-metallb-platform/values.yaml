@@ -1,6 +1,0 @@
-metallbPlatform:
-  metallb:
-    imagePullSecrets: []
-    nameOverride: ""
-    fullnameOverride: ""
-    loadBalancerClass: ""
