@@ -16,15 +16,22 @@ spec:
           app: local-volume-node-cleanup
     spec:
       serviceAccount: platform
-      nodeSelector:
-        {{- range $key, $value := .Values.platformCore.localStaticProvisioner.nodeSelector }}
-        {{ $key }}: {{ $value | quote }}
-        {{- end }}
       tolerations:
-        {{- toYaml .Values.platformCore.localStaticProvisioner.tolerations | nindent 8 }}
+          - key: "${values['global']['localStorageKey']}"
+            value: "${values['global']['localStorageValue']}"
+            operator: "Equal"
+            effect: "NoSchedule"
+      % if values['global']['localStorage']:
+      nodeSelector:
+        ${values['global']['localStorageKey']}: ${values['global']['localStorageValue']}
+      % endif
       containers:
       - name: local-volume-node-cleanup-controller
+        % if 'containerRegistryBase' in values['global']:
+        image: ${values['global']['containerRegistryBase']}/k8s-staging-sig-storage/local-volume-node-cleanup:canary
+        % else:
         image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
+        % endif
         args:
           - "--storageclass-names=nvme-ssd"
           - "--pvc-deletion-delay=60s"
