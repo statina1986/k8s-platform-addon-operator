@@ -9,49 +9,6 @@ metadata:
 data:
   ingress-explorer.json: |-
         {
-          "__inputs": [
-            {
-              "name": "DS_ELASTICSEARCH-INGRESS",
-              "label": "Elasticsearch-Ingress",
-              "description": "",
-              "type": "datasource",
-              "pluginId": "elasticsearch",
-              "pluginName": "Elasticsearch"
-            }
-          ],
-          "__elements": {},
-          "__requires": [
-            {
-              "type": "datasource",
-              "id": "elasticsearch",
-              "name": "Elasticsearch",
-              "version": "1.0.0"
-            },
-            {
-              "type": "grafana",
-              "id": "grafana",
-              "name": "Grafana",
-              "version": "10.1.1"
-            },
-            {
-              "type": "panel",
-              "id": "piechart",
-              "name": "Pie chart",
-              "version": ""
-            },
-            {
-              "type": "panel",
-              "id": "table",
-              "name": "Table",
-              "version": ""
-            },
-            {
-              "type": "panel",
-              "id": "timeseries",
-              "name": "Time series",
-              "version": ""
-            }
-          ],
           "annotations": {
             "list": [
               {
@@ -71,7 +28,7 @@ data:
           "editable": true,
           "fiscalYearStartMonth": 0,
           "graphTooltip": 0,
-          "id": null,
+          "id": 698,
           "links": [],
           "liveNow": false,
           "panels": [
@@ -99,11 +56,13 @@ data:
                     "mode": "palette-classic"
                   },
                   "custom": {
+                    "axisBorderShow": false,
                     "axisCenteredZero": false,
                     "axisColorMode": "text",
                     "axisLabel": "",
                     "axisPlacement": "auto",
                     "barAlignment": 0,
+                    "barWidthFactor": 0.6,
                     "drawStyle": "line",
                     "fillOpacity": 0,
                     "gradientMode": "none",
@@ -222,11 +181,13 @@ data:
                     "mode": "palette-classic"
                   },
                   "custom": {
+                    "axisBorderShow": false,
                     "axisCenteredZero": false,
                     "axisColorMode": "text",
                     "axisLabel": "",
                     "axisPlacement": "auto",
                     "barAlignment": 0,
+                    "barWidthFactor": 0.6,
                     "drawStyle": "line",
                     "fillOpacity": 0,
                     "gradientMode": "none",
@@ -290,7 +251,7 @@ data:
               },
               "gridPos": {
                 "h": 8,
-                "w": 19,
+                "w": 24,
                 "x": 0,
                 "y": 10
               },
@@ -393,9 +354,579 @@ data:
               "type": "timeseries"
             },
             {
+              "collapsed": false,
+              "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 18
+              },
+              "id": 61,
+              "panels": [],
+              "title": "HTTP Rate per Hostname",
+              "type": "row"
+            },
+            {
+              "datasource": {
+                "default": false,
+                "type": "elasticsearch",
+                "uid": "P3D3FDDBD0DC18042"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 19
+              },
+              "id": 21,
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "authority.keyword",
+                      "id": "3",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "response_code",
+                      "id": "4",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "@timestamp",
+                      "id": "5",
+                      "settings": {
+                        "interval": "auto",
+                        "min_doc_count": "0",
+                        "timeZone": "utc",
+                        "trimEdges": "0"
+                      },
+                      "type": "date_histogram"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "hide": false,
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority)  AND (response_code: [000 TO 199])",
+                  "refId": "B",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "0xx-1xx Rate Per Hostname",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "default": false,
+                "type": "elasticsearch",
+                "uid": "P3D3FDDBD0DC18042"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 27
+              },
+              "id": 63,
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "authority.keyword",
+                      "id": "3",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "response_code",
+                      "id": "4",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "@timestamp",
+                      "id": "5",
+                      "settings": {
+                        "interval": "auto",
+                        "min_doc_count": "0",
+                        "timeZone": "utc",
+                        "trimEdges": "0"
+                      },
+                      "type": "date_histogram"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "hide": false,
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority)  AND (response_code: [200 TO 299])",
+                  "refId": "B",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "2xx Rate Per Hostname",
+              "type": "timeseries"
+            },
+            {
               "datasource": {
                 "type": "elasticsearch",
                 "uid": "Elasticsearch-Ingress"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 35
+              },
+              "id": 62,
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "authority.keyword",
+                      "id": "3",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "response_code",
+                      "id": "4",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "@timestamp",
+                      "id": "5",
+                      "settings": {
+                        "interval": "auto",
+                        "min_doc_count": "0",
+                        "timeZone": "utc",
+                        "trimEdges": "0"
+                      },
+                      "type": "date_histogram"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "hide": false,
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority)  AND (response_code: [400 TO 499])",
+                  "refId": "B",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "4xx Rate Per Hostname",
+              "type": "timeseries"
+            },
+            {
+              "datasource": {
+                "type": "elasticsearch",
+                "uid": "Elasticsearch-Ingress"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 43
+              },
+              "id": 22,
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "table",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "authority.keyword",
+                      "id": "3",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "response_code",
+                      "id": "4",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "@timestamp",
+                      "id": "2",
+                      "settings": {
+                        "interval": "auto"
+                      },
+                      "type": "date_histogram"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "hide": false,
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority)  AND (response_code: [500 TO 599])",
+                  "refId": "B",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "5xx Rate Per Hostname",
+              "type": "timeseries"
+            },
+            {
+              "collapsed": false,
+              "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 51
+              },
+              "id": 64,
+              "panels": [],
+              "title": "Ingress Response Code per Path/App",
+              "type": "row"
+            },
+            {
+              "datasource": {
+                "default": false,
+                "type": "elasticsearch",
+                "uid": "P3D3FDDBD0DC18042"
               },
               "fieldConfig": {
                 "defaults": {
@@ -415,9 +946,9 @@ data:
               },
               "gridPos": {
                 "h": 8,
-                "w": 5,
-                "x": 19,
-                "y": 10
+                "w": 6,
+                "x": 0,
+                "y": 52
               },
               "id": 17,
               "options": {
@@ -524,6 +1055,33 @@ data:
                   "query": "(_exists_:authority) AND (response_code: [500 TO 599])",
                   "refId": "C",
                   "timeField": "@timestamp"
+                },
+                {
+                  "alias": "0xx-1xx",
+                  "bucketAggs": [
+                    {
+                      "field": "@timestamp",
+                      "id": "2",
+                      "settings": {
+                        "interval": "auto"
+                      },
+                      "type": "date_histogram"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "hide": false,
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority) AND (response_code: [000 TO 199])",
+                  "refId": "D",
+                  "timeField": "@timestamp"
                 }
               ],
               "title": "Ingress Response Code Totals",
@@ -537,38 +1095,15 @@ data:
               "fieldConfig": {
                 "defaults": {
                   "color": {
-                    "mode": "palette-classic"
+                    "mode": "thresholds"
                   },
                   "custom": {
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "drawStyle": "line",
-                    "fillOpacity": 0,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
                     },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "auto",
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
+                    "inspect": false,
+                    "width": 20
                   },
                   "mappings": [],
                   "thresholds": {
@@ -587,26 +1122,78 @@ data:
                 },
                 "overrides": [
                   {
-                    "__systemRef": "hideSeriesFrom",
                     "matcher": {
-                      "id": "byNames",
-                      "options": {
-                        "mode": "exclude",
-                        "names": [
-                          "flex-admin-mmlyle-prod-mm.qvantel.solutions 404"
-                        ],
-                        "prefix": "All except:",
-                        "readOnly": true
-                      }
+                      "id": "byName",
+                      "options": "Average"
                     },
                     "properties": [
                       {
-                        "id": "custom.hideFrom",
-                        "value": {
-                          "legend": false,
-                          "tooltip": false,
-                          "viz": true
-                        }
+                        "id": "custom.width",
+                        "value": 351
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Avg Latency"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "path.keyword"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 600
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "authority.keyword"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 273
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Avg Latency"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 117
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Max"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 84
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Count"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 73
                       }
                     ]
                   }
@@ -614,59 +1201,206 @@ data:
               },
               "gridPos": {
                 "h": 8,
-                "w": 19,
-                "x": 0,
-                "y": 18
+                "w": 18,
+                "x": 6,
+                "y": 52
               },
-              "id": 21,
+              "id": 57,
               "options": {
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "right",
-                  "showLegend": true
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": false
                 },
-                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-                }
+                "showHeader": true,
+                "sortBy": []
               },
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
                   "bucketAggs": [
                     {
                       "field": "authority.keyword",
+                      "id": "2",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "1",
+                        "size": "0"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "path.keyword",
                       "id": "3",
                       "settings": {
                         "min_doc_count": "1",
                         "order": "desc",
-                        "orderBy": "_term",
+                        "orderBy": "1",
+                        "size": "0"
+                      },
+                      "type": "terms"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "metrics": [
+                    {
+                      "field": "duration",
+                      "id": "1",
+                      "type": "avg"
+                    },
+                    {
+                      "field": "duration",
+                      "id": "4",
+                      "type": "max"
+                    },
+                    {
+                      "id": "5",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "",
+                  "refId": "A",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "Top Latency Requests",
+              "type": "table"
+            },
+            {
+              "datasource": {
+                "default": false,
+                "type": "elasticsearch",
+                "uid": "P3D3FDDBD0DC18042"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": false,
+                    "inspect": false,
+                    "width": 30
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "authority.keyword"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 343
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Count"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 109
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "response_code"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 80
+                      }
+                    ]
+                  }
+                ]
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 6,
+                "x": 0,
+                "y": 60
+              },
+              "id": 23,
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "enablePagination": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Count"
+                  }
+                ]
+              },
+              "pluginVersion": "11.2.1",
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "authority.keyword",
+                      "id": "2",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "1",
                         "size": "10"
                       },
                       "type": "terms"
                     },
                     {
                       "field": "response_code",
-                      "id": "4",
+                      "id": "3",
                       "settings": {
                         "min_doc_count": "1",
                         "order": "desc",
-                        "orderBy": "_term",
+                        "orderBy": "1",
                         "size": "10"
                       },
                       "type": "terms"
-                    },
-                    {
-                      "field": "@timestamp",
-                      "id": "5",
-                      "settings": {
-                        "interval": "auto",
-                        "min_doc_count": "0",
-                        "timeZone": "utc",
-                        "trimEdges": "0"
-                      },
-                      "type": "date_histogram"
                     }
                   ],
                   "datasource": {
@@ -680,13 +1414,160 @@ data:
                       "type": "count"
                     }
                   ],
-                  "query": "(_exists_:authority)  AND (response_code: [400 TO 499])",
+                  "query": "(_exists_:authority) AND (response_code: [000 TO 199])",
                   "refId": "B",
                   "timeField": "@timestamp"
                 }
               ],
-              "title": "4xx Rate Per Hostname",
-              "type": "timeseries"
+              "title": "Ingress 0xx-1xx Response Code Counts Per App",
+              "type": "table"
+            },
+            {
+              "datasource": {
+                "default": false,
+                "type": "elasticsearch",
+                "uid": "P3D3FDDBD0DC18042"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": false,
+                    "inspect": false,
+                    "width": 30
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "authority.keyword"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 343
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Count"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 109
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "response_code"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 80
+                      }
+                    ]
+                  }
+                ]
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 6,
+                "x": 6,
+                "y": 60
+              },
+              "id": 65,
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "enablePagination": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Count"
+                  }
+                ]
+              },
+              "pluginVersion": "11.2.1",
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "authority.keyword",
+                      "id": "2",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "1",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "response_code",
+                      "id": "3",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "1",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "hide": false,
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority) AND (response_code: [200 TO 299])",
+                  "refId": "B",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "Ingress 2xx Response Code Counts Per App",
+              "type": "table"
             },
             {
               "datasource": {
@@ -763,11 +1644,11 @@ data:
               },
               "gridPos": {
                 "h": 8,
-                "w": 5,
-                "x": 19,
-                "y": 18
+                "w": 6,
+                "x": 12,
+                "y": 60
               },
-              "id": 23,
+              "id": 66,
               "options": {
                 "cellHeight": "sm",
                 "footer": {
@@ -787,7 +1668,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -833,137 +1714,6 @@ data:
               ],
               "title": "Ingress 4xx Response Code Counts Per App",
               "type": "table"
-            },
-            {
-              "datasource": {
-                "type": "elasticsearch",
-                "uid": "Elasticsearch-Ingress"
-              },
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "drawStyle": "line",
-                    "fillOpacity": 0,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "auto",
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": null
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": []
-              },
-              "gridPos": {
-                "h": 8,
-                "w": 19,
-                "x": 0,
-                "y": 26
-              },
-              "id": 22,
-              "options": {
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "table",
-                  "placement": "right",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "mode": "single",
-                  "sort": "none"
-                }
-              },
-              "targets": [
-                {
-                  "alias": "",
-                  "bucketAggs": [
-                    {
-                      "field": "authority.keyword",
-                      "id": "3",
-                      "settings": {
-                        "min_doc_count": "1",
-                        "order": "desc",
-                        "orderBy": "_term",
-                        "size": "10"
-                      },
-                      "type": "terms"
-                    },
-                    {
-                      "field": "response_code",
-                      "id": "4",
-                      "settings": {
-                        "min_doc_count": "1",
-                        "order": "desc",
-                        "orderBy": "_term",
-                        "size": "10"
-                      },
-                      "type": "terms"
-                    },
-                    {
-                      "field": "@timestamp",
-                      "id": "2",
-                      "settings": {
-                        "interval": "auto"
-                      },
-                      "type": "date_histogram"
-                    }
-                  ],
-                  "datasource": {
-                    "type": "elasticsearch",
-                    "uid": "Elasticsearch-Ingress"
-                  },
-                  "hide": false,
-                  "metrics": [
-                    {
-                      "id": "1",
-                      "type": "count"
-                    }
-                  ],
-                  "query": "(_exists_:authority)  AND (response_code: [500 TO 599])",
-                  "refId": "B",
-                  "timeField": "@timestamp"
-                }
-              ],
-              "title": "5xx Rate Per Hostname",
-              "type": "timeseries"
             },
             {
               "datasource": {
@@ -1051,9 +1801,9 @@ data:
               },
               "gridPos": {
                 "h": 8,
-                "w": 5,
-                "x": 19,
-                "y": 26
+                "w": 6,
+                "x": 18,
+                "y": 60
               },
               "id": 24,
               "options": {
@@ -1069,7 +1819,7 @@ data:
                 "showHeader": true,
                 "sortBy": []
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -1114,6 +1864,134 @@ data:
                 }
               ],
               "title": "Ingress 5xx Response Code Count Per App",
+              "type": "table"
+            },
+            {
+              "datasource": {
+                "default": false,
+                "type": "elasticsearch",
+                "uid": "P3D3FDDBD0DC18042"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "inspect": false
+                  },
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "response_code"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 139
+                      }
+                    ]
+                  }
+                ]
+              },
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 68
+              },
+              "id": 67,
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                    "sum"
+                  ],
+                  "show": false
+                },
+                "frameIndex": 1,
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Count"
+                  }
+                ]
+              },
+              "pluginVersion": "11.2.1",
+              "targets": [
+                {
+                  "alias": "",
+                  "bucketAggs": [
+                    {
+                      "field": "response_code",
+                      "id": "3",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "authority.keyword",
+                      "id": "2",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    },
+                    {
+                      "field": "path.keyword",
+                      "id": "4",
+                      "settings": {
+                        "min_doc_count": "1",
+                        "order": "desc",
+                        "orderBy": "_term",
+                        "size": "10"
+                      },
+                      "type": "terms"
+                    }
+                  ],
+                  "datasource": {
+                    "type": "elasticsearch",
+                    "uid": "Elasticsearch-Ingress"
+                  },
+                  "metrics": [
+                    {
+                      "id": "1",
+                      "type": "count"
+                    }
+                  ],
+                  "query": "(_exists_:authority) AND (response_code: [000 TO 199])",
+                  "refId": "A",
+                  "timeField": "@timestamp"
+                }
+              ],
+              "title": "Top 0xx-1xx Errors Per Path",
               "type": "table"
             },
             {
@@ -1163,8 +2041,8 @@ data:
               "gridPos": {
                 "h": 8,
                 "w": 12,
-                "x": 0,
-                "y": 34
+                "x": 12,
+                "y": 68
               },
               "id": 46,
               "options": {
@@ -1186,7 +2064,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -1250,199 +2128,6 @@ data:
               },
               "fieldConfig": {
                 "defaults": {
-                  "color": {
-                    "mode": "thresholds"
-                  },
-                  "custom": {
-                    "align": "auto",
-                    "cellOptions": {
-                      "type": "auto"
-                    },
-                    "inspect": false,
-                    "width": 20
-                  },
-                  "mappings": [],
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": null
-                      },
-                      {
-                        "color": "red",
-                        "value": 80
-                      }
-                    ]
-                  }
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Average"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 351
-                      },
-                      {
-                        "id": "displayName",
-                        "value": "Avg Latency"
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "path.keyword"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 600
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "authority.keyword"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 315
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Avg Latency"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 117
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Max"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 84
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Count"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.width",
-                        "value": 73
-                      }
-                    ]
-                  }
-                ]
-              },
-              "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 12,
-                "y": 34
-              },
-              "id": 57,
-              "options": {
-                "cellHeight": "sm",
-                "footer": {
-                  "countRows": false,
-                  "fields": "",
-                  "reducer": [
-                    "sum"
-                  ],
-                  "show": false
-                },
-                "showHeader": true,
-                "sortBy": [
-                  {
-                    "desc": true,
-                    "displayName": "Max"
-                  }
-                ]
-              },
-              "pluginVersion": "10.1.1",
-              "targets": [
-                {
-                  "alias": "",
-                  "bucketAggs": [
-                    {
-                      "field": "authority.keyword",
-                      "id": "2",
-                      "settings": {
-                        "min_doc_count": "1",
-                        "order": "desc",
-                        "orderBy": "1",
-                        "size": "0"
-                      },
-                      "type": "terms"
-                    },
-                    {
-                      "field": "path.keyword",
-                      "id": "3",
-                      "settings": {
-                        "min_doc_count": "1",
-                        "order": "desc",
-                        "orderBy": "1",
-                        "size": "0"
-                      },
-                      "type": "terms"
-                    }
-                  ],
-                  "datasource": {
-                    "type": "elasticsearch",
-                    "uid": "Elasticsearch-Ingress"
-                  },
-                  "metrics": [
-                    {
-                      "field": "duration",
-                      "id": "1",
-                      "type": "avg"
-                    },
-                    {
-                      "field": "duration",
-                      "id": "4",
-                      "type": "max"
-                    },
-                    {
-                      "id": "5",
-                      "type": "count"
-                    }
-                  ],
-                  "query": "",
-                  "refId": "A",
-                  "timeField": "@timestamp"
-                }
-              ],
-              "title": "Top Latency Requests",
-              "type": "table"
-            },
-            {
-              "datasource": {
-                "type": "elasticsearch",
-                "uid": "Elasticsearch-Ingress"
-              },
-              "fieldConfig": {
-                "defaults": {
                   "custom": {
                     "align": "auto",
                     "cellOptions": {
@@ -1484,7 +2169,7 @@ data:
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 42
+                "y": 76
               },
               "id": 56,
               "options": {
@@ -1506,7 +2191,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -1611,7 +2296,7 @@ data:
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 42
+                "y": 76
               },
               "id": 58,
               "options": {
@@ -1633,7 +2318,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -1696,7 +2381,7 @@ data:
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 50
+                "y": 84
               },
               "id": 54,
               "panels": [],
@@ -2182,7 +2867,7 @@ data:
                 "h": 17,
                 "w": 24,
                 "x": 0,
-                "y": 51
+                "y": 85
               },
               "id": 45,
               "options": {
@@ -2204,7 +2889,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -2709,7 +3394,7 @@ data:
                 "h": 17,
                 "w": 24,
                 "x": 0,
-                "y": 68
+                "y": 102
               },
               "id": 60,
               "options": {
@@ -2731,7 +3416,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -3236,7 +3921,7 @@ data:
                 "h": 17,
                 "w": 24,
                 "x": 0,
-                "y": 85
+                "y": 119
               },
               "id": 59,
               "options": {
@@ -3258,7 +3943,7 @@ data:
                   }
                 ]
               },
-              "pluginVersion": "10.1.1",
+              "pluginVersion": "11.2.1",
               "targets": [
                 {
                   "alias": "",
@@ -3286,8 +3971,7 @@ data:
             }
           ],
           "refresh": "",
-          "schemaVersion": 38,
-          "style": "dark",
+          "schemaVersion": 39,
           "tags": [],
           "templating": {
             "list": [
@@ -3361,6 +4045,6 @@ data:
           "timezone": "",
           "title": "Ingress - Explorer",
           "uid": "e5e6e524-ed61-4ccb-9d34-142b4dc91181",
-          "version": 22,
+          "version": 3,
           "weekStart": ""
         }
