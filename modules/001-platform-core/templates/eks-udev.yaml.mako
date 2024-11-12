@@ -15,15 +15,15 @@ spec:
         app: udev-rule-writer
     spec:
       # Ensures this runs only on nodes with the "dedicated-nodes=local-storage" label
-      tolerations:
+      tolerations: 
         - key: "${values['global']['localStorageKey']}"
           value: "${values['global']['localStorageValue']}"
           operator: "Equal"
           effect: "NoSchedule"
-    % if values['global']['localStorage']:
+      % if values['global']['localStorage']:
       nodeSelector:
-        "${values['global']['localStorageKey']}: ${values['global']['localStorageValue']}"
-    % endif
+        ${values['global']['localStorageKey']}: ${values['global']['localStorageValue']}
+      % endif
       hostNetwork: true  # Enables access to the host's network namespace
       hostPID: true      # Enables access to the host's PID namespace
       hostIPC: true      # Enables access to the host's IPC namespace
@@ -31,7 +31,7 @@ spec:
       terminationGracePeriodSeconds: 0         # Immediate termination for quick cleanup
       initContainers:
       - name: init-udev-rule
-        % if 'containerRegistryBase' in values['global']:
+         % if 'containerRegistryBase' in values['global']:
         image: ${values['global']['containerRegistryBase']}/alpine:3.15
         % else:
         image: alpine:3.15
@@ -77,4 +77,5 @@ spec:
       - name: host-root
         hostPath:
           path: /
+---
 {{- end }}

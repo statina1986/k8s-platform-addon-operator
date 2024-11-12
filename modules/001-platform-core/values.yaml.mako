@@ -20,12 +20,14 @@ platformCore:
       - name: nvme-ssd
         hostDir: /dev/disk/kubernetes
         storageClass: true
+    % if values['global']['localStorage']:
     nodeSelector:
-      dedicated-nodes: local-storage
+      ${values['global']['localStorageKey']}: ${values['global']['localStorageValue']}
+    % endif
     tolerations:
-      - key: "dedicated-nodes"
+      - key: ${values['global']['localStorageKey']}
         operator: "Equal"
-        value: "local-storage"
+        value: ${values['global']['localStorageValue']}
         effect: "NoSchedule"
     % if 'containerRegistryBase' in values['global']:
     image: ${values['global']['containerRegistryBase']}/sig-storage/local-volume-provisioner:v2.6.0

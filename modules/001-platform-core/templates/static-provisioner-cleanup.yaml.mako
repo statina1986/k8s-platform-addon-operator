@@ -21,17 +21,17 @@ spec:
             value: "${values['global']['localStorageValue']}"
             operator: "Equal"
             effect: "NoSchedule"
-      % if values['global']['localStorage']:
+% if values['global']['localStorage']:
       nodeSelector:
         ${values['global']['localStorageKey']}: ${values['global']['localStorageValue']}
-      % endif
+% endif
       containers:
       - name: local-volume-node-cleanup-controller
-        % if 'containerRegistryBase' in values['global']:
+% if 'containerRegistryBase' in values['global']:
         image: ${values['global']['containerRegistryBase']}/k8s-staging-sig-storage/local-volume-node-cleanup:canary
-        % else:
+% else:
         image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
-        % endif
+% endif
         args:
           - "--storageclass-names=nvme-ssd"
           - "--pvc-deletion-delay=60s"
