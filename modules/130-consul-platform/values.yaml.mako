@@ -26,8 +26,12 @@ consulPlatform:
           "platform.qvantel.com/clusterip-service-consul-sync": "true"
           "kubernetes.io/metadata.name": ${values['global']['platformNamespace']}
             
-  updateCoreDns:    
+  updateCoreDns:
+    % if values['global']['clusterwideResources'] == "false":  
+    enabled: "false"
+    % else:
     enabled: "true"
+    % endif
     configmapName: "coredns"
     configmapNamespace: "kube-system"
   consul:

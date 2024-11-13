@@ -5,6 +5,11 @@ elasticsearchPlatform:
   loggingSetupimage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
   % endif
   eck-operator:
+    % if values['global']['deployOperators'] == "false":
+    enabled: false
+    % else:
+    enabled: true
+    % endif
     # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false
     image:
@@ -14,10 +19,7 @@ elasticsearchPlatform:
     nameOverride: "elastic-operator"
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
-    createClusterScopedResources: true
     % if values['global']['clusterwideResources'] == "false":
-    managedNamespaces:
-      - ${values['global']['platformNamespace']}
     createClusterScopedResources: false
     webhook:
       enabled: false
@@ -49,7 +51,11 @@ elasticsearchPlatform:
 
   clusters:
     logsearch:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
       enabled: true
+      % endif
       storageSize: "50Gi"
       resources:
         requests:
@@ -111,7 +117,11 @@ elasticsearchPlatform:
                       elasticsearch.k8s.elastic.co/cluster-name: logsearch
                       elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
     smartsearch:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
       enabled: true
+      % endif
       storageSize: "10Gi"
       resources:
         requests:
@@ -176,7 +186,11 @@ elasticsearchPlatform:
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
     kibana:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
       enabled: true
+      % endif
       resources:
         requests:
           memory: 0.5Gi
@@ -364,7 +378,7 @@ elasticsearchPlatform:
             name: logsearch-es-elastic-user
             key: elastic
       - name: ELASTICSEARCH_HOST
-        value: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
+        value: ${values['global']['helmReleaseNamePrefix']}logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
       - name: ELASTICSEARCH_PORT
         value: "9200"
     % if 'containerRegistryBase' in values['global']:
@@ -413,7 +427,7 @@ elasticsearchPlatform:
       #     name: config-secret
       extraEnvs:
       - name: LOGSTASH_HOST
-        value: elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local
+        value: ${values['global']['helmReleaseNamePrefix']}elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local
       - name: LOGSTASH_PORT
         value: "5044"
       hostNetworking: true
@@ -438,7 +452,7 @@ elasticsearchPlatform:
           output.logstash:
             loadbalance: false
             bulk_max_size: 1024
-            hosts: <%text>['${LOGSTASH_HOST:elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
+            hosts: <%text>['${LOGSTASH_HOST:${values['global']['helmReleaseNamePrefix']}elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
             logging.level: info
       resources:
         requests:

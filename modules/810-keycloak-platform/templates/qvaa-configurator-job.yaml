@@ -9,6 +9,6 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   name: "qvaa-configurator-{{ .Release.Name }}"
-  namespace: platform
+  namespace: {{.Release.Namespace}}
 spec:
   {{ tpl .Values.keycloakPlatform.configurator.spec . | nindent 2 }}

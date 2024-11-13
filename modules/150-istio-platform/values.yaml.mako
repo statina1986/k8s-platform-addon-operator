@@ -7,8 +7,13 @@ istioPlatform:
       % endif
   base:
     global:
-      istioNamespace: platform
+      istioNamespace: ${values['global']['platformNamespace']}
   istiod:
+    % if values['global']['deployOperators'] == "true":
+    enabled: true
+    % else:
+    enabled: false
+    % endif
     pilot:
       % if 'containerRegistryBase' in values['global']:
       image: ${values['global']['containerRegistryBase']}/istio/pilot:1.23.2
@@ -35,7 +40,7 @@ istioPlatform:
       replicaCount: 2
       % endif 
     global:
-      istioNamespace: platform
+      istioNamespace: ${values['global']['platformNamespace']}
       logAsJson: true
     meshConfig:
       defaultHttpRetryPolicy:

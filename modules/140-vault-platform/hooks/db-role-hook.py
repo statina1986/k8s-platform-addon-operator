@@ -30,7 +30,8 @@ class DbRoleHook(Hook):
                         "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
                             "labelSelector": {
                                 "matchLabels": {
-                                    "platform.qvantel.com/vault-crd-sync": "true"
+                                    "platform.qvantel.com/vault-crd-sync": "true",
+                                    "kubernetes.io/metadata.name": ADDON_OPERATOR_NAMESPACE
                                 }
                             }
                         }),
