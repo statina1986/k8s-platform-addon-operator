@@ -417,9 +417,17 @@ monitoringPlatform:
             - name: Loki
               type: loki
               % if values['global']['configurationProfile'] == 'dev':
-              url: http://loki-platform.${values['global']['platformNamespace']}.svc:3100
+                % if values['global']['deployOperators'] == "true":
+                url: http://http://${values['global']['helmReleaseNamePrefix']}loki-platform.${values['global']['platformNamespace']}.svc:3100
+                % else:
+                url: http://http://${values['global']['operatorHelmReleaseNamePrefix']}loki-platform.${values['global']['operatorNamespace']}.svc:3100
+                % endif
               % else:
-              url: http://loki-read.${values['global']['platformNamespace']}.svc:3100
+                % if values['global']['deployOperators'] == "true":
+                url: http://${values['global']['helmReleaseNamePrefix']}loki-read.${values['global']['platformNamespace']}.svc:3100
+                % else:
+                url: http://${values['global']['operatorHelmReleaseNamePrefix']}loki-read.${values['global']['operatorNamespace']}.svc:3100
+                % endif
               % endif
             - name: Tempo
               type: tempo              
@@ -440,7 +448,11 @@ monitoringPlatform:
             - name: Elasticsearch-Application
               type: elasticsearch
               access: http
-              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
+              % if values['global']['deployOperators'] == "true":
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
+              % else:
+              url: http://${values['global']['operatorHelmReleaseNamePrefix']}logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc:9200
+              % endif
               basicAuth: true
               basicAuthUser: elastic
               database: application*

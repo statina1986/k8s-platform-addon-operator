@@ -35,9 +35,11 @@ globalConfig:
   ingressBaseUrl: "some-env.qvantel.solutions"
   appsNamespace: "qvantel"
   platformNamespace: "platform"
+  operatorNamespace: ""
   kubernetesVersion: "1.25"
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
   helmReleaseNamePrefix: ""
+  operatorHelmReleaseNamePrefix: ""
   clusterwideResources: "true"
   deployOperators: "true"
 modulesConfig:
