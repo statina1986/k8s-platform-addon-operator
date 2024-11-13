@@ -436,7 +436,11 @@ monitoringPlatform:
             - name: Elasticsearch-Ingress
               type: elasticsearch
               access: http
-              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
+              % if values['global']['deployOperators'] == "true":
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
+              % else:
+              url: http://${values['global']['operatorHelmReleaseNamePrefix']}logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc:9200
+              % endif
               basicAuth: true
               basicAuthUser: elastic
               database: ingress*
