@@ -14,7 +14,3 @@ annotations:
       image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
     - name: local-static-provisioner
       image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
-    - name: init-udev-rule
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
-    - name: dummy-container
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9

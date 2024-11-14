@@ -26,3 +26,7 @@ annotations:
       image: amazon/aws-efs-csi-driver:v1.7.4
     - name: aws-load-balancer-controller
       image: public.ecr.aws/eks/aws-load-balancer-controller:v2.7.0
+    - name: init-udev-rule
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    - name: dummy-container
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9

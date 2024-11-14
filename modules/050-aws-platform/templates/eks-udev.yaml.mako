@@ -1,4 +1,4 @@
-{{- if .Values.platformCore.eksUdevEnabled }}
+{{- if .Values.awsPlatform.eksUdevEnabled }}
 ---
 apiVersion: apps/v1
 kind: DaemonSet

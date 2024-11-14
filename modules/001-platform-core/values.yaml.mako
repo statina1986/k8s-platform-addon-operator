@@ -1,7 +1,6 @@
 platformCore:
   corednsEnabled: false
   localStorageEnabled: false
-  eksUdevEnabled: false
   cleanUpControllerEnabled: false
   turndown:
     enabled: "false"

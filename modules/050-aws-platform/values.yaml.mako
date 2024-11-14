@@ -37,6 +37,8 @@
 %>
 
 awsPlatform:
+  eksUdevEnabled: false
+
   # @schema
   # required: true
   # @schema
