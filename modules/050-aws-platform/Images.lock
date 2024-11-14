@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:03:24.105824927Z"
+  generatedAt: "2024-11-14T09:28:28.525595404Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: aws-platform
@@ -88,3 +88,19 @@ images:
         arch: linux/amd64
       - digest: sha256:ca29996d4c350ff0492059f7a4d41d90bf2df78cf16bfe59a669a911f68cb7da
         arch: linux/arm64
+  - name: init-udev-rule
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    chart: aws-platform
+    digests:
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+        arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
+  - name: dummy-container
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    chart: aws-platform
+    digests:
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+        arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
