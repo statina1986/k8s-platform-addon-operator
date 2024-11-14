@@ -28,8 +28,8 @@ globalConfig:
   platformMastersKey: dedicated-nodes
   platformMastersValue: platform-masters
   localStorage: false
-  localStorageKey: dedicated-nodes
-  localStorageValue: local-storage
+  localStorageKey: local-storage
+  localStorageValue: "true"
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"

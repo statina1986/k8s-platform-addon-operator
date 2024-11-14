@@ -2,6 +2,7 @@ global:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
   platformMasters: false
+  localStorage: false
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"

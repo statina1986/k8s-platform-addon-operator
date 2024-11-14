@@ -32,3 +32,4 @@ platformCore:
     % if 'containerRegistryBase' in values['global']:
     image: ${values['global']['containerRegistryBase']}/sig-storage/local-volume-provisioner:v2.6.0
     % endif
+  cleanUpStorageClass: nvme-ssd

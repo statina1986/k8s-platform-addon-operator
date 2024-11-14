@@ -33,7 +33,7 @@ spec:
         image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
 % endif
         args:
-          - "--storageclass-names=nvme-ssd"
+          - "--storageclass-names={{.Values.platformCore.cleanUpStorageClass}}"
           - "--pvc-deletion-delay=60s"
           - "--stale-pv-discovery-interval=10s"
         ports:

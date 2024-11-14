@@ -32,9 +32,9 @@ spec:
       initContainers:
       - name: init-udev-rule
          % if 'containerRegistryBase' in values['global']:
-        image: ${values['global']['containerRegistryBase']}/alpine:3.15
+        image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
         % else:
-        image: alpine:3.15
+        image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
         % endif
         command:
           - sh
@@ -60,9 +60,9 @@ spec:
       containers:
       - name: dummy-container
         % if 'containerRegistryBase' in values['global']:
-        image: ${values['global']['containerRegistryBase']}/alpine:3.15
+        image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
         % else:
-        image: alpine:3.15
+        image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
         % endif
         command: ["sh", "-c", "sleep infinity"]
         securityContext:

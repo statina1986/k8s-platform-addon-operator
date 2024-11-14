@@ -15,6 +15,6 @@ annotations:
     - name: local-static-provisioner
       image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
     - name: init-udev-rule
-      image: alpine:3.15
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
     - name: dummy-container
-      image: alpine:3.15
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9

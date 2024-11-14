@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-11-08T10:09:56.171317337Z"
+  generatedAt: "2024-11-14T07:15:22.008593234Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: platform-core
@@ -28,9 +28,9 @@ images:
     image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
     chart: platform-core
     digests:
-      - digest: sha256:8c40cc2a1ddc3069e3f80c76b4afa4f313953cb1b1df5bf3eda50800b0b3541a
+      - digest: sha256:8cc2c9ccaf6445fff8f030eacaebb666d715d6f0134c0a8dc17442029565efa5
         arch: linux/amd64
-      - digest: sha256:0399b0791f3ecbbb4af8ea6bd4c1ddc1a25c93f87cd5b7f133162e84dae59cb1
+      - digest: sha256:1985fe37af0ca7306ddac8aae5c9d8ebbeeae0287cab020b94a94d69b5704c8c
         arch: linux/arm64
   - name: local-static-provisioner
     image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
@@ -41,18 +41,18 @@ images:
       - digest: sha256:6124b5c17a188c753c7d6eaf2c48bc91b513e0ec6489a744d2521458fe31c3e0
         arch: linux/arm64
   - name: init-udev-rule
-    image: alpine:3.15
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
     chart: platform-core
     digests:
-      - digest: sha256:6a0657acfef760bd9e293361c9b558e98e7d740ed0dffca823d17098a4ffddf5
-        arch: linux/amd64
-      - digest: sha256:7c6e5d0d2629587d81f812992ec08f9cbe1590e1f2571acec6b7335acb812717
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
         arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
   - name: dummy-container
-    image: alpine:3.15
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
     chart: platform-core
     digests:
-      - digest: sha256:6a0657acfef760bd9e293361c9b558e98e7d740ed0dffca823d17098a4ffddf5
-        arch: linux/amd64
-      - digest: sha256:7c6e5d0d2629587d81f812992ec08f9cbe1590e1f2571acec6b7335acb812717
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
         arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
