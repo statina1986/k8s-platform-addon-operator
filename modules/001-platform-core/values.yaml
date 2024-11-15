@@ -1,4 +1,0 @@
-platformCore:
-  corednsEnabled: false
-  turndown:
-    enabled: "false"

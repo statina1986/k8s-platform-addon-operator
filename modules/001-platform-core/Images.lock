@@ -1,10 +1,58 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:03:18.779533838Z"
+  generatedAt: "2024-11-14T07:15:22.008593234Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: platform-core
   version: 0.0.1
   appVersion: ""
-images: []
+images:
+  - name: coredns
+    image: coredns/coredns:1.11.1
+    chart: platform-core
+    digests:
+      - digest: sha256:2169b3b96af988cf69d7dd69efbcc59433eb027320eb185c6110e0850b997870
+        arch: linux/amd64
+      - digest: sha256:ba9e70dbdf0ff8a77ea63451bb1241d08819471730fe7a35a218a8db2ef7890c
+        arch: linux/arm64
+  - name: coredns-autoscaler
+    image: registry.k8s.io/cpa/cluster-proportional-autoscaler:1.8.5
+    chart: platform-core
+    digests:
+      - digest: sha256:8ac5e2d7650f3767dac4925581ef14de51eaf27ad554bc7fb8af2be77b9e9b15
+        arch: linux/amd64
+      - digest: sha256:260ba0a774e8419e006f2a5fde05d2b7ec3da8dec59b5caad578813848c09e31
+        arch: linux/arm64
+  - name: local-volume-node-cleanup-controller
+    image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
+    chart: platform-core
+    digests:
+      - digest: sha256:8cc2c9ccaf6445fff8f030eacaebb666d715d6f0134c0a8dc17442029565efa5
+        arch: linux/amd64
+      - digest: sha256:1985fe37af0ca7306ddac8aae5c9d8ebbeeae0287cab020b94a94d69b5704c8c
+        arch: linux/arm64
+  - name: local-static-provisioner
+    image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
+    chart: platform-core
+    digests:
+      - digest: sha256:a854dffa0a63a2f7ed15c955a117c8fd94fbcbfc6df2a6db7f737b04603b2a13
+        arch: linux/amd64
+      - digest: sha256:6124b5c17a188c753c7d6eaf2c48bc91b513e0ec6489a744d2521458fe31c3e0
+        arch: linux/arm64
+  - name: init-udev-rule
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    chart: platform-core
+    digests:
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+        arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
+  - name: dummy-container
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    chart: platform-core
+    digests:
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+        arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
