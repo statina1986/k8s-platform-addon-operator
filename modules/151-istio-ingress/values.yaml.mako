@@ -595,6 +595,18 @@ istioIngress:
                   host: flex-bpmn-executor.${values['global']['appsNamespace']}.svc.cluster.local
                   port:
                     number: 21010
+      flex-testing-bpmn-executor:
+        enabled: false
+        gateways:
+          - private-ingress
+        http:
+          - retries:
+              attempts: 0
+            route:
+              - destination:
+                  host: flex-testing-bpmn-executor.${values['global']['appsNamespace']}.svc.cluster.local
+                  port:
+                    number: 21010
       graphql:
         enabled: false
         gateways:
