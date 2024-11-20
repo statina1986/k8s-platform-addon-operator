@@ -240,6 +240,10 @@ awsPlatform:
     image: "v1.28.4-minimal-eksbuild.4"
     % elif values['global']['kubernetesVersion'] in {'1.29'}:
     image: "v1.29.0-minimal-eksbuild.1"
+    % elif values['global']['kubernetesVersion'] in {'1.30'}:
+    image: "v1.30.6-minimal-eksbuild.2"
+    % elif values['global']['kubernetesVersion'] in {'1.31'}:
+    image: "v1.31.2-minimal-eksbuild.2"
     % else:
     image: "v1.25.16-minimal-eksbuild.1"
     % endif
