@@ -254,6 +254,8 @@ keycloakPlatform:
               value: vault:database/creds/postgresql_qvaa-keycloak#username
             - name: KC_DB_PASSWORD
               value: vault:database/creds/postgresql_qvaa-keycloak#password
+            - name: KC_HTTP_PORT
+              value: 8080
             - name: INSTANA_AGENT_HOST
               valueFrom:
                 fieldRef:
