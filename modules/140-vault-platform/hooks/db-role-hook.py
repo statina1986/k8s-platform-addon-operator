@@ -100,7 +100,7 @@ class DbRoleHook(Hook):
 
     def handle_binding(self, binding):
         match(binding):
-            case EventHook(eventName, event):
+            case EventHook(eventName, event, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
                     print("Skipping Vault CRD sync as it is disabled in configuration")
                     return
