@@ -33,12 +33,6 @@ cnpgPostgresPlatform:
       podMonitorEnabled: true
       podMonitorAdditionalLabels: 
         "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
-      grafanaDashboard:
-        create: true
-        labels:
-          grafana_dashboard: "1"
-        annotations:
-          grafana_folder: /tmp/dashboards/Qvantel_platform
     % endif
   clusters:
     qvt-postgredb:
