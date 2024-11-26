@@ -42,6 +42,7 @@ globalConfig:
   operatorHelmReleaseNamePrefix: ""
   clusterwideResources: "true"
   deployOperators: "true"
+  namespaceRestricted: "false"
 modulesConfig:
   apisixPlatformEnabled: "false"
   artifactoryPlatformEnabled: "false"
