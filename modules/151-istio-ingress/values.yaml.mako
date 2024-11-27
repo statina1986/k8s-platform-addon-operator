@@ -970,7 +970,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}artifactory-oss.${values['global']['platformNamespace']}.svc.cluster.local
+              host: artifactory-oss.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 8082
       artifactory-jcr:
@@ -980,7 +980,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}artifactory-jcr.${values['global']['platformNamespace']}.svc.cluster.local
+              host: artifactory-jcr.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 8082             
       consul-ui:
@@ -1031,7 +1031,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}kibana-kb-http.${values['global']['platformNamespace']}.svc.cluster.local
+              host: kibana-kb-http.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 5601
       logsearch:
@@ -1042,7 +1042,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
+              host: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 9200
       loki-read:
@@ -1053,7 +1053,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}loki-read.${values['global']['platformNamespace']}.svc.cluster.local
+              host: loki-read.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 3100
       pmm:
@@ -1063,7 +1063,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}pmm.${values['global']['platformNamespace']}.svc.cluster.local
+              host: pmm.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
       prometheus:
@@ -1084,7 +1084,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: ${values['global']['helmReleaseNamePrefix']}reaper.${values['global']['platformNamespace']}.svc.cluster.local
+              host: reaper.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 8080
       sftp:

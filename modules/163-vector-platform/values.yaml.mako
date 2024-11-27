@@ -64,15 +64,15 @@ vectorPlatform:
             - vector_logs_transform
           address: ${values['global']['helmReleaseNamePrefix']}vector-platform-aggregator.${values['global']['platformNamespace']}.svc:6000
   fluent-bit-events-collector:
-    image:
-      % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/fluent/fluent-bit
-      % endif
     % if values['global']['deployOperators'] == "true":
     enabled: true
     % else:
     enabled: false
     % endif
+    image:
+      % if 'containerRegistryBase' in values['global']:
+      repository: ${values['global']['containerRegistryBase']}/fluent/fluent-bit
+      % endif
     kind: Deployment
     nameOverride: fluent-bit-events-collector
     testFramework:
@@ -351,9 +351,9 @@ vectorPlatform:
           inputs:
             - cleanup_transform
           % if values['global']['configurationProfile'] == 'dev':
-          endpoint: http://${values['global']['helmReleaseNamePrefix']}loki-platform.${values['global']['platformNamespace']}.svc:3100
+          endpoint: http://loki-platform.${values['global']['platformNamespace']}.svc:3100
           % else:
-          endpoint: http://${values['global']['helmReleaseNamePrefix']}loki-write.${values['global']['platformNamespace']}.svc:3100
+          endpoint: http://loki-write.${values['global']['platformNamespace']}.svc:3100
           % endif
           out_of_order_action: accept
           labels:
@@ -402,7 +402,7 @@ vectorPlatform:
         elk_tibco:
           compression: none
           endpoints: 
-            - "http://${values['global']['helmReleaseNamePrefix']}logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
+            - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - tibco_transform
           type: elasticsearch
@@ -422,7 +422,7 @@ vectorPlatform:
         elk_apps:
           compression: none
           endpoints: 
-            - "http://${values['global']['helmReleaseNamePrefix']}logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
+            - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - qvantel_apps_no_debug
             - rbs_transform
@@ -443,7 +443,7 @@ vectorPlatform:
         elk_ingress:
           compression: none
           endpoints: 
-            - "http://${values['global']['helmReleaseNamePrefix']}logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
+            - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - istio_to_elk_transform
           type: elasticsearch

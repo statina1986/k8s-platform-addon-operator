@@ -378,7 +378,7 @@ elasticsearchPlatform:
             name: logsearch-es-elastic-user
             key: elastic
       - name: ELASTICSEARCH_HOST
-        value: ${values['global']['helmReleaseNamePrefix']}logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
+        value: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
       - name: ELASTICSEARCH_PORT
         value: "9200"
     % if 'containerRegistryBase' in values['global']:
@@ -427,7 +427,7 @@ elasticsearchPlatform:
       #     name: config-secret
       extraEnvs:
       - name: LOGSTASH_HOST
-        value: ${values['global']['helmReleaseNamePrefix']}elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local
+        value: elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local
       - name: LOGSTASH_PORT
         value: "5044"
       hostNetworking: true
@@ -452,7 +452,7 @@ elasticsearchPlatform:
           output.logstash:
             loadbalance: false
             bulk_max_size: 1024
-            hosts: <%text>['${LOGSTASH_HOST:${values['global']['helmReleaseNamePrefix']}elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
+            hosts: <%text>['${LOGSTASH_HOST:elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
             logging.level: info
       resources:
         requests:

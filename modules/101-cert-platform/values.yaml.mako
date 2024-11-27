@@ -10,7 +10,7 @@ certPlatform:
     % endif
     global:
       leaderElection:
-        namespace: "${values['global']['platformNamespace']}"
+        namespace: ${values['global']['platformNamespace']}
       % if values['global']['clusterwideResources'] == "false":
       rbac:
         create: false

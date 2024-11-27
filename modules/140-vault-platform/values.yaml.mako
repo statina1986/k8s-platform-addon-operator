@@ -8,7 +8,7 @@ vaultPlatform:
     namespaceSelector:
       labelSelector:
         matchLabels:
-          "platform.qvantel.com/vault-crd-sync": "true"
+          "platform.qvantel.com/vault-${values['global']['platformNamespace']}-crd-sync": "true"
     
   
   # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag

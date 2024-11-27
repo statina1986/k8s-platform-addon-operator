@@ -32,8 +32,7 @@ class ConsulServiceSyncHook(Hook):
                         "namespace": consulPlatform.get("serviceSyncForClusterIP", {}).get("namespaceSelector", {
                             "labelSelector": {
                                 "matchLabels": {
-                                    "platform.qvantel.com/clusterip-service-consul-sync": "true",
-                                    "kubernetes.io/metadata.name": ADDON_OPERATOR_NAMESPACE
+                                    "platform.qvantel.com/clusterip-service-consul-" + ADDON_OPERATOR_NAMESPACE + "-sync": "true"
                                 }
                             }
                         }),

@@ -23,8 +23,7 @@ consulPlatform:
     namespaceSelector:
       labelSelector:
         matchLabels:
-          "platform.qvantel.com/clusterip-service-consul-sync": "true"
-          "kubernetes.io/metadata.name": ${values['global']['platformNamespace']}
+          "platform.qvantel.com/clusterip-service-consul-${values['global']['platformNamespace']}-sync": "true"
             
   updateCoreDns:
     % if values['global']['clusterwideResources'] == "false":  
