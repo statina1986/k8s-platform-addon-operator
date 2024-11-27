@@ -40,12 +40,14 @@ spec:
       app.kubernetes.io/instance: {{ .Values.global.helmReleaseNamePrefix }}vector-platform
       app.kubernetes.io/name: aggregator
 {{- else}}
+---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
     release: {{.Release.Name}}
-  name: vector-aggregator-service-monitor
+  name: {{ .Values.global.helmReleaseNamePrefix }}vector-aggregator-service-monitor
+  namespace: {{ .Values.global.operatorNamespace }}
 spec:
   endpoints:
     - honorTimestamps: true
@@ -57,6 +59,5 @@ spec:
       targetPort: 9598
   selector:
     matchLabels:
-      app.kubernetes.io/instance: {{ .Values.global.helmReleaseNamePrefix }}vector-platform
       app.kubernetes.io/name: aggregator
 {{- end }} 
