@@ -1076,7 +1076,7 @@ istioIngress:
               port:
                 number: 9090
       reaper:
-        enabled: true
+        enabled: false
         gateways:
         - private-ingress
         http:
