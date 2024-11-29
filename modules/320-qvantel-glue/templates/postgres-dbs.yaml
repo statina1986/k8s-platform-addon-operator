@@ -1,0 +1,223 @@
+{{- if .Values.qvantelGlue.dbs.postgres }}
+{{- $root := . }}
+{{- range keys .Values.qvantelGlue.dbs.postgres  }}
+{{- $current := get $.Values.qvantelGlue.dbs.postgres . }}
+{{- $current_name := . }}
+
+{{- if and $current.cluster $current.cluster.spec }}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ . }}
+  {{- with $current.cluster.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    app.kubernetes.io/name: {{ . }}
+    app.kubernetes.io/instance: {{ . }}
+    app.kubernetes.io/part-of: cloudnative-pg
+  {{- with $current.cluster.additionalLabels }}
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- toYaml $current.cluster.spec | nindent 2 }}
+  {{- if $root.Values.global.awsRole}}
+  serviceAccountTemplate:
+    metadata:
+      annotations:
+        eks.amazonaws.com/role-arn: {{ $root.Values.global.awsRole }}
+  {{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    cnpg.io/cluster: {{ . }}
+  name: {{ . }}
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: postgres
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    cnpg.io/cluster: {{ . }}
+    role: primary
+  sessionAffinity: None
+  type: ClusterIP
+
+{{- if $root.Values.qvantelGlue.monitoringPlatformEnabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    cnpg.io/cluster: {{ . }}
+    release: "{{ $root.Values.global.helmReleaseNamePrefix }}monitoring-platform"
+  name: {{ . }}-monitor
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: {{ . }}
+{{- end }}
+
+
+{{- if and $current.cluster.spec.backup $current.cluster.scheduledBackup }}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: {{ . }}-scheduled-backups
+spec:
+  schedule: {{ $current.cluster.scheduledBackup }}
+  backupOwnerReference: self
+  cluster:
+    name: {{ . }}
+  immediate: true
+  target: {{ $current.cluster.spec.backup.target | default "prefer-standby" }}
+  
+{{- end }}
+
+{{- if $current.cluster.vaultConfiguration }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ . }}-admin-role
+spec:
+  db-name: {{ . }}
+  creation-statements: >-
+    {{ printf "CREATE USER \"{{name}}\" SUPERUSER PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ . }}-readonly-role
+spec:
+  db-name: {{ . }}
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data TO \"{{name}}\"" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ . }}
+spec:
+  connection-name: {{ . }}
+  plugin-name: postgresql-database-plugin
+  allowed-roles: '*'
+  computed-values:
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','username')
+    name: secret-username
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','password')
+    name: secret-password
+  db-url: >-
+    {{ printf "postgresql://{{username}}:{{password}}@%s.%s.svc:5432/postgres" . $.Release.Namespace }}
+  db-username: '{secret-username}'
+  db-password: '{secret-password}'
+{{- end }}
+
+{{- end }}
+
+
+{{- if $current.dbs }}
+{{- range keys $current.dbs  }}
+{{- $db := get $current.dbs . }}
+{{- $db_name := ( . | replace "-" "_") }}
+
+---
+apiVersion: platform.qvantel.com/v1
+kind: SqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: postgresql-{{ . }}-installer
+spec:
+  type: postgresql
+  {{- if and $db.sql $db.sql.provision }}
+  db-provision-sql:
+    {{- tpl (toYaml $db.sql.provision) $root | nindent 2 }}
+  {{- else }}
+  db-provision-sql:
+    - "CREATE ROLE db_{{ $db_name }} NOLOGIN"
+    - "GRANT db_{{ $db_name }} TO CURRENT_USER"
+    - "CREATE DATABASE {{ $db_name }} WITH OWNER db_{{ $db_name }}"  
+  {{ end }}  
+  db-username: postgres
+  db-password: "{postgres-password}"
+  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ $current_name }}-rw.platform.svc:5432/postgres"
+  computed-values:
+    - name: "postgres-password"
+      expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "postgres-user"
+      expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+
+{{- if $db.roles }}
+{{- range keys $db.roles  }}
+{{- $dbrole := get $db.roles . }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbrole }}
+spec:
+  creation-statements: {{ $dbrole.sql }}
+  db-name: {{ $current_name }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $dbrole }}
+
+{{- end }}
+{{- else }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: postgresql-{{ . }}
+spec:
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_%s TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_%s;" $db_name $db_name }}
+  db-name: {{ $current_name }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: postgresql_{{ . }}
+
+{{- end }}
+
+
+{{- end }}
+{{- end }}
+
+
+{{- if $current.roles }}
+{{- range keys $current.roles  }}
+{{- $dbrole := get $current.roles . }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbrole }}
+spec:  
+  creation-statements: {{ $dbrole.sql }}
+  db-name: {{ $current_name }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $dbrole }}
+
+{{- end }}
+{{- end }}
+
+
+{{- end }}
+{{- end }}

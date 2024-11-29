@@ -1,0 +1,159 @@
+{{- if .Values.qvantelGlue.dbs.cassandra }}
+{{- $root := . }}
+{{- range keys .Values.qvantelGlue.dbs.cassandra  }}
+{{- $current := get $.Values.qvantelGlue.dbs.cassandra . }}
+{{- $current_name := . }}
+
+{{- if $current.cluster }}
+
+{{- if $current.cluster.spec }}
+
+---
+apiVersion: k8ssandra.io/v1alpha1
+kind: K8ssandraCluster
+metadata:
+  name: {{ . }}
+spec:
+  {{- toYaml $current.cluster.spec | nindent 2 }}
+
+{{- end }}
+
+{{- if $current.cluster.vaultConfiguration }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  name: cassandra-{{ . }}
+spec:
+  connection-name: cassandra-{{ . }}
+  plugin-name: cassandra-database-plugin
+  allowed-roles: '*'  
+  additional-params:
+    hosts: main-cassandra-service.platform.svc
+    protocol_version: "4"
+    username_template: >-
+      {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
+  computed-values:
+  - expression: k8s_get_secret_value('{{ . }}-superuser','platform','username')
+    name: secret-username
+  - expression: k8s_get_secret_value('{{ . }}-superuser','platform','password')
+    name: secret-password
+  db-username: '{secret-username}'
+  db-password: '{secret-password}'
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: cassandra-{{ . }}-admin-role
+spec:
+  db-name: cassandra-{{ . }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: cassandra-{{ . }}-readonly-role
+spec:
+  db-name: cassandra-{{ . }}
+  creation-statements: >-
+    {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}};" }}
+
+{{- end }}
+
+{{- end }}
+
+
+{{- if $current.dbs }}
+{{- range keys $current.dbs  }}
+{{- $db := get $current.dbs . }}
+{{- $db_name := ( . | replace "-" "_") }}
+
+# ---
+# apiVersion: platform.qvantel.com/v1
+# kind: SqlInstaller
+# metadata:
+#   annotations:
+#     platform.qvantel.com/retry-count: "100"
+#   name: postgresql-{{ . }}-installer
+# spec:
+#   type: postgresql
+#   {{- if and $db.sql $db.sql.provision }}
+#   db-provision-sql:
+#     {{- tpl (toYaml $db.sql.provision) $root | nindent 2 }}
+#   {{- else }}
+#   db-provision-sql:
+#     - "CREATE ROLE db_{{ $db_name }} NOLOGIN"
+#     - "GRANT db_{{ $db_name }} TO CURRENT_USER"
+#     - "CREATE DATABASE {{ $db_name }} WITH OWNER db_{{ $db_name }}"  
+#   {{ end }}  
+#   db-username: postgres
+#   db-password: "{postgres-password}"
+#   db-url: "postgresql://{postgres-user}:{postgres-password}@{{ $current_name }}-rw.platform.svc:5432/postgres"
+#   computed-values:
+#     - name: "postgres-password"
+#       expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+#     - name: "postgres-user"
+#       expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+
+{{- if $db.roles }}
+{{- range keys $db.roles  }}
+{{- $dbrole := get $db.roles . }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbrole }}
+spec:
+  creation-statements: {{ $dbrole.sql }}
+  db-name: cassandra-{{ $current_name }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $dbrole }}
+
+{{- end }}
+{{- else }}
+
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: cassandra-{{ . }}
+spec:
+  db-name: cassandra-{{ $current_name }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
+  role-name: cassandra_{{ . }}
+
+{{- end }}
+
+
+{{- end }}
+{{- end }}
+
+
+{{- if $current.roles }}
+{{- range keys $current.roles  }}
+{{- $dbrole := get $current.roles . }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbrole }}
+spec:  
+  creation-statements: {{ $dbrole.sql }}
+  db-name: cassandra-{{ $current_name }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $dbrole }}
+
+{{- end }}
+{{- end }}
+
+
+{{- end }}
+{{- end }}
