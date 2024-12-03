@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-09T15:13:40.9205703Z"
+  generatedAt: "2024-12-01T15:56:14.263648858Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -184,3 +184,43 @@ images:
         arch: linux/arm64
       - digest: sha256:632831c45ad02a28f0309866f100351ca94201f09704431d0f05e6a111288f27
         arch: linux/amd64
+  - name: alloy
+    image: grafana/alloy:v1.5.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:5dd4fbb8ff789f5d559abe816c953312cd7429b16d1e46f3389480f1ac038316
+        arch: linux/amd64
+      - digest: sha256:5b43cb4069675c3bf83bee8967403ce9de005a4f716eea3483e9af6197433ff1
+        arch: linux/arm64
+  - name: configmap-reload
+    image: ghcr.io/jimmidyson/configmap-reload:v0.12.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:e8cefadc91804275415d0e5e60e5e43dd75d975fbc098c3c5bbcc758c4f037f1
+        arch: linux/arm64
+      - digest: sha256:ab303cc19949ade3c308055a7a0c01c87298fa76ab454e405ed138f5bae7c38e
+        arch: linux/amd64
+  - name: beyla
+    image: grafana/beyla:1.9.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:1402bbea770a6e4b60bf11822fbb7368d63eb0e93072e50d2d82c6801dd12f2a
+        arch: linux/amd64
+      - digest: sha256:3fde8a43d42a019a393e7abca4a66c68b79e4a48bf96ea455556166ab3a919bd
+        arch: linux/arm64
+  - name: beyla-k8s-cache
+    image: grafana/beyla-k8s-cache:1.9.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:4d537f4546f8578746155377d133addbdae346fd066d7a99eed920c6229d1972
+        arch: linux/amd64
+      - digest: sha256:92db025d15176e1ae15b5bb0a58a28b5b9f82d933813990259a3f6c2f40b0fd8
+        arch: linux/arm64
+  - name: tempo
+    image: grafana/tempo:2.6.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:a6d09da22ebfcc11ba40701433d02738501c3c46271c769a49f4eb9228429e25
+        arch: linux/amd64
+      - digest: sha256:1aff1f89f4036330ab58df9cad6e8f07bf10741bf5f188da0e3bdb0bd9efeb90
+        arch: linux/arm64

@@ -22,3 +22,15 @@ dependencies:
     condition: yet-another-cloudwatch-exporter.enabled
     version: "0.38.0"
     repository: "https://nerdswords.github.io/helm-charts"
+  - name: beyla
+    condition: beyla.enabled
+    version: "1.5.0"
+    repository: "https://grafana.github.io/helm-charts"
+  - name: tempo
+    condition: tempo.enabled
+    version: "1.14.0"
+    repository: "https://grafana.github.io/helm-charts"
+  - name: alloy
+    condition: alloy.enabled
+    version: "0.10.0"
+    repository: "https://grafana.github.io/helm-charts"

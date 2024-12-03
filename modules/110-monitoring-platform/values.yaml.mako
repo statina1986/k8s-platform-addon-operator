@@ -28,7 +28,117 @@ monitoringPlatform:
       mariadb: ${addon_operator['mariadbOperatorPlatformEnabled']}
       redis: ${addon_operator['redisPlatformEnabled']}
       rabbitmq: ${addon_operator['rabbitmqPlatformEnabled']}
-      mongodb: ${addon_operator['mongodbPlatformEnabled']}            
+      mongodb: ${addon_operator['mongodbPlatformEnabled']}
+  alloy:
+    enabled: false
+    global:
+      image:
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}
+        % endif
+    crds:
+      create: false
+    controller:
+      type: deployment
+      replicas: 1
+    alloy:
+      mode: flow
+      extraPorts:
+      - name: http-traces
+        port: 4318
+        targetPort: 4318
+        protocol: "TCP"
+      extraEnv:
+      - name: PROMETHEUS_ENDPOINT
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc:9090"
+      - name: TEMPO_ENDPOINT
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:4318"
+      configMap:
+        create: true
+        content: |
+          otelcol.receiver.otlp "default" {
+            grpc {}
+            http {}
+          
+            output {
+              metrics = [otelcol.processor.batch.default.input]
+              traces = [otelcol.processor.batch.default.input]
+            }
+          }
+            
+          otelcol.processor.batch "default" {
+            output {
+              metrics = [otelcol.exporter.prometheus.default.input]
+              traces  = [otelcol.exporter.otlphttp.tempo.input]
+            }
+          }
+            
+          otelcol.exporter.prometheus "default" {
+            forward_to = [prometheus.remote_write.prometheus.receiver]
+          }
+            
+          prometheus.remote_write "prometheus" {
+            endpoint {
+              url = env("PROMETHEUS_ENDPOINT") + "/api/v1/write"
+              }
+            }
+            
+          otelcol.exporter.otlphttp "tempo" {
+            // Send traces to a locally running Tempo without TLS enabled.
+            client {
+              endpoint = env("TEMPO_ENDPOINT")
+            }
+          }
+  beyla:
+    enabled: false
+    global:
+      image:
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}
+        % endif
+    serviceAccount:
+      create: false
+      name: platform
+    config:
+      data:
+        # Contents of the actual Beyla configuration file
+        discovery:
+          services:
+            - k8s_namespace: qvantel            
+        routes:
+          unmatched: heuristic
+        otel_metrics_export:
+          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc:4318
+        otel_traces_export:
+          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc:4318
+        attributes:
+          kubernetes:
+            enable: true            
+  tempo:
+    enabled: false
+    tolerations:
+      - key: "dedicated-nodes"
+        value: "platform-masters"
+        operator: "Equal"
+        effect: "NoSchedule"
+    tempo:
+      % if 'containerRegistryBase' in values['global']:
+      repository: ${values['global']['containerRegistryBase']}/grafana/tempo
+      % endif
+      storage:
+        trace:
+          backend: local #change to s3 
+          local:
+            path: /var/tempo/traces
+          wal:
+            path: /var/tempo/wal
+        #  s3:
+        #    endpoint: s3.eu-south-1.amazonaws.com  ### Need to set to correct endpoint
+        #    bucket: tempo-traces
+      metricsGenerator:
+        enabled: true
+        remoteWriteUrl: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}:9090/api/v1/write"
+        send_exemplars: true 
   x509-certificate-exporter:
     enabled: true
     image:
@@ -53,19 +163,19 @@ monitoringPlatform:
           cpu: 20m
           memory: 20Mi 
       podExtraLabels:
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     hostPathsExporter:
       podExtraLabels:
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     service:
       extraLabels:
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     prometheusServiceMonitor:
       extraLabels:
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     prometheusRules:
       extraLabels:
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
     image:
@@ -134,7 +244,7 @@ monitoringPlatform:
     serviceMonitor:
       enabled: true
       labels:
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
   prometheus-consul-exporter:
     enabled: true
     image:
@@ -156,7 +266,7 @@ monitoringPlatform:
     consulServer: consul-consul-server:8500
     serviceMonitor:
       labels: 
-        "release": "monitoring-platform"
+        "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
       enabled: true
       interval: 30s
       telemetryPath: /metrics
@@ -267,7 +377,7 @@ monitoringPlatform:
         userKey: adminUser
       serviceMonitor:
         labels:
-          "release": "monitoring-platform"
+          "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
       persistence:
         type: pvc
         enabled: true
@@ -285,15 +395,18 @@ monitoringPlatform:
             - name: Loki
               type: loki
               % if values['global']['configurationProfile'] == 'dev':
-              url: http://loki-platform.platform.svc:3100
+              url: http://loki-platform.${values['global']['platformNamespace']}.svc:3100
               % else:
-              url: http://loki-read.platform.svc:3100
+              url: http://loki-read.${values['global']['platformNamespace']}.svc:3100
               % endif
+            - name: Tempo
+              type: tempo              
+              url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:3100
             % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
             - name: Elasticsearch-Ingress
               type: elasticsearch
               access: http
-              url: http://logsearch-es-logsearch.platform.svc:9200
+              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
               basicAuth: true
               basicAuthUser: elastic
               database: ingress*
@@ -305,7 +418,7 @@ monitoringPlatform:
             - name: Elasticsearch-Application
               type: elasticsearch
               access: http
-              url: http://logsearch-es-logsearch.platform.svc:9200
+              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
               basicAuth: true
               basicAuthUser: elastic
               database: application*

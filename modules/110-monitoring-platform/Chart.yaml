@@ -50,5 +50,15 @@ annotations:
       image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.13.0
     - name: grafana-plugins
       image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
-      
+    - name: alloy
+      image: grafana/alloy:v1.5.0
+    - name: configmap-reload
+      image: ghcr.io/jimmidyson/configmap-reload:v0.12.0
+    - name: beyla
+      image: grafana/beyla:1.9.0
+    - name: beyla-k8s-cache
+      image: grafana/beyla-k8s-cache:1.9.0
+    - name: tempo
+      image: grafana/tempo:2.6.1
+
 

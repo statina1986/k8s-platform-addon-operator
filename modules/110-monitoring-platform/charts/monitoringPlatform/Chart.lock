@@ -14,5 +14,14 @@ dependencies:
 - name: yet-another-cloudwatch-exporter
   repository: https://nerdswords.github.io/helm-charts
   version: 0.38.0
-digest: sha256:ba0fdd4b4001c968321e68a47b576a5e780b09982dbf47aa10f8cbf5d65b1d3b
-generated: "2024-10-09T16:33:40.721859+02:00"
+- name: beyla
+  repository: https://grafana.github.io/helm-charts
+  version: 1.5.0
+- name: tempo
+  repository: https://grafana.github.io/helm-charts
+  version: 1.14.0
+- name: alloy
+  repository: https://grafana.github.io/helm-charts
+  version: 0.10.0
+digest: sha256:0860fc2ae3828ecc10856bf3257f4ad73e8f32e78ea270c553f43e45c84bb7ef
+generated: "2024-12-01T17:37:33.29841048+02:00"
