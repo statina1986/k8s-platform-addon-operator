@@ -1,12 +1,8 @@
 rancherPlatformNamespace: cattle-system
-rancherHelmVersion: "2.8.1"
+rancherHelmVersion: "2.9.2"
 rancherPlatform:
   rancher:
-    global:
-      cattle:
-        psp:
-          enabled: false
-    hostname: ""    
+    hostname: ""
     ingress:
       enabled: false
     privateCA: false
