@@ -1,0 +1,28 @@
+{{ template "chart.header" . }}
+
+This module provides two versions of [Artifactory](https://jfrog.com/artifactory/) deployment on kubernetes. [OSS](https://artifacthub.io/packages/helm/jfrog/artifactory-oss) and [JCR](https://artifacthub.io/packages/helm/jfrog/artifactory-jcr).
+
+Depends on modules:
+- [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) which is by default is used as main database for both versions.
+
+Provides:
+- OSS artifactory
+- JCR artifactory
+- Database configurability (cnpg recommended)
+
+Both versions available at:
+- artifactory-oss.platform.svc
+- artifactory-jcr.platform.svc
+
+### Minimal configuration
+* This is minimal required configuration for deploying either both or another of these versions:  
+  ```
+  artifactoryPlatformEnabled: "true"
+  artifactoryPlatform:
+    artifactory-oss:
+      enabled: true
+    artifactory-jcr:
+      enabled: true
+  ```
+
+{{ template "chart.valuesSection" . }}
