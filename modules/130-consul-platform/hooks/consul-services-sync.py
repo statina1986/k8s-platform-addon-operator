@@ -41,7 +41,7 @@ class ConsulServiceSyncHook(Hook):
             })
         )
 
-    def registerService(self, event, consul_client):
+    def registerService(self, event, consul_client, prefix=""):
         if event['object']['spec'].get('type', '') != 'ClusterIP':
             return
         name = event['object']['metadata']['name']
@@ -102,7 +102,8 @@ class ConsulServiceSyncHook(Hook):
                         consul_client.catalog.deregister('addon-operator-consul-sync', service_id=id)
                         return
                     else:
-                        self.registerService(event, consul_client)
+                        prefix = values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('prefix', "")
+                        self.registerService(event, consul_client, prefix)
 
             case ScheduleHook(binding, values):
                 if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('enabled', 'false') == 'false':
@@ -117,16 +118,20 @@ class ConsulServiceSyncHook(Hook):
                 if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('purgeClusterIPConsulSyncServicesOnStartup', 'false') == 'true':
                     consul_client.catalog.deregister('addon-operator-consul-sync')
 
+                prefix = values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('prefix', "")
+
                 for event in binding.get('snapshots', {}).get('monitor-clusterIP-services', []):
-                    self.registerService(event, consul_client)
+                    self.registerService(event, consul_client, prefix)
 
             case SynchronizationHook(binding, values):
                 if values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('enabled', 'false') == 'false':
                     print("Skipping ClusterIP Service sync as it is disabled in configuration")
                     return
 
+                prefix = values['consulPlatform'].get('serviceSyncForClusterIP', {}).get('prefix', "")
+
                 for event in binding.get('objects', []):
-                    self.registerService(event, get_consul_client())
+                    self.registerService(event, get_consul_client(), prefix)
             case _:
                 print("Unknown hook data")
 

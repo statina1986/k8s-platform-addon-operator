@@ -17,6 +17,8 @@ consulPlatform:
     purgeClusterIPConsulSyncServicesOnStartup: "false"
     # -- Schedule for reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
     schedule: "*/5 * * * *"
+    # -- Optional prefix for service names registered to Consul.
+    prefix: ""
     # -- Selector for namespaces from which sync services.
     namespaceSelector:
       labelSelector:
