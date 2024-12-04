@@ -50,7 +50,7 @@ monitoringPlatform:
         protocol: "TCP"
       extraEnv:
       - name: PROMETHEUS_ENDPOINT
-        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc:9090"
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform.${values['global']['platformNamespace']}.svc:9090"
       - name: TEMPO_ENDPOINT
         value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:4318"
       configMap:
@@ -104,7 +104,7 @@ monitoringPlatform:
         # Contents of the actual Beyla configuration file
         discovery:
           services:
-            - k8s_namespace: qvantel            
+            - k8s_namespace: ${values['global']['appsNamespace']}           
         routes:
           unmatched: heuristic
         otel_metrics_export:
@@ -137,7 +137,7 @@ monitoringPlatform:
         #    bucket: tempo-traces
       metricsGenerator:
         enabled: true
-        remoteWriteUrl: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}:9090/api/v1/write"
+        remoteWriteUrl: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform.${values['global']['platformNamespace']}:9090/api/v1/write"
         send_exemplars: true 
   x509-certificate-exporter:
     enabled: true
