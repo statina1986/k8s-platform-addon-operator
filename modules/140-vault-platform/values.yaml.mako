@@ -6,9 +6,8 @@ vaultPlatform:
     schedule: "*/5 * * * *"
     # -- Selector for namespaces from which sync crd resources.
     namespaceSelector:
-      labelSelector:
-        matchLabels:
-          "platform.qvantel.com/vault-${values['global']['platformNamespace']}-crd-sync": "true"
+      nameSelector:
+        matchNames: ["${values['global']['platformNamespace']}"]
     
   
   # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag

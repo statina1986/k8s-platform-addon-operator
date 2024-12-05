@@ -21,9 +21,8 @@ consulPlatform:
     prefix: ""
     # -- Selector for namespaces from which sync services.
     namespaceSelector:
-      labelSelector:
-        matchLabels:
-          "platform.qvantel.com/clusterip-service-consul-${values['global']['platformNamespace']}-sync": "true"
+      nameSelector:
+        matchNames: ["${values['global']['platformNamespace']}"]
             
   updateCoreDns:
     % if values['global']['clusterwideResources'] == "false":  

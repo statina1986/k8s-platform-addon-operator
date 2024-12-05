@@ -3,7 +3,6 @@
 import sys
 
 import yaml
-from common.python.variables import *
 from common.python.hooks import *
 from common.python.utils import get_exception_string
 from common.python.consul import *
@@ -32,7 +31,7 @@ class ConsulServiceSyncHook(Hook):
                         "namespace": consulPlatform.get("serviceSyncForClusterIP", {}).get("namespaceSelector", {
                             "labelSelector": {
                                 "matchLabels": {
-                                    "platform.qvantel.com/clusterip-service-consul-" + ADDON_OPERATOR_NAMESPACE + "-sync": "true"
+                                    "platform.qvantel.com/clusterip-service-consul-sync": "true"
                                 }
                             }
                         }),

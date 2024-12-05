@@ -50,10 +50,10 @@ spec:
     name: secret-password
   {{- if and $current.cluster.spec.replication $current.cluster.spec.replication.enabled }}
   db-url: >-
-    {{ printf "{{username}}:{{password}}@tcp(%s-primary.platform.svc:3306)/" . }}
+    {{ printf "{{username}}:{{password}}@tcp(%s-primary.%s.svc:3306)/" . $.Release.Namespace}}
   {{- else }}
   db-url: >-
-    {{ printf "{{username}}:{{password}}@tcp(%s.platform.svc:3306)/" . }}
+    {{ printf "{{username}}:{{password}}@tcp(%s.%s.svc:3306)/" . $.Release.Namespace}}
   {{- end }}
   db-username: 'root'
   db-password: '{secret-password}'
@@ -85,9 +85,9 @@ spec:
   db-username: 'root'
   db-password: "{mariadb-password}"
   {{- if and $current.cluster.spec.replication $current.cluster.spec.replication.enabled }}
-  db-url: {{ $current_name }}-primary.platform.svc
+  db-url: {{ $current_name }}-primary.{{ $.Release.Namespace }}.svc
   {{- else }}
-  db-url: {{ $current_name }}.platform.svc
+  db-url: {{ $current_name }}.{{ $.Release.Namespace }}.svc
   {{- end }}  
   computed-values:
     - name: "mariadb-password"

@@ -155,7 +155,7 @@ spec:
   {{ end }}  
   db-username: postgres
   db-password: "{postgres-password}"
-  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ $current_name }}-rw.platform.svc:5432/postgres"
+  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ $current_name }}-rw.{{ $.Release.Namespace }}.svc:5432/postgres"
   computed-values:
     - name: "postgres-password"
       expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'password')"

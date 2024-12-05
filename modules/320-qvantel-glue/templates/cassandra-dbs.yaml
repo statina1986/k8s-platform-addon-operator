@@ -30,14 +30,14 @@ spec:
   plugin-name: cassandra-database-plugin
   allowed-roles: '*'  
   additional-params:
-    hosts: main-cassandra-service.platform.svc
+    hosts: main-cassandra-service.{{ $.Release.Namespace }}.svc
     protocol_version: "4"
     username_template: >-
       {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
   computed-values:
-  - expression: k8s_get_secret_value('{{ . }}-superuser','platform','username')
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','username')
     name: secret-username
-  - expression: k8s_get_secret_value('{{ . }}-superuser','platform','password')
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-username: '{secret-username}'
   db-password: '{secret-password}'
