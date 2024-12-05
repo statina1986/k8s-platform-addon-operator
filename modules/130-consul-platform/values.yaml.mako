@@ -100,7 +100,7 @@ consulPlatform:
       k8sPrefix: null
       nodePortSyncType: InternalOnly
       addK8SNamespaceSuffix: false
-      % if values['global']['clusterwideResources'] == "false":
+      % if values['global']['namespaceRestricted'] == "true":
       k8sAllowNamespaces:
         - ${values['global']['platformNamespace']}
         - ${values['global']['appsNamespace']}
