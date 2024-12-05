@@ -72,6 +72,7 @@ istioPlatform:
               authority: "%REQ(:AUTHORITY)%"
               x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
               x_trace_token: "%REQ(X-TRACE-TOKEN)%"
+              x_trace_token_resp: "%RESP(X-TRACE-TOKEN)%"
               request_headers: "%DYNAMIC_METADATA(envoy.lua:request_headers)%"
               request_body: "%DYNAMIC_METADATA(envoy.lua:request_body)%"
               response_headers: "%DYNAMIC_METADATA(envoy.lua:response_headers)%"
