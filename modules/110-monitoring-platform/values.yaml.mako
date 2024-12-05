@@ -50,7 +50,7 @@ monitoringPlatform:
         protocol: "TCP"
       extraEnv:
       - name: PROMETHEUS_ENDPOINT
-        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc:9090"
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform.${values['global']['platformNamespace']}.svc:9090"
       - name: TEMPO_ENDPOINT
         value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:4318"
       configMap:
@@ -104,7 +104,7 @@ monitoringPlatform:
         # Contents of the actual Beyla configuration file
         discovery:
           services:
-            - k8s_namespace: qvantel            
+            - k8s_namespace: ${values['global']['appsNamespace']}           
         routes:
           unmatched: heuristic
         otel_metrics_export:
@@ -137,10 +137,16 @@ monitoringPlatform:
         #    bucket: tempo-traces
       metricsGenerator:
         enabled: true
-        remoteWriteUrl: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}:9090/api/v1/write"
+        remoteWriteUrl: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform.${values['global']['platformNamespace']}:9090/api/v1/write"
         send_exemplars: true 
   x509-certificate-exporter:
     enabled: true
+    % if values['global']['clusterwideResources'] == "false":
+    rbac:
+      create: false
+      secretsExporter:
+        serviceAccountName: platform
+    % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -155,6 +161,10 @@ monitoringPlatform:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     secretsExporter:
+      % if values['global']['namespaceRestricted'] == "true":
+      includeNamespaces:
+        - ${values['global']['platformNamespace']}
+      % endif
       resources:
         limits:
           cpu: 250m
@@ -272,6 +282,48 @@ monitoringPlatform:
       telemetryPath: /metrics
   kube-prometheus-stack:
     enabled: true
+    fullnameOverride: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
+    % if values['global']['namespaceRestricted'] == "true":
+    kubelet:
+      serviceMonitor:
+        cAdvisorMetricRelabelings:
+          - sourceLabels: [ namespace ]
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            action: keep
+        cAdvisorRelabelings:
+          - sourceLabels: [__meta_kubernetes_namespace]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: namespace
+            replacement: $1
+            action: replace
+          - sourceLabels: [__metrics_path__]
+            targetLabel: metrics_path
+            action: replace
+        metricRelabelings:
+          - sourceLabels: [ namespace ]
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            action: keep
+        relabelings:
+          - sourceLabels: [__meta_kubernetes_namespace]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: namespace
+            replacement: $1
+            action: replace
+          - sourceLabels: [__metrics_path__]
+            targetLabel: metrics_path
+            action: replace
+    % endif
+    % if values['global']['clusterwideResources'] == "false":
+    crds:
+      enabled: false
+    kubernetesServiceMonitors:
+      enabled: false
+    global:
+      rbac:
+        create: false
+    % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
@@ -295,6 +347,11 @@ monitoringPlatform:
           registry: ${values['global']['containerRegistryBase']}
           % endif
     prometheusOperator:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
+      enabled: true
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -305,6 +362,9 @@ monitoringPlatform:
           registry: ${values['global']['containerRegistryBase']}
           % endif
       admissionWebhooks:
+        % if values['global']['clusterwideResources'] == "false":
+        enabled: false
+        % endif
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
@@ -320,6 +380,10 @@ monitoringPlatform:
         % endif
     grafana:    
       enabled: true
+      % if values['global']['clusterwideResources'] == "false":
+      rbac:
+        namespaced: true
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -384,7 +448,7 @@ monitoringPlatform:
         size: 30Gi
         finalizers:
           - kubernetes.io/pvc-protection
-      % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
+      % if addon_operator['elasticsearchPlatformEnabled'] == 'true' or values['global']['deployOperators'] == "false":
       envFromSecrets: 
         - name: "logsearch-es-elastic-user"
       % endif
@@ -394,19 +458,29 @@ monitoringPlatform:
           datasources:
             - name: Loki
               type: loki
-              % if values['global']['configurationProfile'] == 'dev':
+              % if values['global']['configurationProfile'] == 'dev' and values['global']['deployOperators'] == "true":
               url: http://loki-platform.${values['global']['platformNamespace']}.svc:3100
-              % else:
+              % endif
+              % if values['global']['configurationProfile'] == 'dev' and values['global']['deployOperators'] == "false":
+              url: http://loki-platform.${values['global']['operatorNamespace']}.svc:3100
+              % endif
+              % if values['global']['configurationProfile'] != 'dev' and values['global']['deployOperators'] == "true":
               url: http://loki-read.${values['global']['platformNamespace']}.svc:3100
+              % endif
+              % if values['global']['configurationProfile'] != 'dev' and values['global']['deployOperators'] == "false":
+              url: http://loki-read.${values['global']['operatorNamespace']}.svc:3100
               % endif
             - name: Tempo
               type: tempo              
               url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:3100
-            % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
             - name: Elasticsearch-Ingress
               type: elasticsearch
               access: http
+              % if values['global']['deployOperators'] == "true":
               url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
+              % else:
+              url: http://logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc:9200
+              % endif
               basicAuth: true
               basicAuthUser: elastic
               database: ingress*
@@ -418,7 +492,11 @@ monitoringPlatform:
             - name: Elasticsearch-Application
               type: elasticsearch
               access: http
+              % if values['global']['deployOperators'] == "true":
               url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc:9200
+              % else:
+              url: http://logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc:9200
+              % endif
               basicAuth: true
               basicAuthUser: elastic
               database: application*
@@ -427,7 +505,6 @@ monitoringPlatform:
                 timeField: "@timestamp"
               secureJsonData:
                 basicAuthPassword: <%text>${elastic}</%text>
-            % endif
         business.yaml:
           apiVersion: 1
           datasources:
@@ -457,8 +534,8 @@ monitoringPlatform:
           name_attribute_path: full_name
           auth_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/auth # override if needed in the target environment values file
           signout_redirect_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel/protocol/openid-connect/logout # override if needed in the target environment values file
-          token_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
-          api_url: http://qvaa-proxy-80.{{.Release.Namespace}}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
+          token_url: http://qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/token
+          api_url: http://qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local/auth/realms/qvantel/protocol/openid-connect/userinfo
           role_attribute_path: contains(realm_access.roles[*], 'grafana_admin') && 'Admin' || contains(realm_access.roles[*], 'grafana_server_admin') && 'GrafanaAdmin' || contains(realm_access.roles[*], 'grafana_editor') && 'Editor' || contains(realm_access.roles[*], 'grafana_viewer') && 'Viewer'
           allow_assign_grafana_admin: true
           role_attribute_strict: true
@@ -475,6 +552,11 @@ monitoringPlatform:
           maxLines: 1000
         dashboards:
           enabled: true
+          % if values['global']['namespaceRestricted'] == "true":
+          searchNamespace: 
+            - ${values['global']['platformNamespace']}
+            - ${values['global']['appsNamespace']}
+          % endif
           label: grafana_dashboard
           labelValue: "1"
           annotations:
@@ -486,17 +568,39 @@ monitoringPlatform:
             allowUiUpdates: true
             # enabling to structure dashboards folder based on the k8s-sidecar-target-directory
             foldersFromFilesStructure: true
+    % if values['global']['deployOperators'] == "false":
+    nodeExporter:
+      enabled: false
+    % endif
     prometheus-node-exporter:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
     kube-state-metrics:
+      % if values['global']['namespaceRestricted'] == "true":
+      prometheus:
+        monitor:
+          metricRelabelings:
+            - sourceLabels: [ namespace ]
+              regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+              action: keep
+          relabelings:
+            - sourceLabels: [__meta_kubernetes_namespace]
+              separator: ;
+              regex: ^(.*)$
+              targetLabel: namespace
+              replacement: $1
+              action: replace
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
       rbac:
+        % if values['global']['clusterwideResources'] == "false":
+        useClusterRole: false
+        % endif
         extraRules:
         % if addon_operator['kasopePlatformEnabled'] == 'true':
         - apiGroups: ["medusa.k8ssandra.io"]
@@ -560,6 +664,20 @@ monitoringPlatform:
           % endif
     prometheus:
       enabled: true
+      % if values['global']['namespaceRestricted'] == "true":
+      serviceMonitor:
+        metricRelabelings:
+          - sourceLabels: [ namespace ]
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            action: keep
+        relabelings:
+          - sourceLabels: [__meta_kubernetes_namespace]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: namespace
+            replacement: $1
+            action: replace
+      % endif
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
           value: "${values['global']['platformMastersValue']}"
@@ -581,6 +699,21 @@ monitoringPlatform:
           datacenter: need-to-define
           environment: need-to-define
         enableRemoteWriteReceiver: true
+        podMonitorSelector:
+          matchLabels:
+            "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
+        probeSelector:
+          matchLabels:
+            "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
+        ruleSelector:
+          matchLabels:
+            "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
+        scrapeConfigSelector:
+          matchLabels:
+            "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
+        serviceMonitorSelector:
+          matchLabels:
+            "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
         tolerations:
           - key: "${values['global']['platformMastersKey']}"
             value: "${values['global']['platformMastersValue']}"
@@ -640,6 +773,11 @@ monitoringPlatform:
               target_label: node
               replacement: $1
               action: replace
+            % if values['global']['namespaceRestricted'] == "true":
+            - source_labels: [__meta_kubernetes_namespace]
+              action: keep
+              regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            % endif
           'podMonitor/metrics/kafka-resources-metrics/0' :
             honor_timestamps: true
             scrape_interval: 30s
@@ -738,7 +876,7 @@ monitoringPlatform:
               follow_redirects: true
               namespaces:
                 names:
-                - platform     
+                - ${values['global']['platformNamespace']}
         additionalScrapeConfigs: |
           {{- range $k, $v := .Values.prometheus.prometheusSpec.additionalScrapeConfigsAsMap }}
           - job_name: '{{ $k }}'

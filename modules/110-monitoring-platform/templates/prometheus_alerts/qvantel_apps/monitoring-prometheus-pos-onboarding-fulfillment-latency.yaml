@@ -5,12 +5,9 @@ metadata:
   name: monitoring-prometheus-pos-onboarding-fulfillment-latency.rules
   namespace: {{.Release.Namespace}}
   generation: 1
-  annotations:
-    meta.helm.sh/release-name: monitoring-platform
-    meta.helm.sh/release-namespace: {{.Release.Namespace}}
   labels:
     app: kube-prometheus-stack
-    release: monitoring-platform
+    release: {{.Release.Name}}
 spec:
   groups:
     - name: orders-bpmn-executor-jvm-threads-state.alerts

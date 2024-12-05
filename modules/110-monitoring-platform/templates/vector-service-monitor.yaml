@@ -1,8 +1,9 @@
+{{- if eq .Values.global.deployOperators "true" }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    release: monitoring-platform
+    release: {{.Release.Name}}
   name: vector-agent-service-monitor
 spec:
   endpoints:
@@ -15,7 +16,7 @@ spec:
       targetPort: 9598
   selector:
     matchLabels:
-      app.kubernetes.io/instance: vector-platform
+      app.kubernetes.io/instance: {{ .Values.global.helmReleaseNamePrefix }}vector-platform
       app.kubernetes.io/name: agent
 
 ---
@@ -23,7 +24,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    release: monitoring-platform
+    release: {{.Release.Name}}
   name: vector-aggregator-service-monitor
 spec:
   endpoints:
@@ -36,5 +37,27 @@ spec:
       targetPort: 9598
   selector:
     matchLabels:
-      app.kubernetes.io/instance: vector-platform
+      app.kubernetes.io/instance: {{ .Values.global.helmReleaseNamePrefix }}vector-platform
       app.kubernetes.io/name: aggregator
+{{- else}}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: {{.Release.Name}}
+  name: {{ .Values.global.helmReleaseNamePrefix }}vector-aggregator-service-monitor
+  namespace: {{ .Values.global.operatorNamespace }}
+spec:
+  endpoints:
+    - honorTimestamps: true
+      path: '/metrics'
+      scheme: http
+      scrapeTimeout: 30s
+      params:
+        format: ['prometheus']
+      targetPort: 9598
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aggregator
+{{- end }} 

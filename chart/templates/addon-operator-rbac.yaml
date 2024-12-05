@@ -26,7 +26,6 @@ rules:
     - "*"
   verbs:
     - "*"
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -40,4 +39,89 @@ subjects:
   - kind: ServiceAccount
     name: platform
     namespace: {{ .Release.Namespace }}
-{{- end }} 
+{{- else}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-operator-{{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+    - "*"
+  resources:
+    - "*"
+  verbs:
+    - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-operator-{{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-operator-{{ .Release.Namespace }}
+subjects:
+  - kind: ServiceAccount
+    name: platform
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-operator-{{ .Values.globalConfig.appsNamespace }}
+  namespace: {{ .Values.globalConfig.appsNamespace }}
+rules:
+- apiGroups:
+    - "*"
+  resources:
+    - "*"
+  verbs:
+    - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-operator-{{ .Values.globalConfig.appsNamespace }}
+  namespace: {{ .Values.globalConfig.appsNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-operator-{{ .Values.globalConfig.appsNamespace }}
+subjects:
+  - kind: ServiceAccount
+    name: platform
+    namespace: {{ .Release.Namespace }}
+{{- end }}
+---
+{{- if and (eq .Values.globalConfig.deployOperators "false") (eq .Values.globalConfig.clusterwideResources "false") }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader
+  namespace: {{ .Values.globalConfig.operatorNamespace }}
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - "secrets"
+    - "configmaps"
+  verbs:
+    - "get, list, watch"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader
+  namespace: {{ .Values.globalConfig.operatorNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader
+subjects:
+  - kind: ServiceAccount
+    name: platform
+    namespace: {{ .Release.Namespace }}
+{{- end }}

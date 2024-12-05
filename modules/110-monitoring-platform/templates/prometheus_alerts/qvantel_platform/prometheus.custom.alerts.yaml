@@ -1,15 +1,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: monitoring-platform-prometheus-custom-alerting.rules
+  name: {{.Release.Name}}-prometheus-custom-alerting.rules
   namespace: {{.Release.Namespace}}
   generation: 1
-  annotations:
-    meta.helm.sh/release-name: monitoring-platform
-    meta.helm.sh/release-namespace: {{.Release.Namespace}}
   labels:
     app: kube-prometheus-stack
-    release: monitoring-platform
+    release: {{.Release.Name}}
 spec:
   groups:
   - name: prometheus.custom.alerts
