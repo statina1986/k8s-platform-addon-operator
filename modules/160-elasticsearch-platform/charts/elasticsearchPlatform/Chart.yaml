@@ -5,6 +5,7 @@ dependencies:
   - name: eck-operator
     version: 2.2.0
     repository: https://helm.elastic.co
+    condition: eck-operator.enabled
   - name: logstash
     version: 7.16.2
     repository: https://helm.elastic.co

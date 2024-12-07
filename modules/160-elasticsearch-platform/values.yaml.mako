@@ -5,6 +5,11 @@ elasticsearchPlatform:
   loggingSetupimage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
   % endif
   eck-operator:
+    % if values['global']['deployOperators'] == "false":
+    enabled: false
+    % else:
+    enabled: true
+    % endif
     # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false
     image:
@@ -14,7 +19,13 @@ elasticsearchPlatform:
     nameOverride: "elastic-operator"
     fullnameOverride: "elastic-operator"
     managedNamespaces: []
-    createClusterScopedResources: true
+    % if values['global']['clusterwideResources'] == "false":
+    createClusterScopedResources: false
+    webhook:
+      enabled: false
+    config:
+      validateStorageClass: false
+    % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
@@ -40,7 +51,11 @@ elasticsearchPlatform:
 
   clusters:
     logsearch:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
       enabled: true
+      % endif
       storageSize: "50Gi"
       resources:
         requests:
@@ -102,7 +117,11 @@ elasticsearchPlatform:
                       elasticsearch.k8s.elastic.co/cluster-name: logsearch
                       elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
     smartsearch:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
       enabled: true
+      % endif
       storageSize: "10Gi"
       resources:
         requests:
@@ -167,7 +186,11 @@ elasticsearchPlatform:
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
     kibana:
+      % if values['global']['deployOperators'] == "false":
+      enabled: false
+      % else:
       enabled: true
+      % endif
       resources:
         requests:
           memory: 0.5Gi
@@ -181,7 +204,7 @@ elasticsearchPlatform:
         count: 1
         elasticsearchRef:
           name: logsearch
-          namespace: platform
+          namespace: ${values['global']['platformNamespace']}
         podTemplate:
           spec:
             containers:
@@ -231,7 +254,7 @@ elasticsearchPlatform:
           }
         }
         filter {
-        if ([kubernetes][namespace] == "qvantel") {
+        if ([kubernetes][namespace] == "${values['global']['appsNamespace']}") {
           json {
             source => "message"
           }
@@ -276,7 +299,7 @@ elasticsearchPlatform:
                     ilm_policy => "tibco_policy"
                 }
             }
-            if ([kubernetes][namespace] == "platform"
+            if ([kubernetes][namespace] == "${values['global']['platformNamespace']}"
                 or[kubernetes][namespace] == "elastic-system"
                 or[kubernetes][namespace] == "kube-system") {
                 elasticsearch {
@@ -289,7 +312,7 @@ elasticsearchPlatform:
                     ilm_policy => "platform_policy"
                 }
             }
-            else if ([kubernetes][namespace] == "qvantel") {
+            else if ([kubernetes][namespace] == "${values['global']['appsNamespace']}") {
                 elasticsearch {
                     user => "elastic"
                     password => <%text>"${ELASTICSEARCH_PASSWORD}"</%text>
@@ -323,10 +346,10 @@ elasticsearchPlatform:
                     ilm_policy => "application_policy"
                 }
             }
-            else if ([kubernetes][namespace] not in "platform"
+            else if ([kubernetes][namespace] not in "${values['global']['platformNamespace']}"
                 and[kubernetes][namespace] not in "istio-system"
                 and[kubernetes][namespace] not in "pomerium"
-                and[kubernetes][namespace] not in "qvantel"
+                and[kubernetes][namespace] not in "${values['global']['appsNamespace']}"
                 and[kubernetes][namespace] not in "kube-system"
                 and[kubernetes][namespace] not in "elastic-system"
                 and[message] !~"audit"
@@ -355,7 +378,7 @@ elasticsearchPlatform:
             name: logsearch-es-elastic-user
             key: elastic
       - name: ELASTICSEARCH_HOST
-        value: logsearch-es-http.platform.svc.cluster.local
+        value: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
       - name: ELASTICSEARCH_PORT
         value: "9200"
     % if 'containerRegistryBase' in values['global']:
@@ -404,7 +427,7 @@ elasticsearchPlatform:
       #     name: config-secret
       extraEnvs:
       - name: LOGSTASH_HOST
-        value: elasticsearch-platform-logstash.platform.svc.cluster.local
+        value: elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local
       - name: LOGSTASH_PORT
         value: "5044"
       hostNetworking: true
@@ -429,7 +452,7 @@ elasticsearchPlatform:
           output.logstash:
             loadbalance: false
             bulk_max_size: 1024
-            hosts: <%text>['${LOGSTASH_HOST:elasticsearch-platform-logstash.platform.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
+            hosts: <%text>['${LOGSTASH_HOST:elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
             logging.level: info
       resources:
         requests:

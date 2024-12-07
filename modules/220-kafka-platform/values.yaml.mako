@@ -108,9 +108,16 @@ kafkaPlatform:
 
   # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
+    % if values['global']['clusterwideResources'] == "false":
+    rbac:
+      create: no
+    createGlobalResources: false
+    % endif
     % if 'containerRegistryBase' in values['global']:
     defaultImageRegistry: ${values['global']['containerRegistryBase']}
     % endif
+    serviceAccountCreate: no
+    serviceAccount: platform
     resources:
       limits:
         memory: 1Gi

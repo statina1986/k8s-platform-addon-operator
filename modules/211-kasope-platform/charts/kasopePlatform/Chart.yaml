@@ -5,3 +5,4 @@ dependencies:
  - name: k8ssandra-operator
    version: 1.20.1
    repository: https://helm.k8ssandra.io/stable
+   condition: k8ssandra-operator.enabled

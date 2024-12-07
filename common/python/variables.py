@@ -12,6 +12,6 @@ VAULT_SECRET_NAME = environ.get('VAULT_SECRET_NAME', 'vault-keys')
 VAULT_SECRET_NAMESPACE = environ.get('VAULT_SECRET_NAMESPACE', ADDON_OPERATOR_NAMESPACE)
 VAULT_SECRET_ROOT_TOKEN = environ.get('VAULT_SECRET_ROOT_TOKEN', 'root_token')
 
-CONSUL_HOST = environ.get('CONSUL_HOST', 'consul-platform-consul-server.' + ADDON_OPERATOR_NAMESPACE + '.svc')
+CONSUL_HOST = environ.get('CONSUL_HOST', HELM_RELEASE_NAME_PREFIX + 'consul-platform-consul-server.' + ADDON_OPERATOR_NAMESPACE + '.svc')
 CONSUL_PORT = environ.get('CONSUL_PORT', 8500)
 CONSUL_SCHEME = environ.get('CONSUL_SCHEME', 'http')

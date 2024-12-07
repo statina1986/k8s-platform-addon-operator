@@ -12,6 +12,10 @@ cnpgPostgresPlatform:
       % endif
     crds:
       create: false
+    % if values['global']['clusterwideResources'] == "false":
+    rbac:
+      create: false
+    % endif
     serviceAccount:
       create: false
       name: platform

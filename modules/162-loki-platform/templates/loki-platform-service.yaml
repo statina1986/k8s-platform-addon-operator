@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: loki-platform
-  namespace: platform  
+  namespace: {{.Release.Namespace}} 
 spec:
   ports:
   - name: http-metrics
@@ -16,6 +16,6 @@ spec:
     targetPort: grpc
   selector:
     app.kubernetes.io/component: single-binary
-    app.kubernetes.io/instance: loki-platform
+    app.kubernetes.io/instance: {{ .Values.global.helmReleaseNamePrefix }}loki-platform
     app.kubernetes.io/name: loki
   type: ClusterIP

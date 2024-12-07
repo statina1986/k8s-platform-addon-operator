@@ -47,10 +47,10 @@ spec:
     name: secret-password
   {{- if $current.spec.replication.enabled }}
   db-url: >-
-    {{ printf "{{username}}:{{password}}@tcp(%s-primary.platform.svc:3306)/" . }}
+    {{ printf "{{username}}:{{password}}@tcp(%s-primary.%s.svc:3306)/" . $.Release.Namespace }}
   {{- else }}
   db-url: >-
-    {{ printf "{{username}}:{{password}}@tcp(%s.platform.svc:3306)/" . }}
+    {{ printf "{{username}}:{{password}}@tcp(%s.%s.svc:3306)/" . $.Release.Namespace }}
   {{- end }}
   db-username: 'root'
   db-password: '{secret-password}'

@@ -12,7 +12,7 @@ istioIngress:
   publicIngressBufferHttpRequestSize: 0
   # -- Configuration for underlying `gateway` helm-chart for Public Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   publicIngress:
-    name: public-ingress
+    name: ${values['global']['helmReleaseNamePrefix']}public-ingress
     replicaCount: 3
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
@@ -37,7 +37,7 @@ istioIngress:
           - pod-template-hash
         labelSelector:
           matchLabels:
-            istio: public-ingress
+            istio: ${values['global']['helmReleaseNamePrefix']}public-ingress
     % endif
     autoscaling:
       enabled: false
@@ -60,15 +60,15 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
         service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
-        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-public
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-public
         % endif
-        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-public
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-public
   # -- List of  `Gateway` resources provisioned for Public Ingress gateway.
   publicIngressGateways:
-  - name: public-ingress
+  - name: ${values['global']['helmReleaseNamePrefix']}public-ingress
     spec:
       selector:
-        istio: public-ingress
+        istio: ${values['global']['helmReleaseNamePrefix']}public-ingress
       servers:
       - hosts:
         - '*'
@@ -96,7 +96,7 @@ istioIngress:
   privateIngressBufferHttpRequestSize: 0
   # -- Configuration for underlying `gateway` helm-chart for Private Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   privateIngress:
-    name: private-ingress
+    name: ${values['global']['helmReleaseNamePrefix']}private-ingress
     replicaCount: 3
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
@@ -121,7 +121,7 @@ istioIngress:
           - pod-template-hash
         labelSelector:
           matchLabels:
-            istio: private-ingress
+            istio: ${values['global']['helmReleaseNamePrefix']}private-ingress
     % endif
     autoscaling:
       enabled: false
@@ -144,15 +144,15 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
         service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
-        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-private
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-private
         % endif
-        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-private
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-private
   # -- List of  `Gateway` resources provisioned for Private Ingress gateway.
   privateIngressGateways:
-  - name: private-ingress
+  - name: ${values['global']['helmReleaseNamePrefix']}private-ingress
     spec:
       selector:
-        istio: private-ingress
+        istio: ${values['global']['helmReleaseNamePrefix']}private-ingress
       servers:
       - hosts:
         - '*'
@@ -180,7 +180,7 @@ istioIngress:
   integrationsHttpIngressBufferHttpRequestSize: 0
   # -- Configuration for underlying `gateway` helm-chart for Integrations Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsHttpIngress:
-    name: integrations-http-ingress
+    name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
     replicaCount: 3
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
@@ -205,7 +205,7 @@ istioIngress:
           - pod-template-hash
         labelSelector:
           matchLabels:
-            istio: integrations-http-ingress
+            istio: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
     % endif
     autoscaling:
       enabled: false
@@ -228,15 +228,15 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=false
         service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
-        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-http
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-http
         % endif
-        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-http
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-http
   # -- List of  `Gateway` resources provisioned for Integrations Http Ingress gateway.
   integrationsHttpIngressGateways:
-  - name: integrations-http-ingress
+  - name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
     spec:
       selector:
-        istio: integrations-http-ingress
+        istio: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
       servers:
       - hosts:
         - '*'
@@ -264,7 +264,7 @@ istioIngress:
   integrationsNonHttpIngressBufferHttpRequestSize: 0
   # -- Configuration for underlying `gateway` helm-chart for Integrations Non Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsNonHttpIngress:
-    name: integrations-non-http-ingress
+    name: ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress
     replicaCount: 3
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
@@ -289,7 +289,7 @@ istioIngress:
           - pod-template-hash
         labelSelector:
           matchLabels:
-            istio: integrations-non-http-ingress
+            istio: ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress
     % endif
     autoscaling:
       enabled: false
@@ -312,9 +312,9 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
         service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         % if 'clusterName' in values['global']:
-        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['clusterName']}-i-nonhttp
+        service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-nonhttp
         % endif
-        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['clusterName']}-i-nonhttp
+        service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-nonhttp
       ports:
       - name: status-port
         port: 15021
@@ -326,10 +326,10 @@ istioIngress:
         targetPort: 22
   # -- List of  `Gateway` resources provisioned for Integrations Non Http Ingress gateway.
   integrationsNonHttpIngressGateways:
-  - name: integrations-non-http-ingress
+  - name: ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress
     spec:
       selector:
-        istio: integrations-non-http-ingress
+        istio: ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress
       servers:
       - hosts:
         - '*'
@@ -354,7 +354,7 @@ istioIngress:
       address-manager:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -364,7 +364,7 @@ istioIngress:
       billing:
         enabled: false
         gateways:
-          - private-ingress
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - retries:
               attempts: 0
@@ -376,7 +376,7 @@ istioIngress:
       bssapi:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -386,7 +386,7 @@ istioIngress:
       bssapi-docs:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -396,7 +396,7 @@ istioIngress:
       bssapi-explorer:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - route:
             - destination:
@@ -406,7 +406,7 @@ istioIngress:
       b2b-sales-tool:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - retries:
               attempts: 0
@@ -418,7 +418,7 @@ istioIngress:
       b2b-flex-ecare:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -428,7 +428,7 @@ istioIngress:
       b2c-flex-ecare:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -438,7 +438,7 @@ istioIngress:
       case-admin:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -453,7 +453,7 @@ istioIngress:
       case-management:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -468,7 +468,7 @@ istioIngress:
       catalog-deployer:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -478,7 +478,7 @@ istioIngress:
       catalog-designer:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -496,7 +496,7 @@ istioIngress:
       cdt:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -506,7 +506,7 @@ istioIngress:
       document-manager:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -532,7 +532,7 @@ istioIngress:
       document-storage:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -566,7 +566,7 @@ istioIngress:
       flex-admin:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -576,7 +576,7 @@ istioIngress:
       flex-app-store:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -586,7 +586,7 @@ istioIngress:
       flex-bpmn-executor:
         enabled: false
         gateways:
-          - private-ingress
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - retries:
               attempts: 0
@@ -610,7 +610,7 @@ istioIngress:
       graphql:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -620,7 +620,7 @@ istioIngress:
       kpitool:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -630,7 +630,7 @@ istioIngress:
       mapp:
         enabled: false
         gateways:
-          - public-ingress
+          - ${values['global']['helmReleaseNamePrefix']}public-ingress
         http:
           - match:
             - uri:
@@ -701,7 +701,7 @@ istioIngress:
       message-manager:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -711,7 +711,7 @@ istioIngress:
       # mobile-ui-builder:
       #   enabled: false
       #   gateways:
-      #     - private-ingress
+      #     - ${values['global']['helmReleaseNamePrefix']}private-ingress
       #   http:
       #     - retries:
       #         attempts: 0
@@ -723,7 +723,7 @@ istioIngress:
       # mockbank:
       #   enabled: false
       #   gateways:
-      #   - private-ingress
+      #   - ${values['global']['helmReleaseNamePrefix']}private-ingress
       #   http:
       #   - route:
       #     - destination:
@@ -733,7 +733,7 @@ istioIngress:
       mockoss:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -743,7 +743,7 @@ istioIngress:
       # pcb:
       #   enabled: false
       #   gateways:
-      #   - private-ingress
+      #   - ${values['global']['helmReleaseNamePrefix']}private-ingress
       #   http:
       #   - route:
       #     - destination:
@@ -753,7 +753,7 @@ istioIngress:
       # pos:
       #   enabled: false
       #   gateways:
-      #   - private-ingress
+      #   - ${values['global']['helmReleaseNamePrefix']}private-ingress
       #   http:
       #   - match:
       #     - uri:
@@ -771,7 +771,7 @@ istioIngress:
       prm:
         enabled: false
         gateways:
-          - private-ingress
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - route:
               - destination:
@@ -781,7 +781,7 @@ istioIngress:
       rbs-ui:
         enabled: false
         gateways:
-          - private-ingress
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - route:
               - destination:
@@ -791,7 +791,7 @@ istioIngress:
       recharge-manager:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -802,7 +802,7 @@ istioIngress:
       rim:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -832,7 +832,7 @@ istioIngress:
       sct:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
           - uri:
@@ -850,7 +850,7 @@ istioIngress:
       tmf-openapi:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -860,7 +860,7 @@ istioIngress:
       tnt:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -870,7 +870,7 @@ istioIngress:
       zipkin:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -881,14 +881,14 @@ istioIngress:
       auth:
         enabled: false
         gateways:
-        - public-ingress
+        - ${values['global']['helmReleaseNamePrefix']}public-ingress
         http:
         - match:
           - uri:
               prefix: /.pomerium/
           route:
           - destination:
-              host: pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
         - match:
@@ -896,7 +896,7 @@ istioIngress:
               prefix: /.well-known/
           route:
           - destination:
-              host: pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
         - match:
@@ -904,7 +904,7 @@ istioIngress:
               prefix: /oauth2/
           route:
           - destination:
-              host: pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}pomerium-platform-authenticate.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
         - match:
@@ -966,7 +966,7 @@ istioIngress:
       artifactory-oss:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -976,7 +976,7 @@ istioIngress:
       artifactory-jcr:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -987,37 +987,37 @@ istioIngress:
         enabled: false
         pomeriumProtected: true
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
-              host: consul-platform-consul-ui.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}consul-platform-consul-ui.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80      
       grafana:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
-              host: monitoring-platform-grafana.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}monitoring-platform-grafana.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80      
       kafka-ui:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
-              host: kafka-platform-kafka-ui.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}kafka-platform-kafka-ui.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
       keycloak:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -1027,7 +1027,7 @@ istioIngress:
       kibana:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -1038,16 +1038,18 @@ istioIngress:
         enabled: false
         pomeriumProtected: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
               host: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 9200
       loki-read:
         enabled: false
         pomeriumProtected: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -1057,7 +1059,7 @@ istioIngress:
       pmm:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
@@ -1068,57 +1070,52 @@ istioIngress:
         enabled: false
         pomeriumProtected: true
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
-              host: monitoring-platform-kube-p-prometheus.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 9090
       reaper:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
               host: reaper.${values['global']['platformNamespace']}.svc.cluster.local
               port:
-                number: 8080      
-      
-              port:
-                number: 9200
-      
-      
+                number: 8080
       sftp:
         enabled: false
         gateways:
-        - integrations-non-http-ingress
+        - ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress
         tcp:
         - match:
             - port: 22
           route:
             - destination:
-                host: sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                host: ${values['global']['helmReleaseNamePrefix']}sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
                 port:
                   number: 22
       sftp-ui:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
-              host: sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}sftpgo-platform.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 80
       vault-ui:
         enabled: false
         gateways:
-        - private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - route:
           - destination:
-              host: vault-platform.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}vault-platform.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 8200

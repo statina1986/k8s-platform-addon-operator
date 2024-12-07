@@ -21,13 +21,16 @@ consulPlatform:
     prefix: ""
     # -- Selector for namespaces from which sync services.
     namespaceSelector:
-      labelSelector:
-        matchLabels:
-          "platform.qvantel.com/clusterip-service-consul-sync": "true"      
-            
-  updateCoreDns:    
-    enabled: "true"
+      nameSelector:
+        matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+
+  # -- Configuration for Consul DNS service discovery
+  updateCoreDns:
+    # -- Consul DNS service discovery is disabled by default since platform 1.2.0
+    enabled: "false"
+    # -- CoreDNS configmap to update with Consul DNS entries   
     configmapName: "coredns"
+    # -- CoreDNS configmap namespace to update with Consul DNS entries
     configmapNamespace: "kube-system"
   consul:
     apiGateway:
@@ -97,6 +100,11 @@ consulPlatform:
       k8sPrefix: null
       nodePortSyncType: InternalOnly
       addK8SNamespaceSuffix: false
+      % if values['global']['namespaceRestricted'] == "true":
+      k8sAllowNamespaces:
+        - ${values['global']['appsNamespace']}
+        - ${values['global']['platformNamespace']}        
+      % endif
       resources:
         limits:
           cpu: "100"

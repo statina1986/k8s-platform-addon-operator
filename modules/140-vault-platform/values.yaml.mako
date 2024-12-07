@@ -6,9 +6,8 @@ vaultPlatform:
     schedule: "*/5 * * * *"
     # -- Selector for namespaces from which sync crd resources.
     namespaceSelector:
-      labelSelector:
-        matchLabels:
-          "platform.qvantel.com/vault-crd-sync": "true"
+      nameSelector:
+        matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
     
   
   # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
@@ -82,6 +81,10 @@ vaultPlatform:
     injector:
       enabled: false
     server:
+      % if values['global']['clusterwideResources'] == "false":
+      authDelegator:
+        enabled: false
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/hashicorp/vault

@@ -4,7 +4,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: private-ingress-http-req-buffering-filter
-  namespace: platform
+  namespace: {{ .Release.Namespace }}
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -43,7 +43,7 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: private-ingress
+      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}private-ingress
 {{- end }}
 
 {{- if .Values.istioIngress.publicIngressBufferHttpRequestSize  }}
@@ -51,7 +51,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: public-ingress-http-req-buffering-filter
-  namespace: platform
+  namespace: {{ .Release.Namespace }}
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -90,7 +90,7 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: public-ingress
+      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}public-ingress
 {{- end }}
 
 
@@ -99,7 +99,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: integrations-http-ingress-http-req-buffering-filter
-  namespace: platform
+  namespace: {{ .Release.Namespace }}
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -138,7 +138,7 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: integrations-http-ingress
+      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-http-ingress
 {{- end }}
 
 
@@ -147,7 +147,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: integrations-non-http-ingress-http-req-buffering-filter
-  namespace: platform
+  namespace: {{ .Release.Namespace }}
 spec:
   configPatches:
     - applyTo: HTTP_FILTER
@@ -186,5 +186,5 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: integrations-non-http-ingress
+      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-non-http-ingress
 {{- end }}

@@ -975,7 +975,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "kubelet_volume_stats_available_bytes{namespace=\"platform\",persistentvolumeclaim=~\"data-kafka.*\"}",
+              "expr": "kubelet_volume_stats_available_bytes{namespace=\"{{.Release.Namespace}}\",persistentvolumeclaim=~\"data-kafka.*\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",

@@ -6,11 +6,17 @@ mariadbOperatorPlatform:
       tag: 10.6.19
   nameOverride: "mariadb-operator-platform"
   mariadb-operator:
+    % if values['global']['clusterwideResources'] == "false":
+    currentNamespaceOnly: true
+    % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator
       % endif
     webhook:
+      % if values['global']['clusterwideResources'] == "false":
+      enabled: false
+      % endif
       % if 'containerRegistryBase' in values['global']:
       image:
         repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator

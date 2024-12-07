@@ -1,6 +1,14 @@
 lokiPlatform:
-  loki:    
+  loki:
+    % if values['global']['deployOperators'] == "false":
+    enabled: false
+    % else:
     enabled: true
+    % endif
+    % if values['global']['clusterwideResources'] == "false":
+    rbac:
+      namespaced: true
+    % endif
     memcached:
       % if 'containerRegistryBase' in values['global']:
       image:

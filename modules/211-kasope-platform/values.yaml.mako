@@ -1,5 +1,12 @@
 kasopePlatform:
   k8ssandra-operator:
+    % if values['global']['deployOperators'] == "false":
+    enabled: false
+    % else:
+    enabled: true
+    % endif
+    global:
+      clusterScoped: true
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -129,7 +136,7 @@ kasopePlatform:
             prometheus:
               enabled: true
               commonLabels:
-                release: monitoring-platform
+                release: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
             mcac:
               enabled: false
         reaper:

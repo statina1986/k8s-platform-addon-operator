@@ -5,6 +5,8 @@ dependencies:
   - name: base
     version: "1.23.2"
     repository: https://istio-release.storage.googleapis.com/charts
+    condition: istiod.enabled
   - name: istiod
     version: "1.23.2"
     repository: https://istio-release.storage.googleapis.com/charts
+    condition: istiod.enabled

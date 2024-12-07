@@ -8,14 +8,13 @@ certPlatform:
     % else:
     enabled: false
     % endif
-    % if values['global']['clusterwideResources'] == "false":
-    global:
-      rbac:
-        create: false
-    % endif
     global:
       leaderElection:
-        namespace: "${values['global']['platformNamespace']}"
+        namespace: ${values['global']['platformNamespace']}
+      % if values['global']['clusterwideResources'] == "false":
+      rbac:
+        create: false
+      % endif
     extraArgs:
       - --issuer-ambient-credentials
     image:
@@ -29,12 +28,18 @@ certPlatform:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-cainjector
         % endif
+      serviceAccount:
+        create: false
+        name: "platform"
     webhook:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-webhook
         % endif
+      serviceAccount:
+        create: false
+        name: "platform"
     startupapicheck:
       image:
         % if 'containerRegistryBase' in values['global']:

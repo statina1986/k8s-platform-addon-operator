@@ -3,5 +3,5 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: configurator-configmap
-  namespace: platform
+  namespace: {{.Release.Namespace}}
 data: {{ tpl .Values.keycloakPlatform.configurator.configmap . | nindent 2 }}

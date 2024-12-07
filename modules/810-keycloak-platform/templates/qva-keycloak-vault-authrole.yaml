@@ -6,6 +6,6 @@ spec:
   bound_service_account_names:
   - keycloak
   bound_service_account_namespaces:
-  - platform
+  - {{.Release.Namespace}}
   token_policies:
   - platform-qvaa-keycloak

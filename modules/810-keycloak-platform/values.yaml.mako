@@ -53,7 +53,7 @@ keycloakPlatform:
             env:
               # this must match keycloak kubernetes "service"
               - name: KEYCLOAK_BASE
-                value: "http://qvaa-proxy-80.platform.svc/auth"
+                value: "http://qvaa-proxy-80.${values['global']['platformNamespace']}.svc/auth"
               # this must match the mount and the configmap file in the mount
               - name: CONFIGURATOR_CONFIG
                 value: /config/configurator.yml
@@ -211,7 +211,7 @@ keycloakPlatform:
             app.kubernetes.io/name: keycloak
             vault.security.banzaicloud.io/enable-json-log: "true"
             vault.security.banzaicloud.io/log-level: warn
-            vault.security.banzaicloud.io/vault-addr: http://vault.platform.svc:8200
+            vault.security.banzaicloud.io/vault-addr: http://vault.${values['global']['platformNamespace']}.svc:8200
             vault.security.banzaicloud.io/vault-env-daemon: "true"
             vault.security.banzaicloud.io/vault-ignore-missing-secrets: "false"
             vault.security.banzaicloud.io/vault-role: platform-qvaa-keycloak
@@ -249,7 +249,7 @@ keycloakPlatform:
             - name: KC_DB
               value: postgres
             - name: KC_DB_URL
-              value: jdbc:postgresql://qvt-postgredb.platform.svc/keycloak
+              value: jdbc:postgresql://qvt-postgredb.${values['global']['platformNamespace']}.svc/keycloak
             - name: KC_DB_USERNAME
               value: vault:database/creds/postgresql_qvaa-keycloak#username
             - name: KC_DB_PASSWORD
