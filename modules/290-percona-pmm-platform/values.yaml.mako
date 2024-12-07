@@ -8,3 +8,8 @@ perconaPmmPlatform:
     service:
       name: pmm
       type: ClusterIP
+    tolerations:
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
+        operator: "Equal"
+        effect: "NoSchedule"

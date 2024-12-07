@@ -237,6 +237,11 @@ metadata:
 spec:
   template:
     spec:
+      tolerations:
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
       volumes:
       - name: config-volume
         configMap:
