@@ -7,7 +7,7 @@ vaultPlatform:
     # -- Selector for namespaces from which sync crd resources.
     namespaceSelector:
       nameSelector:
-        matchNames: ["${values['global']['platformNamespace']}"]
+        matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
     
   
   # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag

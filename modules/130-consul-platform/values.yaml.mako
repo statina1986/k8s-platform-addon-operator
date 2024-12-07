@@ -22,15 +22,15 @@ consulPlatform:
     # -- Selector for namespaces from which sync services.
     namespaceSelector:
       nameSelector:
-        matchNames: ["${values['global']['platformNamespace']}"]
-            
+        matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+
+  # -- Configuration for Consul DNS service discovery
   updateCoreDns:
-    % if values['global']['clusterwideResources'] == "false":  
+    # -- Consul DNS service discovery is disabled by default since platform 1.2.0
     enabled: "false"
-    % else:
-    enabled: "true"
-    % endif
+    # -- CoreDNS configmap to update with Consul DNS entries   
     configmapName: "coredns"
+    # -- CoreDNS configmap namespace to update with Consul DNS entries
     configmapNamespace: "kube-system"
   consul:
     apiGateway:
@@ -102,8 +102,8 @@ consulPlatform:
       addK8SNamespaceSuffix: false
       % if values['global']['namespaceRestricted'] == "true":
       k8sAllowNamespaces:
-        - ${values['global']['platformNamespace']}
         - ${values['global']['appsNamespace']}
+        - ${values['global']['platformNamespace']}        
       % endif
       resources:
         limits:
