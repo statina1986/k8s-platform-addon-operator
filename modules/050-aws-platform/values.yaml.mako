@@ -207,6 +207,15 @@ awsPlatform:
         parameters:
           type: gp3
           tagSpecification_name: "Name=${values['global']['clusterName']}-{{ .PVCName }}"
+      - name: st1        
+        # defaults to WaitForFirstConsumer
+        volumeBindingMode: WaitForFirstConsumer
+        # defaults to Delete
+        reclaimPolicy: Delete
+        allowVolumeExpansion: true
+        parameters:
+          type: st1
+          tagSpecification_name: "Name=${values['global']['clusterName']}-{{ .PVCName }}"
   # -- Deploy aws-vpc-cni helm-chart.
   aws-vpc-cni-enabled: false
   # -- Configuration for underlying aws-vpc-cni helm-chart. See https://github.com/aws/amazon-vpc-cni-k8s/tree/master/charts/aws-vpc-cni#configuration for details.
