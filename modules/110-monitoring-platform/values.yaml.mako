@@ -346,6 +346,12 @@ monitoringPlatform:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           % endif
+        tolerations:
+          - key: "${values['global']['platformMastersKey']}"
+            value: "${values['global']['platformMastersValue']}"
+            operator: "Equal"
+            effect: "NoSchedule"
+          
     prometheusOperator:
       % if values['global']['deployOperators'] == "false":
       enabled: false
@@ -356,6 +362,11 @@ monitoringPlatform:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
+      tolerations:
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
       prometheusConfigReloader:
         image:
           % if 'containerRegistryBase' in values['global']:
@@ -374,6 +385,11 @@ monitoringPlatform:
             % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
             % endif
+          tolerations:
+          - key: "${values['global']['platformMastersKey']}"
+            value: "${values['global']['platformMastersValue']}"
+            operator: "Equal"
+            effect: "NoSchedule"
       thanosImage:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}

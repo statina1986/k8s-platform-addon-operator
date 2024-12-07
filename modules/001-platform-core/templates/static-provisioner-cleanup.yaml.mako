@@ -17,10 +17,10 @@ spec:
     spec:
       serviceAccount: platform
       tolerations:
-          - key: "${values['global']['localStorageKey']}"
-            value: "${values['global']['localStorageValue']}"
-            operator: "Equal"
-            effect: "NoSchedule"
+        - key: "${values['global']['localStorageKey']}"
+          value: "${values['global']['localStorageValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
 % if values['global']['localStorage']:
       nodeSelector:
         ${values['global']['localStorageKey']}: ${values['global']['localStorageValue']}

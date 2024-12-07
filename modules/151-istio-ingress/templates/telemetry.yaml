@@ -2,11 +2,11 @@ apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:  
   name: istio-public-ingress-telemetry
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   selector:
     matchLabels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}public-ingress
+      istio: {{ $.Values.global.helmReleaseNamePrefix }}public-ingress
   accessLogging:
   - providers:
     - name: ingress-access-log
@@ -16,11 +16,11 @@ apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:  
   name: istio-private-ingress-telemetry
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   selector:
     matchLabels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}private-ingress
+      istio: {{ $.Values.global.helmReleaseNamePrefix }}private-ingress
   accessLogging:
   - providers:
     - name: ingress-access-log
@@ -30,11 +30,11 @@ apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:  
   name: istio-integrations-http-ingress-telemetry
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   selector:
     matchLabels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-http-ingress
+      istio: {{ $.Values.global.helmReleaseNamePrefix }}integrations-http-ingress
   accessLogging:
   - providers:
     - name: ingress-access-log

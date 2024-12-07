@@ -41,6 +41,11 @@ keycloakPlatform:
       template:
         spec:
           restartPolicy: Never
+          tolerations:
+            - key: "${values['global']['platformMastersKey']}"
+              value: "${values['global']['platformMastersValue']}"
+              operator: "Equal"
+              effect: "NoSchedule"
           containers:
           - name: keycloak-configurator
             image: {{ .Values.keycloakPlatform.configurator.image }}

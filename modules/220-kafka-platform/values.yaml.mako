@@ -5,6 +5,11 @@ kafkaPlatform:
       registry: ${values['global']['containerRegistryBase']}      
       % endif
       tag: "126980339425e4bff3d98b020fe606778d3c45b1"
+    tolerations:
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
+        operator: "Equal"
+        effect: "NoSchedule"
     yamlApplicationConfigConfigMap:
       name: "kafbat-ui-configmap"
       keyName: "config.yml"
