@@ -137,6 +137,31 @@ istioIngress:
       limits:
         memory: 1024Mi
     service:
+      ports:
+      - name: status-port
+        port: 15021
+        protocol: TCP
+        targetPort: 15021
+      - name: http
+        port: 80
+        protocol: TCP
+        targetPort: 80
+      - name: https
+        port: 443
+        protocol: TCP
+        targetPort: 443
+      - name: rabbitmq
+        port: 5672
+        protocol: TCP
+        targetPort: 5672
+      - name: rabbitmq-stomp
+        number: 61613
+        protocol: TCP
+        targetPort: 61613
+      - name: rabbitmq-webstomp
+        number: 15674
+        protocol: HTTP
+        targetPort: 15674
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
@@ -169,6 +194,24 @@ istioIngress:
         tls:
           mode: SIMPLE
           credentialName: qvantel-wildcard
+      - hosts:
+        - '*'
+        port:
+          name: rabbitmq
+          number: 5672
+          protocol: TCP
+      - hosts:
+        - '*'
+        port:
+          name: rabbitmq-stomp
+          number: 61613
+          protocol: TCP
+      - hosts:
+        - '*'
+        port:
+          name: rabbitmq-webstomp
+          number: 15674
+          protocol: HTTP
 
   # -- Enables Integrations Http Ingress gateway
   integrationsHttpIngressEnabled: false
@@ -1077,6 +1120,43 @@ istioIngress:
               host: ${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 9090
+      rabbitmq:
+          enabled: false
+          gateways:
+            - ${values['global']['helmReleaseNamePrefix']}private-ingress
+          tcp:
+            - match:
+              - port: 61613
+              route:
+                - destination:
+                    host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                    port:
+                      number: 61613
+            - match:
+              - port: 5672
+              route:
+                - destination:
+                    host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                    port:
+                      number: 5672
+          http:
+            - match:
+              - port: 15674
+              route:
+                - destination:
+                    host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                    port:
+                      number: 15674
+      rabbitmq-ui:
+          enabled: false
+          gateways:
+            - ${values['global']['helmReleaseNamePrefix']}private-ingress
+          http:
+          - route:
+            - destination:
+                host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 15672
       reaper:
         enabled: false
         gateways:
