@@ -282,8 +282,8 @@ spec:
   template:
     spec:
       tolerations:
-        - key: "${values['global']['platformMastersKey']}"
-          value: "${values['global']['platformMastersValue']}"
+        - key: {{ .Values.global.platformMastersKey}}
+          value: {{ .Values.global.platformMastersValue}}
           operator: "Equal"
           effect: "NoSchedule"
       volumes:
