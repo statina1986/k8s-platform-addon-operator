@@ -155,11 +155,11 @@ istioIngress:
         protocol: TCP
         targetPort: 5672
       - name: rabbitmq-stomp
-        number: 61613
+        port: 61613
         protocol: TCP
         targetPort: 61613
       - name: rabbitmq-webstomp
-        number: 15674
+        port: 15674
         protocol: HTTP
         targetPort: 15674
       annotations:
@@ -1125,28 +1125,28 @@ istioIngress:
           gateways:
             - ${values['global']['helmReleaseNamePrefix']}private-ingress
           tcp:
-            - match:
+          - match:
               - port: 61613
-              route:
-                - destination:
-                    host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
-                    port:
-                      number: 61613
-            - match:
+            route:
+              - destination:
+                  host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                  port:
+                    number: 61613
+          - match:
               - port: 5672
-              route:
-                - destination:
-                    host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
-                    port:
-                      number: 5672
+            route:
+              - destination:
+                  host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                  port:
+                    number: 5672
           http:
-            - match:
+          - match:
               - port: 15674
-              route:
-                - destination:
-                    host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
-                    port:
-                      number: 15674
+            route:
+              - destination:
+                  host: ${values['global']['helmReleaseNamePrefix']}rabbitmq-platform.${values['global']['platformNamespace']}.svc.cluster.local
+                  port:
+                    number: 15674
       rabbitmq-ui:
           enabled: false
           gateways:
