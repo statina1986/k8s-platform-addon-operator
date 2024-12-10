@@ -160,7 +160,7 @@ istioIngress:
         targetPort: 61613
       - name: rabbitmq-webstomp
         port: 15674
-        protocol: HTTP
+        protocol: TCP
         targetPort: 15674
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
