@@ -43,7 +43,7 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}private-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}private-ingress
 {{- end }}
 
 {{- if .Values.istioIngress.publicIngressBufferHttpRequestSize  }}
@@ -90,7 +90,7 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}public-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}public-ingress
 {{- end }}
 
 
@@ -138,7 +138,7 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-http-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-http-ingress
 {{- end }}
 
 
@@ -186,5 +186,5 @@ spec:
                           '@type':  type.googleapis.com/envoy.extensions.filters.common.matcher.action.v3.SkipFilter
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-non-http-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-non-http-ingress
 {{- end }}

@@ -40,7 +40,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}public-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}public-ingress
 {{- end }}
 
 
@@ -85,7 +85,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}public-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}public-ingress
 {{- end }}
 
 
@@ -130,7 +130,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}private-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}private-ingress
 {{- end }}
 
 
@@ -175,7 +175,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}private-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}private-ingress
 {{- end }}
 
 {{- if .Values.istioIngress.integrationsHttpIngressLogFullRequest  }}
@@ -219,7 +219,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-http-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-http-ingress
 {{- end }}
 
 
@@ -264,7 +264,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-http-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-http-ingress
 {{- end }}
 
 {{- if .Values.istioIngress.integrationsNonHttpIngressLogFullRequest  }}
@@ -308,7 +308,7 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-non-http-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-non-http-ingress
 {{- end }}
 
 
@@ -353,5 +353,5 @@ spec:
               end
   workloadSelector:
     labels:
-      istio: {{ .Values.globalConfig.helmReleaseNamePrefix }}integrations-non-http-ingress
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-non-http-ingress
 {{- end }}

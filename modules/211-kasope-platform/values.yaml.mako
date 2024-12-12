@@ -51,6 +51,8 @@ kasopePlatform:
           serviceAccount: platform
           serverVersion: "3.11.13"
           metadata:
+            annotations:
+              cassandra.datastax.com/allow-storage-changes: 'true'
             services:
               dcService:
                 annotations:
