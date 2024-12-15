@@ -141,6 +141,13 @@ kasopePlatform:
                 release: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
             mcac:
               enabled: false
+        % if values.get('kasopePlatform', {}).get('clusters', {}).get('cluster', {}).get('spec', {}).get('medusa', None) is not None: 
+        medusa:
+          containerImage:
+            % if 'containerRegistryBase' in values['global']:
+            registry: ${values['global']['containerRegistryBase']}
+            % endif
+        % endif
         reaper:
           autoScheduling:
             enabled: true
