@@ -665,12 +665,6 @@ monitoringPlatform:
                         path: [status, failed]
                         labelsFromPath:
                           ref: []
-                  - name: "medusaBackupsFinishTime"
-                    help: "backup finished timestamp"
-                    each:
-                      type: Gauge
-                      gauge:
-                        path: [status, finishTime]  
               % endif
     thanosRuler:
       thanosRulerSpec:
