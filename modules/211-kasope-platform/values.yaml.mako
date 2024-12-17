@@ -146,6 +146,7 @@ kasopePlatform:
           containerImage:
             % if 'containerRegistryBase' in values['global']:
             registry: ${values['global']['containerRegistryBase']}
+            tag: "0.22.2"
             % endif
         % endif
         reaper:
