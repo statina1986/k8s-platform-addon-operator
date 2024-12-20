@@ -12,70 +12,38 @@ spec:
   groups:
   - name: cnpg.alerts
     rules:
-    - alert: PostgreSQLRamRequestedHigh
-      expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="postgres"}) / sum by (pod) (kube_pod_container_resource_requests{container="postgres",resource="memory"} > 0)) > 75'
-      for: 10m
+    - alert: PostgreSQLRamLimitsHigh
+      expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="postgres"}) / sum by (pod) (kube_pod_container_resource_limits{container="postgres",resource="memory"} > 0)) > 80'
+      for: 1m
       labels:
         severity: warning
       annotations:
-        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM limits."
         procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
-    - alert: PostgreSQLRamRequestedCritical
-      expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="postgres"}) / sum by (pod) (kube_pod_container_resource_requests{container="postgres",resource="memory"} > 0)) > 90'
-      for: 10m
+    - alert: PostgreSQLRamLimitsCritical
+      expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="postgres"}) / sum by (pod) (kube_pod_container_resource_limits{container="postgres",resource="memory"} > 0)) > 90'
+      for: 1m
       labels:
         severity: critical
       annotations:
-        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
-    - alert: PostgreSQLCpuRequestedHigh
-      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by (pod) / sum(kube_pod_container_resource_requests{container="postgres", resource="cpu"}) by (pod)) > 75'
-      for: 10m
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM limits."
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL and raise the oncall"
+    - alert: PostgreSQLCpuLimitsHigh
+      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by (pod) / sum(kube_pod_container_resource_limits{container="postgres", resource="cpu"}) by (pod)) > 80'
+      for: 1m
       labels:
         severity: warning
       annotations:
-        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of CPU requested."
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of CPU limits."
         procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
-    - alert: PostgreSQLCpuRequestedCritical
-      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by (pod) / sum(kube_pod_container_resource_requests{container="postgres", resource="cpu"}) by (pod)) > 90'
-      for: 10m
+    - alert: PostgreSQLCpuLimitsCritical
+      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by (pod) / sum(kube_pod_container_resource_limits{container="postgres", resource="cpu"}) by (pod)) > 90'
+      for: 1m
       labels:
         severity: critical
       annotations:
-        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
-    - alert: NodePostgreSQLRamRequestedHigh
-      expr: 'round(100 * sum by (instance) (container_memory_working_set_bytes{container="postgres"}) /  sum(machine_memory_bytes) by(instance)) > 75'
-      for: 10m
-      labels:
-        severity: warning
-      annotations:
-        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node RAM assigned."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
-    - alert: NodePostgreSQLRamRequestedCritical
-      expr: 'round(100 * sum by (instance) (container_memory_working_set_bytes{container="postgres"}) /  sum(machine_memory_bytes) by(instance)) > 90'
-      for: 10m
-      labels:
-        severity: critical
-      annotations:
-        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node RAM assigned."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL and raise the on call roster"
-    - alert: NodePostgreSQLCpuRequestedHigh
-      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by(instance) / sum(machine_cpu_cores) by(instance)) > 75'
-      for: 10m
-      labels:
-        severity: warning
-      annotations:
-        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node CPU assigned."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
-    - alert: NodePostgreSQLCpuRequestedCritical
-      expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="postgres"}[10m])) by(instance) / sum(machine_cpu_cores) by(instance)) > 90'
-      for: 10m
-      labels:
-        severity: critical
-      annotations:
-        brief: "PostgreSQL service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node CPU assigned."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL and raise the on call roster"
+        brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM limits."
+        procedure: "Check pod CPU consumption comparing to the total node CPU.  Create a ticket to SQL and raise the oncall"
     - alert: TotalIOPSHigh
       expr: 'max by (pod)(rate(container_fs_reads_total{container="postgres"}[5m])) + max by (pod)(rate(container_fs_writes_total{container="postgres"}[5m])) > 2400'
       for: 10m
