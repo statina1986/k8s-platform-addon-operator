@@ -1653,7 +1653,7 @@
             },
             "dnsBase": {
               "default": "some-env.qvantel.solutions",
-              "description": "external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com\nCommon base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to \u003cvirtual-service-name\u003e-\u003cdnsBase\u003e. By default value is taken from `global.ingressBaseUrl`",
+              "description": "external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com\nCommon base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to \u003cvirtual-service-name\u003e\u003cdnsSeparator\u003e\u003cdnsBase\u003e. By default values are taken from `global.ingressBaseUrl` and `global.ingressBaseUrlSeparator`",
               "required": [],
               "title": "dnsBase",
               "type": "string"
