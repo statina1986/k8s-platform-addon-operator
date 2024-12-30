@@ -27,7 +27,7 @@ spec:
   {{- end }}
   {{- else }}
   hosts: 
-  - {{ . }}-{{ $.Values.istioIngress.virtualServices.dnsBase }}
+  - {{ . }}{{ $.Values.istioIngress.virtualServices.dnsBase }}
   {{- end }}
   {{- with $current.http }}
   http:

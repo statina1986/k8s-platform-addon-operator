@@ -385,8 +385,8 @@ istioIngress:
     # -- Common annotations for all VirtualServices resources provisioned
     annotations:
     # external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com
-    # -- Common base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to <virtual-service-name>-<dnsBase>. By default value is taken from `global.ingressBaseUrl`
-    dnsBase: ${values['global']['ingressBaseUrl']}
+    # -- Common base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to <virtual-service-name><dnsSeparator><dnsBase>. By default values are taken from `global.ingressBaseUrl` and `global.ingressBaseUrlSeparator`
+    dnsBase: ${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
     # -- Qvantel applications namespace name. By default value is taken from `global.appsNamespace` and equal to `qvantel`
     appsNamespace: ${values['global']['appsNamespace']}
     # -- Qvantel platform namespace name. By default value is taken from `global.appsNamespace` and equal to `platform`

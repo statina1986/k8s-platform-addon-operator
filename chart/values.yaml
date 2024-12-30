@@ -33,6 +33,7 @@ globalConfig:
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"
+  ingressBaseUrlSeparator: "-"
   appsNamespace: "qvantel"
   platformNamespace: "platform"
   operatorNamespace: ""
