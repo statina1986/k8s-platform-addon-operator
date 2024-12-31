@@ -39,7 +39,7 @@ kafkaPlatform:
             client-name: keycloak
             provider: keycloak
             authorization-grant-type: authorization_code
-            issuer-uri: https://auth${values['global']['ingressBaseUrlSeparator']}{{ $.Values.global.ingressBaseUrl }}/auth/realms/qvantel
+            issuer-uri: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth/realms/qvantel
             jwk-set-uri: http://qvaa-proxy-80/auth/realms/qvantel/protocol/openid-connect/certs
             user-name-attribute: preferred_username
             custom-params:
