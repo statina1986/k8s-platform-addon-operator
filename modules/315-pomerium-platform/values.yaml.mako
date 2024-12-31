@@ -14,7 +14,7 @@ pomeriumPlatform:
         repository: ${values['global']['containerRegistryBase']}/pomerium/ingress-controller
         % endif
     proxy:
-      authenticateServiceUrl: https://auth-${values['global']['ingressBaseUrl']}
+      authenticateServiceUrl: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
     config:
       extraOpts:
         log_level: info
@@ -25,8 +25,8 @@ pomeriumPlatform:
       generateTLS: false
       generateSigningKey: true
       routes: |
-        - from: https://prometheus-${values['global']['ingressBaseUrl']}
-          to: http://monitoring-platform-kube-p-prometheus.platform.svc.cluster.local:9090
+        - from: https://prometheus${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
+          to: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local:9090
           timeout: 30s
           policy:
             - allow:
@@ -37,8 +37,8 @@ pomeriumPlatform:
             - allow:
                 and:
                   - claim/realm_access.roles: prometheus-admins
-        - from: https://consul-ui-${values['global']['ingressBaseUrl']}
-          to: http://consul-platform-consul-ui.platform.svc.cluster.local:80
+        - from: https://consul-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
+          to: http://${values['global']['helmReleaseNamePrefix']}consul-platform-consul-ui.${values['global']['platformNamespace']}.svc.cluster.local:80
           timeout: 30s
           policy:
             - allow:
@@ -53,5 +53,5 @@ pomeriumPlatform:
     authenticate:
       idp:
         provider: oidc
-        url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel
+        url: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth/realms/qvantel
         clientID: "pomerium"

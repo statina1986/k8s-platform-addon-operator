@@ -64,8 +64,8 @@ sftpgoPlatform:
         bindings:
           - oidc:
               client_id: sftpgo
-              config_url: "https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel"
-              redirect_base_url: "https://sftp-ui-${values['global']['ingressBaseUrl']}"
+              config_url: "https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth/realms/qvantel"
+              redirect_base_url: "https://sftp-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}"
               scopes: 
                 - openid
                 - profile

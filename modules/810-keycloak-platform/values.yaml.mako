@@ -8,8 +8,8 @@ keycloakPlatform:
     # an issue with vault keycloak integration is, vault needs to contact to the "external" url of
     # keycloak, https://auth-... because it expects to "issuer" to match the url.
     # because of this, keycloak integration is not enabled by default.
-    discovery_url: https://auth-${values['global']['ingressBaseUrl']}/auth/realms/qvantel
-    vault_url: https://vault-ui-${values['global']['ingressBaseUrl']}/ui/vault/auth/oidc/oidc/callback
+    discovery_url: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth/realms/qvantel
+    vault_url: https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/ui/vault/auth/oidc/oidc/callback
     oidc_discovery_ca_pem: false
     policies:
       policyread: |
@@ -126,7 +126,7 @@ keycloakPlatform:
                 % endif
                 redirect_uris:
                   # pomerium shares domain name with keycloak
-                  - https://auth-${values['global']['ingressBaseUrl']}/*
+                  - https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
                 roles_claim: realm_access.roles
               grafana:
                 % if addon_operator['pomeriumPlatformEnabled'] == 'true':
@@ -135,14 +135,14 @@ keycloakPlatform:
                 roles_claim: realm_access.roles
                 pkce: S256
                 redirect_uris:
-                  - https://grafana-${values['global']['ingressBaseUrl']}/*
+                  - https://grafana${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
               kafbat:
                 % if addon_operator['kafkaPlatformEnabled'] == 'true':
                 secret: $KAFKA_UI_CLIENT_SECRET
                 % endif
                 roles_claim: roles
                 redirect_uris:
-                  - https://kafka-ui-${values['global']['ingressBaseUrl']}/*
+                  - https://kafka-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
               sftpgo:
                 % if addon_operator['sftpgoPlatformEnabled'] == 'true':
                 secret: $SFTPGO_CLIENT_SECRET
@@ -152,13 +152,13 @@ keycloakPlatform:
                     name: sftpgomapper
                 redirect_uris:
                   # this is a guess, no sftpgo in https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/151-istio-ingress/values.yaml.mako
-                  - https://sftpgo-${values['global']['ingressBaseUrl']}/*
+                  - https://sftpgo${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
               vault:
                 secret: $VAULT_CLIENT_SECRET
                 roles_claim: realm_access.roles
                 redirect_uris:
                   - http://localhost:8250/oidc/callback
-                  - https://vault-ui-${values['global']['ingressBaseUrl']}/*
+                  - https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
             roles:
               kafka-admins: {}
               kafka-readonly: {}
