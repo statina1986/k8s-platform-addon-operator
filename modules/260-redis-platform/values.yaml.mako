@@ -56,7 +56,11 @@ redisPlatform:
         storageClass: ""
         size: 8Gi
     replica:
+      % if values['global']['configurationProfile'] in {'dev'}:
+      replicaCount: 1
+      % else:
       replicaCount: 3
+      % endif
       resources:
         limits: {}
         requests: {}
@@ -80,7 +84,11 @@ redisPlatform:
         registry: ${values['global']['containerRegistryBase']}
         % endif
       masterSet: redis
+      % if values['global']['configurationProfile'] in {'dev'}:
+      quorum: 1
+      % else:
       quorum: 2
+      % endif
       resources:
         limits: {}
         requests: {}
