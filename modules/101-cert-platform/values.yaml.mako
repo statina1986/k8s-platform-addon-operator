@@ -46,6 +46,9 @@ certPlatform:
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-ctl
         % endif
+      serviceAccount:
+        create: false
+        name: platform
     acmesolver:
       image:
         % if 'containerRegistryBase' in values['global']:

@@ -515,6 +515,9 @@ monitoringPlatform:
       serviceMonitor:
         labels:
           "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+      serviceAccount:
+        create: false
+        name: platform
       persistence:
         type: pvc
         enabled: true
