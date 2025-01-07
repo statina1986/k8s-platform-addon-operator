@@ -90,7 +90,7 @@ spec:
         summary: 'Consumer group lag is too big'
         description: 'Consumer group {{` {{ $labels.consumergroup}} `}} lag is too big ({{` {{ $value }} `}}) on topic {{` {{ $labels.topic }} `}}'
     - alert: KafkaBrokerExceededPartitionLimit
-      expr: kafka_server_replicamanager_partitioncount >= 4000
+      expr: kafka_server_replicamanager_partitioncount >= 6000
       labels:
         severity: critical
         level: application
