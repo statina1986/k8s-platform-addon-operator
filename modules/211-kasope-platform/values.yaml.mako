@@ -6,7 +6,11 @@ kasopePlatform:
     enabled: true
     % endif
     global:
+      % if values['global']['clusterwideResources'] == "false":
+      clusterScoped: false
+      % else:
       clusterScoped: true
+      % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}

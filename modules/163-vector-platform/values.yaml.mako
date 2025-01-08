@@ -14,6 +14,9 @@ vectorPlatform:
     rbac:
       create: false
     % endif
+    serviceAccount:
+      create: false
+      name: "platform"
     tolerations:
         - operator: Exists    
     customConfig:
@@ -84,6 +87,9 @@ vectorPlatform:
       create: true
       % endif
       eventsAccess: true
+    serviceAccount:
+      create: false
+      name: "platform"
     config:
         inputs: |
           [INPUT]
@@ -107,6 +113,9 @@ vectorPlatform:
     % else:
     enabled: false
     % endif
+    serviceAccount:
+      create: false
+      name: "platform"
     role: "Aggregator"
     % if values['global']['platformMasters']:
     nodeSelector:

@@ -457,6 +457,9 @@ monitoringPlatform:
       rbac:
         namespaced: true
       % endif
+      serviceAccount:
+        create: false
+        name: platform
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -679,6 +682,9 @@ monitoringPlatform:
           value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
+      serviceAccount:
+        create: false
+        name: platform
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
