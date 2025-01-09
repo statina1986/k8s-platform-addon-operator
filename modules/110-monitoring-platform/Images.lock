@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-12-01T15:56:14.263648858Z"
+  generatedAt: "2025-01-14T10:34:02.6161581Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -217,10 +217,50 @@ images:
       - digest: sha256:92db025d15176e1ae15b5bb0a58a28b5b9f82d933813990259a3f6c2f40b0fd8
         arch: linux/arm64
   - name: tempo
-    image: grafana/tempo:2.6.1
+    image: docker.io/grafana/tempo:2.6.0
     chart: monitoring-platform
     digests:
-      - digest: sha256:a6d09da22ebfcc11ba40701433d02738501c3c46271c769a49f4eb9228429e25
+      - digest: sha256:535a54902bf029b13795432866666b336a54c8ac3065aeb4002ee648fcc7b3ae
         arch: linux/amd64
-      - digest: sha256:1aff1f89f4036330ab58df9cad6e8f07bf10741bf5f188da0e3bdb0bd9efeb90
+      - digest: sha256:214ecab6f0c860db861f1a61e090ada7671f8c3a5280c07d80400b5ca1095370
+        arch: linux/arm64
+  - name: queryFrontendQuery
+    image: grafana/tempo-query:2.6.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:6910011cc584c0bcbeba2311baf2d7d08e5ed669e6125edf028c54578f36c8b5
+        arch: linux/amd64
+      - digest: sha256:5ed6ff2f5da53b050376f2d0ca55eda7f65b868ee9c068aab16afb17a0df18df
+        arch: linux/arm64
+  - name: memcached
+    image: docker.io/memcached:1.6.33-alpine
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:156bc025f995df7b7c19427fa4ce940b4f03d4f730c42426ec495848a588e5c5
+        arch: linux/amd64
+      - digest: sha256:6263c127197a1481b125b0286bfc4d5e1f64c5813a4e96d6d9e92f838e8de116
+        arch: linux/arm64
+  - name: memcachedExporter
+    image: prom/memcached-exporter:v0.14.4
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:3cc259dff5590c50c36d6773b1799b074efb5df5d50f7928bbac7782dd3a1109
+        arch: linux/amd64
+      - digest: sha256:7d488db71214c8eadc810c927bdf560a03626d667cacecf3d07b0aac4121eec0
+        arch: linux/arm64
+  - name: gateway
+    image: nginxinc/nginx-unprivileged:1.27-alpine
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:d8a4810cd0d0d0ffb35a649f220293da37c4e21b2f4edd12ca3eab6e437c6580
+        arch: linux/amd64
+      - digest: sha256:b1c55d19be9f12f8930b97b088034a1e74aba0d965b842884efe97a9be66fec6
+        arch: linux/arm64
+  - name: enterprise
+    image: grafana/enterprise-traces:v2.6.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:7f56c2059ad16037b887894b002e9850144d4628df52157c6b1e0c21503e79fd
+        arch: linux/amd64
+      - digest: sha256:cc6d6dac9bfa6c798d4cc446bf43e2a9b5f9a9b6a1889eed4cef9e734359d8ac
         arch: linux/arm64
