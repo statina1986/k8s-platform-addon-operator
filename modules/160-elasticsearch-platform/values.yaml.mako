@@ -59,7 +59,7 @@ elasticsearchPlatform:
       storageSize: "50Gi"
       resources:
         limits:
-          memory: 4000Mi
+          memory: 8000Mi
           cpu: "1"
         requests:
           memory: 1000Mi

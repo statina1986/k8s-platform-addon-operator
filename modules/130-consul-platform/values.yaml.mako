@@ -78,7 +78,7 @@ consulPlatform:
           cpu: "100m"
         limits:
           memory: "1Gi"
-          cpu: "1"
+          cpu: "100"
       extraConfig: |
         {
           "limits": {
