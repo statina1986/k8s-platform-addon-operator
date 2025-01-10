@@ -13,7 +13,11 @@ istioIngress:
   # -- Configuration for underlying `gateway` helm-chart for Public Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   publicIngress:
     name: ${values['global']['helmReleaseNamePrefix']}public-ingress
+    % if values['global']['configurationProfile'] in {'dev'}:
+    replicaCount: 1
+    % else:
     replicaCount: 3
+    % endif
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
       proxy.istio.io/config: |
@@ -97,7 +101,11 @@ istioIngress:
   # -- Configuration for underlying `gateway` helm-chart for Private Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   privateIngress:
     name: ${values['global']['helmReleaseNamePrefix']}private-ingress
+    % if values['global']['configurationProfile'] in {'dev'}:
+    replicaCount: 1
+    % else:
     replicaCount: 3
+    % endif
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
       proxy.istio.io/config: |
@@ -224,7 +232,11 @@ istioIngress:
   # -- Configuration for underlying `gateway` helm-chart for Integrations Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsHttpIngress:
     name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
+    % if values['global']['configurationProfile'] in {'dev'}:
+    replicaCount: 1
+    % else:
     replicaCount: 3
+    % endif
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
       proxy.istio.io/config: |
@@ -308,7 +320,11 @@ istioIngress:
   # -- Configuration for underlying `gateway` helm-chart for Integrations Non Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsNonHttpIngress:
     name: ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress
+    % if values['global']['configurationProfile'] in {'dev'}:
+    replicaCount: 1
+    % else:
     replicaCount: 3
+    % endif
     podAnnotations:
       # this is to support zero downtime rollout (especially in EKS with NLB). On termination ingress pods will wait `drainDuration` second accepting and serving connections giving external loadbalancer time to drain and deregister target. 
       proxy.istio.io/config: |

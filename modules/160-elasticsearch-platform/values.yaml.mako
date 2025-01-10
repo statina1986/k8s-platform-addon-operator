@@ -58,9 +58,12 @@ elasticsearchPlatform:
       % endif
       storageSize: "50Gi"
       resources:
+        limits:
+          memory: 8000Mi
+          cpu: "2"
         requests:
-          memory: 2000Mi
-          cpu: "1"
+          memory: 1000Mi
+          cpu: "0.1"
       spec: |
         version: 7.16.2
         volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion

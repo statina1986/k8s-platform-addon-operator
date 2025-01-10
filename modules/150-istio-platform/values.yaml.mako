@@ -38,7 +38,11 @@ istioPlatform:
       % if values['global']['configurationProfile'] in {'perf', 'prod'}:  ### In PERF, PROD we run with 2 replicas
       autoscaleMin: 2     
       replicaCount: 2
-      % endif 
+      % endif
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
     global:
       istioNamespace: ${values['global']['platformNamespace']}
       logAsJson: true
