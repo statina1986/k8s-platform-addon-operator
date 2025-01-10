@@ -60,7 +60,7 @@ elasticsearchPlatform:
       resources:
         limits:
           memory: 8000Mi
-          cpu: "1"
+          cpu: "2"
         requests:
           memory: 1000Mi
           cpu: "0.1"
