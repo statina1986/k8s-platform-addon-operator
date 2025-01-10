@@ -12,8 +12,24 @@ keycloakPlatform:
     vault_url: https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/ui/vault/auth/oidc/oidc/callback
     oidc_discovery_ca_pem: false
     policies:
-      policyread: |
+      policysecretappsadmin: |
         path "secret/*" {
+          capabilities = ["read", "list", "create", "update", "patch", "delete"]
+        }
+
+        path "secret/data/installer/qvaa/*" {
+          capabilities = ["deny"]
+        }
+      policydbview: |
+        path "database/*" {
+          capabilities = ["read", "list"]
+        }
+
+        path "database/creds/*" {
+          capabilities = ["deny"]
+        }
+
+        path "database/creds/readonly-role*" {
           capabilities = ["read", "list"]
         }
       policyadmin: |
@@ -21,10 +37,11 @@ keycloakPlatform:
           capabilities = ["read", "list", "create", "update", "delete", "sudo"]
         }
     groups:
-      groupread:
+      groupappsadmin:
         policies:
-          - policyread
-        value: vault-readonly
+          - policysecretappsadmin
+          - policydbview
+        value: vault-appsadmin
         # this value needs to match keycloak role
       groupadmin:
         policies:
@@ -168,7 +185,7 @@ keycloakPlatform:
               prometheus-readonly: {}
               sftpgo-admins: {}
               vault-admins: {}
-              vault-readonly: {}
+              vault-appsadmin: {}
               grafana_server_admin:
                 description: "Grafana server administrator permissions: Manage Grafana server-wide settings and resources"
               grafana_admin:
