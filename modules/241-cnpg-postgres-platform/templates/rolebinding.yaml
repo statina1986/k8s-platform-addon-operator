@@ -1,0 +1,29 @@
+{{ if and (eq .Values.global.deployOperators "true") (eq .Values.global.clusterwideResources "false") }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cnpg-operator-additional-rolebinding
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cnpg-operator-additional-role
+subjects:
+- kind: ServiceAccount
+  name: platform
+  namespace: {{ .Release.Namespace }}
+{{- else if and (eq .Values.global.deployOperators "false") (eq .Values.global.clusterwideResources "false") }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cnpg-operator-additional-rolebinding
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cnpg-operator-additional-role
+subjects:
+- kind: ServiceAccount
+  name: platform
+  namespace: {{ .Values.global.operatorNamespace }}
+{{- end }}
