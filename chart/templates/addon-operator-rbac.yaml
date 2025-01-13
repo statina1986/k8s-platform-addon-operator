@@ -73,26 +73,56 @@ metadata:
   name: addon-operator-{{ .Release.Namespace }}-additional
   namespace: {{ .Release.Namespace }}
 rules:
-- apiGroups:
-    - cassandra.datastax.com
-    - cert-manager.io
-    - core.strimzi.io
-    - kafka.strimzi.io
-    - k8ssandra.io
-    - medusa.k8ssandra.io
-    - monitoring.coreos.com
-    - networking.istio.io
-    - platform-vault.qvantel.com
-    - platform.qvantel.com
-    - postgresql.cnpg.io
-    - qvantel.com
-    - reaper.k8ssandra.io
-    - replication.k8ssandra.io
-    - telemetry.istio.io
-  resources:
-    - "*"
-  verbs:
-    - "*"
+  - verbs:
+      - '*'
+    apiGroups:
+      - apps
+      - cassandra.datastax.com
+      - cert-manager.io
+      - config.k8ssandra.io
+      - control.k8ssandra.io
+      - core.strimzi.io
+      - k8ssandra.io
+      - kafka.strimzi.io
+      - medusa.k8ssandra.io
+      - monitoring.coreos.com
+      - networking.istio.io
+      - platform.qvantel.com
+      - platform-vault.qvantel.com
+      - postgresql.cnpg.io
+      - qvantel.com
+      - rbac.authorization.k8s.io
+      - reaper.k8ssandra.io
+      - replication.k8ssandra.io
+      - stargate.k8ssandra.io
+      - telemetry.istio.io
+    resources:
+      - '*'
+  - verbs:
+      - '*'
+    apiGroups:
+      - ''
+      - coordination.k8s.io
+    resources:
+      - configmaps
+      - events
+      - leases
+      - secrets
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: addon-operator-{{ .Values.globalConfig.appsNamespace }}-additional
+  namespace: {{ .Values.globalConfig.appsNamespace }}
+rules:
+  - apiGroups:
+      - monitoring.coreos.com
+      - platform-vault.qvantel.com
+      - rbac.authorization.k8s.io
+    resources:
+      - "*"
+    verbs:
+      - "*"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -103,6 +133,20 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: addon-operator-{{ .Release.Namespace }}-additional
+subjects:
+  - kind: ServiceAccount
+    name: platform
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: addon-operator-{{ .Values.globalConfig.appsNamespace }}-additional
+  namespace: {{ .Values.globalConfig.appsNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: addon-operator-{{ .Values.globalConfig.appsNamespace }}-additional
 subjects:
   - kind: ServiceAccount
     name: platform
@@ -124,12 +168,12 @@ rules:
     - get
     - list
     - watch
- - apiGroups:
+- apiGroups:
     - monitoring.coreos.com
   resources:
     - servicemonitors
   verbs:
-    - "*" 
+    - "*"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

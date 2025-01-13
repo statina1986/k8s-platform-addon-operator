@@ -527,7 +527,7 @@ monitoringPlatform:
         size: 30Gi
         finalizers:
           - kubernetes.io/pvc-protection
-      % if addon_operator['elasticsearchPlatformEnabled'] == 'true' or values['global']['deployOperators'] == "false":
+      % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
       envFromSecrets: 
         - name: "logsearch-es-elastic-user"
       % endif
