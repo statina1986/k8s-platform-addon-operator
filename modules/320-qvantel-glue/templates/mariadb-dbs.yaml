@@ -18,7 +18,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ . }}-admin-role
+  name: admin-role-{{ . }}
 spec:
   db-name: {{ . }}
   creation-statements: >-
@@ -28,7 +28,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ . }}-readonly-role
+  name: readonly-role-{{ . }}
 spec:
   db-name: {{ . }}
   creation-statements: >-
