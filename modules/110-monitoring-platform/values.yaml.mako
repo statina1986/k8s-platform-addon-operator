@@ -750,6 +750,9 @@ monitoringPlatform:
             kubernetes_sd_configs:
             - role: pod
             relabel_configs:  # If first two labels are present, pod should be scraped  by the istio-secure job.
+            - source_labels: [__meta_kubernetes_pod_label_app]
+              action: drop
+              regex: antrea
             - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
               action: keep
               regex: true
