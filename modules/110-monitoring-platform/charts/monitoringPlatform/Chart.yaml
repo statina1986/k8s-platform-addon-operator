@@ -26,9 +26,9 @@ dependencies:
     condition: beyla.enabled
     version: "1.5.0"
     repository: "https://grafana.github.io/helm-charts"
-  - name: tempo
-    condition: tempo.enabled
-    version: "1.14.0"
+  - name: tempo-distributed
+    condition: tempo-distributed.enabled
+    version: "1.28.0"
     repository: "https://grafana.github.io/helm-charts"
   - name: alloy
     condition: alloy.enabled

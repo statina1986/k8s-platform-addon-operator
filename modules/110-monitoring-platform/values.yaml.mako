@@ -41,18 +41,26 @@ monitoringPlatform:
     controller:
       type: deployment
       replicas: 1
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     alloy:
       mode: flow
       extraPorts:
-      - name: http-traces
+      - name: otlp-grpc
         port: 4318
         targetPort: 4318
         protocol: "TCP"
+      - name: otlp-http
+        port: 4317
+        targetPort: 4317
+        protocol: "TCP"
       extraEnv:
       - name: PROMETHEUS_ENDPOINT
-        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform.${values['global']['platformNamespace']}.svc:9090"
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc:9090"
       - name: TEMPO_ENDPOINT
-        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:4318"
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-distributor.${values['global']['platformNamespace']}.svc:4317"
       configMap:
         create: true
         content: |
@@ -69,7 +77,7 @@ monitoringPlatform:
           otelcol.processor.batch "default" {
             output {
               metrics = [otelcol.exporter.prometheus.default.input]
-              traces  = [otelcol.exporter.otlphttp.tempo.input]
+              traces  = [otelcol.exporter.otlp.tempo.input]
             }
           }
             
@@ -83,10 +91,14 @@ monitoringPlatform:
               }
             }
             
-          otelcol.exporter.otlphttp "tempo" {
+          otelcol.exporter.otlp "tempo" {
             // Send traces to a locally running Tempo without TLS enabled.
             client {
               endpoint = env("TEMPO_ENDPOINT")
+              tls {
+                insecure = true
+                insecure_skip_verify = true
+              }
             }
           }
   beyla:
@@ -96,9 +108,14 @@ monitoringPlatform:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
-    serviceAccount:
-      create: false
-      name: platform
+    service:
+      enabled: true
+      labels:
+        release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     config:
       data:
         # Contents of the actual Beyla configuration file
@@ -108,37 +125,66 @@ monitoringPlatform:
         routes:
           unmatched: heuristic
         otel_metrics_export:
-          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc:4318
+          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc:4317
         otel_traces_export:
-          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc:4318
+          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc:4317
         attributes:
           kubernetes:
-            enable: true            
-  tempo:
+            enable: true
+        internal_metrics:
+          prometheus:
+            port: 9090
+            path: /metrics 
+  tempo-distributed:
     enabled: false
+    metaMonitoring:
+      serviceMonitor:
+        enabled: true
+        labels:
+          release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     tolerations:
       - key: "dedicated-nodes"
         value: "platform-masters"
         operator: "Equal"
         effect: "NoSchedule"
-    tempo:
-      % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/grafana/tempo
-      % endif
-      storage:
-        trace:
-          backend: local #change to s3 
-          local:
-            path: /var/tempo/traces
-          wal:
-            path: /var/tempo/wal
-        #  s3:
-        #    endpoint: s3.eu-south-1.amazonaws.com  ### Need to set to correct endpoint
-        #    bucket: tempo-traces
-      metricsGenerator:
-        enabled: true
-        remoteWriteUrl: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform.${values['global']['platformNamespace']}:9090/api/v1/write"
-        send_exemplars: true 
+    serviceAccount:
+      create: false
+      name: platform
+    traces:
+      otlp:
+        grpc:
+          enabled: true
+        http:
+          enabled: true
+    metricsGenerator:
+      enabled: true
+      config:
+        storage:
+          remote_write:
+            - url: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc:9090/api/v1/write"
+    global_overrides:
+      defaults:
+        metrics_generator:
+          processors:
+            - service-graphs
+            - span-metrics
+      per_tenant_override_config: /runtime-config/overrides.yaml
+    overrides:
+      defaults:
+        metrics_generator:
+          processors:
+            - service-graphs
+            - span-metrics
+    storage:
+      trace:
+        backend: local #s3 to be changed 
+        local:
+          path: /var/tempo/traces
+        wal:
+          path: /var/tempo/wal
+        #s3:
+        #  endpoint: s3.ap-south-1.amazonaws.com  ### qv-platform-test endpoint
+        #  bucket: qv-platform-test-tempo-traces  ### qv-platform-test bucket
   x509-certificate-exporter:
     enabled: true
     % if values['global']['clusterwideResources'] == "false":
@@ -488,7 +534,12 @@ monitoringPlatform:
               % endif
             - name: Tempo
               type: tempo              
-              url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo.${values['global']['platformNamespace']}.svc:3100
+              url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-query-frontend.${values['global']['platformNamespace']}.svc:3100
+              jsonData:
+                serviceMap:
+                  datasourceUid: 'prometheus'
+                nodeGraph:
+                  enabled: true
             - name: Elasticsearch-Ingress
               type: elasticsearch
               access: http
