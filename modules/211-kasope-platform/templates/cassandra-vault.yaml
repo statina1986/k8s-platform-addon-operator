@@ -26,7 +26,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: cassandra-admin-role
+  name: admin-role-cassandra
   namespace: {{.Release.Namespace}}
 spec:
   db-name: cassandra
@@ -37,7 +37,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: cassandra-readonly-role
+  name: readonly-role-cassandra
   namespace: {{.Release.Namespace}}
 spec:
   db-name: cassandra

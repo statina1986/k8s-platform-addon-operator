@@ -56,7 +56,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: cassandra-{{ . }}-readonly-role
+  name: readonly-role-{{ . }}-cassandra
 spec:
   db-name: cassandra-{{ . }}
   creation-statements: >-
