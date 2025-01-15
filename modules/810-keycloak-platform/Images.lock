@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-19T13:02:25.147320237Z"
+  generatedAt: "2025-01-15T10:37:35.566217652Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: keycloak-platform
@@ -17,10 +17,10 @@ images:
       - digest: sha256:168b67a56ca0fff3a205de2ccabee1e20ff4b9cd32aac0dd4ad88a85d72c683e
         arch: linux/amd64
   - name: keycloak-configurator
-    image: artifactory.qvantel.net/keycloak-configurator-standalone:1.16.1.20240815092643_develop_67cdcc04
+    image: artifactory.qvantel.net/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d
     chart: keycloak-platform
     digests:
-      - digest: sha256:676a5785d47be87f67a1d6fed641b510dc3d17adb09df5ec3161b88a2c66ee5a
+      - digest: sha256:5a2bb22b94c624d456c9e86d8a37e3decb5f0a7a9174d0a9a76c82f186313d90
         arch: linux/arm64
-      - digest: sha256:f9c53861787e36768985c1ae36f97083c2c1b64da327f1fcd5ad8c2d3b3ab7d5
+      - digest: sha256:c0870ad7bed1ea36d24aee1f4d4e5b57846a3c516d28e16568cc5fb801976d4d
         arch: linux/amd64

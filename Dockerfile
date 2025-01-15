@@ -23,7 +23,10 @@ RUN chown -R 1001:0 /var/run/addon-operator
 
 USER 1001
 
-ADD --chown=1001:0 common /common
-ADD --chown=1001:0 global-hooks /global-hooks
 ADD --chown=1001:0 resources /resources
+ADD --chown=1001:0 common /common
+RUN chmod -R 775 /common /common
+ADD --chown=1001:0 global-hooks /global-hooks
+RUN chmod -R 775 global-hooks /global-hooks
 ADD --chown=1001:0 modules /modules
+RUN chmod -R 775 modules /modules

@@ -6,4 +6,4 @@ annotations:
     - name: keycloak
       image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.4.20240819100502_hotfix-24_d5c69cea
     - name: keycloak-configurator
-      image: artifactory.qvantel.net/keycloak-configurator-standalone:1.16.1.20240815092643_develop_67cdcc04
+      image: artifactory.qvantel.net/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d

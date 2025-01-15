@@ -35,7 +35,7 @@ keycloakPlatform:
   database:
     name: qvt-postgredb
   configurator:
-    image: ${values['global']['containerRegistryBase']}/keycloak-configurator-standalone:1.16.1.20240815092643_develop_67cdcc04
+    image: ${values['global']['containerRegistryBase']}/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d
     spec: |
       backoffLimit: 5
       template:
