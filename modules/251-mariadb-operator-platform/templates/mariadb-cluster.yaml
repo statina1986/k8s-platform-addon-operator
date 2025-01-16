@@ -33,6 +33,16 @@ spec:
 
 ---
 apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readwrite-role-{{ . }}
+spec:
+  db-name: {{ . }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, SHOW DATABASES, SHOW VIEW, INSERT, UPDATE, DELETE, EXECUTE ON *.* TO '{{name}}'@'%%';" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
 kind: DbConnection
 metadata:
   annotations:

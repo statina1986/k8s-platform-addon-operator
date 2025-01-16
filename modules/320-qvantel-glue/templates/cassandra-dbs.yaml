@@ -46,7 +46,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: cassandra-{{ . }}-admin-role
+  name: admin-role-cassandra-{{ . }}
 spec:
   db-name: cassandra-{{ . }}
   creation-statements: >-
@@ -56,11 +56,22 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-{{ . }}-cassandra
+  name: readonly-role-cassandra-{{ . }}
 spec:
   db-name: cassandra-{{ . }}
   creation-statements: >-
     {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}};" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readwrite-role-cassandra-{{ . }}
+spec:
+  db-name: cassandra-{{ . }}
+  creation-statements: >-
+    {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}}; GRANT EXECUTE ON ALL KEYSPACES TO {{username}};" }}
+
 
 {{- end }}
 

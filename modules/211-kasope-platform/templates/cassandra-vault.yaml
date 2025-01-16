@@ -3,8 +3,7 @@
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbConnection
 metadata:
-  name: cassandra
-  namespace: {{.Release.Namespace}}
+  name: cassandra  
 spec:
   connection-name: cassandra
   plugin-name: cassandra-database-plugin
@@ -27,21 +26,30 @@ apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
   name: admin-role-cassandra
-  namespace: {{.Release.Namespace}}
 spec:
   db-name: cassandra
   creation-statements: >-
-          {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
+    {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
 
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-cassandra
-  namespace: {{.Release.Namespace}}
+  name: readonly-role-cassandra  
 spec:
   db-name: cassandra
   creation-statements: >-
     {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}};" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readwrite-role-cassandra
+spec:
+  db-name: cassandra
+  creation-statements: >-
+    {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}}; GRANT EXECUTE ON ALL KEYSPACES TO {{username}};" }}
+
 
 {{- end }}
