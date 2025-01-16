@@ -191,6 +191,7 @@ lokiPlatform:
     backend:
       replicas: 0
     % else:
+    minioSecretEnabled: "false"
     read:
       replicas: 3
       tolerations:
@@ -211,6 +212,21 @@ lokiPlatform:
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
+      % endif
+      % if values['lokiPlatform']['loki']['minioSecretEnabled'] == "true":
+      extraArgs:
+        - '-config.expand-env=true'
+      extraEnv:
+        - name: MINIO_LOKI_USER
+          valueFrom:
+            secretKeyRef:
+              name: loki-platform-minio-bucket-secret
+              key: MINIO_LOKI_USER
+        - name: MINIO_LOKI_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: loki-platform-minio-bucket-secret
+              key: MINIO_LOKI_SECRET
       % endif
     write:
       replicas: 3
@@ -235,6 +251,21 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
+      % if values['lokiPlatform']['loki']['minioSecretEnabled'] == "true":
+      extraArgs:
+        - '-config.expand-env=true'
+      extraEnv:
+        - name: MINIO_LOKI_USER
+          valueFrom:
+            secretKeyRef:
+              name: loki-platform-minio-bucket-secret
+              key: MINIO_LOKI_USER
+        - name: MINIO_LOKI_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: loki-platform-minio-bucket-secret
+              key: MINIO_LOKI_SECRET
+      % endif
     backend:
       replicas: 3
       tolerations:
@@ -255,6 +286,21 @@ lokiPlatform:
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
+      % endif
+      % if values['lokiPlatform']['loki']['minioSecretEnabled'] == "true":
+      extraArgs:
+        - '-config.expand-env=true'
+      extraEnv:
+        - name: MINIO_LOKI_USER
+          valueFrom:
+            secretKeyRef:
+              name: loki-platform-minio-bucket-secret
+              key: MINIO_LOKI_USER
+        - name: MINIO_LOKI_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: loki-platform-minio-bucket-secret
+              key: MINIO_LOKI_SECRET
       % endif
     % endif
     
