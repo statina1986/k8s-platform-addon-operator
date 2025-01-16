@@ -25,6 +25,7 @@ globalConfig:
   # one of  'dev', 'test', 'perf', 'prod'
   configurationProfile: "test"
   platformMasters: false
+  antreaCNIenabled: "false"
   platformMastersKey: dedicated-nodes
   platformMastersValue: platform-masters
   localStorage: false
