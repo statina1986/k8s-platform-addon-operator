@@ -75,4 +75,4 @@ sftpgoPlatform:
               implicit_roles: true # until we have proper role from Keycloak
       sftpd:
         enabled_ssh_commands:
-          ["md5sum", "sha1sum", "sha256sum", "cd", "pwd", "scp", "rsync"]
+          ["md5sum", "sha1sum", "sha256sum", "cd", "pwd", "scp"]
