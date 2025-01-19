@@ -801,6 +801,11 @@ monitoringPlatform:
             kubernetes_sd_configs:
             - role: pod
             relabel_configs:  # If first two labels are present, pod should be scraped  by the istio-secure job.
+            % if values['global']['antreaCNIenabled'] == "true":
+            - source_labels: [__meta_kubernetes_pod_label_app]
+              action: drop
+              regex: antrea
+            % endif
             - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
               action: keep
               regex: true
@@ -938,6 +943,46 @@ monitoringPlatform:
               namespaces:
                 names:
                 - ${values['global']['platformNamespace']}
+          % if addon_operator['istioIngressEnabled'] == 'true':
+          envoy-stats:
+            metrics_path: /stats/prometheus
+            kubernetes_sd_configs:
+            - role: pod
+            relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_container_port_name]
+              action: keep
+              regex: '.*-envoy-prom'
+          % endif
+          % if values['global']['antreaCNIenabled'] == "true":
+          antrea-controllers:
+            kubernetes_sd_configs:
+            - role: endpoints
+            scheme: https
+            tls_config:
+              ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              insecure_skip_verify: true
+            bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+            relabel_configs:
+            - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_container_name]
+              action: keep
+              regex: kube-system;antrea-controller
+            - source_labels: [__meta_kubernetes_pod_node_name, __meta_kubernetes_pod_name]
+              target_label: instance
+          antrea-agents:
+            kubernetes_sd_configs:
+            - role: pod
+            scheme: https
+            tls_config:
+              ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              insecure_skip_verify: true
+            bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+            relabel_configs:
+            - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_container_name]
+              action: keep
+              regex: kube-system;antrea-agent
+            - source_labels: [__meta_kubernetes_pod_node_name, __meta_kubernetes_pod_name]
+              target_label: instance
+          % endif
         additionalScrapeConfigs: |
           {{- range $k, $v := .Values.prometheus.prometheusSpec.additionalScrapeConfigsAsMap }}
           - job_name: '{{ $k }}'
