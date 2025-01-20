@@ -191,7 +191,8 @@ lokiPlatform:
     backend:
       replicas: 0
     % else:
-    minioSecretEnabled: "false"
+    objectStorageSecretEnabled: "false"
+    secretName: ""
     read:
       replicas: 3
       tolerations:
@@ -213,21 +214,23 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      % if values['lokiPlatform']['loki']['minioSecretEnabled'] == "true":
       extraArgs:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - '-config.expand-env=true'
+        % endif
       extraEnv:
-        - name: MINIO_LOKI_USER
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
-              name: loki-platform-minio-bucket-secret
-              key: MINIO_LOKI_USER
-        - name: MINIO_LOKI_SECRET
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_USER
+        - name: OBJECT_STORAGE_SECRET
           valueFrom:
             secretKeyRef:
-              name: loki-platform-minio-bucket-secret
-              key: MINIO_LOKI_SECRET
-      % endif
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_SECRET
+        % endif
     write:
       replicas: 3
       persistence:
@@ -251,21 +254,23 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      % if values['lokiPlatform']['loki']['minioSecretEnabled'] == "true":
       extraArgs:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - '-config.expand-env=true'
+        % endif
       extraEnv:
-        - name: MINIO_LOKI_USER
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
-              name: loki-platform-minio-bucket-secret
-              key: MINIO_LOKI_USER
-        - name: MINIO_LOKI_SECRET
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_USER
+        - name: OBJECT_STORAGE_SECRET
           valueFrom:
             secretKeyRef:
-              name: loki-platform-minio-bucket-secret
-              key: MINIO_LOKI_SECRET
-      % endif
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_SECRET
+        % endif
     backend:
       replicas: 3
       tolerations:
@@ -287,21 +292,23 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      % if values['lokiPlatform']['loki']['minioSecretEnabled'] == "true":
       extraArgs:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - '-config.expand-env=true'
+        % endif
       extraEnv:
-        - name: MINIO_LOKI_USER
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
-              name: loki-platform-minio-bucket-secret
-              key: MINIO_LOKI_USER
-        - name: MINIO_LOKI_SECRET
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_USER
+        - name: OBJECT_STORAGE_SECRET
           valueFrom:
             secretKeyRef:
-              name: loki-platform-minio-bucket-secret
-              key: MINIO_LOKI_SECRET
-      % endif
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_SECRET
+        % endif
     % endif
     
   promtail:
