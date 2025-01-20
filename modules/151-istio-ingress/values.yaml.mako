@@ -829,24 +829,24 @@ istioIngress:
       #           number: 5010
       openproject:
         enabled: false
-          gateways:
-            - ${values['global']['helmReleaseNamePrefix']}private-ingress
-          http:
-            - route:
-                - destination:
-                    host: openproject.${values['global']['appsNamespace']}.svc.cluster.local
-                    port:
-                      number: 8080
+        gateways:
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+          - route:
+              - destination:
+                  host: openproject.${values['global']['appsNamespace']}.svc.cluster.local
+                  port:
+                    number: 8080
       orders-chat:
         enabled: false
-          gateways:
-            - ${values['global']['helmReleaseNamePrefix']}private-ingress
-          http:
-            - route:
-                - destination:
-                    host: fulfillment-data-chat.${values['global']['appsNamespace']}.svc.cluster.local
-                    port:
-                      number: 7001
+        gateways:
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+          - route:
+              - destination:
+                  host: fulfillment-data-chat.${values['global']['appsNamespace']}.svc.cluster.local
+                  port:
+                    number: 7001
       prm:
         enabled: false
         gateways:
