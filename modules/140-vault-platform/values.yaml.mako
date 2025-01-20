@@ -39,6 +39,7 @@ vaultPlatform:
     certificate:
       useCertManager: true
       generate: false
+      certLifespan: 3650
     % if values['global']['platformMasters']:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
