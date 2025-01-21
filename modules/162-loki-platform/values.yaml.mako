@@ -172,6 +172,9 @@ lokiPlatform:
       create: false
       name: platform
 
+    objectStorageSecretEnabled: "false"
+    secretName: ""
+
     gateway:
       enabled: false
       replicas: 0
@@ -191,8 +194,6 @@ lokiPlatform:
     backend:
       replicas: 0
     % else:
-    objectStorageSecretEnabled: "false"
-    secretName: ""
     read:
       replicas: 3
       tolerations:
@@ -215,11 +216,11 @@ lokiPlatform:
           whenUnsatisfiable: DoNotSchedule
       % endif
       extraArgs:
-        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - '-config.expand-env=true'
         % endif
       extraEnv:
-        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -255,11 +256,11 @@ lokiPlatform:
           whenUnsatisfiable: DoNotSchedule
       % endif
       extraArgs:
-        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - '-config.expand-env=true'
         % endif
       extraEnv:
-        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -293,11 +294,11 @@ lokiPlatform:
           whenUnsatisfiable: DoNotSchedule
       % endif
       extraArgs:
-        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - '-config.expand-env=true'
         % endif
       extraEnv:
-        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
