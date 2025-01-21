@@ -417,10 +417,10 @@ monitoringPlatform:
       % endif
       % if values['global']['namespaceRestricted'] == "true":
       namespaces:
-          releaseNamespace: true
+        releaseNamespace: true
       % endif
       kubeletService:
-          namespace: ${values['global']['platformNamespace']}
+        namespace: ${values['global']['platformNamespace']}
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
