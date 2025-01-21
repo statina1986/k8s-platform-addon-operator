@@ -58,6 +58,7 @@ istioIngress:
         memory: 1024Mi
     service:
       annotations:
+        % if addon_operator['awsPlatformEnabled'] == 'true':
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
@@ -67,6 +68,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-public
         % endif
         service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-public
+        % endif
   # -- List of  `Gateway` resources provisioned for Public Ingress gateway.
   publicIngressGateways:
   - name: ${values['global']['helmReleaseNamePrefix']}public-ingress
@@ -171,6 +173,7 @@ istioIngress:
         protocol: TCP
         targetPort: 15674
       annotations:
+        % if addon_operator['awsPlatformEnabled'] == 'true':
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
@@ -180,6 +183,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-private
         % endif
         service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-private
+        % endif
   # -- List of  `Gateway` resources provisioned for Private Ingress gateway.
   privateIngressGateways:
   - name: ${values['global']['helmReleaseNamePrefix']}private-ingress
@@ -277,6 +281,7 @@ istioIngress:
         memory: 1024Mi
     service:
       annotations:
+        % if addon_operator['awsPlatformEnabled'] == 'true':
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
@@ -286,6 +291,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-http
         % endif
         service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-http
+        % endif
   # -- List of  `Gateway` resources provisioned for Integrations Http Ingress gateway.
   integrationsHttpIngressGateways:
   - name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
@@ -365,6 +371,7 @@ istioIngress:
         memory: 1024Mi
     service:
       annotations:
+        % if addon_operator['awsPlatformEnabled'] == 'true':
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
@@ -374,6 +381,7 @@ istioIngress:
         service.beta.kubernetes.io/aws-load-balancer-name: ${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-nonhttp
         % endif
         service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name=${values['global']['helmReleaseNamePrefix']}${values['global']['clusterName']}-i-nonhttp
+        % endif
       ports:
       - name: status-port
         port: 15021
