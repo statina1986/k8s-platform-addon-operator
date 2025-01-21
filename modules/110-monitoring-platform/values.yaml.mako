@@ -415,7 +415,7 @@ monitoringPlatform:
       % else:
       enabled: true
       % endif
-      % if values['global']['namespaceRestricted'] == "true":
+      % if values['global']['clusterwideResources'] == "false":
       namespaces:
         releaseNamespace: true
       % endif
