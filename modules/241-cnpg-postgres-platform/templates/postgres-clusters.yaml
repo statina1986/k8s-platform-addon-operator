@@ -46,7 +46,7 @@ spec:
 {{- end }}
 
 
-{{- if and $current.spec.backup $current.scheduledBackup }}
+{{- if and $current.spec (and $current.spec.backup $current.scheduledBackup) }}
 
 ---
 apiVersion: postgresql.cnpg.io/v1
