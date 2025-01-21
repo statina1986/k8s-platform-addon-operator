@@ -191,6 +191,8 @@ lokiPlatform:
     backend:
       replicas: 0
     % else:
+    objectStorageSecretEnabled: "false"
+    secretName: ""
     read:
       replicas: 3
       tolerations:
@@ -212,6 +214,23 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
+      extraArgs:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - '-config.expand-env=true'
+        % endif
+      extraEnv:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - name: OBJECT_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_USER
+        - name: OBJECT_STORAGE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_SECRET
+        % endif
     write:
       replicas: 3
       persistence:
@@ -235,6 +254,23 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
+      extraArgs:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - '-config.expand-env=true'
+        % endif
+      extraEnv:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - name: OBJECT_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_USER
+        - name: OBJECT_STORAGE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_SECRET
+        % endif
     backend:
       replicas: 3
       tolerations:
@@ -256,6 +292,23 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
+      extraArgs:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - '-config.expand-env=true'
+        % endif
+      extraEnv:
+        % if values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        - name: OBJECT_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_USER
+        - name: OBJECT_STORAGE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['secretName']}
+              key: OBJECT_STORAGE_SECRET
+        % endif
     % endif
     
   promtail:
