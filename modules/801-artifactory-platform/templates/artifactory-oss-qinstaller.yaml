@@ -14,7 +14,7 @@ spec:
     - "GRANT ALL PRIVILEGES ON DATABASE artifactory_oss TO artifactory_oss;"
   db-username: postgres
   db-password: "{postgres-password}"
-  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ .Values.artifactoryPlatform.databaseOSS.name }}.platform.svc:5432/postgres"
+  db-url: "postgresql://{postgres-user}:{postgres-password}@{{ .Values.artifactoryPlatform.databaseOSS.name }}.{{ $.Release.Namespace }}.svc:5432/postgres"
   computed-values:
     - name: "postgres-password"
       expression: "k8s_get_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
@@ -30,7 +30,7 @@ spec:
     - name: "store password in secrets"
       expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-artifactory-oss', '{{ $.Release.Namespace }}', 'password', '{artifactory-password}')"    
     - name: "store url in secrets"
-      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-artifactory-oss', '{{ $.Release.Namespace }}', 'db-url', 'jdbc:postgresql://{{ .Values.artifactoryPlatform.databaseOSS.name }}.platform.svc.cluster.local.:5432/artifactory_oss')"
+      expression: "k8s_store_secret_value('{{ .Values.artifactoryPlatform.databaseOSS.name }}-artifactory-oss', '{{ $.Release.Namespace }}', 'db-url', 'jdbc:postgresql://{{ .Values.artifactoryPlatform.databaseOSS.name }}.{{ $.Release.Namespace }}.svc.cluster.local.:5432/artifactory_oss')"
 
 {{- end }}
   

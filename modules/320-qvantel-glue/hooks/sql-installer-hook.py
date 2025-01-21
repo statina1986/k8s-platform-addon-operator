@@ -44,6 +44,7 @@ class SqlInstallersHook(Hook):
     def executeSql(self, event, k8s):
         try:
             name = event['object']['metadata']['name']
+            namespace = event['object']['metadata']['namespace']
             db_provision_sql = event['object']['spec']['db-provision-sql']
             db_secret = event['object']['spec'].get(
                 'db-secret-name', '')
@@ -65,7 +66,7 @@ class SqlInstallersHook(Hook):
 
             if db_secret != '':
                 secret = k8s.read_namespaced_secret(
-                    db_secret, 'platform').data
+                    db_secret, namespace).data
                 db_username = base64.b64decode(
                     secret['username']).decode('utf-8')
                 db_password = base64.b64decode(
@@ -116,7 +117,7 @@ class SqlInstallersHook(Hook):
                 group="platform.qvantel.com",
                 version="v1",
                 name=name,
-                namespace="platform",
+                namespace=namespace,
                 plural="sqlinstallers",
                 update=lambda response: updateCrdStatusCondition(
                     response, "Ready", "True", "SqlInstallerSucceded")
@@ -126,7 +127,7 @@ class SqlInstallersHook(Hook):
                 group="platform.qvantel.com",
                 version="v1",
                 name=name,
-                namespace="platform",
+                namespace=namespace,
                 plural="sqlinstallers",
                 update=lambda response: updateCrdStatusCondition(
                     response, "Ready", "False", "SqlInstallerFailed", get_exception_string())

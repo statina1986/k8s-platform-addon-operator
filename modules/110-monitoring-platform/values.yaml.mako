@@ -415,6 +415,12 @@ monitoringPlatform:
       % else:
       enabled: true
       % endif
+      % if values['global']['namespaceRestricted'] == "true":
+      namespaces:
+          releaseNamespace: true
+      % endif
+      kubeletService:
+          namespace: ${values['global']['platformNamespace']}
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -424,6 +430,9 @@ monitoringPlatform:
           value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
+      serviceAccount:
+        create: false
+        name: platform
       prometheusConfigReloader:
         image:
           % if 'containerRegistryBase' in values['global']:
@@ -518,9 +527,6 @@ monitoringPlatform:
       serviceMonitor:
         labels:
           "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
-      serviceAccount:
-        create: false
-        name: platform
       persistence:
         type: pvc
         enabled: true
@@ -764,6 +770,9 @@ monitoringPlatform:
             replacement: $1
             action: replace
       % endif
+      serviceAccount:
+        create: false
+        name: "platform"
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
           value: "${values['global']['platformMastersValue']}"
