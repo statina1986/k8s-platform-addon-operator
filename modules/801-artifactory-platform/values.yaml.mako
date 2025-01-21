@@ -2,24 +2,24 @@ artifactoryPlatform:
   artifactory-oss:
     # -- Enable deployment of OSS Artifactory.
     enabled: false
-    # -- Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router
-    router:
-      image:
-        % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}
-        repository: jfrog/router
-        tag: 7.118.0
-        % endif
-    initContainers:
-      image:
-        % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}
-        repository: ubi9/ubi-minimal
-        tag: 9.4-1194
-        % endif
     artifactory:
       # -- 'fullnameOverride' fully overrides the deployment name.
       fullnameOverride: artifactory-oss
+      # -- Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router
+      router:
+        image:
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}
+          repository: jfrog/router
+          tag: 7.118.0
+          % endif
+      initContainers:
+        image:
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}
+          repository: ubi9/ubi-minimal
+          tag: 9.4-1194
+          % endif
       artifactory:
         # -- 'name' must be same with the 'fullnameOverride'.
         name: "artifactory-oss"
@@ -60,24 +60,24 @@ artifactoryPlatform:
   artifactory-jcr:
     # -- Enable deployment of JCR Artifactory.
     enabled: false
-    # -- Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router
-    router:
-      image:
-        % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}        
-        repository: jfrog/router
-        tag: 7.118.0
-        % endif
-    initContainers:
-      image:
-        % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}      
-        repository: ubi9/ubi-minimal
-        tag: 9.4-1194
-        % endif
     artifactory:
       # -- 'fullnameOverride' fully overrides the deployment name.
       fullnameOverride: artifactory-jcr
+      # -- Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router
+      router:
+        image:
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}        
+          repository: jfrog/router
+          tag: 7.118.0
+          % endif
+      initContainers:
+        image:
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}      
+          repository: ubi9/ubi-minimal
+          tag: 9.4-1194
+          % endif
       artifactory:
         # -- 'name' must be same with the 'fullnameOverride'.
         name: "artifactory-jcr"
