@@ -872,7 +872,7 @@ istioIngress:
         http:
           - route:
               - destination:
-                  host: rbs-ui.${values['global']['appsNamespace']}.svc.cluster.local
+                  host: rbs-ui-web.${values['global']['appsNamespace']}.svc.cluster.local
                   port:
                     number: 3000
       recharge-manager:
