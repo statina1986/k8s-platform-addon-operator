@@ -36,6 +36,7 @@ spec:
               properties:
                 forceGeneration:
                   type: integer
+                  default: 1
                 type:
                   type: string
                   description: The type of database to provision
@@ -54,6 +55,9 @@ spec:
                   type: string
                 db-password:
                   type: string
+                transaction:
+                  type: boolean
+                  default: true
                 computed-values:
                   type: array
                   items:

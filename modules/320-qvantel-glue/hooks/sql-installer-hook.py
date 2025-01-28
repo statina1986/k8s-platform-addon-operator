@@ -11,6 +11,7 @@ from common.python.inline import *
 class SqlInstallersHook(Hook):
     def __init__(self):
         qvantelGlue = self.get_addon_operator_config("qvantelGlue")
+        platformNamespace = self.get_addon_operator_config('global').get('platformNamespace', 'platform')
         super().__init__(str(
             {
                 "configVersion": "v1",
@@ -29,10 +30,8 @@ class SqlInstallersHook(Hook):
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "SqlInstallersQueue",
                         "namespace": qvantelGlue.get("sqlinstallersCrdSync", {}).get("namespaceSelector", {
-                            "labelSelector": {
-                                "matchLabels": {
-                                    "platform.qvantel.com/vault-crd-sync": "true"
-                                }
+                            "nameSelector": {
+                                "matchNames": [platformNamespace]
                             }
                         }),
                         "allowFailure": True,
@@ -54,6 +53,7 @@ class SqlInstallersHook(Hook):
                 'db-password', '')
             db_url = event['object']['spec']['db-url']
             db_type = event['object']['spec']['type']
+            transaction = event['object']['spec']['transaction']
             computed_values = event['object']['spec'].get(
                 'computed-values', {})
             post_actions = event['object']['spec'].get(
@@ -87,15 +87,28 @@ class SqlInstallersHook(Hook):
             elif db_type == "postgresql":
                 import psycopg2
                 conn = psycopg2.connect(db_url)
-                conn.set_session(autocommit=True)
-                cur = conn.cursor()
-                for statement in db_provision_sql:
-                    statement = replace_computed_values(
-                        statement, vals)
+                if transaction:
+                    conn.set_session()
+                    cur = conn.cursor()
                     try:
-                        cur.execute(statement)
+                        for statement in db_provision_sql:
+                            statement = replace_computed_values(statement, vals)
+                            cur.execute(statement)
+                        conn.commit()                    
                     except (psycopg2.errors.DuplicateObject, psycopg2.errors.DuplicateDatabase):
-                        pass
+                        return
+                    except:
+                        conn.rollback()
+                        raise
+                else:
+                    conn.set_session(autocommit=True)
+                    cur = conn.cursor()
+                    try:
+                        for statement in db_provision_sql:
+                            statement = replace_computed_values(statement, vals)
+                            cur.execute(statement)                        
+                    except (psycopg2.errors.DuplicateObject, psycopg2.errors.DuplicateDatabase):
+                        return
 
             execute_post_actions(post_actions, vals)
 
@@ -118,7 +131,14 @@ class SqlInstallersHook(Hook):
                 update=lambda response: updateCrdStatusCondition(
                     response, "Ready", "False", "SqlInstallerFailed", get_exception_string())
             )
-            raise
+            update_crd(
+                group="platform.qvantel.com",
+                version="v1",
+                name=name,
+                namespace="platform",
+                plural="sqlinstallers",
+                update=lambda response: {"spec": {"forceGeneration": response['spec']['forceGeneration'] + 1}}
+            )
 
     def handle_binding(self, binding):
         match(binding):

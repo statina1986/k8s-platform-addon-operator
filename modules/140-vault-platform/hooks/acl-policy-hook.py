@@ -3,6 +3,7 @@
 import sys
 from kubernetes import client, config
 from common.python.hooks import *
+from common.python.inline import *
 from common.python.utils import get_exception_string
 from common.python.vault import *
 import hvac
@@ -13,7 +14,8 @@ v1 = client.CoreV1Api()
 
 class AclPoliciesHook(Hook):
     def __init__(self):
-        vaultPlatform = self.get_addon_operator_config("vaultPlatform")
+        vaultPlatform = self.get_addon_operator_config("vaultPlatform")        
+        platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
         super().__init__(str(
             {
                 "configVersion": "v1",
@@ -32,10 +34,8 @@ class AclPoliciesHook(Hook):
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultAclPolicyQueue",
                         "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
-                            "labelSelector": {
-                                "matchLabels": {
-                                    "platform.qvantel.com/vault-crd-sync": "true"
-                                }
+                            "nameSelector": {
+                                "matchNames": [ platformNamespace ]
                             }
                         }),
                         "allowFailure": True,
@@ -49,9 +49,20 @@ class AclPoliciesHook(Hook):
         try:
             name = event['object']['metadata']['name']
             namespace = event['object']['metadata']['namespace']
-            policy_name = event.get('object', {}).get('spec', {}).get('policy-name')
+            policy_name = event.get('object', {}).get('spec', {}).get('policy-name', name)
             policy_hcl = event['object']['spec']['policy-hcl']
-            vault_client.sys.create_or_update_policy(name=(policy_name or name), policy=policy_hcl)
+
+            computed_values = event['object']['spec'].get('computed-values', {})
+            post_actions = event['object']['spec'].get('post-actions', {})
+
+            vals = get_computed_values(computed_values)
+
+            policy_name = replace_computed_values(policy_name, vals)
+            policy_hcl = replace_computed_values(policy_hcl, vals)
+
+            vault_client.sys.create_or_update_policy(name=policy_name, policy=policy_hcl)
+
+            execute_post_actions(post_actions, vals)
 
             update_crd_status(
                 group="platform-vault.qvantel.com",
@@ -78,12 +89,12 @@ class AclPoliciesHook(Hook):
         match(binding):
             case EventHook(eventName, event):
                 name = event['object']['metadata']['name']
-                policy_name = event.get('object', {}).get('spec', {}).get('policy-name')
+                policy_name = event.get('object', {}).get('spec', {}).get('policy-name', name)
 
                 vault_client = get_vault_client()
 
                 if eventName == "Deleted":
-                    vault_client.sys.delete_policy(name=(policy_name or name))
+                    vault_client.sys.delete_policy(name=policy_name)
                     return
                 else:
                     self.registerResource(event, vault_client)

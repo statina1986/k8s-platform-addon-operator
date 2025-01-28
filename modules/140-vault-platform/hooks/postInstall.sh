@@ -18,7 +18,7 @@ hook::trigger() {
   if [ ! "$(jq 'has("kubernetes/")' $CURL_RESULT)" == "true" ]; then
     kubectl exec -n $ADDON_OPERATOR_NAMESPACE $VAULT_RELEASE_NAME-0 -- /bin/sh -c "vault login -no-print $token && \
         vault auth enable kubernetes && \
-        vault write auth/kubernetes/config kubernetes_host='https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT'"
+        vault write auth/kubernetes/config kubernetes_host='https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT' use_annotations_as_alias_metadata=true"  
   else
     qlog "Kubernetes auth already enabled"
   fi

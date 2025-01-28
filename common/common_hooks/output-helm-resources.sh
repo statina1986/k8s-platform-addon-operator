@@ -4,7 +4,7 @@ source "${0%/*}/../../../common/shell/functions.sh"
 
 set -e
 if [[ $1 == "--config" ]] ; then
-    echo '{"configVersion":"v1", "afterHelm": 1}'
+    echo '{"configVersion":"v1", "beforeHelm": 1}'
 else        
     module=$(basename $(dirname "${0%/*}"))
     echo $module    

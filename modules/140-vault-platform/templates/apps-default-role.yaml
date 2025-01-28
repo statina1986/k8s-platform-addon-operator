@@ -1,0 +1,11 @@
+apiVersion: platform-vault.qvantel.com/v1
+kind: KubernetesAuthRole
+metadata:
+  name: apps-default-role
+spec:
+  bound_service_account_names:
+    - '*'
+  bound_service_account_namespaces:
+    - '*'
+  token_policies:
+    - apps-default-policy

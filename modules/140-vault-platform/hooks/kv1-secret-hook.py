@@ -14,6 +14,8 @@ v1 = client.CoreV1Api()
 class Kv1SecretsHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")
+        appsNamespace = self.get_addon_operator_config('global').get('appsNamespace','qvantel')
+        platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
         super().__init__(str(
             {
                 "configVersion": "v1",
@@ -31,13 +33,11 @@ class Kv1SecretsHook(Hook):
                         "kind": "KV1Secret",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultKV1SecretQueue",
-                        # "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
-                        #     "labelSelector": {
-                        #         "matchLabels": {
-                        #             "platform.qvantel.com/vault-crd-sync": "true"
-                        #         }
-                        #     }
-                        # }),
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                            "nameSelector": {
+                                "matchNames": [ appsNamespace, platformNamespace ]
+                            }
+                        }),
                         "allowFailure": True,
                         "jqFilter": '.spec'
                     }

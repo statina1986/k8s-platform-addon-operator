@@ -10,6 +10,7 @@ from common.python.inline import *
 class DbConnectionHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")
+        platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
         super().__init__(str(
             {
                 "configVersion": "v1",
@@ -28,10 +29,8 @@ class DbConnectionHook(Hook):
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultDbConnectionQueue",
                         "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
-                            "labelSelector": {
-                                "matchLabels": {
-                                    "platform.qvantel.com/vault-crd-sync": "true"
-                                }
+                            "nameSelector": {
+                                "matchNames": [ platformNamespace ]
                             }
                         }),
                         "allowFailure": True,

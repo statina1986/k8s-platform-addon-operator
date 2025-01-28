@@ -42,6 +42,24 @@ spec:
                 policy-hcl:
                   type: string
                   description: Policy Definition.
+                computed-values:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
+                post-actions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      expression:
+                        type: string
             status:
               description: The status of the deployment.
               type: object

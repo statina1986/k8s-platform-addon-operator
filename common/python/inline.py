@@ -56,6 +56,11 @@ def vault_store_secret(path, key, value):
     vault_client.secrets.kv.v1.create_or_update_secret(path, existing)
     return value
 
+def vault_get_accessor(path):
+    vault_client = get_vault_client()
+    accessor = vault_client.sys.list_auth_methods()[path]['accessor']
+    return accessor
+
 
 def get_computed_values(vals):
     results = {}
