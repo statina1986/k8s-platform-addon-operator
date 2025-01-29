@@ -51,19 +51,19 @@ annotations:
     - name: grafana-plugins
       image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
     - name: alloy
-      image: grafana/alloy:v1.5.0
+      image: grafana/alloy:v1.6.1
     - name: configmap-reload
-      image: ghcr.io/jimmidyson/configmap-reload:v0.12.0
+      image: ghcr.io/jimmidyson/configmap-reload:v0.14.0
     - name: beyla
-      image: grafana/beyla:1.9.0
+      image: grafana/beyla:1.9.8
     - name: beyla-k8s-cache
-      image: grafana/beyla-k8s-cache:1.9.0
+      image: grafana/beyla-k8s-cache:1.9.8
     - name: tempo
-      image: docker.io/grafana/tempo:2.6.0
+      image: docker.io/grafana/tempo:2.7.0
     - name: queryFrontendQuery
-      image: grafana/tempo-query:2.6.0
+      image: grafana/tempo-query:2.7.0
     - name: memcached
-      image: docker.io/memcached:1.6.33-alpine
+      image: docker.io/library/memcached:1.6.33-alpine
     - name: memcachedExporter
       image: prom/memcached-exporter:v0.14.4
     - name: gateway

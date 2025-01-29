@@ -16,12 +16,12 @@ dependencies:
   version: 0.38.0
 - name: beyla
   repository: https://grafana.github.io/helm-charts
-  version: 1.5.0
+  version: 1.6.3
 - name: tempo-distributed
   repository: https://grafana.github.io/helm-charts
-  version: 1.28.0
+  version: 1.31.0
 - name: alloy
   repository: https://grafana.github.io/helm-charts
-  version: 0.10.0
-digest: sha256:b99c1c23f4a492a9a1c1911ed57e277b171569844c316e119729580000594578
-generated: "2025-01-09T20:55:14.119931+01:00"
+  version: 0.11.0
+digest: sha256:85f14edf9246f953c927e64d64eacbec2439a2e0c29450f59ac663ab28b0731b
+generated: "2025-01-29T10:57:14.650682+01:00"

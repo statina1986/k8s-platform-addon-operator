@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-01-14T10:34:02.6161581Z"
+  generatedAt: "2025-01-29T12:00:27.5747132Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -185,55 +185,55 @@ images:
       - digest: sha256:632831c45ad02a28f0309866f100351ca94201f09704431d0f05e6a111288f27
         arch: linux/amd64
   - name: alloy
-    image: grafana/alloy:v1.5.0
+    image: grafana/alloy:v1.6.1
     chart: monitoring-platform
     digests:
-      - digest: sha256:5dd4fbb8ff789f5d559abe816c953312cd7429b16d1e46f3389480f1ac038316
+      - digest: sha256:da82cb8b6c5939fac71e2206b05101ca7581f929d6ea7c1e8dd311ccc69176fa
         arch: linux/amd64
-      - digest: sha256:5b43cb4069675c3bf83bee8967403ce9de005a4f716eea3483e9af6197433ff1
+      - digest: sha256:faaa6643430612fc5ee977ac51f54f04d1b8db3ca0933ccae82576e5eb5fe8a5
         arch: linux/arm64
   - name: configmap-reload
-    image: ghcr.io/jimmidyson/configmap-reload:v0.12.0
+    image: ghcr.io/jimmidyson/configmap-reload:v0.14.0
     chart: monitoring-platform
     digests:
-      - digest: sha256:e8cefadc91804275415d0e5e60e5e43dd75d975fbc098c3c5bbcc758c4f037f1
+      - digest: sha256:75a4513f49c4c0ea439cf7daa2c9e275824f9583a09e7ae8461c0a3ab7a83841
         arch: linux/arm64
-      - digest: sha256:ab303cc19949ade3c308055a7a0c01c87298fa76ab454e405ed138f5bae7c38e
+      - digest: sha256:6bd0fa510864cf010ad20a3cdb0a71fc3df804b00479b01102f13d9b9b0b975a
         arch: linux/amd64
   - name: beyla
-    image: grafana/beyla:1.9.0
+    image: grafana/beyla:1.9.8
     chart: monitoring-platform
     digests:
-      - digest: sha256:1402bbea770a6e4b60bf11822fbb7368d63eb0e93072e50d2d82c6801dd12f2a
+      - digest: sha256:3147839b1d9330fdf6be8ac4c832be3f9caedb2d1e91712b6f372b20155f07c4
         arch: linux/amd64
-      - digest: sha256:3fde8a43d42a019a393e7abca4a66c68b79e4a48bf96ea455556166ab3a919bd
+      - digest: sha256:bbc9260bf31aef0afe3dab07775ba81ab672c1d32b0c39ea98509179ae0aa99d
         arch: linux/arm64
   - name: beyla-k8s-cache
-    image: grafana/beyla-k8s-cache:1.9.0
+    image: grafana/beyla-k8s-cache:1.9.8
     chart: monitoring-platform
     digests:
-      - digest: sha256:4d537f4546f8578746155377d133addbdae346fd066d7a99eed920c6229d1972
+      - digest: sha256:b50282da9591776fee00fd0ffe01dcf8e0cc5688a85882f40d294f06204635f7
         arch: linux/amd64
-      - digest: sha256:92db025d15176e1ae15b5bb0a58a28b5b9f82d933813990259a3f6c2f40b0fd8
+      - digest: sha256:85a1cced109ccbcd55bd8e27d4f5caa3931662208448ce3b477e4006d444e014
         arch: linux/arm64
   - name: tempo
-    image: docker.io/grafana/tempo:2.6.0
+    image: docker.io/grafana/tempo:2.7.0
     chart: monitoring-platform
     digests:
-      - digest: sha256:535a54902bf029b13795432866666b336a54c8ac3065aeb4002ee648fcc7b3ae
+      - digest: sha256:b3599d92ed2c933e70ca6985cdece01459242dc697377fad595572058b93c781
         arch: linux/amd64
-      - digest: sha256:214ecab6f0c860db861f1a61e090ada7671f8c3a5280c07d80400b5ca1095370
+      - digest: sha256:8b593a606765f0dfc394926cad7529f10f016df637c73691a27528dfe770a405
         arch: linux/arm64
   - name: queryFrontendQuery
-    image: grafana/tempo-query:2.6.0
+    image: grafana/tempo-query:2.7.0
     chart: monitoring-platform
     digests:
-      - digest: sha256:6910011cc584c0bcbeba2311baf2d7d08e5ed669e6125edf028c54578f36c8b5
+      - digest: sha256:3b6d5a325ae9419a66355fc9301239883f3c3e6d68873a09203f99216a3e837d
         arch: linux/amd64
-      - digest: sha256:5ed6ff2f5da53b050376f2d0ca55eda7f65b868ee9c068aab16afb17a0df18df
+      - digest: sha256:8da0884f6b62296a839d0ae6e0e3dfe91de263730914f5c1563f490055602673
         arch: linux/arm64
   - name: memcached
-    image: docker.io/memcached:1.6.33-alpine
+    image: docker.io/library/memcached:1.6.33-alpine
     chart: monitoring-platform
     digests:
       - digest: sha256:156bc025f995df7b7c19427fa4ce940b4f03d4f730c42426ec495848a588e5c5
@@ -252,9 +252,9 @@ images:
     image: nginxinc/nginx-unprivileged:1.27-alpine
     chart: monitoring-platform
     digests:
-      - digest: sha256:d8a4810cd0d0d0ffb35a649f220293da37c4e21b2f4edd12ca3eab6e437c6580
+      - digest: sha256:f042501615ab350cdc89294ae55d914f517c3a0b2ec53498fa8ac6404a985668
         arch: linux/amd64
-      - digest: sha256:b1c55d19be9f12f8930b97b088034a1e74aba0d965b842884efe97a9be66fec6
+      - digest: sha256:7a72474688da613f6ba77a986ecc67c0a7e0b45be1bd7e52b5d8bf17a8d5ac24
         arch: linux/arm64
   - name: enterprise
     image: grafana/enterprise-traces:v2.6.1

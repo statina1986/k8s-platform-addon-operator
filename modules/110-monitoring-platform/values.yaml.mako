@@ -39,14 +39,15 @@ monitoringPlatform:
     crds:
       create: false
     controller:
-      type: deployment
-      replicas: 1
+      type: statefulset
+      replicas: 3
     serviceMonitor:
       enabled: true
       additionalLabels:
         release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     alloy:
-      mode: flow
+      clustering:
+        enabled: true
       extraPorts:
       - name: otlp-grpc
         port: 4318
@@ -137,6 +138,11 @@ monitoringPlatform:
             path: /metrics 
   tempo-distributed:
     enabled: false
+    global:
+      image:
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}
+        % endif
     metaMonitoring:
       serviceMonitor:
         enabled: true
