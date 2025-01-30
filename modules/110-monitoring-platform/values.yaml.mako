@@ -345,7 +345,7 @@ monitoringPlatform:
       serviceMonitor:
         cAdvisorMetricRelabelings:
           - sourceLabels: [ namespace ]
-            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
             action: keep
         cAdvisorRelabelings:
           - sourceLabels: [__meta_kubernetes_namespace]
@@ -359,7 +359,7 @@ monitoringPlatform:
             action: replace
         metricRelabelings:
           - sourceLabels: [ namespace ]
-            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
             action: keep
         relabelings:
           - sourceLabels: [__meta_kubernetes_namespace]
@@ -375,8 +375,24 @@ monitoringPlatform:
     % if values['global']['clusterwideResources'] == "false":
     crds:
       enabled: false
-    kubernetesServiceMonitors:
+    kubeEtcd:
       enabled: false
+    kubeProxy:
+      enabled: false
+    kubeDns:
+      enabled: false
+    coreDns:
+      enabled: false
+    kubeApiServer:
+      enabled: true
+    kubeControllerManager:
+      enabled: false
+    kubelet:
+      enabled: true
+    kubeScheduler:
+      enabled: false
+    kubernetesServiceMonitors:
+      enabled: true
     global:
       rbac:
         create: false
@@ -418,9 +434,12 @@ monitoringPlatform:
       % if values['global']['clusterwideResources'] == "false":
       namespaces:
         releaseNamespace: true
-      % endif
+        # additional:
+        #   - platform
+        #   - qvantel
       kubeletService:
         namespace: ${values['global']['platformNamespace']}
+      % endif
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -673,7 +692,7 @@ monitoringPlatform:
         monitor:
           metricRelabelings:
             - sourceLabels: [ namespace ]
-              regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+              regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
               action: keep
           relabelings:
             - sourceLabels: [__meta_kubernetes_namespace]
@@ -760,7 +779,7 @@ monitoringPlatform:
       serviceMonitor:
         metricRelabelings:
           - sourceLabels: [ namespace ]
-            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+            regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
             action: keep
         relabelings:
           - sourceLabels: [__meta_kubernetes_namespace]
@@ -876,7 +895,7 @@ monitoringPlatform:
             % if values['global']['namespaceRestricted'] == "true":
             - source_labels: [__meta_kubernetes_namespace]
               action: keep
-              regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']}|kube-system)
+              regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
             % endif
           'podMonitor/metrics/kafka-resources-metrics/0' :
             honor_timestamps: true
