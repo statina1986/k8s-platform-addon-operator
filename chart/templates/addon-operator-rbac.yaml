@@ -151,13 +151,16 @@ subjects:
   - kind: ServiceAccount
     name: platform
     namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: apps
+    namespace: {{ .Values.globalConfig.appsNamespace }}
 {{- end }}
 ---
 {{- if and (eq .Values.globalConfig.deployOperators "false") (eq .Values.globalConfig.clusterwideResources "false") }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader
+  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader-for-{{ .Release.Namespace }}
   namespace: {{ .Values.globalConfig.operatorNamespace }}
 rules:
 - apiGroups: [""]
@@ -178,7 +181,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader
+  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader-for-{{ .Release.Namespace }}
   namespace: {{ .Values.globalConfig.operatorNamespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
