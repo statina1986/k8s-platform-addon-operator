@@ -1,5 +1,8 @@
 rabbitmqPlatform:
   rabbitmq:
+    global: 
+      security:
+        allowInsecureImages: true
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}

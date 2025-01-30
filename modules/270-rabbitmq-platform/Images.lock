@@ -1,22 +1,26 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:05:18.222908133Z"
+  generatedAt: "2025-01-30T07:51:09.529480237Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: rabbitmq-platform
   version: 0.0.1
   appVersion: ""
 images:
+  - name: os-shell
+    image: docker.io/bitnami/os-shell:12-debian-12-r35
+    chart: rabbitmq
+    digests:
+      - digest: sha256:31415d8e37a417ec50fbcdbb8c8fbb9c0a7763934923c1877234a1cd427511d2
+        arch: linux/amd64
+      - digest: sha256:344db2b23709a29683a7ade43fa729fbf2f88911f6a6dcfde39e83c69e75a0bb
+        arch: linux/arm64
   - name: rabbitmq
-    image: platform-artifactory.qvantel.net/platform-1-2-0/bitnami/rabbitmq:3.11.5-debian-11-r2
-    chart: rabbitmq-platform
+    image: docker.io/bitnami/rabbitmq:4.0.5-debian-12-r1
+    chart: rabbitmq
     digests:
-      - digest: sha256:dde88ccc266cc42c872927a7c6ac7acc882a33a5cd797700b15697e777f4eb1d
+      - digest: sha256:cdf7dac1b66972d78cd6b075ea69df78757327550313c511e9b549320de2eb00
         arch: linux/amd64
-  - name: bitnami-shell
-    image: platform-artifactory.qvantel.net/platform-1-2-0/bitnami/bitnami-shell:11-debian-11-r62
-    chart: rabbitmq-platform
-    digests:
-      - digest: sha256:3e1b1d8e0cded15ee5547a78a75c9a5b10d949ef51e889d89c1f550464cfb84f
-        arch: linux/amd64
+      - digest: sha256:1ff661bb1c92dd2ad32503256c27572daf2735c97560aeef0901dbc449e331a4
+        arch: linux/arm64

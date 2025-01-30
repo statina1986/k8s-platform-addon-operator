@@ -1,6 +1,6 @@
 dependencies:
 - name: rabbitmq
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 11.2.2
-digest: sha256:ea41d25fc48b0d2d16d912c1c4e62d5426b02b29ac974eef16f30c1cb0e444ac
-generated: "2023-03-13T21:32:54.86544724+02:00"
+  repository: https://charts.bitnami.com/bitnami
+  version: 15.2.4
+digest: sha256:e7eddf73eae7ff355059a9f6ae2f4bca7b14c15dd09a1fe8679a109a89d7076b
+generated: "2025-01-29T13:26:35.814907954+02:00"
