@@ -111,6 +111,7 @@ elasticsearchPlatform:
               nodeSelector:
                 ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
               % endif
+              % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -119,6 +120,7 @@ elasticsearchPlatform:
                     matchLabels:
                       elasticsearch.k8s.elastic.co/cluster-name: logsearch
                       elasticsearch.k8s.elastic.co/statefulset-name: logsearch-es-logsearch
+              % endif
     smartsearch:
       % if values['global']['deployOperators'] == "false":
       enabled: false
@@ -173,6 +175,7 @@ elasticsearchPlatform:
               nodeSelector:
                 ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
               % endif
+              % if values['global']['multiZone']['enabled']:
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: topology.kubernetes.io/zone
@@ -181,6 +184,7 @@ elasticsearchPlatform:
                     matchLabels:
                       elasticsearch.k8s.elastic.co/cluster-name: smartsearch
                       elasticsearch.k8s.elastic.co/statefulset-name: smartsearch-es-smartsearch
+              % endif
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:

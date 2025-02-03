@@ -23,6 +23,7 @@ istioPlatform:
           value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
+      % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints:
         - labelSelector:
             matchLabels:
@@ -30,7 +31,8 @@ istioPlatform:
               istio: pilot
           maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfiable: DoNotSchedule     
+          whenUnsatisfiable: DoNotSchedule
+      % endif
       % if values['global']['platformMasters']:
       nodeSelector:
         ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
