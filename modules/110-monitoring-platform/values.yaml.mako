@@ -149,8 +149,8 @@ monitoringPlatform:
         labels:
           release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     tolerations:
-      - key: "dedicated-nodes"
-        value: "platform-masters"
+      - key: "${values['global']['platformMastersKey']}"
+        value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
     serviceAccount:
@@ -203,16 +203,16 @@ monitoringPlatform:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
       % endif
-    tolerations:
-      - key: "${values['global']['platformMastersKey']}"
-        value: "${values['global']['platformMastersValue']}"
-        operator: "Equal"
-        effect: "NoSchedule"
     % if values['global']['platformMasters']:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     secretsExporter:
+      tolerations:
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
       % if values['global']['namespaceRestricted'] == "true":
       includeNamespaces:
         - ${values['global']['platformNamespace']}
@@ -229,6 +229,11 @@ monitoringPlatform:
     hostPathsExporter:
       podExtraLabels:
         "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+      tolerations:
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
     service:
       extraLabels:
         "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
@@ -666,6 +671,11 @@ monitoringPlatform:
               replacement: $1
               action: replace
       % endif
+      tolerations:
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
