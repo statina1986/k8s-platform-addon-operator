@@ -15,6 +15,9 @@ cnpgPostgresPlatform:
     % if values['global']['clusterwideResources'] == "false":
     rbac:
       create: false
+    config:
+      data:
+        WATCH_NAMESPACE: ${values['global']['platformNamespace']}
     % endif
     serviceAccount:
       create: false
