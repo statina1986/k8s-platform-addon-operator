@@ -252,4 +252,20 @@ spec:
       annotations:
         brief: "CNPG metrics are not being scrapped."
         procedure: "Create a ticket to Platform Team to be reviewed during business hours"
+    - alert: PostgreSQLBackupFailed
+      expr: '(time() - sum by (pod) (cnpg_collector_last_available_backup_timestamp{}!=0)) / 3600 > 25'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Last CNPG backup on {{` {{ $labels.pod }} `}} was done {{` {{ $value }} `}} hours ago. It should be retrieved daily."
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
+    - alert: PostgreSQLBackupAbsent
+      expr: 'absent(cnpg_collector_last_available_backup_timestamp) == 1'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "CNPG backups are not being taken."
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
 {{- end }}
