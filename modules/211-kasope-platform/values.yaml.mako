@@ -36,7 +36,7 @@ kasopePlatform:
         % if 'containerRegistryBase' in values['global']:
         systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.22.4
         configBuilder: ${values['global']['containerRegistryBase']}/datastax/cass-config-builder:1.0-ubi8
-        k8ssandraClient: ${values['global']['containerRegistryBase']}/k8ssandra/k8ssandra-client/v0.2.2
+        k8ssandraClient: ${values['global']['containerRegistryBase']}/k8ssandra/k8ssandra-client:v0.2.2
         % endif
       admissionWebhooks:
         enabled: false
