@@ -1,3 +1,4 @@
+## Needed when we have no permissions to deploy CNPG clusterroles
 {{ if eq .Values.global.clusterwideResources "false" }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
