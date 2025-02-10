@@ -31,7 +31,7 @@ lokiPlatform:
     deploymentMode: SimpleScalable
     % endif
     lokiCanary:
-        enabled: false
+      enabled: false
     test:
       enabled: false
     monitoring:
@@ -172,8 +172,9 @@ lokiPlatform:
       create: false
       name: platform
 
-    objectStorageSecretEnabled: "false"
-    secretName: ""
+    objectStorageSecret:
+      create: false
+      secretName: ""
 
     gateway:
       enabled: false
@@ -215,23 +216,21 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      extraArgs:
-        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
-        - '-config.expand-env=true'
-        % endif
+      extraArgs:        
+        - '-config.expand-env=true'        
       extraEnv:
-        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['secretName']}
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_USER
         - name: OBJECT_STORAGE_SECRET
           valueFrom:
             secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['secretName']}
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_SECRET
-        % endif
+        % endif   
     write:
       replicas: 3
       persistence:
@@ -256,22 +255,20 @@ lokiPlatform:
           whenUnsatisfiable: DoNotSchedule
       % endif
       extraArgs:
-        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
-        - '-config.expand-env=true'
-        % endif
+        - '-config.expand-env=true'        
       extraEnv:
-        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['secretName']}
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_USER
         - name: OBJECT_STORAGE_SECRET
           valueFrom:
             secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['secretName']}
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_SECRET
-        % endif
+        % endif  
     backend:
       replicas: 3
       tolerations:
@@ -293,23 +290,21 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      extraArgs:
-        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
-        - '-config.expand-env=true'
-        % endif
+      extraArgs:        
+        - '-config.expand-env=true'        
       extraEnv:
-        % if 'objectStorageSecretEnabled' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecretEnabled'] == "true":
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['secretName']}
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_USER
         - name: OBJECT_STORAGE_SECRET
           valueFrom:
             secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['secretName']}
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_SECRET
-        % endif
+        % endif       
     % endif
     
   promtail:
