@@ -173,7 +173,7 @@ lokiPlatform:
       name: platform
 
     objectStorageSecret:
-      create: true
+      create: false
       secretName: ""
 
     gateway:
@@ -219,6 +219,7 @@ lokiPlatform:
       extraArgs:        
         - '-config.expand-env=true'        
       extraEnv:
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -228,7 +229,8 @@ lokiPlatform:
           valueFrom:
             secretKeyRef:
               name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_SECRET      
+              key: OBJECT_STORAGE_SECRET
+        % endif   
     write:
       replicas: 3
       persistence:
@@ -255,6 +257,7 @@ lokiPlatform:
       extraArgs:
         - '-config.expand-env=true'        
       extraEnv:
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -264,7 +267,8 @@ lokiPlatform:
           valueFrom:
             secretKeyRef:
               name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_SECRET        
+              key: OBJECT_STORAGE_SECRET
+        % endif  
     backend:
       replicas: 3
       tolerations:
@@ -288,7 +292,8 @@ lokiPlatform:
       % endif
       extraArgs:        
         - '-config.expand-env=true'        
-      extraEnv:        
+      extraEnv:
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -298,7 +303,8 @@ lokiPlatform:
           valueFrom:
             secretKeyRef:
               name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_SECRET        
+              key: OBJECT_STORAGE_SECRET
+        % endif       
     % endif
     
   promtail:
