@@ -1,0 +1,308 @@
+{{- template "logsearchPlatform.logsearchTestEnvEnabled" . -}}
+{{- if .logsearchTestEnvEnabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade,pre-delete
+    helm.sh/hook-weight: "5"
+  name: logging-configurator
+  namespace: {{.Release.Namespace}}
+data:
+  run: |
+    cp /logging_setup/* /tmp
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibanausers.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibana.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/elastic.sh
+    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/alias.sh
+    /bin/sh /tmp/kibanausers.sh
+    /bin/sh /tmp/kibana.sh
+    /bin/sh /tmp/elastic.sh
+    /bin/sh /tmp/alias.sh
+
+  kibanausers.sh: |
+    PORT=5601
+    URL="http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform-kibana:$PORT"
+    status_code=0
+    while [ "200" != $status_code  ]
+    do
+      echo "Sleeping for 50 seconds..."
+      sleep 50
+      echo "Trying to contact Kibana at $URL"
+      status_code=$(curl -k -u elastic:PW_REPLACE --write-out %{http_code} --silent --output /dev/null "$URL"/status -I)
+      echo "status code $status_code"
+    done
+
+    curl -k -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_security/role/CP_ROLE -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+        "cluster":[],
+        "indices":[{"names":["*"],"privileges":["read","read_cross_cluster"],
+        "allow_restricted_indices":false}],
+        "applications":[{"application":"kibana-.kibana","privileges":["feature_discover.all","feature_visualize.all","feature_dashboard.all"],"resources":["*"]}],
+        "run_as":[],"metadata":{},"transient_metadata":{"enabled":true}
+    }'
+    curl -k -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "password" : "kibana",
+      "roles" : [ "CP_ROLE" ]
+    }'
+
+  kibana.sh: |
+    curl -k -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform-kibana.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/application* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "application*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -k -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform-kibana.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/audit-* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "audit*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -k -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform-kibana.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/ingress* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "ingress*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+    curl -k -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform-kibana.{{.Release.Namespace}}.svc:5601/api/saved_objects/index-pattern/all-tibco* -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
+    {
+      "attributes": {
+            "title": "all-tibco*",
+            "timeFieldName": "@timestamp"
+      }
+    }'
+
+  elastic.sh: |
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_template/application_template <<EOF
+    {
+      "index_patterns": ["application*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "application_policy",
+        "index.lifecycle.rollover_alias": "applicationalias",
+        "index.number_of_replicas": 0,
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_template/audit_template <<EOF
+    {
+      "index_patterns": ["audit*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "audit_policy",
+        "index.lifecycle.rollover_alias": "auditalias",
+        "index.number_of_replicas": 0,
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_template/ingress_template <<EOF
+    {
+      "index_patterns": ["ingress*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "ingress_policy",
+        "index.lifecycle.rollover_alias": "ingressalias",
+        "index.number_of_replicas": 0,
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_template/all-tibco_template <<EOF
+    {
+      "index_patterns": ["all-tibco*"],
+      "order": -1,
+      "settings": {
+        "index.lifecycle.name": "tibco_policy",
+        "index.lifecycle.rollover_alias": "tibcoalias",
+        "index.number_of_replicas": 0,
+        "index.highlight.max_analyzed_offset": 10000000
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_ilm/policy/application_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "delete": {
+            "min_age":"2d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_ilm/policy/ingress_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "delete": {
+            "min_age":"2d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+        http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_ilm/policy/audit_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "delete": {
+            "min_age":"2d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+    curl -k -u elastic:PW_REPLACE -XPUT -H"Content-Type: application/json" --data @- \
+      http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_ilm/policy/tibco_policy <<EOF
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "set_priority": {
+                "priority": 50
+              }
+            }
+          },
+          "delete": {
+            "min_age":"2d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+    EOF
+
+  alias.sh: |
+    DATE=$(date +"%Y-%m-%d")
+    curl -k -u elastic:PW_REPLACE -X POST "http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_aliases?pretty" -H 'Content-Type: application/json' -d'
+    {
+      "actions": [
+        {
+          "add": {
+            "index": "application-'$DATE'",
+            "alias": "applicationalias",
+            "is_write_index": "true"
+          }
+        }
+      ]
+    }'
+    curl -k -u elastic:PW_REPLACE -X POST "http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_aliases?pretty" -H 'Content-Type: application/json' -d'
+    {
+      "actions": [
+        {
+          "add": {
+            "index": "all-tibco-'$DATE'",
+            "alias": "tibcoalias",
+            "is_write_index": "true"
+          }
+        }
+      ]
+    }'
+    curl -k -u elastic:PW_REPLACE -X POST "http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_aliases?pretty" -H 'Content-Type: application/json' -d'
+    {
+      "actions": [
+        {
+          "add": {
+            "index": "ingress-'$DATE'",
+            "alias": "ingressalias",
+            "is_write_index": "true"
+          }
+        }
+      ]
+    }'
+---
+apiVersion: v1
+data:
+  kibana_token: cmVhZG9ubHk6a2liYW5h
+kind: Secret
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade,pre-delete
+    helm.sh/hook-weight: "5"
+  name: kibana-token
+  namespace: {{.Release.Namespace}}
+type: Opaque
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade,pre-delete
+    helm.sh/hook-weight: "5"
+  name: logging-setup
+  namespace: {{.Release.Namespace}}
+spec:
+  template:
+    spec:
+      tolerations:
+        - key: {{ .Values.global.platformMastersKey}}
+          value: {{ .Values.global.platformMastersValue}}
+          operator: "Equal"
+          effect: "NoSchedule"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: logging-configurator
+      containers:
+      - name: logging-setup
+        image: {{ .Values.logsearchPlatform.loggingSetupimage }}
+        command: ["/bin/sh"]
+        args: ["/logging_setup/run" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /logging_setup
+        env:
+        - name: ELPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: logsearch-elastic
+              key: elasticsearch-password
+      restartPolicy: Never
+{{- end }}

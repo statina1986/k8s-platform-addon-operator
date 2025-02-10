@@ -1118,7 +1118,11 @@ istioIngress:
         http:
         - route:
           - destination:
+              % if addon_operator['logsearchPlatformEnabled'] == 'true':
+              host: ${values['global']['helmReleaseNamePrefix']}logsearch-platform-kibana.${values['global']['platformNamespace']}.svc.cluster.local
+              % else:
               host: kibana-kb-http.${values['global']['platformNamespace']}.svc.cluster.local
+              % endif
               port:
                 number: 5601
       logsearch:
@@ -1129,7 +1133,11 @@ istioIngress:
         http:
         - route:
           - destination:
+              % if addon_operator['logsearchPlatformEnabled'] == 'true':
+              host: ${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc.cluster.local
+              % else:
               host: logsearch-es-http.${values['global']['platformNamespace']}.svc.cluster.local
+              % endif
               port:
                 number: 9200
       loki-read:

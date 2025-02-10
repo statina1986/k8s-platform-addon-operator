@@ -143,6 +143,14 @@ vectorPlatform:
             name: logsearch-es-elastic-user
             key: elastic
     % endif
+    % if addon_operator['logsearchPlatformEnabled'] == 'true':
+    env:
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: logsearch-elastic
+            key: elasticsearch-password
+    % endif
     haproxy:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -245,7 +253,7 @@ vectorPlatform:
                 .timestamp = parsed_timestamp
               }
             }
-        % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
+        % if addon_operator['elasticsearchPlatformEnabled'] == 'true' or addon_operator['logsearchPlatformEnabled'] == 'true':
         istio_to_elk_transform:
           inputs:
           - istio_gateway_transform
@@ -453,6 +461,69 @@ vectorPlatform:
           compression: none
           endpoints: 
             - "http://logsearch-es-http.${values['global']['platformNamespace']}.svc:9200"
+          inputs:
+            - istio_to_elk_transform
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
+            user: elastic
+          bulk:
+            index: "ingress-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
+        % endif
+        % if addon_operator['logsearchPlatformEnabled'] == 'true':
+        elk_tibco:
+          compression: none
+          endpoints: 
+            - "http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc:9200"
+          inputs:
+            - tibco_transform
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
+            user: elastic
+          bulk:
+            index: "all-tibco-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
+        elk_apps:
+          compression: none
+          endpoints: 
+            - "http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc:9200"
+          inputs:
+            - qvantel_apps_no_debug
+            - rbs_transform
+          type: elasticsearch
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
+            user: elastic
+          bulk:
+            index: "application-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
+        elk_ingress:
+          compression: none
+          endpoints: 
+            - "http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc:9200"
           inputs:
             - istio_to_elk_transform
           type: elasticsearch
