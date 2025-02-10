@@ -14,6 +14,7 @@ spec:
     - "GRANT ALL PRIVILEGES ON DATABASE artifactory_oss TO artifactory_oss;"
   db-username: postgres
   db-password: "{postgres-password}"
+  transaction: false
   db-url: "postgresql://{postgres-user}:{postgres-password}@{{ .Values.artifactoryPlatform.databaseOSS.name }}.{{ $.Release.Namespace }}.svc:5432/postgres"
   computed-values:
     - name: "postgres-password"

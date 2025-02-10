@@ -151,9 +151,6 @@ subjects:
   - kind: ServiceAccount
     name: platform
     namespace: {{ .Release.Namespace }}
-  - kind: ServiceAccount
-    name: apps
-    namespace: {{ .Values.globalConfig.appsNamespace }}
 {{- end }}
 ---
 {{- if and (eq .Values.globalConfig.deployOperators "false") (eq .Values.globalConfig.clusterwideResources "false") }}

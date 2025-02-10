@@ -1,5 +1,5 @@
-## This is needed so that the Prometheus Operator in the operator namespace can update resources in this platform namespace
-{{- if and (eq .Values.global.deployOperators "false") (eq .Values.global.clusterwideResources "false") }}
+## Needed when we have no permissions to deploy Prometheus stack clusterroles
+{{ if eq .Values.global.clusterwideResources "false" }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -104,18 +104,4 @@ rules:
   - get
   - list
   - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: monitoring-platform-additional-rolebinding
-  namespace: {{ .Release.Namespace }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: monitoring-platform-additional-role
-subjects:
-- kind: ServiceAccount
-  name: platform
-  namespace: {{ .Values.global.operatorNamespace }}
 {{- end }}

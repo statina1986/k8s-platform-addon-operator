@@ -136,7 +136,7 @@ class SqlInstallersHook(Hook):
                 group="platform.qvantel.com",
                 version="v1",
                 name=name,
-                namespace="platform",
+                namespace=namespace,
                 plural="sqlinstallers",
                 update=lambda response: {"spec": {"forceGeneration": response['spec']['forceGeneration'] + 1}}
             )
