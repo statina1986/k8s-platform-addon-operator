@@ -1,4 +1,3 @@
-{{- if eq .Values.global.clusterwideResources "true" }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -46,5 +45,4 @@ webhooks:
     - pods
     scope: '*'
   sideEffects: NoneOnDryRun
-  timeoutSeconds: 10
-{{- end }} 
+  timeoutSeconds: 10 

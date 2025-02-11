@@ -23,6 +23,9 @@ vaultPlatform:
   k8sUnseal: false
   # -- Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps
   useBackwardsCompatibilityService: true
+  # -- Creates a custom certificate for Vault webhook that will last for 10 years
+  longtermWebhookCert:
+    enabled: false
   
   # -- Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
   vault-secrets-webhook:
@@ -37,9 +40,14 @@ vaultPlatform:
       repository: ${values['global']['containerRegistryBase']}/bank-vaults/vault-env
       % endif
     certificate:
+      % if 'longtermWebhookCert' in values['vaultPlatform'] and values['vaultPlatform']['longtermWebhookCert']['enabled']:
+      useCertManager: false
+      servingCertificate: "${values['global']['helmReleaseNamePrefix']}vault-platform-vault-secrets-webhook-ca"
+      generate: false
+      % else:
       useCertManager: true
       generate: false
-      certLifespan: 3650
+      % endif
     % if values['global']['platformMasters']:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
