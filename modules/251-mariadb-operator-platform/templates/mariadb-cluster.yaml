@@ -1,4 +1,5 @@
 {{- if .Values.mariadbOperatorPlatform.clusters }}
+{{- $root := . }}
 {{- range keys .Values.mariadbOperatorPlatform.clusters  }}
 {{- $current := get $.Values.mariadbOperatorPlatform.clusters . }}
 {{- if $current.enabled }}
@@ -65,6 +66,41 @@ spec:
   db-username: 'root'
   db-password: '{secret-password}'
 {{- end }}
+
+{{- if and $current.spec (and $current.spec.backup $current.spec.backup.scheduledBackup) }}
+{{- if $root.Values.global.awsRole}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mariadb-backup
+  annotations:
+    eks.amazonaws.com/role-arn: {{ $root.Values.global.awsRole }}
+  {{- end }}
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Backup
+metadata:
+  name: {{ . }}-scheduled-backups
+spec:
+  mariaDbRef:
+    name: {{ . }}
+  serviceAccountName: mariadb-backup
+  maxRetention: {{ $current.spec.backup.retention | default "48h" }}
+  storage:
+    s3:
+      bucket: {{ $current.spec.backup.bucketName }}
+      prefix: mariadb
+      endpoint: {{ $current.spec.backup.endpoint }}
+      region: {{ $current.spec.backup.region }}
+      tls:
+        enabled: false
+  compression: gzip
+  schedule:
+    cron: {{ $current.spec.backup.scheduledBackup | default "0 0 * * *" }}
+    suspend: false
+{{- end }}
+
 {{- end }}
 {{- end }}
 {{- end }}
