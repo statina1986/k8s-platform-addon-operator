@@ -14,6 +14,9 @@ RUN pip3 install py-consul
 RUN curl -fvSL -o /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.2/yq_linux_${TARGETARCH} && \    
     chmod +x /usr/bin/yq
 
+RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash 
+RUn mv kustomize /usr/bin/kustomize
+
 ENV PYTHONPATH=/
 ARG BUILD_TAG=latest
 ENV BUILD_TAG=${BUILD_TAG}
