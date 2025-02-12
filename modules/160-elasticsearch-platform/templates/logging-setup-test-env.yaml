@@ -165,7 +165,7 @@ data:
             }
           },
           "delete": {
-            "min_age":"31d",
+            "min_age":"2d",
             "actions": {
               "delete": {}
             }
