@@ -7,7 +7,7 @@ dependencies:
 annotations:
   images: |
     - name: mariadb-operator
-      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:0.35.1
+      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:0.37.1
     - name: mariadb-10-6
       image: docker.io/mariadb:10.6.19
     - name: mariadb-10-11
