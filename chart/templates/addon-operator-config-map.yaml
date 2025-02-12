@@ -47,16 +47,6 @@ data:
   elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}
   {{- end }}
 
-  logsearchPlatformEnabled: "{{ .Values.modulesConfig.logsearchPlatformEnabled}}"
-  {{- if .Values.modulesConfig.logsearchPlatform }}
-  logsearchPlatform: {{ print "|\n" (.Values.modulesConfig.logsearchPlatform | toYaml | indent 4) }}
-  {{- end }}
-
-  smartsearchPlatformEnabled: "{{ .Values.modulesConfig.smartsearchPlatformEnabled}}"
-  {{- if .Values.modulesConfig.smartsearchPlatform }}
-  smartsearchPlatform: {{ print "|\n" (.Values.modulesConfig.smartsearchPlatform | toYaml | indent 4) }}
-  {{- end }}
-
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   {{- if .Values.modulesConfig.externalDns }}
   externalDns: {{ print "|\n" (.Values.modulesConfig.externalDns | toYaml | indent 4) }}
@@ -100,6 +90,11 @@ data:
   kyvernoPlatformEnabled: "{{ .Values.modulesConfig.kyvernoPlatformEnabled }}"
   {{- if .Values.modulesConfig.kyvernoPlatform }}
   kyvernoPlatform: {{ print "|\n" (.Values.modulesConfig.kyvernoPlatform | toYaml | indent 4) }}
+  {{- end }}
+
+  logsearchPlatformEnabled: "{{ .Values.modulesConfig.logsearchPlatformEnabled}}"
+  {{- if .Values.modulesConfig.logsearchPlatform }}
+  logsearchPlatform: {{ print "|\n" (.Values.modulesConfig.logsearchPlatform | toYaml | indent 4) }}
   {{- end }}
 
   lokiPlatformEnabled: "{{ .Values.modulesConfig.lokiPlatformEnabled }}"
@@ -180,6 +175,11 @@ data:
   sftpgoPlatformEnabled: "{{ .Values.modulesConfig.sftpgoPlatformEnabled }}"
   {{- if .Values.modulesConfig.sftpgoPlatform }}
   sftpgoPlatform: {{ print "|\n" (.Values.modulesConfig.sftpgoPlatform | toYaml | indent 4) }}
+  {{- end }}
+
+  smartsearchPlatformEnabled: "{{ .Values.modulesConfig.smartsearchPlatformEnabled}}"
+  {{- if .Values.modulesConfig.smartsearchPlatform }}
+  smartsearchPlatform: {{ print "|\n" (.Values.modulesConfig.smartsearchPlatform | toYaml | indent 4) }}
   {{- end }}
 
   vaultPlatformEnabled: "{{ .Values.modulesConfig.vaultPlatformEnabled }}"

@@ -63,6 +63,7 @@ logsearchPlatform:
       nodeSelector:
         ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
+      % if values['global']['multiZone']['enabled']:
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
@@ -71,6 +72,7 @@ logsearchPlatform:
             matchLabels:
               app.kubernetes.io/component: master
               app.kubernetes.io/instance: ${values['global']['helmReleaseNamePrefix']}logsearch-platform
+      % endif
     data:
       replicaCount: 0
       pdb:
