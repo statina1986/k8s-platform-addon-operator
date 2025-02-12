@@ -1,0 +1,8 @@
+apiVersion: v2
+name: logsearch-platform
+version: 0.0.1
+dependencies:
+  - name: logsearchPlatform
+    version: 0.0.1
+
+## No need for images annotations because dependency chart is from Bitnami and already annotated

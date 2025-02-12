@@ -63,6 +63,7 @@ modulesConfig:
     strimziHelmVersion: "0.43.0"
   kasopePlatformEnabled: "false"
   kyvernoPlatformEnabled: "false"
+  logsearchPlatformEnabled: "false"
   lokiPlatformEnabled: "false"
   keycloakPlatformEnabled: "false"
   mariadbPlatformEnabled: "false"
@@ -80,6 +81,7 @@ modulesConfig:
   rancherPlatformEnabled: "false"
   sftpEnabled: "false"
   sftpgoPlatformEnabled: "false"
+  smartsearchPlatformEnabled: "false"
   vaultPlatformEnabled: "false"
   vaultPlatform:
     autoUnseal: false

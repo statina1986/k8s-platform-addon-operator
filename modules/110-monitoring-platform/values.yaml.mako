@@ -556,6 +556,10 @@ monitoringPlatform:
       envFromSecrets: 
         - name: "logsearch-es-elastic-user"
       % endif
+      % if addon_operator['logsearchPlatformEnabled'] == 'true':
+      envFromSecrets: 
+        - name: "logsearch-elastic"
+      % endif
       datasources:
         platform.yaml:
           apiVersion: 1
@@ -582,6 +586,7 @@ monitoringPlatform:
                   datasourceUid: 'prometheus'
                 nodeGraph:
                   enabled: true
+            % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
             - name: Elasticsearch-Ingress
               type: elasticsearch
               access: http
@@ -614,6 +619,41 @@ monitoringPlatform:
                 timeField: "@timestamp"
               secureJsonData:
                 basicAuthPassword: <%text>${elastic}</%text>
+            % endif
+            % if addon_operator['logsearchPlatformEnabled'] == 'true':
+            - name: Elasticsearch-Ingress
+              type: elasticsearch
+              access: http
+              % if values['global']['deployOperators'] == "true":
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc:9200
+              % else:
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['operatorNamespace']}.svc:9200
+              % endif
+              basicAuth: true
+              basicAuthUser: elastic
+              database: ingress*
+              isDefault: false
+              jsonData:
+                timeField: "@timestamp"
+              secureJsonData:
+                basicAuthPassword: <%text>${elasticsearch-password}</%text>
+            - name: Elasticsearch-Application
+              type: elasticsearch
+              access: http
+              % if values['global']['deployOperators'] == "true":
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc:9200
+              % else:
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['operatorNamespace']}.svc:9200
+              % endif
+              basicAuth: true
+              basicAuthUser: elastic
+              database: application*
+              isDefault: false
+              jsonData:
+                timeField: "@timestamp"
+              secureJsonData:
+                basicAuthPassword: <%text>${elasticsearch-password}</%text>
+            % endif
         business.yaml:
           apiVersion: 1
           datasources:
