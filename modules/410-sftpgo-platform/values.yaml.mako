@@ -44,15 +44,21 @@ sftpgoPlatform:
           requests:
             storage: 10Gi
         storageClassName: gp3
+    qvantelCaVolumes:
+      enabled: false
     volumes:
+      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']['enabled']:
       - name: trusted-ca-tls
         secret:
           defaultMode: 420
           optional: true
           secretName: qvantel-root-ca
+      % endif
     volumeMounts:
+      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']['enabled']:
       - name: trusted-ca-tls
-        mountPath: /etc/ssl/certs          
+        mountPath: /etc/ssl/certs 
+      % endif
     podSecurityContext:
       runAsUser: 0
       runAsGroup: 0
