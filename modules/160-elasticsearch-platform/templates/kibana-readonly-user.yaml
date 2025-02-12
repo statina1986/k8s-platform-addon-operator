@@ -1,5 +1,5 @@
 {{- $password := (randAscii 32 | b64enc) }}
-{{- $secretData := (lookup "v1" "Secret" .Release.Namespace "kibana-readonly-user").data }}
+{{- $secretData := (lookup "v1" "Secret" .Release.Namespace "legacy-kibana-readonly-user").data }}
 {{- if $secretData }}
 {{- $password = (index $secretData "password" | b64dec) }}
 {{- end }}
@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: "kibana-readonly-user"
+  name: "legacy-kibana-readonly-user"
   namespace: {{.Release.Namespace}}
 type: Opaque
 data:

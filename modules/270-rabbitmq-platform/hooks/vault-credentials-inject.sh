@@ -13,7 +13,7 @@ hook::trigger() {
   qlog "Inserting RabbitMQ credentials to Vault"
   token="$(vault::get_vault_token)"
 
-  # Readonly credentials
+  # RabbitMQ credentials
   username="user"
   password="$(kubectl::get_secret_opaque_kv rabbitmq-platform rabbitmq-password $VAULT_SECRET_NAMESPACE)"
   credentials_old=`mktemp`

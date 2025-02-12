@@ -11,11 +11,11 @@ metadata:
 data:
   run: |
     cp /logging_setup/* /tmp
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibanausers.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/kibanausers.sh
     sed -i "s/READONLY/$READONLYPASS/" /tmp/kibanausers.sh
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibana.sh
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/elastic.sh
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/alias.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/kibana.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/elastic.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/alias.sh
     /bin/sh /tmp/kibanausers.sh
     /bin/sh /tmp/kibana.sh
     /bin/sh /tmp/elastic.sh
@@ -296,7 +296,7 @@ spec:
         - name: READONLYPASS
           valueFrom:
             secretKeyRef:
-              name: kibana-readonly-user
+              name: legacy-kibana-readonly-user
               key: password
       restartPolicy: Never
 {{- end }}
