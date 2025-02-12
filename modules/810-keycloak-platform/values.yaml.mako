@@ -12,6 +12,14 @@ keycloakPlatform:
     vault_url: https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/ui/vault/auth/oidc/oidc/callback
     oidc_discovery_ca_pem: false
     policies:
+      policyreadonly: |
+        path "secret/*" {
+          capabilities = ["list"]
+        }
+
+        path "secret/data/platform/readonly/*" {
+          capabilities = ["read"]
+        }
       policysecretappsadmin: |
         path "secret/*" {
           capabilities = ["read", "list", "create", "update", "patch", "delete"]
@@ -20,23 +28,40 @@ keycloakPlatform:
         path "secret/data/installer/qvaa/*" {
           capabilities = ["deny"]
         }
-      policydbview: |
+      policydbro: |
         path "database/*" {
-          capabilities = ["read", "list"]
-        }
-
-        path "database/creds/*" {
-          capabilities = ["deny"]
+          capabilities = ["list"]
         }
 
         path "database/creds/readonly-role*" {
-          capabilities = ["read", "list"]
+          capabilities = ["read"]
+        }
+      policydbrw: |
+        path "database/*" {
+          capabilities = ["list"]
+        }
+
+        path "database/creds/readwrite-role*" {
+          capabilities = ["read"]
         }
       policyadmin: |
         path "*" {
           capabilities = ["read", "list", "create", "update", "delete", "sudo"]
         }
+
     groups:
+      groupreadonly:
+        policies:
+          - policyreadonly
+        value: vault-readonly
+      groupdbro:
+        policies:
+          - policydbro
+        value: vault-dbro
+      groupdbrw:
+        policies:
+          - policydbrw
+        value: vault-dbrw
       groupappsadmin:
         policies:
           - policysecretappsadmin
@@ -186,6 +211,9 @@ keycloakPlatform:
               sftpgo-admins: {}
               vault-admins: {}
               vault-appsadmin: {}
+              vault-dbro: {}
+              vault-dbrw: {}
+              vault-readonly: {}
               grafana_server_admin:
                 description: "Grafana server administrator permissions: Manage Grafana server-wide settings and resources"
               grafana_admin:

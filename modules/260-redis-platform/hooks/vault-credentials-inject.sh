@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# push Redis admin credentials to platform Vault
+
+source "${0%/*}/../../../common/shell/functions.sh"
+source "${0%/*}/../../../common/shell/variables.sh"
+
+hook::config() {
+  echo '{"configVersion":"v1", "afterHelm": 1}'
+}
+
+hook::trigger() {
+  qlog "Inserting Redis credentials to Vault"
+  token="$(vault::get_vault_token)"
+
+  # Redis credentials
+  password="$(kubectl::get_secret_opaque_kv redis-platform redis-password $VAULT_SECRET_NAMESPACE)"
+  credentials_old=`mktemp`
+  credentials_add=`mktemp`
+  credentials_new=`mktemp`
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/platform/admin/redis'" '200|404'
+  jq -r .data $CURL_RESULT > $credentials_old
+  echo '{"redis-password":"'"$password"'"}' > $credentials_add
+  jq -s add $credentials_old $credentials_add > $credentials_new
+  curl::execute "-d @$credentials_new --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/platform/admin/redis'" 204
+  rm -f $credentials_old $credentials_add $credentials_new
+}
+
+common::run_hook "$@"
