@@ -1,5 +1,3 @@
-{{- if .Values.vaultPlatform.longtermWebhookCert.enabled }}
----
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -11,7 +9,8 @@ spec:
     - {{.Values.global.helmReleaseNamePrefix}}vault-platform-vault-secrets-webhook
     - {{.Values.global.helmReleaseNamePrefix}}vault-platform-vault-secrets-webhook.{{.Values.global.platformNamespace}}
     - {{.Values.global.helmReleaseNamePrefix}}vault-platform-vault-secrets-webhook.{{.Values.global.platformNamespace}}.svc
-  duration: 87660h
+  duration: {{.Values.vaultPlatform.webhookCertificateDuration }}
+  renewBefore: 360h # 15d
   issuerRef:
     name: qvantel-ca-issuer
     kind: Issuer
@@ -20,4 +19,3 @@ spec:
     algorithm: ECDSA
     size: 256
   secretName: {{.Values.global.helmReleaseNamePrefix}}vault-platform-vault-secrets-webhook-ca
-{{- end }}
