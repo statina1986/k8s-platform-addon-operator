@@ -50,11 +50,11 @@ mariadbOperatorPlatform:
     % if 'containerRegistryBase' in values['global']:
     extraEnv:
       - name: MARIADB_GALERA_AGENT_IMAGE
-        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.35.1
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.37.1
       - name: MARIADB_GALERA_INIT_IMAGE
-        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.35.1
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.37.1
       - name: MARIADB_OPERATOR_IMAGE
-        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.35.1
+        value: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator:0.37.1
       - name: RELATED_IMAGE_EXPORTER
         value: ${values['global']['containerRegistryBase']}/prom/mysqld-exporter:v0.15.1
       - name: RELATED_IMAGE_EXPORTER_MAXSCALE

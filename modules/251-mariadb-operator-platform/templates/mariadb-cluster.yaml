@@ -65,6 +65,33 @@ spec:
   db-username: 'root'
   db-password: '{secret-password}'
 {{- end }}
+
+{{- if and $current.spec (and $current.spec.backup $current.spec.backup.scheduledBackup) }}
+
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Backup
+metadata:
+  name: {{ . }}-scheduled-backups
+spec:
+  mariaDbRef:
+    name: {{ . }}
+  serviceAccountName: platform
+  maxRetention: {{ $current.spec.backup.retention | default "48h" }}
+  storage:
+    s3:
+      bucket: {{ $current.spec.backup.bucketName }}
+      prefix: mariadb
+      endpoint: {{ $current.spec.backup.endpoint }}
+      region: {{ $current.spec.backup.region }}
+      tls:
+        enabled: false
+  compression: gzip
+  schedule:
+    cron: {{ $current.spec.backup.scheduledBackup | default "0 0 * * *" }}
+    suspend: false
+{{- end }}
+
 {{- end }}
 {{- end }}
 {{- end }}
