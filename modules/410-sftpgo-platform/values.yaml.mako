@@ -44,7 +44,7 @@ sftpgoPlatform:
           requests:
             storage: 10Gi
         storageClassName: gp3
-    qvantelCaVolumes:
+    qvantelCaVolumes:  ## This value works when makotemplate is re-rendered, eg when pod is re-created
       enabled: false
     volumes:
       % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']['enabled']:
