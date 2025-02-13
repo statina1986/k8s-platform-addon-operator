@@ -65,7 +65,6 @@ keycloakPlatform:
       groupappsadmin:
         policies:
           - policysecretappsadmin
-          - policydbview
         value: vault-appsadmin
         # this value needs to match keycloak role
       groupadmin:
