@@ -54,6 +54,16 @@ rabbitmqPlatform:
     % else:
     replicaCount: 3
     % endif
+
+    resources:
+      limits:
+        cpu: 1
+        ephemeral-storage: 2Gi
+        memory: 3072Mi
+      requests:
+        cpu: 250m
+        ephemeral-storage: 50Mi
+        memory: 512Mi
     
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
