@@ -15,7 +15,7 @@ RUN curl -fvSL -o /usr/bin/yq https://github.com/mikefarah/yq/releases/download/
     chmod +x /usr/bin/yq
 
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash 
-RUn mv kustomize /usr/bin/kustomize
+RUN mv kustomize /usr/bin/kustomize
 
 ENV PYTHONPATH=/
 ARG BUILD_TAG=latest
