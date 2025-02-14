@@ -146,7 +146,7 @@ keycloakPlatform:
                   - https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
                 roles_claim: realm_access.roles
               grafana:
-                % if addon_operator['pomeriumPlatformEnabled'] == 'true':
+                % if addon_operator['monitoringPlatformEnabled'] == 'true':
                 secret: $GRAFANA_CLIENT_SECRET
                 % endif
                 roles_claim: realm_access.roles
@@ -169,7 +169,7 @@ keycloakPlatform:
                     name: sftpgomapper
                 redirect_uris:
                   # this is a guess, no sftpgo in https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/151-istio-ingress/values.yaml.mako
-                  - https://sftpgo${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+                  - https://sftp-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
               vault:
                 secret: $VAULT_CLIENT_SECRET
                 roles_claim: realm_access.roles
