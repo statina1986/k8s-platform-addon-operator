@@ -11,9 +11,10 @@ metadata:
 data:
   run: |
     cp /logging_setup/* /tmp
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibanausers.sh
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/kibana.sh
-    sed -i 's/PW_REPLACE/$ELPASSWORD/' /tmp/elastic.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/kibanausers.sh
+    sed -i "s/READONLY/$READONLYPASS/" /tmp/kibanausers.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/kibana.sh
+    sed -i "s/PW_REPLACE/$ELPASSWORD/" /tmp/elastic.sh
     /bin/sh /tmp/kibanausers.sh
     /bin/sh /tmp/kibana.sh
     /bin/sh /tmp/elastic.sh
@@ -41,7 +42,7 @@ data:
     }'
     curl -u elastic:PW_REPLACE -XPOST http://{{ .Values.global.helmReleaseNamePrefix}}logsearch-platform.{{.Release.Namespace}}.svc:9200/_security/user/readonly -H "Content-Type: application/json" -H "kbn-xsrf: true" -d'
     {
-      "password" : "kibana",
+      "password" : "READONLY",
       "roles" : [ "CP_ROLE" ]
     }'
 
@@ -121,7 +122,7 @@ data:
             }
           },
           "delete": {
-            "min_age":"31d",
+            "min_age":"2d",
             "actions": {
               "delete": {}
             }
@@ -165,7 +166,7 @@ data:
             }
           },
           "delete": {
-            "min_age":"31d",
+            "min_age":"2d",
             "actions": {
               "delete": {}
             }
@@ -174,19 +175,6 @@ data:
       }
     }
     EOF
-
----
-apiVersion: v1
-data:
-  kibana_token: cmVhZG9ubHk6a2liYW5h
-kind: Secret
-metadata:
-  annotations:
-    helm.sh/hook: post-install,post-upgrade,pre-delete
-    helm.sh/hook-weight: "5"
-  name: kibana-token
-  namespace: {{.Release.Namespace}}
-type: Opaque
 ---
 apiVersion: batch/v1
 kind: Job
@@ -222,5 +210,10 @@ spec:
             secretKeyRef:
               name: logsearch-elastic
               key: elasticsearch-password
+        - name: READONLYPASS
+          valueFrom:
+            secretKeyRef:
+              name: kibana-readonly-user
+              key: password
       restartPolicy: Never
 {{- end }}
