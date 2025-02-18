@@ -64,6 +64,9 @@ rabbitmqPlatform:
         cpu: 250m
         ephemeral-storage: 50Mi
         memory: 512Mi
+
+    networkPolicy:
+      enabled: false
     
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
