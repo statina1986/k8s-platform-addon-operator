@@ -156,6 +156,11 @@ monitoringPlatform:
     serviceAccount:
       create: false
       name: platform
+    memcached:
+      image:
+        % if 'containerRegistryBase' in values['global']:
+        repository: library/memcached
+        % endif
     traces:
       otlp:
         grpc:
