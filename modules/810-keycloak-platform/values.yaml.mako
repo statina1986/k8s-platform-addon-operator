@@ -229,6 +229,7 @@ keycloakPlatform:
     healthPort: 8080
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
+    extraEnv: []
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
     # depending on keycloak use, even more could be needed, but this is a good starting point.
     metaspace: 512m
@@ -312,6 +313,10 @@ keycloakPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.hostIP
+            {{- range .Values.keycloakPlatform.deployment.extraEnv }}
+            - name: {{ .name }}
+              value: "{{ .value }}"
+            {{- end }}
             envFrom:
               - secretRef:
                   name: keycloak-admin-secret
