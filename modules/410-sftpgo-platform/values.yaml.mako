@@ -44,10 +44,10 @@ sftpgoPlatform:
           requests:
             storage: 10Gi
         storageClassName: gp3
-    qvantelCaVolumes:  ## This value works when makotemplate is re-rendered, eg when pod is re-created
-      enabled: false
+    ## This qvantelCaVolumes value works when makotemplate is re-rendered, eg when pod is re-created
+    qvantelCaVolumes: false
     volumes:
-      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']['enabled']:
+      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']:
       - name: trusted-ca-tls
         secret:
           defaultMode: 420
@@ -55,7 +55,7 @@ sftpgoPlatform:
           secretName: qvantel-root-ca
       % endif
     volumeMounts:
-      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']['enabled']:
+      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']:
       - name: trusted-ca-tls
         mountPath: /etc/ssl/certs 
       % endif
