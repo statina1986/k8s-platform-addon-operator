@@ -583,6 +583,16 @@ monitoringPlatform:
               % if values['global']['configurationProfile'] != 'dev' and values['global']['deployOperators'] == "false":
               url: http://loki-read.${values['global']['operatorNamespace']}.svc:3100
               % endif
+              % if values['monitoringPlatform']['tempo-distributed']['enabled']:
+              jsonData:
+                derivedFields:
+                  - name: TraceID
+                    matcherRegex: <%text>"\\\"trace_token\\\":\\\"(.+)\\\""</%text>
+                    url: <%text>"$${__value.raw}"</%text>
+                    urlDisplayLabel: "View trace"
+                    datasourceUid: Tempo
+              % endif
+            % if values['monitoringPlatform']['tempo-distributed']['enabled']:
             - name: Tempo
               type: tempo              
               url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-query-frontend.${values['global']['platformNamespace']}.svc:3100
@@ -591,6 +601,16 @@ monitoringPlatform:
                   datasourceUid: 'prometheus'
                 nodeGraph:
                   enabled: true
+                tracesToLogsV2:
+                  datasourceUid: 'Loki'
+                  spanStartTimeShift: '-1h'
+                  spanEndTimeShift: '1h'
+                  tags: [{ key: 'service.name', value: 'service_name' }]
+                  filterByTraceID: true
+                  filterBySpanID: false
+                  customQuery: true
+                  query: <%text>"{$${__tags}} |~ \"$${__span.traceId}\" | json | line_format `[{{`{{.trace_token}}`}}] {{`{{.log_level}}`}} {{`{{.logger_name}}`}} {{`{{.message}}`}}`"</%text>
+            % endif
             % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
             - name: Elasticsearch-Ingress
               type: elasticsearch
