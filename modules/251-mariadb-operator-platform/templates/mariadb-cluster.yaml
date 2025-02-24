@@ -86,13 +86,13 @@ spec:
       region: {{ $current.spec.backup.region }}
       tls:
         enabled: false
-    stagingStorage:
-      persistentVolumeClaim:
-        resources:
-          requests:
-            storage: {{ $current.spec.backup.stagingStorage | default "10Gi" }}
-        accessModes:
-          - ReadWriteOnce
+  stagingStorage:
+    persistentVolumeClaim:
+      resources:
+        requests:
+          storage: {{ $current.spec.backup.stagingStorage | default "10Gi" }}
+      accessModes:
+        - ReadWriteOnce
   compression: gzip
   schedule:
     cron: {{ $current.spec.backup.scheduledBackup | default "0 0 * * *" }}
