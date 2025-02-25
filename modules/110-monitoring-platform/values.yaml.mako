@@ -583,7 +583,7 @@ monitoringPlatform:
               % if values['global']['configurationProfile'] != 'dev' and values['global']['deployOperators'] == "false":
               url: http://loki-read.${values['global']['operatorNamespace']}.svc:3100
               % endif
-              % if values['monitoringPlatform']['tempo-distributed']['enabled']:
+              % if 'tempo-distributed' in values['monitoringPlatform'] and values['monitoringPlatform']['tempo-distributed']:
               jsonData:
                 derivedFields:
                   - name: TraceID
@@ -592,7 +592,7 @@ monitoringPlatform:
                     urlDisplayLabel: "View trace"
                     datasourceUid: Tempo
               % endif
-            % if values['monitoringPlatform']['tempo-distributed']['enabled']:
+            % if 'tempo-distributed' in values['monitoringPlatform'] and values['monitoringPlatform']['tempo-distributed']:
             - name: Tempo
               type: tempo              
               url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-query-frontend.${values['global']['platformNamespace']}.svc:3100
