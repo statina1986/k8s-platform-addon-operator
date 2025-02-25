@@ -79,6 +79,11 @@ vaultPlatform:
   
   # -- Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
   vault:
+    serverTelemetry:
+      serviceMonitor:
+        enabled: true
+        selectors:
+          release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
     global:
       enabled: true
     injector:
@@ -92,6 +97,27 @@ vaultPlatform:
         % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/hashicorp/vault
         % endif
+      standalone:
+        config: |
+          ui = true
+
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+            # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+            telemetry {
+              unauthenticated_metrics_access = "true"
+            }
+          }
+          storage "file" {
+            path = "/vault/data"
+          }
+
+          telemetry {
+            prometheus_retention_time = "30s"
+            disable_hostname = true
+          }
       serviceAccount:
         create: false
         name: platform
@@ -183,8 +209,14 @@ vaultPlatform:
               address = "[::]:8200"
               cluster_address = "[::]:8201"
               tls_disable = "true"
+              telemetry {
+                unauthenticated_metrics_access = "true"
+              }
             }
-
+            telemetry {
+              prometheus_retention_time = "30s"
+              disable_hostname = true
+            }
             storage "raft" {
               path = "/vault/data"
                 retry_join {
