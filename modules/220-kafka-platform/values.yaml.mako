@@ -5,6 +5,9 @@ kafkaPlatform:
       registry: ${values['global']['containerRegistryBase']}      
       % endif
       tag: "126980339425e4bff3d98b020fe606778d3c45b1"
+    serviceAccount:
+      create: false
+      name: "platform"
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
