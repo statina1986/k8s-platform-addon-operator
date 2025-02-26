@@ -152,7 +152,7 @@ data:
                 "showLabels": false,
                 "showTime": false,
                 "sortOrder": "Descending",
-                "wrapLogMessage": false
+                "wrapLogMessage": true
               },
               "targets": [
                 {
