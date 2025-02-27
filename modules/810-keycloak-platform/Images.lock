@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-01-15T10:37:35.566217652Z"
+  generatedAt: "2025-02-27T09:22:47.800824126Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: keycloak-platform
@@ -9,12 +9,12 @@ chart:
   appVersion: ""
 images:
   - name: keycloak
-    image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.4.20240819100502_hotfix-24_d5c69cea
+    image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
     chart: keycloak-platform
     digests:
-      - digest: sha256:5d90cca8523dda75c42512d52e5b76f04c667fff90f5c2786f2ee7aef67d685c
+      - digest: sha256:5c93d9a8802bc66b2dee98b5c315a99071f1a619f96bc331fda7f920610ee0d6
         arch: linux/arm64
-      - digest: sha256:168b67a56ca0fff3a205de2ccabee1e20ff4b9cd32aac0dd4ad88a85d72c683e
+      - digest: sha256:6c48b28a97227ce210e8365701e7f12c8139984216c14ba38ecf9aaf315752a8
         arch: linux/amd64
   - name: keycloak-configurator
     image: artifactory.qvantel.net/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d

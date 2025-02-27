@@ -224,9 +224,9 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     replicaCount: 1
-    image: ${values['global']['containerRegistryBase']}/qvaa-keycloak-qrp-postgres-quarkus:24.0.5.4.20240819100502_hotfix-24_d5c69cea
+    image: ${values['global']['containerRegistryBase']}/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
     # keycloak 25 moved health to a separate port 9000 https://www.keycloak.org/docs/latest/release_notes/index.html#management-port-for-metrics-and-health-endpoints
-    healthPort: 8080
+    healthPort: 9000
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
@@ -339,6 +339,8 @@ keycloakPlatform:
             name: qvaa-keycloak
             ports:
             - containerPort: 8080
+              protocol: TCP
+            - containerPort: {{ .Values.keycloakPlatform.deployment.healthPort }}
               protocol: TCP
             readinessProbe:
               failureThreshold: 3
