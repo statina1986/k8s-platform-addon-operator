@@ -79,11 +79,13 @@ vaultPlatform:
   
   # -- Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
   vault:
+    % if addon_operator['monitoringPlatformEnabled'] == 'true':
     serverTelemetry:
       serviceMonitor:
         enabled: true
         selectors:
           release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+    % endif
     global:
       enabled: true
     injector:
