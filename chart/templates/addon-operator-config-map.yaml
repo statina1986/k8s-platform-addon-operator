@@ -147,6 +147,11 @@ data:
   postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
   {{- end }}
 
+  progressPlatformEnabled: "{{ .Values.modulesConfig.progressPlatformEnabled }}"
+  {{- if .Values.modulesConfig.progressPlatform }}
+  progressPlatform: {{ print "|\n" (.Values.modulesConfig.progressPlatform | toYaml | indent 4) }}
+  {{- end }}
+
   qvantelGlueEnabled: "{{ .Values.modulesConfig.qvantelGlueEnabled }}"
   {{- if .Values.modulesConfig.qvantelGlue }}
   qvantelGlue: {{ print "|\n" (.Values.modulesConfig.qvantelGlue | toYaml | indent 4) }}
