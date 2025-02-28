@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: qvaa-proxy-80
   namespace: {{.Release.Namespace}}
+  annotations:
+    consul.hashicorp.com/service-port: http
 spec:
   selector:
     # this must match pod label. there are other ways of matching but this is a simple one.
