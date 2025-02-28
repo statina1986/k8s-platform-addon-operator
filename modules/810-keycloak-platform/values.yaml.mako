@@ -167,7 +167,7 @@ keycloakPlatform:
                 % endif
                 redirect_uris:
                   # pomerium shares domain name with keycloak
-                  - https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+                  - https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}./*
                 roles_claim: realm_access.roles
               grafana:
                 % if addon_operator['monitoringPlatformEnabled'] == 'true':
@@ -176,14 +176,14 @@ keycloakPlatform:
                 roles_claim: realm_access.roles
                 pkce: S256
                 redirect_uris:
-                  - https://grafana${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+                  - https://grafana${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}./*
               kafbat:
                 % if addon_operator['kafkaPlatformEnabled'] == 'true':
                 secret: $KAFKA_UI_CLIENT_SECRET
                 % endif
                 roles_claim: roles
                 redirect_uris:
-                  - https://kafka-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+                  - https://kafka-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}./*
               sftpgo:
                 % if addon_operator['sftpgoPlatformEnabled'] == 'true':
                 secret: $SFTPGO_CLIENT_SECRET
@@ -193,13 +193,13 @@ keycloakPlatform:
                     name: sftpgomapper
                 redirect_uris:
                   # this is a guess, no sftpgo in https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/151-istio-ingress/values.yaml.mako
-                  - https://sftp-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+                  - https://sftp-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}./*
               vault:
                 secret: $VAULT_CLIENT_SECRET
                 roles_claim: realm_access.roles
                 redirect_uris:
                   - http://localhost:8250/oidc/callback
-                  - https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+                  - https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}./*
             roles:
               kafka-admins: {}
               kafka-readonly: {}
@@ -263,7 +263,7 @@ keycloakPlatform:
             app.kubernetes.io/name: keycloak
             vault.security.banzaicloud.io/enable-json-log: "true"
             vault.security.banzaicloud.io/log-level: warn
-            vault.security.banzaicloud.io/vault-addr: http://vault.${values['global']['platformNamespace']}.svc:8200
+            vault.security.banzaicloud.io/vault-addr: http://vault.${values['global']['platformNamespace']}.svc.:8200
             vault.security.banzaicloud.io/vault-env-daemon: "true"
             vault.security.banzaicloud.io/vault-ignore-missing-secrets: "false"
             vault.security.banzaicloud.io/vault-role: platform-qvaa-keycloak
@@ -301,7 +301,7 @@ keycloakPlatform:
             - name: KC_DB
               value: postgres
             - name: KC_DB_URL
-              value: jdbc:postgresql://qvt-postgredb.${values['global']['platformNamespace']}.svc/keycloak
+              value: jdbc:postgresql://qvt-postgredb.${values['global']['platformNamespace']}.svc./keycloak
             - name: KC_DB_USERNAME
               value: vault:database/creds/postgresql_qvaa-keycloak#username
             - name: KC_DB_PASSWORD
