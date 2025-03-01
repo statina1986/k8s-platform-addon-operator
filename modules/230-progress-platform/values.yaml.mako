@@ -1,0 +1,2 @@
+progressPlatform:
+  enabled: false
