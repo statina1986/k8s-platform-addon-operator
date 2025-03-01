@@ -92,7 +92,7 @@ certPlatform:
       enabled: false
       spec:
         acme:
-          server: https://acme-v02.api.letsencrypt.org/directory
+          server: https://acme-v02.api.letsencrypt.org./directory
           email: infra.finland@qvantel.com
           privateKeySecretRef:
             name: letsencrypt-platform-dns
@@ -110,7 +110,7 @@ certPlatform:
       enabled: false
       spec:
         acme:
-          server: https://acme-v02.api.letsencrypt.org/directory
+          server: https://acme-v02.api.letsencrypt.org./directory
           email: infra.finland@qvantel.com
           privateKeySecretRef:
             name: qvantel-dot-solutions-private-key-letsencrypt

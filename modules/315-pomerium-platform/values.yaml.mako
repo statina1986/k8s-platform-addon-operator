@@ -26,7 +26,7 @@ pomeriumPlatform:
       generateSigningKey: true
       routes: |
         - from: https://prometheus${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
-          to: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local:9090
+          to: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local.:9090
           timeout: 30s
           policy:
             - allow:
@@ -38,7 +38,7 @@ pomeriumPlatform:
                 and:
                   - claim/realm_access.roles: prometheus-admins
         - from: https://consul-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
-          to: http://${values['global']['helmReleaseNamePrefix']}consul-platform-consul-ui.${values['global']['platformNamespace']}.svc.cluster.local:80
+          to: http://${values['global']['helmReleaseNamePrefix']}consul-platform-consul-ui.${values['global']['platformNamespace']}.svc.cluster.local.:80
           timeout: 30s
           policy:
             - allow:
