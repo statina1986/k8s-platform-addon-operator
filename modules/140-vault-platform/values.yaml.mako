@@ -28,6 +28,7 @@ vaultPlatform:
   
   # -- Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
   vault-secrets-webhook:
+    secretsMutation: false
     image:
       % if 'containerRegistryBase' in values['global']:
       # Original vault-secrets-webhook image is replaced with Qvantel fork https://stash.qvantel.net/projects/CP/repos/qvantel-vault-secrets-webhook/browse
