@@ -59,9 +59,9 @@ monitoringPlatform:
         protocol: "TCP"
       extraEnv:
       - name: PROMETHEUS_ENDPOINT
-        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.:9090"
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local.:9090"
       - name: TEMPO_ENDPOINT
-        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-distributor.${values['global']['platformNamespace']}.svc.:4317"
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-distributor.${values['global']['platformNamespace']}.svc.cluster.local.:4317"
       configMap:
         create: true
         content: |
@@ -126,9 +126,9 @@ monitoringPlatform:
         routes:
           unmatched: heuristic
         otel_metrics_export:
-          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc.:4317
+          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc.cluster.local.:4317
         otel_traces_export:
-          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc.:4317
+          endpoint: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-alloy.${values['global']['platformNamespace']}.svc.cluster.local.:4317
         attributes:
           kubernetes:
             enable: true
@@ -172,7 +172,7 @@ monitoringPlatform:
       config:
         storage:
           remote_write:
-            - url: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.:9090/api/v1/write"
+            - url: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local.:9090/api/v1/write"
     global_overrides:
       defaults:
         metrics_generator:
@@ -572,16 +572,16 @@ monitoringPlatform:
             - name: Loki
               type: loki
               % if values['global']['configurationProfile'] == 'dev' and values['global']['deployOperators'] == "true":
-              url: http://loki-platform.${values['global']['platformNamespace']}.svc.:3100
+              url: http://loki-platform.${values['global']['platformNamespace']}.svc.cluster.local.:3100
               % endif
               % if values['global']['configurationProfile'] == 'dev' and values['global']['deployOperators'] == "false":
-              url: http://loki-platform.${values['global']['operatorNamespace']}.svc.:3100
+              url: http://loki-platform.${values['global']['operatorNamespace']}.svc.cluster.local.3100
               % endif
               % if values['global']['configurationProfile'] != 'dev' and values['global']['deployOperators'] == "true":
-              url: http://loki-read.${values['global']['platformNamespace']}.svc.:3100
+              url: http://loki-read.${values['global']['platformNamespace']}.svc.cluster.local.:3100
               % endif
               % if values['global']['configurationProfile'] != 'dev' and values['global']['deployOperators'] == "false":
-              url: http://loki-read.${values['global']['operatorNamespace']}.svc.:3100
+              url: http://loki-read.${values['global']['operatorNamespace']}.svc.cluster.local.:3100
               % endif
               % if 'tempo-distributed' in values['monitoringPlatform'] and values['monitoringPlatform']['tempo-distributed']:
               jsonData:
@@ -616,9 +616,9 @@ monitoringPlatform:
               type: elasticsearch
               access: http
               % if values['global']['deployOperators'] == "true":
-              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc.:9200
+              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc.cluster.local.:9200
               % else:
-              url: http://logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc.:9200
+              url: http://logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc.cluster.local.:9200
               % endif
               basicAuth: true
               basicAuthUser: elastic
@@ -632,9 +632,9 @@ monitoringPlatform:
               type: elasticsearch
               access: http
               % if values['global']['deployOperators'] == "true":
-              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc.:9200
+              url: http://logsearch-es-logsearch.${values['global']['platformNamespace']}.svc.cluster.local.:9200
               % else:
-              url: http://logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc.:9200
+              url: http://logsearch-es-logsearch.${values['global']['operatorNamespace']}.svc.cluster.local.:9200
               % endif
               basicAuth: true
               basicAuthUser: elastic
@@ -650,9 +650,9 @@ monitoringPlatform:
               type: elasticsearch
               access: http
               % if values['global']['deployOperators'] == "true":
-              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc.:9200
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc.cluster.local.:9200
               % else:
-              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['operatorNamespace']}.svc.:9200
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['operatorNamespace']}.svc.cluster.local.:9200
               % endif
               basicAuth: true
               basicAuthUser: elastic
@@ -666,9 +666,9 @@ monitoringPlatform:
               type: elasticsearch
               access: http
               % if values['global']['deployOperators'] == "true":
-              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc.:9200
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['platformNamespace']}.svc.cluster.local.:9200
               % else:
-              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['operatorNamespace']}.svc.:9200
+              url: http://${values['global']['helmReleaseNamePrefix']}logsearch-platform.${values['global']['operatorNamespace']}.svc.cluster.local.:9200
               % endif
               basicAuth: true
               basicAuthUser: elastic

@@ -223,13 +223,13 @@ vaultPlatform:
             storage "raft" {
               path = "/vault/data"
                 retry_join {
-                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-0.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-0.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}.svc.cluster.local.:8200"
               }
               retry_join {
-                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-1.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-1.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}svc.cluster.local.:8200"
               }
               retry_join {
-                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-2.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-2.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}svc.cluster.local.:8200"
               }
 
               autopilot {
