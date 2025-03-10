@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cat <&0 > ${0%/*}/all.yaml
+
+kustomize build ${0%/*} && rm ${0%/*}/all.yaml

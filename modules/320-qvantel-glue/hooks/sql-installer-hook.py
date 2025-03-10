@@ -60,6 +60,8 @@ class SqlInstallersHook(Hook):
             post_actions = event['object']['spec'].get(
                 'post-actions', {})
 
+            forceGeneration = event['object']['spec'].get('forceGeneration', 1)
+
             vals = get_computed_values(computed_values)
 
             db_url = replace_computed_values(db_url, vals)
@@ -95,7 +97,7 @@ class SqlInstallersHook(Hook):
                         for statement in db_provision_sql:
                             statement = replace_computed_values(statement, vals)
                             cur.execute(statement)
-                        conn.commit()                    
+                        conn.commit()
                     except (psycopg2.errors.DuplicateObject, psycopg2.errors.DuplicateDatabase):
                         return
                     except:
@@ -107,7 +109,7 @@ class SqlInstallersHook(Hook):
                     try:
                         for statement in db_provision_sql:
                             statement = replace_computed_values(statement, vals)
-                            cur.execute(statement)                        
+                            cur.execute(statement)
                     except (psycopg2.errors.DuplicateObject, psycopg2.errors.DuplicateDatabase):
                         return
 
@@ -132,6 +134,9 @@ class SqlInstallersHook(Hook):
                 update=lambda response: updateCrdStatusCondition(
                     response, "Ready", "False", "SqlInstallerFailed", get_exception_string())
             )
+            # SqlInstaller has failed more than 10 times in a row, imposing throttling delay of 10 sec
+            if forceGeneration > 10:                
+                time.sleep(10)
             update_crd(
                 group="platform.qvantel.com",
                 version="v1",
