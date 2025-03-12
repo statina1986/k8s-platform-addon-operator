@@ -1,4 +1,7 @@
 {{- if .Values.kasopePlatform.vaultConfiguration }}
+{{- $main := get .Values.kasopePlatform.clusters .Values.kasopePlatform.mainCassandraCluster }}
+{{- if $main.enabled }}
+{{- $clusterName := nospace (default .Values.kasopePlatform.mainCassandraCluster $main.spec.cassandra.clusterName) }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbConnection
@@ -14,9 +17,9 @@ spec:
     username_template: >-
       {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
   computed-values:
-  - expression: k8s_get_secret_value('cluster-superuser','{{ $.Release.Namespace }}','username')
+  - expression: k8s_get_secret_value('{{ $clusterName }}-superuser','{{ $.Release.Namespace }}','username')
     name: secret-username
-  - expression: k8s_get_secret_value('cluster-superuser','{{ $.Release.Namespace }}','password')
+  - expression: k8s_get_secret_value('{{ $clusterName }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-username: '{secret-username}'
   db-password: '{secret-password}'
@@ -51,5 +54,5 @@ spec:
   creation-statements: >-
     {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}}; GRANT EXECUTE ON ALL KEYSPACES TO {{username}};" }}
 
-
+{{- end }}
 {{- end }}
