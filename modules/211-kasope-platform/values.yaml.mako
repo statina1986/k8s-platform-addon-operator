@@ -26,6 +26,9 @@ kasopePlatform:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
+    serviceAccount:
+      create: false
+      name: "platform"
     cass-operator:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -44,6 +47,9 @@ kasopePlatform:
         % endif
       admissionWebhooks:
         enabled: false
+      serviceAccount:
+        create: false
+        name: "platform"
     disableCrdUpgraderJob: true
   vaultConfiguration: true
   mainCassandraCluster: "cluster"
