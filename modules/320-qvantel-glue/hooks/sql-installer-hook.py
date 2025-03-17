@@ -135,7 +135,7 @@ class SqlInstallersHook(Hook):
                     response, "Ready", "False", "SqlInstallerFailed", get_exception_string())
             )
             # SqlInstaller has failed more than 10 times in a row, imposing throttling delay of 10 sec
-            if forceGeneration > 10:                
+            if forceGeneration > 10:
                 time.sleep(10)
             update_crd(
                 group="platform.qvantel.com",
@@ -145,6 +145,13 @@ class SqlInstallersHook(Hook):
                 plural="sqlinstallers",
                 update=lambda response: {"spec": {"forceGeneration": response['spec']['forceGeneration'] + 1}}
             )
+
+    def checkIfReady(self, event):
+        conditions = event['object'].get('status', {}).get('conditions', [])
+        for idx, item in enumerate(conditions):
+            if ((item["type"] == "Ready") and (item["status"] == "True")):
+                return True
+        return False
 
     def handle_binding(self, binding):
         match(binding):
@@ -169,7 +176,12 @@ class SqlInstallersHook(Hook):
                 k8s = get_k8s_client()
 
                 for event in binding.get('snapshots', {}).get('monitor-sql-installers', []):
-                    self.executeSql(event, k8s)
+                    # Skipping 'Ready' Installers from scheduled execution as those were already applied
+                    if self.checkIfReady(event):
+                        name = event['object']['metadata']['name']
+                        print("Skipping SqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                    else:
+                        self.executeSql(event, k8s)
 
             case SynchronizationHook(binding, values):
                 if values['qvantelGlue'].get('sqlinstallersCrdSync', {}).get('enabled', 'false') == 'false':
@@ -179,7 +191,13 @@ class SqlInstallersHook(Hook):
                 k8s = get_k8s_client()
 
                 for event in binding.get('objects', []):
-                    self.executeSql(event, k8s)
+                    # Skipping 'Ready' Installers from synchronization execution as those were already applied
+                    if self.checkIfReady(event):
+                        name = event['object']['metadata']['name']
+                        print("Skipping SqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                    else:
+                        self.executeSql(event, k8s)
+
             case _:
                 print("Unknown hook data")
 
