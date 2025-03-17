@@ -12,10 +12,11 @@ hook::config() {
 hook::trigger() {
   qlog "Inserting RabbitMQ credentials to Vault"
   token="$(vault::get_vault_token)"
+  FULL_RELEASE_NAME="${HELM_RELEASE_NAME_PREFIX}rabbitmq-platform"
 
   # RabbitMQ credentials
   username="user"
-  password="$(kubectl::get_secret_opaque_kv rabbitmq-platform rabbitmq-password $VAULT_SECRET_NAMESPACE)"
+  password="$(kubectl::get_secret_opaque_kv $FULL_RELEASE_NAME rabbitmq-password $VAULT_SECRET_NAMESPACE)"
   credentials_old=`mktemp`
   credentials_add=`mktemp`
   credentials_new=`mktemp`

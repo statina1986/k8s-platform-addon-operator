@@ -12,9 +12,10 @@ hook::config() {
 hook::trigger() {
   qlog "Inserting Redis credentials to Vault"
   token="$(vault::get_vault_token)"
+  FULL_RELEASE_NAME="${HELM_RELEASE_NAME_PREFIX}redis-platform"
 
   # Redis credentials
-  password="$(kubectl::get_secret_opaque_kv redis-platform redis-password $VAULT_SECRET_NAMESPACE)"
+  password="$(kubectl::get_secret_opaque_kv $FULL_RELEASE_NAME redis-password $VAULT_SECRET_NAMESPACE)"
   credentials_old=`mktemp`
   credentials_add=`mktemp`
   credentials_new=`mktemp`
