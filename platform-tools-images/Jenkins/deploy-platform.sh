@@ -16,7 +16,7 @@ TIMEOUT=${TIMEOUT:-"600s"}
 
 
 START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-PLATFORM_READY=$(kubectl get dss -n platform platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
+PLATFORM_READY=$(kubectl get dss -n $KPLAT_NAMESPACE platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
 
 # Here we deploy platform helm chart with custom configuration
 START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -52,7 +52,7 @@ do
     echo "Waiting for platform to restart"
     sleep 5
     N=$N-5
-    PLATFORM_READY=$(kubectl get dss -n platform platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
+    PLATFORM_READY=$(kubectl get dss -n $KPLAT_NAMESPACE platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
 done
 
 N=1800
@@ -65,7 +65,7 @@ do
     echo "Waiting for platform deployment to complete"
     sleep 5
     N=$N-5
-    PLATFORM_READY=$(kubectl get dss -n platform platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
+    PLATFORM_READY=$(kubectl get dss -n $KPLAT_NAMESPACE platform-deployment -o=jsonpath="{$.status.conditions[?(@.type=='Ready')].status}" || echo "False")
 done
 
 echo "Deployment completed"
