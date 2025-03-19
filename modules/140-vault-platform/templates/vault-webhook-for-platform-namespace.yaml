@@ -19,10 +19,10 @@ webhooks:
   name: pods.vault-secrets-webhook.admission.banzaicloud.com
   namespaceSelector:
     matchExpressions:
-    - key: name
-      operator: NotIn
+    - key: kubernetes.io/metadata.name
+      operator: In
       values:
-      - kube-system
+      - {{ .Release.Namespace }}
     - key: kubernetes.io/metadata.name
       operator: NotIn
       values:

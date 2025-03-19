@@ -183,7 +183,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader
+  name: addon-operator-{{ .Values.globalConfig.operatorNamespace }}-configuration-reader-for-{{ .Release.Namespace }}
 subjects:
   - kind: ServiceAccount
     name: platform

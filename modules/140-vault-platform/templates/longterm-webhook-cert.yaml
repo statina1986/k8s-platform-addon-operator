@@ -18,4 +18,5 @@ spec:
   privateKey:
     algorithm: ECDSA
     size: 256
+    rotationPolicy: Always
   secretName: {{.Values.global.helmReleaseNamePrefix}}vault-platform-vault-secrets-webhook-ca
