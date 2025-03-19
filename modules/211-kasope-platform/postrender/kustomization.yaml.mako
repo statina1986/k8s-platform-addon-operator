@@ -19,3 +19,9 @@ patches:
       metadata:
         name: DOES NOT MATTER
 % endif
+
+patches:
+  - path: rolebinding-patch.yaml
+    target:
+      kind: RoleBinding
+      name: ${values['global']['helmReleaseNamePrefix']}kasope-platform-cass-operator-leader

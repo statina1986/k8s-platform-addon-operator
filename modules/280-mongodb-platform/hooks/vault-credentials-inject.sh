@@ -12,9 +12,10 @@ hook::config() {
 hook::trigger() {
   qlog "Inserting MongoDB credentials to Vault"
   token="$(vault::get_vault_token)"
+  FULL_RELEASE_NAME="${HELM_RELEASE_NAME_PREFIX}mongodb-platform"
 
   # MongoDB credentials
-  password="$(kubectl::get_secret_opaque_kv mongodb-platform mongodb-root-password $VAULT_SECRET_NAMESPACE)"
+  password="$(kubectl::get_secret_opaque_kv $FULL_RELEASE_NAME mongodb-root-password $VAULT_SECRET_NAMESPACE)"
   credentials_old=`mktemp`
   credentials_add=`mktemp`
   credentials_new=`mktemp`
