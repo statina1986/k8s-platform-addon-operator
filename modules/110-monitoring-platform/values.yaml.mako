@@ -878,6 +878,33 @@ monitoringPlatform:
           datacenter: need-to-define
           environment: need-to-define
         enableRemoteWriteReceiver: true
+        # we need to put something here in order to add additionalAlertRelabelConfigs to prometheus
+        additionalAlertRelabelConfigs: "Actual value not important, will be overridden from additionalAlertRelabelConfigAsMap"
+        additionalAlertRelabelConfigAsMap:
+          # critical severity to severity_qvantel SL3
+          qvantelSeverityChange1: 
+            action: replace
+            regex: critical
+            replacement: SL3
+            source_labels:
+            - severity
+            target_label: severity_qvantel
+          # warning,info or none severity to severity_qvantel SL4
+          qvantelSeverityChange2:
+            action: replace
+            regex: (warning|info|none)
+            replacement: SL4
+            source_labels:
+            - severity
+            target_label: severity_qvantel
+          # adapt severtiy_qvantel to SL2 for specific alerts
+          qvantelSeverityChange3:
+            action: replace
+            regex: AppFrequentDeaths|BSSAPIExcessiveFailingGET|FailingPods|PendingPods|PostgreSQLRamLimitsCritical|PostgreSQLTempFilesCritical|KubePersistentVolumeFillingUp|Frequent5XXCalls
+            replacement: SL2
+            source_labels:
+            - alertname
+            target_label: severity_qvantel
         podMonitorSelector:
           matchLabels:
             "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform

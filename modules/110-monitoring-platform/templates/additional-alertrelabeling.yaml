@@ -1,0 +1,23 @@
+{{- define "alerts-relabel-config-from-map" -}}
+{{- range $k, $v := .additionalAlertRelabelConfigAsMap }}
+- {{ $v | toYaml | indent 2 | trim }}
+{{- end }}
+{{- end }}
+
+{{- $kubePrometheusStack := index .Values.monitoringPlatform "kube-prometheus-stack" }}
+{{- if and $kubePrometheusStack.prometheus.enabled $kubePrometheusStack.prometheus.prometheusSpec.additionalAlertRelabelConfigAsMap }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "kube-prometheus-stack.fullname" $ }}-prometheus-am-relabel-confg
+  namespace: {{ template "kube-prometheus-stack.namespace" $ }}
+  {{- if $kubePrometheusStack.prometheus.prometheusSpec.additionalPrometheusSecretsAnnotations }}
+  annotations:
+    {{ toYaml $kubePrometheusStack.prometheus.prometheusSpec.additionalPrometheusSecretsAnnotations | indent 4 }}
+  {{- end }}
+  labels:
+    app: {{ template "kube-prometheus-stack.name" $ }}-prometheus-am-relabel-confg
+    {{ include "kube-prometheus-stack.labels" $ | indent 4 }}
+data:  
+  additional-alert-relabel-configs.yaml: {{ include "alerts-relabel-config-from-map" $kubePrometheusStack.prometheus.prometheusSpec | b64enc | quote }}
+{{- end }}
