@@ -13,11 +13,11 @@ spec:
   - name: bssapi-alerts
     rules:
       - alert: BSSAPIExcessiveFailingPOST
-        # Checks if more than 2% of the incoming POST requests has failed the last hour
+        # Checks if more than 2% of the incoming POST requests has failed the last 10 minutes
         annotations:
-          brief: BSSAPI {{` {{$labels.job}} `}} POST requests has more than {{` {{$value}} `}}% errors last hour
+          brief: BSSAPI {{` {{$labels.job}} `}} POST requests has more than {{` {{$value}} `}}% errors in last 10 minutes
           procedure: Escalate to L2 after verifying
-        expr: sum(rate(aggregator_requests_total{status="failed",method="POST"}[1h])) by(job) / sum(rate(aggregator_requests_total{method="POST"}[1h])) by(job) * 100 > 2
+        expr: sum(rate(aggregator_requests_total{status="failed",method="POST"}[10m])) by(job) / sum(rate(aggregator_requests_total{method="POST"}[10m])) by(job) * 100 > 2
         for: 5m
         labels:
           severity: critical
