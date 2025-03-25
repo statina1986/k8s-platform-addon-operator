@@ -1,7 +1,12 @@
 resources:
   - all.yaml
+
+patches:
+  - path: rolebinding-patch.yaml
+    target:
+      kind: RoleBinding
+      name: ${values['global']['helmReleaseNamePrefix']}kasope-platform-cass-operator-leader
 % if values['global']['clusterwideResources'] == "false":
-patches:  
   - target:
       kind: ClusterRole
     patch: |
@@ -19,9 +24,3 @@ patches:
       metadata:
         name: DOES NOT MATTER
 % endif
-
-patches:
-  - path: rolebinding-patch.yaml
-    target:
-      kind: RoleBinding
-      name: ${values['global']['helmReleaseNamePrefix']}kasope-platform-cass-operator-leader
