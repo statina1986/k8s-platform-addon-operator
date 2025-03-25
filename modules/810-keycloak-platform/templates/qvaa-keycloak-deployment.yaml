@@ -9,5 +9,5 @@ metadata:
     {{ tpl .Values.keycloakPlatform.deployment.additionalLabels . | nindent 4 }}
     {{- end }}
 spec:
-  {{ tpl .Values.keycloakPlatform.deployment.spec . | nindent 2 }}
+  {{- tpl ( toYaml .Values.keycloakPlatform.deployment.spec) . | nindent 2 }}
   

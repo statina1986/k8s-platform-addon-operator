@@ -11,4 +11,4 @@ metadata:
   name: "qvaa-configurator-{{ .Release.Name }}"
   namespace: {{.Release.Namespace}}
 spec:
-  {{ tpl .Values.keycloakPlatform.configurator.spec . | nindent 2 }}
+  {{- tpl ( toYaml .Values.keycloakPlatform.configurator.spec) . | nindent 2 }}

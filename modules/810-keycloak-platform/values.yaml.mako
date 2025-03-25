@@ -77,7 +77,7 @@ keycloakPlatform:
     name: qvt-postgredb
   configurator:
     image: ${values['global']['containerRegistryBase']}/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d
-    spec: |
+    spec:
       backoffLimit: 5
       template:
         spec:
@@ -89,7 +89,7 @@ keycloakPlatform:
               effect: "NoSchedule"
           containers:
           - name: keycloak-configurator
-            image: {{ .Values.keycloakPlatform.configurator.image }}
+            image: "{{ .Values.keycloakPlatform.configurator.image }}"
             command:
             - /opt/docker/configurator.py
             volumeMounts:
@@ -152,75 +152,73 @@ keycloakPlatform:
                       items:
                         - key: configurator.yml
                           path: configurator.yml
-    configmap: |
-      configurator.yml: |
-        ---
-        realms:
-          qvantel:
-            clients:
-              # note: all clients will be created, regardless if they are used.
-              # if the module is not defined and the secret does not exist,
-              # there will a random secret generated.
-              pomerium:
-                % if addon_operator['pomeriumPlatformEnabled'] == 'true':
-                secret: $POMERIUM_CLIENT_SECRET
-                % endif
-                redirect_uris:
-                  # pomerium shares domain name with keycloak
-                  - https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
-                roles_claim: realm_access.roles
-              grafana:
-                % if addon_operator['monitoringPlatformEnabled'] == 'true':
-                secret: $GRAFANA_CLIENT_SECRET
-                % endif
-                roles_claim: realm_access.roles
-                pkce: S256
-                redirect_uris:
-                  - https://grafana${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
-              kafbat:
-                % if addon_operator['kafkaPlatformEnabled'] == 'true':
-                secret: $KAFKA_UI_CLIENT_SECRET
-                % endif
-                roles_claim: roles
-                redirect_uris:
-                  - https://kafka-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
-              sftpgo:
-                % if addon_operator['sftpgoPlatformEnabled'] == 'true':
-                secret: $SFTPGO_CLIENT_SECRET
-                % endif
-                mappers:
-                  - type: sftpgo
-                    name: sftpgomapper
-                redirect_uris:
-                  # this is a guess, no sftpgo in https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/151-istio-ingress/values.yaml.mako
-                  - https://sftp-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
-              vault:
-                secret: $VAULT_CLIENT_SECRET
-                roles_claim: realm_access.roles
-                redirect_uris:
-                  - http://localhost:8250/oidc/callback
-                  - https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
-            roles:
-              kafka-admins: {}
-              kafka-readonly: {}
-              consul-admins: {}
-              consul-readonly: {}
-              prometheus-admins: {}
-              prometheus-readonly: {}
-              sftpgo-admins: {}
-              vault-admins: {}
-              vault-appsadmin: {}
-              vault-dbro: {}
-              vault-dbrw: {}
-              vault-readonly: {}
-              grafana_server_admin:
-                description: "Grafana server administrator permissions: Manage Grafana server-wide settings and resources"
-              grafana_admin:
-                description: "Organization administrator: Has access to all organization resources, including dashboards, users, and teams."
-              grafana_editor:
-                description: "Editor: Can view and edit dashboards, folders, and playlists."
-              grafana_viewer:
-                description: "Viewer: Can view dashboards and playlists."
+    configmapValues:
+      realms:
+        qvantel:
+          clients:
+            # note: all clients will be created, regardless if they are used.
+            # if the module is not defined and the secret does not exist,
+            # there will a random secret generated.
+            pomerium:
+              % if addon_operator['pomeriumPlatformEnabled'] == 'true':
+              secret: $POMERIUM_CLIENT_SECRET
+              % endif
+              redirect_uris:
+                # pomerium shares domain name with keycloak
+                - https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+              roles_claim: realm_access.roles
+            grafana:
+              % if addon_operator['monitoringPlatformEnabled'] == 'true':
+              secret: $GRAFANA_CLIENT_SECRET
+              % endif
+              roles_claim: realm_access.roles
+              pkce: S256
+              redirect_uris:
+                - https://grafana${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+            kafbat:
+              % if addon_operator['kafkaPlatformEnabled'] == 'true':
+              secret: $KAFKA_UI_CLIENT_SECRET
+              % endif
+              roles_claim: roles
+              redirect_uris:
+                - https://kafka-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+            sftpgo:
+              % if addon_operator['sftpgoPlatformEnabled'] == 'true':
+              secret: $SFTPGO_CLIENT_SECRET
+              % endif
+              mappers:
+                - type: sftpgo
+                  name: sftpgomapper
+              redirect_uris:
+                # this is a guess, no sftpgo in https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/151-istio-ingress/values.yaml.mako
+                - https://sftp-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+            vault:
+              secret: $VAULT_CLIENT_SECRET
+              roles_claim: realm_access.roles
+              redirect_uris:
+                - http://localhost:8250/oidc/callback
+                - https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+          roles:
+            kafka-admins: {}
+            kafka-readonly: {}
+            consul-admins: {}
+            consul-readonly: {}
+            prometheus-admins: {}
+            prometheus-readonly: {}
+            sftpgo-admins: {}
+            vault-admins: {}
+            vault-appsadmin: {}
+            vault-dbro: {}
+            vault-dbrw: {}
+            vault-readonly: {}
+            grafana_server_admin:
+              description: "Grafana server administrator permissions: Manage Grafana server-wide settings and resources"
+            grafana_admin:
+              description: "Organization administrator: Has access to all organization resources, including dashboards, users, and teams."
+            grafana_editor:
+              description: "Editor: Can view and edit dashboards, folders, and playlists."
+            grafana_viewer:
+              description: "Viewer: Can view dashboards and playlists."
   deployment:
     additionalLabels: null
     replicaCount: 1
@@ -246,9 +244,9 @@ keycloakPlatform:
     memory: 1G
     cpu: 100m
     % endif
-    spec: |
+    spec:
       progressDeadlineSeconds: 600
-      replicas: {{ .Values.keycloakPlatform.deployment.replicaCount }}
+      replicas: "{{ .Values.keycloakPlatform.deployment.replicaCount }}"
       % if values['global']['configurationProfile'] == 'dev':
       # in single host environments pod affinity prevents rolling update because second pod can't run on same host
       strategy:
@@ -285,19 +283,19 @@ keycloakPlatform:
           containers:
           - env:
             - name: APP_DOCKER_IMAGE
-              value: {{ .Values.keycloakPlatform.deployment.image }}
+              value: "{{ .Values.keycloakPlatform.deployment.image }}"
             - name: METASPACE_SIZE
-              value: {{ .Values.keycloakPlatform.deployment.metaspace }}
+              value: "{{ .Values.keycloakPlatform.deployment.metaspace }}"
             - name: KC_LOG_LEVEL
               value: info,org.keycloak.events:debug
             - name: SERVICE_NAME
               value: qvaa-keycloak
             - name: MAX_METASPACE_SIZE
-              value: {{ .Values.keycloakPlatform.deployment.maxMetaspace }}
+              value: "{{ .Values.keycloakPlatform.deployment.maxMetaspace }}"
             - name: XMX
-              value: {{ .Values.keycloakPlatform.deployment.xmx }}
+              value: "{{ .Values.keycloakPlatform.deployment.xmx }}"
             - name: XMS
-              value: {{ .Values.keycloakPlatform.deployment.xms }}
+              value: "{{ .Values.keycloakPlatform.deployment.xms }}"
             - name: KC_DB
               value: postgres
             - name: KC_DB_URL
@@ -313,20 +311,20 @@ keycloakPlatform:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.hostIP
-            {{- range .Values.keycloakPlatform.deployment.extraEnv }}
-            - name: {{ .name }}
-              value: "{{ .value }}"
-            {{- end }}
+            % for env in values['keycloakPlatform']['deployment']['extraEnv']:
+            - name: ${env['name']}
+              value: ${env['value']}
+            % endfor
             envFrom:
               - secretRef:
                   name: keycloak-admin-secret
-            image: {{ .Values.keycloakPlatform.deployment.image }}
-            {{- if .Values.keycloakPlatform.deployment.command }}
-            command: {{ .Values.keycloakPlatform.deployment.command }}
-            {{- end }}
-            {{- if .Values.keycloakPlatform.deployment.args }}
-            args: {{ .Values.keycloakPlatform.deployment.args }}
-            {{- end }}
+            image: "{{ .Values.keycloakPlatform.deployment.image }}"
+            % if values['keycloakPlatform']['deployment'].get('command'):
+            command: ${values['keycloakPlatform']['deployment']['command']}
+            % endif
+            % if values['keycloakPlatform']['deployment'].get('args'):
+            args: ${values['keycloakPlatform']['deployment']['args']}
+            % endif
             imagePullPolicy: IfNotPresent
             livenessProbe:
               failureThreshold: 3
@@ -335,7 +333,7 @@ keycloakPlatform:
                 - name: CheckType
                   value: liveness
                 path: /auth/health
-                port: {{ .Values.keycloakPlatform.deployment.healthPort }}
+                port: "{{ .Values.keycloakPlatform.deployment.healthPort }}"
                 scheme: HTTP
               initialDelaySeconds: 300
               periodSeconds: 60
@@ -345,7 +343,7 @@ keycloakPlatform:
             ports:
             - containerPort: 8080
               protocol: TCP
-            - containerPort: {{ .Values.keycloakPlatform.deployment.healthPort }}
+            - containerPort: "{{ .Values.keycloakPlatform.deployment.healthPort }}"
               protocol: TCP
             readinessProbe:
               failureThreshold: 3
@@ -354,7 +352,7 @@ keycloakPlatform:
                 - name: CheckType
                   value: readiness
                 path: /auth/health
-                port: {{ .Values.keycloakPlatform.deployment.healthPort }}
+                port: "{{ .Values.keycloakPlatform.deployment.healthPort }}"
                 scheme: HTTP
               initialDelaySeconds: 10
               periodSeconds: 10
@@ -362,6 +360,6 @@ keycloakPlatform:
               timeoutSeconds: 9
             resources:
               limits:
-                memory: {{ .Values.keycloakPlatform.deployment.memory }}
+                memory: "{{ .Values.keycloakPlatform.deployment.memory }}"
               requests:
-                cpu: {{ .Values.keycloakPlatform.deployment.cpu }}
+                cpu: "{{ .Values.keycloakPlatform.deployment.cpu }}"
