@@ -9,17 +9,28 @@ from common.python.inline import *
 
 class GrafanaTeamHook(Hook):
     def __init__(self):
-        super().__init__("""
-configVersion: v1
-kubernetes:
-- name: "Monitor Grafana Teams"
-  apiVersion: platform.qvantel.com/v1
-  kind: GrafanaTeam
-  executeHookOnEvent: [ "Added", "Modified", "Deleted" ]
-  queue: GrafanaTeamQueue
-  allowFailure: true
-  jqFilter: '.spec'
-""")
+        platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
+        super().__init__(str(
+            {
+                "configVersion": "v1",
+                "kubernetes": [
+                    {
+                        "name": "Monitor Grafana Teams",
+                        "apiVersion": "platform.qvantel.com/v1",
+                        "kind": "GrafanaTeam",
+                        "executeHookOnEvent": ["Added", "Modified", "Deleted"],
+                        "queue": "GrafanaTeamQueue",
+                        "namespace": {
+                            "nameSelector": {
+                                "matchNames": [ platformNamespace ]
+                            }
+                        },
+                        "allowFailure": True,
+                        "jqFilter": '.spec'
+                    }
+                ]
+            })
+        )
 
     def handle_binding(self, binding):
         match(binding):

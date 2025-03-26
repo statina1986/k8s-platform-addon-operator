@@ -84,6 +84,14 @@ spec:
       prefix: mariadb
       endpoint: {{ $current.spec.backup.endpoint }}
       region: {{ $current.spec.backup.region }}
+      {{- if $current.spec.backup.secretName }}
+      accessKeyIdSecretKeyRef:
+        name: {{ $current.spec.backup.secretName }}
+        key: {{ $current.spec.backup.secretUserKey }}
+      secretAccessKeySecretKeyRef:
+        name: {{ $current.spec.backup.secretName }}
+        key: {{ $current.spec.backup.secretKey }}
+      {{- end }}
       tls:
         enabled: false
   stagingStorage:

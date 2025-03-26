@@ -175,6 +175,8 @@ lokiPlatform:
     objectStorageSecret:
       create: false
       secretName: ""
+      userKey: ""
+      secretKey: ""
 
     gateway:
       enabled: false
@@ -219,7 +221,7 @@ lokiPlatform:
       extraArgs:        
         - '-config.expand-env=true'        
       extraEnv:
-        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecret']['create']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -230,6 +232,17 @@ lokiPlatform:
             secretKeyRef:
               name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_SECRET
+        % elif 'objectStorageSecret' in values['lokiPlatform']['loki'] and not values['lokiPlatform']['loki']['objectStorageSecret']['create']:
+        - name: OBJECT_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
+        - name: OBJECT_STORAGE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
         % endif   
     write:
       replicas: 3
@@ -257,7 +270,7 @@ lokiPlatform:
       extraArgs:
         - '-config.expand-env=true'        
       extraEnv:
-        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecret']['create']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -268,7 +281,18 @@ lokiPlatform:
             secretKeyRef:
               name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_SECRET
-        % endif  
+        % elif 'objectStorageSecret' in values['lokiPlatform']['loki'] and not values['lokiPlatform']['loki']['objectStorageSecret']['create']:
+        - name: OBJECT_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
+        - name: OBJECT_STORAGE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
+        % endif
     backend:
       replicas: 3
       tolerations:
@@ -293,7 +317,7 @@ lokiPlatform:
       extraArgs:        
         - '-config.expand-env=true'        
       extraEnv:
-        % if 'objectStorageSecret' in values['lokiPlatform']['loki']:
+        % if 'objectStorageSecret' in values['lokiPlatform']['loki'] and values['lokiPlatform']['loki']['objectStorageSecret']['create']:
         - name: OBJECT_STORAGE_USER
           valueFrom:
             secretKeyRef:
@@ -304,6 +328,17 @@ lokiPlatform:
             secretKeyRef:
               name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
               key: OBJECT_STORAGE_SECRET
+        % elif 'objectStorageSecret' in values['lokiPlatform']['loki'] and not values['lokiPlatform']['loki']['objectStorageSecret']['create']:
+        - name: OBJECT_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
+        - name: OBJECT_STORAGE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
         % endif       
     % endif
     

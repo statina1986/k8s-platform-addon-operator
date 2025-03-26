@@ -122,6 +122,11 @@ data:
   metricsPlatform: {{ print "|\n" (.Values.modulesConfig.metricsPlatform | toYaml | indent 4) }}
   {{- end }}
 
+  minioPlatformEnabled: "{{ .Values.modulesConfig.minioPlatformEnabled }}"
+  {{- if .Values.modulesConfig.minioPlatform }}
+  minioPlatform: {{ print "|\n" (.Values.modulesConfig.minioPlatform | toYaml | indent 4) }}
+  {{- end }}
+
   mongodbPlatformEnabled: "{{ .Values.modulesConfig.mongodbPlatformEnabled }}"
   {{- if .Values.modulesConfig.mongodbPlatform }}
   mongodbPlatform: {{ print "|\n" (.Values.modulesConfig.mongodbPlatform | toYaml | indent 4) }}

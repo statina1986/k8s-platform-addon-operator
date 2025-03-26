@@ -1,0 +1,13 @@
+apiVersion: v2
+name: minio-platform
+version: 0.0.1
+dependencies:
+  - name: minioPlatform
+    version: 0.0.1
+annotations:
+  images: |
+    - name: minio
+      image: quay.io/minio/minio:RELEASE.2024-12-18T13-15-44Z
+    - name: mc
+      image: quay.io/minio/mc:RELEASE.2024-11-21T17-21-54Z
+    

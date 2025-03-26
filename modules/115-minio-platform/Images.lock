@@ -1,0 +1,26 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2025-03-26T15:05:29.936660262Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: minio-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: minio
+    image: quay.io/minio/minio:RELEASE.2024-12-18T13-15-44Z
+    chart: minio-platform
+    digests:
+      - digest: sha256:dca4c608031e569387ebb9dbc5738542a4ddd68f57464c1f7ad5a2d31cefcb8d
+        arch: linux/arm64
+      - digest: sha256:34c8e2f52a5984492555427fee07254c80036bdb7079bb91679232abd7a4fa20
+        arch: linux/amd64
+  - name: mc
+    image: quay.io/minio/mc:RELEASE.2024-11-21T17-21-54Z
+    chart: minio-platform
+    digests:
+      - digest: sha256:25abaf60c1654a0c36089eb6885b966496bfe2766a44a8b2941d50aa8bc2d73c
+        arch: linux/arm64
+      - digest: sha256:771f5ad7925a6b5e069786d8e847a292de320f1e3e3203647e29f47ec9b3d93b
+        arch: linux/amd64

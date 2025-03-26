@@ -70,6 +70,7 @@ modulesConfig:
   mariadbOperatorPlatformEnabled: "false"
   metallbPlatformEnabled: "false"
   metricsPlatformEnabled: "false"
+  minioPlatformEnabled: "false"
   mongodbPlatformEnabled: "false"
   monitoringPlatformEnabled: "false"
   perconaPmmPlatformEnabled: "false"
