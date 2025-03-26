@@ -47,6 +47,8 @@ mariadbOperatorPlatform: {}
 mariadbOperatorPlatformEnabled: true
 mariadbPlatformEnabled: true
 metricsPlatformEnabled: true
+minioPlatform: {}
+minioPlatformEnabled: true
 mongodbPlatform: {}
 mongodbPlatformEnabled: true
 monitoringPlatform: {}
