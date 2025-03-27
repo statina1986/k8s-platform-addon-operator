@@ -718,7 +718,7 @@ istioIngress:
             - destination:
                 host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local
                 port:
-                  number: 80
+                  number: 8080
           - match:
             - uri:
                 prefix: /file
@@ -928,7 +928,7 @@ istioIngress:
           - destination:
               host: catalog-qflow-catalog-data.${values['global']['appsNamespace']}.svc.cluster.local
               port:
-                number: 80
+                number: 8080
         - route:
           - destination:
               host: sales-and-care-toolbox-web.${values['global']['appsNamespace']}.svc.cluster.local
