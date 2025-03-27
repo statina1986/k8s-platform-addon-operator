@@ -221,13 +221,12 @@ keycloakPlatform:
               description: "Viewer: Can view dashboards and playlists."
   deployment:
     additionalLabels: null
-    replicaCount: 1
+    healthPort: 9000
     image: ${values['global']['containerRegistryBase']}/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
     # keycloak 25 moved health to a separate port 9000 https://www.keycloak.org/docs/latest/release_notes/index.html#management-port-for-metrics-and-health-endpoints
-    healthPort: 9000
+    
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
-    extraEnv: []
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
     # depending on keycloak use, even more could be needed, but this is a good starting point.
     metaspace: 512m
@@ -246,12 +245,7 @@ keycloakPlatform:
     % endif
     spec:
       progressDeadlineSeconds: 600
-      replicas: "{{ .Values.keycloakPlatform.deployment.replicaCount }}"
-      % if values['global']['configurationProfile'] == 'dev':
-      # in single host environments pod affinity prevents rolling update because second pod can't run on same host
-      strategy:
-        type: Recreate
-      % endif
+      replicas: 1
       selector:
         matchLabels:
           app: qvaa-keycloak
@@ -281,85 +275,56 @@ keycloakPlatform:
                     - qvaa-keycloak
                 topologyKey: kubernetes.io/hostname
           containers:
-          - env:
-            - name: APP_DOCKER_IMAGE
-              value: "{{ .Values.keycloakPlatform.deployment.image }}"
-            - name: METASPACE_SIZE
-              value: "{{ .Values.keycloakPlatform.deployment.metaspace }}"
-            - name: KC_LOG_LEVEL
-              value: info,org.keycloak.events:debug
-            - name: SERVICE_NAME
-              value: qvaa-keycloak
-            - name: MAX_METASPACE_SIZE
-              value: "{{ .Values.keycloakPlatform.deployment.maxMetaspace }}"
-            - name: XMX
-              value: "{{ .Values.keycloakPlatform.deployment.xmx }}"
-            - name: XMS
-              value: "{{ .Values.keycloakPlatform.deployment.xms }}"
-            - name: KC_DB
-              value: postgres
-            - name: KC_DB_URL
-              value: jdbc:postgresql://qvt-postgredb.${values['global']['platformNamespace']}.svc.cluster.local./keycloak
-            - name: KC_DB_USERNAME
-              value: vault:database/creds/postgresql_qvaa-keycloak#username
-            - name: KC_DB_PASSWORD
-              value: vault:database/creds/postgresql_qvaa-keycloak#password
-            - name: KC_HTTP_PORT
-              value: "8080"
-            - name: INSTANA_AGENT_HOST
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: status.hostIP
-            % for env in values['keycloakPlatform']['deployment']['extraEnv']:
-            - name: ${env['name']}
-              value: ${env['value']}
-            % endfor
-            envFrom:
-              - secretRef:
-                  name: keycloak-admin-secret
-            image: "{{ .Values.keycloakPlatform.deployment.image }}"
-            % if values['keycloakPlatform']['deployment'].get('command'):
-            command: ${values['keycloakPlatform']['deployment']['command']}
-            % endif
-            % if values['keycloakPlatform']['deployment'].get('args'):
-            args: ${values['keycloakPlatform']['deployment']['args']}
-            % endif
-            imagePullPolicy: IfNotPresent
-            livenessProbe:
-              failureThreshold: 3
-              httpGet:
-                httpHeaders:
-                - name: CheckType
-                  value: liveness
-                path: /auth/health
-                port: "{{ .Values.keycloakPlatform.deployment.healthPort }}"
-                scheme: HTTP
-              initialDelaySeconds: 300
-              periodSeconds: 60
-              successThreshold: 1
-              timeoutSeconds: 20
-            name: qvaa-keycloak
-            ports:
-            - containerPort: 8080
-              protocol: TCP
-            - containerPort: "{{ .Values.keycloakPlatform.deployment.healthPort }}"
-              protocol: TCP
-            readinessProbe:
-              failureThreshold: 3
-              httpGet:
-                httpHeaders:
-                - name: CheckType
-                  value: readiness
-                path: /auth/health
-                port: "{{ .Values.keycloakPlatform.deployment.healthPort }}"
-                scheme: HTTP
-              initialDelaySeconds: 10
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 9
-            resources:
-              limits:
-                memory: "{{ .Values.keycloakPlatform.deployment.memory }}"
-              requests:
-                cpu: "{{ .Values.keycloakPlatform.deployment.cpu }}"
+            env:
+              envVars:
+                KC_LOG_LEVEL:
+                  value: info,org.keycloak.events:debug
+                SERVICE_NAME:
+                  value: qvaa-keycloak
+                KC_DB:
+                  value: postgres
+                KC_DB_URL:
+                  value: jdbc:postgresql://qvt-postgredb.${values['global']['platformNamespace']}.svc.cluster.local./keycloak
+                KC_DB_USERNAME:
+                  value: vault:database/creds/postgresql_qvaa-keycloak#username
+                KC_DB_PASSWORD:
+                  value: vault:database/creds/postgresql_qvaa-keycloak#password
+                KC_HTTP_PORT:
+                  value: 8080
+              envFrom:
+                - secretRef:
+                    name: keycloak-admin-secret
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  httpHeaders:
+                  - name: CheckType
+                    value: liveness
+                  path: /auth/health
+                  scheme: HTTP
+                initialDelaySeconds: 300
+                periodSeconds: 60
+                successThreshold: 1
+                timeoutSeconds: 20
+              name: qvaa-keycloak
+              ports:
+              - containerPort: 8080
+                protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  httpHeaders:
+                  - name: CheckType
+                    value: readiness
+                  path: /auth/health
+                  scheme: HTTP
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 9
+              resources: |
+                limits:
+                  memory: {{ .Values.keycloakPlatform.deployment.memory }}
+                requests:
+                  cpu: {{ .Values.keycloakPlatform.deployment.cpu }}
