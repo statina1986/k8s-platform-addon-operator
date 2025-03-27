@@ -8,4 +8,4 @@ data:
   configurator.yml: |
     ---
     realms:
-      {{- tpl (toYaml .Values.keycloakPlatform.configurator.configmapValues.realms) . | nindent 4 }}
+      {{- tpl (toYaml .Values.keycloakPlatform.configurator.configmapValues.realms) . | nindent 6 }}

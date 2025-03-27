@@ -64,7 +64,7 @@ spec:
           {{- $newHttpGet := merge $lp.httpGet (dict "port" (int .Values.keycloakPlatform.deployment.healthPort)) }}
           {{- toYaml $lp | nindent 10 }}
         name: {{ $env.name }}
-        port:
+        ports:
           {{- toYaml $env.ports | nindent 8}}
         - containerPort: {{ .Values.keycloakPlatform.deployment.healthPort }}
           protocol: TCP
