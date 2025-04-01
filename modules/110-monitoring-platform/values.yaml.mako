@@ -905,6 +905,13 @@ monitoringPlatform:
             source_labels:
             - alertname
             target_label: severity_qvantel
+          # adding new category label requested on PS-1043 by Teja Galla to categorize from which namespace the alert comes from
+          qvantelCategoryLabel:
+            action: replace
+            replacement: $1
+            source_labels:
+            - namespace
+            target_label: category          
         podMonitorSelector:
           matchLabels:
             "release": ${values['global']['helmReleaseNamePrefix']}monitoring-platform
