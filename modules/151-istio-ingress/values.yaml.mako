@@ -1159,7 +1159,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: minio-platform.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}minio-platform.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 9000
       minio-console:
@@ -1170,7 +1170,7 @@ istioIngress:
         http:
         - route:
           - destination:
-              host: minio-platform-console.${values['global']['platformNamespace']}.svc.cluster.local
+              host: ${values['global']['helmReleaseNamePrefix']}minio-platform-console.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 9001     
       pmm:
