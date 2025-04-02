@@ -1151,6 +1151,28 @@ istioIngress:
               host: loki-read.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 3100
+      minio:
+        enabled: false
+        pomeriumProtected: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - route:
+          - destination:
+              host: minio-platform.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 9000
+      minio-console:
+        enabled: false
+        pomeriumProtected: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - route:
+          - destination:
+              host: minio-platform-console.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 9001     
       pmm:
         enabled: false
         gateways:
