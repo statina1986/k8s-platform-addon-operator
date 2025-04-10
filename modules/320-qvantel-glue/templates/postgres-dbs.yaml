@@ -22,13 +22,9 @@ metadata:
       {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  {{- toYaml $dbCluster.cluster.spec | nindent 2 }}
-  {{- if $root.Values.global.awsRole}}
-  serviceAccountTemplate:
-    metadata:
-      annotations:
-        eks.amazonaws.com/role-arn: {{ $root.Values.global.awsRole }}
-  {{- end }}
+  {{- $spec := $dbCluster.cluster.spec | default (dict) | deepCopy }}
+  {{- $defaultSpec := include "default-cluster-spec"  $dbCluster.cluster | fromYaml }}
+  {{- toYaml (merge $spec $defaultSpec.spec)| nindent 2 }}
 
 ---
 apiVersion: v1

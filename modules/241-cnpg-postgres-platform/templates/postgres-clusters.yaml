@@ -20,13 +20,9 @@ metadata:
     {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- toYaml $current.spec | nindent 2 }}
-  {{- if $root.Values.global.awsRole}}
-  serviceAccountTemplate:
-    metadata:
-      annotations:
-        eks.amazonaws.com/role-arn: {{ $root.Values.global.awsRole }}
-  {{- end }}
+  {{- $spec := $current.spec | default (dict) | deepCopy }}
+  {{- $defaultSpec := include "default-cluster-spec"  $current | fromYaml }}
+  {{- toYaml (merge $spec $defaultSpec.spec)| nindent 2 }}
 
 {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
 ---

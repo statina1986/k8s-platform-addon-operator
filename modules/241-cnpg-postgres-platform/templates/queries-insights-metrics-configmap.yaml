@@ -1,0 +1,101 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cnpg-queries-insights-metrics
+  namespace: platform
+  labels:
+    cnpg.io/reload: ""
+data:
+  custom-metrics-queries: |
+    pg_stat_statements:
+      query: |
+        SELECT
+          pg_get_userbyid(userid) AS user,
+          pg_database.datname,
+          pg_stat_statements.queryid,
+          pg_stat_statements.query,
+          pg_stat_statements.calls,
+          pg_stat_statements.total_exec_time,
+          pg_stat_statements.rows,
+          pg_stat_statements.blk_read_time ,
+          pg_stat_statements.blk_write_time
+        FROM pg_stat_statements
+        JOIN pg_database
+          ON pg_database.oid = pg_stat_statements.dbid
+        ORDER BY pg_stat_statements.total_exec_time DESC
+        LIMIT 500;
+      metrics:
+        - user:
+            usage: "LABEL"
+            description: "The user who executed the statement"
+        - datname:
+            usage: "LABEL"
+            description: "The database in which the statement was executed"
+        - queryid:
+            usage: "LABEL"
+            description: "Internal hash code computed from the statement's parse tree"
+        - query:
+            usage: "LABEL"
+            description: "The query text"
+        - calls:
+            usage: "COUNTER"
+            description: "Number of times executed"
+        - total_exec_time:
+            usage: "COUNTER"
+            description: "Total time spent in the statement, in milliseconds"
+        - rows:
+            usage: "COUNTER"
+            description: "Total number of rows retrieved or affected by the statement"
+        - blk_read_time:
+            usage: "COUNTER"
+            description: "Total time the statement spent reading blocks, in milliseconds"
+        - blk_write_time:
+            usage: "COUNTER"
+            description: "Total time the statement spent writing blocks, in milliseconds"
+
+    wait_event_profile:
+      query: |
+        SELECT 
+            pss.queryid AS "queryid",
+            pss.query AS "query",
+            pg_database.datname,
+            case when pwsp.event_type IS NULL then 'cpu' else pwsp.event_type end AS "wait_event_type",            
+            case when pwsp.event IS NULL then 'cpu' else pwsp.event end AS "wait_event",            
+            sum(pwsp.count) AS "wait_event_count"
+        FROM 
+            pg_wait_sampling_profile pwsp
+        JOIN 
+            pg_stat_statements pss ON pss.queryid = pwsp.queryid
+        JOIN 
+            pg_database ON pg_database.oid = pss.dbid
+        WHERE 
+            pwsp.count > 0  -- Ensure wait events have occurred
+        GROUP BY    
+            pss.queryid, pss.query, 
+            pwsp.event_type,pwsp.event,
+            pg_database.datname
+        ORDER BY 
+            wait_event_count DESC
+        LIMIT 500;
+      metrics:
+        - queryid:
+            usage: "LABEL"
+            description: "The SQL query ID"
+        - query:
+            usage: "LABEL"
+            description: "The SQL query text"
+        - datname:
+            usage: "LABEL"
+            description: "The database in which the statement was executed"
+        - wait_event_type:
+            usage: "LABEL"
+            description: "Type of the wait event"
+        - wait_event:
+            usage: "LABEL"
+            description: "wait event Name"
+        - wait_event_count:
+            usage: "GAUGE"
+            description: "Number of times this wait event was sampled for this query"
+      target_databases:
+        - postgres
