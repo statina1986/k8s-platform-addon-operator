@@ -108,7 +108,7 @@ keycloakPlatform:
                 # https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/315-pomerium-platform/templates/shared-secret.yaml
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Values.keycloakPlatform.pomeriumSecretName }}
+                    name: "{{ .Values.keycloakPlatform.pomeriumSecretName }}"
                     key: IDP_CLIENT_SECRET
               % endif
               % if addon_operator['kafkaPlatformEnabled'] == 'true':
