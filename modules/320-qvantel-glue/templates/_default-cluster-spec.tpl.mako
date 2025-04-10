@@ -13,12 +13,6 @@ spec:
   % else:
   instances: 2
   % endif
-  resources:
-    requests:
-      memory: 1Gi
-      cpu: "0.1"
-  storage:
-    size: 10Gi
   affinity:
     % if values['global']['multiZone']['enabled']:
     topologyKey: topology.kubernetes.io/zone
