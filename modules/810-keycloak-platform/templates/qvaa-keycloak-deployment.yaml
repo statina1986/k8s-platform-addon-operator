@@ -9,5 +9,69 @@ metadata:
     {{ tpl .Values.keycloakPlatform.deployment.additionalLabels . | nindent 4 }}
     {{- end }}
 spec:
-  {{ tpl .Values.keycloakPlatform.deployment.spec . | nindent 2 }}
-  
+  progressDeadlineSeconds: {{ .Values.keycloakPlatform.deployment.spec.progressDeadlineSeconds }}
+  replicas: {{ .Values.keycloakPlatform.deployment.spec.replicas }}
+  {{- if eq .Values.global.configurationProfile "dev" }}
+  # in single host environments pod affinity prevents rolling update because second pod can't run on same host
+  strategy:
+    type: Recreate
+  {{- end }}
+  selector:
+    {{- toYaml .Values.keycloakPlatform.deployment.spec.selector | nindent 4 }}
+  template:
+    metadata:
+      {{- toYaml .Values.keycloakPlatform.deployment.spec.template.metadata | nindent 6 }}
+    spec:
+      serviceAccountName: {{ .Values.keycloakPlatform.deployment.spec.template.spec.serviceAccountName }}
+      affinity:
+        {{- toYaml .Values.keycloakPlatform.deployment.spec.template.spec.affinity | nindent 8 }}
+      containers:
+      - env:
+        - name: APP_DOCKER_IMAGE
+          value: {{ .Values.keycloakPlatform.deployment.image }}
+        - name: METASPACE_SIZE
+          value: {{ .Values.keycloakPlatform.deployment.metaspace }}
+        - name: MAX_METASPACE_SIZE
+          value: {{ .Values.keycloakPlatform.deployment.maxMetaspace }}
+        - name: XMX
+          value: {{ .Values.keycloakPlatform.deployment.xmx }}
+        - name: XMS
+          value: {{ .Values.keycloakPlatform.deployment.xms }}
+        - name: INSTANA_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        {{- $env := .Values.keycloakPlatform.deployment.spec.template.spec.containers.env }}
+        {{- range $key, $envVars := $env.envVars }}
+        - name: {{ $key }}
+          value: {{ $envVars.value | quote }}
+        {{- end }}
+        envFrom:
+          {{- toYaml $env.envFrom | nindent 8 }}
+        image: {{ .Values.keycloakPlatform.deployment.image }}
+        {{- if .Values.keycloakPlatform.deployment.command }}
+        command: {{ .Values.keycloakPlatform.deployment.command }}
+        {{- end }}
+
+        {{- if .Values.keycloakPlatform.deployment.args }}
+        args: {{ .Values.keycloakPlatform.deployment.args }}
+        {{- end }}
+        imagePullPolicy: {{ $env.imagePullPolicy }}
+        livenessProbe:
+          {{- $lpStr := tpl ( toYaml $env.livenessProbe) . }}
+          {{- $lp := fromYaml $lpStr }}
+          {{- $newHttpGet := merge $lp.httpGet (dict "port" (int .Values.keycloakPlatform.deployment.healthPort)) }}
+          {{- toYaml $lp | nindent 10 }}
+        name: {{ $env.name }}
+        ports:
+          {{- toYaml $env.ports | nindent 8}}
+        - containerPort: {{ .Values.keycloakPlatform.deployment.healthPort }}
+          protocol: TCP
+        readinessProbe:
+          {{- $lpStr := tpl ( toYaml $env.readinessProbe) . }}
+          {{- $lp := fromYaml $lpStr }}
+          {{- $newHttpGet := merge $lp.httpGet (dict "port" (int .Values.keycloakPlatform.deployment.healthPort)) }}
+          {{- toYaml $lp | nindent 10 }}
+        resources:
+          {{- tpl $env.resources . | nindent 10}}
