@@ -74,7 +74,7 @@ spec:
         brief: "Kafka cluster {{` {{ $labels.job }} `}} has {{` {{ $value }} `}} failed produce requests for {{` {{ $labels.topic }} `}}"
         procedure: "Escalate to L2 after verifying."
     - alert: LargeConsumerGroupLag
-      expr: sum(kafka_consumergroup_lag) by(topic,consumergroup) > 5000
+      expr: sum by (topic, consumergroup) (kafka_consumergroup_lag{consumergroup!="", topic!~"STREAM-ORCHESTRATION-INFORMATION|STREAM-SCHEDULED-EXPIRED-PRODUCTS-EVENTS|STREAM-PERIODIC-TOPUP-BY-RENEWAL-DATE-EVENTS|STREAM-CUSTOMER-INTERACTIONS"})  > 5000 
       for: 15m
       labels:
         severity: warning
@@ -82,7 +82,7 @@ spec:
         summary: 'Consumer group lag is big'
         description: 'Consumer group {{` {{ $labels.consumergroup}} `}} lag is big ({{` {{ $value }} `}}) on topic {{` {{ $labels.topic }} `}}'
     - alert: TooBigConsumerGroupLag
-      expr: sum(kafka_consumergroup_lag) by(topic,consumergroup) > 10000
+      expr: sum by (topic, consumergroup) (kafka_consumergroup_lag{consumergroup!="", topic!~"STREAM-ORCHESTRATION-INFORMATION|STREAM-SCHEDULED-EXPIRED-PRODUCTS-EVENTS|STREAM-PERIODIC-TOPUP-BY-RENEWAL-DATE-EVENTS|STREAM-CUSTOMER-INTERACTIONS"})  > 10000 
       for: 15m
       labels:
         severity: critical
