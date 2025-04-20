@@ -24,6 +24,46 @@ spec:
   {{- $defaultSpec := include "default-cluster-spec"  $current | fromYaml }}
   {{- toYaml (merge $spec $defaultSpec.spec)| nindent 2 }}
 
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ . }}-stats-cleanup
+spec:
+  schedule: "@midnight"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: db-tools
+            image: platform.artifactory.qvantel.net/platform/platform-db-tools:1.3.0_202504201254_master_e95ea903
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: username
+                    name: {{ . }}-superuser
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: password
+                    name: {{ . }}-superuser
+              - name: POSTGRES_SERVICE
+                value: "{{.}}"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              date; echo 'Executing postgresql stats cleanup.'
+              PGPASSWORD=$POSTGRES_PASSWORD psql -U $POSTGRES_USER -h $POSTGRES_SERVICE -c \
+                "SELECT pg_wait_sampling_reset_profile(); SELECT pg_stat_statements_reset();"\
+              && echo 'Postgresql stats cleanup completed.'
+          restartPolicy: OnFailure
+          backoffLimit: 3
+  schedule: "@midnight"
+
 {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -43,7 +83,6 @@ spec:
 
 
 {{- if and $current.spec (and $current.spec.backup $current.scheduledBackup) }}
-
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
@@ -56,7 +95,6 @@ spec:
     name: {{ . }}
   immediate: true
   target: {{ $current.spec.backup.target | default "prefer-standby" }}
-  
 {{- end }}
 
 {{- end }}

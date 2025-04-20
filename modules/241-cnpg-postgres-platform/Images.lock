@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-04-09T18:23:19.802405291Z"
+  generatedAt: "2025-04-20T10:39:36.689494313Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: cnpg-postgres-platform
@@ -46,3 +46,11 @@ images:
         arch: linux/amd64
       - digest: sha256:0a569c2cc646462a51615f537549d48c3ee88537325ec147b7002655984fe036
         arch: linux/arm64
+  - name: db-tools
+    image: platform.artifactory.qvantel.net/platform/platform-db-tools:1.3.0_202504201254_master_e95ea903
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:500b23c0e31c3a64dfa05b80c637b309a9a7e19affad19d22a030626a1a6bd8a
+        arch: linux/arm64
+      - digest: sha256:812997eab3cb1ba3c39eea6b465538ed705da1fe829b0d3edebadeec60d873fc
+        arch: linux/amd64

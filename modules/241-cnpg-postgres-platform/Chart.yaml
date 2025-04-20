@@ -2,10 +2,10 @@ apiVersion: v2
 name: cnpg-postgres-platform
 version: 0.0.1
 dependencies:
-  - name: cnpgPostgresPlatform
-    version: 0.0.1
+- name: cnpgPostgresPlatform
+  version: 0.0.1
 annotations:
-  images: |  
+  images: |
     - name: q-cnpg-timescale-13
       image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:13.18-33_1.2.1_202503141111_master_facc7d5c
     - name: q-cnpg-timescale-15
@@ -16,3 +16,5 @@ annotations:
       image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:17.2-32_1.2.1_202503141111_master_facc7d5c
     - name: cloudnative-pg
       image: ghcr.io/cloudnative-pg/cloudnative-pg:1.24.0
+    - name: db-tools
+      image: platform.artifactory.qvantel.net/platform/platform-db-tools:1.3.0_202504201254_master_e95ea903
