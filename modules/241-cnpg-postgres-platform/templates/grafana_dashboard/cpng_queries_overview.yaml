@@ -1,0 +1,977 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cnpg-queries-overview-grafana-dashboard
+  namespace: {{.Release.Namespace}}
+  labels:
+    grafana_dashboard: '1'
+  annotations:
+    grafana_folder: /tmp/dashboards/Qvantel_platform
+data:
+  cnpg-queries-overview.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "description": "CNPG custom queries dashboard for https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/pull-requests/397/overview",
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 143,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "bars",
+                "fillOpacity": 45,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1,
+          "options": {
+            "legend": {
+              "calcs": [
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(increase(cnpg_wait_event_profile_wait_event_count{pod=~\"$instances\",datname=~\"$Datname\"}[1m])) by(wait_event, wait_event_type)",
+              "format": "time_series",
+              "instant": false,
+              "interval": "1m",
+              "legendFormat": "{{"{{wait_event_type}}:{{wait_event}}"}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Active Sessions by CPU and Waits",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "Statements calls per Datname. ",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 12
+          },
+          "id": 3,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "expr": "sum by (datname) (rate(cnpg_pg_stat_statements_calls{datname=~\"$Datname\",pod=~\"$instances\"}[$__rate_interval]))",
+              "instant": false,
+              "interval": "",
+              "legendFormat": "__auto",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Queries execution rate",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "Top queries in the Time Range by Total Execution Time (Load %)",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Calls/sec"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "none"
+                  },
+                  {
+                    "id": "custom.width"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 728
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Avg Exec Time"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Calls %"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 177
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #Calls/sec"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 154
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #Avg Exec Time"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 182
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Calls/sec"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 175
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Rows/query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 160
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Pod"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 191
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Load %"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 20
+          },
+          "id": 30,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Load %"
+              }
+            ]
+          },
+          "pluginVersion": "11.2.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Calls"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "(cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range) / $__range",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Calls/sec"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "0.01 * sum(cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Calls Total"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "cnpg_pg_stat_statements_total_exec_time{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_total_exec_time{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Exec Time"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "(cnpg_pg_stat_statements_total_exec_time{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_total_exec_time{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range) / (cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Avg Exec Time"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "0.01 * sum(cnpg_pg_stat_statements_total_exec_time{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_total_exec_time{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range) ",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Exec Time Total"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "(cnpg_pg_stat_statements_rows{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_rows{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range) / (cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} - cnpg_pg_stat_statements_calls{datname=~\"$Datname\", pod=~\"$instances\"} offset $__range)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "Rows/query"
+            }
+          ],
+          "title": "Top Queries in Time Range",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "alias": "Calls %",
+                "binary": {
+                  "left": "Value #Calls",
+                  "operator": "/",
+                  "right": "Value #Calls Total"
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "replaceFields": false
+              }
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "alias": "Load %",
+                "binary": {
+                  "left": "Value #Exec Time",
+                  "operator": "/",
+                  "right": "Value #Exec Time Total"
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                }
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "Value #Calls": true,
+                  "Value #Calls Total": true,
+                  "Value #E": false,
+                  "Value #Exec Time": true,
+                  "Value #Exec Time Total": true,
+                  "__name__": true,
+                  "container": true,
+                  "endpoint": true,
+                  "instance": true,
+                  "job": true,
+                  "namespace": true,
+                  "user": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Time": 4,
+                  "Value #Avg Exec Time": 15,
+                  "Value #Calls": 11,
+                  "Value #Calls Total": 13,
+                  "Value #Calls/sec": 12,
+                  "Value #Exec Time": 14,
+                  "Value #Exec Time Total": 16,
+                  "Value #Rows/query": 17,
+                  "container": 5,
+                  "datname": 0,
+                  "endpoint": 6,
+                  "instance": 7,
+                  "job": 8,
+                  "namespace": 9,
+                  "pod": 1,
+                  "query": 3,
+                  "queryid": 2,
+                  "user": 10
+                },
+                "renameByName": {
+                  "Value #A": "# Calls",
+                  "Value #Avg Exec Time": "Avg Exec Time",
+                  "Value #B": "Exec time",
+                  "Value #C": "# Rows",
+                  "Value #Calls": "",
+                  "Value #Calls/sec": "Calls/sec",
+                  "Value #D": "Calls %",
+                  "Value #E": "Total Calls",
+                  "Value #Rows/query": "Rows/query",
+                  "__name__": "",
+                  "datname": "DB Name",
+                  "pod": "Pod",
+                  "user": "",
+                  "{__name__=\"cnpg_pg_stat_statements_calls\", container=\"postgres\", datname=\"app\", endpoint=\"metrics\", instance=\"10.50.120.179:9187\", job=\"platform/qvt-postgredb-monitor\", namespace=\"platform\", pod=\"qvt-postgredb-2\", query=\"SELECT\n  pg_get_userbyid(userid) AS user,\n  pg_database.datname,\n  pg_stat_statements.queryid,\n  pg_stat_statements.query,\n  pg_stat_statements.calls,\n  pg_stat_statements.total_exec_time ,\n  pg_stat_statements.mean_exec_time AS avg_exec_time,\n  ROUND(CAST((pg_stat_statements.total_exec_time / SUM(pg_stat_statements.total_exec_time) OVER ()) * $1 AS numeric),$2) AS total_exec_time_percent,\n  pg_stat_statements.rows,\n  pg_stat_statements.blk_read_time ,\n  pg_stat_statements.blk_write_time\nFROM pg_stat_statements\nJOIN pg_database\n  ON pg_database.oid = pg_stat_statements.dbid\nORDER BY pg_stat_statements.total_exec_time DESC\nLIMIT $3\", queryid=\"6923998497215495738\", user=\"pg_monitor\"}": "% Calls"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "default": false,
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "query"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 645
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "duration"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 119
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "record_session_start_time"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 206
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "logging_pod"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 134
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "record_user_name"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 28
+          },
+          "id": 31,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "11.2.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "editorMode": "code",
+              "expr": "{pod_name=~\"$instances\"} |= `\\\"message\\\":\\\"duration:` |= `\"error_severity\\\":\\\"LOG\\\"` | json | line_format `{{ `{{.message}}` }}` | json | line_format `{{ `{{.record_message}}` }}` | pattern `duration: <duration> ms  plan:<query>`",
+              "key": "Q-3e585fce-c65d-4cdc-9508-25def1c55343-0",
+              "queryType": "range",
+              "refId": "A"
+            }
+          ],
+          "title": "Slow Queries Log",
+          "transformations": [
+            {
+              "id": "extractFields",
+              "options": {
+                "source": "labels"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "includeByName": {
+                  "Time": true,
+                  "duration": true,
+                  "logging_pod": true,
+                  "query": true,
+                  "record_application_name": true,
+                  "record_query_id": true,
+                  "record_session_start_time": true,
+                  "record_user_name": true
+                },
+                "indexByName": {
+                  "Time": 0,
+                  "duration": 2,
+                  "logging_pod": 4,
+                  "query": 1,
+                  "record_application_name": 7,
+                  "record_query_id": 6,
+                  "record_session_start_time": 3,
+                  "record_user_name": 5
+                }
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "refresh": "",
+      "schemaVersion": 39,
+      "tags": [
+        "cloudnativepg"
+      ],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "selected": false,
+              "text": "platform",
+              "value": "platform"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "label_values(controller_runtime_active_workers,namespace)",
+            "description": "Namespace where the CNPG operator is located",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Operator Namespace",
+            "multi": false,
+            "name": "operatorNamespace",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(controller_runtime_active_workers,namespace)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "platform",
+              "value": "platform"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "cnpg_collector_up",
+            "description": "Namespace where the database cluster is located",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Database Namespace",
+            "multi": false,
+            "name": "namespace",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "cnpg_collector_up",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 2,
+            "regex": "/namespace=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "qvt-postgredb",
+              "value": "qvt-postgredb"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "cnpg_collector_up{namespace=~\"$namespace\"}",
+            "description": "CNPG Cluster",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Cluster",
+            "multi": false,
+            "name": "cluster",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "cnpg_collector_up{namespace=~\"$namespace\"}",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 2,
+            "regex": "/\\bcluster\\b=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": true,
+              "text": [
+                "qvt-postgredb-1"
+              ],
+              "value": [
+                "qvt-postgredb-1"
+              ]
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "cnpg_collector_up{namespace=~\"$namespace\",pod=~\"$cluster-([1-9][0-9]*)$\"}",
+            "description": "Database cluster instances",
+            "hide": 0,
+            "includeAll": true,
+            "label": "Instances",
+            "multi": true,
+            "name": "instances",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "cnpg_collector_up{namespace=~\"$namespace\",pod=~\"$cluster-([1-9][0-9]*)$\"}",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/pod=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": true,
+              "text": [
+                "All"
+              ],
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "query_result(group by(datname)(cnpg_pg_stat_statements_calls{job=~\"$namespace/$cluster-.*\"}))",
+            "hide": 0,
+            "includeAll": true,
+            "multi": true,
+            "name": "Datname",
+            "options": [],
+            "query": {
+              "qryType": 3,
+              "query": "query_result(group by(datname)(cnpg_pg_stat_statements_calls{job=~\"$namespace/$cluster-.*\"}))",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/\\bdatname\\b=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "CNPG Queries Overview",
+      "uid": "deeuylgxowf0gb",
+      "version": 71,
+      "weekStart": ""
+    }

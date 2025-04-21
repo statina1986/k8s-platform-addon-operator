@@ -9193,7 +9193,7 @@ data:
         "nowDelay": ""
       },
       "timezone": "",
-      "title": "CloudNativePG",
+      "title": "CNPG Cluster Overview",
       "uid": "cloudnative-pg",
       "version": 2,
       "weekStart": ""

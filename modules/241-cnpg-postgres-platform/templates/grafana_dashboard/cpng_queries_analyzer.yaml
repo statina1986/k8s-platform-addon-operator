@@ -1,0 +1,515 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cnpg-queries-analyzer-grafana-dashboard
+  namespace: {{.Release.Namespace}}
+  labels:
+    grafana_dashboard: '1'
+  annotations:
+    grafana_folder: /tmp/dashboards/Qvantel_platform
+data:
+  cnpg-queries-analyzer.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 365,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 11,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 5,
+          "options": {
+            "legend": {
+              "calcs": [
+                "max",
+                "min",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Max",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "(sort_desc(topk(20,\n$MinLatency < (rate(cnpg_pg_stat_statements_total_exec_time{datname=~\"$datname\", pod=~\"$instances\"}[2m])\n/\nrate(cnpg_pg_stat_statements_calls{datname=~\"$datname\", pod=~\"$instances\"}[2m])\n) < $MaxLatency\n)))",
+              "instant": false,
+              "legendFormat": "{{ "{{queryid}} - {{pod}} - {{query}}" }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Top Latency Queries ",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "It allows to filter out per Wait_event and retrieve the wait_event, wait_event_type and query",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 24,
+            "x": 0,
+            "y": 11
+          },
+          "id": 1,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Max",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "expr": "sum (increase(cnpg_wait_event_profile_wait_event_count{wait_event=~\"$wait_event\", pod=~\"$instances\", datname=~\"$datname\", queryid=~\"$queryid\"}[$__rate_interval])) by(query,queryid,wait_event,wait_event_type,datname)",
+              "instant": false,
+              "legendFormat": "{{ "{{queryid}} - {{datname}} - {{wait_event}} - {{wait_event_type}} - {{query}}" }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Queries CPU & Wait events",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "",
+      "schemaVersion": 39,
+      "tags": [
+        "cloudnativepg"
+      ],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "selected": false,
+              "text": "platform",
+              "value": "platform"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "cnpg_collector_up",
+            "description": "Namespace where the database cluster is located",
+            "hide": 0,
+            "includeAll": false,
+            "label": "namespace",
+            "multi": false,
+            "name": "namespace",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "cnpg_collector_up",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/namespace=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "qvt-postgredb",
+              "value": "qvt-postgredb"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "cnpg_collector_up{namespace=~\"$namespace\"}",
+            "description": "CNPG Cluster",
+            "hide": 0,
+            "includeAll": false,
+            "label": "cluster",
+            "multi": false,
+            "name": "cluster",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "cnpg_collector_up{namespace=~\"$namespace\"}",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 2,
+            "regex": "/\\bcluster\\b=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "qvt-postgredb-1",
+              "value": "qvt-postgredb-1"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "cnpg_collector_up{namespace=~\"$namespace\",pod=~\"$cluster-([1-9][0-9]*)$\"}",
+            "hide": 0,
+            "includeAll": false,
+            "label": "intances",
+            "multi": false,
+            "name": "instances",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "cnpg_collector_up{namespace=~\"$namespace\",pod=~\"$cluster-([1-9][0-9]*)$\"}",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/pod=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": true,
+              "text": [
+                "All"
+              ],
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "query_result(group by(datname)(cnpg_pg_stat_statements_calls{job=~\"$namespace/$cluster-.*\"}))",
+            "hide": 0,
+            "includeAll": true,
+            "label": "datname",
+            "multi": true,
+            "name": "datname",
+            "options": [],
+            "query": {
+              "qryType": 3,
+              "query": "query_result(group by(datname)(cnpg_pg_stat_statements_calls{job=~\"$namespace/$cluster-.*\"}))",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/\\bdatname\\b=\"(?<text>[^\"]+)/g",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": true,
+              "text": [
+                "All"
+              ],
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "label_values(cnpg_wait_event_profile_wait_event_count{pod=~\"$instances\", namespace=\"$namespace\"},wait_event)",
+            "hide": 0,
+            "includeAll": true,
+            "label": "wait_event",
+            "multi": true,
+            "name": "wait_event",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(cnpg_wait_event_profile_wait_event_count{pod=~\"$instances\", namespace=\"$namespace\"},wait_event)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": true,
+              "text": [
+                "All"
+              ],
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "label_values(cnpg_wait_event_profile_wait_event_count{wait_event=~\"$wait_event\", pod=~\"$instances\"},queryid)",
+            "hide": 0,
+            "includeAll": true,
+            "label": "queryid",
+            "multi": true,
+            "name": "queryid",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(cnpg_wait_event_profile_wait_event_count{wait_event=~\"$wait_event\", pod=~\"$instances\"},queryid)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "label_values(cnpg_wait_event_profile_wait_event_count{queryid=~\"$queryid\"},query)",
+            "hide": 0,
+            "includeAll": true,
+            "label": "query",
+            "multi": false,
+            "name": "query",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(cnpg_wait_event_profile_wait_event_count{queryid=~\"$queryid\"},query)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "0",
+              "value": "0"
+            },
+            "hide": 0,
+            "label": "Min Latency",
+            "name": "MinLatency",
+            "options": [
+              {
+                "selected": true,
+                "text": "0",
+                "value": "0"
+              }
+            ],
+            "query": "0",
+            "skipUrlSync": false,
+            "type": "textbox"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "999999",
+              "value": "999999"
+            },
+            "hide": 0,
+            "label": "Max Latency",
+            "name": "MaxLatency",
+            "options": [
+              {
+                "selected": true,
+                "text": "999999",
+                "value": "999999"
+              }
+            ],
+            "query": "999999",
+            "skipUrlSync": false,
+            "type": "textbox"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-3h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "CNPG Query Analyzer",
+      "uid": "behhxrxo4jzswb",
+      "version": 41,
+      "weekStart": ""
+    }
