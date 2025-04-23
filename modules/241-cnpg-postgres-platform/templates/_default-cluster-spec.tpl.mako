@@ -5,7 +5,6 @@ spec:
     apiGroup: postgresql.cnpg.io
     kind: ImageCatalog
     name: qvantel-base-cnpg-images
-    namespace: ${values['global']['platformNamespace']}
     major: 15
   {{- end }}
   enableSuperuserAccess: true
