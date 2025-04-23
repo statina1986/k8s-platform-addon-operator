@@ -28,7 +28,7 @@ class KubernetesAuthRoleHook(Hook):
                         "kind": "KubernetesAuthRole",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultKubernetesAuthRoleQueue",
-                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncKubernetesAuthRoles", {}).get("namespaceSelector", {
                             "nameSelector": {
                                 "matchNames": [ platformNamespace ]
                             }
@@ -96,7 +96,10 @@ class KubernetesAuthRoleHook(Hook):
 
     def handle_binding(self, binding):
         match(binding):
-            case EventHook(eventName, event):
+            case EventHook(eventName, event, values):
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKubernetesAuthRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault KubernetesAuthRoles sync as it is disabled in configuration")
+                    return
 
                 name = event['object']['metadata']['name']
                 mount_point = event['object']['spec'].get('mount_point', 'kubernetes')
@@ -110,8 +113,8 @@ class KubernetesAuthRoleHook(Hook):
                     self.registerResource(event, vault_client)
 
             case ScheduleHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKubernetesAuthRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault KubernetesAuthRoles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -120,8 +123,8 @@ class KubernetesAuthRoleHook(Hook):
                     self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKubernetesAuthRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault KubernetesAuthRoles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()

@@ -1,7 +1,8 @@
 apiVersion: postgresql.cnpg.io/v1
-kind: ClusterImageCatalog
+kind: ImageCatalog
 metadata:
   name: qvantel-base-cnpg-images
+  namespace: ${values['global']['platformNamespace']}
 spec:
   images:
     % if 'containerRegistryBase' in values['global']:

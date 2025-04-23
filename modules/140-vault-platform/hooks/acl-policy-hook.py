@@ -33,7 +33,7 @@ class AclPoliciesHook(Hook):
                         "kind": "AclPolicy",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultAclPolicyQueue",
-                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncAclPolicies", {}).get("namespaceSelector", {
                             "nameSelector": {
                                 "matchNames": [ platformNamespace ]
                             }
@@ -87,7 +87,11 @@ class AclPoliciesHook(Hook):
 
     def handle_binding(self, binding):
         match(binding):
-            case EventHook(eventName, event):
+            case EventHook(eventName, event, values):
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncAclPolicies', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault ACL Policies sync as it is disabled in configuration")
+                    return
+
                 name = event['object']['metadata']['name']
                 policy_name = event.get('object', {}).get('spec', {}).get('policy-name', name)
 
@@ -100,8 +104,8 @@ class AclPoliciesHook(Hook):
                     self.registerResource(event, vault_client)
 
             case ScheduleHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncAclPolicies', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault ACL Policies sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -110,8 +114,8 @@ class AclPoliciesHook(Hook):
                     self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncAclPolicies', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault ACL Policies sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()

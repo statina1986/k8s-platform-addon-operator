@@ -2,14 +2,34 @@
 vaultPlatform:
   # -- Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation. 
   vaultCrdSync:
-    # -- Enables Vault CRDs reconciliation
-    enabled: true
     # -- Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
     schedule: "*/5 * * * *"
-    # -- Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.
-    namespaceSelector:
-      nameSelector:
-        matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+    syncAclPolicies:
+      enabled: true
+      # -- Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.
+      namespaceSelector:
+        nameSelector:
+          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+    syncDbConnections:
+      enabled: true
+      namespaceSelector:
+        nameSelector:
+          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+    syncDbRoles:
+      enabled: true
+      namespaceSelector:
+        nameSelector:
+          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+    syncKubernetesAuthRoles:
+      enabled: true
+      namespaceSelector:
+        nameSelector:
+          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+    syncKV1Secrets:
+      enabled: true
+      namespaceSelector:
+        nameSelector:
+          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
     
   
   # -- Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
@@ -225,10 +245,10 @@ vaultPlatform:
                 leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-0.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}.svc.cluster.local.:8200"
               }
               retry_join {
-                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-1.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}svc.cluster.local.:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-1.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}.svc.cluster.local.:8200"
               }
               retry_join {
-                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-2.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}svc.cluster.local.:8200"
+                leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-2.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}.svc.cluster.local.:8200"
               }
               autopilot {
                 cleanup_dead_servers = "true"

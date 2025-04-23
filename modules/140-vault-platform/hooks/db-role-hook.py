@@ -28,7 +28,7 @@ class DbRoleHook(Hook):
                         "kind": "DbRole",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultDbRoleQueue",
-                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncDbRoles", {}).get("namespaceSelector", {
                             "nameSelector": {
                                 "matchNames": [ platformNamespace ]
                             }
@@ -100,8 +100,8 @@ class DbRoleHook(Hook):
     def handle_binding(self, binding):
         match(binding):
             case EventHook(eventName, event, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
                     return
 
                 name = event['object']['metadata']['name']
@@ -117,9 +117,10 @@ class DbRoleHook(Hook):
                     return
                 else:
                     self.registerResource(event, vault_client)
+                    
             case ScheduleHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -128,8 +129,8 @@ class DbRoleHook(Hook):
                     self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()

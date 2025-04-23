@@ -3,8 +3,9 @@ spec:
   {{- if or (not $.spec) (not $.spec.imageName) }}
   imageCatalogRef:
     apiGroup: postgresql.cnpg.io
-    kind: ClusterImageCatalog
+    kind: ImageCatalog
     name: qvantel-base-cnpg-images
+    namespace: ${values['global']['platformNamespace']}
     major: 15
   {{- end }}
   enableSuperuserAccess: true

@@ -14,7 +14,6 @@ v1 = client.CoreV1Api()
 class Kv1SecretsHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")
-        appsNamespace = self.get_addon_operator_config('global').get('appsNamespace','qvantel')
         platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
         super().__init__(str(
             {
@@ -33,9 +32,9 @@ class Kv1SecretsHook(Hook):
                         "kind": "KV1Secret",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultKV1SecretQueue",
-                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncKV1Secrets", {}).get("namespaceSelector", {
                             "nameSelector": {
-                                "matchNames": [ appsNamespace, platformNamespace ]
+                                "matchNames": [ platformNamespace ]
                             }
                         }),
                         "allowFailure": True,
@@ -87,7 +86,11 @@ class Kv1SecretsHook(Hook):
 
     def handle_binding(self, binding):
         match(binding):
-            case EventHook(eventName, event):
+            case EventHook(eventName, event, values):
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKV1Secrets', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault KV1 Secrets sync as it is disabled in configuration")
+                    return
+
                 if eventName == "Deleted":
                     # vault_client.secrets.kv.v1.delete_secret(path)
                     return
@@ -95,8 +98,8 @@ class Kv1SecretsHook(Hook):
                     self.registerResource(event, vault_client)
                     
             case ScheduleHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKV1Secrets', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault KV1 Secrets sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -105,8 +108,8 @@ class Kv1SecretsHook(Hook):
                     self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKV1Secrets', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault KV1 Secrets sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()

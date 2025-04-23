@@ -23,7 +23,7 @@ minioPlatform:
     # Number of drives attached to a node
     drivesPerNode: 1
     # Number of MinIO containers running
-    replicas: 4
+    replicas: 3
     # Number of expanded MinIO clusters
     pools: 1
 

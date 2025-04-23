@@ -28,7 +28,7 @@ class DbConnectionHook(Hook):
                         "kind": "DbConnection",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
                         "queue": "VaultDbConnectionQueue",
-                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("namespaceSelector", {
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncDbConnections", {}).get("namespaceSelector", {
                             "nameSelector": {
                                 "matchNames": [ platformNamespace ]
                             }
@@ -102,10 +102,15 @@ class DbConnectionHook(Hook):
 
     def handle_binding(self, binding):
         match(binding):
-            case EventHook(eventName, event):
+            case EventHook(eventName, event, values):
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbConnections', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB connections sync as it is disabled in configuration")
+                    return
+
                 name = event['object']['metadata']['name']
                 connection_name = event['object']['spec']['connection-name']
                 namespace = event['object']['metadata']['namespace']
+                
                 vault_client = get_vault_client()
 
                 if eventName == "Deleted":
@@ -116,8 +121,8 @@ class DbConnectionHook(Hook):
                     self.registerResource(event, vault_client)
 
             case ScheduleHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbConnections', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB connections sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -126,8 +131,8 @@ class DbConnectionHook(Hook):
                     self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('enabled', 'false') == 'false':
-                    print("Skipping Vault CRD sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbConnections', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB connections sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
