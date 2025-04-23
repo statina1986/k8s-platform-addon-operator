@@ -11,6 +11,7 @@ externalDns:
     aws:
       zoneType: public
     sources:
+      - crd
       - service
       - ingress
       - istio-gateway

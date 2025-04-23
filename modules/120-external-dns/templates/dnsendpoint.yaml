@@ -1,0 +1,13 @@
+{{- if .Values.externalDns.dnsEndpoints }}
+{{- range $name, $endpoints := .Values.externalDns.dnsEndpoints }}
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  endpoints:
+{{ toYaml $endpoints | indent 4 }}
+{{- end }}
+{{- end }}
