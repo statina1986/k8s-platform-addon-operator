@@ -5,6 +5,7 @@ vaultPlatform:
     # -- Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
     schedule: "*/5 * * * *"
     syncAclPolicies:
+      # -- Enables Vault CRDs reconciliation for individual resources
       enabled: true
       # -- Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.
       namespaceSelector:
