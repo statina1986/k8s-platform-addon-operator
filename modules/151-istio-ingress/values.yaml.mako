@@ -405,6 +405,7 @@ istioIngress:
           number: 22
           protocol: TCP
   # -- VirtualServices to be provisioned.
+  # @default -- see values.yaml.mako
   virtualServices:
     # -- Common annotations for all VirtualServices resources provisioned
     annotations:
@@ -416,6 +417,7 @@ istioIngress:
     # -- Qvantel platform namespace name. By default value is taken from `global.appsNamespace` and equal to `platform`
     platformNamespace: ${values['global']['platformNamespace']}
     # -- List of  `VirtualService` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  
+    # @default -- see values.yaml.mako
     instances: 
       # Product managed services    
       address-manager:

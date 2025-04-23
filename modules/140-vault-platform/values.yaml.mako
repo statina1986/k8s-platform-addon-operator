@@ -1,10 +1,12 @@
 # vaultPlatformNamespace: vault
 vaultPlatform:
+  # -- Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation. 
   vaultCrdSync:
+    # -- Enables Vault CRDs reconciliation
     enabled: true
-    # -- Schedule for reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+    # -- Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
     schedule: "*/5 * * * *"
-    # -- Selector for namespaces from which sync crd resources.
+    # -- Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.
     namespaceSelector:
       nameSelector:
         matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
@@ -103,7 +105,6 @@ vaultPlatform:
       standalone:
         config: |
           ui = true
-
           listener "tcp" {
             tls_disable = 1
             address = "[::]:8200"
@@ -116,7 +117,6 @@ vaultPlatform:
           storage "file" {
             path = "/vault/data"
           }
-
           telemetry {
             prometheus_retention_time = "30s"
             disable_hostname = true
@@ -207,7 +207,6 @@ vaultPlatform:
           additionalConfig: ""
           config: |
             ui = true
-
             listener "tcp" {
               address = "[::]:8200"
               cluster_address = "[::]:8201"
@@ -231,7 +230,6 @@ vaultPlatform:
               retry_join {
                 leader_api_addr = "http://${values['global']['helmReleaseNamePrefix']}vault-platform-2.${values['global']['helmReleaseNamePrefix']}vault-platform-internal.${values['global']['platformNamespace']}svc.cluster.local.:8200"
               }
-
               autopilot {
                 cleanup_dead_servers = "true"
                 last_contact_threshold = "200ms"
@@ -240,9 +238,7 @@ vaultPlatform:
                 min_quorum = 5
                 server_stabilization_time = "10s"
               }
-
             }
-
             service_registration "kubernetes" {}
             {{ .Values.server.ha.raft.additionalConfig}}
         requests:

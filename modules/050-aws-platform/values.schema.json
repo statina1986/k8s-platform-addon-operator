@@ -296,6 +296,57 @@
                     },
                     "required": [],
                     "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "allowVolumeExpansion": {
+                        "default": true,
+                        "required": [],
+                        "title": "allowVolumeExpansion",
+                        "type": "boolean"
+                      },
+                      "name": {
+                        "default": "st1",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "properties": {
+                          "tagSpecification_name": {
+                            "default": "Name=some-cluster-{{ .PVCName }}",
+                            "required": [],
+                            "title": "tagSpecification_name",
+                            "type": "string"
+                          },
+                          "type": {
+                            "default": "st1",
+                            "required": [],
+                            "title": "type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "title": "parameters",
+                        "type": "object"
+                      },
+                      "reclaimPolicy": {
+                        "default": "Delete",
+                        "description": "defaults to Delete",
+                        "required": [],
+                        "title": "reclaimPolicy",
+                        "type": "string"
+                      },
+                      "volumeBindingMode": {
+                        "default": "WaitForFirstConsumer",
+                        "description": "defaults to WaitForFirstConsumer",
+                        "required": [],
+                        "title": "volumeBindingMode",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
                   }
                 ],
                 "required": []
@@ -827,6 +878,12 @@
           "required": [],
           "title": "clusterName",
           "type": "string"
+        },
+        "eksUdevEnabled": {
+          "default": false,
+          "required": [],
+          "title": "eksUdevEnabled",
+          "type": "boolean"
         },
         "region": {
           "default": "eu-central-1",

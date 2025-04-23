@@ -1,0 +1,353 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "example-postgredb": {
+      "description": "This is example PostgreSQL glue definition. \nNote: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`",
+      "properties": {
+        "cluster": {
+          "description": "Defines CNPG database cluster (kind: Cluster) to deploy. \nIf it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.\nCluster configuration follows same structure which is deinfed in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module.\nIn this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.",
+          "properties": {
+            "spec": {
+              "description": "Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.\nValues configured in this spec are merged with result of templating [_default-cluster-spec.tpl.mako](templates/_default-cluster-spec.tpl.mako).",
+              "properties": {
+                "affinity": {
+                  "properties": {
+                    "topologyKey": {
+                      "default": "topology.kubernetes.io/zone",
+                      "required": [],
+                      "title": "topologyKey",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "affinity",
+                  "type": "object"
+                },
+                "enableSuperuserAccess": {
+                  "default": true,
+                  "required": [],
+                  "title": "enableSuperuserAccess",
+                  "type": "boolean"
+                },
+                "imageName": {
+                  "default": "platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.7-1_7_master_b0ee48eda",
+                  "required": [],
+                  "title": "imageName",
+                  "type": "string"
+                },
+                "instances": {
+                  "default": 2,
+                  "required": [],
+                  "title": "instances",
+                  "type": "integer"
+                },
+                "postgresql": {
+                  "properties": {
+                    "parameters": {
+                      "properties": {
+                        "max_connections": {
+                          "default": "300",
+                          "required": [],
+                          "title": "max_connections",
+                          "type": "string"
+                        },
+                        "pg_stat_statements.max": {
+                          "default": "10000",
+                          "required": [],
+                          "title": "pg_stat_statements.max",
+                          "type": "string"
+                        },
+                        "pg_stat_statements.track": {
+                          "default": "all",
+                          "required": [],
+                          "title": "pg_stat_statements.track",
+                          "type": "string"
+                        },
+                        "random_page_cost": {
+                          "default": "1",
+                          "required": [],
+                          "title": "random_page_cost",
+                          "type": "string"
+                        },
+                        "wal_compression": {
+                          "default": "pglz",
+                          "required": [],
+                          "title": "wal_compression",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "parameters",
+                      "type": "object"
+                    },
+                    "shared_preload_libraries": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "shared_preload_libraries",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "postgresql",
+                  "type": "object"
+                },
+                "resources": {
+                  "properties": {
+                    "requests": {
+                      "properties": {
+                        "cpu": {
+                          "default": "0.1",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "1Gi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "storage": {
+                  "properties": {
+                    "size": {
+                      "default": "10Gi",
+                      "required": [],
+                      "title": "size",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "storage",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "spec",
+              "type": "object"
+            },
+            "vaultConfiguration": {
+              "default": true,
+              "description": "Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.",
+              "required": [],
+              "title": "vaultConfiguration",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "cluster",
+          "type": "object"
+        },
+        "dbs": {
+          "description": "Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvnatel conventions.",
+          "properties": {
+            "catalog-deployer": {
+              "properties": {
+                "sql": {
+                  "properties": {
+                    "provision": {
+                      "default": "- \"CREATE ROLE db_catalog_deployer NOLOGIN\"\n- \"GRANT db_catalog_deployer TO CURRENT_USER\"\n- \"CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer\"    \n",
+                      "description": "It is possible to define provisionsing SQL for the database if customization is required.",
+                      "required": [],
+                      "title": "provision",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "sql",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "catalog-deployer",
+              "type": "object"
+            },
+            "ddl": {
+              "properties": {
+                "extensions": {
+                  "description": "Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.",
+                  "properties": {
+                    "timescaledb": {
+                      "description": "Enables `timescaledb` extensions for database.",
+                      "required": [],
+                      "title": "timescaledb",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "extensions",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "ddl",
+              "type": "object"
+            },
+            "flex-bpmn-executor": {
+              "properties": {
+                "owners": {
+                  "description": "Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.",
+                  "properties": {
+                    "apps-another-app-to-access-flex": {
+                      "required": [],
+                      "title": "apps-another-app-to-access-flex",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "owners",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "flex-bpmn-executor",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "dbs",
+          "type": "object"
+        },
+        "roles": {
+          "description": "Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.",
+          "properties": {
+            "custom-role-access-multiple-dbs": {
+              "properties": {
+                "sql": {
+                  "default": "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';\nGRANT db_ddl TO \"{{name}}\";\nGRANT db_flex_bpmn_executor TO \"{{name}}\";\nALTER ROLE \"{{name}}\" SET role db_ddl;\nALTER ROLE \"{{name}}\" SET role db_flex_bpmn_executor;\n",
+                  "required": [],
+                  "title": "sql",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "custom-role-access-multiple-dbs",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "roles",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "example-postgredb",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "qvantelGlue": {
+      "properties": {
+        "dbs": {
+          "description": "Databases deployment configuration.",
+          "properties": {
+            "cassandra": {
+              "description": "Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster \nand associated configuration like keyspaces and roles.",
+              "required": [],
+              "title": "cassandra",
+              "type": "object"
+            },
+            "mariadb": {
+              "description": "MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster \nand associated configuration like dbs, roles and extensions.",
+              "required": [],
+              "title": "mariadb",
+              "type": "object"
+            },
+            "postgres": {
+              "description": "PostgreSQL databases configuration. This is a map where each key corresponds to the PostgreSQL cluster \nand associated configuration like dbs, roles and extensions.\nFor Example, see `example-postgredb` definition in Examples-PostgreSQL section below.",
+              "required": [],
+              "title": "postgres",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "dbs",
+          "type": "object"
+        },
+        "monitoringPlatformEnabled": {
+          "default": "True",
+          "required": [],
+          "title": "monitoringPlatformEnabled",
+          "type": "boolean"
+        },
+        "sqlinstallersCrdSync": {
+          "description": "Configuration for SqlInstaller CRDs reconciliation.",
+          "properties": {
+            "enabled": {
+              "default": true,
+              "description": "Enables SqlInstaller CRDs reconciliation",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "namespaceSelector": {
+              "description": "Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.",
+              "properties": {
+                "nameSelector": {
+                  "properties": {
+                    "matchNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "matchNames",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "nameSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "namespaceSelector",
+              "type": "object"
+            },
+            "schedule": {
+              "default": "*/5 * * * *",
+              "description": "Schedule for periodic reconciliation. Default is \"*/5 * * * *\" - so every 5 minutes.",
+              "required": [],
+              "title": "schedule",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "sqlinstallersCrdSync",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "qvantelGlue",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

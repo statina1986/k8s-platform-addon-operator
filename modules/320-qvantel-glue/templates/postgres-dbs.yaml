@@ -83,6 +83,7 @@ spec:
                 "SELECT pg_wait_sampling_reset_profile(); SELECT pg_stat_statements_reset();"\
               && echo 'Postgresql stats cleanup completed.'
           restartPolicy: OnFailure
+          backoffLimit: 3
   schedule: "@midnight"
 
 {{- if $root.Values.qvantelGlue.monitoringPlatformEnabled }}

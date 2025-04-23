@@ -2,35 +2,35 @@ apiVersion: v2
 name: monitoringPlatform
 version: 0.0.1
 dependencies:
-  - name: kube-prometheus-stack
-    condition: kube-prometheus-stack.enabled
-    version: "65.1.1"
-    repository: "https://prometheus-community.github.io/helm-charts"
-  - name: prometheus-blackbox-exporter
-    condition: prometheus-blackbox-exporter.enabled
-    version: "8.16.0"
-    repository: "https://prometheus-community.github.io/helm-charts"
-  - name: prometheus-consul-exporter
-    condition: prometheus-consul-exporter.enabled
-    version: "1.0.0"
-    repository: "https://prometheus-community.github.io/helm-charts"
-  - name: x509-certificate-exporter
-    condition: x509-certificate-exporter.enabled
-    version: "v3.14.0"
-    repository: "https://charts.enix.io"
-  - name: yet-another-cloudwatch-exporter
-    condition: yet-another-cloudwatch-exporter.enabled
-    version: "0.38.0"
-    repository: "https://nerdswords.github.io/helm-charts"
-  - name: beyla
-    condition: beyla.enabled
-    version: "1.6.3"
-    repository: "https://grafana.github.io/helm-charts"
-  - name: tempo-distributed
-    condition: tempo-distributed.enabled
-    version: "1.31.0"
-    repository: "https://grafana.github.io/helm-charts"
-  - name: alloy
-    condition: alloy.enabled
-    version: "0.11.0"
-    repository: "https://grafana.github.io/helm-charts"
+- name: kube-prometheus-stack
+  condition: kube-prometheus-stack.enabled
+  version: "65.1.1"
+  repository: "https://prometheus-community.github.io/helm-charts"
+- name: prometheus-blackbox-exporter
+  condition: prometheus-blackbox-exporter.enabled
+  version: "8.16.0"
+  repository: "https://prometheus-community.github.io/helm-charts"
+- name: prometheus-consul-exporter
+  condition: prometheus-consul-exporter.enabled
+  version: "1.0.0"
+  repository: "https://prometheus-community.github.io/helm-charts"
+- name: x509-certificate-exporter
+  condition: x509-certificate-exporter.enabled
+  version: "v3.14.0"
+  repository: "https://charts.enix.io"
+- name: yet-another-cloudwatch-exporter
+  condition: yet-another-cloudwatch-exporter.enabled
+  version: "0.38.0"
+  repository: "https://nerdswords.github.io/helm-charts"
+- name: beyla
+  condition: beyla.enabled
+  version: "1.6.3"
+  repository: "https://grafana.github.io/helm-charts"
+- name: tempo-distributed
+  condition: tempo-distributed.enabled
+  version: "1.31.0"
+  repository: "https://grafana.github.io/helm-charts"
+- name: alloy
+  condition: alloy.enabled
+  version: "0.11.0"
+  repository: "https://grafana.github.io/helm-charts"

@@ -326,7 +326,7 @@
                           "type": "string"
                         },
                         "config": {
-                          "default": "ui = true\n\nlistener \"tcp\" {\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  tls_disable = \"true\"\n}\n\nstorage \"raft\" {\n  path = \"/vault/data\"\n    retry_join {\n    leader_api_addr = \"http://vault-platform-0.vault-platform-internal:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-1.vault-platform-internal:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-2.vault-platform-internal:8200\"\n  }\n\n  autopilot {\n    cleanup_dead_servers = \"true\"\n    last_contact_threshold = \"200ms\"\n    last_contact_failure_threshold = \"10m\"\n    max_trailing_logs = 250000\n    min_quorum = 5\n    server_stabilization_time = \"10s\"\n  }\n\n}\n\nservice_registration \"kubernetes\" {}\n{{ .Values.server.ha.raft.additionalConfig}}\n",
+                          "default": "ui = true\nlistener \"tcp\" {\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  tls_disable = \"true\"\n  telemetry {\n    unauthenticated_metrics_access = \"true\"\n  }\n}\ntelemetry {\n  prometheus_retention_time = \"30s\"\n  disable_hostname = true\n}\nstorage \"raft\" {\n  path = \"/vault/data\"\n    retry_join {\n    leader_api_addr = \"http://vault-platform-0.vault-platform-internal.platform.svc.cluster.local.:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-1.vault-platform-internal.platformsvc.cluster.local.:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-2.vault-platform-internal.platformsvc.cluster.local.:8200\"\n  }\n  autopilot {\n    cleanup_dead_servers = \"true\"\n    last_contact_threshold = \"200ms\"\n    last_contact_failure_threshold = \"10m\"\n    max_trailing_logs = 250000\n    min_quorum = 5\n    server_stabilization_time = \"10s\"\n  }\n}\nservice_registration \"kubernetes\" {}\n{{ .Values.server.ha.raft.additionalConfig}}\n",
                           "required": [],
                           "title": "config",
                           "type": "string"
@@ -459,6 +459,19 @@
                   "title": "serviceAccount",
                   "type": "object"
                 },
+                "standalone": {
+                  "properties": {
+                    "config": {
+                      "default": "ui = true\nlistener \"tcp\" {\n  tls_disable = 1\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  # Enable unauthenticated metrics access (necessary for Prometheus Operator)\n  telemetry {\n    unauthenticated_metrics_access = \"true\"\n  }\n}\nstorage \"file\" {\n  path = \"/vault/data\"\n}\ntelemetry {\n  prometheus_retention_time = \"30s\"\n  disable_hostname = true\n}\n",
+                      "required": [],
+                      "title": "config",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "standalone",
+                  "type": "object"
+                },
                 "tolerations": {
                   "default": "- key: \"dedicated-nodes\"\n  value: \"platform-masters\"\n  operator: \"Equal\"\n  effect: \"NoSchedule\"\n",
                   "required": [],
@@ -486,8 +499,14 @@
                   "title": "generate",
                   "type": "boolean"
                 },
+                "servingCertificate": {
+                  "default": "vault-platform-vault-secrets-webhook-ca",
+                  "required": [],
+                  "title": "servingCertificate",
+                  "type": "string"
+                },
                 "useCertManager": {
-                  "default": true,
+                  "default": false,
                   "required": [],
                   "title": "useCertManager",
                   "type": "boolean"
@@ -588,6 +607,12 @@
               "title": "secretsFailurePolicy",
               "type": "string"
             },
+            "secretsMutation": {
+              "default": false,
+              "required": [],
+              "title": "secretsMutation",
+              "type": "boolean"
+            },
             "tolerations": {
               "items": {
                 "anyOf": [
@@ -646,12 +671,74 @@
           "title": "vault-secrets-webhook",
           "type": "object"
         },
+        "vaultCrdSync": {
+          "description": "Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation. ",
+          "properties": {
+            "enabled": {
+              "default": true,
+              "description": "Enables Vault CRDs reconciliation",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "namespaceSelector": {
+              "description": "Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.",
+              "properties": {
+                "nameSelector": {
+                  "properties": {
+                    "matchNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "matchNames",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "nameSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "namespaceSelector",
+              "type": "object"
+            },
+            "schedule": {
+              "default": "*/5 * * * *",
+              "description": "Schedule for periodic reconciliation. Default is \"*/5 * * * *\" - so every 5 minutes.",
+              "required": [],
+              "title": "schedule",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "vaultCrdSync",
+          "type": "object"
+        },
         "vaultWebhooksEnabled": {
           "default": true,
           "description": "Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag",
           "required": [],
           "title": "vaultWebhooksEnabled",
           "type": "boolean"
+        },
+        "webhookCertificateDuration": {
+          "default": "87600h",
+          "description": "Sets the validity duration in hours for the vault-webhook certificate, must be larger than renewaltime ( 360h = 15 days), default is 10 years",
+          "required": [],
+          "title": "webhookCertificateDuration",
+          "type": "string"
         }
       },
       "required": [],

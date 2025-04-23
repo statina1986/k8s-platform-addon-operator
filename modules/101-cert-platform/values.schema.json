@@ -53,53 +53,65 @@
                   "required": [],
                   "title": "image",
                   "type": "object"
+                },
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
                 }
               },
               "required": [],
               "title": "cainjector",
               "type": "object"
             },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "extraArgs": {
+              "items": {
+                "anyOf": [
+                  {
+                    "required": [],
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "extraArgs",
+              "type": "array"
+            },
             "global": {
               "properties": {
-                "tolerations": {
-                  "items": {
-                    "anyOf": [
-                      {
-                        "properties": {
-                          "effect": {
-                            "default": "NoSchedule",
-                            "required": [],
-                            "title": "effect",
-                            "type": "string"
-                          },
-                          "key": {
-                            "default": "dedicated-nodes",
-                            "required": [],
-                            "title": "key",
-                            "type": "string"
-                          },
-                          "operator": {
-                            "default": "Equal",
-                            "required": [],
-                            "title": "operator",
-                            "type": "string"
-                          },
-                          "value": {
-                            "default": "platform-masters",
-                            "required": [],
-                            "title": "value",
-                            "type": "string"
-                          }
-                        },
-                        "required": [],
-                        "type": "object"
-                      }
-                    ],
-                    "required": []
+                "leaderElection": {
+                  "properties": {
+                    "namespace": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "namespace",
+                      "type": "string"
+                    }
                   },
                   "required": [],
-                  "title": "tolerations",
-                  "type": "array"
+                  "title": "leaderElection",
+                  "type": "object"
                 }
               },
               "required": [],
@@ -164,11 +176,70 @@
                   "required": [],
                   "title": "image",
                   "type": "object"
+                },
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
+                  "type": "object"
                 }
               },
               "required": [],
               "title": "startupapicheck",
               "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
             },
             "webhook": {
               "properties": {
@@ -189,6 +260,25 @@
                   },
                   "required": [],
                   "title": "image",
+                  "type": "object"
+                },
+                "serviceAccount": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceAccount",
                   "type": "object"
                 }
               },
@@ -242,7 +332,7 @@
                           "type": "string"
                         },
                         "kind": {
-                          "default": "ClusterIssuer",
+                          "default": "Issuer",
                           "required": [],
                           "title": "kind",
                           "type": "string"
@@ -358,7 +448,7 @@
                           "type": "string"
                         },
                         "kind": {
-                          "default": "ClusterIssuer",
+                          "default": "Issuer",
                           "required": [],
                           "title": "kind",
                           "type": "string"
@@ -447,7 +537,7 @@
                           "type": "string"
                         },
                         "kind": {
-                          "default": "ClusterIssuer",
+                          "default": "Issuer",
                           "required": [],
                           "title": "kind",
                           "type": "string"
@@ -526,6 +616,35 @@
               "required": [],
               "title": "example-cluster-issuer",
               "type": "object"
+            }
+          },
+          "required": [],
+          "title": "clusterIssuers",
+          "type": "object"
+        },
+        "issuers": {
+          "description": "List of Issuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `Issuer` resource details.",
+          "properties": {
+            "example-issuer": {
+              "description": "Example Issuer used for documentation",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "description": "If Issuer is enabled and hence will be deployed to the cluster.",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "description": "Configure `spec` property of `Issuer` resource.",
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "example-issuer",
+              "type": "object"
             },
             "qvantel-ca-issuer": {
               "description": "This issuer is Simple Qvantel CA issuer",
@@ -594,7 +713,7 @@
                           "type": "object"
                         },
                         "server": {
-                          "default": "https://acme-v02.api.letsencrypt.org/directory",
+                          "default": "https://acme-v02.api.letsencrypt.org./directory",
                           "required": [],
                           "title": "server",
                           "type": "string"
@@ -716,7 +835,7 @@
                           "type": "object"
                         },
                         "server": {
-                          "default": "https://acme-v02.api.letsencrypt.org/directory",
+                          "default": "https://acme-v02.api.letsencrypt.org./directory",
                           "required": [],
                           "title": "server",
                           "type": "string"
@@ -829,35 +948,6 @@
               },
               "required": [],
               "title": "qvantel-selfsigned-issuer",
-              "type": "object"
-            }
-          },
-          "required": [],
-          "title": "clusterIssuers",
-          "type": "object"
-        },
-        "issuers": {
-          "description": "List of Issuers to provision. See https://cert-manager.io/docs/concepts/issuer/ for `Issuer` resource details.",
-          "properties": {
-            "example-issuer": {
-              "description": "Example Issuer used for documentation",
-              "properties": {
-                "enabled": {
-                  "default": false,
-                  "description": "If Issuer is enabled and hence will be deployed to the cluster.",
-                  "required": [],
-                  "title": "enabled",
-                  "type": "boolean"
-                },
-                "spec": {
-                  "description": "Configure `spec` property of `Issuer` resource.",
-                  "required": [],
-                  "title": "spec",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "example-issuer",
               "type": "object"
             }
           },

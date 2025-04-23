@@ -124,53 +124,10 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "properties": {
-                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
-                      "default": "Name=some-cluster-i-http",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
-                      "default": "load_balancing.cross_zone.enabled=false",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
-                      "default": "true",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-name": {
-                      "default": "some-cluster-i-http",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
-                      "default": "ip",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
-                      "default": "deregistration_delay.timeout_seconds=30",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-type": {
-                      "default": "external",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
-                      "type": "string"
-                    }
-                  },
+                  "default": "",
                   "required": [],
                   "title": "annotations",
-                  "type": "object"
+                  "type": "null"
                 }
               },
               "required": [],
@@ -527,53 +484,10 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "properties": {
-                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
-                      "default": "Name=some-cluster-i-nonhttp",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
-                      "default": "load_balancing.cross_zone.enabled=true",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
-                      "default": "true",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-name": {
-                      "default": "some-cluster-i-nonhttp",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
-                      "default": "ip",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
-                      "default": "deregistration_delay.timeout_seconds=30",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-type": {
-                      "default": "external",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
-                      "type": "string"
-                    }
-                  },
+                  "default": "",
                   "required": [],
                   "title": "annotations",
-                  "type": "object"
+                  "type": "null"
                 },
                 "ports": {
                   "items": {
@@ -943,53 +857,200 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "properties": {
-                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
-                      "default": "Name=some-cluster-i-private",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
-                      "default": "load_balancing.cross_zone.enabled=false",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
-                      "default": "true",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-name": {
-                      "default": "some-cluster-i-private",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
-                      "default": "ip",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
-                      "default": "deregistration_delay.timeout_seconds=30",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-type": {
-                      "default": "external",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
-                      "type": "string"
-                    }
-                  },
+                  "default": "",
                   "required": [],
                   "title": "annotations",
-                  "type": "object"
+                  "type": "null"
+                },
+                "ports": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "status-port",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 15021,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 15021,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "http",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 80,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 80,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "https",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 443,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 443,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "rabbitmq",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 5672,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 5672,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "rabbitmq-stomp",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 61613,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 61613,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "rabbitmq-webstomp",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 15674,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 15674,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "ports",
+                  "type": "array"
                 }
               },
               "required": [],
@@ -1193,6 +1254,141 @@
                               },
                               "required": [],
                               "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "hosts": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "required": [],
+                                        "type": "string"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "hosts",
+                                  "type": "array"
+                                },
+                                "port": {
+                                  "properties": {
+                                    "name": {
+                                      "default": "rabbitmq",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "number": {
+                                      "default": 5672,
+                                      "required": [],
+                                      "title": "number",
+                                      "type": "integer"
+                                    },
+                                    "protocol": {
+                                      "default": "TCP",
+                                      "required": [],
+                                      "title": "protocol",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "port",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "hosts": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "required": [],
+                                        "type": "string"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "hosts",
+                                  "type": "array"
+                                },
+                                "port": {
+                                  "properties": {
+                                    "name": {
+                                      "default": "rabbitmq-stomp",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "number": {
+                                      "default": 61613,
+                                      "required": [],
+                                      "title": "number",
+                                      "type": "integer"
+                                    },
+                                    "protocol": {
+                                      "default": "TCP",
+                                      "required": [],
+                                      "title": "protocol",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "port",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "hosts": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "required": [],
+                                        "type": "string"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "hosts",
+                                  "type": "array"
+                                },
+                                "port": {
+                                  "properties": {
+                                    "name": {
+                                      "default": "rabbitmq-webstomp",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "number": {
+                                      "default": 15674,
+                                      "required": [],
+                                      "title": "number",
+                                      "type": "integer"
+                                    },
+                                    "protocol": {
+                                      "default": "HTTP",
+                                      "required": [],
+                                      "title": "protocol",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "port",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
                             }
                           ],
                           "required": []
@@ -1346,53 +1542,10 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "properties": {
-                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
-                      "default": "Name=some-cluster-i-public",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
-                      "default": "load_balancing.cross_zone.enabled=false",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
-                      "default": "false",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-name": {
-                      "default": "some-cluster-i-public",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
-                      "default": "ip",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
-                      "default": "deregistration_delay.timeout_seconds=30",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
-                      "type": "string"
-                    },
-                    "service.beta.kubernetes.io/aws-load-balancer-type": {
-                      "default": "external",
-                      "required": [],
-                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
-                      "type": "string"
-                    }
-                  },
+                  "default": "",
                   "required": [],
                   "title": "annotations",
-                  "type": "object"
+                  "type": "null"
                 }
               },
               "required": [],
@@ -1652,14 +1805,14 @@
               "type": "string"
             },
             "dnsBase": {
-              "default": "some-env.qvantel.solutions",
+              "default": "-some-env.qvantel.solutions",
               "description": "external-dns.alpha.kubernetes.io/target: my-global-load-balancer.cloud.com\nCommon base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to \u003cvirtual-service-name\u003e\u003cdnsSeparator\u003e\u003cdnsBase\u003e. By default values are taken from `global.ingressBaseUrl` and `global.ingressBaseUrlSeparator`",
               "required": [],
               "title": "dnsBase",
               "type": "string"
             },
             "instances": {
-              "description": "List of  `VirtualService` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  ",
+              "description": "List of  `VirtualService` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.",
               "properties": {
                 "address-manager": {
                   "description": "Product managed services    ",
@@ -4858,7 +5011,7 @@
                   "title": "flex-bpmn-executor",
                   "type": "object"
                 },
-                "flex-content-provider": {
+                "flex-testing-bpmn-executor": {
                   "properties": {
                     "enabled": {
                       "default": false,
@@ -4906,7 +5059,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "flex-content-provider.qvantel.svc.cluster.local",
+                                              "default": "flex-testing-bpmn-executor.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -4914,7 +5067,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 21210,
+                                                  "default": 21010,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -4953,7 +5106,7 @@
                     }
                   },
                   "required": [],
-                  "title": "flex-content-provider",
+                  "title": "flex-testing-bpmn-executor",
                   "type": "object"
                 },
                 "grafana": {
@@ -5379,139 +5532,6 @@
                   },
                   "required": [],
                   "title": "kibana",
-                  "type": "object"
-                },
-                "knowledge": {
-                  "properties": {
-                    "enabled": {
-                      "default": false,
-                      "required": [],
-                      "title": "enabled",
-                      "type": "boolean"
-                    },
-                    "gateways": {
-                      "items": {
-                        "anyOf": [
-                          {
-                            "required": [],
-                            "type": "string"
-                          }
-                        ],
-                        "required": []
-                      },
-                      "required": [],
-                      "title": "gateways",
-                      "type": "array"
-                    },
-                    "http": {
-                      "items": {
-                        "anyOf": [
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "uri": {
-                                          "properties": {
-                                            "exact": {
-                                              "default": "/",
-                                              "required": [],
-                                              "title": "exact",
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "uri",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "redirect": {
-                                "properties": {
-                                  "uri": {
-                                    "default": "/knowledge_wiki/",
-                                    "required": [],
-                                    "title": "uri",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [],
-                                "title": "redirect",
-                                "type": "object"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "knowledge-wiki.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 8080,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          }
-                        ],
-                        "required": []
-                      },
-                      "required": [],
-                      "title": "http",
-                      "type": "array"
-                    }
-                  },
-                  "required": [],
-                  "title": "knowledge",
                   "type": "object"
                 },
                 "kpitool": {
@@ -5956,7 +5976,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 80,
+                                                  "default": 8080,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -6482,7 +6502,7 @@
                   "title": "message-manager",
                   "type": "object"
                 },
-                "mobile-ui-builder": {
+                "minio": {
                   "properties": {
                     "enabled": {
                       "default": false,
@@ -6509,19 +6529,6 @@
                         "anyOf": [
                           {
                             "properties": {
-                              "retries": {
-                                "properties": {
-                                  "attempts": {
-                                    "default": 0,
-                                    "required": [],
-                                    "title": "attempts",
-                                    "type": "integer"
-                                  }
-                                },
-                                "required": [],
-                                "title": "retries",
-                                "type": "object"
-                              },
                               "route": {
                                 "items": {
                                   "anyOf": [
@@ -6530,7 +6537,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "mobile-ui-builder.qvantel.svc.cluster.local",
+                                              "default": "minio-platform.platform.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6538,7 +6545,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 21080,
+                                                  "default": 9000,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -6574,13 +6581,19 @@
                       "required": [],
                       "title": "http",
                       "type": "array"
+                    },
+                    "pomeriumProtected": {
+                      "default": false,
+                      "required": [],
+                      "title": "pomeriumProtected",
+                      "type": "boolean"
                     }
                   },
                   "required": [],
-                  "title": "mobile-ui-builder",
+                  "title": "minio",
                   "type": "object"
                 },
-                "mockbank": {
+                "minio-console": {
                   "properties": {
                     "enabled": {
                       "default": false,
@@ -6615,7 +6628,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "omnichannel-bank.qvantel.svc.cluster.local",
+                                              "default": "minio-platform-console.platform.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6623,7 +6636,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 3500,
+                                                  "default": 9001,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -6659,13 +6672,20 @@
                       "required": [],
                       "title": "http",
                       "type": "array"
+                    },
+                    "pomeriumProtected": {
+                      "default": false,
+                      "required": [],
+                      "title": "pomeriumProtected",
+                      "type": "boolean"
                     }
                   },
                   "required": [],
-                  "title": "mockbank",
+                  "title": "minio-console",
                   "type": "object"
                 },
                 "mockoss": {
+                  "description": "mobile-ui-builder:\n  enabled: false\n  gateways:\n    - private-ingress\n  http:\n    - retries:\n        attempts: 0\n      route:\n        - destination:\n            host: mobile-ui-builder.qvantel.svc.cluster.local\n            port:\n              number: 21080\nmockbank:\n  enabled: false\n  gateways:\n  - private-ingress\n  http:\n  - route:\n    - destination:\n        host: omnichannel-bank.qvantel.svc.cluster.local\n        port:\n          number: 3500",
                   "properties": {
                     "enabled": {
                       "default": false,
@@ -6750,7 +6770,8 @@
                   "title": "mockoss",
                   "type": "object"
                 },
-                "pcb": {
+                "openproject": {
+                  "description": "pcb:\n  enabled: false\n  gateways:\n  - private-ingress\n  http:\n  - route:\n    - destination:\n        host: pcb.qvantel.svc.cluster.local\n        port:\n          number: 8095\npos:\n  enabled: false\n  gateways:\n  - private-ingress\n  http:\n  - match:\n    - uri:\n        prefix: /images/\n    route:\n    - destination:\n        host: catalog-qflow-catalog-data.qvantel.svc.cluster.local\n        port:\n          number: 80\n  - route:\n    - destination:\n        host: omnichannel-pos.qvantel.svc.cluster.local\n        port:\n          number: 5010",
                   "properties": {
                     "enabled": {
                       "default": false,
@@ -6785,7 +6806,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "pcb.qvantel.svc.cluster.local",
+                                              "default": "openproject.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6793,7 +6814,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 8095,
+                                                  "default": 8080,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -6832,7 +6853,92 @@
                     }
                   },
                   "required": [],
-                  "title": "pcb",
+                  "title": "openproject",
+                  "type": "object"
+                },
+                "orders-chat": {
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "gateways": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "gateways",
+                      "type": "array"
+                    },
+                    "http": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "fulfillment-data-chat.qvantel.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 7001,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "http",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "orders-chat",
                   "type": "object"
                 },
                 "pmm": {
@@ -6920,7 +7026,7 @@
                   "title": "pmm",
                   "type": "object"
                 },
-                "pos": {
+                "prm": {
                   "properties": {
                     "enabled": {
                       "default": false,
@@ -6947,35 +7053,6 @@
                         "anyOf": [
                           {
                             "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "uri": {
-                                          "properties": {
-                                            "prefix": {
-                                              "default": "/images/",
-                                              "required": [],
-                                              "title": "prefix",
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "uri",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
                               "route": {
                                 "items": {
                                   "anyOf": [
@@ -6984,7 +7061,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "catalog-qflow-catalog-data.qvantel.svc.cluster.local",
+                                              "default": "partner-management.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6992,55 +7069,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 80,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "omnichannel-pos.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 5010,
+                                                  "default": 8000,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -7079,7 +7108,7 @@
                     }
                   },
                   "required": [],
-                  "title": "pos",
+                  "title": "prm",
                   "type": "object"
                 },
                 "prometheus": {
@@ -7117,7 +7146,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "monitoring-platform-kube-p-prometheus.platform.svc.cluster.local",
+                                              "default": "monitoring-platform-prometheus.platform.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -7173,6 +7202,348 @@
                   "title": "prometheus",
                   "type": "object"
                 },
+                "rabbitmq": {
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "gateways": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "gateways",
+                      "type": "array"
+                    },
+                    "http": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 15674,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "rabbitmq-platform.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 15674,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "http",
+                      "type": "array"
+                    },
+                    "tcp": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 61613,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "rabbitmq-platform.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 61613,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 5672,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "rabbitmq-platform.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 5672,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "tcp",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "rabbitmq",
+                  "type": "object"
+                },
+                "rabbitmq-ui": {
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "gateways": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "gateways",
+                      "type": "array"
+                    },
+                    "http": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "rabbitmq-platform.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 15672,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "http",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "rabbitmq-ui",
+                  "type": "object"
+                },
                 "rbs-ui": {
                   "properties": {
                     "enabled": {
@@ -7208,7 +7579,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "rbs-ui.qvantel.svc.cluster.local",
+                                              "default": "rbs-ui-web.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -7261,7 +7632,7 @@
                 "reaper": {
                   "properties": {
                     "enabled": {
-                      "default": true,
+                      "default": false,
                       "required": [],
                       "title": "enabled",
                       "type": "boolean"
@@ -7765,7 +8136,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 80,
+                                                  "default": 8080,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"

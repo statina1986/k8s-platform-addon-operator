@@ -1,0 +1,102 @@
+{{ define "chart.valueDefaultColumnRender" }}
+{{- $defaultValue := (default .Default .AutoDefault)  -}}
+{{- $notationType := .NotationType }}
+{{- if (and (hasPrefix "`" $defaultValue) (hasSuffix "`" $defaultValue) ) -}}
+{{- $defaultValue = (toYaml (fromJson (trimAll "`" (default .Default .AutoDefault) ) ) ) -}}
+{{- $notationType = "yaml" }}
+{{- end -}}
+{{- if (eq $notationType "tpl" ) }}
+<pre style="max-width:500px; overflow-x:auto; white-space: pre;" lang="{{ $notationType }}"><code>{{ .Key }}: |
+{{- $defaultValue | nindent 2 }}
+</code></pre>
+{{- else }}
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="{{ $notationType }}"><code>{{ $defaultValue }}</code></pre>
+{{- end }}
+{{ end }}
+
+
+{{ define "chart.valuesTableHtml" }}
+{{ if .Sections.DefaultSection.SectionItems }}
+<h3> Main Values</h3>
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+	{{- range .Sections.DefaultSection.SectionItems }}
+	<tr>
+		<td style="width: 300px;">{{ .Key }}</td>
+		<td>{{ .Type }}</td>
+		<td>{{- template "chart.valueDefaultColumnRender" . -}}</td>
+		<td>
+<div>
+
+{{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
+
+</div>
+		</td>
+	</tr>
+	{{- end }}
+	</tbody>
+</table>
+{{ end }}
+{{ if .Sections.Sections }}
+{{- range .Sections.Sections }}
+<h3>{{- .SectionName }}</h3>
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+	{{- range .SectionItems }}
+		<tr>
+			<td style="width: 300px;">{{ .Key }}</td>
+			<td>{{ .Type }}</td>
+			<td>{{- template "chart.valueDefaultColumnRender" . -}}</td>
+			<td>
+<div>
+
+{{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
+
+</div>
+			</td>
+		</tr>
+	{{- end }}
+	</tbody>
+</table>
+{{- end }}
+{{ else }}
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+	{{- range .Values }}
+		<tr>
+			<td style="width: 300px;" id="{{ .Key | replace "." "--" }}">{{ .Key }}</td>
+			<td>{{ .Type }}</td>
+			<td>
+				<div>{{- template "chart.valueDefaultColumnRender" . -}}</div>
+			</td>
+			<td>
+<div>
+
+{{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
+
+</div>
+      </td>
+		</tr>
+	{{- end }}
+	</tbody>
+</table>
+{{ end }}
+{{ end }}

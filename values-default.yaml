@@ -1,11 +1,13 @@
 global:
-  # one of  'dev', 'test', 'perf', 'prod'
+  antreaCNIenabled: "false"
   configurationProfile: "test"
+  deployOperators: "true"
   platformMasters: false
   localStorage: false
   multiZone:
     enabled: false
   ingressBaseUrl: "some-env.qvantel.solutions"
+  ingressBaseUrlSeparator: "-"
   appsNamespace: "qvantel"
   platformNamespace: "platform"
   kubernetesVersion: "1.25"
@@ -13,6 +15,9 @@ global:
   helmReleaseNamePrefix: ""
   clusterName: "some-cluster"
   clusterwideResources: "true"
+  platformMastersKey: dedicated-nodes
+  platformMastersValue: platform-masters
+  namespaceRestricted: "false"
 
 apisixPlatformEnabled: true
 artifactoryPlatformEnabled: true
@@ -27,7 +32,7 @@ consulPlatformEnabled: true
 elasticsearchPlatform: {}
 elasticsearchPlatformEnabled: true
 externalDns: {}
-externalDnsEnabled: true  
+externalDnsEnabled: true
 instanaPlatformEnabled: true
 istioIngress: {}
 istioIngressEnabled: true
@@ -41,6 +46,8 @@ keycloakPlatformEnabled: true
 ksixPlatformEnabled: true
 kyvernoPlatform: {}
 kyvernoPlatformEnabled: true
+logsearchPlatform: {}
+logsearchPlatformEnabled: true
 lokiPlatform: {}
 lokiPlatformEnabled: true
 mariadbOperatorPlatform: {}

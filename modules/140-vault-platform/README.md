@@ -1,3 +1,5 @@
+
+
 # vault-platform
 
 This module is responsible for deployment of [vault](https://www.vaultproject.io/) in the cluster
@@ -71,14 +73,762 @@ For details of each resource please check CRD definition.
 
 ## Values
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| vaultPlatform.autoUnseal | bool | `false` | Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal |
-| vaultPlatform.k8sUnseal | bool | `false` | Enable auto unseal with local Shamir keys stored in local K8S secret |
-| vaultPlatform.useBackwardsCompatibilityService | bool | `true` | Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps |
-| vaultPlatform.vault | object | `{"global":{"enabled":true},"injector":{"enabled":false},"server":{"affinity":"podAntiAffinity:\n  requiredDuringSchedulingIgnoredDuringExecution:\n    - labelSelector:\n        matchLabels:\n          app.kubernetes.io/name: {{ template \"vault.name\" . }}\n          app.kubernetes.io/instance: \"{{ .Release.Name }}\"\n          component: server\n      topologyKey: kubernetes.io/hostname\n","extraContainers":[{"args":["/init-script/init.sh"],"command":["/bin/sh"],"env":[{"name":"VAULT_K8S_POD_NAME","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.name"}}},{"name":"VAULT_K8S_NAMESPACE","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"metadata.namespace"}}},{"name":"VAULT_INIT_NODE","value":"vault-platform-0"}],"image":"platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5","imagePullPolicy":"IfNotPresent","name":"auto-init-and-unseal-sidecar","volumeMounts":[{"mountPath":"/init-script/","name":"userconfig-vault-auto-init-config"}]}],"extraVolumes":[{"defaultMode":511,"name":"vault-auto-init-config","type":"configMap"}],"ha":{"enabled":true,"limits":{"memory":"1Gi"},"raft":{"additionalConfig":"","config":"ui = true\n\nlistener \"tcp\" {\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  tls_disable = \"true\"\n}\n\nstorage \"raft\" {\n  path = \"/vault/data\"\n    retry_join {\n    leader_api_addr = \"http://vault-platform-0.vault-platform-internal:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-1.vault-platform-internal:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-2.vault-platform-internal:8200\"\n  }\n\n  autopilot {\n    cleanup_dead_servers = \"true\"\n    last_contact_threshold = \"200ms\"\n    last_contact_failure_threshold = \"10m\"\n    max_trailing_logs = 250000\n    min_quorum = 5\n    server_stabilization_time = \"10s\"\n  }\n\n}\n\nservice_registration \"kubernetes\" {}\n{{ .Values.server.ha.raft.additionalConfig}}\n","enabled":true,"setNodeId":true},"replicas":3,"requests":{"cpu":"100m","memory":"100Mi"}},"image":{"repository":"platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/vault"},"livenessProbe":{"enabled":true,"initialDelaySeconds":60,"path":"/v1/sys/health?standbyok=true&sealedcode=204"},"readinessProbe":{"enabled":true,"path":"/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"},"resources":{},"serviceAccount":{"create":false,"name":"platform"},"tolerations":"- key: \"dedicated-nodes\"\n  value: \"platform-masters\"\n  operator: \"Equal\"\n  effect: \"NoSchedule\"\n"}}` | Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration |
-| vaultPlatform.vault-secrets-webhook | object | `{"certificate":{"generate":false,"useCertManager":true},"configMapFailurePolicy":"Fail","image":{"repository":"platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/qvantel-vault-secrets-webhook","tag":"1.0.0.1_master_e5e0236d8"},"namespaceSelector":{"matchExpressions":[{"key":"kubernetes.io/metadata.name","operator":"In","values":["qvantel"]}]},"podsFailurePolicy":"Fail","secretsFailurePolicy":"Fail","tolerations":[{"effect":"NoSchedule","key":"dedicated-nodes","operator":"Equal","value":"platform-masters"}],"vaultEnv":{"repository":"platform.artifactory.qvantel.net/k8s-platform-1-2-0/bank-vaults/vault-env"}}` | Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values |
-| vaultPlatform.vault-secrets-webhook.configMapFailurePolicy | string | `"Fail"` | This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing. |
-| vaultPlatform.vault-secrets-webhook.podsFailurePolicy | string | `"Fail"` | This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing. |
-| vaultPlatform.vault-secrets-webhook.secretsFailurePolicy | string | `"Fail"` | This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing. |
-| vaultPlatform.vaultWebhooksEnabled | bool | `true` | Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag |
+<h3> Main Values</h3>
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.autoUnseal</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</td>
+		<td>
+<div>
+
+Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.k8sUnseal</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</td>
+		<td>
+<div>
+
+Enable auto unseal with local Shamir keys stored in local K8S secret
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.useBackwardsCompatibilityService</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+		<td>
+<div>
+
+Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vault</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>global:
+    enabled: true
+injector:
+    enabled: false
+server:
+    affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "vault.name" . }}
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
+                  component: server
+              topologyKey: kubernetes.io/hostname
+    extraContainers:
+        - args:
+            - /init-script/init.sh
+          command:
+            - /bin/sh
+          env:
+            - name: VAULT_K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.name
+            - name: VAULT_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+            - name: VAULT_INIT_NODE
+              value: vault-platform-0
+          image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          imagePullPolicy: IfNotPresent
+          name: auto-init-and-unseal-sidecar
+          volumeMounts:
+            - mountPath: /init-script/
+              name: userconfig-vault-auto-init-config
+    extraVolumes:
+        - defaultMode: 511
+          name: vault-auto-init-config
+          type: configMap
+    ha:
+        enabled: true
+        limits:
+            memory: 1Gi
+        raft:
+            additionalConfig: ""
+            config: |
+                ui = true
+                listener "tcp" {
+                  address = "[::]:8200"
+                  cluster_address = "[::]:8201"
+                  tls_disable = "true"
+                  telemetry {
+                    unauthenticated_metrics_access = "true"
+                  }
+                }
+                telemetry {
+                  prometheus_retention_time = "30s"
+                  disable_hostname = true
+                }
+                storage "raft" {
+                  path = "/vault/data"
+                    retry_join {
+                    leader_api_addr = "http://vault-platform-0.vault-platform-internal.platform.svc.cluster.local.:8200"
+                  }
+                  retry_join {
+                    leader_api_addr = "http://vault-platform-1.vault-platform-internal.platformsvc.cluster.local.:8200"
+                  }
+                  retry_join {
+                    leader_api_addr = "http://vault-platform-2.vault-platform-internal.platformsvc.cluster.local.:8200"
+                  }
+                  autopilot {
+                    cleanup_dead_servers = "true"
+                    last_contact_threshold = "200ms"
+                    last_contact_failure_threshold = "10m"
+                    max_trailing_logs = 250000
+                    min_quorum = 5
+                    server_stabilization_time = "10s"
+                  }
+                }
+                service_registration "kubernetes" {}
+                {{ .Values.server.ha.raft.additionalConfig}}
+            enabled: true
+            setNodeId: true
+        replicas: 3
+        requests:
+            cpu: 100m
+            memory: 100Mi
+    image:
+        repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/vault
+    livenessProbe:
+        enabled: true
+        initialDelaySeconds: 60
+        path: /v1/sys/health?standbyok=true&sealedcode=204
+    readinessProbe:
+        enabled: true
+        path: /v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204
+    resources: {}
+    serviceAccount:
+        create: false
+        name: platform
+    standalone:
+        config: |
+            ui = true
+            listener "tcp" {
+              tls_disable = 1
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
+              # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+              telemetry {
+                unauthenticated_metrics_access = "true"
+              }
+            }
+            storage "file" {
+              path = "/vault/data"
+            }
+            telemetry {
+              prometheus_retention_time = "30s"
+              disable_hostname = true
+            }
+    tolerations: |
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"</code></pre>
+</td>
+		<td>
+<div>
+
+Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vault-secrets-webhook</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>certificate:
+    generate: false
+    servingCertificate: vault-platform-vault-secrets-webhook-ca
+    useCertManager: false
+configMapFailurePolicy: Fail
+image:
+    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/qvantel-vault-secrets-webhook
+    tag: 1.0.0.1_master_e5e0236d8
+namespaceSelector:
+    matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - qvantel
+podsFailurePolicy: Fail
+secretsFailurePolicy: Fail
+secretsMutation: false
+tolerations:
+    - effect: NoSchedule
+      key: dedicated-nodes
+      operator: Equal
+      value: platform-masters
+vaultEnv:
+    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bank-vaults/vault-env</code></pre>
+</td>
+		<td>
+<div>
+
+Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vault-secrets-webhook.configMapFailurePolicy</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
+</td>
+		<td>
+<div>
+
+This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vault-secrets-webhook.podsFailurePolicy</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
+</td>
+		<td>
+<div>
+
+This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vault-secrets-webhook.secretsFailurePolicy</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
+</td>
+		<td>
+<div>
+
+This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vaultCrdSync</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>enabled: true
+namespaceSelector:
+    nameSelector:
+        matchNames:
+            - qvantel
+            - platform
+schedule: '*/5 * * * *'</code></pre>
+</td>
+		<td>
+<div>
+
+Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation.
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vaultCrdSync.enabled</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+		<td>
+<div>
+
+Enables Vault CRDs reconciliation
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vaultCrdSync.namespaceSelector</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
+    matchNames:
+        - qvantel
+        - platform</code></pre>
+</td>
+		<td>
+<div>
+
+Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vaultCrdSync.schedule</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>'*/5 * * * *'</code></pre>
+</td>
+		<td>
+<div>
+
+Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.vaultWebhooksEnabled</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+		<td>
+<div>
+
+Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
+
+</div>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">vaultPlatform.webhookCertificateDuration</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>87600h</code></pre>
+</td>
+		<td>
+<div>
+
+Sets the validity duration in hours for the vault-webhook certificate, must be larger than renewaltime ( 360h = 15 days), default is 10 years
+
+</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--autoUnseal">vaultPlatform.autoUnseal</td>
+			<td>bool</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--k8sUnseal">vaultPlatform.k8sUnseal</td>
+			<td>bool</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Enable auto unseal with local Shamir keys stored in local K8S secret
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--useBackwardsCompatibilityService">vaultPlatform.useBackwardsCompatibilityService</td>
+			<td>bool</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vault">vaultPlatform.vault</td>
+			<td>object</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>global:
+    enabled: true
+injector:
+    enabled: false
+server:
+    affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ template "vault.name" . }}
+                  app.kubernetes.io/instance: "{{ .Release.Name }}"
+                  component: server
+              topologyKey: kubernetes.io/hostname
+    extraContainers:
+        - args:
+            - /init-script/init.sh
+          command:
+            - /bin/sh
+          env:
+            - name: VAULT_K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.name
+            - name: VAULT_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+            - name: VAULT_INIT_NODE
+              value: vault-platform-0
+          image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          imagePullPolicy: IfNotPresent
+          name: auto-init-and-unseal-sidecar
+          volumeMounts:
+            - mountPath: /init-script/
+              name: userconfig-vault-auto-init-config
+    extraVolumes:
+        - defaultMode: 511
+          name: vault-auto-init-config
+          type: configMap
+    ha:
+        enabled: true
+        limits:
+            memory: 1Gi
+        raft:
+            additionalConfig: ""
+            config: |
+                ui = true
+                listener "tcp" {
+                  address = "[::]:8200"
+                  cluster_address = "[::]:8201"
+                  tls_disable = "true"
+                  telemetry {
+                    unauthenticated_metrics_access = "true"
+                  }
+                }
+                telemetry {
+                  prometheus_retention_time = "30s"
+                  disable_hostname = true
+                }
+                storage "raft" {
+                  path = "/vault/data"
+                    retry_join {
+                    leader_api_addr = "http://vault-platform-0.vault-platform-internal.platform.svc.cluster.local.:8200"
+                  }
+                  retry_join {
+                    leader_api_addr = "http://vault-platform-1.vault-platform-internal.platformsvc.cluster.local.:8200"
+                  }
+                  retry_join {
+                    leader_api_addr = "http://vault-platform-2.vault-platform-internal.platformsvc.cluster.local.:8200"
+                  }
+                  autopilot {
+                    cleanup_dead_servers = "true"
+                    last_contact_threshold = "200ms"
+                    last_contact_failure_threshold = "10m"
+                    max_trailing_logs = 250000
+                    min_quorum = 5
+                    server_stabilization_time = "10s"
+                  }
+                }
+                service_registration "kubernetes" {}
+                {{ .Values.server.ha.raft.additionalConfig}}
+            enabled: true
+            setNodeId: true
+        replicas: 3
+        requests:
+            cpu: 100m
+            memory: 100Mi
+    image:
+        repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/vault
+    livenessProbe:
+        enabled: true
+        initialDelaySeconds: 60
+        path: /v1/sys/health?standbyok=true&sealedcode=204
+    readinessProbe:
+        enabled: true
+        path: /v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204
+    resources: {}
+    serviceAccount:
+        create: false
+        name: platform
+    standalone:
+        config: |
+            ui = true
+            listener "tcp" {
+              tls_disable = 1
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
+              # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+              telemetry {
+                unauthenticated_metrics_access = "true"
+              }
+            }
+            storage "file" {
+              path = "/vault/data"
+            }
+            telemetry {
+              prometheus_retention_time = "30s"
+              disable_hostname = true
+            }
+    tolerations: |
+        - key: "dedicated-nodes"
+          value: "platform-masters"
+          operator: "Equal"
+          effect: "NoSchedule"</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook">vaultPlatform.vault-secrets-webhook</td>
+			<td>object</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>certificate:
+    generate: false
+    servingCertificate: vault-platform-vault-secrets-webhook-ca
+    useCertManager: false
+configMapFailurePolicy: Fail
+image:
+    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/qvantel-vault-secrets-webhook
+    tag: 1.0.0.1_master_e5e0236d8
+namespaceSelector:
+    matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - qvantel
+podsFailurePolicy: Fail
+secretsFailurePolicy: Fail
+secretsMutation: false
+tolerations:
+    - effect: NoSchedule
+      key: dedicated-nodes
+      operator: Equal
+      value: platform-masters
+vaultEnv:
+    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bank-vaults/vault-env</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook--configMapFailurePolicy">vaultPlatform.vault-secrets-webhook.configMapFailurePolicy</td>
+			<td>string</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook--podsFailurePolicy">vaultPlatform.vault-secrets-webhook.podsFailurePolicy</td>
+			<td>string</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook--secretsFailurePolicy">vaultPlatform.vault-secrets-webhook.secretsFailurePolicy</td>
+			<td>string</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync">vaultPlatform.vaultCrdSync</td>
+			<td>object</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>enabled: true
+namespaceSelector:
+    nameSelector:
+        matchNames:
+            - qvantel
+            - platform
+schedule: '*/5 * * * *'</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation.
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--enabled">vaultPlatform.vaultCrdSync.enabled</td>
+			<td>bool</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Enables Vault CRDs reconciliation
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--namespaceSelector">vaultPlatform.vaultCrdSync.namespaceSelector</td>
+			<td>object</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
+    matchNames:
+        - qvantel
+        - platform</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--schedule">vaultPlatform.vaultCrdSync.schedule</td>
+			<td>string</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>'*/5 * * * *'</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--vaultWebhooksEnabled">vaultPlatform.vaultWebhooksEnabled</td>
+			<td>bool</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
+
+</div>
+      </td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="vaultPlatform--webhookCertificateDuration">vaultPlatform.webhookCertificateDuration</td>
+			<td>string</td>
+			<td>
+				<div>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>87600h</code></pre>
+</div>
+			</td>
+			<td>
+<div>
+
+Sets the validity duration in hours for the vault-webhook certificate, must be larger than renewaltime ( 360h = 15 days), default is 10 years
+
+</div>
+      </td>
+		</tr>
+	</tbody>
+</table>
+

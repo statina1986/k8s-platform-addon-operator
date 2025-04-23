@@ -1,0 +1,16 @@
+{{ template "chart.header" . }}
+
+`qvantel-glue` module provides abstractions and automations to support Qvantel workloads deployments and operations.
+Those are opiniated templates which utilize Qvantel specific conventions.
+
+Depends on modules:
+- This is module is collection of thin wrappers on top existing functionality and resources.
+
+Provides:
+- SqlInstaller CRD
+- Database deployments configuration
+  - PostgreSQL (via CNPG)
+  - MariaDB (via MariaDB-operator)
+  - Cassandra (via k8ssandra)
+
+{{ template "chart.valuesSectionHtml" . }}

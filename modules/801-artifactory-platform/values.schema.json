@@ -159,6 +159,38 @@
                   "title": "fullnameOverride",
                   "type": "string"
                 },
+                "initContainers": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "ubi9/ubi-minimal",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "9.4-1194",
+                          "required": [],
+                          "title": "tag",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "initContainers",
+                  "type": "object"
+                },
                 "nginx": {
                   "description": "Enable separate nginx container.",
                   "properties": {
@@ -186,6 +218,39 @@
                   "required": [],
                   "title": "postgresql",
                   "type": "object"
+                },
+                "router": {
+                  "description": "Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router",
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "jfrog/router",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "7.118.0",
+                          "required": [],
+                          "title": "tag",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "router",
+                  "type": "object"
                 }
               },
               "required": [],
@@ -198,71 +263,6 @@
               "required": [],
               "title": "enabled",
               "type": "boolean"
-            },
-            "initContainers": {
-              "properties": {
-                "image": {
-                  "properties": {
-                    "registry": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                      "required": [],
-                      "title": "registry",
-                      "type": "string"
-                    },
-                    "repository": {
-                      "default": "ubi9/ubi-minimal",
-                      "required": [],
-                      "title": "repository",
-                      "type": "string"
-                    },
-                    "tag": {
-                      "default": "9.4-1194",
-                      "required": [],
-                      "title": "tag",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "image",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "initContainers",
-              "type": "object"
-            },
-            "router": {
-              "description": "Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router",
-              "properties": {
-                "image": {
-                  "properties": {
-                    "registry": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                      "required": [],
-                      "title": "registry",
-                      "type": "string"
-                    },
-                    "repository": {
-                      "default": "jfrog/router",
-                      "required": [],
-                      "title": "repository",
-                      "type": "string"
-                    },
-                    "tag": {
-                      "default": "7.118.0",
-                      "required": [],
-                      "title": "tag",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "image",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "router",
-              "type": "object"
             }
           },
           "required": [],
@@ -427,6 +427,38 @@
                   "title": "fullnameOverride",
                   "type": "string"
                 },
+                "initContainers": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "ubi9/ubi-minimal",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "9.4-1194",
+                          "required": [],
+                          "title": "tag",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "initContainers",
+                  "type": "object"
+                },
                 "nginx": {
                   "description": "Enable separate nginx container.",
                   "properties": {
@@ -454,6 +486,39 @@
                   "required": [],
                   "title": "postgresql",
                   "type": "object"
+                },
+                "router": {
+                  "description": "Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router",
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "jfrog/router",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "7.118.0",
+                          "required": [],
+                          "title": "tag",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "router",
+                  "type": "object"
                 }
               },
               "required": [],
@@ -466,71 +531,6 @@
               "required": [],
               "title": "enabled",
               "type": "boolean"
-            },
-            "initContainers": {
-              "properties": {
-                "image": {
-                  "properties": {
-                    "registry": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                      "required": [],
-                      "title": "registry",
-                      "type": "string"
-                    },
-                    "repository": {
-                      "default": "ubi9/ubi-minimal",
-                      "required": [],
-                      "title": "repository",
-                      "type": "string"
-                    },
-                    "tag": {
-                      "default": "9.4-1194",
-                      "required": [],
-                      "title": "tag",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "image",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "initContainers",
-              "type": "object"
-            },
-            "router": {
-              "description": "Router microservice, discovers other artifactory microservices. See https://jfrog.com/help/r/artifactory-s-microservices-explained/router",
-              "properties": {
-                "image": {
-                  "properties": {
-                    "registry": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                      "required": [],
-                      "title": "registry",
-                      "type": "string"
-                    },
-                    "repository": {
-                      "default": "jfrog/router",
-                      "required": [],
-                      "title": "repository",
-                      "type": "string"
-                    },
-                    "tag": {
-                      "default": "7.118.0",
-                      "required": [],
-                      "title": "tag",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "image",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "router",
-              "type": "object"
             }
           },
           "required": [],
