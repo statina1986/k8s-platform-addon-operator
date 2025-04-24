@@ -32,6 +32,15 @@ hook::trigger() {
     qlog "KV Secrets already enabled"
   fi
 
+  qlog "Ensuring kv2 secrets engine enabled"
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/sys/mounts'" 200
+  if [ ! "$(jq 'has("platform-secret/")' $CURL_RESULT)" == "true" ]; then
+    kubectl exec -n $ADDON_OPERATOR_NAMESPACE $VAULT_RELEASE_NAME-0 -- /bin/sh -c "vault login -no-print $token && \
+        vault secrets enable -path='platform-secret' kv-v2"
+  else
+    qlog "KV2 Secrets already enabled"
+  fi
+
   qlog "Ensuring database secrets engine enabled"
   curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/sys/mounts'" 200
   if [ ! "$(jq 'has("database/")' $CURL_RESULT)" == "true" ]; then
