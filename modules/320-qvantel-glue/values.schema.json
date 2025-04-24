@@ -286,7 +286,7 @@
           "type": "object"
         },
         "monitoringPlatformEnabled": {
-          "default": "True",
+          "default": true,
           "required": [],
           "title": "monitoringPlatformEnabled",
           "type": "boolean"

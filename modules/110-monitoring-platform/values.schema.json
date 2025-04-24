@@ -710,6 +710,326 @@
                                 },
                                 "required": [],
                                 "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "access": {
+                                    "default": "http",
+                                    "required": [],
+                                    "title": "access",
+                                    "type": "string"
+                                  },
+                                  "basicAuth": {
+                                    "default": true,
+                                    "required": [],
+                                    "title": "basicAuth",
+                                    "type": "boolean"
+                                  },
+                                  "basicAuthUser": {
+                                    "default": "elastic",
+                                    "required": [],
+                                    "title": "basicAuthUser",
+                                    "type": "string"
+                                  },
+                                  "database": {
+                                    "default": "ingress*",
+                                    "required": [],
+                                    "title": "database",
+                                    "type": "string"
+                                  },
+                                  "isDefault": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "isDefault",
+                                    "type": "boolean"
+                                  },
+                                  "jsonData": {
+                                    "properties": {
+                                      "timeField": {
+                                        "default": "@timestamp",
+                                        "required": [],
+                                        "title": "timeField",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "jsonData",
+                                    "type": "object"
+                                  },
+                                  "name": {
+                                    "default": "Elasticsearch-Ingress",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "secureJsonData": {
+                                    "properties": {
+                                      "basicAuthPassword": {
+                                        "default": "${elastic}",
+                                        "required": [],
+                                        "title": "basicAuthPassword",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "secureJsonData",
+                                    "type": "object"
+                                  },
+                                  "type": {
+                                    "default": "elasticsearch",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "default": "http://logsearch-es-logsearch.platform.svc.cluster.local.:9200",
+                                    "required": [],
+                                    "title": "url",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "access": {
+                                    "default": "http",
+                                    "required": [],
+                                    "title": "access",
+                                    "type": "string"
+                                  },
+                                  "basicAuth": {
+                                    "default": true,
+                                    "required": [],
+                                    "title": "basicAuth",
+                                    "type": "boolean"
+                                  },
+                                  "basicAuthUser": {
+                                    "default": "elastic",
+                                    "required": [],
+                                    "title": "basicAuthUser",
+                                    "type": "string"
+                                  },
+                                  "database": {
+                                    "default": "application*",
+                                    "required": [],
+                                    "title": "database",
+                                    "type": "string"
+                                  },
+                                  "isDefault": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "isDefault",
+                                    "type": "boolean"
+                                  },
+                                  "jsonData": {
+                                    "properties": {
+                                      "timeField": {
+                                        "default": "@timestamp",
+                                        "required": [],
+                                        "title": "timeField",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "jsonData",
+                                    "type": "object"
+                                  },
+                                  "name": {
+                                    "default": "Elasticsearch-Application",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "secureJsonData": {
+                                    "properties": {
+                                      "basicAuthPassword": {
+                                        "default": "${elastic}",
+                                        "required": [],
+                                        "title": "basicAuthPassword",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "secureJsonData",
+                                    "type": "object"
+                                  },
+                                  "type": {
+                                    "default": "elasticsearch",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "default": "http://logsearch-es-logsearch.platform.svc.cluster.local.:9200",
+                                    "required": [],
+                                    "title": "url",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "access": {
+                                    "default": "http",
+                                    "required": [],
+                                    "title": "access",
+                                    "type": "string"
+                                  },
+                                  "basicAuth": {
+                                    "default": true,
+                                    "required": [],
+                                    "title": "basicAuth",
+                                    "type": "boolean"
+                                  },
+                                  "basicAuthUser": {
+                                    "default": "elastic",
+                                    "required": [],
+                                    "title": "basicAuthUser",
+                                    "type": "string"
+                                  },
+                                  "database": {
+                                    "default": "ingress*",
+                                    "required": [],
+                                    "title": "database",
+                                    "type": "string"
+                                  },
+                                  "isDefault": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "isDefault",
+                                    "type": "boolean"
+                                  },
+                                  "jsonData": {
+                                    "properties": {
+                                      "timeField": {
+                                        "default": "@timestamp",
+                                        "required": [],
+                                        "title": "timeField",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "jsonData",
+                                    "type": "object"
+                                  },
+                                  "name": {
+                                    "default": "Elasticsearch-Ingress",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "secureJsonData": {
+                                    "properties": {
+                                      "basicAuthPassword": {
+                                        "default": "${elasticsearch-password}",
+                                        "required": [],
+                                        "title": "basicAuthPassword",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "secureJsonData",
+                                    "type": "object"
+                                  },
+                                  "type": {
+                                    "default": "elasticsearch",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "default": "http://logsearch-platform.platform.svc.cluster.local.:9200",
+                                    "required": [],
+                                    "title": "url",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "access": {
+                                    "default": "http",
+                                    "required": [],
+                                    "title": "access",
+                                    "type": "string"
+                                  },
+                                  "basicAuth": {
+                                    "default": true,
+                                    "required": [],
+                                    "title": "basicAuth",
+                                    "type": "boolean"
+                                  },
+                                  "basicAuthUser": {
+                                    "default": "elastic",
+                                    "required": [],
+                                    "title": "basicAuthUser",
+                                    "type": "string"
+                                  },
+                                  "database": {
+                                    "default": "application*",
+                                    "required": [],
+                                    "title": "database",
+                                    "type": "string"
+                                  },
+                                  "isDefault": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "isDefault",
+                                    "type": "boolean"
+                                  },
+                                  "jsonData": {
+                                    "properties": {
+                                      "timeField": {
+                                        "default": "@timestamp",
+                                        "required": [],
+                                        "title": "timeField",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "jsonData",
+                                    "type": "object"
+                                  },
+                                  "name": {
+                                    "default": "Elasticsearch-Application",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "secureJsonData": {
+                                    "properties": {
+                                      "basicAuthPassword": {
+                                        "default": "${elasticsearch-password}",
+                                        "required": [],
+                                        "title": "basicAuthPassword",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "title": "secureJsonData",
+                                    "type": "object"
+                                  },
+                                  "type": {
+                                    "default": "elasticsearch",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "default": "http://logsearch-platform.platform.svc.cluster.local.:9200",
+                                    "required": [],
+                                    "title": "url",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
                               }
                             ],
                             "required": []
@@ -765,6 +1085,28 @@
                   "required": [],
                   "title": "envFromSecret",
                   "type": "string"
+                },
+                "envFromSecrets": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "logsearch-elastic",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "envFromSecrets",
+                  "type": "array"
                 },
                 "extraContainerVolumes": {
                   "items": {
@@ -1402,10 +1744,278 @@
                         "spec": {
                           "properties": {
                             "resources": {
-                              "default": "",
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "groupVersionKind": {
+                                        "properties": {
+                                          "group": {
+                                            "default": "medusa.k8ssandra.io",
+                                            "required": [],
+                                            "title": "group",
+                                            "type": "string"
+                                          },
+                                          "kind": {
+                                            "default": "MedusaBackupJob",
+                                            "required": [],
+                                            "title": "kind",
+                                            "type": "string"
+                                          },
+                                          "version": {
+                                            "default": "v1alpha1",
+                                            "required": [],
+                                            "title": "version",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "groupVersionKind",
+                                        "type": "object"
+                                      },
+                                      "labelsFromPath": {
+                                        "properties": {
+                                          "name": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "name",
+                                            "type": "array"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "labelsFromPath",
+                                        "type": "object"
+                                      },
+                                      "metrics": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "info": {
+                                                      "properties": {
+                                                        "labelsFromPath": {
+                                                          "properties": {
+                                                            "ref": {
+                                                              "items": {
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "ref",
+                                                              "type": "array"
+                                                            }
+                                                          },
+                                                          "required": [],
+                                                          "title": "labelsFromPath",
+                                                          "type": "object"
+                                                        },
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "info",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Info",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "finished backups",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "finishedMedusaBackups",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "gauge": {
+                                                      "properties": {
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "gauge",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Gauge",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "backup finished timestamp",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "medusaBackupsFinishTime",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "info": {
+                                                      "properties": {
+                                                        "labelsFromPath": {
+                                                          "properties": {
+                                                            "ref": {
+                                                              "items": {
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "ref",
+                                                              "type": "array"
+                                                            }
+                                                          },
+                                                          "required": [],
+                                                          "title": "labelsFromPath",
+                                                          "type": "object"
+                                                        },
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "info",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Info",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "failed backups",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "failedMedusaBackups",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "metrics",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
                               "required": [],
                               "title": "resources",
-                              "type": "null"
+                              "type": "array"
                             }
                           },
                           "required": [],
@@ -1470,10 +2080,66 @@
                 "rbac": {
                   "properties": {
                     "extraRules": {
-                      "default": "",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "apiGroups": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "apiGroups",
+                                "type": "array"
+                              },
+                              "resources": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "resources",
+                                "type": "array"
+                              },
+                              "verbs": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    },
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "verbs",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
                       "required": [],
                       "title": "extraRules",
-                      "type": "null"
+                      "type": "array"
                     }
                   },
                   "required": [],
@@ -1754,6 +2420,83 @@
                     },
                     "additionalScrapeConfigsAsMap": {
                       "properties": {
+                        "envoy-stats": {
+                          "properties": {
+                            "kubernetes_sd_configs": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "role": {
+                                        "default": "pod",
+                                        "required": [],
+                                        "title": "role",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "kubernetes_sd_configs",
+                              "type": "array"
+                            },
+                            "metrics_path": {
+                              "default": "/stats/prometheus",
+                              "required": [],
+                              "title": "metrics_path",
+                              "type": "string"
+                            },
+                            "relabel_configs": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "properties": {
+                                      "action": {
+                                        "default": "keep",
+                                        "required": [],
+                                        "title": "action",
+                                        "type": "string"
+                                      },
+                                      "regex": {
+                                        "default": ".*-envoy-prom",
+                                        "required": [],
+                                        "title": "regex",
+                                        "type": "string"
+                                      },
+                                      "source_labels": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "required": [],
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "source_labels",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "relabel_configs",
+                              "type": "array"
+                            }
+                          },
+                          "required": [],
+                          "title": "envoy-stats",
+                          "type": "object"
+                        },
                         "kubernetes-pods": {
                           "properties": {
                             "kubernetes_sd_configs": {
@@ -3964,79 +4707,79 @@
               "description": "Modules variables to control alerts and dashboards deployed based on the modules already deployed",
               "properties": {
                 "cnpg": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "cnpg",
                   "type": "boolean"
                 },
                 "consul": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "consul",
                   "type": "boolean"
                 },
                 "elasticsearch": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "elasticsearch",
                   "type": "boolean"
                 },
                 "istio": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "istio",
                   "type": "boolean"
                 },
                 "kafka": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "kafka",
                   "type": "boolean"
                 },
                 "kasope": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "kasope",
                   "type": "boolean"
                 },
                 "loki": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "loki",
                   "type": "boolean"
                 },
                 "mariadb": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "mariadb",
                   "type": "boolean"
                 },
                 "mongodb": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "mongodb",
                   "type": "boolean"
                 },
                 "rabbitmq": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "rabbitmq",
                   "type": "boolean"
                 },
                 "redis": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "redis",
                   "type": "boolean"
                 },
                 "vault": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "vault",
                   "type": "boolean"
                 },
                 "vector": {
-                  "default": "True",
+                  "default": true,
                   "required": [],
                   "title": "vector",
                   "type": "boolean"

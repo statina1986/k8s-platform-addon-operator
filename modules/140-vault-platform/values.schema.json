@@ -326,7 +326,7 @@
                           "type": "string"
                         },
                         "config": {
-                          "default": "ui = true\nlistener \"tcp\" {\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  tls_disable = \"true\"\n  telemetry {\n    unauthenticated_metrics_access = \"true\"\n  }\n}\ntelemetry {\n  prometheus_retention_time = \"30s\"\n  disable_hostname = true\n}\nstorage \"raft\" {\n  path = \"/vault/data\"\n    retry_join {\n    leader_api_addr = \"http://vault-platform-0.vault-platform-internal.platform.svc.cluster.local.:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-1.vault-platform-internal.platformsvc.cluster.local.:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-2.vault-platform-internal.platformsvc.cluster.local.:8200\"\n  }\n  autopilot {\n    cleanup_dead_servers = \"true\"\n    last_contact_threshold = \"200ms\"\n    last_contact_failure_threshold = \"10m\"\n    max_trailing_logs = 250000\n    min_quorum = 5\n    server_stabilization_time = \"10s\"\n  }\n}\nservice_registration \"kubernetes\" {}\n{{ .Values.server.ha.raft.additionalConfig}}\n",
+                          "default": "ui = true\nlistener \"tcp\" {\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n  tls_disable = \"true\"\n  telemetry {\n    unauthenticated_metrics_access = \"true\"\n  }\n}\ntelemetry {\n  prometheus_retention_time = \"30s\"\n  disable_hostname = true\n}\nstorage \"raft\" {\n  path = \"/vault/data\"\n    retry_join {\n    leader_api_addr = \"http://vault-platform-0.vault-platform-internal.platform.svc.cluster.local.:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-1.vault-platform-internal.platform.svc.cluster.local.:8200\"\n  }\n  retry_join {\n    leader_api_addr = \"http://vault-platform-2.vault-platform-internal.platform.svc.cluster.local.:8200\"\n  }\n  autopilot {\n    cleanup_dead_servers = \"true\"\n    last_contact_threshold = \"200ms\"\n    last_contact_failure_threshold = \"10m\"\n    max_trailing_logs = 250000\n    min_quorum = 5\n    server_stabilization_time = \"10s\"\n  }\n}\nservice_registration \"kubernetes\" {}\n{{ .Values.server.ha.raft.additionalConfig}}\n",
                           "required": [],
                           "title": "config",
                           "type": "string"
@@ -481,6 +481,39 @@
               },
               "required": [],
               "title": "server",
+              "type": "object"
+            },
+            "serverTelemetry": {
+              "properties": {
+                "serviceMonitor": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "selectors": {
+                      "properties": {
+                        "release": {
+                          "default": "monitoring-platform",
+                          "required": [],
+                          "title": "release",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "selectors",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceMonitor",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "serverTelemetry",
               "type": "object"
             }
           },
@@ -674,52 +707,247 @@
         "vaultCrdSync": {
           "description": "Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation. ",
           "properties": {
-            "enabled": {
-              "default": true,
-              "description": "Enables Vault CRDs reconciliation",
-              "required": [],
-              "title": "enabled",
-              "type": "boolean"
-            },
-            "namespaceSelector": {
-              "description": "Selector for namespaces from which sync Vault CRD resources. Default are `qvantel` and `platform` namespaces.",
-              "properties": {
-                "nameSelector": {
-                  "properties": {
-                    "matchNames": {
-                      "items": {
-                        "anyOf": [
-                          {
-                            "required": [],
-                            "type": "string"
-                          },
-                          {
-                            "required": [],
-                            "type": "string"
-                          }
-                        ],
-                        "required": []
-                      },
-                      "required": [],
-                      "title": "matchNames",
-                      "type": "array"
-                    }
-                  },
-                  "required": [],
-                  "title": "nameSelector",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "namespaceSelector",
-              "type": "object"
-            },
             "schedule": {
               "default": "*/5 * * * *",
               "description": "Schedule for periodic reconciliation. Default is \"*/5 * * * *\" - so every 5 minutes.",
               "required": [],
               "title": "schedule",
               "type": "string"
+            },
+            "syncAclPolicies": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Enables Vault CRDs reconciliation for ACL policies",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "namespaceSelector": {
+                  "description": "Selector for namespaces from which to sync Vault ACL Policy resources. Default are `qvantel` and `platform` namespaces.",
+                  "properties": {
+                    "nameSelector": {
+                      "properties": {
+                        "matchNames": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "matchNames",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "nameSelector",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "namespaceSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "syncAclPolicies",
+              "type": "object"
+            },
+            "syncDbConnections": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Enables Vault CRDs reconciliation for DB connections",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "namespaceSelector": {
+                  "description": "Selector for namespaces from which to sync Vault DB connection resources. Default are `qvantel` and `platform` namespaces.",
+                  "properties": {
+                    "nameSelector": {
+                      "properties": {
+                        "matchNames": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "matchNames",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "nameSelector",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "namespaceSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "syncDbConnections",
+              "type": "object"
+            },
+            "syncDbRoles": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Enables Vault CRDs reconciliation for DB roles",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "namespaceSelector": {
+                  "description": "Selector for namespaces from which to sync Vault DB roles resources. Default are `qvantel` and `platform` namespaces.",
+                  "properties": {
+                    "nameSelector": {
+                      "properties": {
+                        "matchNames": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "matchNames",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "nameSelector",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "namespaceSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "syncDbRoles",
+              "type": "object"
+            },
+            "syncKV1Secrets": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Enables Vault CRDs reconciliation for KV1 Secrets",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "namespaceSelector": {
+                  "description": "Selector for namespaces from which to sync Vault KV1 Secrets resources. Default are `qvantel` and `platform` namespaces.",
+                  "properties": {
+                    "nameSelector": {
+                      "properties": {
+                        "matchNames": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "matchNames",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "nameSelector",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "namespaceSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "syncKV1Secrets",
+              "type": "object"
+            },
+            "syncKubernetesAuthRoles": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Enables Vault CRDs reconciliation for KubernetesAuthRoles",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "namespaceSelector": {
+                  "description": "Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default are `qvantel` and `platform` namespaces.",
+                  "properties": {
+                    "nameSelector": {
+                      "properties": {
+                        "matchNames": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "matchNames",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "nameSelector",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "namespaceSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "syncKubernetesAuthRoles",
+              "type": "object"
             }
           },
           "required": [],

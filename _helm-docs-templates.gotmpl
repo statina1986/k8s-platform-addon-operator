@@ -16,6 +16,8 @@
 
 
 {{ define "chart.valuesTableHtml" }}
+{{ if .Sections.Sections }}
+
 {{ if .Sections.DefaultSection.SectionItems }}
 <h3> Main Values</h3>
 <table>
@@ -43,7 +45,7 @@
 	</tbody>
 </table>
 {{ end }}
-{{ if .Sections.Sections }}
+
 {{- range .Sections.Sections }}
 <h3>{{- .SectionName }}</h3>
 <table>
@@ -71,6 +73,8 @@
 	</tbody>
 </table>
 {{- end }}
+
+
 {{ else }}
 <table>
 	<thead>

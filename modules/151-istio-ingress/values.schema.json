@@ -124,10 +124,53 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "default": "",
+                  "properties": {
+                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
+                      "default": "Name=some-cluster-i-http",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
+                      "default": "load_balancing.cross_zone.enabled=false",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
+                      "default": "true",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-name": {
+                      "default": "some-cluster-i-http",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
+                      "default": "ip",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
+                      "default": "deregistration_delay.timeout_seconds=30",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-type": {
+                      "default": "external",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
+                      "type": "string"
+                    }
+                  },
                   "required": [],
                   "title": "annotations",
-                  "type": "null"
+                  "type": "object"
                 }
               },
               "required": [],
@@ -484,10 +527,53 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "default": "",
+                  "properties": {
+                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
+                      "default": "Name=some-cluster-i-nonhttp",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
+                      "default": "load_balancing.cross_zone.enabled=true",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
+                      "default": "true",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-name": {
+                      "default": "some-cluster-i-nonhttp",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
+                      "default": "ip",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
+                      "default": "deregistration_delay.timeout_seconds=30",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-type": {
+                      "default": "external",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
+                      "type": "string"
+                    }
+                  },
                   "required": [],
                   "title": "annotations",
-                  "type": "null"
+                  "type": "object"
                 },
                 "ports": {
                   "items": {
@@ -857,10 +943,53 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "default": "",
+                  "properties": {
+                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
+                      "default": "Name=some-cluster-i-private",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
+                      "default": "load_balancing.cross_zone.enabled=false",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
+                      "default": "true",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-name": {
+                      "default": "some-cluster-i-private",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
+                      "default": "ip",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
+                      "default": "deregistration_delay.timeout_seconds=30",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-type": {
+                      "default": "external",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
+                      "type": "string"
+                    }
+                  },
                   "required": [],
                   "title": "annotations",
-                  "type": "null"
+                  "type": "object"
                 },
                 "ports": {
                   "items": {
@@ -1542,10 +1671,53 @@
             "service": {
               "properties": {
                 "annotations": {
-                  "default": "",
+                  "properties": {
+                    "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags": {
+                      "default": "Name=some-cluster-i-public",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-attributes": {
+                      "default": "load_balancing.cross_zone.enabled=false",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-internal": {
+                      "default": "false",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-internal",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-name": {
+                      "default": "some-cluster-i-public",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-name",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": {
+                      "default": "ip",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes": {
+                      "default": "deregistration_delay.timeout_seconds=30",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-target-group-attributes",
+                      "type": "string"
+                    },
+                    "service.beta.kubernetes.io/aws-load-balancer-type": {
+                      "default": "external",
+                      "required": [],
+                      "title": "service.beta.kubernetes.io/aws-load-balancer-type",
+                      "type": "string"
+                    }
+                  },
                   "required": [],
                   "title": "annotations",
-                  "type": "null"
+                  "type": "object"
                 }
               },
               "required": [],
@@ -5484,7 +5656,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "kibana-kb-http.platform.svc.cluster.local",
+                                              "default": "logsearch-platform-kibana.platform.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -5654,7 +5826,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "logsearch-es-http.platform.svc.cluster.local",
+                                              "default": "logsearch-platform.platform.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
