@@ -124,22 +124,6 @@ spec:
       annotations:
         brief: "There are over 10 deadlocks in {{` {{ $labels.pod }} `}} in the last 30 minutes."
         procedure: "Create a ticket for SQL to be checked during business hours"
-    - alert: PostgreSQLTempFilesHigh
-      expr: 'round(sum(increase(cnpg_pg_stat_database_temp_bytes[10m])) by (pod)) > 100000000'
-      for: 10m
-      labels:
-        severity: warning
-      annotations:
-        brief: "Temp files bytes in {{` {{ $labels.pod }} `}} are over 100000000."
-        procedure: "TBD"
-    - alert: PostgreSQLTempFilesCritical
-      expr: 'round(sum(increase(cnpg_pg_stat_database_temp_bytes[10m])) by (pod)) > 150000000'
-      for: 10m
-      labels:
-        severity: critical
-      annotations:
-        brief: "Temp files bytes in {{` {{ $labels.pod }} `}} are over 150000000."
-        procedure: "TBD"
     - alert: PostgreSQLConnectionsHigh
       expr: '100 * sum by (pod) (cnpg_backends_total) / sum by (pod) (cnpg_pg_settings_setting{name="max_connections"}) > 75'
       for: 5m
