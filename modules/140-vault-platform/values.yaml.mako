@@ -7,31 +7,31 @@ vaultPlatform:
     syncAclPolicies:
       # -- Enables Vault CRDs reconciliation for ACL policies
       enabled: true
-      # -- Selector for namespaces from which to sync Vault ACL Policy resources. Default are `qvantel` and `platform` namespaces.
+      # -- Selector for namespaces from which to sync Vault ACL Policy resources. Default is `platform` namespace.
       namespaceSelector:
         nameSelector:
-          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+          matchNames: ["${values['global']['platformNamespace']}"]
     syncDbConnections:
       # -- Enables Vault CRDs reconciliation for DB connections
       enabled: true
-      # -- Selector for namespaces from which to sync Vault DB connection resources. Default are `qvantel` and `platform` namespaces.
+      # -- Selector for namespaces from which to sync Vault DB connection resources. Default is `platform` namespace.
       namespaceSelector:
         nameSelector:
-          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+          matchNames: ["${values['global']['platformNamespace']}"]
     syncDbRoles:
       # -- Enables Vault CRDs reconciliation for DB roles
       enabled: true
-      # -- Selector for namespaces from which to sync Vault DB roles resources. Default are `qvantel` and `platform` namespaces.
+      # -- Selector for namespaces from which to sync Vault DB roles resources. Default is `platform` namespace.
       namespaceSelector:
         nameSelector:
-          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+          matchNames: ["${values['global']['platformNamespace']}"]
     syncKubernetesAuthRoles:
       # -- Enables Vault CRDs reconciliation for KubernetesAuthRoles
       enabled: true
-      # -- Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default are `qvantel` and `platform` namespaces.
+      # -- Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default is `platform` namespace.
       namespaceSelector:
         nameSelector:
-          matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+          matchNames: ["${values['global']['platformNamespace']}"]
     syncKV1Secrets:
       # -- Enables Vault CRDs reconciliation for KV1 Secrets
       enabled: true

@@ -15,7 +15,7 @@ class Kv1SecretsHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")
         platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
-        appsNamespace = self.get_addon_operator_config('global').get('appsNamespace','qvantel')
+        appsNamespace = self.get_addon_operator_config('global').get('appsNamespace','qvantel') ## We want to sync KV1 secrets from apps namespace also
         super().__init__(str(
             {
                 "configVersion": "v1",

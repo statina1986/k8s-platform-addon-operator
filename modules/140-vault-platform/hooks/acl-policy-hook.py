@@ -16,7 +16,6 @@ class AclPoliciesHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")        
         platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
-        appsNamespace = self.get_addon_operator_config('global').get('appsNamespace','qvantel')
         super().__init__(str(
             {
                 "configVersion": "v1",
@@ -36,7 +35,7 @@ class AclPoliciesHook(Hook):
                         "queue": "VaultAclPolicyQueue",
                         "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncAclPolicies", {}).get("namespaceSelector", {
                             "nameSelector": {
-                                "matchNames": [ appsNamespace, platformNamespace ]
+                                "matchNames": [ platformNamespace ]
                             }
                         }),
                         "allowFailure": True,
