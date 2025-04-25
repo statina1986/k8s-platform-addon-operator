@@ -25,6 +25,20 @@ hook::trigger() {
   # put new data to vault
   curl::execute "-d @$NEW --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/installer/qvaa/keycloak'" 204
   rm -f $OLD $ADD $NEW
+
+  qlog "Inserting keycloak admin password to platform-secret kv2 Vault"
+  OLD=`mktemp`
+  ADD=`mktemp`
+  NEW=`mktemp`
+  # read old data from vault, accept also not found
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/platform-secret/data/keycloak'" '200|404'
+  jq -r .data $CURL_RESULT > $OLD
+  echo '{"data": {"keycloak-password":"'"$password"'"}}' > $ADD
+  # combine old data (possibly null) with new
+  jq -s add $OLD $ADD > $NEW
+  # put new data to vault
+  curl::execute "-d @$NEW --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/platform-secret/data/keycloak'" 200 ## Needs to be 200 on kv2
+  rm -f $OLD $ADD $NEW
 }
 
 common::run_hook "$@"
