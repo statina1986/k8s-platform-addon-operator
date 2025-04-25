@@ -15,6 +15,7 @@ class Kv1SecretsHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")
         platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
+        appsNamespace = self.get_addon_operator_config('global').get('appsNamespace','qvantel')
         super().__init__(str(
             {
                 "configVersion": "v1",
@@ -34,7 +35,7 @@ class Kv1SecretsHook(Hook):
                         "queue": "VaultKV1SecretQueue",
                         "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncKV1Secrets", {}).get("namespaceSelector", {
                             "nameSelector": {
-                                "matchNames": [ platformNamespace ]
+                                "matchNames": [ appsNamespace, platformNamespace ]
                             }
                         }),
                         "allowFailure": True,
