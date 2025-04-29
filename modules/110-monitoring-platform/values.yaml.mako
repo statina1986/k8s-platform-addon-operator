@@ -20,6 +20,7 @@ monitoringPlatform:
       kafka: ${addon_operator['kafkaPlatformEnabled']}
       loki: ${addon_operator['lokiPlatformEnabled']}
       vector: ${addon_operator['vectorPlatformEnabled']}
+      istio: ${addon_operator['istioPlatformEnabled']}
       kasope: ${addon_operator['kasopePlatformEnabled']}
       consul: ${addon_operator['consulPlatformEnabled']}
       vault: ${addon_operator['vaultPlatformEnabled']}

@@ -1,0 +1,31 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.istio }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{.Release.Name}}-istio.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  labels:
+    app: kube-prometheus-stack
+    release: {{.Release.Name}}
+spec:
+  groups:
+  - name: istio.alerts
+    rules:
+    - alert: IstioPilotsReplicas
+      expr: 'sum(istio_build{component="pilot"}) < 2'
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Number of pilots is {{` {{ $value }} `}} when it has to be 2"
+        procedure: "Contact Platform team urgently to verify the potential risk and create a ticket to them"
+    - alert: InternalXDSErrosInPilot
+      expr: 'sum(increase(pilot_total_xds_internal_errors[5m])) >= 1'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        brief: "Total number of internal XDS errors in pilot are {{` {{ $value }} `}}."
+        procedure: "Contact Platform team urgently to verify the potential risk and create a ticket to them"
+  {{- end }}
