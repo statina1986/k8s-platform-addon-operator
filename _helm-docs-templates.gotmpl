@@ -14,6 +14,15 @@
 {{- end }}
 {{ end }}
 
+{{ define "chart.descriptionColumnRender" }}
+{{- $description := (default .Description .AutoDescription) | replace "\\newline" "\n" -}}
+<div>
+
+{{ $description }}
+
+</div>
+{{ end }}
+
 
 {{ define "chart.valuesTableHtml" }}
 {{ if .Sections.Sections }}
@@ -33,13 +42,7 @@
 		<td style="width: 300px;">{{ .Key }}</td>
 		<td>{{ .Type }}</td>
 		<td>{{- template "chart.valueDefaultColumnRender" . -}}</td>
-		<td>
-<div>
-
-{{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
-
-</div>
-		</td>
+		<td>{{- template "chart.descriptionColumnRender" . -}}</td>
 	</tr>
 	{{- end }}
 	</tbody>
@@ -61,13 +64,7 @@
 			<td style="width: 300px;">{{ .Key }}</td>
 			<td>{{ .Type }}</td>
 			<td>{{- template "chart.valueDefaultColumnRender" . -}}</td>
-			<td>
-<div>
-
-{{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
-
-</div>
-			</td>
+			<td>{{- template "chart.descriptionColumnRender" . -}}</td>
 		</tr>
 	{{- end }}
 	</tbody>
@@ -88,16 +85,8 @@
 		<tr>
 			<td style="width: 300px;" id="{{ .Key | replace "." "--" }}">{{ .Key }}</td>
 			<td>{{ .Type }}</td>
-			<td>
-				<div>{{- template "chart.valueDefaultColumnRender" . -}}</div>
-			</td>
-			<td>
-<div>
-
-{{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
-
-</div>
-      </td>
+			<td>{{- template "chart.valueDefaultColumnRender" . -}}</td>
+			<td>{{- template "chart.descriptionColumnRender" . -}}</td>
 		</tr>
 	{{- end }}
 	</tbody>

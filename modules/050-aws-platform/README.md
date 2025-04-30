@@ -36,23 +36,19 @@ Provides:
 			<td style="width: 300px;" id="awsPlatform--apiServerEndpoint">awsPlatform.apiServerEndpoint</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 **Required.** EKS API server endpoint.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-ebs-csi-driver">awsPlatform.aws-ebs-csi-driver</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>controller:
     extraVolumeTags: {}
     serviceAccount:
@@ -103,37 +99,31 @@ storageClasses:
         type: st1
       reclaimPolicy: Delete
       volumeBindingMode: WaitForFirstConsumer</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying aws-ebs-csi-driver helm-chart. See https://github.com/kubernetes-sigs/aws-ebs-csi-driver for details.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-ebs-csi-driver-enabled">awsPlatform.aws-ebs-csi-driver-enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Deploy aws-ebs-csi-driver helm-chart.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-efs-csi-driver">awsPlatform.aws-efs-csi-driver</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>controller:
     serviceAccount:
         create: false
@@ -172,37 +162,31 @@ storageClasses:
         uid: "0"
       reclaimPolicy: Delete
       volumeBindingMode: Immediate</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying aws-efs-csi-driver helm-chart. See https://github.com/kubernetes-sigs/aws-efs-csi-driver for details.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-efs-csi-driver-enabled">awsPlatform.aws-efs-csi-driver-enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Deploy aws-efs-csi-driver helm-chart.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-load-balancer-controller">awsPlatform.aws-load-balancer-controller</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>clusterName: some-cluster
 defaultTags: {}
 serviceAccount:
@@ -213,37 +197,31 @@ tolerations:
       key: dedicated-nodes
       operator: Equal
       value: platform-masters</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying aws-load-balancer-controller helm-chart. See https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/helm/aws-load-balancer-controller/README.md#configuration for details.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-load-balancer-controller-enabled">awsPlatform.aws-load-balancer-controller-enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Deploy aws-load-balancer-controller helm-chart.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-vpc-cni">awsPlatform.aws-vpc-cni</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>eniConfig:
     region: eu-central-1
 env:
@@ -259,127 +237,104 @@ nodeAgent:
     image:
         account: "602401143452"
         region: eu-central-1</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying aws-vpc-cni helm-chart. See https://github.com/aws/amazon-vpc-cni-k8s/tree/master/charts/aws-vpc-cni#configuration for details.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--aws-vpc-cni-enabled">awsPlatform.aws-vpc-cni-enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Deploy aws-vpc-cni helm-chart.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--awsKubeProxy">awsPlatform.awsKubeProxy</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>image: v1.25.16-minimal-eksbuild.1</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for EKS kube-proxy.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--awsKubeProxyEnabled">awsPlatform.awsKubeProxyEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Deploy EKS kube-proxy.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--awsRegistry">awsPlatform.awsRegistry</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>602401143452.dkr.ecr.eu-central-1.amazonaws.com</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 ECR registry for AWS images. By default is automatically assigned based on configured `region`
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--clusterName">awsPlatform.clusterName</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>some-cluster</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 EKS cluster name. Defaults to the name from `global.clusterName`
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--region">awsPlatform.region</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>eu-central-1</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 **Required.** AWS Region where cluster is deployed.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="awsPlatform--tags">awsPlatform.tags</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 **Required.** Default tags to be added for AWS Resources provisioned by this module (loadbalancers, ebs volumes, etc). If you do not want to add tags, provide `{}`.
 
 </div>
-      </td>
+</td>
 		</tr>
 	</tbody>
 </table>

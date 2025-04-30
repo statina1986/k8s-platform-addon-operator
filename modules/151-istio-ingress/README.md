@@ -30,7 +30,6 @@ Additional documentation can be found in Platform Docs https://intra.qvantel.com
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngress">istioIngress.integrationsHttpIngress</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>autoscaling:
     enabled: false
     maxReplicas: 9
@@ -64,53 +63,44 @@ tolerations:
       key: dedicated-nodes
       operator: Equal
       value: platform-masters</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying `gateway` helm-chart for Integrations Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressBufferHttpRequestSize">istioIngress.integrationsHttpIngressBufferHttpRequestSize</td>
 			<td>int</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>0</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configure request buffering (in bytes) for Integrations Http Ingress gateway. Set to 0 for disabling buffering.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressEnabled">istioIngress.integrationsHttpIngressEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Integrations Http Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressGateways">istioIngress.integrationsHttpIngressGateways</td>
 			<td>list</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- name: integrations-http-ingress
   spec:
     selector:
@@ -131,53 +121,44 @@ Enables Integrations Http Ingress gateway
           tls:
             credentialName: qvantel-wildcard
             mode: SIMPLE</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 List of  `Gateway` resources provisioned for Integrations Http Ingress gateway.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressLogFullRequest">istioIngress.integrationsHttpIngressLogFullRequest</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full request logging for Integrations Http Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressLogFullResponse">istioIngress.integrationsHttpIngressLogFullResponse</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full response logging for Integrations Http Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngress">istioIngress.integrationsNonHttpIngress</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>autoscaling:
     enabled: false
     maxReplicas: 9
@@ -220,53 +201,44 @@ tolerations:
       key: dedicated-nodes
       operator: Equal
       value: platform-masters</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying `gateway` helm-chart for Integrations Non Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressBufferHttpRequestSize">istioIngress.integrationsNonHttpIngressBufferHttpRequestSize</td>
 			<td>int</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>0</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configure request buffering (in bytes) for Integrations Non Http Ingress gateway. Set to 0 for disabling buffering.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressEnabled">istioIngress.integrationsNonHttpIngressEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Integrations Non Http Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressGateways">istioIngress.integrationsNonHttpIngressGateways</td>
 			<td>list</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- name: integrations-non-http-ingress
   spec:
     selector:
@@ -278,69 +250,57 @@ Enables Integrations Non Http Ingress gateway
             name: sftp
             number: 22
             protocol: TCP</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 List of  `Gateway` resources provisioned for Integrations Non Http Ingress gateway.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressLogFullRequest">istioIngress.integrationsNonHttpIngressLogFullRequest</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full request logging for Integrations Non Http Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressLogFullResponse">istioIngress.integrationsNonHttpIngressLogFullResponse</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full response logging for Integrations Non Http Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--pomeriumEnabled">istioIngress.pomeriumEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Pomerium Authorization proxy. This will affect only VirtualServices which have `pomeriumProtected: true` attributes
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--privateIngress">istioIngress.privateIngress</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>autoscaling:
     enabled: false
     maxReplicas: 9
@@ -399,53 +359,44 @@ tolerations:
       key: dedicated-nodes
       operator: Equal
       value: platform-masters</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying `gateway` helm-chart for Private Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--privateIngressBufferHttpRequestSize">istioIngress.privateIngressBufferHttpRequestSize</td>
 			<td>int</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>0</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configure request buffering (in bytes) for Private Ingress gateway. Set to 0 for disabling buffering.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--privateIngressEnabled">istioIngress.privateIngressEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Private Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--privateIngressGateways">istioIngress.privateIngressGateways</td>
 			<td>list</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- name: private-ingress
   spec:
     selector:
@@ -484,53 +435,44 @@ Enables Private Ingress gateway
             name: rabbitmq-webstomp
             number: 15674
             protocol: HTTP</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 List of  `Gateway` resources provisioned for Private Ingress gateway.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--privateIngressLogFullRequest">istioIngress.privateIngressLogFullRequest</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full request logging for Private Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--privateIngressLogFullResponse">istioIngress.privateIngressLogFullResponse</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full response logging for Private Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngress">istioIngress.publicIngress</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>autoscaling:
     enabled: false
     maxReplicas: 9
@@ -564,53 +506,44 @@ tolerations:
       key: dedicated-nodes
       operator: Equal
       value: platform-masters</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying `gateway` helm-chart for Public Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngressBufferHttpRequestSize">istioIngress.publicIngressBufferHttpRequestSize</td>
 			<td>int</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>0</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configure request buffering (in bytes) for Public Ingress gateway. Set to 0 for disabling buffering.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngressEnabled">istioIngress.publicIngressEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Public Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngressGateways">istioIngress.publicIngressGateways</td>
 			<td>list</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- name: public-ingress
   spec:
     selector:
@@ -631,143 +564,117 @@ Enables Public Ingress gateway
           tls:
             credentialName: qvantel-wildcard
             mode: SIMPLE</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 List of  `Gateway` resources provisioned for Public Ingress gateway.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngressLogFullRequest">istioIngress.publicIngressLogFullRequest</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full request logging for Public Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngressLogFullResponse">istioIngress.publicIngressLogFullResponse</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable full response logging for Public Ingress gateway
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices">istioIngress.virtualServices</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 VirtualServices to be provisioned.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices--annotations">istioIngress.virtualServices.annotations</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Common annotations for all VirtualServices resources provisioned
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices--appsNamespace">istioIngress.virtualServices.appsNamespace</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>qvantel</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Qvantel applications namespace name. By default value is taken from `global.appsNamespace` and equal to `qvantel`
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices--dnsBase">istioIngress.virtualServices.dnsBase</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>-some-env.qvantel.solutions</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Common base dns name to be used for all VirtualServices. `host` of VirtualServices will be set to <virtual-service-name><dnsSeparator><dnsBase>. By default values are taken from `global.ingressBaseUrl` and `global.ingressBaseUrlSeparator`
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices--instances">istioIngress.virtualServices.instances</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 List of  `VirtualService` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files. 
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices--platformNamespace">istioIngress.virtualServices.platformNamespace</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Qvantel platform namespace name. By default value is taken from `global.appsNamespace` and equal to `platform`
 
 </div>
-      </td>
+</td>
 		</tr>
 	</tbody>
 </table>

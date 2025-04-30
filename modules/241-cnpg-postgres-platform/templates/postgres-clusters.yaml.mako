@@ -1,3 +1,8 @@
+<%! 
+import json
+import base64
+%>
+
 {{- if .Values.cnpgPostgresPlatform }}
 {{- $root := . }}
 {{- range keys .Values.cnpgPostgresPlatform.clusters  }}
@@ -21,8 +26,9 @@ metadata:
   {{- end }}
 spec:
   {{- $spec := $current.spec | default (dict) | deepCopy }}
-  {{- $defaultSpec := include "default-cluster-spec"  $current | fromYaml }}
-  {{- toYaml (merge $spec $defaultSpec.spec)| nindent 2 }}
+  {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
+  {{- $defaultSpec := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterSpec (dict "cluster" $current "root" $root "addonOperator" $addonoperator) | fromYaml }}
+  {{- toYaml (merge $spec $defaultSpec)| nindent 2 }}
 
 ---
 apiVersion: batch/v1

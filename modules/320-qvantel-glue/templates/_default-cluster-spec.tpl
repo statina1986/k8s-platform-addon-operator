@@ -3,37 +3,39 @@ spec:
   {{- if or (not $.spec) (not $.spec.imageName) }}
   imageCatalogRef:
     apiGroup: postgresql.cnpg.io
-    kind: ClusterImageCatalog
+    kind: ImageCatalog
     name: qvantel-base-cnpg-images
     major: 15
   {{- end }}
   enableSuperuserAccess: true
-  % if values['global']['configurationProfile'] in {'dev'}: 
+  {{- if eq $.root.Values.global.configurationProfile "dev" }}
   instances: 1
-  % else:
+  {{- else }}
   instances: 2
-  % endif
+  {{- end }}
   affinity:
-    % if values['global']['multiZone']['enabled']:
+    {{- if $.root.Values.global.multiZone.enabled }}
     topologyKey: topology.kubernetes.io/zone
-    % endif
-  % if values['global']['configurationProfile'] not in {'dev'}:
+    {{- end }}
+  {{- if ne $.root.Values.global.configurationProfile "dev" }}
   backup:
     retentionPolicy: "7d"
     barmanObjectStore:
-      destinationPath: "s3://<your-S3-bucket-name-here>"
+      destinationPath: {{ $.root.Values.qvantelGlue.dbs.common.postgres.s3Bucket }}
       s3Credentials:
+      {{- if $.addonOperator.monitoringPlatformEnabled }}
         inheritFromIAMRole: true
+      {{- end }}
     wal:
       compression: gzip
       maxParallel: 8
       encryption: AES256
-  % endif
+  {{- end }}
   postgresql:
     parameters:
-      auto_explain.log_min_duration: "500ms" 
+      auto_explain.log_min_duration: "500ms"
       auto_explain.log_analyze: "on"
-      auto_explain.log_timing: "off"    
+      auto_explain.log_timing: "off"
       max_connections: "500"      
       random_page_cost: "1"
       pg_stat_statements.max: "10000"
@@ -48,35 +50,40 @@ spec:
       - pg_wait_sampling
       {{- if $.additionalSharedLibraries }}
       {{- range $.additionalSharedLibraries }}
-      - {{ . }}       
+      - {{ . }}
       {{- end }}
       {{- end }}
-  % if addon_operator['monitoringPlatformEnabled']:
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: "0.1"
+  storage:
+    size: 10Gi
+  {{- if $.addonOperator.monitoringPlatformEnabled }}
   monitoring:
     podMonitorEnabled: true
-    customQueriesConfigMap:      
+    customQueriesConfigMap:
       - name: cnpg-queries-insights-metrics
-        key: custom-metrics-queries      
-      {{- if $.additionalCustomQueriesConfigMaps }} 
+        key: custom-metrics-queries
+      {{- if $.additionalCustomQueriesConfigMaps }}
       {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}
       - name: {{ $k }}
       {{ $v | toYaml | indent 2 }}
       {{- end }}
       {{- end }}
-  % endif
+  {{- end }}
   {{- if or (not $.spec) (not $.spec.bootstrap) }}
   bootstrap:
     initdb:
       postInitSQL:
         - "CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;"
         - "CREATE EXTENSION IF NOT EXISTS timescaledb;"
-  {{- end }} 
-  
-  % if 'awsRole' in values['global']:
+  {{- end }}
+  {{- if $.root.Values.global.awsRole }}
   serviceAccountTemplate:
     metadata:
       annotations:
-        eks.amazonaws.com/role-arn: ${values['global']['awsRole']}
-  % endif
+        eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}
+  {{- end }}
 
 {{- end }} 

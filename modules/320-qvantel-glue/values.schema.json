@@ -5,10 +5,16 @@
       "description": "This is example PostgreSQL glue definition. \nNote: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`",
       "properties": {
         "cluster": {
-          "description": "Defines CNPG database cluster (kind: Cluster) to deploy. \nIf it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.\nCluster configuration follows same structure which is deinfed in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module.\nIn this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.",
+          "description": "Defines CNPG database cluster (kind: Cluster) to deploy. \nIf it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.\nCluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module.\nIn this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.",
           "properties": {
+            "scheduledBackup": {
+              "default": "0 0 0 * * *",
+              "description": "Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.\nValues configured in this spec are merged with default spec from 'qvantelGlue.dbs.common.postgres.defaultClusterSpec'.\nDefines scheduled backup configuration as Cron string (e.g. \"0 0 0 * * *\" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.",
+              "required": [],
+              "title": "scheduledBackup",
+              "type": "string"
+            },
             "spec": {
-              "description": "Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.\nValues configured in this spec are merged with result of templating [_default-cluster-spec.tpl.mako](templates/_default-cluster-spec.tpl.mako).",
               "properties": {
                 "affinity": {
                   "properties": {
@@ -156,7 +162,7 @@
           "type": "object"
         },
         "dbs": {
-          "description": "Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvnatel conventions.",
+          "description": "Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.",
           "properties": {
             "catalog-deployer": {
               "properties": {
@@ -164,7 +170,7 @@
                   "properties": {
                     "provision": {
                       "default": "- \"CREATE ROLE db_catalog_deployer NOLOGIN\"\n- \"GRANT db_catalog_deployer TO CURRENT_USER\"\n- \"CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer\"    \n",
-                      "description": "It is possible to define provisionsing SQL for the database if customization is required.",
+                      "description": "It is possible to define provisioning SQL for the database if customization is required.",
                       "required": [],
                       "title": "provision",
                       "type": "string"
@@ -266,6 +272,36 @@
               "description": "Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster \nand associated configuration like keyspaces and roles.",
               "required": [],
               "title": "cassandra",
+              "type": "object"
+            },
+            "common": {
+              "description": "Common configurations to be used across databases",
+              "properties": {
+                "postgres": {
+                  "description": "Common configurations for PostgreSQL databases",
+                  "properties": {
+                    "defaultClusterSpec": {
+                      "default": "{{- if or (not $.spec) (not $.spec.imageName) }}\nimageCatalogRef:\n  apiGroup: postgresql.cnpg.io\n  kind: ImageCatalog\n  name: qvantel-base-cnpg-images\n  major: 15\n{{- end }}\nenableSuperuserAccess: true\n{{- if eq $.root.Values.global.configurationProfile \"dev\" }}\ninstances: 1\n{{- else }}\ninstances: 2\n{{- end }}\naffinity:\n  {{- if $.root.Values.global.multiZone.enabled }}\n  topologyKey: topology.kubernetes.io/zone\n  {{- end }}\n{{- if ne $.root.Values.global.configurationProfile \"dev\" }}\nbackup:\n  retentionPolicy: \"7d\"\n  barmanObjectStore:\n    destinationPath: {{ $.root.Values.qvantelGlue.dbs.common.postgres.s3Bucket }}\n    s3Credentials:\n    {{- if $.addonOperator.monitoringPlatformEnabled }}\n      inheritFromIAMRole: true\n    {{- end }}\n  wal:\n    compression: gzip\n    maxParallel: 8\n    encryption: AES256\n{{- end }}\npostgresql:\n  parameters:\n    auto_explain.log_min_duration: \"500ms\"\n    auto_explain.log_analyze: \"on\"\n    auto_explain.log_timing: \"off\"\n    max_connections: \"500\"      \n    random_page_cost: \"1\"\n    pg_stat_statements.max: \"10000\"\n    pg_stat_statements.track: \"top\"\n    pg_stat_statements.track_utility: \"off\"\n    pg_wait_sampling.profile_pid: \"false\"\n    track_io_timing: \"on\"\n    wal_compression: \"pglz\"\n  shared_preload_libraries:\n    - timescaledb\n    - pg_partman_bgw\n    - pg_wait_sampling\n    {{- if $.additionalSharedLibraries }}\n    {{- range $.additionalSharedLibraries }}\n    - {{ . }}\n    {{- end }}\n    {{- end }}\nresources:\n  requests:\n    memory: 1Gi\n    cpu: \"0.1\"\nstorage:\n  size: 10Gi\n{{- if $.addonOperator.monitoringPlatformEnabled }}\nmonitoring:\n  podMonitorEnabled: true\n  customQueriesConfigMap:\n    - name: cnpg-queries-insights-metrics\n      key: custom-metrics-queries\n    {{- if $.additionalCustomQueriesConfigMaps }}\n    {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}\n    - name: {{ $k }}\n    {{ $v | toYaml | indent 2 }}\n    {{- end }}\n    {{- end }}\n{{- end }}\n{{- if or (not $.spec) (not $.spec.bootstrap) }}\nbootstrap:\n  initdb:\n    postInitSQL:\n      - \"CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;\"\n      - \"CREATE EXTENSION IF NOT EXISTS timescaledb;\"\n{{- end }}\n{{- if $.root.Values.global.awsRole }}\nserviceAccountTemplate:\n  metadata:\n    annotations:\n      eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}\n{{- end }}\n",
+                      "description": "(tpl/string) Default spec for CNPG clusters. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.\nThis is templated field which is rendered for each cluster from 'dbs.postgres.\u003ccluster\u003e'. Scope for the template contains fields: \n\\newline\n* addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.\n\\newline\n* root: root context of 'qvantel-glue' module, containing all Values for the module.\n\\newline\n* spec: content of 'spec' field for rendered cluster. It is possible to check if particular default values are overridden.",
+                      "required": [],
+                      "title": "defaultClusterSpec",
+                      "type": "string"
+                    },
+                    "s3Bucket": {
+                      "default": "s3://common-s3-bucket-for-postgresql",
+                      "description": "Common s3 bucket to store WALs and Backups",
+                      "required": [],
+                      "title": "s3Bucket",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "postgres",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "common",
               "type": "object"
             },
             "mariadb": {

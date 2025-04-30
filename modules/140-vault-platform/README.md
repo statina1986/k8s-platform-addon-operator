@@ -85,55 +85,45 @@ For details of each resource please check CRD definition.
 			<td style="width: 300px;" id="vaultPlatform--autoUnseal">vaultPlatform.autoUnseal</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--k8sUnseal">vaultPlatform.k8sUnseal</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable auto unseal with local Shamir keys stored in local K8S secret
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--useBackwardsCompatibilityService">vaultPlatform.useBackwardsCompatibilityService</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Creates `vault.{{.Release.Namespace}}.svc` which is expected by Qvantel apps
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vault">vaultPlatform.vault</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>global:
     enabled: true
 injector:
@@ -266,21 +256,18 @@ serverTelemetry:
         enabled: true
         selectors:
             release: monitoring-platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook">vaultPlatform.vault-secrets-webhook</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>certificate:
     generate: false
     servingCertificate: vault-platform-vault-secrets-webhook-ca
@@ -305,69 +292,57 @@ tolerations:
       value: platform-masters
 vaultEnv:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bank-vaults/vault-env</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook--configMapFailurePolicy">vaultPlatform.vault-secrets-webhook.configMapFailurePolicy</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook--podsFailurePolicy">vaultPlatform.vault-secrets-webhook.podsFailurePolicy</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vault-secrets-webhook--secretsFailurePolicy">vaultPlatform.vault-secrets-webhook.secretsFailurePolicy</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>Fail</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync">vaultPlatform.vaultCrdSync</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>schedule: '*/5 * * * *'
 syncAclPolicies:
     enabled: true
@@ -404,238 +379,197 @@ syncKubernetesAuthRoles:
             matchNames:
                 - qvantel
                 - platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Configuration for Vault CRDs (DbConnection, DbRoles, etc) reconciliation.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--schedule">vaultPlatform.vaultCrdSync.schedule</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>'*/5 * * * *'</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncAclPolicies--enabled">vaultPlatform.vaultCrdSync.syncAclPolicies.enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Vault CRDs reconciliation for ACL policies
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncAclPolicies--namespaceSelector">vaultPlatform.vaultCrdSync.syncAclPolicies.namespaceSelector</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
         - qvantel
         - platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Selector for namespaces from which to sync Vault ACL Policy resources. Default are `qvantel` and `platform` namespaces.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncDbConnections--enabled">vaultPlatform.vaultCrdSync.syncDbConnections.enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Vault CRDs reconciliation for DB connections
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncDbConnections--namespaceSelector">vaultPlatform.vaultCrdSync.syncDbConnections.namespaceSelector</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
         - qvantel
         - platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Selector for namespaces from which to sync Vault DB connection resources. Default are `qvantel` and `platform` namespaces.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncDbRoles--enabled">vaultPlatform.vaultCrdSync.syncDbRoles.enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Vault CRDs reconciliation for DB roles
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncDbRoles--namespaceSelector">vaultPlatform.vaultCrdSync.syncDbRoles.namespaceSelector</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
         - qvantel
         - platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Selector for namespaces from which to sync Vault DB roles resources. Default are `qvantel` and `platform` namespaces.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncKV1Secrets--enabled">vaultPlatform.vaultCrdSync.syncKV1Secrets.enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Vault CRDs reconciliation for KV1 Secrets
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncKV1Secrets--namespaceSelector">vaultPlatform.vaultCrdSync.syncKV1Secrets.namespaceSelector</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
         - qvantel
         - platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Selector for namespaces from which to sync Vault KV1 Secrets resources. Default are `qvantel` and `platform` namespaces.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncKubernetesAuthRoles--enabled">vaultPlatform.vaultCrdSync.syncKubernetesAuthRoles.enabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enables Vault CRDs reconciliation for KubernetesAuthRoles
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultCrdSync--syncKubernetesAuthRoles--namespaceSelector">vaultPlatform.vaultCrdSync.syncKubernetesAuthRoles.namespaceSelector</td>
 			<td>object</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
         - qvantel
         - platform</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default are `qvantel` and `platform` namespaces.
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--vaultWebhooksEnabled">vaultPlatform.vaultWebhooksEnabled</td>
 			<td>bool</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Enable deployment of vault-secrets-webhook subchart. Depends of value of `global.clusterwideResources` flag
 
 </div>
-      </td>
+</td>
 		</tr>
 		<tr>
 			<td style="width: 300px;" id="vaultPlatform--webhookCertificateDuration">vaultPlatform.webhookCertificateDuration</td>
 			<td>string</td>
 			<td>
-				<div>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>87600h</code></pre>
-</div>
-			</td>
-			<td>
-<div>
+</td>
+			<td><div>
 
 Sets the validity duration in hours for the vault-webhook certificate, must be larger than renewaltime ( 360h = 15 days), default is 10 years
 
 </div>
-      </td>
+</td>
 		</tr>
 	</tbody>
 </table>
