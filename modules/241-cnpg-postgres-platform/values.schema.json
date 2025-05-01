@@ -1,0 +1,356 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "cnpgPostgresPlatform": {
+      "properties": {
+        "cloudnative-pg": {
+          "description": "Configuration for CNPG operator helm chart. See https://github.com/cloudnative-pg/charts/tree/main/charts/cloudnative-pg for API reference.",
+          "properties": {
+            "additionalEnv": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "EXPIRING_CHECK_THRESHOLD",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "30",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "additionalEnv",
+              "type": "array"
+            },
+            "crds": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "crds",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/cloudnative-pg/cloudnative-pg",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "cloudnative-pg",
+          "type": "object"
+        },
+        "clusters": {
+          "description": "CNPG clusters configuration. This is a map where each key corresponds to the PostgreSQL cluster to be provisioned\nFor Example, see `example-postgredb` definition in Examples-PostgreSQL section below.\nBy default cluster 'qvt-postgredb' is enabled and provisioned with default configuration.",
+          "properties": {
+            "qvt-postgredb": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "scheduledBackup": {
+                  "default": "0 0 0 * * *",
+                  "required": [],
+                  "title": "scheduledBackup",
+                  "type": "string"
+                },
+                "vaultConfiguration": {
+                  "default": true,
+                  "required": [],
+                  "title": "vaultConfiguration",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "qvt-postgredb",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "clusters",
+          "type": "object"
+        },
+        "common": {
+          "description": "Common configurations for PostgreSQL databases",
+          "properties": {
+            "defaultClusterSpec": {
+              "default": "{{- if or (not $.spec) (not $.spec.imageName) }}\nimageCatalogRef:\n  apiGroup: postgresql.cnpg.io\n  kind: ImageCatalog\n  name: qvantel-base-cnpg-images\n  major: 15\n{{- end }}\nenableSuperuserAccess: true\n{{- if eq $.root.Values.global.configurationProfile \"dev\" }}\ninstances: 1\n{{- else }}\ninstances: 2\n{{- end }}\naffinity:\n  {{- if $.root.Values.global.multiZone.enabled }}\n  topologyKey: topology.kubernetes.io/zone\n  {{- end }}\n{{- if ne $.root.Values.global.configurationProfile \"dev\" }}\nbackup:\n  retentionPolicy: \"7d\"\n  barmanObjectStore:\n    destinationPath: {{ $.root.Values.qvantelGlue.dbs.common.postgres.s3Bucket }}\n    s3Credentials:\n    {{- if $.addonOperator.monitoringPlatformEnabled }}\n      inheritFromIAMRole: true\n    {{- end }}\n  wal:\n    compression: gzip\n    maxParallel: 8\n    encryption: AES256\n{{- end }}\npostgresql:\n  parameters:\n    auto_explain.log_min_duration: \"500ms\"\n    auto_explain.log_analyze: \"on\"\n    auto_explain.log_timing: \"off\"\n    max_connections: \"500\"      \n    random_page_cost: \"1\"\n    pg_stat_statements.max: \"10000\"\n    pg_stat_statements.track: \"top\"\n    pg_stat_statements.track_utility: \"off\"\n    pg_wait_sampling.profile_pid: \"false\"\n    track_io_timing: \"on\"\n    wal_compression: \"pglz\"\n  shared_preload_libraries:\n    - timescaledb\n    - pg_partman_bgw\n    - pg_wait_sampling\n    {{- if $.additionalSharedLibraries }}\n    {{- range $.additionalSharedLibraries }}\n    - {{ . }}\n    {{- end }}\n    {{- end }}\nresources:\n  requests:\n    memory: 1Gi\n    cpu: \"0.1\"\nstorage:\n  size: 10Gi\n{{- if $.addonOperator.monitoringPlatformEnabled }}\nmonitoring:\n  podMonitorEnabled: true\n  customQueriesConfigMap:\n    - name: cnpg-queries-insights-metrics\n      key: custom-metrics-queries\n    {{- if $.additionalCustomQueriesConfigMaps }}\n    {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}\n    - name: {{ $k }}\n    {{ $v | toYaml | indent 2 }}\n    {{- end }}\n    {{- end }}\n{{- end }}\n{{- if or (not $.spec) (not $.spec.bootstrap) }}\nbootstrap:\n  initdb:\n    postInitSQL:\n      - \"CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;\"\n      - \"CREATE EXTENSION IF NOT EXISTS timescaledb;\"\n{{- end }}\n{{- if $.root.Values.global.awsRole }}\nserviceAccountTemplate:\n  metadata:\n    annotations:\n      eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}\n{{- end }}\n",
+              "description": "(tpl/string) Default spec for CNPG clusters. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.\nThis is templated field which is rendered for each cluster from 'clusters.\u003ccluster\u003e'. Scope for the template contains fields: \n\\newline\n* addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.\n\\newline\n* root: root context of 'qvantel-glue' module, containing all Values for the module.\n\\newline\n* spec: content of 'spec' field for rendered cluster. It is possible to check if particular default values are overridden.",
+              "required": [],
+              "title": "defaultClusterSpec",
+              "type": "string"
+            },
+            "s3Bucket": {
+              "default": "s3://common-s3-bucket-for-postgresql",
+              "description": "Common s3 bucket to store WALs and Backups",
+              "required": [],
+              "title": "s3Bucket",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "common",
+          "type": "object"
+        },
+        "monitoringPlatformEnabled": {
+          "default": true,
+          "required": [],
+          "title": "monitoringPlatformEnabled",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "cnpgPostgresPlatform",
+      "type": "object"
+    },
+    "example-postgredb": {
+      "description": "This is example PostgreSQL cluster definition. \nNote: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `cnpgPostgresPlatform.clusters`",
+      "properties": {
+        "enabled": {
+          "default": true,
+          "description": "Enables cluster provisioning. By default 'false' which means cluster will not be deployed.",
+          "required": [],
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "scheduledBackup": {
+          "default": "0 0 0 * * *",
+          "description": "Defines scheduled backup configuration as Cron string (e.g. \"0 0 0 * * *\" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.",
+          "required": [],
+          "title": "scheduledBackup",
+          "type": "string"
+        },
+        "spec": {
+          "description": "Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.\nValues configured in this spec are merged with default spec from 'cnpgPostgresPlatform.common.defaultClusterSpec'.",
+          "properties": {
+            "affinity": {
+              "properties": {
+                "nodeSelector": {
+                  "properties": {
+                    "dedicated-nodes": {
+                      "default": "platform-masters",
+                      "required": [],
+                      "title": "dedicated-nodes",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "nodeSelector",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                },
+                "topologyKey": {
+                  "default": "topology.kubernetes.io/zone",
+                  "required": [],
+                  "title": "topologyKey",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "affinity",
+              "type": "object"
+            },
+            "backup": {
+              "properties": {
+                "barmanObjectStore": {
+                  "properties": {
+                    "destinationPath": {
+                      "default": "s3://q-sit-pf-postgresql",
+                      "required": [],
+                      "title": "destinationPath",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "barmanObjectStore",
+                  "type": "object"
+                },
+                "retentionPolicy": {
+                  "default": "2d",
+                  "required": [],
+                  "title": "retentionPolicy",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "backup",
+              "type": "object"
+            },
+            "instances": {
+              "default": 2,
+              "required": [],
+              "title": "instances",
+              "type": "integer"
+            },
+            "storage": {
+              "properties": {
+                "size": {
+                  "default": "10Gi",
+                  "required": [],
+                  "title": "size",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "storage",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "spec",
+          "type": "object"
+        },
+        "vaultConfiguration": {
+          "default": true,
+          "description": "Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.",
+          "required": [],
+          "title": "vaultConfiguration",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "example-postgredb",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

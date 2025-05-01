@@ -349,21 +349,18 @@ syncAclPolicies:
     namespaceSelector:
         nameSelector:
             matchNames:
-                - qvantel
                 - platform
 syncDbConnections:
     enabled: true
     namespaceSelector:
         nameSelector:
             matchNames:
-                - qvantel
                 - platform
 syncDbRoles:
     enabled: true
     namespaceSelector:
         nameSelector:
             matchNames:
-                - qvantel
                 - platform
 syncKV1Secrets:
     enabled: true
@@ -377,7 +374,6 @@ syncKubernetesAuthRoles:
     namespaceSelector:
         nameSelector:
             matchNames:
-                - qvantel
                 - platform</code></pre>
 </td>
 			<td><div>
@@ -419,12 +415,11 @@ Enables Vault CRDs reconciliation for ACL policies
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
-        - qvantel
         - platform</code></pre>
 </td>
 			<td><div>
 
-Selector for namespaces from which to sync Vault ACL Policy resources. Default are `qvantel` and `platform` namespaces.
+Selector for namespaces from which to sync Vault ACL Policy resources. Default is `platform` namespace.
 
 </div>
 </td>
@@ -448,12 +443,11 @@ Enables Vault CRDs reconciliation for DB connections
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
-        - qvantel
         - platform</code></pre>
 </td>
 			<td><div>
 
-Selector for namespaces from which to sync Vault DB connection resources. Default are `qvantel` and `platform` namespaces.
+Selector for namespaces from which to sync Vault DB connection resources. Default is `platform` namespace.
 
 </div>
 </td>
@@ -477,12 +471,11 @@ Enables Vault CRDs reconciliation for DB roles
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
-        - qvantel
         - platform</code></pre>
 </td>
 			<td><div>
 
-Selector for namespaces from which to sync Vault DB roles resources. Default are `qvantel` and `platform` namespaces.
+Selector for namespaces from which to sync Vault DB roles resources. Default is `platform` namespace.
 
 </div>
 </td>
@@ -535,12 +528,11 @@ Enables Vault CRDs reconciliation for KubernetesAuthRoles
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
     matchNames:
-        - qvantel
         - platform</code></pre>
 </td>
 			<td><div>
 
-Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default are `qvantel` and `platform` namespaces.
+Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default is `platform` namespace.
 
 </div>
 </td>

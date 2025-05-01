@@ -8,6 +8,10 @@ import base64
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.postgres . }}
 {{- $dbClusterName := . }}
 
+{{- if not (hasKey $dbCluster.cluster "vaultConfiguration") }}
+{{ $_ := set $dbCluster.cluster "vaultConfiguration" "${addon_operator['vaultPlatformEnabled']}" }}
+{{- end }}
+
 {{- if and $dbCluster.cluster $dbCluster.cluster.spec }}
 ---
 apiVersion: postgresql.cnpg.io/v1
@@ -123,6 +127,7 @@ spec:
   immediate: true
   target: {{ $dbCluster.cluster.spec.backup.target | default "prefer-standby" }}
 {{- end }}
+
 
 {{- if $dbCluster.cluster.vaultConfiguration }}
 ---

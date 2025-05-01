@@ -2,8 +2,11 @@
 {{- range keys .Values.cnpgPostgresPlatform.clusters  }}
 {{- $current := get $.Values.cnpgPostgresPlatform.clusters . }}
 {{- if $current.enabled }}
----
-  
+
+{{- if not (hasKey $current "vaultConfiguration") }}
+{{ $_ := set $current "vaultConfiguration" "${addon_operator['vaultPlatformEnabled']}" }}
+{{- end }}
+
 {{- if $current.vaultConfiguration }}
 ---
 apiVersion: platform-vault.qvantel.com/v1

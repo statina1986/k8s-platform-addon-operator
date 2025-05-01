@@ -375,7 +375,7 @@ Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - ever
 			<td style="width: 300px;">example-postgredb.cluster.vaultConfiguration</td>
 			<td>bool</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> false</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'</code></pre>
 </td>
 			<td><div>
 

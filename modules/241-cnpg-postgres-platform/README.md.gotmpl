@@ -1,0 +1,13 @@
+{{ template "chart.header" . }}
+
+This module is responsible for deployment of [CNPG Operator](https://cloudnative-pg.io/documentation/current/) and managed PostgresSQL clusters.
+
+Depends on modules:
+- [platform-core](/modules/101-platform-core/README.md) from which *platform* Service Account is used
+
+Provides:
+- CNPG Operator deployment
+- Configuration of postgres cluster CRDs (postgresql.cnpg.io/v1)
+
+
+{{ template "chart.valuesSectionHtml" . }}

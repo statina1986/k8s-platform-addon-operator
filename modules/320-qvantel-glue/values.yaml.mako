@@ -140,7 +140,7 @@ example-postgredb:
   # @section -- Examples-PostgreSQL
   cluster:
     # -- Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
-    # @default --  false
+    # @default --  by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
     # @section -- Examples-PostgreSQL
     vaultConfiguration: true
     # -- Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.

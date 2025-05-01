@@ -724,17 +724,13 @@
                   "type": "boolean"
                 },
                 "namespaceSelector": {
-                  "description": "Selector for namespaces from which to sync Vault ACL Policy resources. Default are `qvantel` and `platform` namespaces.",
+                  "description": "Selector for namespaces from which to sync Vault ACL Policy resources. Default is `platform` namespace.",
                   "properties": {
                     "nameSelector": {
                       "properties": {
                         "matchNames": {
                           "items": {
                             "anyOf": [
-                              {
-                                "required": [],
-                                "type": "string"
-                              },
                               {
                                 "required": [],
                                 "type": "string"
@@ -771,17 +767,13 @@
                   "type": "boolean"
                 },
                 "namespaceSelector": {
-                  "description": "Selector for namespaces from which to sync Vault DB connection resources. Default are `qvantel` and `platform` namespaces.",
+                  "description": "Selector for namespaces from which to sync Vault DB connection resources. Default is `platform` namespace.",
                   "properties": {
                     "nameSelector": {
                       "properties": {
                         "matchNames": {
                           "items": {
                             "anyOf": [
-                              {
-                                "required": [],
-                                "type": "string"
-                              },
                               {
                                 "required": [],
                                 "type": "string"
@@ -818,17 +810,13 @@
                   "type": "boolean"
                 },
                 "namespaceSelector": {
-                  "description": "Selector for namespaces from which to sync Vault DB roles resources. Default are `qvantel` and `platform` namespaces.",
+                  "description": "Selector for namespaces from which to sync Vault DB roles resources. Default is `platform` namespace.",
                   "properties": {
                     "nameSelector": {
                       "properties": {
                         "matchNames": {
                           "items": {
                             "anyOf": [
-                              {
-                                "required": [],
-                                "type": "string"
-                              },
                               {
                                 "required": [],
                                 "type": "string"
@@ -912,17 +900,13 @@
                   "type": "boolean"
                 },
                 "namespaceSelector": {
-                  "description": "Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default are `qvantel` and `platform` namespaces.",
+                  "description": "Selector for namespaces from which to sync Vault KubernetesAuthRole resources. Default is `platform` namespace.",
                   "properties": {
                     "nameSelector": {
                       "properties": {
                         "matchNames": {
                           "items": {
                             "anyOf": [
-                              {
-                                "required": [],
-                                "type": "string"
-                              },
                               {
                                 "required": [],
                                 "type": "string"

@@ -154,7 +154,7 @@ example-postgredb:
   # @section -- Examples-PostgreSQL
   enabled: true
   # -- Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
-  # @default --  false
+  # @default -- by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
   # @section -- Examples-PostgreSQL
   vaultConfiguration: true
   # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
