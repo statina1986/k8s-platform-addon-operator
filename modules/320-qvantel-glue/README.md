@@ -138,7 +138,6 @@ Common configurations for PostgreSQL databases
       {{- end }}
   resources:
     requests:
-      memory: 1Gi
       cpu: "0.1"
   storage:
     size: 10Gi
@@ -296,6 +295,8 @@ Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minu
 			<td>object</td>
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
+    additionalLabels: {}
+    annotations: {}
     scheduledBackup: 0 0 0 * * *
     spec:
         affinity:
@@ -359,6 +360,32 @@ Defines CNPG database cluster (kind: Cluster) to deploy.  If it is omitted, no c
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;">example-postgredb.cluster.additionalLabels</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Additional labels to be configured on cluster resource.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.cluster.annotations</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Annotations to be configured on cluster resource.
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;">example-postgredb.cluster.scheduledBackup</td>
 			<td>string</td>
 			<td>
@@ -367,6 +394,19 @@ Defines CNPG database cluster (kind: Cluster) to deploy.  If it is omitted, no c
 			<td><div>
 
 Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.cluster.spec</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference. Values configured in this spec are merged with default spec from 'qvantelGlue.dbs.common.postgres.defaultClusterSpec'.
 
 </div>
 </td>

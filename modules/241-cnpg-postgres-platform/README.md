@@ -105,7 +105,7 @@ Common configurations for PostgreSQL databases
   backup:
     retentionPolicy: "7d"
     barmanObjectStore:
-      destinationPath: {{ $.root.Values.qvantelGlue.dbs.common.postgres.s3Bucket }}
+      destinationPath: {{ $.root.Values.cnpgPostgresPlatform.common.s3Bucket }}
       s3Credentials:
       {{- if $.addonOperator.monitoringPlatformEnabled }}
         inheritFromIAMRole: true
@@ -139,7 +139,6 @@ Common configurations for PostgreSQL databases
       {{- end }}
   resources:
     requests:
-      memory: 1Gi
       cpu: "0.1"
   storage:
     size: 10Gi
@@ -211,7 +210,9 @@ Common s3 bucket to store WALs and Backups
 			<td style="width: 300px;">example-postgredb</td>
 			<td>object</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>enabled: true
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>additionalLabels: {}
+annotations: {}
+enabled: true
 scheduledBackup: 0 0 0 * * *
 spec:
     affinity:
@@ -235,6 +236,32 @@ vaultConfiguration: true</code></pre>
 			<td><div>
 
 This is example PostgreSQL cluster definition.  Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `cnpgPostgresPlatform.clusters`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.additionalLabels</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Additional labels to be configured on cluster resource.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.annotations</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Annotations to be configured on cluster resource.
 
 </div>
 </td>

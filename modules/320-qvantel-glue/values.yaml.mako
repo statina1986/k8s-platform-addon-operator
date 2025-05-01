@@ -84,7 +84,6 @@ qvantelGlue:
               {{- end }}
           resources:
             requests:
-              memory: 1Gi
               cpu: "0.1"
           storage:
             size: 10Gi
@@ -143,14 +142,22 @@ example-postgredb:
     # @default --  by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
     # @section -- Examples-PostgreSQL
     vaultConfiguration: true
-    # -- Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.
-    # Values configured in this spec are merged with default spec from 'qvantelGlue.dbs.common.postgres.defaultClusterSpec'.
-    # @default -- {}
-    # @section -- Examples-PostgreSQL
     # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
     # @default --  null
     # @section -- Examples-PostgreSQL
     scheduledBackup: "0 0 0 * * *" # every midnight
+    # -- Annotations to be configured on cluster resource.
+    # @default --  null
+    # @section -- Examples-PostgreSQL
+    annotations: {}
+    # -- Additional labels to be configured on cluster resource.
+    # @default --  null
+    # @section -- Examples-PostgreSQL
+    additionalLabels: {}
+    # -- Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.
+    # Values configured in this spec are merged with default spec from 'qvantelGlue.dbs.common.postgres.defaultClusterSpec'.
+    # @default -- {}
+    # @section -- Examples-PostgreSQL
     spec:
       affinity:
         topologyKey: topology.kubernetes.io/zone

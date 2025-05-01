@@ -70,7 +70,7 @@ cnpgPostgresPlatform:
       backup:
         retentionPolicy: "7d"
         barmanObjectStore:
-          destinationPath: {{ $.root.Values.qvantelGlue.dbs.common.postgres.s3Bucket }}
+          destinationPath: {{ $.root.Values.cnpgPostgresPlatform.common.s3Bucket }}
           s3Credentials:
           {{- if $.addonOperator.monitoringPlatformEnabled }}
             inheritFromIAMRole: true
@@ -104,7 +104,6 @@ cnpgPostgresPlatform:
           {{- end }}
       resources:
         requests:
-          memory: 1Gi
           cpu: "0.1"
       storage:
         size: 10Gi
@@ -161,6 +160,14 @@ example-postgredb:
   # @default --  null
   # @section -- Examples-PostgreSQL
   scheduledBackup: "0 0 0 * * *" # every midnight
+  # -- Annotations to be configured on cluster resource.
+  # @default --  null
+  # @section -- Examples-PostgreSQL
+  annotations: {}
+  # -- Additional labels to be configured on cluster resource.
+  # @default --  null
+  # @section -- Examples-PostgreSQL
+  additionalLabels: {}
   # -- Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.
   # Values configured in this spec are merged with default spec from 'cnpgPostgresPlatform.common.defaultClusterSpec'.
   # @default -- {}
