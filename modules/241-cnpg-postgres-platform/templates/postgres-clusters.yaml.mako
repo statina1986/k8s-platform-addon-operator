@@ -7,7 +7,11 @@ import base64
 {{- $root := . }}
 {{- range keys .Values.cnpgPostgresPlatform.clusters  }}
 {{- $current := get $.Values.cnpgPostgresPlatform.clusters . }}
-{{- if $current.enabled }}
+
+{{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
+{{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $current "root" $root "addonOperator" $addonoperator) | fromYaml }}
+{{- $current := merge $current ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict)) $defaultTemplate }}
+
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -24,11 +28,8 @@ metadata:
   {{- with $current.additionalLabels }}
     {{ toYaml . | nindent 4 }}
   {{- end }}
-spec:
-  {{- $spec := $current.spec | default (dict) | deepCopy }}
-  {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
-  {{- $defaultSpec := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterSpec (dict "cluster" $current "root" $root "addonOperator" $addonoperator) | fromYaml }}
-  {{- toYaml (merge $spec $defaultSpec)| nindent 2 }}
+spec:  
+  {{- toYaml $current.spec | nindent 2 }}
 
 ---
 apiVersion: batch/v1
@@ -103,6 +104,5 @@ spec:
   target: {{ $current.spec.backup.target | default "prefer-standby" }}
 {{- end }}
 
-{{- end }}
 {{- end }}
 {{- end }}

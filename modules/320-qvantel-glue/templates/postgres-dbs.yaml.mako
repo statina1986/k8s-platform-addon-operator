@@ -8,11 +8,14 @@ import base64
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.postgres . }}
 {{- $dbClusterName := . }}
 
-{{- if not (hasKey $dbCluster.cluster "vaultConfiguration") }}
-{{ $_ := set $dbCluster.cluster "vaultConfiguration" "${addon_operator['vaultPlatformEnabled']}" }}
-{{- end }}
+{{- if $dbCluster.cluster }}
 
-{{- if and $dbCluster.cluster $dbCluster.cluster.spec }}
+{{- $cluster := $dbCluster.cluster | default (dict) | deepCopy }}
+{{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
+{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $dbCluster.cluster "root" $root "addonOperator" $addonoperator) | fromYaml }}
+{{- $cluster := merge $cluster ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict)) $defaultTemplate }}
+{{- $_ := set $dbCluster "cluster" $cluster}}
+
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -29,11 +32,8 @@ metadata:
     {{- with $dbCluster.cluster.additionalLabels }}
       {{ toYaml . | nindent 4 }}
     {{- end }}
-spec:
-  {{- $spec := $dbCluster.cluster.spec | default (dict) | deepCopy }}
-  {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
-  {{- $defaultSpec := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterSpec (dict "cluster" $dbCluster.cluster "root" $root "addonOperator" $addonoperator) | fromYaml }}
-  {{- toYaml (merge $spec $defaultSpec)| nindent 2 }}
+spec:  
+  {{- toYaml $dbCluster.cluster.spec | nindent 2 }}
 
 ---
 apiVersion: v1
@@ -64,6 +64,7 @@ spec:
   schedule: "@midnight"
   jobTemplate:
     spec:
+      backoffLimit: 3
       template:
         spec:
           containers:
@@ -91,8 +92,7 @@ spec:
               PGPASSWORD=$POSTGRES_PASSWORD psql -U $POSTGRES_USER -h $POSTGRES_SERVICE -c \
                 "SELECT pg_wait_sampling_reset_profile(); SELECT pg_stat_statements_reset();"\
               && echo 'Postgresql stats cleanup completed.'
-          restartPolicy: OnFailure
-          backoffLimit: 3
+          restartPolicy: OnFailure          
   schedule: "@midnight"
 
 {{- if $root.Values.qvantelGlue.monitoringPlatformEnabled }}

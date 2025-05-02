@@ -19,102 +19,109 @@ qvantelGlue:
       # -- Common configurations for PostgreSQL databases
       # @default -- see child items docs
       postgres:
-        # -- (tpl/string) Default spec for CNPG clusters. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.
-        # This is templated field which is rendered for each cluster from 'dbs.postgres.<cluster>'. Scope for the template contains fields: 
+        # -- Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
+        # With this field you can configure common values for all CNPG clusters, e.g. backup location and schedule.
+        defaultCluster: {}
+        # -- (tpl/string) Default template for CNPG clusters. See `example-postgredb.cluster` for reference.
+        # This is templated field which is rendered for each cluster from `qvantelGlue.dbs.postgres`.
+        # With this field you can override default cluster template for complex cases and utilize helm templating in it.
+        # Scope for the template contains fields: 
         # \newline
         # * addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.
         # \newline
         # * root: root context of 'qvantel-glue' module, containing all Values for the module.
         # \newline
-        # * spec: content of 'spec' field for rendered cluster. It is possible to check if particular default values are overridden.                 
+        # * cluster: content of 'cluster' field for rendered cluster.
         # @notationType -- tpl
-        defaultClusterSpec: |
-          {{- if or (not $.spec) (not $.spec.imageName) }}
-          imageCatalogRef:
-            apiGroup: postgresql.cnpg.io
-            kind: ImageCatalog
-            name: qvantel-base-cnpg-images
-            major: 15
+        defaultClusterTemplate: |
+          {{- if $.addonOperator.vaultPlatformEnabled }}
+          vaultConfiguration: true
           {{- end }}
-          enableSuperuserAccess: true
-          {{- if eq $.root.Values.global.configurationProfile "dev" }}
-          instances: 1
-          {{- else }}
-          instances: 2
-          {{- end }}
-          affinity:
-            {{- if $.root.Values.global.multiZone.enabled }}
-            topologyKey: topology.kubernetes.io/zone
+          spec:
+            {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
+            imageCatalogRef:
+              apiGroup: postgresql.cnpg.io
+              kind: ImageCatalog
+              name: qvantel-base-cnpg-images
+              major: 15
             {{- end }}
-          {{- if ne $.root.Values.global.configurationProfile "dev" }}
-          backup:
-            retentionPolicy: "7d"
-            barmanObjectStore:
-              destinationPath: {{ $.root.Values.qvantelGlue.dbs.common.postgres.s3Bucket }}
-              s3Credentials:
-              {{- if $.addonOperator.monitoringPlatformEnabled }}
-                inheritFromIAMRole: true
+            enableSuperuserAccess: true
+            {{- if eq $.root.Values.global.configurationProfile "dev" }}
+            instances: 1
+            {{- else }}
+            instances: 2
+            {{- end }}
+            affinity:
+              {{- if $.root.Values.global.multiZone.enabled }}
+              topologyKey: topology.kubernetes.io/zone
               {{- end }}
-            wal:
-              compression: gzip
-              maxParallel: 8
-              encryption: AES256
-          {{- end }}
-          postgresql:
-            parameters:
-              auto_explain.log_min_duration: "500ms"
-              auto_explain.log_analyze: "on"
-              auto_explain.log_timing: "off"
-              max_connections: "500"      
-              random_page_cost: "1"
-              pg_stat_statements.max: "10000"
-              pg_stat_statements.track: "top"
-              pg_stat_statements.track_utility: "off"
-              pg_wait_sampling.profile_pid: "false"
-              track_io_timing: "on"
-              wal_compression: "pglz"
-            shared_preload_libraries:
-              - timescaledb
-              - pg_partman_bgw
-              - pg_wait_sampling
-              {{- if $.additionalSharedLibraries }}
-              {{- range $.additionalSharedLibraries }}
-              - {{ . }}
-              {{- end }}
-              {{- end }}
-          resources:
-            requests:
-              cpu: "0.1"
-          storage:
-            size: 10Gi
-          {{- if $.addonOperator.monitoringPlatformEnabled }}
-          monitoring:
-            podMonitorEnabled: true
-            customQueriesConfigMap:
-              - name: cnpg-queries-insights-metrics
-                key: custom-metrics-queries
-              {{- if $.additionalCustomQueriesConfigMaps }}
-              {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}
-              - name: {{ $k }}
-              {{ $v | toYaml | indent 2 }}
-              {{- end }}
-              {{- end }}
-          {{- end }}
-          {{- if or (not $.spec) (not $.spec.bootstrap) }}
-          bootstrap:
-            initdb:
-              postInitSQL:
-                - "CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;"
-                - "CREATE EXTENSION IF NOT EXISTS timescaledb;"
-          {{- end }}
-          {{- if $.root.Values.global.awsRole }}
-          serviceAccountTemplate:
-            metadata:
-              annotations:
-                eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}
-          {{- end }}
-        # -- Common s3 bucket to store WALs and Backups
-        s3Bucket: "s3://common-s3-bucket-for-postgresql"
+            {{- if ne $.root.Values.global.configurationProfile "dev" }}
+            backup:
+              retentionPolicy: "7d"
+              barmanObjectStore:
+                destinationPath: "s3://s3-bucket-for-postgresql"
+                s3Credentials:
+                {{- if $.addonOperator.monitoringPlatformEnabled }}
+                  inheritFromIAMRole: true
+                {{- end }}
+              wal:
+                compression: gzip
+                maxParallel: 8
+                encryption: AES256
+            {{- end }}
+            postgresql:
+              parameters:
+                auto_explain.log_min_duration: "500ms"
+                auto_explain.log_analyze: "on"
+                auto_explain.log_timing: "off"
+                max_connections: "500"      
+                random_page_cost: "1"
+                pg_stat_statements.max: "10000"
+                pg_stat_statements.track: "top"
+                pg_stat_statements.track_utility: "off"
+                pg_wait_sampling.profile_pid: "false"
+                track_io_timing: "on"
+                wal_compression: "pglz"
+              shared_preload_libraries:
+                - timescaledb
+                - pg_partman_bgw
+                - pg_wait_sampling
+                {{- if $.additionalSharedLibraries }}
+                {{- range $.additionalSharedLibraries }}
+                - {{ . }}
+                {{- end }}
+                {{- end }}
+            resources:
+              requests:
+                cpu: "0.1"
+            storage:
+              size: 10Gi
+            {{- if $.addonOperator.monitoringPlatformEnabled }}
+            monitoring:
+              podMonitorEnabled: true
+              customQueriesConfigMap:
+                - name: cnpg-queries-insights-metrics
+                  key: custom-metrics-queries
+                {{- if $.additionalCustomQueriesConfigMaps }}
+                {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}
+                - name: {{ $k }}
+                {{ $v | toYaml | indent 2 }}
+                {{- end }}
+                {{- end }}
+            {{- end }}
+            {{- if or (not $.cluster.spec) (not $.cluster.spec.bootstrap) }}
+            bootstrap:
+              initdb:
+                postInitSQL:
+                  - "CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;"
+                  - "CREATE EXTENSION IF NOT EXISTS timescaledb;"
+            {{- end }}
+            {{- if $.root.Values.global.awsRole }}
+            serviceAccountTemplate:
+              metadata:
+                annotations:
+                  eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}
+            {{- end }}
 
     # -- PostgreSQL databases configuration. This is a map where each key corresponds to the PostgreSQL cluster 
     # and associated configuration like dbs, roles and extensions.
@@ -128,13 +135,15 @@ qvantelGlue:
     cassandra: {}
 
 # -- This is example PostgreSQL glue definition. 
+# In this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.
 # Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`
 # @section -- Examples-PostgreSQL
 example-postgredb:
   # -- Defines CNPG database cluster (kind: Cluster) to deploy. 
   # If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.
-  # Cluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module.
-  # In this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.
+  # Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`.
+  # Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
+  # Cluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module. 
   # @default -- null
   # @section -- Examples-PostgreSQL
   cluster:
@@ -154,8 +163,7 @@ example-postgredb:
     # @default --  null
     # @section -- Examples-PostgreSQL
     additionalLabels: {}
-    # -- Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.
-    # Values configured in this spec are merged with default spec from 'qvantelGlue.dbs.common.postgres.defaultClusterSpec'.
+    # -- Configure CNPG cluster details. See https://cloudnative-pg.io/documentation/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-ClusterSpec for API reference.    
     # @default -- {}
     # @section -- Examples-PostgreSQL
     spec:
