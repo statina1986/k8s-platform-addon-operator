@@ -149,7 +149,6 @@ cnpgPostgresPlatform:
   clusters:
     qvt-postgredb:
       scheduledBackup: "0 0 0 * * *" # every midnight
-      vaultConfiguration: false
         
 # -- This is example PostgreSQL cluster definition. 
 # Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `cnpgPostgresPlatform.clusters`
