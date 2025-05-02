@@ -10,9 +10,10 @@ import base64
 
 {{- if ne $current nil }}
 
+{{- $cluster := deepCopy $current }}
 {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
 {{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $current "root" $root "addonOperator" $addonoperator) | fromYaml }}
-{{- $current := merge $current ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict)) $defaultTemplate }}
+{{- $current := mergeOverwrite $defaultTemplate ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict)) $cluster }}
 
 ---
 apiVersion: postgresql.cnpg.io/v1
@@ -104,6 +105,60 @@ spec:
     name: {{ . }}
   immediate: true
   target: {{ $current.spec.backup.target | default "prefer-standby" }}
+{{- end }}
+
+{{- if $current.vaultConfiguration }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: admin-role-{{ . }}
+spec:
+  db-name: {{ . }}
+  creation-statements: >-
+    {{ printf "CREATE USER \"{{name}}\" SUPERUSER PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readonly-role-{{ . }}
+spec:
+  db-name: {{ . }}
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data TO \"{{name}}\"" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readwrite-role-{{ . }}
+spec:
+  db-name: {{ . }}
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data, pg_write_all_data TO \"{{name}}\"" }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ . }}
+spec:
+  connection-name: {{ . }}
+  plugin-name: postgresql-database-plugin
+  allowed-roles: '*'
+  computed-values:
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','username')
+    name: secret-username
+  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','password')
+    name: secret-password
+  db-url: >-
+    {{ printf "postgresql://{{username}}:{{password}}@%s.%s.svc:5432/postgres" . $.Release.Namespace }}
+  db-username: '{secret-username}'
+  db-password: '{secret-password}'
+
 {{- end }}
 
 {{- end }}

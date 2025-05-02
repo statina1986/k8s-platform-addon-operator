@@ -34,7 +34,7 @@ qvantelGlue:
         # * cluster: content of 'cluster' field for rendered cluster.
         # @notationType -- tpl
         defaultClusterTemplate: |
-          {{- if $.addonOperator.vaultPlatformEnabled }}
+          {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
           vaultConfiguration: true
           {{- end }}
           spec:
