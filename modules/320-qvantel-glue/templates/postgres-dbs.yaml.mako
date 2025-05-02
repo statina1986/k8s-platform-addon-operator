@@ -8,7 +8,7 @@ import base64
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.postgres . }}
 {{- $dbClusterName := . }}
 
-{{- if $dbCluster.cluster }}
+{{- if ne $dbCluster.cluster nil }}
 
 {{- $cluster := $dbCluster.cluster | default (dict) | deepCopy }}
 {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
