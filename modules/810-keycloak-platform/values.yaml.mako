@@ -10,7 +10,10 @@ keycloakPlatform:
     # because of this, keycloak integration is not enabled by default.
     discovery_url: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth/realms/qvantel
     vault_url: https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/ui/vault/auth/oidc/oidc/callback
-    oidc_discovery_ca_pem: false
+    oidcCertDiscovery:
+      enabled: false
+      oidcDiscoverySecretName: "name-of-secret-with-ca"
+      oidcDiscoverySecretKey: "key-for-ca-cert-in-secret"
     policies:
       policyreadonly: |
         path "secret/*" {

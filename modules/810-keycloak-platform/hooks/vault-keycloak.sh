@@ -5,7 +5,7 @@
 # name both inside the k8s cluster and outside the cluster (with a web browser).
 # by default, keycloak is auth-domain-name.qvantel.systems and if that works inside the cluster,
 # that's okay. Again by default, that keycloak should have a certificate from a commonly trusted CA.
-# if the cert for keycloak is not from a commonly trusted CA, it needs to be added in configuration.
+# if the cert for keycloak is not from a commonly trusted CA, it needs to be read from cluster secrets with the provided name.
 
 source "${0%/*}/../../../common/shell/functions.sh"
 source "${0%/*}/../../../common/shell/variables.sh"
@@ -25,17 +25,22 @@ hook::trigger() {
   token="$(vault::get_vault_token)"
 
   discovery_url="$(common::get_values_value '.keycloakPlatform.vaultIntegration.discovery_url')"
-  cacert="$(jq .keycloakPlatform.vaultIntegration.oidc_discovery_ca_pem < $VALUES_PATH)"
-  if [ "$cacert" == 'false' ]
+  oidc_enabled="$(common::get_values_value '.keycloakPlatform.vaultIntegration.oidcCertDiscovery.enabled')"
+  oidc_discovery_secret_name="$(common::get_values_value '.keycloakPlatform.vaultIntegration.oidcCertDiscovery.oidcDiscoverySecretName')"
+  oidc_discovery_secret_key="$(common::get_values_value '.keycloakPlatform.vaultIntegration.oidcCertDiscovery.oidcDiscoverySecretKey')"
+  
+  if [ "$oidc_enabled" == 'false' ]
   then
-    qlog "oidc_discovery_ca_pem was not defined"
-    vaultcaopt=""
+    qlog "OIDC cert discovery is not enabled, continuing..."
     curlcaopt=""
+    vaultcaopt=""
   else
-    qlog "oidc_discovery_ca_pem defined, using custom ca cert"
-    vaultcaopt=",\"oidc_discovery_ca_pem\":$cacert"
+    qlog "OIDC cert discovery enabled, adding CA cert from $oidc_discovery_secret_name to commands"
+    cacert="$(kubectl::get_secret_opaque_kv $oidc_discovery_secret_name $oidc_discovery_secret_key $VAULT_SECRET_NAMESPACE)" ## multiline CA cert, used to contact keycloak
+    single_line_cert="$(echo "$cacert" | sed ':a;N;$!ba;s/\n/\\n/g')" ## singleline CA cert, needs to be in this form for the oidc config futher down
+    vaultcaopt=",\"oidc_discovery_ca_pem\":\"$single_line_cert\""
     FILE=`mktemp`
-    jq -r .keycloakPlatform.vaultIntegration.oidc_discovery_ca_pem < $VALUES_PATH > $FILE
+    echo "$cacert" > $FILE
     curlcaopt="--cacert $FILE"
   fi
   # ensure we can contact keycloak and there is some good url. It's different than vault contacting keycloak though.
@@ -58,7 +63,7 @@ hook::trigger() {
   done
 
   qlog "configure oidc"
-  secret="$(kubectl::get_secret_opaque_kv vault-client-secret VAULT_CLIENT_SECRET platform)"
+  secret="$(kubectl::get_secret_opaque_kv vault-client-secret VAULT_CLIENT_SECRET $VAULT_SECRET_NAMESPACE)"
   curl::put_data '{"default_role":"default","oidc_client_id":"vault","oidc_client_secret":"'$secret'","oidc_discovery_url":"'$discovery_url'"'"$vaultcaopt"'}' \
       "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/auth/oidc/config'" 204
 
