@@ -37,7 +37,7 @@ hook::trigger() {
   else
     qlog "OIDC cert discovery enabled, adding CA cert from $oidc_discovery_secret_name to commands"
     cacert="$(kubectl::get_secret_opaque_kv $oidc_discovery_secret_name $oidc_discovery_secret_key $VAULT_SECRET_NAMESPACE)" ## multiline CA cert, used to contact keycloak
-    single_line_cert="$(echo "$cacert" | sed ':a;N;$!ba;s/\n/\\n/g')" ## singleline CA cert, needs to be in this form for the oidc config futher down
+    single_line_cert="$(echo "$cacert" | sed ':a;N;$!ba;s/\n/\\n/g')" ## singleline CA cert, used sed to replace newlines with literal string \n. Needs to be in this JSON parseable form for the oidc config further down as it can't handle multiline cert.
     vaultcaopt=",\"oidc_discovery_ca_pem\":\"$single_line_cert\""
     FILE=`mktemp`
     echo "$cacert" > $FILE
