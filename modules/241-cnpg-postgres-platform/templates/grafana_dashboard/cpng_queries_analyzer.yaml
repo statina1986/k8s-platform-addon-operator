@@ -30,9 +30,112 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 365,
+      "id": 860,
       "links": [],
       "panels": [
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 6,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Max",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "expr": "rate(cnpg_pg_stat_statements_calls{datname=~\"$datname\", pod=~\"$instances\", queryid=~\"$queryid\"}[$__rate_interval])",
+              "instant": false,
+              "legendFormat": "{{ "{{queryid}} - {{pod}} - {{query}}" }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Queries Request Rate",
+          "type": "timeseries"
+        },
         {
           "datasource": {
             "default": true,
@@ -99,7 +202,7 @@ data:
             "h": 11,
             "w": 24,
             "x": 0,
-            "y": 0
+            "y": 7
           },
           "id": 5,
           "options": {
@@ -112,7 +215,7 @@ data:
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Max",
+              "sortBy": "Mean",
               "sortDesc": true
             },
             "tooltip": {
@@ -128,7 +231,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "(sort_desc(topk(20,\n$MinLatency < (rate(cnpg_pg_stat_statements_total_exec_time{datname=~\"$datname\", pod=~\"$instances\"}[2m])\n/\nrate(cnpg_pg_stat_statements_calls{datname=~\"$datname\", pod=~\"$instances\"}[2m])\n) < $MaxLatency\n)))",
+              "expr": "(sort_desc(topk(20,\n$MinLatency < (rate(cnpg_pg_stat_statements_total_exec_time{datname=~\"$datname\", pod=~\"$instances\", queryid=~\"$queryid\"}[2m])\n/\nrate(cnpg_pg_stat_statements_calls{datname=~\"$datname\", pod=~\"$instances\", queryid=~\"$queryid\"}[2m])\n) < $MaxLatency\n)))",
               "instant": false,
               "legendFormat": "{{ "{{queryid}} - {{pod}} - {{query}}" }}",
               "range": true,
@@ -204,7 +307,7 @@ data:
             "h": 14,
             "w": 24,
             "x": 0,
-            "y": 11
+            "y": 18
           },
           "id": 1,
           "options": {
@@ -435,34 +538,6 @@ data:
           {
             "current": {
               "selected": false,
-              "text": "All",
-              "value": "$__all"
-            },
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
-            "definition": "label_values(cnpg_wait_event_profile_wait_event_count{queryid=~\"$queryid\"},query)",
-            "hide": 0,
-            "includeAll": true,
-            "label": "query",
-            "multi": false,
-            "name": "query",
-            "options": [],
-            "query": {
-              "qryType": 1,
-              "query": "label_values(cnpg_wait_event_profile_wait_event_count{queryid=~\"$queryid\"},query)",
-              "refId": "PrometheusVariableQueryEditor-VariableQuery"
-            },
-            "refresh": 1,
-            "regex": "",
-            "skipUrlSync": false,
-            "sort": 0,
-            "type": "query"
-          },
-          {
-            "current": {
-              "selected": false,
               "text": "0",
               "value": "0"
             },
@@ -510,6 +585,6 @@ data:
       "timezone": "browser",
       "title": "CNPG Query Analyzer",
       "uid": "behhxrxo4jzswb",
-      "version": 41,
+      "version": 4,
       "weekStart": ""
     }
