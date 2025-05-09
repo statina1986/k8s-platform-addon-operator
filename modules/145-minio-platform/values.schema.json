@@ -1,0 +1,349 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "minioPlatform": {
+      "properties": {
+        "minio": {
+          "properties": {
+            "buckets": {
+              "description": "List of buckets to be created after MinIO install",
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "cassandra-backup",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "loki-logs",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "postgres-backup",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "mariadb-backup",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "buckets",
+              "type": "array"
+            },
+            "drivesPerNode": {
+              "default": 1,
+              "description": "Number of drives attached to a node",
+              "required": [],
+              "title": "drivesPerNode",
+              "type": "integer"
+            },
+            "environment": {
+              "description": "Environment variables to add to the MinIO pods",
+              "properties": {
+                "MINIO_PROMETHEUS_URL": {
+                  "default": "http://monitoring-platform-prometheus.platform.svc.cluster.local:9090",
+                  "description": "Enables advanced metrics in MinIO Console if monitoring-platform module is enabled",
+                  "required": [],
+                  "title": "MINIO_PROMETHEUS_URL",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "environment",
+              "type": "object"
+            },
+            "existingSecret": {
+              "default": "platform-minio-root",
+              "description": "Use existing Secret for root user",
+              "required": [],
+              "title": "existingSecret",
+              "type": "string"
+            },
+            "ignoreChartChecksums": {
+              "default": true,
+              "description": "Ignore changing config checksums, to avoid unnecessary restarts",
+              "required": [],
+              "title": "ignoreChartChecksums",
+              "type": "boolean"
+            },
+            "image": {
+              "description": "MinIO image version",
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/minio/minio",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "RELEASE.2024-12-18T13-15-44Z",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "mcImage": {
+              "description": "MinIO console image version",
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/minio/mc",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "RELEASE.2024-11-21T17-21-54Z",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "mcImage",
+              "type": "object"
+            },
+            "minioAPIPort": {
+              "default": "9000",
+              "required": [],
+              "title": "minioAPIPort",
+              "type": "string"
+            },
+            "minioConsolePort": {
+              "default": "9001",
+              "required": [],
+              "title": "minioConsolePort",
+              "type": "string"
+            },
+            "mode": {
+              "default": "distributed",
+              "description": "MinIO mode, i.e. standalone or distributed",
+              "required": [],
+              "title": "mode",
+              "type": "string"
+            },
+            "persistence": {
+              "description": "MinIO persistent volumes configuration",
+              "properties": {
+                "accessMode": {
+                  "default": "ReadWriteOnce",
+                  "required": [],
+                  "title": "accessMode",
+                  "type": "string"
+                },
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "size": {
+                  "default": "30Gi",
+                  "required": [],
+                  "title": "size",
+                  "type": "string"
+                },
+                "storageClass": {
+                  "default": "",
+                  "required": [],
+                  "title": "storageClass",
+                  "type": "string"
+                },
+                "volumeName": {
+                  "default": "",
+                  "required": [],
+                  "title": "volumeName",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "persistence",
+              "type": "object"
+            },
+            "pools": {
+              "default": 1,
+              "description": "Number of expanded MinIO clusters",
+              "required": [],
+              "title": "pools",
+              "type": "integer"
+            },
+            "replicas": {
+              "default": 3,
+              "description": "Number of MinIO containers to deploy",
+              "required": [],
+              "title": "replicas",
+              "type": "integer"
+            },
+            "resources": {
+              "description": "Resource settings for MinIO pods",
+              "properties": {
+                "requests": {
+                  "properties": {
+                    "memory": {
+                      "default": "1Gi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "requests",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "resources",
+              "type": "object"
+            },
+            "securityContext": {
+              "description": "Enable stateful containers to have security context",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "securityContext",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            },
+            "users": {
+              "description": "List of users and their credentials to be created after MinIO install",
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "accessKey": {
+                        "default": "platform-minio-readwrite",
+                        "required": [],
+                        "title": "accessKey",
+                        "type": "string"
+                      },
+                      "existingSecret": {
+                        "default": "platform-minio-readwrite",
+                        "required": [],
+                        "title": "existingSecret",
+                        "type": "string"
+                      },
+                      "existingSecretKey": {
+                        "default": "readwritePassword",
+                        "required": [],
+                        "title": "existingSecretKey",
+                        "type": "string"
+                      },
+                      "policy": {
+                        "default": "readwrite",
+                        "required": [],
+                        "title": "policy",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "users",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "minio",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "minioPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
