@@ -155,6 +155,15 @@ kafkaPlatform:
           % else:
           replicas: 3
           % endif
+          % if values['global']['configurationProfile'] in {'dev'}:
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: "0.5"
+              memory: 512Mi
+          % endif
           
           config:
             auto.create.topics.enable: "true"
@@ -258,6 +267,15 @@ kafkaPlatform:
           replicas: 1
           % else:
           replicas: 3
+          % endif
+          % if values['global']['configurationProfile'] in {'dev'}:
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1.5Gi
+            requests:
+              cpu: "0.5"
+              memory: 1Gi
           % endif
           readinessProbe:
             initialDelaySeconds: 15

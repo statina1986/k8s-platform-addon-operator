@@ -88,7 +88,7 @@ kasopePlatform:
                   % if values['global']['configurationProfile'] in {'dev'}: 
                   storage: 10Gi
                   % else:
-                  storage: 100Gi
+                  storage: 20Gi
                   % endif
           % if values['global']['configurationProfile'] in {'dev'}: 
           resources:
@@ -120,6 +120,16 @@ kasopePlatform:
               % else:
               size: 3
               % endif
+              # Universal limits for init containers
+              initContainers:
+              - name: server-config-init
+                resources:
+                  limits:
+                    cpu: '0.5'
+                    memory: 384M
+                  requests:
+                    cpu: '0.1'
+                    memory: 256M
               % if 'containerRegistryBase' in values['global']:              
               perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
               % else:
