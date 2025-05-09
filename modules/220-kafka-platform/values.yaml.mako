@@ -163,6 +163,14 @@ kafkaPlatform:
             requests:
               cpu: "0.5"
               memory: 512Mi
+          % elif values['global']['configurationProfile'] in {'test'}:
+          resources:
+            limits:
+              cpu: "1"
+              memory: 4Gi
+            requests:
+              cpu: "0.5"
+              memory: 2Gi
           % endif
           
           config:
@@ -276,7 +284,16 @@ kafkaPlatform:
             requests:
               cpu: "0.5"
               memory: 1Gi
+          % elif values['global']['configurationProfile'] in {'test'}:
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: "0.5"
+              memory: 1.5Gi
           % endif
+          
           readinessProbe:
             initialDelaySeconds: 15
             timeoutSeconds: 5
