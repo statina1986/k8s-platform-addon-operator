@@ -10,9 +10,9 @@
     "minioPlatform": {
       "properties": {
         "minio": {
+          "description": "Configuration for underlying minio helm-chart. See https://github.com/minio/minio/tree/master/helm/minio#configuration",
           "properties": {
             "buckets": {
-              "description": "List of buckets to be created after MinIO install",
               "items": {
                 "anyOf": [
                   {
@@ -72,7 +72,6 @@
             },
             "drivesPerNode": {
               "default": 1,
-              "description": "Number of drives attached to a node",
               "required": [],
               "title": "drivesPerNode",
               "type": "integer"
@@ -94,20 +93,17 @@
             },
             "existingSecret": {
               "default": "platform-minio-root",
-              "description": "Use existing Secret for root user",
               "required": [],
               "title": "existingSecret",
               "type": "string"
             },
             "ignoreChartChecksums": {
               "default": true,
-              "description": "Ignore changing config checksums, to avoid unnecessary restarts",
               "required": [],
               "title": "ignoreChartChecksums",
               "type": "boolean"
             },
             "image": {
-              "description": "MinIO image version",
               "properties": {
                 "repository": {
                   "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/minio/minio",
@@ -127,7 +123,6 @@
               "type": "object"
             },
             "mcImage": {
-              "description": "MinIO console image version",
               "properties": {
                 "repository": {
                   "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/minio/mc",
@@ -160,13 +155,11 @@
             },
             "mode": {
               "default": "distributed",
-              "description": "MinIO mode, i.e. standalone or distributed",
               "required": [],
               "title": "mode",
               "type": "string"
             },
             "persistence": {
-              "description": "MinIO persistent volumes configuration",
               "properties": {
                 "accessMode": {
                   "default": "ReadWriteOnce",
@@ -205,20 +198,17 @@
             },
             "pools": {
               "default": 1,
-              "description": "Number of expanded MinIO clusters",
               "required": [],
               "title": "pools",
               "type": "integer"
             },
             "replicas": {
               "default": 3,
-              "description": "Number of MinIO containers to deploy",
               "required": [],
               "title": "replicas",
               "type": "integer"
             },
             "resources": {
-              "description": "Resource settings for MinIO pods",
               "properties": {
                 "requests": {
                   "properties": {
@@ -239,7 +229,6 @@
               "type": "object"
             },
             "securityContext": {
-              "description": "Enable stateful containers to have security context",
               "properties": {
                 "enabled": {
                   "default": false,
@@ -293,7 +282,6 @@
               "type": "array"
             },
             "users": {
-              "description": "List of users and their credentials to be created after MinIO install",
               "items": {
                 "anyOf": [
                   {
