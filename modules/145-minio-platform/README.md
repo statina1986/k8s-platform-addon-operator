@@ -92,19 +92,6 @@ Configuration for underlying minio helm-chart. See https://github.com/minio/mini
 </td>
 		</tr>
 		<tr>
-			<td style="width: 300px;" id="minioPlatform--minio--environment">minioPlatform.minio.environment</td>
-			<td>object</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see child items docs</code></pre>
-</td>
-			<td><div>
-
-Environment variables to add to the MinIO pods
-
-</div>
-</td>
-		</tr>
-		<tr>
 			<td style="width: 300px;" id="minioPlatform--minio--environment--MINIO_PROMETHEUS_URL">minioPlatform.minio.environment.MINIO_PROMETHEUS_URL</td>
 			<td>string</td>
 			<td>

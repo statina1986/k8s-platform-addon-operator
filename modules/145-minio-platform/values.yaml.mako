@@ -79,8 +79,6 @@ minioPlatform:
       - name: postgres-backup
       - name: mariadb-backup
 
-    # -- Environment variables to add to the MinIO pods
-    # @default -- see child items docs
     environment:
       # -- Enables advanced metrics in MinIO Console if monitoring-platform module is enabled
       % if addon_operator['monitoringPlatformEnabled'] == 'true':
