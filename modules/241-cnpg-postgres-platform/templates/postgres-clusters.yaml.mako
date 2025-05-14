@@ -13,7 +13,7 @@ import base64
 {{- $cluster := deepCopy $current }}
 {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
 {{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $current "root" $root "addonOperator" $addonoperator) | fromYaml }}
-{{- $current := mergeOverwrite $defaultTemplate ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict)) $cluster }}
+{{- $current := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict) | deepCopy) $cluster }}
 
 ---
 apiVersion: postgresql.cnpg.io/v1

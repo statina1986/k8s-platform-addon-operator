@@ -13,7 +13,7 @@ import base64
 {{- $cluster := $dbCluster.cluster | default (dict) | deepCopy }}
 {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $dbCluster.cluster "root" $root "addonOperator" $addonoperator) | fromYaml }}
-{{- $cluster := mergeOverwrite $defaultTemplate ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict)) $cluster }}
+{{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) $cluster }}
 {{- $_ := set $dbCluster "cluster" $cluster}}
 
 ---
