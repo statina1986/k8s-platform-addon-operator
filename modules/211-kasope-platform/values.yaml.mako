@@ -1,9 +1,17 @@
 kasopePlatform:
   # -- Configuration for underlying k8ssandra helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/k8ssandra
   k8ssandra-operator:
+    % if values['global']['deployOperators'] == "false":
+    enabled: false
+    % else:
     enabled: true
+    % endif
     global:
+      % if values['global']['clusterwideResources'] == "false":
       clusterScoped: false
+      % else:
+      clusterScoped: true
+      % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}

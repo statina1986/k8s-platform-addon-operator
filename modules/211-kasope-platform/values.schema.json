@@ -801,7 +801,7 @@
             "global": {
               "properties": {
                 "clusterScoped": {
-                  "default": false,
+                  "default": true,
                   "required": [],
                   "title": "clusterScoped",
                   "type": "boolean"

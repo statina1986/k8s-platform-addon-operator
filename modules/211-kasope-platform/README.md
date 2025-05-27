@@ -160,7 +160,7 @@ client:
 disableCrdUpgraderJob: true
 enabled: true
 global:
-    clusterScoped: false
+    clusterScoped: true
 image:
     registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
 serviceAccount:
