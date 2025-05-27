@@ -1,16 +1,9 @@
 kasopePlatform:
+  # -- Configuration for underlying k8ssandra helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/k8ssandra
   k8ssandra-operator:
-    % if values['global']['deployOperators'] == "false":
-    enabled: false
-    % else:
     enabled: true
-    % endif
     global:
-      % if values['global']['clusterwideResources'] == "false":
       clusterScoped: false
-      % else:
-      clusterScoped: true
-      % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -29,6 +22,7 @@ kasopePlatform:
     serviceAccount:
       create: false
       name: "platform"
+    # -- Configuration for underlying cass-operator helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/cass-operator
     cass-operator:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -51,11 +45,14 @@ kasopePlatform:
         create: false
         name: "platform"
     disableCrdUpgraderJob: true
+  # -- If true, will create DbConnection and DbRoles. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/cassandra-vault.yaml
   vaultConfiguration: true
+  # -- Name of the cassandra cluster used as a backend for main-cassandra-service. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/main-service.yaml
   mainCassandraCluster: "cluster"
   clusters:
     cluster:
-      enabled: true    
+      enabled: true
+      # -- Cassandra cluster spec section
       spec:
         cassandra:
           serviceAccount: platform
