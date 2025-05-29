@@ -48,6 +48,7 @@ Configured profiles:
     - name: mariadb-backup
 drivesPerNode: 1
 environment:
+    MINIO_BROWSER_LOGIN_ANIMATION: "off"
     MINIO_PROMETHEUS_URL: http://monitoring-platform-prometheus.platform.svc.cluster.local:9090
 existingSecret: platform-minio-root
 ignoreChartChecksums: true
@@ -87,6 +88,19 @@ users:
 			<td><div>
 
 Configuration for underlying minio helm-chart. See https://github.com/minio/minio/tree/master/helm/minio#configuration
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="minioPlatform--minio--environment--MINIO_BROWSER_LOGIN_ANIMATION">minioPlatform.minio.environment.MINIO_BROWSER_LOGIN_ANIMATION</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>"off"</code></pre>
+</td>
+			<td><div>
+
+Disables login animation, which breaks login page with kubectl port forwarding ( https://github.com/minio/minio/pull/17123 )
 
 </div>
 </td>

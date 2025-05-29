@@ -84,3 +84,5 @@ minioPlatform:
       % if addon_operator['monitoringPlatformEnabled'] == 'true':
       MINIO_PROMETHEUS_URL: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local:9090"
       % endif
+      # -- Disables login animation, which breaks login page with kubectl port forwarding ( https://github.com/minio/minio/pull/17123 )
+      MINIO_BROWSER_LOGIN_ANIMATION: 'off'
