@@ -47,7 +47,7 @@ spec:
         spec:
           containers:
           - name: db-tools
-            image: platform.artifactory.qvantel.net/platform/platform-db-tools:1.3.0_202504201254_master_e95ea903
+            image: ${values['global']['containerRegistryBase']}/platform/platform-db-tools:1.3.0_202504201254_master_e95ea903
             imagePullPolicy: IfNotPresent
             env:
               - name: POSTGRES_USER
