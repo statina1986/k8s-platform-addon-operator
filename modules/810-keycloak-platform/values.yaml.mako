@@ -246,6 +246,9 @@ keycloakPlatform:
     memory: 1G
     cpu: 100m
     % endif
+    # base64 encoded string, create with base64 -w0. default is dummy value that is to be overriden in values file
+    # it is taken in use in keycloak with environment variables and not in use by default
+    trustStoreContent: YWJjCg==
     spec:
       progressDeadlineSeconds: 600
       replicas: 1
