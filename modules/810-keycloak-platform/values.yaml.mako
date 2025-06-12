@@ -52,6 +52,10 @@ keycloakPlatform:
           capabilities = ["read", "list", "create", "update", "delete", "sudo"]
         }
 
+        path "secret/*" {
+          capabilities = ["read", "list", "create", "update", "delete", "sudo"]
+        }
+
     groups:
       groupreadonly:
         policies:
