@@ -68,7 +68,7 @@ hook::trigger() {
       "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/auth/oidc/config'" 204
 
   qlog "configure oidc default role"
-  curl::put_data '{"allowed_redirect_uris":"http://localhost:8250/oidc/callback,'"$(common::get_values_value '.keycloakPlatform.vaultIntegration.vault_url')"'","groups_claim":"/realm_access/roles","oidc_scopes":"email","policies":"default","ttl":"1h","user_claim":"preferred_username"}' \
+  curl::put_data '{"allowed_redirect_uris":"http://localhost:8250/oidc/callback,'"$(common::get_values_value '.keycloakPlatform.vaultIntegration.vault_url')"'","groups_claim":"/realm_access/roles","oidc_scopes":"email","policies":"default","ttl":"8h","user_claim":"preferred_username"}' \
       "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/auth/oidc/role/default'" 204
 
   qlog "list groups"
