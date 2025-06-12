@@ -65,6 +65,14 @@ modulesConfig:
   kyvernoPlatformEnabled: "false"
   logsearchPlatformEnabled: "false"
   lokiPlatformEnabled: "false"
+  lokiPlatform:
+    loki:
+      objectStorageSecret:
+        create: false
+        secretName: "platform-minio-readwrite"
+        userName: "platform-minio-readwrite"
+        userKey: "readwriteUser"
+        secretKey: "readwritePassword"
   keycloakPlatformEnabled: "false"
   mariadbPlatformEnabled: "false"
   mariadbOperatorPlatformEnabled: "false"
