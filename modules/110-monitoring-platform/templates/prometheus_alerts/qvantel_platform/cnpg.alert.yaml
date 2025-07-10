@@ -128,10 +128,10 @@ spec:
       expr: '100 * sum by (pod) (cnpg_backends_total) / sum by (pod) (cnpg_pg_settings_setting{name="max_connections"}) > 75'
       for: 5m
       labels:
-        severity: "Create a ticket for SQL to be checked during business hours"
+        severity: warning
       annotations:
         brief: "Connections in {{` {{ $labels.pod }} `}} are over {{` {{ $value }} `}} percentage."
-        procedure: "TBD"
+        procedure: "Create a ticket for SQL to be checked during business hours"
     - alert: PostgreSQLConnectionsCritical
       expr: '100 * sum by (pod) (cnpg_backends_total) / sum by (pod) (cnpg_pg_settings_setting{name="max_connections"}) > 90'
       for: 5m
