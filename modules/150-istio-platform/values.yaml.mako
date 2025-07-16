@@ -1,10 +1,11 @@
 # istioPlatformNamespace: istio-system
 istioPlatform:
+  % if 'containerRegistryBase' in values['global']:
   global:
-    proxy:
-      % if 'containerRegistryBase' in values['global']:
+    proxy:      
       image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.23.2
-      % endif
+  % endif
+  
   base:
     global:
       istioNamespace: ${values['global']['platformNamespace']}

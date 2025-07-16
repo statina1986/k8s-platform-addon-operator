@@ -52,7 +52,7 @@ metadata:
 spec:
   db-name: cassandra
   creation-statements: >-
-    {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}}; GRANT EXECUTE ON ALL KEYSPACES TO {{username}};" }}
+    {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}};" }}
 
 {{- end }}
 {{- end }}
