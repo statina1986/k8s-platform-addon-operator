@@ -7,6 +7,29 @@ rabbitmqPlatform:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
       % endif
+    # More relaxed readiness probe to prevent a deadlock when restarting after an abrupt stop.
+    # This is because rabbitmq tries to sync with its peers before becoming fully functional,
+    # while Kubernetes OrderedReady policy only starts the next pod once first one is considered
+    # ready.
+    #
+    # Documentation suggests running the Parallel pod management policy, but it is only feasible
+    # for existing clusters - new deployments need to be ran with OrderedReady to add new cluster
+    # members one by one. In addition adjusting podManagementPolicy is not allowed on the fly,
+    # forcing recreating the sateful set.
+    #
+    # However, since liveness probe defaults to curling /api/health/checks/virtual-hosts,
+    # a relaxed readiness probe shouldn't lead to false positives concerning pod health.
+    #
+    # https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes
+    # https://github.com/bitnami/charts/blob/main/bitnami/rabbitmq/values.yaml#L684-L695
+    # https://stackoverflow.com/questions/60407082/rabbit-mq-error-while-waiting-for-mnesia-tables/78439528#78439528
+    customReadinessProbe:
+      exec:
+        command:
+          - sh
+          - -ec
+          - rabbitmq-diagnostics -q ping
+      timeoutSeconds: 10
     auth:
       username: user
       securePassword: true
