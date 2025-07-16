@@ -205,6 +205,9 @@ keycloakPlatform:
               redirect_uris:
                 - http://localhost:8250/oidc/callback
                 - https://vault-ui${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/*
+          config:
+            # when k8s cluster uses 100.* addresses which keycloak considers "external", application logins fail without this
+            ssl_required: none
           roles:
             kafka-admins: {}
             kafka-readonly: {}
