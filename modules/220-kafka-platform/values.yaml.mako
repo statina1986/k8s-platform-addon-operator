@@ -31,8 +31,10 @@ kafkaPlatform:
         type: disabled
     rolesConfig: ""
     % else:
+    # -- Kafbat UI authconfig ( https://ui.docs.kafbat.io/configuration/authentication )
     authConfig:
       type: OAUTH2
+      # -- By default OAuth2 is configured ( https://ui.docs.kafbat.io/configuration/authentication/oauth2 )
       oauth2:
         client:
           keycloak:
@@ -48,6 +50,8 @@ kafkaPlatform:
             custom-params:
               type: oauth
               roles-field: roles
+    # -- Role based access control for kafbat ui ( https://ui.docs.kafbat.io/configuration/rbac-role-based-access-control ) - rolesConfig becomes rbac with [our templating](./templates/kafka-ui-cm.yaml).
+    # @notationType -- tpl
     rolesConfig: |
       roles: 
         {{- range keys .Values.kafkaPlatform.clusters }}
@@ -114,7 +118,7 @@ kafkaPlatform:
     % endif
     additionalRoles: ""    
 
-  # configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
+  # -- configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
     % if values['global']['clusterwideResources'] == "false":
     rbac:
@@ -143,7 +147,7 @@ kafkaPlatform:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
     
-  # List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource.
+  # -- List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource. ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaClusterSpec-reference )
   clusters:
     kafka-cluster:
       enabled: true
@@ -199,7 +203,7 @@ kafkaPlatform:
             % else:
             num.partitions: 6
             % endif
-
+          # -- Kafka listener configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-GenericKafkaListener-schema-reference )
           listeners:
             - name: plain
               port: 9092
@@ -270,6 +274,7 @@ kafkaPlatform:
                       strimzi.io/cluster: kafka-cluster
                       strimzi.io/name: kafka-cluster-kafka
               % endif
+        # -- Kafka zookeeper configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-ZookeeperClusterSpec-reference )
         zookeeper:
           % if values['global']['configurationProfile'] in {'dev'}:
           replicas: 1
@@ -372,6 +377,7 @@ kafkaPlatform:
                           values:
                           - ${values['global']['platformMastersValue']}
               % endif
+        # -- KafkaExporter configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaExporterSpec-reference )
         kafkaExporter:
           template:
             pod:

@@ -1,0 +1,1409 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "kafkaPlatform": {
+      "properties": {
+        "clusters": {
+          "description": "List of clusters to provision. Spec for each cluster is configured according to \"kafka.strimzi.io/v1beta2\" resource. ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaClusterSpec-reference )",
+          "properties": {
+            "kafka-cluster": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "spec": {
+                  "properties": {
+                    "entityOperator": {
+                      "properties": {
+                        "template": {
+                          "properties": {
+                            "pod": {
+                              "properties": {
+                                "tolerations": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "properties": {
+                                          "effect": {
+                                            "default": "NoSchedule",
+                                            "required": [],
+                                            "title": "effect",
+                                            "type": "string"
+                                          },
+                                          "key": {
+                                            "default": "dedicated-nodes",
+                                            "required": [],
+                                            "title": "key",
+                                            "type": "string"
+                                          },
+                                          "operator": {
+                                            "default": "Equal",
+                                            "required": [],
+                                            "title": "operator",
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "default": "platform-masters",
+                                            "required": [],
+                                            "title": "value",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "type": "object"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "tolerations",
+                                  "type": "array"
+                                }
+                              },
+                              "required": [],
+                              "title": "pod",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "template",
+                          "type": "object"
+                        },
+                        "topicOperator": {
+                          "required": [],
+                          "title": "topicOperator",
+                          "type": "object"
+                        },
+                        "userOperator": {
+                          "required": [],
+                          "title": "userOperator",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "entityOperator",
+                      "type": "object"
+                    },
+                    "kafka": {
+                      "properties": {
+                        "config": {
+                          "properties": {
+                            "auto.create.topics.enable": {
+                              "default": "true",
+                              "required": [],
+                              "title": "auto.create.topics.enable",
+                              "type": "string"
+                            },
+                            "compression.type": {
+                              "default": "lz4",
+                              "required": [],
+                              "title": "compression.type",
+                              "type": "string"
+                            },
+                            "default.replication.factor": {
+                              "default": 3,
+                              "required": [],
+                              "title": "default.replication.factor",
+                              "type": "integer"
+                            },
+                            "delete.topic.enable": {
+                              "default": true,
+                              "required": [],
+                              "title": "delete.topic.enable",
+                              "type": "boolean"
+                            },
+                            "group.initial.rebalance.delay.ms": {
+                              "default": 3000,
+                              "required": [],
+                              "title": "group.initial.rebalance.delay.ms",
+                              "type": "integer"
+                            },
+                            "log.retention.hours": {
+                              "default": 168,
+                              "required": [],
+                              "title": "log.retention.hours",
+                              "type": "integer"
+                            },
+                            "min.insync.replicas": {
+                              "default": 2,
+                              "required": [],
+                              "title": "min.insync.replicas",
+                              "type": "integer"
+                            },
+                            "num.partitions": {
+                              "default": 6,
+                              "required": [],
+                              "title": "num.partitions",
+                              "type": "integer"
+                            },
+                            "offsets.topic.replication.factor": {
+                              "default": 3,
+                              "required": [],
+                              "title": "offsets.topic.replication.factor",
+                              "type": "integer"
+                            },
+                            "transaction.state.log.min.isr": {
+                              "default": 2,
+                              "required": [],
+                              "title": "transaction.state.log.min.isr",
+                              "type": "integer"
+                            },
+                            "transaction.state.log.replication.factor": {
+                              "default": 3,
+                              "required": [],
+                              "title": "transaction.state.log.replication.factor",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "config",
+                          "type": "object"
+                        },
+                        "listeners": {
+                          "description": "Kafka listener configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-GenericKafkaListener-schema-reference )",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "name": {
+                                    "default": "plain",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "port": {
+                                    "default": 9092,
+                                    "required": [],
+                                    "title": "port",
+                                    "type": "integer"
+                                  },
+                                  "tls": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "tls",
+                                    "type": "boolean"
+                                  },
+                                  "type": {
+                                    "default": "internal",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "name": {
+                                    "default": "tls",
+                                    "required": [],
+                                    "title": "name",
+                                    "type": "string"
+                                  },
+                                  "port": {
+                                    "default": 9093,
+                                    "required": [],
+                                    "title": "port",
+                                    "type": "integer"
+                                  },
+                                  "tls": {
+                                    "default": true,
+                                    "required": [],
+                                    "title": "tls",
+                                    "type": "boolean"
+                                  },
+                                  "type": {
+                                    "default": "internal",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "listeners",
+                          "type": "array"
+                        },
+                        "livenessProbe": {
+                          "properties": {
+                            "initialDelaySeconds": {
+                              "default": 15,
+                              "required": [],
+                              "title": "initialDelaySeconds",
+                              "type": "integer"
+                            },
+                            "timeoutSeconds": {
+                              "default": 5,
+                              "required": [],
+                              "title": "timeoutSeconds",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "livenessProbe",
+                          "type": "object"
+                        },
+                        "metricsConfig": {
+                          "properties": {
+                            "type": {
+                              "default": "jmxPrometheusExporter",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "valueFrom": {
+                              "properties": {
+                                "configMapKeyRef": {
+                                  "properties": {
+                                    "key": {
+                                      "default": "kafka-metrics-config.yml",
+                                      "required": [],
+                                      "title": "key",
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "default": "kafka-metrics",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "configMapKeyRef",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "valueFrom",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "metricsConfig",
+                          "type": "object"
+                        },
+                        "readinessProbe": {
+                          "properties": {
+                            "initialDelaySeconds": {
+                              "default": 15,
+                              "required": [],
+                              "title": "initialDelaySeconds",
+                              "type": "integer"
+                            },
+                            "timeoutSeconds": {
+                              "default": 5,
+                              "required": [],
+                              "title": "timeoutSeconds",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "readinessProbe",
+                          "type": "object"
+                        },
+                        "replicas": {
+                          "default": 3,
+                          "required": [],
+                          "title": "replicas",
+                          "type": "integer"
+                        },
+                        "resources": {
+                          "properties": {
+                            "limits": {
+                              "properties": {
+                                "cpu": {
+                                  "default": "1",
+                                  "required": [],
+                                  "title": "cpu",
+                                  "type": "string"
+                                },
+                                "memory": {
+                                  "default": "4Gi",
+                                  "required": [],
+                                  "title": "memory",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "limits",
+                              "type": "object"
+                            },
+                            "requests": {
+                              "properties": {
+                                "cpu": {
+                                  "default": "0.5",
+                                  "required": [],
+                                  "title": "cpu",
+                                  "type": "string"
+                                },
+                                "memory": {
+                                  "default": "2Gi",
+                                  "required": [],
+                                  "title": "memory",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "requests",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "resources",
+                          "type": "object"
+                        },
+                        "storage": {
+                          "properties": {
+                            "deleteClaim": {
+                              "default": false,
+                              "required": [],
+                              "title": "deleteClaim",
+                              "type": "boolean"
+                            },
+                            "size": {
+                              "default": "10Gi",
+                              "required": [],
+                              "title": "size",
+                              "type": "string"
+                            },
+                            "type": {
+                              "default": "persistent-claim",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "storage",
+                          "type": "object"
+                        },
+                        "template": {
+                          "properties": {
+                            "pod": {
+                              "properties": {
+                                "affinity": {
+                                  "properties": {
+                                    "podAntiAffinity": {
+                                      "properties": {
+                                        "requiredDuringSchedulingIgnoredDuringExecution": {
+                                          "items": {
+                                            "anyOf": [
+                                              {
+                                                "properties": {
+                                                  "labelSelector": {
+                                                    "properties": {
+                                                      "matchExpressions": {
+                                                        "items": {
+                                                          "anyOf": [
+                                                            {
+                                                              "properties": {
+                                                                "key": {
+                                                                  "default": "strimzi.io/cluster",
+                                                                  "required": [],
+                                                                  "title": "key",
+                                                                  "type": "string"
+                                                                },
+                                                                "operator": {
+                                                                  "default": "In",
+                                                                  "required": [],
+                                                                  "title": "operator",
+                                                                  "type": "string"
+                                                                },
+                                                                "values": {
+                                                                  "items": {
+                                                                    "anyOf": [
+                                                                      {
+                                                                        "required": [],
+                                                                        "type": "string"
+                                                                      }
+                                                                    ],
+                                                                    "required": []
+                                                                  },
+                                                                  "required": [],
+                                                                  "title": "values",
+                                                                  "type": "array"
+                                                                }
+                                                              },
+                                                              "required": [],
+                                                              "type": "object"
+                                                            },
+                                                            {
+                                                              "properties": {
+                                                                "key": {
+                                                                  "default": "strimzi.io/name",
+                                                                  "required": [],
+                                                                  "title": "key",
+                                                                  "type": "string"
+                                                                },
+                                                                "operator": {
+                                                                  "default": "In",
+                                                                  "required": [],
+                                                                  "title": "operator",
+                                                                  "type": "string"
+                                                                },
+                                                                "values": {
+                                                                  "items": {
+                                                                    "anyOf": [
+                                                                      {
+                                                                        "required": [],
+                                                                        "type": "string"
+                                                                      }
+                                                                    ],
+                                                                    "required": []
+                                                                  },
+                                                                  "required": [],
+                                                                  "title": "values",
+                                                                  "type": "array"
+                                                                }
+                                                              },
+                                                              "required": [],
+                                                              "type": "object"
+                                                            }
+                                                          ],
+                                                          "required": []
+                                                        },
+                                                        "required": [],
+                                                        "title": "matchExpressions",
+                                                        "type": "array"
+                                                      }
+                                                    },
+                                                    "required": [],
+                                                    "title": "labelSelector",
+                                                    "type": "object"
+                                                  },
+                                                  "topologyKey": {
+                                                    "default": "kubernetes.io/hostname",
+                                                    "required": [],
+                                                    "title": "topologyKey",
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [],
+                                                "type": "object"
+                                              }
+                                            ],
+                                            "required": []
+                                          },
+                                          "required": [],
+                                          "title": "requiredDuringSchedulingIgnoredDuringExecution",
+                                          "type": "array"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "podAntiAffinity",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "affinity",
+                                  "type": "object"
+                                },
+                                "tolerations": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "properties": {
+                                          "effect": {
+                                            "default": "NoSchedule",
+                                            "required": [],
+                                            "title": "effect",
+                                            "type": "string"
+                                          },
+                                          "key": {
+                                            "default": "dedicated-nodes",
+                                            "required": [],
+                                            "title": "key",
+                                            "type": "string"
+                                          },
+                                          "operator": {
+                                            "default": "Equal",
+                                            "required": [],
+                                            "title": "operator",
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "default": "platform-masters",
+                                            "required": [],
+                                            "title": "value",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "type": "object"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "tolerations",
+                                  "type": "array"
+                                }
+                              },
+                              "required": [],
+                              "title": "pod",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "template",
+                          "type": "object"
+                        },
+                        "version": {
+                          "default": "3.8.0",
+                          "required": [],
+                          "title": "version",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "kafka",
+                      "type": "object"
+                    },
+                    "kafkaExporter": {
+                      "description": "KafkaExporter configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaExporterSpec-reference )",
+                      "properties": {
+                        "groupRegex": {
+                          "default": ".*",
+                          "required": [],
+                          "title": "groupRegex",
+                          "type": "string"
+                        },
+                        "template": {
+                          "properties": {
+                            "pod": {
+                              "properties": {
+                                "tolerations": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "properties": {
+                                          "effect": {
+                                            "default": "NoSchedule",
+                                            "required": [],
+                                            "title": "effect",
+                                            "type": "string"
+                                          },
+                                          "key": {
+                                            "default": "dedicated-nodes",
+                                            "required": [],
+                                            "title": "key",
+                                            "type": "string"
+                                          },
+                                          "operator": {
+                                            "default": "Equal",
+                                            "required": [],
+                                            "title": "operator",
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "default": "platform-masters",
+                                            "required": [],
+                                            "title": "value",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "type": "object"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "tolerations",
+                                  "type": "array"
+                                }
+                              },
+                              "required": [],
+                              "title": "pod",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "template",
+                          "type": "object"
+                        },
+                        "topicRegex": {
+                          "default": ".*",
+                          "required": [],
+                          "title": "topicRegex",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "kafkaExporter",
+                      "type": "object"
+                    },
+                    "zookeeper": {
+                      "description": "Kafka zookeeper configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-ZookeeperClusterSpec-reference )",
+                      "properties": {
+                        "livenessProbe": {
+                          "properties": {
+                            "initialDelaySeconds": {
+                              "default": 15,
+                              "required": [],
+                              "title": "initialDelaySeconds",
+                              "type": "integer"
+                            },
+                            "timeoutSeconds": {
+                              "default": 5,
+                              "required": [],
+                              "title": "timeoutSeconds",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "livenessProbe",
+                          "type": "object"
+                        },
+                        "metricsConfig": {
+                          "properties": {
+                            "type": {
+                              "default": "jmxPrometheusExporter",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "valueFrom": {
+                              "properties": {
+                                "configMapKeyRef": {
+                                  "properties": {
+                                    "key": {
+                                      "default": "zookeeper-metrics-config.yml",
+                                      "required": [],
+                                      "title": "key",
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "default": "kafka-metrics",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "configMapKeyRef",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "valueFrom",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "metricsConfig",
+                          "type": "object"
+                        },
+                        "readinessProbe": {
+                          "properties": {
+                            "initialDelaySeconds": {
+                              "default": 15,
+                              "required": [],
+                              "title": "initialDelaySeconds",
+                              "type": "integer"
+                            },
+                            "timeoutSeconds": {
+                              "default": 5,
+                              "required": [],
+                              "title": "timeoutSeconds",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "readinessProbe",
+                          "type": "object"
+                        },
+                        "replicas": {
+                          "default": 3,
+                          "required": [],
+                          "title": "replicas",
+                          "type": "integer"
+                        },
+                        "resources": {
+                          "properties": {
+                            "limits": {
+                              "properties": {
+                                "cpu": {
+                                  "default": "1",
+                                  "required": [],
+                                  "title": "cpu",
+                                  "type": "string"
+                                },
+                                "memory": {
+                                  "default": "2Gi",
+                                  "required": [],
+                                  "title": "memory",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "limits",
+                              "type": "object"
+                            },
+                            "requests": {
+                              "properties": {
+                                "cpu": {
+                                  "default": "0.5",
+                                  "required": [],
+                                  "title": "cpu",
+                                  "type": "string"
+                                },
+                                "memory": {
+                                  "default": "1.5Gi",
+                                  "required": [],
+                                  "title": "memory",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "requests",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "resources",
+                          "type": "object"
+                        },
+                        "storage": {
+                          "properties": {
+                            "deleteClaim": {
+                              "default": false,
+                              "required": [],
+                              "title": "deleteClaim",
+                              "type": "boolean"
+                            },
+                            "size": {
+                              "default": "1Gi",
+                              "required": [],
+                              "title": "size",
+                              "type": "string"
+                            },
+                            "type": {
+                              "default": "persistent-claim",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "storage",
+                          "type": "object"
+                        },
+                        "template": {
+                          "properties": {
+                            "pod": {
+                              "properties": {
+                                "affinity": {
+                                  "properties": {
+                                    "podAntiAffinity": {
+                                      "properties": {
+                                        "requiredDuringSchedulingIgnoredDuringExecution": {
+                                          "items": {
+                                            "anyOf": [
+                                              {
+                                                "properties": {
+                                                  "labelSelector": {
+                                                    "properties": {
+                                                      "matchExpressions": {
+                                                        "items": {
+                                                          "anyOf": [
+                                                            {
+                                                              "properties": {
+                                                                "key": {
+                                                                  "default": "strimzi.io/cluster",
+                                                                  "required": [],
+                                                                  "title": "key",
+                                                                  "type": "string"
+                                                                },
+                                                                "operator": {
+                                                                  "default": "In",
+                                                                  "required": [],
+                                                                  "title": "operator",
+                                                                  "type": "string"
+                                                                },
+                                                                "values": {
+                                                                  "items": {
+                                                                    "anyOf": [
+                                                                      {
+                                                                        "required": [],
+                                                                        "type": "string"
+                                                                      }
+                                                                    ],
+                                                                    "required": []
+                                                                  },
+                                                                  "required": [],
+                                                                  "title": "values",
+                                                                  "type": "array"
+                                                                }
+                                                              },
+                                                              "required": [],
+                                                              "type": "object"
+                                                            },
+                                                            {
+                                                              "properties": {
+                                                                "key": {
+                                                                  "default": "strimzi.io/name",
+                                                                  "required": [],
+                                                                  "title": "key",
+                                                                  "type": "string"
+                                                                },
+                                                                "operator": {
+                                                                  "default": "In",
+                                                                  "required": [],
+                                                                  "title": "operator",
+                                                                  "type": "string"
+                                                                },
+                                                                "values": {
+                                                                  "items": {
+                                                                    "anyOf": [
+                                                                      {
+                                                                        "required": [],
+                                                                        "type": "string"
+                                                                      }
+                                                                    ],
+                                                                    "required": []
+                                                                  },
+                                                                  "required": [],
+                                                                  "title": "values",
+                                                                  "type": "array"
+                                                                }
+                                                              },
+                                                              "required": [],
+                                                              "type": "object"
+                                                            }
+                                                          ],
+                                                          "required": []
+                                                        },
+                                                        "required": [],
+                                                        "title": "matchExpressions",
+                                                        "type": "array"
+                                                      }
+                                                    },
+                                                    "required": [],
+                                                    "title": "labelSelector",
+                                                    "type": "object"
+                                                  },
+                                                  "topologyKey": {
+                                                    "default": "kubernetes.io/hostname",
+                                                    "required": [],
+                                                    "title": "topologyKey",
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [],
+                                                "type": "object"
+                                              }
+                                            ],
+                                            "required": []
+                                          },
+                                          "required": [],
+                                          "title": "requiredDuringSchedulingIgnoredDuringExecution",
+                                          "type": "array"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "podAntiAffinity",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "affinity",
+                                  "type": "object"
+                                },
+                                "tolerations": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "properties": {
+                                          "effect": {
+                                            "default": "NoSchedule",
+                                            "required": [],
+                                            "title": "effect",
+                                            "type": "string"
+                                          },
+                                          "key": {
+                                            "default": "dedicated-nodes",
+                                            "required": [],
+                                            "title": "key",
+                                            "type": "string"
+                                          },
+                                          "operator": {
+                                            "default": "Equal",
+                                            "required": [],
+                                            "title": "operator",
+                                            "type": "string"
+                                          },
+                                          "value": {
+                                            "default": "platform-masters",
+                                            "required": [],
+                                            "title": "value",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "type": "object"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "tolerations",
+                                  "type": "array"
+                                }
+                              },
+                              "required": [],
+                              "title": "pod",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "template",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "zookeeper",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "kafka-cluster",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "clusters",
+          "type": "object"
+        },
+        "kafka-ui": {
+          "properties": {
+            "additionalRoles": {
+              "default": "",
+              "required": [],
+              "title": "additionalRoles",
+              "type": "string"
+            },
+            "authConfig": {
+              "description": "Kafbat UI authconfig ( https://ui.docs.kafbat.io/configuration/authentication )",
+              "properties": {
+                "oauth2": {
+                  "description": "By default OAuth2 is configured ( https://ui.docs.kafbat.io/configuration/authentication/oauth2 )",
+                  "properties": {
+                    "client": {
+                      "properties": {
+                        "keycloak": {
+                          "properties": {
+                            "authorization-grant-type": {
+                              "default": "authorization_code",
+                              "required": [],
+                              "title": "authorization-grant-type",
+                              "type": "string"
+                            },
+                            "client-name": {
+                              "default": "keycloak",
+                              "required": [],
+                              "title": "client-name",
+                              "type": "string"
+                            },
+                            "clientId": {
+                              "default": "kafbat",
+                              "required": [],
+                              "title": "clientId",
+                              "type": "string"
+                            },
+                            "clientSecret": {
+                              "default": "${KAFKA_UI_CLIENT_SECRET}",
+                              "required": [],
+                              "title": "clientSecret",
+                              "type": "string"
+                            },
+                            "custom-params": {
+                              "properties": {
+                                "roles-field": {
+                                  "default": "roles",
+                                  "required": [],
+                                  "title": "roles-field",
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "default": "oauth",
+                                  "required": [],
+                                  "title": "type",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "custom-params",
+                              "type": "object"
+                            },
+                            "issuer-uri": {
+                              "default": "https://auth-some-env.qvantel.solutions/auth/realms/qvantel",
+                              "required": [],
+                              "title": "issuer-uri",
+                              "type": "string"
+                            },
+                            "jwk-set-uri": {
+                              "default": "http://qvaa-proxy-80/auth/realms/qvantel/protocol/openid-connect/certs",
+                              "required": [],
+                              "title": "jwk-set-uri",
+                              "type": "string"
+                            },
+                            "provider": {
+                              "default": "keycloak",
+                              "required": [],
+                              "title": "provider",
+                              "type": "string"
+                            },
+                            "scope": {
+                              "default": "openid",
+                              "required": [],
+                              "title": "scope",
+                              "type": "string"
+                            },
+                            "user-name-attribute": {
+                              "default": "preferred_username",
+                              "required": [],
+                              "title": "user-name-attribute",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "keycloak",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "client",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "oauth2",
+                  "type": "object"
+                },
+                "type": {
+                  "default": "OAUTH2",
+                  "required": [],
+                  "title": "type",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "authConfig",
+              "type": "object"
+            },
+            "env": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "JAVA_OPTS",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "-Dreactor.netty.pool.maxIdleTime=30000 -Dreactor.netty.pool.maxLifeTime=60000",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "KAFKA_UI_CLIENT_SECRET",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "valueFrom": {
+                        "properties": {
+                          "secretKeyRef": {
+                            "properties": {
+                              "key": {
+                                "default": "KAFKA_UI_CLIENT_SECRET",
+                                "required": [],
+                                "title": "key",
+                                "type": "string"
+                              },
+                              "name": {
+                                "default": "kafka-ui-client-secret",
+                                "required": [],
+                                "title": "name",
+                                "type": "string"
+                              }
+                            },
+                            "required": [],
+                            "title": "secretKeyRef",
+                            "type": "object"
+                          }
+                        },
+                        "required": [],
+                        "title": "valueFrom",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "env",
+              "type": "array"
+            },
+            "image": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "126980339425e4bff3d98b020fe606778d3c45b1",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "rolesConfig": {
+              "default": "roles: \n  {{- range keys .Values.kafkaPlatform.clusters }}\n  {{- $current := get $.Values.kafkaPlatform.clusters . }}\n  {{- if $current.enabled }}\n  {{- $cluster_name := . }}\n  - name: \"kafka-admins-{{ $cluster_name }}\"\n    clusters:\n      - {{ $cluster_name }}\n    subjects:\n      - provider: oauth\n        type: role\n        value: \"kafka-admins\"\n    permissions:\n      - resource: applicationconfig\n        actions: all\n      - resource: clusterconfig\n        actions: all\n      - resource: topic\n        value: \".*\"\n        actions: all\n      - resource: consumer\n        value: \".*\"\n        actions: all\n      - resource: schema\n        value: \".*\"\n        actions: all\n      - resource: connect\n        value: \".*\"\n        actions: all\n      - resource: ksql\n        actions: all\n      - resource: acl\n        actions: [ view ]\n  - name: \"kafka-readonly-{{ $cluster_name }}\"\n    clusters:\n      - {{ $cluster_name }}\n    subjects:\n      - provider: oauth\n        type: role\n        value: \"kafka-readonly\"\n    permissions:\n      - resource: clusterconfig\n        actions: [ \"view\" ]\n      - resource: topic\n        value: \".*\"\n        actions: \n          - VIEW\n          - MESSAGES_READ\n      - resource: consumer\n        value: \".*\"\n        actions: [ view ]\n      - resource: schema\n        value: \".*\"\n        actions: [ view ]\n      - resource: connect\n        value: \".*\"\n        actions: [ view ]\n      - resource: acl\n        actions: [ view ]          \n  {{- end }}\n  {{- end }}\n  {{ tpl  (index .Values.kafkaPlatform \"kafka-ui\" \"additionalRoles\") . | nindent 8 }}\n",
+              "description": "Role based access control for kafbat ui ( https://ui.docs.kafbat.io/configuration/rbac-role-based-access-control ) - rolesConfig becomes rbac with [our templating](./templates/kafka-ui-cm.yaml).",
+              "required": [],
+              "title": "rolesConfig",
+              "type": "string"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            },
+            "yamlApplicationConfigConfigMap": {
+              "properties": {
+                "keyName": {
+                  "default": "config.yml",
+                  "required": [],
+                  "title": "keyName",
+                  "type": "string"
+                },
+                "name": {
+                  "default": "kafbat-ui-configmap",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "yamlApplicationConfigConfigMap",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "kafka-ui",
+          "type": "object"
+        },
+        "strimzi-kafka-operator": {
+          "description": "configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml",
+          "properties": {
+            "defaultImageRegistry": {
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+              "required": [],
+              "title": "defaultImageRegistry",
+              "type": "string"
+            },
+            "resources": {
+              "properties": {
+                "limits": {
+                  "properties": {
+                    "cpu": {
+                      "default": "1",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "1Gi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "limits",
+                  "type": "object"
+                },
+                "requests": {
+                  "properties": {
+                    "cpu": {
+                      "default": "200m",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "384Mi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "requests",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "resources",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "default": "platform",
+              "required": [],
+              "title": "serviceAccount",
+              "type": "string"
+            },
+            "serviceAccountCreate": {
+              "default": "no",
+              "required": [],
+              "title": "serviceAccountCreate",
+              "type": "string"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "strimzi-kafka-operator",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "kafkaPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
