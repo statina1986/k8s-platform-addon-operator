@@ -1348,10 +1348,10 @@
               "type": "string"
             },
             "serviceAccountCreate": {
-              "default": "no",
+              "default": false,
               "required": [],
               "title": "serviceAccountCreate",
-              "type": "string"
+              "type": "boolean"
             },
             "tolerations": {
               "items": {

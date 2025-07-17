@@ -122,13 +122,13 @@ kafkaPlatform:
   strimzi-kafka-operator:
     % if values['global']['clusterwideResources'] == "false":
     rbac:
-      create: no
+      create: false
     createGlobalResources: false
     % endif
     % if 'containerRegistryBase' in values['global']:
     defaultImageRegistry: ${values['global']['containerRegistryBase']}
     % endif
-    serviceAccountCreate: no
+    serviceAccountCreate: false
     serviceAccount: platform
     resources:
       limits:
