@@ -416,7 +416,7 @@ resources:
         cpu: 200m
         memory: 384Mi
 serviceAccount: platform
-serviceAccountCreate: "no"
+serviceAccountCreate: false
 tolerations:
     - effect: NoSchedule
       key: dedicated-nodes
