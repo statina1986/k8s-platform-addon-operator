@@ -27,8 +27,8 @@ kafkaPlatform:
             name: kafka-ui-client-secret
             key: KAFKA_UI_CLIENT_SECRET    
     % if values['global']['configurationProfile'] == 'dev':
-    authConfig: |
-        type: disabled
+    authConfig:
+      type: disabled
     rolesConfig: ""
     % else:
     # -- Kafbat UI authconfig ( https://ui.docs.kafbat.io/configuration/authentication )
