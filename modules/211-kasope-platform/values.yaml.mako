@@ -1,6 +1,7 @@
 kasopePlatform:
-  # -- Configuration for underlying k8ssandra helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/k8ssandra
+  # -- Configuration for underlying k8ssandra-operator helm-chart. See https://github.com/k8ssandra/k8ssandra-operator/tree/main/charts/k8ssandra-operator
   k8ssandra-operator:
+    # -- In clusters where we can't or won't deploy operators, then this can be set to false.
     % if values['global']['deployOperators'] == "false":
     enabled: false
     % else:
@@ -53,9 +54,9 @@ kasopePlatform:
         create: false
         name: "platform"
     disableCrdUpgraderJob: true
-  # -- If true, will create DbConnection and DbRoles. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/cassandra-vault.yaml
+  # -- If true, will create DbConnection and DbRoles. See [cassandra-vault](templates/cassandra-vault.yaml)
   vaultConfiguration: true
-  # -- Name of the cassandra cluster used as a backend for main-cassandra-service. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/main-service.yaml
+  # -- Name of the cassandra cluster used as a backend for main-cassandra-service. See [main-service](templates/main-service.yaml)
   mainCassandraCluster: "cluster"
   clusters:
     cluster:

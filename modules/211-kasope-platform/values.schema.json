@@ -640,7 +640,7 @@
           "type": "object"
         },
         "k8ssandra-operator": {
-          "description": "Configuration for underlying k8ssandra helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/k8ssandra",
+          "description": "Configuration for underlying k8ssandra-operator helm-chart. See https://github.com/k8ssandra/k8ssandra-operator/tree/main/charts/k8ssandra-operator",
           "properties": {
             "cass-operator": {
               "description": "Configuration for underlying cass-operator helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/cass-operator",
@@ -794,6 +794,7 @@
             },
             "enabled": {
               "default": true,
+              "description": "In clusters where we can't or won't deploy operators, then this can be set to false.",
               "required": [],
               "title": "enabled",
               "type": "boolean"
@@ -850,14 +851,14 @@
         },
         "mainCassandraCluster": {
           "default": "cluster",
-          "description": "Name of the cassandra cluster used as a backend for main-cassandra-service. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/main-service.yaml",
+          "description": "Name of the cassandra cluster used as a backend for main-cassandra-service. See [main-service](templates/main-service.yaml)",
           "required": [],
           "title": "mainCassandraCluster",
           "type": "string"
         },
         "vaultConfiguration": {
           "default": true,
-          "description": "If true, will create DbConnection and DbRoles. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/cassandra-vault.yaml",
+          "description": "If true, will create DbConnection and DbRoles. See [cassandra-vault](templates/cassandra-vault.yaml)",
           "required": [],
           "title": "vaultConfiguration",
           "type": "boolean"

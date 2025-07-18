@@ -169,7 +169,7 @@ serviceAccount:
 </td>
 			<td><div>
 
-Configuration for underlying k8ssandra helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/k8ssandra
+Configuration for underlying k8ssandra-operator helm-chart. See https://github.com/k8ssandra/k8ssandra-operator/tree/main/charts/k8ssandra-operator
 
 </div>
 </td>
@@ -201,6 +201,19 @@ Configuration for underlying cass-operator helm-chart. See https://github.com/k8
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;" id="kasopePlatform--k8ssandra-operator--enabled">kasopePlatform.k8ssandra-operator.enabled</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+			<td><div>
+
+In clusters where we can't or won't deploy operators, then this can be set to false.
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="kasopePlatform--mainCassandraCluster">kasopePlatform.mainCassandraCluster</td>
 			<td>string</td>
 			<td>
@@ -208,7 +221,7 @@ Configuration for underlying cass-operator helm-chart. See https://github.com/k8
 </td>
 			<td><div>
 
-Name of the cassandra cluster used as a backend for main-cassandra-service. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/main-service.yaml
+Name of the cassandra cluster used as a backend for main-cassandra-service. See [main-service](templates/main-service.yaml)
 
 </div>
 </td>
@@ -221,7 +234,7 @@ Name of the cassandra cluster used as a backend for main-cassandra-service. See 
 </td>
 			<td><div>
 
-If true, will create DbConnection and DbRoles. See https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/211-kasope-platform/templates/cassandra-vault.yaml
+If true, will create DbConnection and DbRoles. See [cassandra-vault](templates/cassandra-vault.yaml)
 
 </div>
 </td>
