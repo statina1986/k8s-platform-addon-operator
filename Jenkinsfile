@@ -8,6 +8,8 @@ TYPE = "generic"
 CI_VERSION = "3"
 
 BITBUCKET_PROJECT = "cp"
+// Set long build timeout to give enough time to full images relocation
+BUILD_TIMEOUT = 500
 
 // Used to determine build types, if sending feedback, deploying automatically
 DELIVERY_BRANCHES = ["master", "experimental"]
