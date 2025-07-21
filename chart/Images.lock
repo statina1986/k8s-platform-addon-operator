@@ -1,0 +1,1234 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: ""
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: k8s-platform-addon-operator
+  version: 1.3.0
+  appVersion: "1.3.0"
+images:
+  - name: coredns
+    image: coredns/coredns:1.11.1
+    chart: platform-core
+    digests:
+      - digest: sha256:2169b3b96af988cf69d7dd69efbcc59433eb027320eb185c6110e0850b997870
+        arch: linux/amd64
+      - digest: sha256:ba9e70dbdf0ff8a77ea63451bb1241d08819471730fe7a35a218a8db2ef7890c
+        arch: linux/arm64
+  - name: coredns-autoscaler
+    image: registry.k8s.io/cpa/cluster-proportional-autoscaler:1.8.5
+    chart: platform-core
+    digests:
+      - digest: sha256:8ac5e2d7650f3767dac4925581ef14de51eaf27ad554bc7fb8af2be77b9e9b15
+        arch: linux/amd64
+      - digest: sha256:260ba0a774e8419e006f2a5fde05d2b7ec3da8dec59b5caad578813848c09e31
+        arch: linux/arm64
+  - name: local-volume-node-cleanup-controller
+    image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
+    chart: platform-core
+    digests:
+      - digest: sha256:8cc2c9ccaf6445fff8f030eacaebb666d715d6f0134c0a8dc17442029565efa5
+        arch: linux/amd64
+      - digest: sha256:1985fe37af0ca7306ddac8aae5c9d8ebbeeae0287cab020b94a94d69b5704c8c
+        arch: linux/arm64
+  - name: local-static-provisioner
+    image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
+    chart: platform-core
+    digests:
+      - digest: sha256:a854dffa0a63a2f7ed15c955a117c8fd94fbcbfc6df2a6db7f737b04603b2a13
+        arch: linux/amd64
+      - digest: sha256:6124b5c17a188c753c7d6eaf2c48bc91b513e0ec6489a744d2521458fe31c3e0
+        arch: linux/arm64
+  - name: init-udev-rule
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    chart: platform-core
+    digests:
+      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+        arch: linux/arm64
+      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+        arch: linux/amd64
+  - name: kyverno-cli
+    image: ghcr.io/kyverno/kyverno-cli:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:b0f12027c2e1ff3ff0646a09b773e0648a0f8ace6c9fb77e7ddc77d3f96d0ed6
+        arch: linux/amd64
+      - digest: sha256:38936ba7613a607f87f641b83b5223eb6f75e64f9ba162b32e216b0f0b4068f5
+        arch: linux/arm64
+  - name: tools
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
+        arch: linux/arm64
+      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
+        arch: linux/amd64
+  - name: kyvernopre
+    image: ghcr.io/kyverno/kyvernopre:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:887f6fc3c2526d3f9fda09ad2f5d2e4a95ca6966846c52796bb2bd0aba14cedf
+        arch: linux/amd64
+      - digest: sha256:0b8065473f3bbf6cae71cf8a4aebc50cab9ce6ba6fa4967882b81e5efbba2248
+        arch: linux/arm64
+  - name: kyverno
+    image: ghcr.io/kyverno/kyverno:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:2a713842f1bfe3f621f942c9389c4d862c82b5f190fec9a94888aa5e749479ca
+        arch: linux/amd64
+      - digest: sha256:fa577cc6d84bdb6e90bb5430401d4b0acf84be7c9519760d7da57f289f3f12be
+        arch: linux/arm64
+  - name: background-controller
+    image: ghcr.io/kyverno/background-controller:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:8be71f2a3915e5523f8ec16b62aadebe08d712a08205cff8ebc277a3fa7b44a7
+        arch: linux/amd64
+      - digest: sha256:ca41990e70a1483e7d75a49ba25573fbfe4a4a59a29ca98a014a61127ce43f8d
+        arch: linux/arm64
+  - name: cleanup-controller
+    image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:af53fecd47b5409255c91ab8e6fd48dcb68316652233f4ebc250b58431b14c3e
+        arch: linux/amd64
+      - digest: sha256:8d62c43256681bbcbfcad5c1c137d1ce67d710f882d19bad68831d13a9a08cf5
+        arch: linux/arm64
+  - name: reports-controller
+    image: ghcr.io/kyverno/reports-controller:v1.12.5
+    chart: kyverno-platform
+    digests:
+      - digest: sha256:fd0c94551ae0be794c850cc2509a26fab42cc518c1f1bdff4f5594a2c55329e7
+        arch: linux/amd64
+      - digest: sha256:72ab55fabc7757db9f0048ff42f02eee8274f0e97abb0cea33403349fa1b2bf8
+        arch: linux/arm64
+  - name: aws-ebs-csi-driver
+    image: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.27.0
+    chart: aws-platform
+    digests:
+      - digest: sha256:e9171cf47f1c281a184dc148fc7ff225b841b11ed343cf33dbcefcda50a9772a
+        arch: linux/amd64
+      - digest: sha256:1cc768a74faacf59c6b9d0d4cba55170875f98dcd01a362b2bb15e0f6fa76d43
+        arch: linux/arm64
+  - name: external-provisioner
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v3.6.3-eks-1-29-3
+    chart: aws-platform
+    digests:
+      - digest: sha256:ff6a34bdeff8cfbe4a95a9581f9e7304b755af7042f2905a93c9aef785a9cb70
+        arch: linux/amd64
+      - digest: sha256:5d57536082f57525f25c5d483e4483a82fdb5b3ef76c8855e1f5ad4dec6d1c34
+        arch: linux/arm64
+  - name: external-attacher
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher:v4.4.3-eks-1-29-3
+    chart: aws-platform
+    digests:
+      - digest: sha256:e35046e05dbac1db0d891f4dd1ea671aad96215cdd872894dc8b4abab79884c2
+        arch: linux/amd64
+      - digest: sha256:7d5401a48c9ff4781a3248db2e0f2bc7cb80804d6c57d8775c93f44c75d8a865
+        arch: linux/arm64
+  - name: csi-snapshotter
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-snapshotter/csi-snapshotter:v6.3.3-eks-1-29-3
+    chart: aws-platform
+    digests:
+      - digest: sha256:f33d95ff3ee4113f9b7c10f10242b1f964d66402300bacd3aab0a8ad088b382c
+        arch: linux/amd64
+      - digest: sha256:daadc6e545669524a37c624d75e99d1499e87081ec0957f42fa66908880b5de9
+        arch: linux/arm64
+  - name: livenessprobe
+    image: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.11.0-eks-1-29-3
+    chart: aws-platform
+    digests:
+      - digest: sha256:f050c8d68a06a28d1dbdd6feb79ac132475d71bc3635577e1acb23e3e119d196
+        arch: linux/amd64
+      - digest: sha256:36ce6686436c4a95ea636283fe392b7554c9e334a0f5d8c6a57afc6e4115dd9a
+        arch: linux/arm64
+  - name: external-resizer
+    image: public.ecr.aws/eks-distro/kubernetes-csi/external-resizer:v1.9.3-eks-1-29-3
+    chart: aws-platform
+    digests:
+      - digest: sha256:4382f9c42eac5ef9bef6087bc37405277a13e5494938dcbe7d03f1b6f9f54a73
+        arch: linux/amd64
+      - digest: sha256:8aa3100bdd7278d6da33fbd53ddf9706b2e65decab4186ed5dd2d75c81815550
+        arch: linux/arm64
+  - name: node-driver-registrar
+    image: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.9.3-eks-1-29-3
+    chart: aws-platform
+    digests:
+      - digest: sha256:4f220894ca29cd345634cc3bcb4992598acd41046dc85dd6a82aa42961345d4a
+        arch: linux/amd64
+      - digest: sha256:c6c7e483bf01cf47fbd97854deb440ca9d33fbcb99a858b6ea2fad09490cb46b
+        arch: linux/arm64
+  - name: volume-modifier-for-k8s
+    image: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s:v0.2.1
+    chart: aws-platform
+    digests:
+      - digest: sha256:1e80ff8d05cc7b7f105bc13dfac4efd52ac62cab91c14cb7bfbc27d0a77f60b9
+        arch: linux/amd64
+      - digest: sha256:893a2b02edeb61e73f12926baa1a74b401c4ceb1754be0236c2399d6627a428f
+        arch: linux/arm64
+  - name: aws-efs-csi-driver
+    image: amazon/aws-efs-csi-driver:v1.7.4
+    chart: aws-platform
+    digests:
+      - digest: sha256:b012f5946e740806d9e008a0388209371e2c07ed6ba335106cebb5f4eb5868af
+        arch: linux/amd64
+      - digest: sha256:b4d5c34d47be03e2449bb708841c6f66e69c3e0e832791ba738e133b6862c65c
+        arch: linux/arm64
+  - name: aws-load-balancer-controller
+    image: public.ecr.aws/eks/aws-load-balancer-controller:v2.7.0
+    chart: aws-platform
+    digests:
+      - digest: sha256:a819361b6a151d42b0df1d1cd59266f6dca9e45e807010baa03889020ca5a489
+        arch: linux/amd64
+      - digest: sha256:ca29996d4c350ff0492059f7a4d41d90bf2df78cf16bfe59a669a911f68cb7da
+        arch: linux/arm64
+  - name: cert-manager
+    image: quay.io/jetstack/cert-manager-controller:v1.12.13
+    chart: cert-platform
+    digests:
+      - digest: sha256:9dd9fc81b4e84c2d43ae5727555daf5b4734bedab90491d5305a2d19acceb66f
+        arch: linux/amd64
+      - digest: sha256:a0ac267006ed1d9240b5deda22c5fc80ddceaad739141064d3b541be72755a23
+        arch: linux/arm64
+  - name: cainjector
+    image: quay.io/jetstack/cert-manager-cainjector:v1.12.13
+    chart: cert-platform
+    digests:
+      - digest: sha256:b7eca08abd547be1d8488ff7e98f1d834d19832082a3b24ba934058043d5e0a3
+        arch: linux/amd64
+      - digest: sha256:d85f6dbb293536d76d6789d94c4f8f6dd2b93fb338098b112880044105588ae7
+        arch: linux/arm64
+  - name: webhook
+    image: quay.io/jetstack/cert-manager-webhook:v1.12.13
+    chart: cert-platform
+    digests:
+      - digest: sha256:7a9dd18f58e70a5cf022f675c7bd3a3554352048475ddb40bebbd6af2e6fa635
+        arch: linux/amd64
+      - digest: sha256:c8b4109be14a02804c120adcc0422355299a08073587434fe4090ea4c1d290f5
+        arch: linux/arm64
+  - name: acmesolver
+    image: quay.io/jetstack/cert-manager-acmesolver:v1.12.13
+    chart: cert-platform
+    digests:
+      - digest: sha256:9050f0a1513212f30bba57b090bce512a299a77a80d6ada2ca6f1c2e57622b09
+        arch: linux/amd64
+      - digest: sha256:f0626be9c052558550981c4d2a5f0254b0b6297c60085c443e661fad8932e515
+        arch: linux/arm64
+  - name: cert-manager-ctl
+    image: quay.io/jetstack/cert-manager-ctl:v1.12.13
+    chart: cert-platform
+    digests:
+      - digest: sha256:da7b9fd4dc0098091a6db73dbe5b33e1de106e4060d36ba7371e2ce477c19d9e
+        arch: linux/amd64
+      - digest: sha256:0bb4dea5e93ff7c9cd4b9d591119db633a280b3b1824b0f8b7e47115f9a6b390
+        arch: linux/arm64
+  - name: x509-certificate-exporter
+    image: docker.io/enix/x509-certificate-exporter:3.14.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:333feb146cabeabc000196246cd3b062c85312efb926d205bb014edac2472b59
+        arch: linux/amd64
+      - digest: sha256:b15e9ff44502d7551d89dcccf53da21335a9891a426c315c86cbadfb83e8ece1
+        arch: linux/arm64
+  - name: prometheus-blackbox-exporter
+    image: quay.io/prometheus/blackbox-exporter:v0.25.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:67847e8aaec3c4852a2c7d84d5344e7931521962988c48df00cd980cd1b490a2
+        arch: linux/amd64
+      - digest: sha256:9761529b5ff576deb4e823e298ec5ca70e738086fd7d073a84698332c9ae3554
+        arch: linux/arm64
+  - name: prometheus-consul-exporter
+    image: prom/consul-exporter:v0.5.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:b84635725f7eb56411bab05e8309f2d1bab8b08de330439eff0bb5296e60cd5b
+        arch: linux/amd64
+      - digest: sha256:ae94c1cbbdfc98929084099df165cea999fd6e2ec77903284cbe8ab0180e4947
+        arch: linux/arm64
+  - name: yet-another-cloudwatch-exporter
+    image: ghcr.io/nerdswords/yet-another-cloudwatch-exporter:v0.61.2
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:4d70fbd4c7555d6cc5e6081bb0c742f53245271715442900d04f49b051178ea8
+        arch: linux/amd64
+      - digest: sha256:26956b0c1de0d9bc42948aafa8112f59f2e7514e26b3336990e655dfcc2066d4
+        arch: linux/arm64
+  - name: alertmanager
+    image: quay.io/prometheus/alertmanager:v0.27.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:45c3a586d4332d710bef92b06e90380c0b1f588968c00100d4b5e4e44c40ca5f
+        arch: linux/amd64
+      - digest: sha256:2fbdd4c66d91e740fe3fd462d8f52fc3d305a5b403bab3a58feb62be237a84fb
+        arch: linux/arm64
+  - name: prometheus-operator-webhook
+    image: quay.io/prometheus-operator/admission-webhook:v0.77.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:e4917246fac89d0b8f51e943212c3cb838e01c8df37e26b8795176eab41d6977
+        arch: linux/amd64
+      - digest: sha256:55680ec342111352dbe419bcc6a81424c313c590ba86bcff75989d20b0f1ad7d
+        arch: linux/arm64
+  - name: admissionWebhooks
+    image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:5e6fdb9b2c74ad2576dd835b389d00d18ccfee21b547d1a79efb881009664099
+        arch: linux/amd64
+      - digest: sha256:b9c3b341fdb5203284c2d8b91afdc82c7dd350531a6b229bdc72de045841cc4e
+        arch: linux/arm64
+  - name: prometheus-operator
+    image: quay.io/prometheus-operator/prometheus-operator:v0.77.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:f384fc6a6b8d549cdb1574acc24dfcf8b4870a74dba48407989be481b04ca811
+        arch: linux/amd64
+      - digest: sha256:588201c912a2b083d9fdd3714a19f38e2b3ce135e5f7947f9d39f80fc70d363d
+        arch: linux/arm64
+  - name: prometheusConfigReloader
+    image: quay.io/prometheus-operator/prometheus-config-reloader:v0.77.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:6468dc535b72de1e047eed715ede9a241749896f75aa27351eab98e9962e544a
+        arch: linux/amd64
+      - digest: sha256:c5f2f26cca1fdbb1de8278b7de9227bd36b5bac18c6a116a4e247a2fd2ea0874
+        arch: linux/arm64
+  - name: thanos
+    image: quay.io/thanos/thanos:v0.36.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:969335e9a19c1f616c9e0dfb9caa36691108217f87ce1086ff1f1bf06e6b847f
+        arch: linux/amd64
+      - digest: sha256:caa36584993838c4b01b20cd7f6fb4543393e01738c91d134a39f1d1d4098b40
+        arch: linux/arm64
+  - name: prometheus
+    image: quay.io/prometheus/prometheus:v2.54.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:69961df6ffa67598048a31aa2822d61f3c93b91d7db24e44d9bb03f99d520da9
+        arch: linux/amd64
+      - digest: sha256:0375e523ffe0ce7522a9968793b57cb36372a4a2a9a570572b48082227790ed7
+        arch: linux/arm64
+  - name: grafana
+    image: docker.io/grafana/grafana-enterprise:11.2.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:494ca6e9981c6d01792083722cb9eef44f80c429390e18517500de2b9ba4beef
+        arch: linux/amd64
+      - digest: sha256:13e57e26a027e21a9f084aa871515fd0e98c6b3e97d20b373a08e4368a4ade61
+        arch: linux/arm64
+  - name: testFramework
+    image: docker.io/bats/bats:v1.4.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:d1049593eee83c2c8f420cdc94e4a540532cb09d681cc6bb098cbc5c4e739aff
+        arch: linux/amd64
+      - digest: sha256:b7778baed271227ad03027fc07443a064eb08c3b43d88fd877c792f4fae86efd
+        arch: linux/arm64
+  - name: downloadDashboardsImage
+    image: docker.io/curlimages/curl:7.85.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:f4821d304c3d1fa06dcea4feb2be79f98ff012a8fa3a51943b94e333f69b0098
+        arch: linux/amd64
+      - digest: sha256:90e5dc1fd0c1ea56b5817ea17c8fc82ccb40eaa0e43a336b19a51e30e5b81c41
+        arch: linux/arm64
+  - name: initChownData
+    image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:73f7dcacb460dad137a58f24668470a5a2e47378838a0190eef0ab532c6e8998
+        arch: linux/amd64
+      - digest: sha256:8e2db05c13c422bfd50dbe48b8e075b8d9d735e7c5a2a54b4aec340b1ad2e6cd
+        arch: linux/arm64
+  - name: grafana-sidecar
+    image: quay.io/kiwigrid/k8s-sidecar:1.27.4
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:7e56f5f09951458af3da95770e59f218833beb58d99f4b5d4ae2149788ceebcc
+        arch: linux/amd64
+      - digest: sha256:ee126f259e0ebb20fa228ba0937bc12c6829826de38f806849fbefae4ed877b1
+        arch: linux/arm64
+  - name: imageRenderer
+    image: docker.io/grafana/grafana-image-renderer:3.11.5
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:b870676b66ef43989966e1a23cb101aa465dce32450f49b574818276983473b2
+        arch: linux/amd64
+      - digest: sha256:774b8469f6cd581922addff23ad1d21fdf447546ad2857830d828bc051c08727
+        arch: linux/arm64
+  - name: prometheus-node-exporter
+    image: quay.io/prometheus/node-exporter:v1.8.2
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:065914c03336590ebed517e7df38520f0efb44465fde4123c3f6b7328f5a9396
+        arch: linux/amd64
+      - digest: sha256:1eabab826c9d9f0c534e4e8fa745445f743fef9aee276d561d12811edea74004
+        arch: linux/arm64
+  - name: kubeRBACProxy
+    image: quay.io/brancz/kube-rbac-proxy:v0.18.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:62eeb8a0aaa13a8d886de07e5805940cec079ffbaf1d74483e26ad4a84952dce
+        arch: linux/amd64
+      - digest: sha256:6384785247f126850e3ad620af329670612b0a7fbc15f51b4450f4918117e6ce
+        arch: linux/arm64
+  - name: kube-state-metrics
+    image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.13.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:cfef7d6665aab9bfeecd9f738a23565cb57f038a4dfb2fa6b36e2d80a8333a0a
+        arch: linux/amd64
+      - digest: sha256:888486e7e0a53aa7293b223bddc8db077c4bb7f7b41140f32aa04880a10c6c24
+        arch: linux/arm64
+  - name: grafana-plugins
+    image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:df171b61de00d913db12992bc6005989ded8215454980bce264608b39fffe88a
+        arch: linux/arm64
+      - digest: sha256:632831c45ad02a28f0309866f100351ca94201f09704431d0f05e6a111288f27
+        arch: linux/amd64
+  - name: alloy
+    image: grafana/alloy:v1.6.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:da82cb8b6c5939fac71e2206b05101ca7581f929d6ea7c1e8dd311ccc69176fa
+        arch: linux/amd64
+      - digest: sha256:faaa6643430612fc5ee977ac51f54f04d1b8db3ca0933ccae82576e5eb5fe8a5
+        arch: linux/arm64
+  - name: configmap-reload
+    image: ghcr.io/jimmidyson/configmap-reload:v0.14.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:75a4513f49c4c0ea439cf7daa2c9e275824f9583a09e7ae8461c0a3ab7a83841
+        arch: linux/arm64
+      - digest: sha256:6bd0fa510864cf010ad20a3cdb0a71fc3df804b00479b01102f13d9b9b0b975a
+        arch: linux/amd64
+  - name: beyla
+    image: grafana/beyla:1.9.8
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:3147839b1d9330fdf6be8ac4c832be3f9caedb2d1e91712b6f372b20155f07c4
+        arch: linux/amd64
+      - digest: sha256:bbc9260bf31aef0afe3dab07775ba81ab672c1d32b0c39ea98509179ae0aa99d
+        arch: linux/arm64
+  - name: beyla-k8s-cache
+    image: grafana/beyla-k8s-cache:1.9.8
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:b50282da9591776fee00fd0ffe01dcf8e0cc5688a85882f40d294f06204635f7
+        arch: linux/amd64
+      - digest: sha256:85a1cced109ccbcd55bd8e27d4f5caa3931662208448ce3b477e4006d444e014
+        arch: linux/arm64
+  - name: tempo
+    image: docker.io/grafana/tempo:2.7.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:b3599d92ed2c933e70ca6985cdece01459242dc697377fad595572058b93c781
+        arch: linux/amd64
+      - digest: sha256:8b593a606765f0dfc394926cad7529f10f016df637c73691a27528dfe770a405
+        arch: linux/arm64
+  - name: queryFrontendQuery
+    image: grafana/tempo-query:2.7.0
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:3b6d5a325ae9419a66355fc9301239883f3c3e6d68873a09203f99216a3e837d
+        arch: linux/amd64
+      - digest: sha256:8da0884f6b62296a839d0ae6e0e3dfe91de263730914f5c1563f490055602673
+        arch: linux/arm64
+  - name: memcached
+    image: docker.io/library/memcached:1.6.33-alpine
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:156bc025f995df7b7c19427fa4ce940b4f03d4f730c42426ec495848a588e5c5
+        arch: linux/amd64
+      - digest: sha256:6263c127197a1481b125b0286bfc4d5e1f64c5813a4e96d6d9e92f838e8de116
+        arch: linux/arm64
+  - name: memcachedExporter
+    image: prom/memcached-exporter:v0.14.4
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:3cc259dff5590c50c36d6773b1799b074efb5df5d50f7928bbac7782dd3a1109
+        arch: linux/amd64
+      - digest: sha256:7d488db71214c8eadc810c927bdf560a03626d667cacecf3d07b0aac4121eec0
+        arch: linux/arm64
+  - name: gateway
+    image: nginxinc/nginx-unprivileged:1.27-alpine
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:f042501615ab350cdc89294ae55d914f517c3a0b2ec53498fa8ac6404a985668
+        arch: linux/amd64
+      - digest: sha256:7a72474688da613f6ba77a986ecc67c0a7e0b45be1bd7e52b5d8bf17a8d5ac24
+        arch: linux/arm64
+  - name: enterprise
+    image: grafana/enterprise-traces:v2.6.1
+    chart: monitoring-platform
+    digests:
+      - digest: sha256:7f56c2059ad16037b887894b002e9850144d4628df52157c6b1e0c21503e79fd
+        arch: linux/amd64
+      - digest: sha256:cc6d6dac9bfa6c798d4cc446bf43e2a9b5f9a9b6a1889eed4cef9e734359d8ac
+        arch: linux/arm64
+  - name: metrics-server
+    image: registry.k8s.io/metrics-server/metrics-server:v0.7.1
+    chart: metrics-platform
+    digests:
+      - digest: sha256:31f034feb3f16062e93be7c40efc596553c89de172e2e412e588f02382388872
+        arch: linux/amd64
+      - digest: sha256:7f0fc3565b6d4655d078bb8e250d0423d7c79aeb05fbc71e1ffa6ff664264d70
+        arch: linux/arm64
+  - name: addon-resizer
+    image: registry.k8s.io/autoscaling/addon-resizer:1.8.21
+    chart: metrics-platform
+    digests:
+      - digest: sha256:151f9fed906c4a21371f3800928cc356d20f4ceb08eb53c9ecb2849fe26ec581
+        arch: linux/amd64
+      - digest: sha256:745d38e2827e76d31ef2504f5bbe37004aa8724fb736968260f9193976c19e8d
+        arch: linux/arm64
+  - name: external-dns
+    image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
+    chart: external-dns
+    digests:
+      - digest: sha256:7d61e5efae6a4f850341734edbe84c27a8997e15c81ce004ef293d938e55cd15
+        arch: linux/amd64
+      - digest: sha256:ef3176c7dc29074eabd95eafa762e665fc1f394438a0ffaaf8959a8afffdb3fb
+        arch: linux/arm64
+  - name: consul
+    image: docker.io/hashicorp/consul:1.14.4
+    chart: consul-platform
+    digests:
+      - digest: sha256:6cabd7023b12556ecb63d07df07cfd6d6e35f2d7426f1d0f0ec7c3caf3f193cf
+        arch: linux/amd64
+      - digest: sha256:9b44aac2203797b88aae8d5e1c3dbe9ddc2768257b433039d02e802beca02158
+        arch: linux/arm64
+  - name: consul-k8s-control-plane
+    image: docker.io/hashicorp/consul-k8s-control-plane:1.0.3
+    chart: consul-platform
+    digests:
+      - digest: sha256:149049aea575ea8e779f0f0d379f6068bfe9f06fdbf219a3e105550d2dcc8b05
+        arch: linux/amd64
+      - digest: sha256:e71816c706ee433b4321b100873b4648d9d979d18c8dbfa307ea85512a38858e
+        arch: linux/arm64
+  - name: consul-dataplane
+    image: docker.io/hashicorp/consul-dataplane:1.0.1
+    chart: consul-platform
+    digests:
+      - digest: sha256:9815eeb33d341a537dcc1d2bb71e8c941e795b78196eeeccfbd5c925e2bc580c
+        arch: linux/arm64
+      - digest: sha256:e79755cb2c07890eeb087f99a8306a711124ca48e840edb6a95582e6032dbd3e
+        arch: linux/amd64
+  - name: envoy
+    image: docker.io/envoyproxy/envoy:v1.23.1
+    chart: consul-platform
+    digests:
+      - digest: sha256:fa1250b1e2b1d33d83f0a3fb82267eb9af3245fc7b5ae857dbed19e5282d5cec
+        arch: linux/arm64
+      - digest: sha256:2e528bb5731c21a53e9ab93578490306e79eae2ab37a39eb54721bab7cb7c643
+        arch: linux/amd64
+  - name: vault
+    image: docker.io/hashicorp/vault:1.17.2
+    chart: vault-platform
+    digests:
+      - digest: sha256:10d7ebc9b405c01ffdeedfd5b9b6a41edbe4519b7b5834ab4bc36b849204ac3d
+        arch: linux/amd64
+      - digest: sha256:2d2d928c3a0d68145f94eca249283a975f94d19ac8a46f564e5922ae0d46f53b
+        arch: linux/arm64
+  - name: vault-secrets-webhook
+    image: platform.artifactory.qvantel.net/platform/qvantel-vault-secrets-webhook:1.0.0.1_master_e5e0236d8
+    chart: vault-platform
+    digests:
+      - digest: sha256:ca84ff33db3e42d8799683f5f048a2979f820887e66f4615c580ef07bd94abca
+        arch: linux/arm64
+      - digest: sha256:7a743ec9d43dcfcb2bbc0bcee1936e7d657be2f2b3ccbc880d3ffd24e760602f
+        arch: linux/amd64
+  - name: vault-env
+    image: ghcr.io/bank-vaults/vault-env:v1.21.6
+    chart: vault-platform
+    digests:
+      - digest: sha256:ba99d5178db6bbd536fd35dc0d07c84ccc254855c16f4ad446f6402ecde94178
+        arch: linux/amd64
+      - digest: sha256:0fea8271e2f8ec09706f6541c180b52888d93016ea60e50e4c7c14d739b82d05
+        arch: linux/arm64
+  - name: minio
+    image: quay.io/minio/minio:RELEASE.2024-12-18T13-15-44Z
+    chart: minio-platform
+    digests:
+      - digest: sha256:dca4c608031e569387ebb9dbc5738542a4ddd68f57464c1f7ad5a2d31cefcb8d
+        arch: linux/arm64
+      - digest: sha256:34c8e2f52a5984492555427fee07254c80036bdb7079bb91679232abd7a4fa20
+        arch: linux/amd64
+  - name: mc
+    image: quay.io/minio/mc:RELEASE.2024-11-21T17-21-54Z
+    chart: minio-platform
+    digests:
+      - digest: sha256:25abaf60c1654a0c36089eb6885b966496bfe2766a44a8b2941d50aa8bc2d73c
+        arch: linux/arm64
+      - digest: sha256:771f5ad7925a6b5e069786d8e847a292de320f1e3e3203647e29f47ec9b3d93b
+        arch: linux/amd64
+  - name: pilot
+    image: docker.io/istio/pilot:1.23.2
+    chart: istio-platform
+    digests:
+      - digest: sha256:59a252ac64fde086b8ea643a673478441e1e76ecd1848bf44e5db67222e210a3
+        arch: linux/arm64
+      - digest: sha256:72df012f5c6d427cfa90bbdf26bf8fd6a1648da0fcc33394e6a3d00d46531c09
+        arch: linux/amd64
+  - name: proxyv2
+    image: docker.io/istio/proxyv2:1.23.2
+    chart: istio-platform
+    digests:
+      - digest: sha256:0ca972533d44be0e903f3fcdfaf881e1739538336e4c7056c8a1b0b536326d8a
+        arch: linux/arm64
+      - digest: sha256:84fd20ad035413df3883d427a7d13eeb5163f0c18ba38dc973b70c7c25ba1162
+        arch: linux/amd64
+  - name: elasticsearch
+    image: docker.io/library/elasticsearch:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:3e82c0aefb87f2b716d0d09ffc252076b200a05eb1692c795dcb5c3057952477
+        arch: linux/amd64
+      - digest: sha256:5837d1482e31630c7c8f0b309743361c260c50749dd2ca14d96b8950f727993b
+        arch: linux/arm64
+  - name: kibana
+    image: docker.io/library/kibana:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:51aec3d4fa9711e712bcd0af984bfc35a6fe0cb1bcaef2f241b5c5fafbf18e4d
+        arch: linux/amd64
+      - digest: sha256:f4bbb4e68162da8d7b492294e5fbdb8af96fe9149b3f844445b530695327665e
+        arch: linux/arm64
+  - name: eck-operator
+    image: docker.io/elastic/eck-operator:2.2.0
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:9f959870f664f36557b7d7163c0eb3498b6f3111b28e90313a7b04fe75a6f42a
+        arch: linux/amd64
+      - digest: sha256:3ef1438ca50c0bd1434658bb2c0870628139fdf9e58e200e7f554ab368532139
+        arch: linux/arm64
+  - name: filebeat
+    image: docker.io/elastic/filebeat:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:92aa1b3478d4d1edc9428957999770e6f42516f2435816bdda03b992b18478eb
+        arch: linux/amd64
+  - name: logstash
+    image: docker.io/library/logstash:7.16.2
+    chart: elasticsearch-platform
+    digests:
+      - digest: sha256:a3f0ea205881847c0f72c07dd4e8cc49246f34c6cbefae35c3719f81552d812b
+        arch: linux/amd64
+      - digest: sha256:c2350fb6b74b694615e628764b338a2885ea55d7cfdd4344feb1e5ed41b7f12f
+        arch: linux/arm64
+  - name: elasticsearch
+    image: docker.io/bitnami/elasticsearch:8.17.1-debian-12-r2
+    chart: elasticsearch
+    digests:
+      - digest: sha256:38a83c05a0a167f58145122fe7ec7652cd743afb434dbb3fbcdc077e95c2a5a8
+        arch: linux/amd64
+      - digest: sha256:ba5145797f4e27ef4b8e2116911bc9e7226f8fe7a0465440005964f5cc5a8c87
+        arch: linux/arm64
+  - name: elasticsearch-exporter
+    image: docker.io/bitnami/elasticsearch-exporter:1.8.0-debian-12-r9
+    chart: elasticsearch
+    digests:
+      - digest: sha256:16ea6b2c615fa8cb12a180601dd75c9a23222dadeea3f25ff8bc4d985a422285
+        arch: linux/amd64
+      - digest: sha256:92ad65ba153eaaba95c081a5e77440442332ba7974c4dd9f60ab4d448b98c31b
+        arch: linux/arm64
+  - name: os-shell
+    image: docker.io/bitnami/os-shell:12-debian-12-r35
+    chart: elasticsearch
+    digests:
+      - digest: sha256:31415d8e37a417ec50fbcdbb8c8fbb9c0a7763934923c1877234a1cd427511d2
+        arch: linux/amd64
+      - digest: sha256:344db2b23709a29683a7ade43fa729fbf2f88911f6a6dcfde39e83c69e75a0bb
+        arch: linux/arm64
+  - name: kibana
+    image: docker.io/bitnami/kibana:8.17.0-debian-12-r0
+    chart: kibana
+    digests:
+      - digest: sha256:3411c290b05ff588275f45c863693bb5e97cbbf3045dba2d1e38cfe961361cbb
+        arch: linux/amd64
+      - digest: sha256:5bafed2d62d202aebf51b9fb47587117cd9dea9dfd532cc871deffbf89063f8d
+        arch: linux/arm64
+  - name: os-shell
+    image: docker.io/bitnami/os-shell:12-debian-12-r34
+    chart: kibana
+    digests:
+      - digest: sha256:4aea4e9e0642686f6f2220e3a88af6967443c0d1fe256b296cbba97171e0b170
+        arch: linux/amd64
+      - digest: sha256:997b822ddc8dc081ec0350e836a64a0a05ea1dcd278e03f298471f5d3756619c
+        arch: linux/arm64
+  - name: loki
+    image: docker.io/grafana/loki:3.2.0
+    chart: loki-platform
+    digests:
+      - digest: sha256:f9e882734526722e173b9c2c6694a0880f22a815229c497ccb4e9a9e32ebbf15
+        arch: linux/amd64
+      - digest: sha256:ad96f64845f664700caddc642c0621467603c12887fb649c66e3082768a1c755
+        arch: linux/arm64
+  - name: loki-sidecar
+    image: kiwigrid/k8s-sidecar:1.27.5
+    chart: loki-platform
+    digests:
+      - digest: sha256:afb4e8f23ebe3057130d9ee58176ec6c8e168f530e4300cf1a971db8daba5ab1
+        arch: linux/amd64
+      - digest: sha256:901073c75e53ca3f266a7e089a9e59acbb9182fc15d008cf80390e7f3f596b97
+        arch: linux/arm64
+  - name: memcached
+    image: docker.io/library/memcached:1.6.23-alpine
+    chart: loki-platform
+    digests:
+      - digest: sha256:56b3526ad7eba067730ca64ab7a9062327160c9ff6dd9bc6d84fe0cd36b9005b
+        arch: linux/amd64
+      - digest: sha256:bf184a14585ef27c8248c86fc4b7720d470388144f78d47be37fe579906fae6e
+        arch: linux/arm64
+  - name: fluent-bit
+    image: cr.fluentbit.io/fluent/fluent-bit:3.1.9
+    chart: vector-platform
+    digests:
+      - digest: sha256:bdff03dc15a55ab5ef74b3d566c9331b02812957b39b63ef7b6dd345fe2a2e01
+        arch: linux/amd64
+      - digest: sha256:0c485fc139d296de50567b38ccbaa382d29b9972db4068e4f13dd77718768140
+        arch: linux/arm64
+  - name: vector
+    image: docker.io/timberio/vector:0.41.1-distroless-libc
+    chart: vector-platform
+    digests:
+      - digest: sha256:3282e63ec4ac50a560b531f6da0ae68b196218629c1c759e4f18bc94566dc5a4
+        arch: linux/amd64
+      - digest: sha256:3dd50a937130947c6320dd333b501acd7806d596454fe97c1303bb07ac7555ce
+        arch: linux/arm64
+  - name: haproxy-alpine
+    image: docker.io/haproxytech/haproxy-alpine:2.6.12
+    chart: vector-platform
+    digests:
+      - digest: sha256:e758f95e4c6c0440d66e741255a1855a647d966499d66cbbca0a708b93f5ec9f
+        arch: linux/amd64
+      - digest: sha256:23116f314d0eba4bc541660cfcadebbad63c11fe2c86d2ee16efb578c52ba364
+        arch: linux/arm64
+  - name: cass-operator
+    image: cr.k8ssandra.io/k8ssandra/cass-operator:v1.22.4
+    chart: kasope-platform
+    digests:
+      - digest: sha256:77a894b552aa3289bfced92452f9dc6f5ef6e4c179009fa8a67d6c1c3c448371
+        arch: linux/amd64
+      - digest: sha256:06dd8718c64cace3e32e2b5c024e134e490c7a983c004bee5229d7e549c6952c
+        arch: linux/arm64
+  - name: cassandra
+    image: cr.k8ssandra.io/k8ssandra/cass-management-api:3.11.13
+    chart: kasope-platform
+    digests:
+      - digest: sha256:438c7d706177109f35de3c7260dc888a3549c5c35593e194dcb9ceb34ace046f
+        arch: linux/amd64
+      - digest: sha256:c7b894c4ddaf279aa063b67bd13b807f711c9bf8dd78eb645fd75783ec8f3a0e
+        arch: linux/arm64
+  - name: systemLogger
+    image: cr.k8ssandra.io/k8ssandra/system-logger:v1.22.4
+    chart: kasope-platform
+    digests:
+      - digest: sha256:1337e443605b3cab84107311a572f87d14f44080bf2870f3e558b0ad456ffc2c
+        arch: linux/amd64
+      - digest: sha256:052c0f28214e4e72e897d71e7f6c41ad8ab51883ce95d4e3543c73a9193cf8e1
+        arch: linux/arm64
+  - name: configBuilder
+    image: cr.dtsx.io/datastax/cass-config-builder:1.0-ubi8
+    chart: kasope-platform
+    digests:
+      - digest: sha256:9ea0fe726ece3cda64876ed389801ad0bc659a94dfc79a6cad080f20fc8d13b3
+        arch: linux/amd64
+      - digest: sha256:699ddf003d731c1ba93e3e2f6a46d1d1f354b71b4b8db861a6f20c46d8f5e191
+        arch: linux/arm64
+  - name: k8ssandraClient
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-client:v0.2.2
+    chart: kasope-platform
+    digests:
+      - digest: sha256:df0474a565dfe7b98848534dfef485b6ccd0a8a5e72dc0c622490ce12fec0396
+        arch: linux/amd64
+      - digest: sha256:f258101bf0ac7691e1705710b16121cc4575c7e7a48aed0eee43911d72ce8483
+        arch: linux/arm64
+  - name: k8ssandra-tools
+    image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
+    chart: kasope-platform
+    digests:
+      - digest: sha256:4db559c3b2f139fda7cd63c774048d20d9ec9c205f34226eacbe70d203a2cbc2
+        arch: linux/amd64
+      - digest: sha256:82fa0c265f3e21613123e9bb52e16146be6f59aa66494ed6c3e964cea5a53cd1
+        arch: linux/arm64
+  - name: k8ssandra-operator
+    image: cr.k8ssandra.io/k8ssandra/k8ssandra-operator:v1.20.1
+    chart: kasope-platform
+    digests:
+      - digest: sha256:e49ee84763267fe3dc6061bf34077aee4471a17c740c1e724ebfb85fb1e5c322
+        arch: linux/amd64
+      - digest: sha256:614dadb3a896d4c4c56d208ace6e1dbe832e885000c9fbec14cce897535ab042
+        arch: linux/arm64
+  - name: reaper
+    image: thelastpickle/cassandra-reaper:3.6.1
+    chart: kasope-platform
+    digests:
+      - digest: sha256:524f03675179843ba9678e6d308de866bb88dd8b73e0d18920da1862a70c227e
+        arch: linux/amd64
+      - digest: sha256:751bb941d2f7d3588d7b84b917faba8a2d1f436971690e19b3ea7b67c40e6c83
+        arch: linux/arm64
+  - name: medusa
+    image: docker.io/k8ssandra/medusa:0.22.2
+    chart: kasope-platform
+    digests:
+      - digest: sha256:42c5fe056b78803874e0384ebc150b00bfc197a271da5906d816bb1cb5df2f79
+        arch: linux/amd64
+      - digest: sha256:845adc2c9e62830510344f3bd810b502d7030ca9aa6ddf5eab2a53f7fd079834
+        arch: linux/arm64
+  - name: operator-037
+    image: quay.io/strimzi/operator:0.37.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:202cb9d2cd20602b622cd09e5d522b650e6e327c9c54dfa8f3c2e559949aa477
+        arch: linux/amd64
+      - digest: sha256:205c994d398ef948960e3253ce5fae3ccac9771745c389fbd6bd9cd422b8bfa3
+        arch: linux/arm64
+  - name: operator-043
+    image: quay.io/strimzi/operator:0.43.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:d3ad91c18183ff2fab03da27eae667e4901670eec2bccb03d7f3365dfb6c1d60
+        arch: linux/amd64
+      - digest: sha256:ed74d92ce60aae006457e5e80210330f898a575e8bf99b41b13eafb9f68d06e9
+        arch: linux/arm64
+  - name: kafka-037-351
+    image: quay.io/strimzi/kafka:0.37.0-kafka-3.5.1
+    chart: kafka-platform
+    digests:
+      - digest: sha256:17fffbb06201b9ab73c431eaa4e506ceaf855e8c29b844131cbfdf8067426234
+        arch: linux/amd64
+      - digest: sha256:ed433b82aa76529a6f8245ae967c8bddbd6c7da012474980e8e9845baeb9e99d
+        arch: linux/arm64
+  - name: kafka-043-380
+    image: quay.io/strimzi/kafka:0.43.0-kafka-3.8.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:0fe2a417da7f09b02a612d37228ce1891fedd78be6fbc9145f6442554e74f02e
+        arch: linux/amd64
+      - digest: sha256:7c7ae30c87c2c0a9b19f6e828a10a900bf15962bc08f5511c7862f25ee5f2ac3
+        arch: linux/arm64
+  - name: kafka-bridge-026
+    image: quay.io/strimzi/kafka-bridge:0.26.1
+    chart: kafka-platform
+    digests:
+      - digest: sha256:0c8077ff5983ffdb4786aae89cd4a76007e317e84be88ecd55e64600726ccdf1
+        arch: linux/amd64
+      - digest: sha256:e93ff46ea3546fde10c0d3cf8d59bbbd397a70269392e7532f09239c7016882d
+        arch: linux/arm64
+  - name: kafka-bridge-030
+    image: quay.io/strimzi/kafka-bridge:0.30.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:e394bffb35c13a0673d4291264dac1dc59de34f18bae5ec97a92f5ac29be4961
+        arch: linux/amd64
+      - digest: sha256:d0ab44a918948a04280c23edcd4a957278773ad2095f6d52541b969969088454
+        arch: linux/arm64
+  - name: kaniko-executor-037
+    image: quay.io/strimzi/kaniko-executor:0.37.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:71d30172bd94d6c39fb0f9ea4cb42b05bb428fd81b031e17f28828be2876cd08
+        arch: linux/amd64
+      - digest: sha256:a3348eb562f60b3afec727b266013bc43cbf8f9f1876ab6c089b5011760f6a4c
+        arch: linux/arm64
+  - name: kaniko-executor-043
+    image: quay.io/strimzi/kaniko-executor:0.43.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:b9fda52720a8c6ae739df862b988abcc29dd6b223b681afc2dc7387bcd42c9e0
+        arch: linux/amd64
+      - digest: sha256:3edced8385a32cb6de7b3a843a0fc695ed1c33fdbd7f58ad330937cc2475bb23
+        arch: linux/arm64
+  - name: maven-builder-037
+    image: quay.io/strimzi/maven-builder:0.37.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:408e0d7498ab8a35b647c249344a32b69ce9df857587117770b5454019b21013
+        arch: linux/amd64
+      - digest: sha256:e98dfbe7bbf8d99c3ce649abe249fd1e1b5f2e5f91c77bf0af551ff2f71dd358
+        arch: linux/arm64
+  - name: maven-builder-043
+    image: quay.io/strimzi/maven-builder:0.43.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:b19bb811daf44f03d79d98693a761d994de46ef65edc5c4ee321531af1252ff3
+        arch: linux/amd64
+      - digest: sha256:5584be35b9ff52a9edc3f6a45509c8832ecc639bd605d73eaa65d9784bc61f25
+        arch: linux/arm64
+  - name: kafka-ui
+    image: ghcr.io/kafbat/kafka-ui:126980339425e4bff3d98b020fe606778d3c45b1
+    chart: kafka-platform
+    digests:
+      - digest: sha256:cc86297eeab7963056ac7bdcf8f96fb275570e9aa505fd8004c00ea4dc20839f
+        arch: linux/amd64
+      - digest: sha256:ccf3db646533f4bb76845f4e032d4facd40e012fd87cea08c6bfd780d1831814
+        arch: linux/arm64
+  - name: q-cnpg-timescale-13
+    image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:13.18-33_1.2.1_202503141111_master_facc7d5c
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:5b284a0ef6f114a7e666ef5426cbf5bd2c0593109871db07ab2e4dce3689e88d
+        arch: linux/amd64
+  - name: q-cnpg-timescale-15
+    image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.10-32_1.2.1_202503141111_master_facc7d5c
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:280282ba9d8d30a3be8070e05d6ee8e6d44c53082f6cb58218b7c8d1d214ad07
+        arch: linux/arm64
+      - digest: sha256:01825bc87fff69b99560bd6269bce43f0143171c398b242f96624b0c4f23713a
+        arch: linux/amd64
+  - name: q-cnpg-timescale-16
+    image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.6-32_1.2.1_202503141111_master_facc7d5c
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:3b05ff4da0800afaf6d05e234d6fadee267c0ee93c05b77ec6d1db22800de244
+        arch: linux/arm64
+      - digest: sha256:e950ce4d5ad9d29372c7edc4b2b24f9f3d8a5176a2b1abf5b8c0dee9917b1f57
+        arch: linux/amd64
+  - name: q-cnpg-timescale-17
+    image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:17.2-32_1.2.1_202503141111_master_facc7d5c
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:7d1445347429d7f53a64f449bdca7968c5f6b15e80fa4a4902491f02785e9044
+        arch: linux/arm64
+      - digest: sha256:da0ad799ca0e91da31400bef85c17730641720133cd45ff9c2d20cc6883ae244
+        arch: linux/amd64
+  - name: cloudnative-pg
+    image: ghcr.io/cloudnative-pg/cloudnative-pg:1.24.0
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:ad0a3feaa80a90c6ce18fe6c29627c7f3250638d93eae4d1ee0be4029212f368
+        arch: linux/amd64
+      - digest: sha256:0a569c2cc646462a51615f537549d48c3ee88537325ec147b7002655984fe036
+        arch: linux/arm64
+  - name: db-tools
+    image: platform.artifactory.qvantel.net/platform/platform-db-tools:1.3.0_202504201254_master_e95ea903
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:500b23c0e31c3a64dfa05b80c637b309a9a7e19affad19d22a030626a1a6bd8a
+        arch: linux/arm64
+      - digest: sha256:812997eab3cb1ba3c39eea6b465538ed705da1fe829b0d3edebadeec60d873fc
+        arch: linux/amd64
+  - name: mariadb-operator
+    image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:0.37.1
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:6d26042d5a1dd734f198c5de9100301024d2ba802171689d7d857ae630cd7c84
+        arch: linux/arm64
+      - digest: sha256:1f4f92c64cb11e07ffd739f23d22160e8c14d3b9f624f448ff89cba56e4af607
+        arch: linux/amd64
+  - name: mariadb-10-6
+    image: docker.io/mariadb:10.6.19
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:dfc3273c65d43677180a2ce67ac8e941b1c5cfbea4027a2fc78842cfc8cde0b7
+        arch: linux/amd64
+      - digest: sha256:02662a1b77ce0031ebbba3a0eb4059eaa745060bb363a16ab6d4b2e351502444
+        arch: linux/arm64
+  - name: mariadb-10-11
+    image: docker.io/mariadb:10.11.9
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:100717846f551a000e2b16e592643973e63ccf4dc759ce6416732710e1762364
+        arch: linux/amd64
+      - digest: sha256:b720833d4c6eb8e6ee58724cf07e14f070ab479d80bfdaab0ccb6925112e4b32
+        arch: linux/arm64
+  - name: mariadb-11-4
+    image: docker.io/mariadb:11.4.3
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:ba779bb3d3eecb77fa37f49ae504145b1d5927132600d42d0409e1dd23e484fb
+        arch: linux/amd64
+      - digest: sha256:90fbc70ae9f64cbe923836ac3a85448fd58899d9b217ca32a8eb1b61d5c614b9
+        arch: linux/arm64
+  - name: maxscale
+    image: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:5081aa9457a9d217c61fd87e162c05a60ca38db770df9890bf66460346b57a87
+        arch: linux/amd64
+      - digest: sha256:674ff05fb75d15c6a045e23db17ab9402b14c350ba2d6abfaab4db2a7cd5aba4
+        arch: linux/arm64
+  - name: mariadb-exporter
+    image: prom/mysqld-exporter:v0.15.1
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:cc6b391a57862699c0cc2fafbc7b53aec66f503291b3258e44d3fd1d61487fc1
+        arch: linux/amd64
+      - digest: sha256:40a1de57cc39e13c4dd2f1f5fe13f1bc78a93d6196442a58f7be2f28f5bcec98
+        arch: linux/arm64
+  - name: maxscale-exporter
+    image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+    chart: mariadb-operator-platform
+    digests:
+      - digest: sha256:dc07389d5c2e3b858a368193c03fb7bfa841e8b071914ef26930b916a299d6b2
+        arch: linux/arm64
+      - digest: sha256:31cd85a021265395062a8a2f9e89df372e974686b379c638bd66c5c329fe562d
+        arch: linux/amd64
+  - name: redis
+    image: docker.io/bitnami/redis:7.2.5-debian-12-r4
+    chart: redis
+    digests:
+      - digest: sha256:79a1d020032eec29b58762f7add09cf4fd7d4987ae487ab73c8f20e57b30c2d4
+        arch: linux/amd64
+      - digest: sha256:947014a1ad8fd2e86fa04cc9d34723f916370ecb009336c5ef5e9f0d918f33a3
+        arch: linux/arm64
+  - name: redis-exporter
+    image: docker.io/bitnami/redis-exporter:1.62.0-debian-12-r2
+    chart: redis
+    digests:
+      - digest: sha256:87eb1444a891b22dec2a1f1e65355bdb77b645c3cc5cd78bc7e5eb5fe3af5eac
+        arch: linux/amd64
+      - digest: sha256:d42aabf4159783bb07810a8d0530c9b76c047c3528b0bfeb1b632b08f15706cf
+        arch: linux/arm64
+  - name: redis-sentinel
+    image: docker.io/bitnami/redis-sentinel:7.2.5-debian-12-r4
+    chart: redis
+    digests:
+      - digest: sha256:1ca6e5192137cb3f618e217a03e57f9f09ed61247c7892af721415061ecd4c40
+        arch: linux/amd64
+      - digest: sha256:8d33769466e10e0ffc86f05fd73ae567aa86d8e0a2b29884f5f8231f70a88bf0
+        arch: linux/arm64
+  - name: rabbitmq
+    image: docker.io/bitnami/rabbitmq:4.0.5-debian-12-r1
+    chart: rabbitmq
+    digests:
+      - digest: sha256:cdf7dac1b66972d78cd6b075ea69df78757327550313c511e9b549320de2eb00
+        arch: linux/amd64
+      - digest: sha256:1ff661bb1c92dd2ad32503256c27572daf2735c97560aeef0901dbc449e331a4
+        arch: linux/arm64
+  - name: kubectl
+    image: docker.io/bitnami/kubectl:1.30.2-debian-12-r0
+    chart: mongodb
+    digests:
+      - digest: sha256:3ec696e5ce1b79f78eb0eac1fed4ef20fa6584662cdf3c7ad933b0b03b9ce3f6
+        arch: linux/amd64
+      - digest: sha256:cde63381127786f694d6ceb39168593f8dd7e0564f2534f1ca4e7d1aaa70d3db
+        arch: linux/arm64
+  - name: mongodb
+    image: docker.io/bitnami/mongodb:7.0.12-debian-12-r0
+    chart: mongodb
+    digests:
+      - digest: sha256:22ce4d823b0938340885de5cc39d1f93617a7686e60363c33c78e179d42fe404
+        arch: linux/amd64
+  - name: mongodb-exporter
+    image: docker.io/bitnami/mongodb-exporter:0.40.0-debian-12-r30
+    chart: mongodb
+    digests:
+      - digest: sha256:4111a9be9fea7ee34a7f16bae3a07fbaaa903ee652551dcf94051c3823bf941c
+        arch: linux/amd64
+      - digest: sha256:ae3f85d4cc555a5f214cedf00fe4ebdca469f7669b1e71fb75cd7098ba27679c
+        arch: linux/arm64
+  - name: nginx
+    image: docker.io/bitnami/nginx:1.27.0-debian-12-r2
+    chart: mongodb
+    digests:
+      - digest: sha256:f228971a40e1c5de326428123cd044650b02f19baa8aac1c28f6e29fe43ecc81
+        arch: linux/amd64
+      - digest: sha256:21f6a568d4f30701576ea8c9ed89d77c5ecf6443746232555f594b0825a87c8c
+        arch: linux/arm64
+  - name: os-shell
+    image: docker.io/bitnami/os-shell:12-debian-12-r23
+    chart: mongodb
+    digests:
+      - digest: sha256:1c6aa5c51d48458b8cb00c59efb89bb9dbbb38906aeac24e57e719ab61e33e59
+        arch: linux/amd64
+      - digest: sha256:6b87753e9928bbe6f85fba5d8eba67f408de53bb03082953342ff9a2eec9890c
+        arch: linux/arm64
+  - name: pmm-server
+    image: percona/pmm-server:2.41.2
+    chart: percona-pmm-platform
+    digests:
+      - digest: sha256:a5c45207d6e454f18b1c341b10673e88216b9abb6c280793d8db125aedcc47d6
+        arch: linux/amd64
+  - name: ingress-controller
+    image: pomerium/ingress-controller:sha-54e3ddc
+    chart: pomerium-platform
+    digests:
+      - digest: sha256:c276a2ea6f36a866ec997b3ee35e16494f91d2fe21f6596ff9b06909beed1ebb
+        arch: linux/amd64
+      - digest: sha256:f6eb7d7435773d1ce9dd1b2af9a56a47428cff82cd01b3bf42e26736c6248cbb
+        arch: linux/arm64
+  - name: pomerium
+    image: pomerium/pomerium:v0.22.1
+    chart: pomerium-platform
+    digests:
+      - digest: sha256:721e2c7ee9b72ad01afdebc9bcf67b06abb43b7306748448292f7cbc79a22296
+        arch: linux/amd64
+      - digest: sha256:7f73e9b5a70b80f8727c2a1e9ded2f69b6e7a719d6ce9b218c7c8dc0a4353f2a
+        arch: linux/arm64
+  - name: agent-static
+    image: icr.io/instana/agent:1.276.0
+    chart: instana-platform
+    digests:
+      - digest: sha256:933ac2ebaa67687b6cdef755ed30825f2fc31592960683e6b96c07fe33670f2d
+        arch: linux/amd64
+      - digest: sha256:dfd0d5cdf929a702782edc765ebef456f49e8500406ac3df0753fed5a91308f8
+        arch: linux/arm64
+  - name: leader-elector
+    image: icr.io/instana/leader-elector:0.5.19
+    chart: instana-platform
+    digests:
+      - digest: sha256:0e849dd3903cced2d19e73390a5ffc70b0aa35d1f3b2e4b567e64850bcdf70d5
+        arch: linux/amd64
+      - digest: sha256:1af592691975d10be8f30c8bf9030670e5f4ad4cd1b0ed83ee5ff7c09ac74466
+        arch: linux/arm64
+  - name: k8sensor
+    image: icr.io/instana/k8sensor:ffb74e9
+    chart: instana-platform
+    digests:
+      - digest: sha256:e7f5bbefa6079992ed5e4c8d858b7306f7545c9c621ff99fbe74a9143e56f569
+        arch: linux/amd64
+      - digest: sha256:7ecbf1ad70a073f38e6c9603783f918b4a64e6874a8746cf1d8ebed118bbe26b
+        arch: linux/arm64
+  - name: sftpgo
+    image: ghcr.io/drakkan/sftpgo:v2.5.4
+    chart: sftpgo-platform
+    digests:
+      - digest: sha256:432700195d5b163f149af47d86be4e294e032e5cf57a88df3f51e2ab0a08258e
+        arch: linux/amd64
+      - digest: sha256:f3ddf08c355335dedbd189a618a1f219eecca635781bc44a6f4fc95e35979e23
+        arch: linux/arm64
+  - name: sftpgo-alpine
+    image: ghcr.io/drakkan/sftpgo:v2.5.4-alpine
+    chart: sftpgo-platform
+    digests:
+      - digest: sha256:4fac9b1244283c8fda39a7456909afd803ffc3dba1f3873cc48fe8fe3332acaa
+        arch: linux/amd64
+      - digest: sha256:1e729fc6b896e928c6945baeb4478d30def2819b4355fc13c83e5c8ac044ba51
+        arch: linux/arm64
+  - name: fleet
+    image: rancher/fleet:v0.10.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:57ae9967af7413642b609c737e4710f90512c8042193ba5c32825ae85d0ac213
+        arch: linux/amd64
+      - digest: sha256:5f0b009ecc2ab8bf08c352356f750c9766b44fa74c3a62b98cf9d07fd30e9138
+        arch: linux/arm64
+  - name: fleet-agent
+    image: rancher/fleet-agent:v0.10.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:c250c21701a7132fb3404298b6799f39992246c5e073aa582d08e7ac970f4dc5
+        arch: linux/amd64
+      - digest: sha256:c7284e766258f184f6a64ccde7745e0297371085478be9655f7d13f72b5133e0
+        arch: linux/arm64
+  - name: rancher-webhook
+    image: rancher/rancher-webhook:v0.5.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:3f916cdce0a3507aec0a91733fbfb0c2f1a81a265ded5d18e08a234736e75690
+        arch: linux/amd64
+      - digest: sha256:43a4c8689e5d4f6126fac2962e08ca46b493b8ca7f816598203e8367a8908bbb
+        arch: linux/arm64
+  - name: rancher
+    image: rancher/rancher:v2.9.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:4a86c71bef5914edf011fbfca8cc49898672db4e1a5db04d4037bbf4effeb009
+        arch: linux/amd64
+      - digest: sha256:567734a6ae6a5eaa71750e8aecffc58c8592aaf10892406c50f872cc2d35cb97
+        arch: linux/arm64
+  - name: shell
+    image: rancher/shell:v0.2.1
+    chart: rancher-platform
+    digests:
+      - digest: sha256:efcc110ddf0a3ae0d5585c90855620343005fddb138a9c498e3f30f23b9ff7ef
+        arch: linux/amd64
+      - digest: sha256:f72d12f60ec32cb06eeb7cbe05974c243dd7fc6c79604383415e4282ec4470cc
+        arch: linux/arm64
+  - name: rancher-agent
+    image: rancher/rancher-agent:v2.9.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:60447248e44d41b3c0217bcc4284347192225519ff0b94e5b73860e1a3f9f79b
+        arch: linux/amd64
+      - digest: sha256:678d5abe28e59aac26d83d35efa0dd220ab847175eb2504d2e4d7b8a04ef4149
+        arch: linux/arm64
+  - name: kubectl
+    image: rancher/kubectl:v1.29.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:8002f3dce7150b167c978c69cd3c1fdbbd4c9eeddd1905700003dd13b9c94d96
+        arch: linux/amd64
+      - digest: sha256:eb89fb2becb94c50345d17ea3ecadd236ac313705933365812ce12e4c578c0f9
+        arch: linux/arm64
+  - name: mirrored-cluster-api-controller
+    image: rancher/mirrored-cluster-api-controller:v1.7.3
+    chart: rancher-platform
+    digests:
+      - digest: sha256:69cc8975f61483d94e9726a43270ac0102cdebd35ac75151025c0e8164fc647c
+        arch: linux/amd64
+      - digest: sha256:c87794e7893c596e5aac1bfa6c8aaf8db685cc4c3049617ee9773b35501c9942
+        arch: linux/arm64
+  - name: artifactory-oss
+    image: releases-docker.jfrog.io/jfrog/artifactory-oss:7.90.5
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:fb0b84cea8e80220b442f0eb70550d789363b898a769958630dc91ec1388ad51
+        arch: linux/arm64
+      - digest: sha256:1c837eb4005621ecd48518b8383e2b94546bdf11cee29a4fa6dd2753aa01fe7e
+        arch: linux/amd64
+  - name: artifactory-jcr
+    image: releases-docker.jfrog.io/jfrog/artifactory-jcr:7.90.5
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:dc7b9c9de235de285039aa98beec08f273c6559ce8cd5532ce0652b13589d259
+        arch: linux/arm64
+      - digest: sha256:068fb8dcc122682f256db81e356367d63732af93995579688aaa9952e24a214c
+        arch: linux/amd64
+  - name: router
+    image: releases-docker.jfrog.io/jfrog/router:7.118.0
+    chart: artifactory-platform
+    digests:
+      - digest: sha256:7c2cce12365c29e58289e6399a82104dd3dc6286599f5f3d503bcc8266e90f95
+        arch: linux/arm64
+      - digest: sha256:987138a8db4e90b6c2cf666596795fbb322eceb2ba3da4b1db8862c2d179bd26
+        arch: linux/amd64
+  - name: ffr
+    image: quay.io/frrouting/frr:9.1.0
+    chart: metallb-platform
+    digests:
+      - digest: sha256:3dfb852ce63ead7bdbbc5cb8236819e273f7bb54881ad6bfec880eb43874b308
+        arch: linux/amd64
+      - digest: sha256:b3b67aaee35bea1c1cb0e6bb9f1cc4c75fad5bc6d1fcf9e0516bc3187e5faad5
+        arch: linux/arm64
+  - name: metallb-speaker
+    image: quay.io/metallb/speaker:v0.14.8
+    chart: metallb-platform
+    digests:
+      - digest: sha256:c50578d7aaf9147c95e828d6d4a38d817de554cd6f8dd5512790eae48d18129e
+        arch: linux/amd64
+      - digest: sha256:09add5fa2289bcdcb6b3320daeb773bff874a8147c93f1be0ee9697e62aae2ab
+        arch: linux/arm64
+  - name: metallb-controller
+    image: quay.io/metallb/controller:v0.14.8
+    chart: metallb-platform
+    digests:
+      - digest: sha256:741e029d1c5b5b3dad2749cba166b9e2695d63dc9e8879dbeda90d5d1275aa7e
+        arch: linux/amd64
+      - digest: sha256:1ae4a9d498a8fed94b0d8461f47f66ffd4e68a1a07bda3ede8de9b52699bea82
+        arch: linux/arm64
+  - name: keycloak
+    image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
+    chart: keycloak-platform
+    digests:
+      - digest: sha256:5c93d9a8802bc66b2dee98b5c315a99071f1a619f96bc331fda7f920610ee0d6
+        arch: linux/arm64
+      - digest: sha256:6c48b28a97227ce210e8365701e7f12c8139984216c14ba38ecf9aaf315752a8
+        arch: linux/amd64
+  - name: keycloak-configurator
+    image: artifactory.qvantel.net/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d
+    chart: keycloak-platform
+    digests:
+      - digest: sha256:5a2bb22b94c624d456c9e86d8a37e3decb5f0a7a9174d0a9a76c82f186313d90
+        arch: linux/arm64
+      - digest: sha256:c0870ad7bed1ea36d24aee1f4d4e5b57846a3c516d28e16568cc5fb801976d4d
+        arch: linux/amd64

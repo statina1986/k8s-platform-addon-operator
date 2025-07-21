@@ -22,7 +22,7 @@ EXECUTION_ENV_DOCKER = "artifactory.qvantel.net/jenkins-ci-default:2.4.0.2022020
 K8S_PLATFORM_NAME = 'platform/k8s-platform-addon-operator'
 CHART_NAME = 'k8s-platform-addon-operator'
 ARTIFACTORY_URL = 'platform.artifactory.qvantel.net'
-IMAGES_RELOCATE_URL = 'platform.artifactory.qvantel.net/k8s-platform-1-2-0'
+IMAGES_RELOCATE_URL = 'platform.artifactory.qvantel.net/k8s-platform-1-3-0-prerelease'
 PROJECT_NAME = 'baseline'
  
 // Other configuration options on "jenkins" branch in pipeline.config file

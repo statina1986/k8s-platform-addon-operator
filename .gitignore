@@ -2,4 +2,3 @@ __pycache__
 *.pyc
 .vscode
 chart/images
-chart/Images.lock
