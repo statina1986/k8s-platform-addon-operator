@@ -1,3 +1,7 @@
+<%
+  keycloakRegistry = values.get('global', {}).get('containerRegistryBase','artifactory.qvantel.net')
+%>
+
 # keycloakPlatformNamespace: keycloak
 keycloakPlatform:
   adminUsername: "admin"
@@ -84,7 +88,7 @@ keycloakPlatform:
   database:
     name: qvt-postgredb
   configurator:
-    image: ${values['global']['containerRegistryBase']}/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d
+    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d    
     spec:
       backoffLimit: 5
       template:
@@ -233,7 +237,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     healthPort: 9000
-    image: ${values['global']['containerRegistryBase']}/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
+    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
     # keycloak 25 moved health to a separate port 9000 https://www.keycloak.org/docs/latest/release_notes/index.html#management-port-for-metrics-and-health-endpoints
     
     # command: [ "some-command" ]
@@ -303,7 +307,7 @@ keycloakPlatform:
                   value: vault:database/creds/postgresql_qvaa-keycloak#username
                 KC_DB_PASSWORD:
                   value: vault:database/creds/postgresql_qvaa-keycloak#password
-                % if values['keycloakPlatform']['externalEndpointsAvailable']:
+                % if values.get('keycloakPlatform', {}).get('externalEndpointsAvailable', False):
                 KC_HOSTNAME:
                   value: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth
                 KC_HOSTNAME_ADMIN:
