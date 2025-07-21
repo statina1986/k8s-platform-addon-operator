@@ -173,10 +173,8 @@ lokiPlatform:
       name: platform
 
     objectStorageSecret:
-      create: false
-      secretName: ""
-      userKey: ""
-      secretKey: ""
+      create: true
+      secretName: "loki-s3-readwrite"
 
     gateway:
       enabled: false

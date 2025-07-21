@@ -7,9 +7,10 @@ imageBase: "platform.artifactory.qvantel.net/platform/k8s-platform-addon-operato
 deployment:
   replicas: 1
   additionalEnvironmentVars: []
-  nodeSelector:
-  #cluster-controller: "true"
-  tolerations:
+  # nodeSelector:
+  #   cluster-controller: "true"
+
+  # tolerations:
   # - effect: NoSchedule
   #   key: CriticalAddonsOnly
   #   operator: Exists
@@ -48,7 +49,7 @@ globalConfig:
 modulesConfig:
   apisixPlatformEnabled: "false"
   artifactoryPlatformEnabled: "false"
-  awsPlatformEnabled: "false"  
+  awsPlatformEnabled: "false"
   certPlatformEnabled: "false"
   cnpgPostgresPlatformEnabled: "false"
   consulPlatformEnabled: "false"
@@ -68,11 +69,8 @@ modulesConfig:
   lokiPlatform:
     loki:
       objectStorageSecret:
-        create: false
-        secretName: "platform-minio-readwrite"
-        userName: "platform-minio-readwrite"
-        userKey: "readwriteUser"
-        secretKey: "readwritePassword"
+        create: true
+        secretName: "loki-s3-readwrite"
   keycloakPlatformEnabled: "false"
   mariadbPlatformEnabled: "false"
   mariadbOperatorPlatformEnabled: "false"

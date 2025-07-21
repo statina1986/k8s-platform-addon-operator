@@ -24,7 +24,6 @@ monitoringPlatform:
       kasope: ${addon_operator['kasopePlatformEnabled']}
       consul: ${addon_operator['consulPlatformEnabled']}
       vault: ${addon_operator['vaultPlatformEnabled']}
-      istio: ${addon_operator['istioPlatformEnabled']}
       elasticsearch: ${addon_operator['elasticsearchPlatformEnabled']}
       mariadb: ${addon_operator['mariadbOperatorPlatformEnabled']}
       redis: ${addon_operator['redisPlatformEnabled']}
