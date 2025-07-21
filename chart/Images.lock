@@ -5,8 +5,8 @@ metadata:
   generatedBy: Distribution Tooling for Helm
 chart:
   name: k8s-platform-addon-operator
-  version: 1.3.0
-  appVersion: "1.3.0"
+  version: ""
+  appVersion: ""
 images:
   - name: coredns
     image: coredns/coredns:1.11.1

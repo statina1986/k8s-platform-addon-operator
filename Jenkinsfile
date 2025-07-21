@@ -38,7 +38,7 @@ def createPackage() {
 
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
 
-    sh "./generate-image-lock.sh"
+    sh "./generate-image-lock-chart.sh"
     sh "./push-images-after-build.sh $IMAGES_RELOCATE_URL"
 
     sh "docker buildx create --use"
