@@ -419,6 +419,11 @@ monitoringPlatform:
         kubeSchedulerAlerting: false
         kubeControllerManager: false
     alertmanager:
+      podDisruptionBudget: ## One pod operational all the time
+        enabled: true
+        minAvailable: 1
+      servicePerReplica: ## Service for each AM pod
+        enabled: true
       alertmanagerSpec:
         image:
           % if 'containerRegistryBase' in values['global']:
@@ -429,6 +434,24 @@ monitoringPlatform:
             value: "${values['global']['platformMastersValue']}"
             operator: "Equal"
             effect: "NoSchedule"
+        % if values['global']['multiZone']['enabled']:
+        topologySpreadConstraints:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: alertmanager
+            maxSkew: 1
+            topologyKey: topology.kubernetes.io/zone
+            whenUnsatisfiable: DoNotSchedule
+        % endif
+        replicas: 3 ## 3 pod HA always
+        podAntiAffinity: "hard"
+        podAntiAffinityTopologyKey: kubernetes.io/hostname
+        storage:
+          volumeClaimTemplate: ## To persist all the created silences
+            spec:
+              resources:
+                requests:
+                  storage: 2Gi
           
     prometheusOperator:
       % if values['global']['deployOperators'] == "false":
