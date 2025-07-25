@@ -9,6 +9,13 @@
     },
     "monitoringPlatform": {
       "properties": {
+        "alertManagerHighAvailability": {
+          "default": false,
+          "description": "If enabled, configures alertmanager with 3 replicas and other HA parameters",
+          "required": [],
+          "title": "alertManagerHighAvailability",
+          "type": "boolean"
+        },
         "alloy": {
           "properties": {
             "alloy": {
@@ -2222,46 +2229,6 @@
                   "properties": {
                     "additionalAlertRelabelConfigAsMap": {
                       "properties": {
-                        "qvantelCategoryLabel": {
-                          "description": "adding new category label requested on PS-1043 by Teja Galla to categorize from which namespace the alert comes from",
-                          "properties": {
-                            "action": {
-                              "default": "replace",
-                              "required": [],
-                              "title": "action",
-                              "type": "string"
-                            },
-                            "replacement": {
-                              "default": "$1",
-                              "required": [],
-                              "title": "replacement",
-                              "type": "string"
-                            },
-                            "source_labels": {
-                              "items": {
-                                "anyOf": [
-                                  {
-                                    "required": [],
-                                    "type": "string"
-                                  }
-                                ],
-                                "required": []
-                              },
-                              "required": [],
-                              "title": "source_labels",
-                              "type": "array"
-                            },
-                            "target_label": {
-                              "default": "category",
-                              "required": [],
-                              "title": "target_label",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "qvantelCategoryLabel",
-                          "type": "object"
-                        },
                         "qvantelSeverityChange1": {
                           "description": "critical severity to severity_qvantel SL3",
                           "properties": {

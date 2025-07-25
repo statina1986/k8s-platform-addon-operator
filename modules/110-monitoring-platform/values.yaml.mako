@@ -1,4 +1,6 @@
 monitoringPlatform:
+  # -- If enabled, configures alertmanager with 3 replicas and other HA parameters
+  alertManagerHighAvailability: false
   qvantelMonitoring:
     #Customer variable to control alerts and dashboards deployed per Program
     programs:  
@@ -419,11 +421,13 @@ monitoringPlatform:
         kubeSchedulerAlerting: false
         kubeControllerManager: false
     alertmanager:
+      % if values.get('monitoringPlatform', {}).get('alertManagerHighAvailability', False):
       podDisruptionBudget: ## One pod operational all the time
         enabled: true
         minAvailable: 1
-      servicePerReplica: ## Service for each AM pod
+      servicePerReplica: ## To allow traffic separation to each pod
         enabled: true
+      % endif
       alertmanagerSpec:
         image:
           % if 'containerRegistryBase' in values['global']:
@@ -443,7 +447,8 @@ monitoringPlatform:
             topologyKey: topology.kubernetes.io/zone
             whenUnsatisfiable: DoNotSchedule
         % endif
-        replicas: 3 ## 3 pod HA always
+        % if values.get('monitoringPlatform', {}).get('alertManagerHighAvailability', False):
+        replicas: 3
         podAntiAffinity: "hard"
         podAntiAffinityTopologyKey: kubernetes.io/hostname
         storage:
@@ -452,6 +457,7 @@ monitoringPlatform:
               resources:
                 requests:
                   storage: 2Gi
+        % endif
           
     prometheusOperator:
       % if values['global']['deployOperators'] == "false":
@@ -963,6 +969,8 @@ monitoringPlatform:
           - static_configs:
               - targets:
                   - "alertmanager.alert.k8s.qvantel.net:9096"
+                  - "alertmanager-secondary.alert.k8s.qvantel.net:9096"
+                  - "alertmanager-tertiary.alert.k8s.qvantel.net:9096"
         % endif
         additionalScrapeConfigsAsMap:
           kubernetes-pods:
