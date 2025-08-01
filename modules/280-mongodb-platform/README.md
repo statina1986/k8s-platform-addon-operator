@@ -4,7 +4,7 @@
 
 This module deploys [Bitnami's MongoDB](https://artifacthub.io/packages/helm/bitnami/mongodb/15.6.12) chart.
 
-[Upstream values.yaml with comments](https://github.com/bitnami/charts/blob/main/bitnami/mongodb/values.yaml).
+Refer to [values.yaml with comments](./examples/values.yaml.with.comments) for more detailed documentation.
 
 ## Values
 
