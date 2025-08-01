@@ -1,5 +1,6 @@
 rabbitmqPlatform:
   rabbitmq:
+    # -- Has to be set because Bitnami considers mirror registries insecure
     global: 
       security:
         allowInsecureImages: true
@@ -7,7 +8,7 @@ rabbitmqPlatform:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
       % endif
-    # More relaxed readiness probe to prevent a deadlock when restarting after an abrupt stop.
+    # -- More relaxed readiness probe to prevent a deadlock when restarting after an abrupt stop.
     # This is because rabbitmq tries to sync with its peers before becoming fully functional,
     # while Kubernetes OrderedReady policy only starts the next pod once first one is considered
     # ready.
@@ -20,9 +21,9 @@ rabbitmqPlatform:
     # However, since liveness probe defaults to curling /api/health/checks/virtual-hosts,
     # a relaxed readiness probe shouldn't lead to false positives concerning pod health.
     #
-    # https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes
-    # https://github.com/bitnami/charts/blob/main/bitnami/rabbitmq/values.yaml#L684-L695
-    # https://stackoverflow.com/questions/60407082/rabbit-mq-error-while-waiting-for-mnesia-tables/78439528#78439528
+    # [RabbitMQ documentation](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
+    # [Chart values documentation](https://github.com/bitnami/charts/blob/main/bitnami/rabbitmq/values.yaml#L684-L695)
+    # [StackOverflow thread with a comment from RMQ developer](https://stackoverflow.com/questions/60407082/rabbit-mq-error-while-waiting-for-mnesia-tables/78439528#78439528)
     customReadinessProbe:
       exec:
         command:
@@ -46,10 +47,12 @@ rabbitmqPlatform:
         existingSecret: ""
         existingSecretFullChain: false
 
+    # -- Enabled rabbitmq plugins
     plugins: "rabbitmq_management, rabbitmq_peer_discovery_k8s, rabbitmq_auth_backend_ldap, rabbitmq_stomp"
 
     communityPlugins: ""
 
+    # -- Enabled rabbitmq extra plugins
     extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_web_stomp"
 
     extraContainerPorts:
@@ -72,6 +75,7 @@ rabbitmqPlatform:
       #default_vhost = {{ .Release.Namespace }}-vhost
       #disk_free_limit.absolute = 50MB
 
+    # -- Number of replicas - Default is one for development profile, three for anything else.
     % if values['global']['configurationProfile'] in {'dev'}:
     replicaCount: 1
     % else:
