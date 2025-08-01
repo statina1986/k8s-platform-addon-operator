@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "mongodbPlatform": {
+      "properties": {
+        "mongodb": {
+          "properties": {
+            "architecture": {
+              "default": "replicaset",
+              "description": "Deploying as replicaset as opposed to standalone,\nresulting in an arbiter and two instances, primary\nand secondary, which may swap.",
+              "required": [],
+              "title": "architecture",
+              "type": "string"
+            },
+            "externalAccess": {
+              "properties": {
+                "autoDiscovery": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "autoDiscovery",
+                  "type": "object"
+                },
+                "dnsCheck": {
+                  "properties": {
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "image",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "dnsCheck",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "externalAccess",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "metrics": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "metrics",
+              "type": "object"
+            },
+            "tls": {
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "tls",
+              "type": "object"
+            },
+            "volumePermissions": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "volumePermissions",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "mongodb",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "mongodbPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

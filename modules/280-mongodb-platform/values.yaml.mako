@@ -1,5 +1,8 @@
 mongodbPlatform:
   mongodb:
+    # -- Deploying as replicaset as opposed to standalone,
+    # resulting in an arbiter and two instances, primary
+    # and secondary, which may swap.
     architecture: replicaset
     image:
       % if 'containerRegistryBase' in values['global']:
