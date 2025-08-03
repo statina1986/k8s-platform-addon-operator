@@ -15,7 +15,6 @@ spec:
       targetPort: admin
   selector:
     app.kubernetes.io/component: reaper
-    app.kubernetes.io/created-by: reaper-controller
     app.kubernetes.io/managed-by: k8ssandra-operator
     app.kubernetes.io/name: k8ssandra-operator
     app.kubernetes.io/part-of: k8ssandra
