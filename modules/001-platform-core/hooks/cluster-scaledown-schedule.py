@@ -64,8 +64,8 @@ class ClusterScaledownScheduleHook(Hook):
                             response,
                             "Phase",
                             "True",
-                            "TriggeredTeardownOperation",
-                            "Teardown Operation has been triggered based on schedule '" + context['binding'] + "'",
+                            "TriggeredScaledownOperation",
+                            "Scaledown Operation has been triggered based on schedule '" + context['binding'] + "'"
                         ),
                         **args
                     )
@@ -74,10 +74,10 @@ class ClusterScaledownScheduleHook(Hook):
                             response,
                             "Ready",
                             "False",
-                            "TriggeredTeardownOperation",
-                            "Teardown Operation has been triggered based on schedule '" + context['binding'] + "'",
-                            **args
+                            "TriggeredScaledownOperation",
+                            "Scaledown Operation has been triggered based on schedule '" + context['binding'] + "'"
                         ),
+                        **args
                     )
                 except:
                     logger.info("Error during triggering teardown")

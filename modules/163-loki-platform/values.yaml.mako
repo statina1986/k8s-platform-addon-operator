@@ -197,6 +197,8 @@ lokiPlatform:
     % else:
     read:
       replicas: 3
+      persistence:
+        enableStatefulSetAutoDeletePVC: false
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
           value: "${values['global']['platformMastersValue']}"
@@ -245,6 +247,7 @@ lokiPlatform:
     write:
       replicas: 3
       persistence:
+        enableStatefulSetAutoDeletePVC: false
         size: 50Gi
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
@@ -293,6 +296,8 @@ lokiPlatform:
         % endif
     backend:
       replicas: 3
+      persistence:
+        enableStatefulSetAutoDeletePVC: false
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
           value: "${values['global']['platformMastersValue']}"

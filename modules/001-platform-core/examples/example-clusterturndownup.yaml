@@ -1,0 +1,50 @@
+apiVersion: platform.qvantel.com/v1
+kind: ClusterTurndown
+metadata:
+  name: cluster-turndown
+  namespace: platform
+spec:
+  desiredState: current
+  strategy:
+    down:
+      - expression: onoff.scaledown_namespace_deployments('cattle-fleet-system')
+        name: scaledown_namespace_deployments_fleet
+      - expression: onoff.wait(30)
+        name: wait_for_scaledown_namespace_deployments_fleet
+      - expression: onoff.scaledown_namespace_deployments('qvantel')
+        name: scaledown_namespace_deployments_qvantel
+      - expression: onoff.wait(30)
+        name: wait_for_scaledown_namespace_deployments_qvantel
+      - expression: onoff.scaledown_namespace_deployments('platform')
+        name: scaledown_namespace_deployments_platform
+      - expression: onoff.wait(30)
+        name: wait_for_scaledown_namespace_deployments_platform
+      - expression: onoff.scaledown_namespace_statefulsets('platform')
+        name: scaledown_namespace_statefulsets_platform
+      - expression: onoff.wait(30)
+        name: wait_for_scaledown_namespace_statefulsets_platform
+      - expression: onoff.delete_namespace_strimzipodsets('platform')
+        name: delete_namespace_strimzipodsets_platform
+      - expression: onoff.wait(30)
+        name: wait_for_delete_namespace_strimzipodsets_platform
+      - expression: onoff.scaledown_nodegroups('{clusterName}')
+        name: scaledown_nodegroups
+    up:
+      - expression: onoff.scaleup_nodegroups('{clusterName}')
+        name: scaleup_nodegroups
+      - expression: onoff.scaleup_deployment('ebs-csi-controller','platform')
+        name: scaleup_ebs-csi-controller_to_provision_volumes
+      - expression: onoff.scaleup_deployment('cnpg-postgres-platform-cloudnative-pg','platform')
+        name: scaleup_cnpg_postgres_platform_cloudnative_pg_to_get_postgres_ready  
+      - expression: onoff.scaleup_deployment('strimzi-cluster-operator','platform')
+        name: scaleup_strimzi-cluster-operator_to_get_kafka_ready 
+      - expression: onoff.scaleup_namespace_statefulsets('platform')
+        name: scaleup_namespace_statefulsets_platform
+      - expression: onoff.wait(180)
+        name: wait_for_scaleup_namespace_statefulsets_platform
+      - expression: onoff.scaleup_namespace_deployments('platform')
+        name: scaleup_namespace_deployments_platform
+      - expression: onoff.wait(180)
+        name: wait_for_scaleup_namespace_deployments_platform
+      - expression: onoff.scaleup_namespace_deployments('cattle-fleet-system')
+        name: scaleup_namespace_deployments_fleet
