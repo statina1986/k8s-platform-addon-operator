@@ -19,96 +19,174 @@ def scaledown_deployment(name, namespace):
     Scale down a single deployment, storing the current replica count as an annotation.
     """
     k8s_apps = get_k8s_apps_client()
-    logger.info("Scaling down deployment " + name + " in namespace " + namespace)
     deployment = k8s_apps.read_namespaced_deployment(name, namespace)
     replicas = deployment.spec.replicas
     if replicas == 0:
-        logger.info("Skipping deployment " + deployment.metadata.name + " because it already has 0 replicas")
+        logger.info("Skipping deployment " + deployment.metadata.name + " in namespace " +  deployment.metadata.namespace + " because it already has 0 replicas")
         return
+    if deployment.metadata.name == "addon-operator":
+        logger.info("Skipping deployment " + deployment.metadata.name + " in namespace " +  deployment.metadata.namespace + " as it controls the scaling operations")
+        return
+    if deployment.metadata.name == "mariadb-metrics":
+        logger.info("Skipping deployment " + deployment.metadata.name + " in namespace " +  deployment.metadata.namespace + " as it is controlled by MariaDB cluster")
+        return
+    # Ensure annotations dict exists
+    if deployment.metadata.annotations is None:
+        deployment.metadata.annotations = {}
     deployment.metadata.annotations["pre-turndown-scaling-configuration"] = str(replicas)
     try:
+        logger.debug("Scaling down deployment " + deployment.metadata.name + " in namespace " + deployment.metadata.namespace)
         k8s_apps.patch_namespaced_deployment(deployment.metadata.name, deployment.metadata.namespace, {"metadata": {"annotations": deployment.metadata.annotations}})
         k8s_apps.patch_namespaced_deployment_scale(deployment.metadata.name, deployment.metadata.namespace, {'spec': {'replicas': 0}})
     except ApiException as e:
-        print(f"Failed to patch deployment {deployment.metadata.name}: {e}")
+        logger.info("Failed to patch deployment " + deployment.metadata.name + " : " + e)
 
-def scaledown_namespace_deployments(name):
+def scaledown_namespace_deployments(namespace):
     """
-    Scale down all deployments in the specified namespace, except 'addon-operator'.
-    Save the original replica count as an annotation on each deployment.
+    Scale down all deployments in the specified namespace to 0 replicas.
+    Waits for all deployments to scale down and terminate.
     """
     k8s_apps = get_k8s_apps_client()
-    resp = k8s_apps.list_namespaced_deployment(name)
-    logger.info("Scaling down deployments in namespace " + name)
-    for deployment in resp.items:
-        replicas = deployment.spec.replicas
-        if replicas == 0:
-            logger.info("Skipping deployment " + deployment.metadata.name + " because it already has 0 replicas")
-            continue
-        if deployment.metadata.name == "addon-operator":
-            logger.info("Skipping deployment " + deployment.metadata.name + " as it controls the scaling operations")
-            continue
-        # Ensure annotations dict exists
-        if deployment.metadata.annotations is None:
-            deployment.metadata.annotations = {}
-        deployment.metadata.annotations["pre-turndown-scaling-configuration"] = str(replicas)
-        try:
-            k8s_apps.patch_namespaced_deployment(deployment.metadata.name, deployment.metadata.namespace, {"metadata": {"annotations": deployment.metadata.annotations}})
-            k8s_apps.patch_namespaced_deployment_scale(deployment.metadata.name, deployment.metadata.namespace, {'spec': {'replicas': 0}})
-        except ApiException as e:
-            print(f"Failed to patch deployment {deployment.metadata.name}: {e}")
+    try:
+        deployments = k8s_apps.list_namespaced_deployment(namespace)
+    except ApiException as e:
+        logger.info("Failed to list deployments in namespace " + namespace + ": " + str(e))
+        return
 
-def scaledown_namespace_statefulsets(name):
+    logger.info("Scaling down deployments in namespace " + namespace)
+
+    for deployment in deployments.items:
+        scaledown_deployment(deployment.metadata.name, namespace)
+
+    while True:
+        all_scaled_down = True
+        try:
+            current_deployments = k8s_apps.list_namespaced_deployment(namespace)
+        except ApiException as e:
+            logger.info("Error fetching deployment status: " + str(e))
+            break
+
+        for deploy in current_deployments.items:
+            name = deploy.metadata.name
+            if name == "addon-operator":
+                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it controls the scaling operations")
+                continue
+            if name == "mariadb-metrics":
+                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it is controlled by MariaDB cluster")
+                continue
+            desired = deploy.spec.replicas or 0
+            ready = deploy.status.ready_replicas or 0
+            if ready > 0:
+                logger.info("Deployment " + name +  " in namespace " + namespace + " not yet scaled down: " + str(ready) + "/" + str(desired))
+                all_scaled_down = False
+            else:
+                logger.debug("Deployment " + name + " in namespace " + namespace + " scaled down: " + str(ready) + "/" + str(desired))
+
+        if all_scaled_down:
+            logger.info("All deployments scaled down successfully in namespace " + namespace)
+            break
+        sleep(10)
+
+def scaledown_statefulset(name, namespace):
     """
-    Scale down all statefulsets in the specified namespace.
-    Save the original replica count as an annotation on each statefulset.
+    Scale down a single statefulset, storing the current replica count as an annotation.
     """
     k8s_apps = get_k8s_apps_client()
-    resp = k8s_apps.list_namespaced_stateful_set(name)
-    logger.info("Scaling down statefulsets in namespace " + name)
-    for statefulset in resp.items:
-        replicas = statefulset.spec.replicas
-        if replicas == 0:
-            logger.info("Skipping statefulset " + statefulset.metadata.name + " because it already has 0 replicas")
-            continue
-        # Ensure annotations dict exists
-        if statefulset.metadata.annotations is None:
-            statefulset.metadata.annotations = {}
-        statefulset.metadata.annotations["pre-turndown-scaling-configuration"] = str(replicas)
-        try:
-            k8s_apps.patch_namespaced_stateful_set(statefulset.metadata.name, statefulset.metadata.namespace, {"metadata": {"annotations": statefulset.metadata.annotations}})
-            k8s_apps.patch_namespaced_stateful_set_scale(statefulset.metadata.name, statefulset.metadata.namespace, {'spec': {'replicas': 0}})
-        except ApiException as e:
-            print(f"Failed to patch statefulset {statefulset.metadata.name}: {e}")
+    statefulset = k8s_apps.read_namespaced_stateful_set(name, namespace)
+    replicas = statefulset.spec.replicas
+    if replicas == 0:
+        logger.info("Skipping statefulset " + statefulset.metadata.name + " in namespace " + statefulset.metadata.namespace + " because it already has 0 replicas")
+        return
+    # Ensure annotations dict exists
+    if statefulset.metadata.annotations is None:
+        statefulset.metadata.annotations = {}
+    statefulset.metadata.annotations["pre-turndown-scaling-configuration"] = str(replicas)
+    try:
+        logger.debug("Scaling down statefulset " + statefulset.metadata.name + " in namespace " + statefulset.metadata.namespace)
+        k8s_apps.patch_namespaced_stateful_set(statefulset.metadata.name, statefulset.metadata.namespace, {"metadata": {"annotations": statefulset.metadata.annotations}})
+        k8s_apps.patch_namespaced_stateful_set_scale(statefulset.metadata.name, statefulset.metadata.namespace, {'spec': {'replicas': 0}})
+    except ApiException as e:
+        logger.info("Failed to patch statefulset " + statefulset.metadata.name + " : " + e)
 
-def delete_namespace_strimzipodsets(name):
+def scaledown_namespace_statefulsets(namespace):
+    """
+    Scale down all statefulsets in the specified namespace to 0 replicas.
+    Waits for all StatefulSets to scale down and terminate.
+    """
+    k8s_apps = get_k8s_apps_client()
+    try:
+        statefulsets = k8s_apps.list_namespaced_stateful_set(namespace)
+    except ApiException as e:
+        logger.info("Failed to list statefulsets in namespace " + namespace +":"+ e)
+        return
+
+    logger.info("Scaling down statefulsets in namespace " + namespace)
+
+    for statefulset in statefulsets.items:
+        scaledown_statefulset(statefulset.metadata.name, namespace)
+
+    while True:
+        all_scaled_down = True
+        try:
+            current_sets = k8s_apps.list_namespaced_stateful_set(namespace)
+        except ApiException as e:
+            logger.info("Error fetching statefulSet status in namespace " + namespace + " : " + e)
+            break
+
+        for sts in current_sets.items:
+            name = sts.metadata.name
+            desired = sts.spec.replicas or 0
+            ready = sts.status.ready_replicas or 0
+            if ready > 0:
+                logger.info("Statefulset " + name + " in namespace " + namespace + " not yet scaled down: " + str(ready) + "/" + str(desired))
+                all_scaled_down = False
+            else:
+                logger.debug("Statefulset " + name + " in namespace " + namespace + " scaled down: " + str(ready) + "/" + str(desired))
+
+        if all_scaled_down:
+            logger.info("All statefulSets scaled down successfully in namespace " + namespace)
+            break
+        sleep(10)
+
+
+def delete_namespace_strimzipodsets(namespace):
     """
     Delete all StrimziPodSet resources from a given namespace.
     This is required for Kafka Strimzi clusters before scaling down.
+    Waits for all StrimziPodSet pods to terminate.
     """
     k8s_crd = get_k8s_crd_client()
-    logger.info("Deleting StrimziPodSets in namespace " + name)
+    k8s_core = get_k8s_client()
+
+    logger.info("Deleting strimzipodsets in namespace " + namespace)
 
     # Defining the group, version, and plural for StrimziPodSet
     group = "core.strimzi.io"
     version = "v1beta2"
     plural = "strimzipodsets"
-    namespace = name
+    namespace = namespace
 
     try:
         podsets = k8s_crd.list_namespaced_custom_object(
             group=group,
             version=version,
-            namespace=name,
+            namespace=namespace,
             plural=plural
         )
-    except client.exceptions.ApiException as e:
-        print(f"Failed to list StrimziPodSets in namespace {namespace}: {e}")
+    except ApiException as e:
+        logger.info("Failed to list strimzipodsets in namespace " + namespace + " : " + e)
         return
 
     for podset in podsets.get("items", []):
         podsetname = podset["metadata"]["name"]
+
+        # Determine label selector to find pods belonging to this PodSet
+        # StrimziPodSet typically manages pods using a label like 'strimzi.io/name'
+        labels = podset["spec"].get("template", {}).get("metadata", {}).get("labels", {})
+        label_selector = ",".join([f"{k}={v}" for k, v in labels.items()]) if labels else f"strimzi.io/name={podsetname}"
+
         try:
+            logger.info("Deleting strimzipodset " + podsetname + " in namespace " + namespace)
             k8s_crd.delete_namespaced_custom_object(
                 group=group,
                 version=version,
@@ -117,88 +195,224 @@ def delete_namespace_strimzipodsets(name):
                 name=podsetname,
                 body=client.V1DeleteOptions()
             )
-        except client.exceptions.ApiException as e:
-            print(f"Failed to delete StrimziPodSet {podsetname}: {e}")
+        except ApiException as e:
+            logger.info("Failed to delete strimzipodset " + podsetname + " in namespace " + namespace + " : " + e)
+
+    while True:
+        try:
+            pods = k8s_core.list_namespaced_pod(
+                namespace=namespace,
+                label_selector=label_selector
+            )
+        except ApiException as e:
+            logger.info("Error listing pods for strimzipodset " + podsetname + " in namespace " + namespace + " : " + e)
+            break
+
+        if not pods.items:
+            logger.info("All pods for strimzipodset " + podsetname + " in namespace " + namespace + " have been terminated")
+            break
+        else:
+            pod_names = [p.metadata.name for p in pods.items]
+            logger.info("Still waiting on pods from strimzipodset " + podsetname + " in namespace " + namespace + " : " + ", ".join(pod_names))
+        sleep(10)
 
 def scaleup_deployment(name, namespace):
     """
     Scale up a single deployment using the saved replica count from annotations.
     """
     k8s_apps = get_k8s_apps_client()
-    logger.info("Scaling up deployment " + name + " in namespace " + namespace)
     deployment = k8s_apps.read_namespaced_deployment(name, namespace)
-    replicas = deployment.metadata.annotations.get("pre-turndown-scaling-configuration", "")
+    replicas = (deployment.metadata.annotations or {}).get("pre-turndown-scaling-configuration", "")
     if replicas != "":
         try:
+            logger.info("Scaling up deployment " + deployment.metadata.name + " in namespace " + deployment.metadata.namespace)
             k8s_apps.patch_namespaced_deployment_scale(deployment.metadata.name, deployment.metadata.namespace, {'spec': {'replicas': int(replicas)}})
         except ApiException as e:
-            print(f"Failed to patch deployment {deployment.metadata.name}: {e}")
+            logger.info("Failed to patch deployment " + deployment.metadata.name + " in namespace " + deployment.metadata.namespace + " : " + e)
 
-def scaleup_namespace_deployments(name):
+def scaleup_namespace_deployments(namespace):
     """
     Scale up all deployments in the specified namespace using previously
-    stored replica counts from annotations.
+    stored replica counts from annotations. Waits for all Deployments to become ready.
     """
     k8s_apps = get_k8s_apps_client()
-    logger.info("Scaling up deployments in namespace " + name)
-    deployments = k8s_apps.list_namespaced_deployment(name)
-    for deployment in deployments.items:
-        replicas = deployment.metadata.annotations.get("pre-turndown-scaling-configuration", "")
-        if replicas != "":
-            try:
-                k8s_apps.patch_namespaced_deployment_scale(deployment.metadata.name, deployment.metadata.namespace, {'spec': {'replicas': int(replicas)}})
-            except ApiException as e:
-                print(f"Failed to patch deployment {deployment.metadata.name}: {e}")
+    try:
+        deployments = k8s_apps.list_namespaced_deployment(namespace)
+    except ApiException as e:
+        logger.info("Failed to list deployments in namespace " + namespace + " : " + e)
+        return
 
-def scaleup_namespace_statefulsets(name):
+    logger.info("Scaling up deployments in namespace " + namespace)
+
+    # Start scaling up
+    for deployment in deployments.items:
+        scaleup_deployment(deployment.metadata.name, namespace)
+
+    while True:
+        all_ready = True
+        try:
+            current_deps = k8s_apps.list_namespaced_deployment(namespace)
+        except ApiException as e:
+            logger.info("Error fetching deployment status in namespace " + namespace + " : " + e)
+            break
+
+        for dep in current_deps.items:
+            name = dep.metadata.name
+            desired = dep.spec.replicas
+            ready = dep.status.ready_replicas or 0
+            if ready < desired:
+                logger.info("Deployment " + name + " in namespace " + namespace + " not yet ready: " + str(ready) + "/" + str(desired))
+                all_ready = False
+            else:
+                logger.debug("Deployment " + name + " in namespace " + namespace + " is ready: " + str(ready) + "/" + str(desired))
+
+        if all_ready:
+            logger.info("All deployments are ready in namespace " + namespace)
+            break
+
+        sleep(10)
+
+def scaleup_statefulset(name, namespace):
+    """
+    Scale up a single statefulset using the saved replica count from annotations.
+    """
+    k8s_apps = get_k8s_apps_client()
+    statefulset = k8s_apps.read_namespaced_stateful_set(name, namespace)
+    replicas = (statefulset.metadata.annotations or {}).get("pre-turndown-scaling-configuration", "")
+    if replicas != "":
+        try:
+            logger.info("Scaling up statefulset " + statefulset.metadata.name + " in namespace " + statefulset.metadata.namespace)
+            k8s_apps.patch_namespaced_stateful_set_scale(statefulset.metadata.name, statefulset.metadata.namespace, {'spec': {'replicas': int(replicas)}})
+        except ApiException as e:
+            logger.info("Failed to patch statefulset " + statefulset.metadata.name + " in namespace " + statefulset.metadata.namespace + " : " + e)
+
+def scaleup_namespace_statefulsets(namespace):
     """
     Scale up all statefulsets in the specified namespace using previously
-    stored replica counts from annotations.
+    stored replica counts from annotations. Waits for all StatefulSets to become ready.
     """
     k8s_apps = get_k8s_apps_client()
-    logger.info("Scaling up statefulsets in namespace " + name)
-    statefulsets = k8s_apps.list_namespaced_stateful_set(name)
+    try:
+        statefulsets = k8s_apps.list_namespaced_stateful_set(namespace)
+    except ApiException as e:
+        logger.info("Failed to list statefulsets in namespace " + namespace + " : " + e)
+        return
+
+    logger.info("Scaling up statefulsets in namespace " + namespace)
+
+    # Start scaling up
     for statefulset in statefulsets.items:
-        replicas = statefulset.metadata.annotations.get("pre-turndown-scaling-configuration", "")
-        if replicas != "":
+        scaleup_statefulset(statefulset.metadata.name, namespace)
+
+    while True:
+        all_ready = True
+        try:
+            current_sets = k8s_apps.list_namespaced_stateful_set(namespace)
+        except ApiException as e:
+            logger.info("Error fetching statefulset status in namespace " + namespace + " : " + e)
+            break
+
+        for sts in current_sets.items:
+            name = sts.metadata.name
+            desired = sts.spec.replicas
+            ready = sts.status.ready_replicas or 0
+            if ready < desired:
+                logger.info("StatefulSet " + name + " in namespace " + namespace + " not yet ready: " + str(ready) + "/" + str(desired))
+                all_ready = False
+            else:
+                logger.debug("StatefulSet " + name + " in namespace " + namespace + " is ready: " + str(ready) + "/" + str(desired))
+
+        if all_ready:
+            logger.info("All statefulsets are ready in namespace " + namespace)
+            break
+
+        sleep(10)
+
+def check_pods_ready_in_namespaces(namespaces):
+    """
+    Waits until all pods in the provided list of namespaces are in 'Running' phase
+    and all containers are Ready.
+    """
+    k8s_core = get_k8s_client()
+
+    while True:
+        all_namespaces_ready = True
+
+        for namespace in namespaces:
+            logger.info("Checking pods in namespace: " + namespace)
             try:
-                k8s_apps.patch_namespaced_stateful_set_scale(statefulset.metadata.name, statefulset.metadata.namespace, {'spec': {'replicas': int(replicas)}})
+                pods = k8s_core.list_namespaced_pod(namespace)
             except ApiException as e:
-                print(f"Failed to patch statefulset {statefulset.metadata.name}: {e}")
+                logger.info("Failed to list pods in namespace " + namespace + " : " + e)
+                all_namespaces_ready = False
+                continue
+
+            all_pods_ready = True
+            for pod in pods.items:
+                pod_name = pod.metadata.name
+                phase = pod.status.phase
+                conditions = pod.status.conditions or []
+
+                ready_condition = next((c for c in conditions if c.type == "Ready"), None)
+                is_ready = ready_condition and ready_condition.status == "True"
+
+                # Logic:
+                # - If Running: must be Ready
+                # - If Succeeded: always considered ready ( K8s Jobs etc. )
+                # - Else: not ready
+                if (phase == "Running" and not is_ready) or (phase not in ("Running", "Succeeded")):
+                    logger.info("Pod " + pod_name + " in namespace " + namespace + " is not ready: Phase " + phase + ", Ready=" + str(is_ready))
+                    all_pods_ready = False
+                else:
+                    logger.debug("Pod " + pod_name + " in namespace " + namespace + " is running and ready.")
+
+            if not all_pods_ready:
+                logger.warning("Some pods are not ready in namespace " + namespace)
+                all_namespaces_ready = False
+            else:
+                logger.info("All pods are ready in namespace " + namespace)
+
+        if all_namespaces_ready:
+            logger.info("All pods are running and ready in all specified namespaces.")
+            break
+
+        logger.info("Waiting 10 seconds before rechecking pods status...")
+        sleep(10)
+
 
 # EKS NODE SCALING FUNCTIONS
 
-def get_scaling_nodegroups(cluster):
+def get_scaling_nodegroups_eks(cluster):
     """
     Retrieve all nodegroups for a given EKS cluster,
     excluding any that have the label 'cluster-controller=true'.
     """
-    client = boto3.client("eks")
-    ng_list = client.list_nodegroups(clusterName=cluster)
+    eks_client = boto3.client("eks")
+    ng_list = eks_client.list_nodegroups(clusterName=cluster)
     nodegroups = []
     for ng in ng_list["nodegroups"]:
-        nodegroup = client.describe_nodegroup(clusterName=cluster, nodegroupName=ng)["nodegroup"]
+        nodegroup = eks_client.describe_nodegroup(clusterName=cluster, nodegroupName=ng)["nodegroup"]
         if nodegroup.get("labels", {}).get("cluster-controller", {}) == "true":
             continue
         else:
             nodegroups.append(nodegroup)
     return nodegroups
 
-def scaledown_nodegroups(clusterName):
+def scaledown_nodegroups_eks(clusterName):
     """
-    Scale down all matching nodegroups in a cluster using stored scaling config from tags.
+    Scale down all matching EKS nodegroups in a cluster using stored scaling config from tags.
     """
-    nodegroups = get_scaling_nodegroups(clusterName)
+    nodegroups = get_scaling_nodegroups_eks(clusterName)
 
     monitoring_tasks = []
 
     with ThreadPoolExecutor(max_workers=len(nodegroups)) as executor:
         for ng in nodegroups:
-            result = initiate_scaledown(ng)
+            result = initiate_scaledown_eks(ng)
             if result:
                 # Submit monitoring task to run in background
                 future = executor.submit(
-                    monitor_scaledown,
+                    monitor_scaledown_eks,
                     result["clusterName"],
                     result["nodegroupName"],
                     result["updateId"]
@@ -209,12 +423,12 @@ def scaledown_nodegroups(clusterName):
         try:
             task.result()
         except Exception as e:
-            print(f"Monitoring task failed: {e}")
+            logger.info("Monitoring task failed: " + e)
     logger.info("Nodegroup(s) scale-down operations complete!")
 
-def initiate_scaledown(ng):
+def initiate_scaledown_eks(ng):
     """
-    Triggers the scale-down of the nodegroup and returns the update ID.
+    Triggers the scale-down of the EKS nodegroup and returns the update ID.
     """
     eks_client = boto3.client("eks")
 
@@ -248,7 +462,7 @@ def initiate_scaledown(ng):
         "updateId": update_op["update"]["id"]
     }
 
-def monitor_scaledown(clusterName, nodegroupName, updateId):
+def monitor_scaledown_eks(clusterName, nodegroupName, updateId):
     """
     Polls EKS update and EC2 instances until they are terminated
     """
@@ -289,21 +503,21 @@ def monitor_scaledown(clusterName, nodegroupName, updateId):
         logger.info("Waiting for " + str(active_instances) + " EC2 instance(s) in nodegroup " + nodegroupName + " to terminate, sleeping for 10 seconds ...")
         sleep(10)
 
-def scaleup_nodegroups(clusterName):
+def scaleup_nodegroups_eks(clusterName):
     """
-    Scale up all matching nodegroups in a cluster using stored scaling config from tags.
+    Scale up all matching EKS nodegroups in a cluster using stored scaling config from tags.
     """
-    nodegroups = get_scaling_nodegroups(clusterName)
+    nodegroups = get_scaling_nodegroups_eks(clusterName)
 
     monitoring_tasks = []
 
     with ThreadPoolExecutor(max_workers=len(nodegroups)) as executor:
         for ng in nodegroups:
-            result = initiate_scaleup(ng)
+            result = initiate_scaleup_eks(ng)
             if result:
                 # Submit monitoring task to run in background
                 future = executor.submit(
-                    monitor_scaleup,
+                    monitor_scaleup_eks,
                     result["clusterName"],
                     result["nodegroupName"],
                     result["updateId"]
@@ -314,12 +528,12 @@ def scaleup_nodegroups(clusterName):
         try:
             task.result()
         except Exception as e:
-            print(f"Monitoring task failed: {e}")
+            logger.info("Monitoring task failed: " + e)
     logger.info("Nodegroup(s) scaleup operations complete!")
 
-def initiate_scaleup(ng):
+def initiate_scaleup_eks(ng):
     """
-    Scale up a single nodegroup based on stored configuration in tags.
+    Scale up a single EKS nodegroup based on stored configuration in tags.
     """
     eks_client = boto3.client("eks")
 
@@ -344,7 +558,7 @@ def initiate_scaleup(ng):
         "updateId": update_op["update"]["id"]
     }
 
-def monitor_scaleup(clusterName, nodegroupName, updateId):
+def monitor_scaleup_eks(clusterName, nodegroupName, updateId):
     """
     Polls EKS update and EC2 instances until they are running and ready
     """
