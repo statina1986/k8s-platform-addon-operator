@@ -2,7 +2,12 @@ apiVersion: v2
 name: mongodb-platform
 version: 0.0.1
 dependencies:
-  - name: mongodbPlatform
-    version: 0.0.1
+- name: mongodbPlatform
+  version: 0.0.1
 
 ## No need for images annotations because dependency chart is from Bitnami and already annotated
+
+annotations:
+  images: |
+    - image: platform.artifactory.qvantel.net/platform/bitnami-mongodb:7.0.15
+      name: mongodb-qvantel
