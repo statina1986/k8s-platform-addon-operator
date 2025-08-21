@@ -40,8 +40,16 @@ def createPackage() {
 
   if (env.BRANCH_NAME in DELIVERY_BRANCHES) {
 
-    sh "./generate-image-lock-chart.sh"
+    // This will re-generate Images.lock file for the chart to ensure correct list of images
+    sh "./generate-image-lock.sh"
+    
+    // This will push changed images to target (release specific) registry like 'platform.artifactory.qvantel.net/k8s-platform-1-3'
     sh "./push-images-after-build.sh $IMAGES_RELOCATE_URL"
+
+    // This will relocate images in the chart Images.lock file to the target (release specific) registry like 'platform.artifactory.qvantel.net/k8s-platform-1-3'.
+    // This way generated chart will contain correct list of images with release specific registry as the source.
+    sh "./utils/dt --plain charts relocate chart $IMAGES_RELOCATE_URL"
+
 
     sh "docker buildx create --use"
     sh "docker buildx build --push --platform linux/arm64,linux/amd64 --build-arg='BUILD_TAG=${imageVersion()}' -t ${imageTag(K8S_PLATFORM_NAME)} ."
