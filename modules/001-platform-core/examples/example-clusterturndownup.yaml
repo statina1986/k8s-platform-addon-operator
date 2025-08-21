@@ -1,0 +1,44 @@
+apiVersion: platform.qvantel.com/v1
+kind: ClusterTurndown
+metadata:
+  name: cluster-turndown
+  namespace: platform
+spec:
+  desiredState: current
+  strategy:
+    down:
+      - expression: onoff.scaledown_namespace_deployments('cattle-fleet-system')
+        name: scaledown_namespace_deployments_fleet
+      - expression: onoff.scaledown_namespace_deployments('qvantel')
+        name: scaledown_namespace_deployments_qvantel
+      - expression: onoff.scaledown_namespace_deployments('platform')
+        name: scaledown_namespace_deployments_platform
+      - expression: onoff.scaledown_namespace_statefulsets('platform')
+        name: scaledown_namespace_statefulsets_platform
+      - expression: onoff.delete_namespace_strimzipodsets('platform')
+        name: delete_namespace_strimzipodsets_platform
+      - expression: onoff.scaledown_nodegroups_eks('{clusterName}')
+        name: scaledown_nodegroups_eks
+    up:
+      - expression: onoff.scaleup_nodegroups_eks('{clusterName}')
+        name: scaleup_nodegroups_eks
+      - expression: onoff.scaleup_deployment('ebs-csi-controller','platform')
+        name: scaleup_ebs-csi-controller_to_provision_volumes
+      - expression: onoff.scaleup_deployment('cnpg-postgres-platform-cloudnative-pg','platform')
+        name: scaleup_cnpg-postgres-platform-cloudnative-pg_to_get_postgres_ready
+      - expression: onoff.scaleup_deployment('strimzi-cluster-operator','platform')
+        name: scaleup_strimzi-cluster-operator_to_get_kafka_ready
+      - expression: onoff.scaleup_deployment('kasope-platform-k8ssandra-operator','platform')
+        name: scaleup_kasope-platform-k8ssandra-operator_to_get_cassandra_ready
+      - expression: onoff.scaleup_deployment('kasope-platform-cass-operator','platform')
+        name: scaleup_kasope-platform-cass-operator_to_get_cassandra_ready
+      - expression: onoff.scaleup_deployment('mariadb-operator-platform-webhook','platform')
+        name: scaleup_mariadb-operator-platform-webhook_to_get_mariadb_ready
+      - expression: onoff.scaleup_namespace_statefulsets('platform')
+        name: scaleup_namespace_statefulsets_platform
+      - expression: onoff.scaleup_namespace_deployments('platform')
+        name: scaleup_namespace_deployments_platform
+      - expression: onoff.scaleup_namespace_deployments('cattle-fleet-system')
+        name: scaleup_namespace_deployments_fleet
+      - expression: onoff.check_pods_ready_in_namespaces(['cattle-fleet-system', 'qvantel', 'platform'])
+        name: check_pods_ready_in_namespaces

@@ -65,7 +65,7 @@ class ClusterScaleupScheduleHook(Hook):
                             "Phase",
                             "True",
                             "TriggeredScaleupOperation",
-                            "Scaleup Operation has been triggered based on schedule '" + context['binding'] + "'",
+                            "Scaleup Operation has been triggered based on schedule '" + context['binding'] + "'"
                         ),
                         **args
                     )
@@ -75,7 +75,7 @@ class ClusterScaleupScheduleHook(Hook):
                             "Ready",
                             "False",
                             "TriggeredScaleupOperation",
-                            "Scaleup Operation has been triggered based on schedule '" + context['binding'] + "'",
+                            "Scaleup Operation has been triggered based on schedule '" + context['binding'] + "'"
                         ),
                         **args
                     )
