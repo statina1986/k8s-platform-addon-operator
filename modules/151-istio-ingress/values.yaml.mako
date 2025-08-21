@@ -745,18 +745,6 @@ istioIngress:
                   number: 21090
           - match:
             - uri:
-                prefix: /flow/
-            retries:
-              attempts: 0
-            rewrite:
-              uri: /
-            route:
-            - destination:
-                host: mobile-flowable-api.${values['global']['appsNamespace']}.svc.cluster.local
-                port:
-                  number: 80
-          - match:
-            - uri:
                 prefix: /web/static
             retries:
               attempts: 0
@@ -766,7 +754,7 @@ istioIngress:
             - destination:
                 host: mobile-flows-catalog-service.${values['global']['appsNamespace']}.svc.cluster.local
                 port:
-                  number: 80
+                  number: 8080
       message-manager:
         enabled: false
         gateways:
