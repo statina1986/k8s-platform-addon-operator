@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-09T17:42:11.471458916Z"
+  generatedAt: "2025-08-25T15:17:27.772856291Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: loki-platform
@@ -9,26 +9,26 @@ chart:
   appVersion: ""
 images:
   - name: loki
-    image: docker.io/grafana/loki:3.2.0
+    image: docker.io/grafana/loki:3.5.3
     chart: loki-platform
     digests:
-      - digest: sha256:f9e882734526722e173b9c2c6694a0880f22a815229c497ccb4e9a9e32ebbf15
+      - digest: sha256:94828396c18bcb1319270387766be9aae0454f8e0cb38557e70848490509a9d4
         arch: linux/amd64
-      - digest: sha256:ad96f64845f664700caddc642c0621467603c12887fb649c66e3082768a1c755
+      - digest: sha256:69112907f83af2ccf5f502935fcdc3dca0effd0693f36db700641a47ffe02a52
         arch: linux/arm64
   - name: loki-sidecar
-    image: kiwigrid/k8s-sidecar:1.27.5
+    image: kiwigrid/k8s-sidecar:1.30.7
     chart: loki-platform
     digests:
-      - digest: sha256:afb4e8f23ebe3057130d9ee58176ec6c8e168f530e4300cf1a971db8daba5ab1
+      - digest: sha256:d3749777d5bedf62549b452a7e2ccb205da53588dc7f04927efc75d0da5b6d23
         arch: linux/amd64
-      - digest: sha256:901073c75e53ca3f266a7e089a9e59acbb9182fc15d008cf80390e7f3f596b97
+      - digest: sha256:a0b1d922ab0f56c310a03729b78e28f26b13b442a2887ca4894defcf55080e0a
         arch: linux/arm64
   - name: memcached
-    image: docker.io/library/memcached:1.6.23-alpine
+    image: docker.io/library/memcached:1.6.38-alpine
     chart: loki-platform
     digests:
-      - digest: sha256:56b3526ad7eba067730ca64ab7a9062327160c9ff6dd9bc6d84fe0cd36b9005b
+      - digest: sha256:43881a4a56a9ad130834fe1da183c2822234f78c19f65c6386a66e448b8944e0
         arch: linux/amd64
-      - digest: sha256:bf184a14585ef27c8248c86fc4b7720d470388144f78d47be37fe579906fae6e
+      - digest: sha256:eaf8a809be9470d3e96e92f7e2c46aa5a46234fb8d62bd6a2ee3e97d3d2e40e6
         arch: linux/arm64

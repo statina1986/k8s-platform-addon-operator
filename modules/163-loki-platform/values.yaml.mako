@@ -1,4 +1,31 @@
 lokiPlatform:
+  global:
+    extraArgs:
+      - '-config.expand-env=true'
+    extraEnv:
+      % if values['lokiPlatform']['loki']['objectStorageSecret']['create']:
+      - name: OBJECT_STORAGE_USER
+        valueFrom:
+          secretKeyRef:
+            name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+            key: OBJECT_STORAGE_USER
+      - name: OBJECT_STORAGE_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+            key: OBJECT_STORAGE_SECRET
+      % else:
+      - name: OBJECT_STORAGE_USER
+        valueFrom:
+          secretKeyRef:
+            name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+            key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
+      - name: OBJECT_STORAGE_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
+            key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
+      % endif
   loki:
     % if values['global']['deployOperators'] == "false":
     enabled: false
@@ -52,7 +79,7 @@ lokiPlatform:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}        
         % endif
-        tag: 3.2.0
+        tag: 3.5.3
       analytics:
         reporting_enabled: false
       auth_enabled: false
@@ -144,26 +171,25 @@ lokiPlatform:
         type: s3
         % endif
 
-      structuredConfig:
-        ruler:
-          wal:
-            dir: /var/loki/ruler-wal
-          storage:
-            type: local
-            local:
-              directory: /rules
-          rule_path: /rules
-          ring:
-            kvstore:
-              store: inmemory
-          external_labels:
-            country: need-to-define
-            customer: need-to-define
-            datacenter: need-to-define
-            environment: need-to-define
-          alertmanager_url: http://alertmanager.alert.k8s.qvantel.net:9096
-          enable_api: true
-          enable_alertmanager_v2: true 
+      rulerConfig:
+        wal:
+          dir: /var/loki/ruler-wal
+        storage:
+          type: local
+          local:
+            directory: /rules
+        rule_path: /rules
+        ring:
+          kvstore:
+            store: inmemory
+        external_labels:
+          country: need-to-define
+          customer: need-to-define
+          datacenter: need-to-define
+          environment: need-to-define
+        alertmanager_url: http://alertmanager.alert.k8s.qvantel.net:9096
+        enable_api: true
+        enable_alertmanager_v2: true
 
       tracing:
         enabled: false
@@ -218,32 +244,6 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      extraArgs:        
-        - '-config.expand-env=true'        
-      extraEnv:
-        % if values['lokiPlatform']['loki']['objectStorageSecret']['create']:
-        - name: OBJECT_STORAGE_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_USER
-        - name: OBJECT_STORAGE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_SECRET
-        % else:
-        - name: OBJECT_STORAGE_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
-        - name: OBJECT_STORAGE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
-        % endif   
     write:
       replicas: 3
       persistence:
@@ -268,32 +268,6 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      extraArgs:
-        - '-config.expand-env=true'        
-      extraEnv:
-        % if values['lokiPlatform']['loki']['objectStorageSecret']['create']:
-        - name: OBJECT_STORAGE_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_USER
-        - name: OBJECT_STORAGE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_SECRET
-        % else:
-        - name: OBJECT_STORAGE_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
-        - name: OBJECT_STORAGE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
-        % endif
     backend:
       replicas: 3
       persistence:
@@ -317,32 +291,6 @@ lokiPlatform:
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
       % endif
-      extraArgs:        
-        - '-config.expand-env=true'        
-      extraEnv:
-        % if values['lokiPlatform']['loki']['objectStorageSecret']['create']:
-        - name: OBJECT_STORAGE_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_USER
-        - name: OBJECT_STORAGE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: OBJECT_STORAGE_SECRET
-        % else:
-        - name: OBJECT_STORAGE_USER
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['userKey']}
-        - name: OBJECT_STORAGE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretName']}
-              key: ${values['lokiPlatform']['loki']['objectStorageSecret']['secretKey']}
-        % endif
     % endif
     
   promtail:
