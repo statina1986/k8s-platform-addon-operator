@@ -82,33 +82,32 @@ spec:
 {{- range keys $current.dbs  }}
 {{- $db := get $current.dbs . }}
 {{- $db_name := ( . | replace "-" "_") }}
+{{- $db_rf := ( $db.replicationFactors | default "{'class':'NetworkTopologyStrategy', 'DC1': 1}") }}
 
-# ---
-# apiVersion: platform.qvantel.com/v1
-# kind: SqlInstaller
-# metadata:
-#   annotations:
-#     platform.qvantel.com/retry-count: "100"
-#   name: postgresql-{{ . }}-installer
-# spec:
-#   type: postgresql
-#   {{- if and $db.sql $db.sql.provision }}
-#   db-provision-sql:
-#     {{- tpl (toYaml $db.sql.provision) $root | nindent 2 }}
-#   {{- else }}
-#   db-provision-sql:
-#     - "CREATE ROLE db_{{ $db_name }} NOLOGIN"
-#     - "GRANT db_{{ $db_name }} TO CURRENT_USER"
-#     - "CREATE DATABASE {{ $db_name }} WITH OWNER db_{{ $db_name }}"  
-#   {{ end }}  
-#   db-username: postgres
-#   db-password: "{postgres-password}"
-#   db-url: "postgresql://{postgres-user}:{postgres-password}@{{ $current_name }}-rw.platform.svc:5432/postgres"
-#   computed-values:
-#     - name: "postgres-password"
-#       expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
-#     - name: "postgres-user"
-#       expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+---
+apiVersion: platform.qvantel.com/v1
+kind: CqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: cassandra-{{ . }}-installer
+spec:  
+  {{- if and $db.cql $db.cql.provision }}
+  db-provision-cql:
+    {{- tpl (toYaml $db.cql.provision) $root | nindent 2 }}
+  {{- else }}
+  db-provision-cql:
+    - "CREATE KEYSPACE IF NOT EXISTS {{ $db_name }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
+    - "ALTER KEYSPACE {{ $db_name }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
+  {{ end }}  
+  db-username: "{cass-user}"
+  db-password: "{cass-password}"
+  db-url: "main-cassandra-service-0-headless.platform.svc"
+  computed-values:
+    - name: "cass-password"
+      expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "cass-user"
+      expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
 {{- if $db.roles }}
 {{- range keys $db.roles  }}

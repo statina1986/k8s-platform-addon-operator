@@ -10,6 +10,7 @@ RUN pip3 install python-json-logger
 RUN pip3 install pyyaml
 RUN pip3 install mako
 RUN pip3 install py-consul
+RUN pip3 install cassandra-driver
 
 RUN curl -fvSL -o /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.2/yq_linux_${TARGETARCH} && \    
     chmod +x /usr/bin/yq

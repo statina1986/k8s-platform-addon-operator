@@ -10,6 +10,15 @@ qvantelGlue:
     namespaceSelector:
       nameSelector:
         matchNames: [ "${values['global']['platformNamespace']}" ]
+  cqlinstallersCrdSync:
+    # -- Enables SqlInstaller CRDs reconciliation
+    enabled: true
+    # -- Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+    schedule: "*/5 * * * *"
+    # -- Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.
+    namespaceSelector:
+      nameSelector:
+        matchNames: [ "${values['global']['platformNamespace']}" ]
   # -- Databases deployment configuration.
   # @default -- see child items docs
   dbs:
