@@ -293,11 +293,12 @@ spec:
 {{- range keys $db.owners  }}
 {{- $dbRole := get $db.owners . }}
 {{- $dbRoleName := . }}
+{{- $objName := printf "%s-%s-%s" $dbClusterName $dbName $dbRoleName | replace "_" "-" }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $dbRoleName }}
+  name: {{ $objName }}
 spec:
   creation-statements: >-
     {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_%s TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_%s;" $dbNameUnderscored $dbNameUnderscored }}
