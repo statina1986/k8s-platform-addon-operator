@@ -27,6 +27,47 @@ Provides:
 	</thead>
 	<tbody>
 	<tr>
+		<td style="width: 300px;">qvantelGlue.cqlinstallersCrdSync.enabled</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+		<td><div>
+
+Enables SqlInstaller CRDs reconciliation
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.cqlinstallersCrdSync.namespaceSelector</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
+    matchNames:
+        - platform</code></pre>
+</td>
+		<td><div>
+
+Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.cqlinstallersCrdSync.schedule</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>'*/5 * * * *'</code></pre>
+</td>
+		<td><div>
+
+Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+
+</div>
+</td>
+	</tr>
+	<tr>
 		<td style="width: 300px;">qvantelGlue.dbs</td>
 		<td>object</td>
 		<td>
@@ -47,7 +88,7 @@ Databases deployment configuration.
 </td>
 		<td><div>
 
-Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster  and associated configuration like keyspaces and roles.
+Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster  and associated configuration like keyspaces and roles. For Example, see `example-cassandra` definition in Examples-Cassandra section below.
 
 </div>
 </td>
@@ -96,7 +137,7 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
 		<td>tpl/string</td>
 		<td>
 <pre style="max-width:500px; overflow-x:auto; white-space: pre;" lang="tpl"><code>qvantelGlue.dbs.common.postgres.defaultClusterTemplate: |
-  {{- if $.addonOperator.vaultPlatformEnabled }}
+  {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
   vaultConfiguration: true
   {{- end }}
   spec:
@@ -285,6 +326,150 @@ Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minu
 	</tbody>
 </table>
 
+<h3>Examples-Cassandra</h3>
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 300px;">example-cassandra</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
+    spec: null
+    vaultConfiguration: true
+dbs:
+    messaging:
+        cql:
+            provision: "- \"CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"\n- \"ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"   \n"
+    revenue-events:
+        replicationFactors: '{''class'':''NetworkTopologyStrategy'', ''DC1'': 1}'
+        roles:
+            apps-another-app-to-access-revenue-events:
+                cql: |
+                    CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE revenue_events TO {{username}};
+roles:
+    custom-role-access-all-keyspaces:
+        sql: |
+            CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};</code></pre>
+</td>
+			<td><div>
+
+This is example Cassandra glue definition.  In this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles. Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Defines K8ssandra cluster (kind: K8ssandraCluster) to deploy.  If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster.spec</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Configure K8ssandra cluster details. See https://docs.k8ssandra.io/reference/crd/k8ssandra-operator-crds-latest/#k8ssandraclusterspec for API reference.   
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster.vaultConfiguration</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'</code></pre>
+</td>
+			<td><div>
+
+Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.dbs</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions. This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.dbs.messaging.cql</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+It is possible to define provisioning CQL for the keyspace if customization is required.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.dbs.revenue-events.replicationFactors</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{'class':'NetworkTopologyStrategy', 'DC1': 1}</code></pre>
+</td>
+			<td><div>
+
+Replication configuration for the Keyspace.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.dbs.revenue-events.roles</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configures additional custom roles for this Keyspace in Vault. Keys in this map will be used as Vault roles names.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.roles</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
+
+</div>
+</td>
+		</tr>
+	</tbody>
+</table>
 <h3>Examples-PostgreSQL</h3>
 <table>
 	<thead>
@@ -436,7 +621,7 @@ Create Vault configuration for this cluster according to Qvantel conventions, i.
 </td>
 			<td><div>
 
-Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  
+Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.   This is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).
 
 </div>
 </td>

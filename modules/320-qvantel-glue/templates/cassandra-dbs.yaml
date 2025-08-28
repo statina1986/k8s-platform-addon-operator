@@ -102,7 +102,7 @@ spec:
   {{ end }}  
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: "main-cassandra-service-0-headless.platform.svc"
+  db-url: "main-cassandra-service-0-headless.{{ $.Release.Namespace }}.svc"
   computed-values:
     - name: "cass-password"
       expression: "k8s_get_secret_value('{{ $current_name }}-superuser', '{{ $.Release.Namespace }}', 'password')"
@@ -118,7 +118,7 @@ kind: DbRole
 metadata:
   name: {{ $dbrole }}
 spec:
-  creation-statements: {{ $dbrole.sql }}
+  creation-statements: {{ $dbrole.cql }}
   db-name: cassandra-{{ $current_name }}
   default-ttl: "0"
   max-ttl: "0"
@@ -155,7 +155,7 @@ kind: DbRole
 metadata:
   name: {{ $dbrole }}
 spec:  
-  creation-statements: {{ $dbrole.sql }}
+  creation-statements: {{ $dbrole.cql }}
   db-name: cassandra-{{ $current_name }}
   default-ttl: "0"
   max-ttl: "0"

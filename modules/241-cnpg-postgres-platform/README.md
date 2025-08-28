@@ -95,7 +95,7 @@ Default values for CNPG clusters. See `example-postgredb` for reference. With th
 		<td>tpl/string</td>
 		<td>
 <pre style="max-width:500px; overflow-x:auto; white-space: pre;" lang="tpl"><code>cnpgPostgresPlatform.common.defaultClusterTemplate: |
-  {{- if $.addonOperator.vaultPlatformEnabled }}
+  {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
   vaultConfiguration: true
   {{- end }}
   spec:

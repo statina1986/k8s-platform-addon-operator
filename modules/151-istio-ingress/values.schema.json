@@ -6381,109 +6381,6 @@
                                         "uri": {
                                           "properties": {
                                             "prefix": {
-                                              "default": "/flow/",
-                                              "required": [],
-                                              "title": "prefix",
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "uri",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "retries": {
-                                "properties": {
-                                  "attempts": {
-                                    "default": 0,
-                                    "required": [],
-                                    "title": "attempts",
-                                    "type": "integer"
-                                  }
-                                },
-                                "required": [],
-                                "title": "retries",
-                                "type": "object"
-                              },
-                              "rewrite": {
-                                "properties": {
-                                  "uri": {
-                                    "default": "/",
-                                    "required": [],
-                                    "title": "uri",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [],
-                                "title": "rewrite",
-                                "type": "object"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "mobile-flowable-api.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 80,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "uri": {
-                                          "properties": {
-                                            "prefix": {
                                               "default": "/web/static",
                                               "required": [],
                                               "title": "prefix",
@@ -6547,7 +6444,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 80,
+                                                  "default": 8080,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"

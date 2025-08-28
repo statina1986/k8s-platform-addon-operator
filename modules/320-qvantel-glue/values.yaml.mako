@@ -141,6 +141,7 @@ qvantelGlue:
     mariadb: {}
     # -- Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster 
     # and associated configuration like keyspaces and roles.
+    # For Example, see `example-cassandra` definition in Examples-Cassandra section below.
     cassandra: {}
 
 # -- This is example PostgreSQL glue definition. 
@@ -196,7 +197,8 @@ example-postgredb:
           cpu: "0.1"
       storage:
         size: 10Gi
-  # -- Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.   
+  # -- Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  
+  # This is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).
   # @default -- {}
   # @section -- Examples-PostgreSQL
   dbs:
@@ -235,3 +237,55 @@ example-postgredb:
         GRANT db_flex_bpmn_executor TO "{{name}}";
         ALTER ROLE "{{name}}" SET role db_ddl;
         ALTER ROLE "{{name}}" SET role db_flex_bpmn_executor;
+
+# -- This is example Cassandra glue definition. 
+# In this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.
+# Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`
+# @section -- Examples-Cassandra
+example-cassandra:
+  # -- Defines K8ssandra cluster (kind: K8ssandraCluster) to deploy. 
+  # If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.
+  # @default -- null
+  # @section -- Examples-Cassandra
+  cluster:
+    # -- Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
+    # @default --  by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
+    # @section -- Examples-Cassandra
+    vaultConfiguration: true
+    # -- Configure K8ssandra cluster details. See https://docs.k8ssandra.io/reference/crd/k8ssandra-operator-crds-latest/#k8ssandraclusterspec for API reference.    
+    # @default -- null
+    # @section -- Examples-Cassandra
+    spec: null
+  # -- Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions.
+  # This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).
+  # @default -- {}
+  # @section -- Examples-Cassandra
+  dbs:
+    messaging:
+      # -- It is possible to define provisioning CQL for the keyspace if customization is required.
+      # @default -- null
+      # @section -- Examples-Cassandra
+      cql:
+        provision: |
+          - "CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;"
+          - "ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;"   
+    revenue-events:
+      # -- Replication configuration for the Keyspace.
+      # @default -- {'class':'NetworkTopologyStrategy', 'DC1': 1}
+      # @section -- Examples-Cassandra
+      replicationFactors: "{'class':'NetworkTopologyStrategy', 'DC1': 1}"
+      # -- Configures additional custom roles for this Keyspace in Vault. Keys in this map will be used as Vault roles names.
+      # @default -- {}
+      # @section -- Examples-Cassandra
+      roles:
+        apps-another-app-to-access-revenue-events:
+          cql: |
+            CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE revenue_events TO {{username}};
+
+  # -- Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
+  # @default -- {}
+  # @section -- Examples-Cassandra
+  roles:
+    custom-role-access-all-keyspaces:
+      sql: |
+        CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};

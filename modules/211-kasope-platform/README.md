@@ -63,7 +63,7 @@ Configured profiles:
                 dcService:
                     annotations:
                         consul.hashicorp.com/service-port: native
-          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
           racks:
             - name: default
           size: 3

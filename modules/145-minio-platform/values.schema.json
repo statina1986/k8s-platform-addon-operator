@@ -78,6 +78,13 @@
             },
             "environment": {
               "properties": {
+                "MINIO_BROWSER_LOGIN_ANIMATION": {
+                  "default": "off",
+                  "description": "Disables login animation, which breaks login page with kubectl port forwarding ( https://github.com/minio/minio/pull/17123 )",
+                  "required": [],
+                  "title": "MINIO_BROWSER_LOGIN_ANIMATION",
+                  "type": "string"
+                },
                 "MINIO_PROMETHEUS_URL": {
                   "default": "http://monitoring-platform-prometheus.platform.svc.cluster.local:9090",
                   "description": "Enables advanced metrics in MinIO Console if monitoring-platform module is enabled",

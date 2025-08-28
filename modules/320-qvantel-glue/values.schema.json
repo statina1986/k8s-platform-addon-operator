@@ -1,6 +1,121 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "properties": {
+    "example-cassandra": {
+      "description": "This is example Cassandra glue definition. \nIn this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.\nNote: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`",
+      "properties": {
+        "cluster": {
+          "description": "Defines K8ssandra cluster (kind: K8ssandraCluster) to deploy. \nIf it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.",
+          "properties": {
+            "spec": {
+              "default": "null",
+              "description": "Configure K8ssandra cluster details. See https://docs.k8ssandra.io/reference/crd/k8ssandra-operator-crds-latest/#k8ssandraclusterspec for API reference.",
+              "required": [],
+              "title": "spec",
+              "type": "null"
+            },
+            "vaultConfiguration": {
+              "default": true,
+              "description": "Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.",
+              "required": [],
+              "title": "vaultConfiguration",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "cluster",
+          "type": "object"
+        },
+        "dbs": {
+          "description": "Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions.\nThis is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).",
+          "properties": {
+            "messaging": {
+              "properties": {
+                "cql": {
+                  "description": "It is possible to define provisioning CQL for the keyspace if customization is required.",
+                  "properties": {
+                    "provision": {
+                      "default": "- \"CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"\n- \"ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"   \n",
+                      "required": [],
+                      "title": "provision",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "cql",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "messaging",
+              "type": "object"
+            },
+            "revenue-events": {
+              "properties": {
+                "replicationFactors": {
+                  "default": "{'class':'NetworkTopologyStrategy', 'DC1': 1}",
+                  "description": "Replication configuration for the Keyspace.",
+                  "required": [],
+                  "title": "replicationFactors",
+                  "type": "string"
+                },
+                "roles": {
+                  "description": "Configures additional custom roles for this Keyspace in Vault. Keys in this map will be used as Vault roles names.",
+                  "properties": {
+                    "apps-another-app-to-access-revenue-events": {
+                      "properties": {
+                        "cql": {
+                          "default": "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE revenue_events TO {{username}};\n",
+                          "required": [],
+                          "title": "cql",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "apps-another-app-to-access-revenue-events",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "roles",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "revenue-events",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "dbs",
+          "type": "object"
+        },
+        "roles": {
+          "description": "Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.",
+          "properties": {
+            "custom-role-access-all-keyspaces": {
+              "properties": {
+                "sql": {
+                  "default": "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};\n",
+                  "required": [],
+                  "title": "sql",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "custom-role-access-all-keyspaces",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "roles",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "example-cassandra",
+      "type": "object"
+    },
     "example-postgredb": {
       "description": "This is example PostgreSQL glue definition. \nIn this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.\nNote: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`",
       "properties": {
@@ -175,7 +290,7 @@
           "type": "object"
         },
         "dbs": {
-          "description": "Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.",
+          "description": "Defines Databases to deploy in the CNPG Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  \nThis is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).",
           "properties": {
             "catalog-deployer": {
               "properties": {
@@ -278,11 +393,61 @@
     },
     "qvantelGlue": {
       "properties": {
+        "cqlinstallersCrdSync": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "description": "Enables SqlInstaller CRDs reconciliation",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "namespaceSelector": {
+              "description": "Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.",
+              "properties": {
+                "nameSelector": {
+                  "properties": {
+                    "matchNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "matchNames",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "nameSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "namespaceSelector",
+              "type": "object"
+            },
+            "schedule": {
+              "default": "*/5 * * * *",
+              "description": "Schedule for periodic reconciliation. Default is \"*/5 * * * *\" - so every 5 minutes.",
+              "required": [],
+              "title": "schedule",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "cqlinstallersCrdSync",
+          "type": "object"
+        },
         "dbs": {
           "description": "Databases deployment configuration.",
           "properties": {
             "cassandra": {
-              "description": "Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster \nand associated configuration like keyspaces and roles.",
+              "description": "Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster \nand associated configuration like keyspaces and roles.\nFor Example, see `example-cassandra` definition in Examples-Cassandra section below.",
               "required": [],
               "title": "cassandra",
               "type": "object"
@@ -300,7 +465,7 @@
                       "type": "object"
                     },
                     "defaultClusterTemplate": {
-                      "default": "{{- if $.addonOperator.vaultPlatformEnabled }}\nvaultConfiguration: true\n{{- end }}\nspec:\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}\n  imageCatalogRef:\n    apiGroup: postgresql.cnpg.io\n    kind: ImageCatalog\n    name: qvantel-base-cnpg-images\n    major: 15\n  {{- end }}\n  enableSuperuserAccess: true\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  instances: 1\n  {{- else }}\n  instances: 2\n  {{- end }}\n  affinity:\n    {{- if $.root.Values.global.multiZone.enabled }}\n    topologyKey: topology.kubernetes.io/zone\n    {{- end }}\n  {{- if ne $.root.Values.global.configurationProfile \"dev\" }}\n  backup:\n    retentionPolicy: \"7d\"\n    barmanObjectStore:\n      destinationPath: \"s3://s3-bucket-for-postgresql\"\n      s3Credentials:\n      {{- if $.addonOperator.monitoringPlatformEnabled }}\n        inheritFromIAMRole: true\n      {{- end }}\n    wal:\n      compression: gzip\n      maxParallel: 8\n      encryption: AES256\n  {{- end }}\n  postgresql:\n    parameters:\n      auto_explain.log_min_duration: \"500ms\"\n      auto_explain.log_analyze: \"on\"\n      auto_explain.log_timing: \"off\"\n      max_connections: \"500\"      \n      random_page_cost: \"1\"\n      pg_stat_statements.max: \"10000\"\n      pg_stat_statements.track: \"top\"\n      pg_stat_statements.track_utility: \"off\"\n      pg_wait_sampling.profile_pid: \"false\"\n      track_io_timing: \"on\"\n      wal_compression: \"pglz\"\n    shared_preload_libraries:\n      - timescaledb\n      - pg_partman_bgw\n      - pg_wait_sampling\n      {{- if $.additionalSharedLibraries }}\n      {{- range $.additionalSharedLibraries }}\n      - {{ . }}\n      {{- end }}\n      {{- end }}\n  resources:\n    requests:\n      cpu: \"0.1\"\n  storage:\n    size: 10Gi\n  {{- if $.addonOperator.monitoringPlatformEnabled }}\n  monitoring:\n    podMonitorEnabled: true\n    customQueriesConfigMap:\n      - name: cnpg-queries-insights-metrics\n        key: custom-metrics-queries\n      {{- if $.additionalCustomQueriesConfigMaps }}\n      {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}\n      - name: {{ $k }}\n      {{ $v | toYaml | indent 2 }}\n      {{- end }}\n      {{- end }}\n  {{- end }}\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.bootstrap) }}\n  bootstrap:\n    initdb:\n      postInitSQL:\n        - \"CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;\"\n        - \"CREATE EXTENSION IF NOT EXISTS timescaledb;\"\n  {{- end }}\n  {{- if $.root.Values.global.awsRole }}\n  serviceAccountTemplate:\n    metadata:\n      annotations:\n        eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}\n  {{- end }}\n",
+                      "default": "{{- if eq $.addonOperator.vaultPlatformEnabled \"true\" }}\nvaultConfiguration: true\n{{- end }}\nspec:\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}\n  imageCatalogRef:\n    apiGroup: postgresql.cnpg.io\n    kind: ImageCatalog\n    name: qvantel-base-cnpg-images\n    major: 15\n  {{- end }}\n  enableSuperuserAccess: true\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  instances: 1\n  {{- else }}\n  instances: 2\n  {{- end }}\n  affinity:\n    {{- if $.root.Values.global.multiZone.enabled }}\n    topologyKey: topology.kubernetes.io/zone\n    {{- end }}\n  {{- if ne $.root.Values.global.configurationProfile \"dev\" }}\n  backup:\n    retentionPolicy: \"7d\"\n    barmanObjectStore:\n      destinationPath: \"s3://s3-bucket-for-postgresql\"\n      s3Credentials:\n      {{- if $.addonOperator.monitoringPlatformEnabled }}\n        inheritFromIAMRole: true\n      {{- end }}\n    wal:\n      compression: gzip\n      maxParallel: 8\n      encryption: AES256\n  {{- end }}\n  postgresql:\n    parameters:\n      auto_explain.log_min_duration: \"500ms\"\n      auto_explain.log_analyze: \"on\"\n      auto_explain.log_timing: \"off\"\n      max_connections: \"500\"      \n      random_page_cost: \"1\"\n      pg_stat_statements.max: \"10000\"\n      pg_stat_statements.track: \"top\"\n      pg_stat_statements.track_utility: \"off\"\n      pg_wait_sampling.profile_pid: \"false\"\n      track_io_timing: \"on\"\n      wal_compression: \"pglz\"\n    shared_preload_libraries:\n      - timescaledb\n      - pg_partman_bgw\n      - pg_wait_sampling\n      {{- if $.additionalSharedLibraries }}\n      {{- range $.additionalSharedLibraries }}\n      - {{ . }}\n      {{- end }}\n      {{- end }}\n  resources:\n    requests:\n      cpu: \"0.1\"\n  storage:\n    size: 10Gi\n  {{- if $.addonOperator.monitoringPlatformEnabled }}\n  monitoring:\n    podMonitorEnabled: true\n    customQueriesConfigMap:\n      - name: cnpg-queries-insights-metrics\n        key: custom-metrics-queries\n      {{- if $.additionalCustomQueriesConfigMaps }}\n      {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}\n      - name: {{ $k }}\n      {{ $v | toYaml | indent 2 }}\n      {{- end }}\n      {{- end }}\n  {{- end }}\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.bootstrap) }}\n  bootstrap:\n    initdb:\n      postInitSQL:\n        - \"CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;\"\n        - \"CREATE EXTENSION IF NOT EXISTS timescaledb;\"\n  {{- end }}\n  {{- if $.root.Values.global.awsRole }}\n  serviceAccountTemplate:\n    metadata:\n      annotations:\n        eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}\n  {{- end }}\n",
                       "description": "(tpl/string) Default template for CNPG clusters. See `example-postgredb.cluster` for reference.\nThis is templated field which is rendered for each cluster from `qvantelGlue.dbs.postgres`.\nWith this field you can override default cluster template for complex cases and utilize helm templating in it.\nScope for the template contains fields: \n\\newline\n* addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.\n\\newline\n* root: root context of 'qvantel-glue' module, containing all Values for the module.\n\\newline\n* cluster: content of 'cluster' field for rendered cluster.",
                       "required": [],
                       "title": "defaultClusterTemplate",
