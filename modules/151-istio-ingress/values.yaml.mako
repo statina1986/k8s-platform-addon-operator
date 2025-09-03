@@ -832,7 +832,7 @@ istioIngress:
         http:
           - route:
               - destination:
-                  host: openproject.${values['global']['appsNamespace']}.svc.cluster.local
+                  host: openproject-web.${values['global']['appsNamespace']}.svc.cluster.local
                   port:
                     number: 8080
       orders-chat:
