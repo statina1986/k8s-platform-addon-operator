@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-30T07:55:43.608014364Z"
+  generatedAt: "2025-09-04T06:35:16.239922644Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: metrics-platform
@@ -9,18 +9,18 @@ chart:
   appVersion: ""
 images:
   - name: metrics-server
-    image: registry.k8s.io/metrics-server/metrics-server:v0.7.1
+    image: registry.k8s.io/metrics-server/metrics-server:v0.8.0
     chart: metrics-platform
     digests:
-      - digest: sha256:31f034feb3f16062e93be7c40efc596553c89de172e2e412e588f02382388872
+      - digest: sha256:5dd31abb8093690d9624a53277a00d2257e7e57e6766be3f9f54cf9f54cddbc1
         arch: linux/amd64
-      - digest: sha256:7f0fc3565b6d4655d078bb8e250d0423d7c79aeb05fbc71e1ffa6ff664264d70
+      - digest: sha256:8f49cf1b0688bb0eae18437882dbf6de2c7a2baac71b1492bc4eca25439a1bf2
         arch: linux/arm64
   - name: addon-resizer
-    image: registry.k8s.io/autoscaling/addon-resizer:1.8.21
+    image: registry.k8s.io/autoscaling/addon-resizer:1.8.23
     chart: metrics-platform
     digests:
-      - digest: sha256:151f9fed906c4a21371f3800928cc356d20f4ceb08eb53c9ecb2849fe26ec581
+      - digest: sha256:d6e1abade519d4d19408ceffcdce20d836214bc778ed7ee414662dbaac8181ff
         arch: linux/amd64
-      - digest: sha256:745d38e2827e76d31ef2504f5bbe37004aa8724fb736968260f9193976c19e8d
+      - digest: sha256:5551bb1ff0fff61b83a85cfb7aa83f3bbb7b2b2a20e57424a87ae627cda43e57
         arch: linux/arm64

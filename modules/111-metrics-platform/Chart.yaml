@@ -7,6 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: metrics-server
-      image: registry.k8s.io/metrics-server/metrics-server:v0.7.1
+      image: registry.k8s.io/metrics-server/metrics-server:v0.8.0
     - name: addon-resizer
-      image: registry.k8s.io/autoscaling/addon-resizer:1.8.21
+      image: registry.k8s.io/autoscaling/addon-resizer:1.8.23
