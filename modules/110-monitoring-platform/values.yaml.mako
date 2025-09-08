@@ -531,18 +531,23 @@ monitoringPlatform:
         image: 
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+           % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.2_202508131123_master_e140ddde
       downloadDashboardsImage:
-        % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}
-        % endif
+        image:
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}
+           % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.2_202508131123_master_e140ddde
       initChownData:
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          repository: ubi9/ubi-minimal
-          tag: 9.4-1194
            % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.2_202508131123_master_e140ddde
       extraContainerVolumes:
         - name: grafana-plugins
           emptyDir: { }
@@ -552,13 +557,13 @@ monitoringPlatform:
       extraInitContainers: 
         - name: plugin-sidecar
           % if 'containerRegistryBase' in values['global']:
-          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:1.2.0_4_f26bb6e90
+          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:1.2.0_7_e03920fe8
           % else:
-          image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
+          image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_7_e03920fe8
           % endif
           command: ["/bin/sh", "-c"]
           args:
-          - unzip /tmp/*.zip -d /var/lib/grafana/plugins
+            - "for file in /tmp/*.zip; do unzip -o -q \"$file\" -d /var/lib/grafana/plugins; done"
           volumeMounts:
             - name: grafana-plugins
               mountPath: /var/lib/grafana/plugins
@@ -717,6 +722,8 @@ monitoringPlatform:
               isDefault: false
 
       grafana.ini:
+        plugins:
+          preinstall_disabled: true
         auth.anonymous:
           enabled: false
         dataproxy:
