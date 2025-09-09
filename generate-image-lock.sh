@@ -8,7 +8,9 @@ dirs=(${0%/*}/modules/*)
 
 for val in ${dirs[@]}; do
     if [[ ! -f "$val/Images.lock" ]] ; then
-        ./utils/dt images lock --plain --platforms linux/amd64 --platforms linux/arm64 "$val" 
+        ### With this we can define custom 'images-key' annotation in Chart.yaml in order to override key from which images annotations are taken
+        imagesKey=( `./utils/yq '.annotations.images-key // "images"' "$val/Chart.yaml"` )
+        ./utils/dt images lock --plain --platforms linux/amd64 --platforms linux/arm64 --annotations-key "$imagesKey" "$val" 
     fi  
 done
 
