@@ -205,7 +205,7 @@
               "type": "array"
             },
             "extraPlugins": {
-              "default": "rabbitmq_auth_backend_ldap rabbitmq_web_stomp",
+              "default": "rabbitmq_auth_backend_ldap rabbitmq_web_stomp rabbitmq_stomp",
               "description": "Enabled rabbitmq extra plugins",
               "required": [],
               "title": "extraPlugins",
@@ -239,6 +239,12 @@
                   "required": [],
                   "title": "registry",
                   "type": "string"
+                },
+                "repository": {
+                  "default": "bitnamilegacy/rabbitmq",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
                 }
               },
               "required": [],
@@ -259,7 +265,7 @@
               "type": "object"
             },
             "plugins": {
-              "default": "rabbitmq_management, rabbitmq_peer_discovery_k8s, rabbitmq_auth_backend_ldap, rabbitmq_stomp",
+              "default": "rabbitmq_management rabbitmq_peer_discovery_k8s",
               "description": "Enabled rabbitmq plugins",
               "required": [],
               "title": "plugins",
@@ -467,6 +473,18 @@
                       "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
                       "required": [],
                       "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/platform-k8s-tools-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.3.3_202509080945_master_90384dcc",
+                      "required": [],
+                      "title": "tag",
                       "type": "string"
                     }
                   },

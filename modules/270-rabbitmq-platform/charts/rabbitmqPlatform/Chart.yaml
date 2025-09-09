@@ -3,5 +3,5 @@ name: rabbitmqPlatform
 version: 0.0.1
 dependencies:
   - name: rabbitmq
-    version: 15.2.4
+    version: 16.0.14
     repository: https://charts.bitnami.com/bitnami

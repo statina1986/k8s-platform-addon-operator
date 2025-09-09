@@ -8,6 +8,8 @@ rabbitmqPlatform:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
       % endif
+      repository: bitnamilegacy/rabbitmq
+
     # -- More relaxed readiness probe to prevent a deadlock when restarting after an abrupt stop.
     # This is because rabbitmq tries to sync with its peers before becoming fully functional,
     # while Kubernetes OrderedReady policy only starts the next pod once first one is considered
@@ -48,12 +50,12 @@ rabbitmqPlatform:
         existingSecretFullChain: false
 
     # -- Enabled rabbitmq plugins
-    plugins: "rabbitmq_management, rabbitmq_peer_discovery_k8s, rabbitmq_auth_backend_ldap, rabbitmq_stomp"
+    plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
     communityPlugins: ""
 
     # -- Enabled rabbitmq extra plugins
-    extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_web_stomp"
+    extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_web_stomp rabbitmq_stomp"
 
     extraContainerPorts:
       - name: web-stomp
@@ -77,6 +79,8 @@ rabbitmqPlatform:
 
     # -- Number of replicas - Default is one for development profile, three for anything else.
     % if values['global']['configurationProfile'] in {'dev'}:
+    clustering:
+      enabled: false
     replicaCount: 1
     % else:
     replicaCount: 3
@@ -111,3 +115,5 @@ rabbitmqPlatform:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}    
         % endif
+        repository: platform/platform-k8s-tools-minimal
+        tag: 1.3.3_202509080945_master_90384dcc

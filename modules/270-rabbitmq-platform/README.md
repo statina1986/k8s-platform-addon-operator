@@ -42,7 +42,7 @@ More relaxed readiness probe to prevent a deadlock when restarting after an abru
 			<td style="width: 300px;" id="rabbitmqPlatform--rabbitmq--extraPlugins">rabbitmqPlatform.rabbitmq.extraPlugins</td>
 			<td>string</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>rabbitmq_auth_backend_ldap rabbitmq_web_stomp</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>rabbitmq_auth_backend_ldap rabbitmq_web_stomp rabbitmq_stomp</code></pre>
 </td>
 			<td><div>
 
@@ -69,7 +69,7 @@ Has to be set because Bitnami considers mirror registries insecure
 			<td style="width: 300px;" id="rabbitmqPlatform--rabbitmq--plugins">rabbitmqPlatform.rabbitmq.plugins</td>
 			<td>string</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>rabbitmq_management, rabbitmq_peer_discovery_k8s, rabbitmq_auth_backend_ldap, rabbitmq_stomp</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>rabbitmq_management rabbitmq_peer_discovery_k8s</code></pre>
 </td>
 			<td><div>
 

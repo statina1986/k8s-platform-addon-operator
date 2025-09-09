@@ -1,26 +1,26 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-01-30T07:51:09.529480237Z"
+  generatedAt: "2025-09-09T05:03:40.05962905Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: rabbitmq-platform
   version: 0.0.1
   appVersion: ""
 images:
-  - name: os-shell
-    image: docker.io/bitnami/os-shell:12-debian-12-r35
-    chart: rabbitmq
-    digests:
-      - digest: sha256:31415d8e37a417ec50fbcdbb8c8fbb9c0a7763934923c1877234a1cd427511d2
-        arch: linux/amd64
-      - digest: sha256:344db2b23709a29683a7ade43fa729fbf2f88911f6a6dcfde39e83c69e75a0bb
-        arch: linux/arm64
   - name: rabbitmq
-    image: docker.io/bitnami/rabbitmq:4.0.5-debian-12-r1
-    chart: rabbitmq
+    image: docker.io/bitnamilegacy/rabbitmq:4.1.3-debian-12-r1
+    chart: rabbitmq-platform
     digests:
-      - digest: sha256:cdf7dac1b66972d78cd6b075ea69df78757327550313c511e9b549320de2eb00
+      - digest: sha256:20d35467add5925f221338e7c304f0754a611acba197ccefda1b8bd5294ac1ef
         arch: linux/amd64
-      - digest: sha256:1ff661bb1c92dd2ad32503256c27572daf2735c97560aeef0901dbc449e331a4
+      - digest: sha256:c31193fe08b8488e17c798ac164a2928a01b56a490558d5eddcb6999375a9398
         arch: linux/arm64
+  - name: platform-k8s-tools-minimal
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    chart: rabbitmq-platform
+    digests:
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
+        arch: linux/arm64
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
+        arch: linux/amd64
