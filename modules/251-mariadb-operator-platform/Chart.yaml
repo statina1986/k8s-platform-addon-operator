@@ -2,12 +2,12 @@ apiVersion: v2
 name: mariadb-operator-platform
 version: 0.0.1
 dependencies:
-  - name: mariadbOperatorPlatform
-    version: 0.0.1
+- name: mariadbOperatorPlatform
+  version: 0.0.1
 annotations:
   images: |
     - name: mariadb-operator
-      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:0.37.1
+      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:25.8.3
     - name: mariadb-10-6
       image: docker.io/mariadb:10.6.19
     - name: mariadb-10-11
@@ -20,4 +20,3 @@ annotations:
       image: prom/mysqld-exporter:v0.15.1
     - name: maxscale-exporter
       image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
-    

@@ -107,6 +107,108 @@ Common configurations to be used across databases
 </td>
 	</tr>
 	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.common.mariadb</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see child items docs</code></pre>
+</td>
+		<td><div>
+
+Common configurations for MariaDB databases
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.common.mariadb.defaultCluster</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>{}</code></pre>
+</td>
+		<td><div>
+
+Default values for MariaDB clusters. See `example-mariadb.cluster` for reference. With this field you can configure common values for all MariaDB clusters, e.g. backup location and schedule.
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.common.mariadb.defaultClusterTemplate</td>
+		<td>tpl/string</td>
+		<td>
+<pre style="max-width:500px; overflow-x:auto; white-space: pre;" lang="tpl"><code>qvantelGlue.dbs.common.mariadb.defaultClusterTemplate: |
+  {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
+  vaultConfiguration: true
+  {{- end }}
+  spec:
+    {{- if $.root.Values.global.platformMasters }}
+    nodeSelector:
+      {{ $.root.Values.global.platformMastersKey }}: {{ $.root.Values.global.platformMastersValue }}
+    {{- end }}
+    storage:
+      size: 10Gi
+    {{- if eq $.root.Values.global.configurationProfile "dev" }}
+    replicas: 1
+    {{- else }}
+    replicas: 3
+    galera:
+      enabled: true
+      config:
+        reuseStorageVolume: true
+      providerOptions:
+        gcache.size: 128M
+    maxScale:
+      enabled: true
+      replicas: 2
+    {{- end }}
+    {{- if $.addonOperator.monitoringPlatformEnabled }}
+    metrics:
+      enabled: true
+      serviceMonitor:
+        prometheusRelease: "{{ $.root.Values.global.helmReleaseNamePrefix }}monitoring-platform"
+    {{- end }}
+    affinity:
+      antiAffinityEnabled: true 
+    tolerations:
+      - key: "k8s.mariadb.com/ha"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "{{ $.root.Values.global.platformMastersKey }}"
+        value: "{{ $.root.Values.global.platformMastersValue }}"
+        operator: "Equal"
+        effect: "NoSchedule"
+    podDisruptionBudget:
+      maxUnavailable: 33%
+    updateStrategy:
+      type: RollingUpdate
+    myCnf: |
+      [mariadb]
+      bind-address=*
+      default_storage_engine=InnoDB
+      binlog_format=row
+      innodb_autoinc_lock_mode=2
+      max_allowed_packet=256M
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 1Gi 
+       
+ 
+</code></pre>
+</td>
+		<td><div>
+
+Default template for MariaDB clusters. See `example-mariadb.cluster` for reference. This is templated field which is rendered for each cluster from `qvantelGlue.dbs.mariadb`. With this field you can override default cluster template for complex cases and utilize helm templating in it. Scope for the template contains fields: 
+ * addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.
+ * root: root context of 'qvantel-glue' module, containing all Values for the module.
+ * cluster: content of 'cluster' field for rendered cluster.
+
+</div>
+</td>
+	</tr>
+	<tr>
 		<td style="width: 300px;">qvantelGlue.dbs.common.postgres</td>
 		<td>object</td>
 		<td>

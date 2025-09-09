@@ -455,6 +455,27 @@
             "common": {
               "description": "Common configurations to be used across databases",
               "properties": {
+                "mariadb": {
+                  "description": "Common configurations for MariaDB databases",
+                  "properties": {
+                    "defaultCluster": {
+                      "description": "Default values for MariaDB clusters. See `example-mariadb.cluster` for reference.\nWith this field you can configure common values for all MariaDB clusters, e.g. backup location and schedule.",
+                      "required": [],
+                      "title": "defaultCluster",
+                      "type": "object"
+                    },
+                    "defaultClusterTemplate": {
+                      "default": "{{- if eq $.addonOperator.vaultPlatformEnabled \"true\" }}\nvaultConfiguration: true\n{{- end }}\nspec:\n  {{- if $.root.Values.global.platformMasters }}\n  nodeSelector:\n    {{ $.root.Values.global.platformMastersKey }}: {{ $.root.Values.global.platformMastersValue }}\n  {{- end }}\n  storage:\n    size: 10Gi\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  replicas: 1\n  {{- else }}\n  replicas: 3\n  galera:\n    enabled: true\n    config:\n      reuseStorageVolume: true\n    providerOptions:\n      gcache.size: 128M\n  maxScale:\n    enabled: true\n    replicas: 2\n  {{- end }}\n  {{- if $.addonOperator.monitoringPlatformEnabled }}\n  metrics:\n    enabled: true\n    serviceMonitor:\n      prometheusRelease: \"{{ $.root.Values.global.helmReleaseNamePrefix }}monitoring-platform\"\n  {{- end }}\n  affinity:\n    antiAffinityEnabled: true  \n  tolerations:\n    - key: \"k8s.mariadb.com/ha\"\n      operator: \"Exists\"\n      effect: \"NoSchedule\"\n    - key: \"{{ $.root.Values.global.platformMastersKey }}\"\n      value: \"{{ $.root.Values.global.platformMastersValue }}\"\n      operator: \"Equal\"\n      effect: \"NoSchedule\"\n  podDisruptionBudget:\n    maxUnavailable: 33%\n  updateStrategy:\n    type: RollingUpdate\n  myCnf: |\n    [mariadb]\n    bind-address=*\n    default_storage_engine=InnoDB\n    binlog_format=row\n    innodb_autoinc_lock_mode=2\n    max_allowed_packet=256M\n  resources:\n    requests:\n      cpu: 100m\n      memory: 128Mi\n    limits:\n      memory: 1Gi  \n      \n",
+                      "description": "(tpl/string) Default template for MariaDB clusters. See `example-mariadb.cluster` for reference.\nThis is templated field which is rendered for each cluster from `qvantelGlue.dbs.mariadb`.\nWith this field you can override default cluster template for complex cases and utilize helm templating in it.\nScope for the template contains fields: \n\\newline\n* addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.\n\\newline\n* root: root context of 'qvantel-glue' module, containing all Values for the module.\n\\newline\n* cluster: content of 'cluster' field for rendered cluster.",
+                      "required": [],
+                      "title": "defaultClusterTemplate",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "mariadb",
+                  "type": "object"
+                },
                 "postgres": {
                   "description": "Common configurations for PostgreSQL databases",
                   "properties": {
