@@ -1,4 +1,5 @@
 vectorPlatform:
+  # -- Vector Agent configuration
   agent:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -66,6 +67,7 @@ vectorPlatform:
             - kubernetes_logs_transform
             - vector_logs_transform
           address: ${values['global']['helmReleaseNamePrefix']}vector-platform-aggregator.${values['global']['platformNamespace']}.svc:6000
+  # -- Fluent Bit configuration
   fluent-bit-events-collector:
     % if values['global']['deployOperators'] == "true":
     enabled: true
@@ -76,6 +78,9 @@ vectorPlatform:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/fluent/fluent-bit
       % endif
+      # Hard coding the tag to override helm chart's 4.0.7 to avoid JSON regression
+      # https://fluentbit.io/announcements/v4.0.8/
+      tag: 4.0.8
     kind: Deployment
     nameOverride: fluent-bit-events-collector
     testFramework:
@@ -103,6 +108,7 @@ vectorPlatform:
               match k8s_events
               host ${values['global']['helmReleaseNamePrefix']}vector-platform-aggregator.${values['global']['platformNamespace']}.svc
               port 9002
+  # -- Vector Aggregator configuration
   aggregator:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -162,6 +168,7 @@ vectorPlatform:
         enabled: true
         playground: false
       data_dir: /vector-data-dir
+      # -- Data sources for Vector Aggregator
       sources:
         vector:
           type: vector
@@ -175,8 +182,8 @@ vectorPlatform:
           type: internal_logs
         k8s_events_fluent:
           type: fluent
+          mode: "tcp"
           address: 0.0.0.0:9002
-          encoding: json
       transforms:
         k8s_events_transform:
           type: remap
@@ -196,6 +203,7 @@ vectorPlatform:
           - vector_metrics
           source: |
             del(.tags.file)
+        # -- Identifies logs based on tags so transformations can target specific log types
         log_types:
           type: route
           inputs:
@@ -211,6 +219,7 @@ vectorPlatform:
             nodes_messages: .tags != null && includes(array!(.tags), "messages")
             nodes_container: .tags != null && includes(array!(.tags), "container")
             nodes_secure: .tags != null && includes(array!(.tags), "secure")
+        # -- Transformation relying on [Generic Log Format](https://qvantel.atlassian.net/wiki/spaces/PDG/pages/1358727788/Generic+Log+Format) for app logs
         qvantel_apps_transform:
           type: remap
           inputs:
@@ -254,6 +263,7 @@ vectorPlatform:
               }
             }
         % if addon_operator['elasticsearchPlatformEnabled'] == 'true' or addon_operator['logsearchPlatformEnabled'] == 'true':
+        # -- Transformation in case ELK is enabled - forwards access logs from Istio
         istio_to_elk_transform:
           inputs:
           - istio_gateway_transform
@@ -264,6 +274,7 @@ vectorPlatform:
             del(.kubernetes)
             .@timestamp = del(.timestamp)
           type: remap
+        # -- Transformation in case ELK is enabled - only forwards access logs and app logs which aren't DEBUG or TRACE and could be parsed
         qvantel_apps_no_debug:
           type: filter
           inputs:
@@ -309,12 +320,19 @@ vectorPlatform:
             - log_types.nodes_container
           source: |
             .log_source = "nodes_containers"
+        nodes_secure_transform:
+          type: remap
+          inputs:
+            - log_types.nodes_secure
+          source: |
+            .log_source = "nodes_secure"
         rbs_transform:
           type: remap
           inputs:
             - log_types.rbs
           source: |
             .log_source = "rbs_logs"
+        # -- Rearranges k8s related labels and discards ones which aren't needed
         cleanup_transform:
           type: remap
           inputs:
@@ -326,6 +344,7 @@ vectorPlatform:
             - rbs_transform
             - nodes_messages_transform
             - nodes_container_transform
+            - nodes_secure_transform
             - vector_logs_transform
             - k8s_events_transform
           source: |
@@ -353,6 +372,65 @@ vectorPlatform:
             if exists(.kubernetes.pod_annotations) {
               del(.kubernetes.pod_annotations)
             }
+        # If a field is missing for sink, vector logs an error such as:
+        #
+        # WARN sink{component_kind="sink" component_id=loki component_type=loki}: vector::internal_events::template: Internal log [Failed to render template for "label_value "{{ kubernetes.pod_labels_instance }}" with label_key "instance"".] has been suppressed 442 times.
+        #
+        # Template failed drops the event according to Vector docs: https://vector.dev/docs/reference/configuration/template-syntax/
+        # But according to this PR, that is not always true, for example loki sink does preserve the event: https://github.com/vectordotdev/vector/pull/17746
+        # 
+        # OpenShift used a similar solution for their logging: https://github.com/openshift/cluster-logging-operator/pull/2374
+        # -- Transformation adding labels which loki sink configuration expects to exist
+        populate_missing_tags_transform:
+          type: remap
+          inputs:
+            - cleanup_transform
+          source: |
+            if !exists(.severity) {
+              .severity = ""
+            }
+            if !exists(.source_type) {
+              .source_type = ""
+            }
+            if !exists(.log_source) {
+              .log_source = ""
+            }
+            if !exists(.kubernetes.pod_namespace) {
+              .kubernetes.pod_namespace = ""
+            }
+            if !exists(.kubernetes.pod_name) {
+              .kubernetes.pod_name = ""
+            }
+            if !exists(.kubernetes.pod_labels_app) {
+              .kubernetes.pod_labels_app = ""
+            }
+            if !exists(.kubernetes.pod_labels_instance) {
+              .kubernetes.pod_labels_instance = ""
+            }
+            if !exists(.kubernetes.pod_labels_name) {
+              .kubernetes.pod_labels_name = ""
+            }
+            if !exists(.kubernetes.pod_labels_component) {
+              .kubernetes.pod_labels_component = ""
+            }
+            if !exists(.log_type) {
+              .log_type = ""
+            }
+            if !exists(.service_name) {
+              .service_name = ""
+            }
+            if !exists(.artifact_id) {
+              .artifact_id = ""
+            }
+            if !exists(.log_level) {
+              .log_level = ""
+            }
+            if !exists(.kubernetes.hostname) {
+              .kubernetes.hostname = ""
+            }
+            if !exists(.kubernetes.pod_node_name) {
+              .kubernetes.pod_node_name = ""
+            }
       sinks:
         prometheus:
           type: prometheus_exporter
@@ -366,7 +444,7 @@ vectorPlatform:
         loki:
           type: loki
           inputs:
-            - cleanup_transform
+            - populate_missing_tags_transform
           % if values['global']['configurationProfile'] == 'dev':
           endpoint: http://loki-platform.${values['global']['platformNamespace']}.svc.cluster.local.:3100
           % else:
@@ -415,6 +493,11 @@ vectorPlatform:
             max_size: 268435488
             when_full: drop_newest
             type: disk
+        # -- Blackhole sink to avoid "has no consumers" warnings
+        drop_unwanted:
+          type: blackhole
+          inputs:
+            - log_types.loki
         % if addon_operator['elasticsearchPlatformEnabled'] == 'true':
         elk_tibco:
           compression: none

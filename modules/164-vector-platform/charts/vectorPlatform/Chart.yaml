@@ -6,14 +6,14 @@ dependencies:
     alias: agent
     condition: agent.enabled
     repository: https://helm.vector.dev
-    version: "^0.36.1"
+    version: "0.45.0"
   - name: vector
     alias: aggregator
     condition: aggregator.enabled
     repository: https://helm.vector.dev
-    version: "^0.36.1"
+    version: "0.45.0"
   - name: fluent-bit
     alias: fluent-bit-events-collector
     condition: fluent-bit-events-collector.enabled
     repository: https://fluent.github.io/helm-charts
-    version: "^0.47.10"
+    version: "0.52.0"

@@ -7,8 +7,8 @@ dependencies:
 annotations:
   images: |
     - name: fluent-bit
-      image: cr.fluentbit.io/fluent/fluent-bit:3.1.9
+      image: cr.fluentbit.io/fluent/fluent-bit:4.0.8
     - name: vector
-      image: docker.io/timberio/vector:0.41.1-distroless-libc
+      image: docker.io/timberio/vector:0.49.0-distroless-libc
     - name: haproxy-alpine
       image: docker.io/haproxytech/haproxy-alpine:2.6.12

@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-02T06:47:27.769923662Z"
+  generatedAt: "2025-09-03T12:36:23.596663423Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: vector-platform
@@ -9,20 +9,20 @@ chart:
   appVersion: ""
 images:
   - name: fluent-bit
-    image: cr.fluentbit.io/fluent/fluent-bit:3.1.9
+    image: cr.fluentbit.io/fluent/fluent-bit:4.0.8
     chart: vector-platform
     digests:
-      - digest: sha256:bdff03dc15a55ab5ef74b3d566c9331b02812957b39b63ef7b6dd345fe2a2e01
+      - digest: sha256:08f0d5796ef43f75f7967304001e102df9da28c01929be2a30a413d9851c39ee
         arch: linux/amd64
-      - digest: sha256:0c485fc139d296de50567b38ccbaa382d29b9972db4068e4f13dd77718768140
+      - digest: sha256:ae1a43af4281c846998d811788dec4410963909e26845acd85f686a3bdde8fbc
         arch: linux/arm64
   - name: vector
-    image: docker.io/timberio/vector:0.41.1-distroless-libc
+    image: docker.io/timberio/vector:0.49.0-distroless-libc
     chart: vector-platform
     digests:
-      - digest: sha256:3282e63ec4ac50a560b531f6da0ae68b196218629c1c759e4f18bc94566dc5a4
+      - digest: sha256:064e9e1f2090ea76d2b0b5278ef36e4977f7c5a93013dca6f10b9ae9755e0241
         arch: linux/amd64
-      - digest: sha256:3dd50a937130947c6320dd333b501acd7806d596454fe97c1303bb07ac7555ce
+      - digest: sha256:c50d8ea14b01e77762793a28f258f4cb2e212d9ec724968a362667d049284cf6
         arch: linux/arm64
   - name: haproxy-alpine
     image: docker.io/haproxytech/haproxy-alpine:2.6.12

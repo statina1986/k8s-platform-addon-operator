@@ -1,0 +1,2085 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "vectorPlatform": {
+      "properties": {
+        "agent": {
+          "description": "Vector Agent configuration",
+          "properties": {
+            "customConfig": {
+              "properties": {
+                "api": {
+                  "properties": {
+                    "address": {
+                      "default": "0.0.0.0:8686",
+                      "required": [],
+                      "title": "address",
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "playground": {
+                      "default": false,
+                      "required": [],
+                      "title": "playground",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "api",
+                  "type": "object"
+                },
+                "data_dir": {
+                  "default": "/vector-data-dir",
+                  "required": [],
+                  "title": "data_dir",
+                  "type": "string"
+                },
+                "sinks": {
+                  "properties": {
+                    "prometheus": {
+                      "properties": {
+                        "address": {
+                          "default": "0.0.0.0:9598",
+                          "required": [],
+                          "title": "address",
+                          "type": "string"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "type": {
+                          "default": "prometheus_exporter",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "prometheus",
+                      "type": "object"
+                    },
+                    "vector": {
+                      "properties": {
+                        "address": {
+                          "default": "vector-platform-aggregator.platform.svc:6000",
+                          "required": [],
+                          "title": "address",
+                          "type": "string"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "type": {
+                          "default": "vector",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "sinks",
+                  "type": "object"
+                },
+                "sources": {
+                  "properties": {
+                    "kubernetes": {
+                      "properties": {
+                        "type": {
+                          "default": "kubernetes_logs",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "kubernetes",
+                      "type": "object"
+                    },
+                    "vector_logs": {
+                      "properties": {
+                        "type": {
+                          "default": "internal_logs",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_logs",
+                      "type": "object"
+                    },
+                    "vector_metrics": {
+                      "properties": {
+                        "type": {
+                          "default": "internal_metrics",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_metrics",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "sources",
+                  "type": "object"
+                },
+                "transforms": {
+                  "properties": {
+                    "kubernetes_logs_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"kubernetes_logs\"      \nif exists(.kubernetes.namespace_labels) {\n  del(.kubernetes.namespace_labels)\n}\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "kubernetes_logs_transform",
+                      "type": "object"
+                    },
+                    "vector_logs_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"vector_logs\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_logs_transform",
+                      "type": "object"
+                    },
+                    "vector_metrics_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": "del(.tags.file)\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_metrics_transform",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "transforms",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "customConfig",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/timberio/vector",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "role": {
+              "default": "Agent",
+              "required": [],
+              "title": "role",
+              "type": "string"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "operator": {
+                        "default": "Exists",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "agent",
+          "type": "object"
+        },
+        "aggregator": {
+          "description": "Vector Aggregator configuration",
+          "properties": {
+            "customConfig": {
+              "properties": {
+                "api": {
+                  "properties": {
+                    "address": {
+                      "default": "0.0.0.0:8686",
+                      "required": [],
+                      "title": "address",
+                      "type": "string"
+                    },
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "playground": {
+                      "default": false,
+                      "required": [],
+                      "title": "playground",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "api",
+                  "type": "object"
+                },
+                "data_dir": {
+                  "default": "/vector-data-dir",
+                  "required": [],
+                  "title": "data_dir",
+                  "type": "string"
+                },
+                "sinks": {
+                  "properties": {
+                    "drop_unwanted": {
+                      "description": "Blackhole sink to avoid \"has no consumers\" warnings",
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "type": {
+                          "default": "blackhole",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "drop_unwanted",
+                      "type": "object"
+                    },
+                    "elk_apps": {
+                      "properties": {
+                        "auth": {
+                          "properties": {
+                            "password": {
+                              "default": "${ELASTICSEARCH_PASSWORD}",
+                              "required": [],
+                              "title": "password",
+                              "type": "string"
+                            },
+                            "strategy": {
+                              "default": "basic",
+                              "required": [],
+                              "title": "strategy",
+                              "type": "string"
+                            },
+                            "user": {
+                              "default": "elastic",
+                              "required": [],
+                              "title": "user",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "auth",
+                          "type": "object"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "bulk": {
+                          "properties": {
+                            "index": {
+                              "default": "application-%Y-%m-%d",
+                              "required": [],
+                              "title": "index",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "bulk",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "none",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "endpoints": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "endpoints",
+                          "type": "array"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "tls": {
+                          "properties": {
+                            "verify_certificate": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_certificate",
+                              "type": "boolean"
+                            },
+                            "verify_hostname": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_hostname",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "tls",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "elasticsearch",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "elk_apps",
+                      "type": "object"
+                    },
+                    "elk_ingress": {
+                      "properties": {
+                        "auth": {
+                          "properties": {
+                            "password": {
+                              "default": "${ELASTICSEARCH_PASSWORD}",
+                              "required": [],
+                              "title": "password",
+                              "type": "string"
+                            },
+                            "strategy": {
+                              "default": "basic",
+                              "required": [],
+                              "title": "strategy",
+                              "type": "string"
+                            },
+                            "user": {
+                              "default": "elastic",
+                              "required": [],
+                              "title": "user",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "auth",
+                          "type": "object"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "bulk": {
+                          "properties": {
+                            "index": {
+                              "default": "ingress-%Y-%m-%d",
+                              "required": [],
+                              "title": "index",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "bulk",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "none",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "endpoints": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "endpoints",
+                          "type": "array"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "tls": {
+                          "properties": {
+                            "verify_certificate": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_certificate",
+                              "type": "boolean"
+                            },
+                            "verify_hostname": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_hostname",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "tls",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "elasticsearch",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "elk_ingress",
+                      "type": "object"
+                    },
+                    "elk_tibco": {
+                      "properties": {
+                        "auth": {
+                          "properties": {
+                            "password": {
+                              "default": "${ELASTICSEARCH_PASSWORD}",
+                              "required": [],
+                              "title": "password",
+                              "type": "string"
+                            },
+                            "strategy": {
+                              "default": "basic",
+                              "required": [],
+                              "title": "strategy",
+                              "type": "string"
+                            },
+                            "user": {
+                              "default": "elastic",
+                              "required": [],
+                              "title": "user",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "auth",
+                          "type": "object"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "bulk": {
+                          "properties": {
+                            "index": {
+                              "default": "all-tibco-%Y-%m-%d",
+                              "required": [],
+                              "title": "index",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "bulk",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "none",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "endpoints": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "endpoints",
+                          "type": "array"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "tls": {
+                          "properties": {
+                            "verify_certificate": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_certificate",
+                              "type": "boolean"
+                            },
+                            "verify_hostname": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_hostname",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "tls",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "elasticsearch",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "elk_tibco",
+                      "type": "object"
+                    },
+                    "loki": {
+                      "properties": {
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "snappy",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "encoding": {
+                          "properties": {
+                            "codec": {
+                              "default": "json",
+                              "required": [],
+                              "title": "codec",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "encoding",
+                          "type": "object"
+                        },
+                        "endpoint": {
+                          "default": "http://loki-write.platform.svc.cluster.local.:3100",
+                          "required": [],
+                          "title": "endpoint",
+                          "type": "string"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "labels": {
+                          "properties": {
+                            "app": {
+                              "default": "{{ print \"{{ kubernetes.pod_labels_app }}\" }}",
+                              "required": [],
+                              "title": "app",
+                              "type": "string"
+                            },
+                            "artifact_id": {
+                              "default": "{{ print \"{{ artifact_id }}\" }}",
+                              "required": [],
+                              "title": "artifact_id",
+                              "type": "string"
+                            },
+                            "component": {
+                              "default": "{{ print \"{{ kubernetes.pod_labels_component }}\" }}",
+                              "description": "we have to keep this line without spaces otherwise bad toYaml behavior (https://github.com/helm/helm/issues/8789) will wrap this line and break template",
+                              "required": [],
+                              "title": "component",
+                              "type": "string"
+                            },
+                            "forwarder": {
+                              "default": "vector_aggregator",
+                              "required": [],
+                              "title": "forwarder",
+                              "type": "string"
+                            },
+                            "hostname": {
+                              "default": "{{ print \"{{ kubernetes.hostname }}\" }}              ",
+                              "required": [],
+                              "title": "hostname",
+                              "type": "string"
+                            },
+                            "instance": {
+                              "default": "{{ print \"{{ kubernetes.pod_labels_instance }}\" }}",
+                              "description": "we have to keep this line without spaces otherwise bad toYaml behavior (https://github.com/helm/helm/issues/8789) will wrap this line and break template",
+                              "required": [],
+                              "title": "instance",
+                              "type": "string"
+                            },
+                            "level": {
+                              "default": "{{ print \"{{ log_level }}\" }}",
+                              "required": [],
+                              "title": "level",
+                              "type": "string"
+                            },
+                            "log_source": {
+                              "default": "{{ print \"{{ log_source }}\" }}",
+                              "required": [],
+                              "title": "log_source",
+                              "type": "string"
+                            },
+                            "log_type": {
+                              "default": "{{ print \"{{ log_type }}\" }}",
+                              "required": [],
+                              "title": "log_type",
+                              "type": "string"
+                            },
+                            "name": {
+                              "default": "{{ print \"{{ kubernetes.pod_labels_name }}\" }}",
+                              "description": "we have to keep this line without spaces otherwise bad toYaml behavior (https://github.com/helm/helm/issues/8789) will wrap this line and break template",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "pod_name": {
+                              "default": "{{ print \"{{ kubernetes.pod_name }}\" }}",
+                              "required": [],
+                              "title": "pod_name",
+                              "type": "string"
+                            },
+                            "pod_namespace": {
+                              "default": "{{ print \"{{ kubernetes.pod_namespace }}\" }}",
+                              "required": [],
+                              "title": "pod_namespace",
+                              "type": "string"
+                            },
+                            "pod_node_name": {
+                              "default": "{{ print \"{{ kubernetes.pod_node_name }}\" }}",
+                              "required": [],
+                              "title": "pod_node_name",
+                              "type": "string"
+                            },
+                            "service_name": {
+                              "default": "{{ print \"{{ service_name }}\" }}",
+                              "required": [],
+                              "title": "service_name",
+                              "type": "string"
+                            },
+                            "severity": {
+                              "default": "{{ print \"{{ severity }}\" }}",
+                              "required": [],
+                              "title": "severity",
+                              "type": "string"
+                            },
+                            "source_type": {
+                              "default": "{{ print \"{{ source_type }}\" }}",
+                              "required": [],
+                              "title": "source_type",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "labels",
+                          "type": "object"
+                        },
+                        "out_of_order_action": {
+                          "default": "accept",
+                          "required": [],
+                          "title": "out_of_order_action",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "loki",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "loki",
+                      "type": "object"
+                    },
+                    "prometheus": {
+                      "properties": {
+                        "address": {
+                          "default": "0.0.0.0:9598",
+                          "required": [],
+                          "title": "address",
+                          "type": "string"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "type": {
+                          "default": "prometheus_exporter",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "prometheus",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "sinks",
+                  "type": "object"
+                },
+                "sources": {
+                  "description": "Data sources for Vector Aggregator",
+                  "properties": {
+                    "k8s_events_fluent": {
+                      "properties": {
+                        "address": {
+                          "default": "0.0.0.0:9002",
+                          "required": [],
+                          "title": "address",
+                          "type": "string"
+                        },
+                        "mode": {
+                          "default": "tcp",
+                          "required": [],
+                          "title": "mode",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "fluent",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "k8s_events_fluent",
+                      "type": "object"
+                    },
+                    "logstash": {
+                      "properties": {
+                        "address": {
+                          "default": "0.0.0.0:9000",
+                          "required": [],
+                          "title": "address",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "logstash",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "logstash",
+                      "type": "object"
+                    },
+                    "vector": {
+                      "properties": {
+                        "address": {
+                          "default": "0.0.0.0:6000",
+                          "required": [],
+                          "title": "address",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "vector",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector",
+                      "type": "object"
+                    },
+                    "vector_logs": {
+                      "properties": {
+                        "type": {
+                          "default": "internal_logs",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_logs",
+                      "type": "object"
+                    },
+                    "vector_metrics": {
+                      "properties": {
+                        "type": {
+                          "default": "internal_metrics",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_metrics",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "sources",
+                  "type": "object"
+                },
+                "transforms": {
+                  "properties": {
+                    "cleanup_transform": {
+                      "description": "Rearranges k8s related labels and discards ones which aren't needed",
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": "if exists(.kubernetes.namespace_labels) {\n  del(.kubernetes.namespace_labels)\n}\nif exists(.kubernetes.pod_labels.app) {\n  .kubernetes.pod_labels_app = .kubernetes.pod_labels.app\n}\nif exists(.kubernetes.pod_labels.\"app.kubernetes.io/instance\") {\n  .kubernetes.pod_labels_instance = .kubernetes.pod_labels.\"app.kubernetes.io/instance\"\n}\nif exists(.kubernetes.pod_labels.\"app.kubernetes.io/name\") {\n  .kubernetes.pod_labels_name = .kubernetes.pod_labels.\"app.kubernetes.io/name\"\n}\nif exists(.kubernetes.pod_labels.\"app.kubernetes.io/component\") {\n  .kubernetes.pod_labels_component = .kubernetes.pod_labels.\"app.kubernetes.io/component\"\n}\nif exists(.kubernetes.pod_labels) {\n  del(.kubernetes.pod_labels)\n}\nif exists(.kubernetes.node_labels) {\n  del(.kubernetes.node_labels)\n}\nif exists(.kubernetes.pod_annotations) {\n  del(.kubernetes.pod_annotations)\n}\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "cleanup_transform",
+                      "type": "object"
+                    },
+                    "istio_gateway_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"istio_access_logs\"\nstructured, err = parse_json(.message)\nif err != null {\n  log(\"Unable to parse Istio Access JSON: \" + string!(.message), level: \"error\")\n  .parse_error = err\n} else {\n  .log_type = \"AUDIT\"\n  . = merge!(., structured)\n  parsed_timestamp, err = parse_timestamp(.start_time,\"%+\")\n  if err != null {                  \n    .parse_error = err\n  } else {\n    .timestamp = parsed_timestamp\n  }\n}\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "istio_gateway_transform",
+                      "type": "object"
+                    },
+                    "istio_to_elk_transform": {
+                      "description": "Transformation in case ELK is enabled - forwards access logs from Istio",
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": "if exists(.kubernetes.pod_labels.app) {\n  .app = .kubernetes.pod_labels.app\n}\ndel(.kubernetes)\n.@timestamp = del(.timestamp)\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "istio_to_elk_transform",
+                      "type": "object"
+                    },
+                    "k8s_events_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"k8s-events\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "k8s_events_transform",
+                      "type": "object"
+                    },
+                    "log_types": {
+                      "description": "Identifies logs based on tags so transformations can target specific log types",
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "route": {
+                          "properties": {
+                            "istio_gateway": {
+                              "default": ".kubernetes.pod_annotations.\"inject.istio.io/templates\" == \"gateway\"",
+                              "required": [],
+                              "title": "istio_gateway",
+                              "type": "string"
+                            },
+                            "loki": {
+                              "default": ".kubernetes.pod_labels.\"app.kubernetes.io/name\" == \"loki\"",
+                              "required": [],
+                              "title": "loki",
+                              "type": "string"
+                            },
+                            "nodes_container": {
+                              "default": ".tags != null \u0026\u0026 includes(array!(.tags), \"container\")",
+                              "required": [],
+                              "title": "nodes_container",
+                              "type": "string"
+                            },
+                            "nodes_messages": {
+                              "default": ".tags != null \u0026\u0026 includes(array!(.tags), \"messages\")",
+                              "required": [],
+                              "title": "nodes_messages",
+                              "type": "string"
+                            },
+                            "nodes_secure": {
+                              "default": ".tags != null \u0026\u0026 includes(array!(.tags), \"secure\")",
+                              "required": [],
+                              "title": "nodes_secure",
+                              "type": "string"
+                            },
+                            "qvantel_apps": {
+                              "default": ".kubernetes.pod_namespace == \"qvantel\"",
+                              "required": [],
+                              "title": "qvantel_apps",
+                              "type": "string"
+                            },
+                            "rbs": {
+                              "default": ".tags != null \u0026\u0026 includes(array!(.tags), \"rbs\")",
+                              "required": [],
+                              "title": "rbs",
+                              "type": "string"
+                            },
+                            "tibco": {
+                              "default": ".tags != null \u0026\u0026 includes(array!(.tags), \"tibco\")",
+                              "required": [],
+                              "title": "tibco",
+                              "type": "string"
+                            },
+                            "vault": {
+                              "default": ".kubernetes.pod_labels.\"app.kubernetes.io/name\" == \"vault\"",
+                              "required": [],
+                              "title": "vault",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "route",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "route",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "log_types",
+                      "type": "object"
+                    },
+                    "nodes_container_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"nodes_containers\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "nodes_container_transform",
+                      "type": "object"
+                    },
+                    "nodes_messages_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"nodes_messages\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "nodes_messages_transform",
+                      "type": "object"
+                    },
+                    "nodes_secure_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"nodes_secure\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "nodes_secure_transform",
+                      "type": "object"
+                    },
+                    "populate_missing_tags_transform": {
+                      "description": "If a field is missing for sink, vector logs an error such as:\n\nWARN sink{component_kind=\"sink\" component_id=loki component_type=loki}: vector::internal_events::template: Internal log [Failed to render template for \"label_value \"{{ kubernetes.pod_labels_instance }}\" with label_key \"instance\"\".] has been suppressed 442 times.\n\nTemplate failed drops the event according to Vector docs: https://vector.dev/docs/reference/configuration/template-syntax/\nBut according to this PR, that is not always true, for example loki sink does preserve the event: https://github.com/vectordotdev/vector/pull/17746\n\nOpenShift used a similar solution for their logging: https://github.com/openshift/cluster-logging-operator/pull/2374\nTransformation adding labels which loki sink configuration expects to exist",
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": "if !exists(.severity) {\n  .severity = \"\"\n}\nif !exists(.source_type) {\n  .source_type = \"\"\n}\nif !exists(.log_source) {\n  .log_source = \"\"\n}\nif !exists(.kubernetes.pod_namespace) {\n  .kubernetes.pod_namespace = \"\"\n}\nif !exists(.kubernetes.pod_name) {\n  .kubernetes.pod_name = \"\"\n}\nif !exists(.kubernetes.pod_labels_app) {\n  .kubernetes.pod_labels_app = \"\"\n}\nif !exists(.kubernetes.pod_labels_instance) {\n  .kubernetes.pod_labels_instance = \"\"\n}\nif !exists(.kubernetes.pod_labels_name) {\n  .kubernetes.pod_labels_name = \"\"\n}\nif !exists(.kubernetes.pod_labels_component) {\n  .kubernetes.pod_labels_component = \"\"\n}\nif !exists(.log_type) {\n  .log_type = \"\"\n}\nif !exists(.service_name) {\n  .service_name = \"\"\n}\nif !exists(.artifact_id) {\n  .artifact_id = \"\"\n}\nif !exists(.log_level) {\n  .log_level = \"\"\n}\nif !exists(.kubernetes.hostname) {\n  .kubernetes.hostname = \"\"\n}\nif !exists(.kubernetes.pod_node_name) {\n  .kubernetes.pod_node_name = \"\"\n}\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "populate_missing_tags_transform",
+                      "type": "object"
+                    },
+                    "qvantel_apps_no_debug": {
+                      "description": "Transformation in case ELK is enabled - only forwards access logs and app logs which aren't DEBUG or TRACE and could be parsed",
+                      "properties": {
+                        "condition": {
+                          "default": ".log_level != \"DEBUG\" \u0026\u0026 .log_level != \"TRACE\" \u0026\u0026 !exists(.parse_error)\n",
+                          "required": [],
+                          "title": "condition",
+                          "type": "string"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "type": {
+                          "default": "filter",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "qvantel_apps_no_debug",
+                      "type": "object"
+                    },
+                    "qvantel_apps_transform": {
+                      "description": "Transformation relying on [Generic Log Format](https://qvantel.atlassian.net/wiki/spaces/PDG/pages/1358727788/Generic+Log+Format) for app logs",
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"qvantel_apps\"\nif .message != null \u0026\u0026 .message != \"\" {\n  structured, err = parse_json(.message)\n  if err != null {\n    log(\"Unable to parse Qvantel JSON: \" + string!(.message), level: \"error\")\n    .parse_error = err\n  } else {\n    .qvantel_message = .message\n    . = merge!(., structured)\n    parsed_timestamp, err = parse_timestamp(.@timestamp,\"%+\")\n    if err != null {                  \n      .parse_error = err\n    } else {\n      .timestamp = parsed_timestamp\n    }                \n  }\n}        \n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "qvantel_apps_transform",
+                      "type": "object"
+                    },
+                    "rbs_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"rbs_logs\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "rbs_transform",
+                      "type": "object"
+                    },
+                    "tibco_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"tibco_logs\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "tibco_transform",
+                      "type": "object"
+                    },
+                    "vault_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"vault_audit_logs\"\nstructured, err = parse_json(.message)\nif err != null {\n  log(\"Unable to parse Vault JSON: \" + string!(.message), level: \"error\")\n  .parse_error = err\n} else {\n  .log_type = \"AUDIT\"\n  . = merge!(., structured)\n  parsed_timestamp, err = parse_timestamp(.time,\"%+\")\n  if err != null {                  \n    .parse_error = err\n  } else {\n    .timestamp = parsed_timestamp\n  }\n}\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vault_transform",
+                      "type": "object"
+                    },
+                    "vector_logs_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": ".log_source = \"vector_logs\"\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_logs_transform",
+                      "type": "object"
+                    },
+                    "vector_metrics_transform": {
+                      "properties": {
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "source": {
+                          "default": "del(.tags.file)\n",
+                          "required": [],
+                          "title": "source",
+                          "type": "string"
+                        },
+                        "type": {
+                          "default": "remap",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "vector_metrics_transform",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "transforms",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "customConfig",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "env": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "ELASTICSEARCH_PASSWORD",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "valueFrom": {
+                        "properties": {
+                          "secretKeyRef": {
+                            "properties": {
+                              "key": {
+                                "default": "elasticsearch-password",
+                                "required": [],
+                                "title": "key",
+                                "type": "string"
+                              },
+                              "name": {
+                                "default": "logsearch-elastic",
+                                "required": [],
+                                "title": "name",
+                                "type": "string"
+                              }
+                            },
+                            "required": [],
+                            "title": "secretKeyRef",
+                            "type": "object"
+                          }
+                        },
+                        "required": [],
+                        "title": "valueFrom",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "env",
+              "type": "array"
+            },
+            "haproxy": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "repository": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/haproxytech/haproxy-alpine",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "haproxy",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/timberio/vector",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "role": {
+              "default": "Aggregator",
+              "required": [],
+              "title": "role",
+              "type": "string"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "aggregator",
+          "type": "object"
+        },
+        "fluent-bit-events-collector": {
+          "description": "Fluent Bit configuration",
+          "properties": {
+            "config": {
+              "properties": {
+                "inputs": {
+                  "default": "[INPUT]\n    name kubernetes_events\n    tag k8s_events\n    # ask k8s API for updates every 30 seconds (default 5)\n    interval_sec 30\n",
+                  "required": [],
+                  "title": "inputs",
+                  "type": "string"
+                },
+                "outputs": {
+                  "default": "[OUTPUT]\n    name forward\n    match k8s_events\n    host vector-platform-aggregator.platform.svc\n    port 9002\n",
+                  "required": [],
+                  "title": "outputs",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "config",
+              "type": "object"
+            },
+            "enabled": {
+              "default": true,
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/fluent/fluent-bit",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "4.0.8",
+                  "description": "Hard coding the tag to override helm chart's 4.0.7 to avoid JSON regression\nhttps://fluentbit.io/announcements/v4.0.8/",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "kind": {
+              "default": "Deployment",
+              "required": [],
+              "title": "kind",
+              "type": "string"
+            },
+            "nameOverride": {
+              "default": "fluent-bit-events-collector",
+              "required": [],
+              "title": "nameOverride",
+              "type": "string"
+            },
+            "rbac": {
+              "properties": {
+                "create": {
+                  "default": true,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "eventsAccess": {
+                  "default": true,
+                  "required": [],
+                  "title": "eventsAccess",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "rbac",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "testFramework": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "testFramework",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "fluent-bit-events-collector",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "vectorPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

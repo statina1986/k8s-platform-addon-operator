@@ -1,0 +1,32 @@
+{{ template "chart.header" . }}
+
+This module is responsible for deployment of [Vector](https://vector.dev/) and [Fluent Bit](https://fluentbit.io/).
+
+Current pipeline configuration:
+* Vector agents collect logs from k8s nodes and send them to Vector Aggregator
+* Fluent bit collects Kubernetes events and sends them to Vector Aggregator
+* Vector Aggregator performs all the log transformations and filtering
+    * Qvantel apps tranformation expects logs in [Generic Log Format](https://qvantel.atlassian.net/wiki/spaces/PDG/pages/1358727788/Generic+Log+Format)
+* Vector Aggregator sends logs to Loki and optionally to ElasticSearch
+
+## Deployment Models
+
+Vector Agents are a DaemonSet and always transfer the logs to Aggregator so there is no effect on its functionality, when deploying, with different configurationProfiles.
+Vector Aggregator on the other hand is a StatefulSet and manages where we send the logs so when deploying with different configurationProfiles, changes are made based on the environment.
+
+globalConfig.configurationProfile values effects explained below:
+* dev
+    * Endpoint points towards the loki-platform 
+* test
+    * Endpoint points towards the loki-write
+* perf, prod
+    * Endpoint points towards the loki-write
+    * Replicas 3
+    * nodeSelector set to platform-masters
+
+Dependencies:
+- A log sink
+    - with our default configuration, that is [Loki](../163-loki-platform/).
+- globalConfig.appsNamespace needs to be configured
+
+{{ template "chart.valuesSectionHtml" . }}
