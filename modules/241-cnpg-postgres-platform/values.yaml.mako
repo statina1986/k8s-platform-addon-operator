@@ -1,5 +1,6 @@
 cnpgPostgresPlatform:
   monitoringPlatformEnabled: ${addon_operator['monitoringPlatformEnabled']}
+  vaultPlatformEnabled: ${addon_operator['vaultPlatformEnabled']}
   # -- Configuration for CNPG operator helm chart. See https://github.com/cloudnative-pg/charts/tree/main/charts/cloudnative-pg for API reference.
   cloudnative-pg:            
     % if values['global']['deployOperators'] == "true":
@@ -57,6 +58,20 @@ cnpgPostgresPlatform:
       {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
       vaultConfiguration: true
       {{- end }}
+      {{- if ne $.root.Values.global.configurationProfile "dev" }}
+      barmanObjectStore:
+        scheduledBackup: "0 0 * * *"
+        retentionPolicy: "7d"
+        configuration:
+          s3Credentials:
+          {{- if $.addonOperator.awsPlatformEnabled }}
+            inheritFromIAMRole: true
+          {{- end }}
+          wal:
+            compression: gzip
+            maxParallel: 9
+            encryption: AES256
+      {{- end }}    
       spec:
         {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
         imageCatalogRef:
@@ -75,19 +90,12 @@ cnpgPostgresPlatform:
           {{- if $.root.Values.global.multiZone.enabled }}
           topologyKey: topology.kubernetes.io/zone
           {{- end }}
-        {{- if ne $.root.Values.global.configurationProfile "dev" }}
-        backup:
-          retentionPolicy: "7d"
-          barmanObjectStore:
-            destinationPath: "s3://s3-bucket-for-postgresql"
-            s3Credentials:
-            {{- if $.addonOperator.monitoringPlatformEnabled }}
-              inheritFromIAMRole: true
-            {{- end }}
-          wal:
-            compression: gzip
-            maxParallel: 8
-            encryption: AES256
+        {{- if $.cluster.barmanObjectStore }}
+        plugins:
+        - name: barman-cloud.cloudnative-pg.io
+          isWALArchiver: true
+          parameters:
+            barmanObjectName: {{ $.clusterName }}-objectstore
         {{- end }}
         postgresql:
           parameters:
@@ -122,6 +130,10 @@ cnpgPostgresPlatform:
           customQueriesConfigMap:
             - name: cnpg-queries-insights-metrics
               key: custom-metrics-queries
+            {{- if and $.cluster.spec $.cluster.spec.postgresql $.cluster.spec.postgresql.parameters (hasKey $.cluster.spec.postgresql.parameters "pg_partman_bgw.dbname") }}
+            - name: cnpg-partitions-alerts-{{ $.clusterName }}
+              key: partitions-alerts-queries
+            {{- end }}
             {{- if $.additionalCustomQueriesConfigMaps }}
             {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}
             - name: {{ $k }}
@@ -147,8 +159,7 @@ cnpgPostgresPlatform:
   # For Example, see `example-postgredb` definition in Examples-PostgreSQL section below.
   # By default cluster 'qvt-postgredb' is defined and provisioned with default configuration.
   clusters:
-    qvt-postgredb:
-      scheduledBackup: "0 0 0 * * *" # every midnight
+    qvt-postgredb: {}
         
 # -- This is example PostgreSQL cluster definition. 
 # Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `cnpgPostgresPlatform.clusters`
@@ -160,10 +171,11 @@ example-postgredb:
   # @default -- by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
   # @section -- Examples-PostgreSQL
   vaultConfiguration: true
-  # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
+  # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
   # @default --  null
   # @section -- Examples-PostgreSQL
-  scheduledBackup: "0 0 0 * * *" # every midnight
+  ObjectStore:
+    scheduledBackup: "0 0 * * *" # every midnight
   # -- Annotations to be configured on cluster resource.
   # @default --  null
   # @section -- Examples-PostgreSQL
@@ -176,10 +188,6 @@ example-postgredb:
   # @default -- {}
   # @section -- Examples-PostgreSQL
   spec:
-    backup:
-      retentionPolicy: "2d"
-      barmanObjectStore:
-        destinationPath: "s3://q-sit-pf-postgresql"
     instances: 2
     storage:
       size: 10Gi

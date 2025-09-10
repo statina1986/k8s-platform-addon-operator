@@ -2,7 +2,7 @@
 import json
 import base64
 %>
-{{- if .Values.qvantelGlue.dbs.postgres }}
+{{- if and .Values.qvantelGlue.dbs .Values.qvantelGlue.dbs.postgres }}
 {{- $root := . }}
 {{- range keys .Values.qvantelGlue.dbs.postgres  }}
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.postgres . }}
@@ -21,7 +21,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: {{ $dbClusterName }}
-  {{- with $dbCluster.cluster.annotations }}
+  {{- with $cluster.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -29,11 +29,11 @@ metadata:
     app.kubernetes.io/name: {{ $dbClusterName }}
     app.kubernetes.io/instance: {{ $dbClusterName }}
     app.kubernetes.io/part-of: cloudnative-pg
-    {{- with $dbCluster.cluster.additionalLabels }}
+    {{- with $cluster.additionalLabels }}
       {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:  
-  {{- toYaml $dbCluster.cluster.spec | nindent 2 }}
+  {{- toYaml $cluster.spec | nindent 2 }}
 
 ---
 apiVersion: v1
@@ -99,6 +99,35 @@ spec:
           restartPolicy: OnFailure          
   schedule: "@midnight"
 
+
+{{- if $cluster.barmanObjectStore }}
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: {{ $dbClusterName }}-objectstore
+spec:
+  retentionPolicy: {{ $cluster.barmanObjectStore.retentionPolicy | default "3d" }}
+  configuration:
+    destinationPath: {{ $cluster.barmanObjectStore.configuration.destinationPath | default "no-path" }}
+    endpointURL: {{ $cluster.barmanObjectStore.configuration.endpointURL | default "https://s3.ap-south-1.amazonaws.com" }}
+    s3Credentials:
+      {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
+      inheritFromIAMRole: true
+      {{- else if hasKey $cluster.barmanObjectStore.configuration.s3Credentials "accessKeyId" }}
+      accessKeyId:
+        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyName }}
+        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyId }}
+      secretAccessKey:
+        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreName }}
+        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreKey }}
+      {{- end }}
+    wal:
+      compression: {{ $cluster.barmanObjectStore.configuration.wal.compression | default "gzip" }}
+      maxParallel: {{ $cluster.barmanObjectStore.configuration.wal.maxParallel | default "8" }}
+      encryption: {{ $cluster.barmanObjectStore.configuration.wal.encryption | default "AES256" }}
+{{- end }}
+
 {{- if $root.Values.qvantelGlue.monitoringPlatformEnabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -117,23 +146,25 @@ spec:
 {{- end }}
 
 
-{{- if and $dbCluster.cluster.spec.backup $dbCluster.cluster.scheduledBackup }}
+{{- if and $cluster.spec.backup $cluster.scheduledBackup }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
   name: {{ $dbClusterName }}-scheduled-backups
 spec:
-  schedule: {{ $dbCluster.cluster.scheduledBackup }}
+  schedule: {{ $cluster.barmanObjectStore.scheduledBackup }}
   backupOwnerReference: self
   cluster:
     name: {{ $dbClusterName }}
   immediate: true
-  target: {{ $dbCluster.cluster.spec.backup.target | default "prefer-standby" }}
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
 {{- end }}
 
 
-{{- if $dbCluster.cluster.vaultConfiguration }}
+{{- if $cluster.vaultConfiguration }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole

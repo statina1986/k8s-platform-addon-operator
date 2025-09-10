@@ -3,6 +3,6 @@ name: cnpgPostgresPlatform
 version: 0.0.1
 dependencies:
   - name: cloudnative-pg
-    version: 0.22.0
+    version: 0.26.0
     repository: https://cloudnative-pg.github.io/charts
     condition: cloudnative-pg.enabled

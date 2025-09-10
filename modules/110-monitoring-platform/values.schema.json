@@ -1070,11 +1070,30 @@
                 },
                 "downloadDashboardsImage": {
                   "properties": {
-                    "registry": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                    "image": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "platform/platform-k8s-tools-minimal",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "1.3.2_202508131123_master_e140ddde",
+                          "required": [],
+                          "title": "tag",
+                          "type": "string"
+                        }
+                      },
                       "required": [],
-                      "title": "registry",
-                      "type": "string"
+                      "title": "image",
+                      "type": "object"
                     }
                   },
                   "required": [],
@@ -1180,7 +1199,7 @@
                             "type": "array"
                           },
                           "image": {
-                            "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:1.2.0_4_f26bb6e90",
+                            "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:1.2.0_7_e03920fe8",
                             "required": [],
                             "title": "image",
                             "type": "string"
@@ -1395,6 +1414,19 @@
                       "title": "dataproxy",
                       "type": "object"
                     },
+                    "plugins": {
+                      "properties": {
+                        "preinstall_disabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "preinstall_disabled",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "plugins",
+                      "type": "object"
+                    },
                     "server": {
                       "properties": {
                         "root_url": {
@@ -1456,13 +1488,13 @@
                           "type": "string"
                         },
                         "repository": {
-                          "default": "ubi9/ubi-minimal",
+                          "default": "platform/platform-k8s-tools-minimal",
                           "required": [],
                           "title": "repository",
                           "type": "string"
                         },
                         "tag": {
-                          "default": "9.4-1194",
+                          "default": "1.3.2_202508131123_master_e140ddde",
                           "required": [],
                           "title": "tag",
                           "type": "string"
@@ -1679,6 +1711,18 @@
                           "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
                           "required": [],
                           "title": "registry",
+                          "type": "string"
+                        },
+                        "repository": {
+                          "default": "platform/platform-k8s-tools-minimal",
+                          "required": [],
+                          "title": "repository",
+                          "type": "string"
+                        },
+                        "tag": {
+                          "default": "1.3.2_202508131123_master_e140ddde",
+                          "required": [],
+                          "title": "tag",
                           "type": "string"
                         }
                       },

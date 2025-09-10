@@ -242,6 +242,20 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
   {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
   vaultConfiguration: true
   {{- end }}
+  {{- if ne $.root.Values.global.configurationProfile "dev" }}
+  barmanObjectStore:
+    scheduledBackup: "0 0 * * *"
+    retentionPolicy: "7d"
+    configuration:
+      s3Credentials:
+      {{- if $.addonOperator.awsPlatformEnabled }}
+        inheritFromIAMRole: true
+      {{- end }}
+      wal:
+        compression: gzip
+        maxParallel: 9
+        encryption: AES256
+  {{- end }}   
   spec:
     {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
     imageCatalogRef:
@@ -260,19 +274,12 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
       {{- if $.root.Values.global.multiZone.enabled }}
       topologyKey: topology.kubernetes.io/zone
       {{- end }}
-    {{- if ne $.root.Values.global.configurationProfile "dev" }}
-    backup:
-      retentionPolicy: "7d"
-      barmanObjectStore:
-        destinationPath: "s3://s3-bucket-for-postgresql"
-        s3Credentials:
-        {{- if $.addonOperator.monitoringPlatformEnabled }}
-          inheritFromIAMRole: true
-        {{- end }}
-      wal:
-        compression: gzip
-        maxParallel: 8
-        encryption: AES256
+    {{- if $.cluster.barmanObjectStore }}
+    plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: {{ $.clusterName }}-objectstore
     {{- end }}
     postgresql:
       parameters:
@@ -307,6 +314,10 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
       customQueriesConfigMap:
         - name: cnpg-queries-insights-metrics
           key: custom-metrics-queries
+        {{- if and $.cluster.spec $.cluster.spec.postgresql $.cluster.spec.postgresql.parameters (hasKey $.cluster.spec.postgresql.parameters "pg_partman_bgw.dbname") }}
+        - name: cnpg-partitions-alerts-{{ $.clusterName }}
+          key: partitions-alerts-queries
+        {{- end }}
         {{- if $.additionalCustomQueriesConfigMaps }}
         {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}
         - name: {{ $k }}

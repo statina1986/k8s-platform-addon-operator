@@ -54,8 +54,7 @@ Configuration for CNPG operator helm chart. See https://github.com/cloudnative-p
 		<td style="width: 300px;">cnpgPostgresPlatform.clusters</td>
 		<td>object</td>
 		<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>qvt-postgredb:
-    scheduledBackup: 0 0 0 * * *</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>qvt-postgredb: {}</code></pre>
 </td>
 		<td><div>
 
@@ -98,6 +97,20 @@ Default values for CNPG clusters. See `example-postgredb` for reference. With th
   {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
   vaultConfiguration: true
   {{- end }}
+  {{- if ne $.root.Values.global.configurationProfile "dev" }}
+  barmanObjectStore:
+    scheduledBackup: "0 0 * * *"
+    retentionPolicy: "7d"
+    configuration:
+      s3Credentials:
+      {{- if $.addonOperator.awsPlatformEnabled }}
+        inheritFromIAMRole: true
+      {{- end }}
+      wal:
+        compression: gzip
+        maxParallel: 9
+        encryption: AES256
+  {{- end }}   
   spec:
     {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
     imageCatalogRef:
@@ -116,19 +129,12 @@ Default values for CNPG clusters. See `example-postgredb` for reference. With th
       {{- if $.root.Values.global.multiZone.enabled }}
       topologyKey: topology.kubernetes.io/zone
       {{- end }}
-    {{- if ne $.root.Values.global.configurationProfile "dev" }}
-    backup:
-      retentionPolicy: "7d"
-      barmanObjectStore:
-        destinationPath: "s3://s3-bucket-for-postgresql"
-        s3Credentials:
-        {{- if $.addonOperator.monitoringPlatformEnabled }}
-          inheritFromIAMRole: true
-        {{- end }}
-      wal:
-        compression: gzip
-        maxParallel: 8
-        encryption: AES256
+    {{- if $.cluster.barmanObjectStore }}
+    plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: {{ $.clusterName }}-objectstore
     {{- end }}
     postgresql:
       parameters:
@@ -163,6 +169,10 @@ Default values for CNPG clusters. See `example-postgredb` for reference. With th
       customQueriesConfigMap:
         - name: cnpg-queries-insights-metrics
           key: custom-metrics-queries
+        {{- if and $.cluster.spec $.cluster.spec.postgresql $.cluster.spec.postgresql.parameters (hasKey $.cluster.spec.postgresql.parameters "pg_partman_bgw.dbname") }}
+        - name: cnpg-partitions-alerts-{{ $.clusterName }}
+          key: partitions-alerts-queries
+        {{- end }}
         {{- if $.additionalCustomQueriesConfigMaps }}
         {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}
         - name: {{ $k }}
@@ -212,9 +222,10 @@ Default spec for CNPG clusters. See `example-postgredb` for reference. This is t
 			<td style="width: 300px;">example-postgredb</td>
 			<td>object</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>additionalLabels: {}
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>ObjectStore:
+    scheduledBackup: 0 0 * * *
+additionalLabels: {}
 annotations: {}
-scheduledBackup: 0 0 0 * * *
 spec:
     affinity:
         nodeSelector:
@@ -225,10 +236,6 @@ spec:
               operator: Equal
               value: platform-masters
         topologyKey: topology.kubernetes.io/zone
-    backup:
-        barmanObjectStore:
-            destinationPath: s3://q-sit-pf-postgresql
-        retentionPolicy: 2d
     instances: 2
     storage:
         size: 10Gi
@@ -237,6 +244,19 @@ vaultConfiguration: true</code></pre>
 			<td><div>
 
 This is example PostgreSQL cluster definition.  Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `cnpgPostgresPlatform.clusters` Values configured in this object are merged with default template from `cnpgPostgresPlatform.common.defaultClusterTemplate` and with default values from `cnpgPostgresPlatform.common.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.ObjectStore</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Defines scheduled backup configuration as Cron string (e.g. "0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
 
 </div>
 </td>
@@ -263,19 +283,6 @@ Additional labels to be configured on cluster resource.
 			<td><div>
 
 Annotations to be configured on cluster resource.
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;">example-postgredb.scheduledBackup</td>
-			<td>string</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
-</td>
-			<td><div>
-
-Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
 
 </div>
 </td>

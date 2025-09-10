@@ -6,39 +6,60 @@ import base64
 {{- if .Values.cnpgPostgresPlatform }}
 {{- $root := . }}
 {{- range keys .Values.cnpgPostgresPlatform.clusters  }}
-{{- $current := get $.Values.cnpgPostgresPlatform.clusters . }}
+{{- $dbCluster := get $.Values.cnpgPostgresPlatform.clusters . }}
+{{- $dbClusterName := . }}
 
-{{- if ne $current nil }}
+{{- if ne $dbCluster nil }}
 
-{{- $cluster := deepCopy $current }}
+{{- $cluster := deepCopy $dbCluster }}
 {{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
-{{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $current "root" $root "addonOperator" $addonoperator) | fromYaml }}
-{{- $current := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict) | deepCopy) $cluster }}
+{{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $dbCluster "root" $root "addonOperator" $addonoperator "clusterName" .) | fromYaml }}
+{{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict) | deepCopy) $cluster }}
 
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ . }}
-  {{- with $current.annotations }}
+  name: {{ $dbClusterName }}
+  {{- with $cluster.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    app.kubernetes.io/name: {{ . }}
-    app.kubernetes.io/instance: {{ . }}
+    app.kubernetes.io/name: {{ $dbClusterName }}
+    app.kubernetes.io/instance: {{ $dbClusterName }}
     app.kubernetes.io/part-of: cloudnative-pg
-  {{- with $current.additionalLabels }}
-    {{ toYaml . | nindent 4 }}
-  {{- end }}
+    {{- with $cluster.additionalLabels }}
+      {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:  
-  {{- toYaml $current.spec | nindent 2 }}
+  {{- toYaml $cluster.spec | nindent 2 }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    cnpg.io/cluster: {{ $dbClusterName }}
+  name: {{ $dbClusterName }}
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: postgres
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    cnpg.io/cluster: {{ $dbClusterName }}
+    role: primary
+  sessionAffinity: None
+  type: ClusterIP
 
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ . }}-stats-cleanup
+  name: {{ $dbClusterName }}-stats-cleanup
 spec:
   schedule: "@midnight"
   jobTemplate:
@@ -78,45 +99,74 @@ spec:
           backoffLimit: 3
   schedule: "@midnight"
 
+{{- if $cluster.barmanObjectStore }}
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: {{ $dbClusterName }}-objectstore
+spec:
+  retentionPolicy: {{ $cluster.barmanObjectStore.retentionPolicy | default "3d" }}
+  configuration:
+    destinationPath: {{ $cluster.barmanObjectStore.configuration.destinationPath | default "no-path" }}
+    endpointURL: {{ $cluster.barmanObjectStore.configuration.endpointURL | default "https://s3.ap-south-1.amazonaws.com" }}
+    s3Credentials:
+      {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
+      inheritFromIAMRole: true
+      {{- else if hasKey $cluster.barmanObjectStore.configuration.s3Credentials "accessKeyId" }}
+      accessKeyId:
+        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyName }}
+        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyId }}
+      secretAccessKey:
+        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreName }}
+        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreKey }}
+      {{- end }}
+    wal:
+      compression: {{ $cluster.barmanObjectStore.configuration.wal.compression | default "gzip" }}
+      maxParallel: {{ $cluster.barmanObjectStore.configuration.wal.maxParallel | default "8" }}
+      encryption: {{ $cluster.barmanObjectStore.configuration.wal.encryption | default "AES256" }}
+{{- end }}
+
 {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   labels:
-    cnpg.io/cluster: {{ . }}
+    cnpg.io/cluster: {{ $dbClusterName }}
     release: "{{ $root.Values.global.helmReleaseNamePrefix }}monitoring-platform"
-  name: {{ . }}-monitor
+  name: {{ $dbClusterName }}-monitor
 spec:
   podMetricsEndpoints:
     - port: metrics
   selector:
     matchLabels:
-      cnpg.io/cluster: {{ . }}
+      cnpg.io/cluster: {{ $dbClusterName }}
 {{- end }}
 
-
-{{- if and $current.spec (and $current.spec.backup $current.scheduledBackup) }}
+{{- if and $cluster.spec (and $cluster.barmanObjectStore $cluster.barmanObjectStore.scheduledBackup) }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
-  name: {{ . }}-scheduled-backups
+  name: {{ $dbClusterName }}-scheduled-backups
 spec:
-  schedule: {{ $current.scheduledBackup }}
+  schedule: {{ $cluster.barmanObjectStore.scheduledBackup }}
   backupOwnerReference: self
   cluster:
-    name: {{ . }}
+    name: {{ $dbClusterName }}
   immediate: true
-  target: {{ $current.spec.backup.target | default "prefer-standby" }}
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
 {{- end }}
 
-{{- if $current.vaultConfiguration }}
+{{- if and $root.Values.cnpgPostgresPlatform.vaultPlatformEnabled $cluster.vaultConfiguration }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: admin-role-{{ . }}
+  name: admin-role-{{ $dbClusterName }}
 spec:
   db-name: {{ . }}
   creation-statements: >-
@@ -126,7 +176,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-{{ . }}
+  name: readonly-role-{{ $dbClusterName }}
 spec:
   db-name: {{ . }}
   creation-statements: >-
@@ -136,7 +186,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readwrite-role-{{ . }}
+  name: readwrite-role-{{ $dbClusterName }}
 spec:
   db-name: {{ . }}
   creation-statements: >-
@@ -148,18 +198,18 @@ kind: DbConnection
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ . }}
+  name: {{ $dbClusterName }}
 spec:
-  connection-name: {{ . }}
+  connection-name: {{ $dbClusterName }}
   plugin-name: postgresql-database-plugin
   allowed-roles: '*'
   computed-values:
-  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','username')
+  - expression: k8s_get_secret_value('{{ $dbClusterName }}-superuser','{{ $.Release.Namespace }}','username')
     name: secret-username
-  - expression: k8s_get_secret_value('{{ . }}-superuser','{{ $.Release.Namespace }}','password')
+  - expression: k8s_get_secret_value('{{ $dbClusterName }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-url: >-
-    {{ printf "postgresql://{{username}}:{{password}}@%s.%s.svc:5432/postgres" . $.Release.Namespace }}
+    {{ printf "postgresql://{{username}}:{{password}}@%s.%s.svc:5432/postgres" $dbClusterName $.Release.Namespace }}
   db-username: '{secret-username}'
   db-password: '{secret-password}'
 

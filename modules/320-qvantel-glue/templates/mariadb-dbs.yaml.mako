@@ -2,7 +2,7 @@
 import json
 import base64
 %>
-{{- if .Values.qvantelGlue.dbs.mariadb }}
+{{- if and .Values.qvantelGlue.dbs .Values.qvantelGlue.dbs.mariadb }}
 {{- $root := . }}
 {{- range keys .Values.qvantelGlue.dbs.mariadb  }}
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.mariadb . }}

@@ -531,13 +531,17 @@ monitoringPlatform:
         image: 
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-           % endif
+          % else:
+          registry: platform.artifactory.qvantel.net
+          % endif
           repository: platform/platform-k8s-tools-minimal
           tag: 1.3.2_202508131123_master_e140ddde
       downloadDashboardsImage:
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % else:
+          registry: platform.artifactory.qvantel.net
            % endif
           repository: platform/platform-k8s-tools-minimal
           tag: 1.3.2_202508131123_master_e140ddde
@@ -545,6 +549,8 @@ monitoringPlatform:
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
+          % else:
+          registry: platform.artifactory.qvantel.net
            % endif
           repository: platform/platform-k8s-tools-minimal
           tag: 1.3.2_202508131123_master_e140ddde
