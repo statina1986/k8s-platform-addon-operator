@@ -44,7 +44,7 @@ certPlatform:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        repository: jetstack/cert-manager-ctl
+        repository: jetstack/cert-manager-startupapicheck
         % endif
       serviceAccount:
         create: false

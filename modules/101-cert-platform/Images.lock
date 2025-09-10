@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-29T21:11:58.244542147Z"
+  generatedAt: "2025-08-22T13:41:39.304801512Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: cert-platform
@@ -9,42 +9,42 @@ chart:
   appVersion: ""
 images:
   - name: cert-manager
-    image: quay.io/jetstack/cert-manager-controller:v1.12.13
+    image: quay.io/jetstack/cert-manager-controller:v1.18.2
     chart: cert-platform
     digests:
-      - digest: sha256:9dd9fc81b4e84c2d43ae5727555daf5b4734bedab90491d5305a2d19acceb66f
+      - digest: sha256:058a3ee5b133f964acefbd5926a08ace1fb7c0775b92d3bc11e4c7a33de71e25
         arch: linux/amd64
-      - digest: sha256:a0ac267006ed1d9240b5deda22c5fc80ddceaad739141064d3b541be72755a23
+      - digest: sha256:980ecb589b54e91fa5c1cd97a0f1689e39ba62eb2904bcf43f63893671065780
         arch: linux/arm64
   - name: cainjector
-    image: quay.io/jetstack/cert-manager-cainjector:v1.12.13
+    image: quay.io/jetstack/cert-manager-cainjector:v1.18.2
     chart: cert-platform
     digests:
-      - digest: sha256:b7eca08abd547be1d8488ff7e98f1d834d19832082a3b24ba934058043d5e0a3
+      - digest: sha256:fd289495aed22983861cd8359fc535878ba388842faa9a01a33ebc5c9fe820d2
         arch: linux/amd64
-      - digest: sha256:d85f6dbb293536d76d6789d94c4f8f6dd2b93fb338098b112880044105588ae7
+      - digest: sha256:5d3ae4ae5ba2135ebdc302e943e385544f975179aca9d6039a37e480e431e97c
         arch: linux/arm64
   - name: webhook
-    image: quay.io/jetstack/cert-manager-webhook:v1.12.13
+    image: quay.io/jetstack/cert-manager-webhook:v1.18.2
     chart: cert-platform
     digests:
-      - digest: sha256:7a9dd18f58e70a5cf022f675c7bd3a3554352048475ddb40bebbd6af2e6fa635
+      - digest: sha256:88f79993c4ad584324262419338d4a92919ea1495d984f44e34181c33d33e290
         arch: linux/amd64
-      - digest: sha256:c8b4109be14a02804c120adcc0422355299a08073587434fe4090ea4c1d290f5
+      - digest: sha256:ec280149b4ab0a2c4270deb0c9d5a7eb27ce8ae0cd2790140ca865fc6be5c0a1
         arch: linux/arm64
   - name: acmesolver
-    image: quay.io/jetstack/cert-manager-acmesolver:v1.12.13
+    image: quay.io/jetstack/cert-manager-acmesolver:v1.18.2
     chart: cert-platform
     digests:
-      - digest: sha256:9050f0a1513212f30bba57b090bce512a299a77a80d6ada2ca6f1c2e57622b09
+      - digest: sha256:b3718a60d47e3f0444d4d42949d816a97384642987cd6094c35a9827ba19aab8
         arch: linux/amd64
-      - digest: sha256:f0626be9c052558550981c4d2a5f0254b0b6297c60085c443e661fad8932e515
+      - digest: sha256:397fad51315a752ad6f63ac63b724cae849ce4c7731cf3020455afdc8dde7f7f
         arch: linux/arm64
-  - name: cert-manager-ctl
-    image: quay.io/jetstack/cert-manager-ctl:v1.12.13
+  - name: startupapicheck
+    image: quay.io/jetstack/cert-manager-startupapicheck:v1.18.2
     chart: cert-platform
     digests:
-      - digest: sha256:da7b9fd4dc0098091a6db73dbe5b33e1de106e4060d36ba7371e2ce477c19d9e
+      - digest: sha256:f37f4e84f892ec7d44432971336cd4f591a5eaf4f086b5f14d3d7d065721341b
         arch: linux/amd64
-      - digest: sha256:0bb4dea5e93ff7c9cd4b9d591119db633a280b3b1824b0f8b7e47115f9a6b390
+      - digest: sha256:3fa025c179daeb3672c100ff6c8398f4e428e31e1470b3acaa86ca958bdab7af
         arch: linux/arm64

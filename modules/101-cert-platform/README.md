@@ -55,7 +55,7 @@ serviceAccount:
 startupapicheck:
     image:
         registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-        repository: jetstack/cert-manager-ctl
+        repository: jetstack/cert-manager-startupapicheck
     serviceAccount:
         create: false
         name: platform
