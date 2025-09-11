@@ -67,7 +67,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: admin-role-{{ . }}
+  name: admin-role-{{ $dbClusterName }}
 spec:
   db-name: {{ $dbClusterName }}
   creation-statements: >-
@@ -77,7 +77,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-{{ . }}
+  name: readonly-role-{{ $dbClusterName }}
 spec:
   db-name: {{ $dbClusterName }}
   creation-statements: >-
@@ -87,7 +87,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readwrite-role-{{ . }}
+  name: readwrite-role-{{ $dbClusterName }}
 spec:
   db-name: {{ $dbClusterName }}
   creation-statements: >-
