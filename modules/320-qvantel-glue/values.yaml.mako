@@ -1,5 +1,4 @@
 qvantelGlue:
-  monitoringPlatformEnabled: ${addon_operator['monitoringPlatformEnabled']}
   # -- Configuration for SqlInstaller CRDs reconciliation.
   sqlinstallersCrdSync:
     # -- Enables SqlInstaller CRDs reconciliation
@@ -67,7 +66,7 @@ qvantelGlue:
               enabled: true
               replicas: 2
             {{- end }}
-            {{- if $.addonOperator.monitoringPlatformEnabled }}
+            {{- if  eq $.addonOperator.monitoringPlatformEnabled "true"}}
             metrics:
               enabled: true
               serviceMonitor:
@@ -125,17 +124,18 @@ qvantelGlue:
           {{- if ne $.root.Values.global.configurationProfile "dev" }}
           barmanObjectStore:
             scheduledBackup: "0 0 * * *"
-            retentionPolicy: "7d"
-            configuration:
-              s3Credentials:
-              {{- if $.addonOperator.awsPlatformEnabled }}
-                inheritFromIAMRole: true
-              {{- end }}
-              wal:
-                compression: gzip
-                maxParallel: 9
-                encryption: AES256
-          {{- end }}    
+            spec:
+              retentionPolicy: "7d"
+              configuration:
+                s3Credentials:
+                  {{- if eq $.addonOperator.awsPlatformEnabled "true" }}
+                  inheritFromIAMRole: true
+                  {{- end }}
+                wal:
+                  compression: gzip
+                  maxParallel: 8
+                  encryption: AES256
+          {{- end }}  
           spec:
             {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
             imageCatalogRef:
@@ -188,7 +188,7 @@ qvantelGlue:
                 cpu: "0.1"
             storage:
               size: 10Gi
-            {{- if $.addonOperator.monitoringPlatformEnabled }}
+            {{- if eq $.addonOperator.monitoringPlatformEnabled "true" }}
             monitoring:
               podMonitorEnabled: true
               customQueriesConfigMap:
@@ -248,10 +248,24 @@ example-postgredb:
     # @default --  by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
     # @section -- Examples-PostgreSQL
     vaultConfiguration: true
-    # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
-    # @default --  null
-    # @section -- Examples-PostgreSQL
     scheduledBackup: "0 0 0 * * *" # every midnight
+    barmanObjectStore:
+      # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
+      # @default --  null
+      # @section -- Examples-PostgreSQL
+      scheduledBackup: "0 0 * * *"
+      # -- Defines ObjectStore specification. See https://cloudnative-pg.io/plugin-barman-cloud/docs/plugin-barman-cloud.v1/#objectstorespec
+      # @default --  null
+      # @section -- Examples-PostgreSQL
+      spec:
+        retentionPolicy: "7d"
+        configuration:
+          s3Credentials:
+            inheritFromIAMRole: true
+          wal:
+            compression: gzip
+            maxParallel: 8
+            encryption: AES256
     # -- Annotations to be configured on cluster resource.
     # @default --  null
     # @section -- Examples-PostgreSQL

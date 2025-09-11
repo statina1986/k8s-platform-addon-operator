@@ -134,9 +134,81 @@
               "title": "annotations",
               "type": "object"
             },
+            "barmanObjectStore": {
+              "properties": {
+                "scheduledBackup": {
+                  "default": "0 0 * * *",
+                  "description": "Defines scheduled backup configuration as Cron string (e.g. \"0 0 0 * * *\" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.",
+                  "required": [],
+                  "title": "scheduledBackup",
+                  "type": "string"
+                },
+                "spec": {
+                  "description": "Defines ObjectStore specification. See https://cloudnative-pg.io/plugin-barman-cloud/docs/plugin-barman-cloud.v1/#objectstorespec",
+                  "properties": {
+                    "configuration": {
+                      "properties": {
+                        "s3Credentials": {
+                          "properties": {
+                            "inheritFromIAMRole": {
+                              "default": true,
+                              "required": [],
+                              "title": "inheritFromIAMRole",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "s3Credentials",
+                          "type": "object"
+                        },
+                        "wal": {
+                          "properties": {
+                            "compression": {
+                              "default": "gzip",
+                              "required": [],
+                              "title": "compression",
+                              "type": "string"
+                            },
+                            "encryption": {
+                              "default": "AES256",
+                              "required": [],
+                              "title": "encryption",
+                              "type": "string"
+                            },
+                            "maxParallel": {
+                              "default": 8,
+                              "required": [],
+                              "title": "maxParallel",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "wal",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "configuration",
+                      "type": "object"
+                    },
+                    "retentionPolicy": {
+                      "default": "7d",
+                      "required": [],
+                      "title": "retentionPolicy",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "barmanObjectStore",
+              "type": "object"
+            },
             "scheduledBackup": {
               "default": "0 0 0 * * *",
-              "description": "Defines scheduled backup configuration as Cron string (e.g. \"0 0 0 * * *\" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.",
               "required": [],
               "title": "scheduledBackup",
               "type": "string"
@@ -465,7 +537,7 @@
                       "type": "object"
                     },
                     "defaultClusterTemplate": {
-                      "default": "{{- if eq $.addonOperator.vaultPlatformEnabled \"true\" }}\nvaultConfiguration: true\n{{- end }}\nspec:\n  {{- if $.root.Values.global.platformMasters }}\n  nodeSelector:\n    {{ $.root.Values.global.platformMastersKey }}: {{ $.root.Values.global.platformMastersValue }}\n  {{- end }}\n  storage:\n    size: 10Gi\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  replicas: 1\n  {{- else }}\n  replicas: 3\n  galera:\n    enabled: true\n    config:\n      reuseStorageVolume: true\n    providerOptions:\n      gcache.size: 128M\n  maxScale:\n    enabled: true\n    replicas: 2\n  {{- end }}\n  {{- if $.addonOperator.monitoringPlatformEnabled }}\n  metrics:\n    enabled: true\n    serviceMonitor:\n      prometheusRelease: \"{{ $.root.Values.global.helmReleaseNamePrefix }}monitoring-platform\"\n  {{- end }}\n  affinity:\n    antiAffinityEnabled: true  \n  tolerations:\n    - key: \"k8s.mariadb.com/ha\"\n      operator: \"Exists\"\n      effect: \"NoSchedule\"\n    - key: \"{{ $.root.Values.global.platformMastersKey }}\"\n      value: \"{{ $.root.Values.global.platformMastersValue }}\"\n      operator: \"Equal\"\n      effect: \"NoSchedule\"\n  podDisruptionBudget:\n    maxUnavailable: 33%\n  updateStrategy:\n    type: RollingUpdate\n  myCnf: |\n    [mariadb]\n    bind-address=*\n    default_storage_engine=InnoDB\n    binlog_format=row\n    innodb_autoinc_lock_mode=2\n    max_allowed_packet=256M\n  resources:\n    requests:\n      cpu: 100m\n      memory: 128Mi\n    limits:\n      memory: 1Gi  \n      \n",
+                      "default": "{{- if eq $.addonOperator.vaultPlatformEnabled \"true\" }}\nvaultConfiguration: true\n{{- end }}\nspec:\n  {{- if $.root.Values.global.platformMasters }}\n  nodeSelector:\n    {{ $.root.Values.global.platformMastersKey }}: {{ $.root.Values.global.platformMastersValue }}\n  {{- end }}\n  storage:\n    size: 10Gi\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  replicas: 1\n  {{- else }}\n  replicas: 3\n  galera:\n    enabled: true\n    config:\n      reuseStorageVolume: true\n    providerOptions:\n      gcache.size: 128M\n  maxScale:\n    enabled: true\n    replicas: 2\n  {{- end }}\n  {{- if  eq $.addonOperator.monitoringPlatformEnabled \"true\"}}\n  metrics:\n    enabled: true\n    serviceMonitor:\n      prometheusRelease: \"{{ $.root.Values.global.helmReleaseNamePrefix }}monitoring-platform\"\n  {{- end }}\n  affinity:\n    antiAffinityEnabled: true  \n  tolerations:\n    - key: \"k8s.mariadb.com/ha\"\n      operator: \"Exists\"\n      effect: \"NoSchedule\"\n    - key: \"{{ $.root.Values.global.platformMastersKey }}\"\n      value: \"{{ $.root.Values.global.platformMastersValue }}\"\n      operator: \"Equal\"\n      effect: \"NoSchedule\"\n  podDisruptionBudget:\n    maxUnavailable: 33%\n  updateStrategy:\n    type: RollingUpdate\n  myCnf: |\n    [mariadb]\n    bind-address=*\n    default_storage_engine=InnoDB\n    binlog_format=row\n    innodb_autoinc_lock_mode=2\n    max_allowed_packet=256M\n  resources:\n    requests:\n      cpu: 100m\n      memory: 128Mi\n    limits:\n      memory: 1Gi  \n      \n",
                       "description": "(tpl/string) Default template for MariaDB clusters. See `example-mariadb.cluster` for reference.\nThis is templated field which is rendered for each cluster from `qvantelGlue.dbs.mariadb`.\nWith this field you can override default cluster template for complex cases and utilize helm templating in it.\nScope for the template contains fields: \n\\newline\n* addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.\n\\newline\n* root: root context of 'qvantel-glue' module, containing all Values for the module.\n\\newline\n* cluster: content of 'cluster' field for rendered cluster.",
                       "required": [],
                       "title": "defaultClusterTemplate",
@@ -486,7 +558,7 @@
                       "type": "object"
                     },
                     "defaultClusterTemplate": {
-                      "default": "{{- if eq $.addonOperator.vaultPlatformEnabled \"true\" }}\nvaultConfiguration: true\n{{- end }}\n{{- if ne $.root.Values.global.configurationProfile \"dev\" }}\nbarmanObjectStore:\n  scheduledBackup: \"0 0 * * *\"\n  retentionPolicy: \"7d\"\n  configuration:\n    s3Credentials:\n    {{- if $.addonOperator.awsPlatformEnabled }}\n      inheritFromIAMRole: true\n    {{- end }}\n    wal:\n      compression: gzip\n      maxParallel: 9\n      encryption: AES256\n{{- end }}    \nspec:\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}\n  imageCatalogRef:\n    apiGroup: postgresql.cnpg.io\n    kind: ImageCatalog\n    name: qvantel-base-cnpg-images\n    major: 15\n  {{- end }}\n  enableSuperuserAccess: true\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  instances: 1\n  {{- else }}\n  instances: 2\n  {{- end }}\n  affinity:\n    {{- if $.root.Values.global.multiZone.enabled }}\n    topologyKey: topology.kubernetes.io/zone\n    {{- end }}\n  {{- if $.cluster.barmanObjectStore }}\n  plugins:\n  - name: barman-cloud.cloudnative-pg.io\n    isWALArchiver: true\n    parameters:\n      barmanObjectName: {{ $.clusterName }}-objectstore\n  {{- end }}\n  postgresql:\n    parameters:\n      auto_explain.log_min_duration: \"500ms\"\n      auto_explain.log_analyze: \"on\"\n      auto_explain.log_timing: \"off\"\n      max_connections: \"500\"      \n      random_page_cost: \"1\"\n      pg_stat_statements.max: \"10000\"\n      pg_stat_statements.track: \"top\"\n      pg_stat_statements.track_utility: \"off\"\n      pg_wait_sampling.profile_pid: \"false\"\n      track_io_timing: \"on\"\n      wal_compression: \"pglz\"\n    shared_preload_libraries:\n      - timescaledb\n      - pg_partman_bgw\n      - pg_wait_sampling\n      {{- if $.additionalSharedLibraries }}\n      {{- range $.additionalSharedLibraries }}\n      - {{ . }}\n      {{- end }}\n      {{- end }}\n  resources:\n    requests:\n      cpu: \"0.1\"\n  storage:\n    size: 10Gi\n  {{- if $.addonOperator.monitoringPlatformEnabled }}\n  monitoring:\n    podMonitorEnabled: true\n    customQueriesConfigMap:\n      - name: cnpg-queries-insights-metrics\n        key: custom-metrics-queries\n      {{- if and $.cluster.spec $.cluster.spec.postgresql $.cluster.spec.postgresql.parameters (hasKey $.cluster.spec.postgresql.parameters \"pg_partman_bgw.dbname\") }}\n      - name: cnpg-partitions-alerts-{{ $.clusterName }}\n        key: partitions-alerts-queries\n      {{- end }}\n      {{- if $.additionalCustomQueriesConfigMaps }}\n      {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}\n      - name: {{ $k }}\n      {{ $v | toYaml | indent 2 }}\n      {{- end }}\n      {{- end }}\n  {{- end }}\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.bootstrap) }}\n  bootstrap:\n    initdb:\n      postInitSQL:\n        - \"CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;\"\n        - \"CREATE EXTENSION IF NOT EXISTS timescaledb;\"\n  {{- end }}\n  {{- if $.root.Values.global.awsRole }}\n  serviceAccountTemplate:\n    metadata:\n      annotations:\n        eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}\n  {{- end }}\n",
+                      "default": "{{- if eq $.addonOperator.vaultPlatformEnabled \"true\" }}\nvaultConfiguration: true\n{{- end }}\n{{- if ne $.root.Values.global.configurationProfile \"dev\" }}\nbarmanObjectStore:\n  scheduledBackup: \"0 0 * * *\"\n  spec:\n    retentionPolicy: \"7d\"\n    configuration:\n      s3Credentials:\n        {{- if eq $.addonOperator.awsPlatformEnabled \"true\" }}\n        inheritFromIAMRole: true\n        {{- end }}\n      wal:\n        compression: gzip\n        maxParallel: 8\n        encryption: AES256\n{{- end }}  \nspec:\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}\n  imageCatalogRef:\n    apiGroup: postgresql.cnpg.io\n    kind: ImageCatalog\n    name: qvantel-base-cnpg-images\n    major: 15\n  {{- end }}\n  enableSuperuserAccess: true\n  {{- if eq $.root.Values.global.configurationProfile \"dev\" }}\n  instances: 1\n  {{- else }}\n  instances: 2\n  {{- end }}\n  affinity:\n    {{- if $.root.Values.global.multiZone.enabled }}\n    topologyKey: topology.kubernetes.io/zone\n    {{- end }}\n  {{- if $.cluster.barmanObjectStore }}\n  plugins:\n  - name: barman-cloud.cloudnative-pg.io\n    isWALArchiver: true\n    parameters:\n      barmanObjectName: {{ $.clusterName }}-objectstore\n  {{- end }}\n  postgresql:\n    parameters:\n      auto_explain.log_min_duration: \"500ms\"\n      auto_explain.log_analyze: \"on\"\n      auto_explain.log_timing: \"off\"\n      max_connections: \"500\"      \n      random_page_cost: \"1\"\n      pg_stat_statements.max: \"10000\"\n      pg_stat_statements.track: \"top\"\n      pg_stat_statements.track_utility: \"off\"\n      pg_wait_sampling.profile_pid: \"false\"\n      track_io_timing: \"on\"\n      wal_compression: \"pglz\"\n    shared_preload_libraries:\n      - timescaledb\n      - pg_partman_bgw\n      - pg_wait_sampling\n      {{- if $.additionalSharedLibraries }}\n      {{- range $.additionalSharedLibraries }}\n      - {{ . }}\n      {{- end }}\n      {{- end }}\n  resources:\n    requests:\n      cpu: \"0.1\"\n  storage:\n    size: 10Gi\n  {{- if eq $.addonOperator.monitoringPlatformEnabled \"true\" }}\n  monitoring:\n    podMonitorEnabled: true\n    customQueriesConfigMap:\n      - name: cnpg-queries-insights-metrics\n        key: custom-metrics-queries\n      {{- if and $.cluster.spec $.cluster.spec.postgresql $.cluster.spec.postgresql.parameters (hasKey $.cluster.spec.postgresql.parameters \"pg_partman_bgw.dbname\") }}\n      - name: cnpg-partitions-alerts-{{ $.clusterName }}\n        key: partitions-alerts-queries\n      {{- end }}\n      {{- if $.additionalCustomQueriesConfigMaps }}\n      {{- range $k, $v := $.additionalCustomQueriesConfigMaps }}\n      - name: {{ $k }}\n      {{ $v | toYaml | indent 2 }}\n      {{- end }}\n      {{- end }}\n  {{- end }}\n  {{- if or (not $.cluster.spec) (not $.cluster.spec.bootstrap) }}\n  bootstrap:\n    initdb:\n      postInitSQL:\n        - \"CREATE EXTENSION IF NOT EXISTS pg_wait_sampling;\"\n        - \"CREATE EXTENSION IF NOT EXISTS timescaledb;\"\n  {{- end }}\n  {{- if $.root.Values.global.awsRole }}\n  serviceAccountTemplate:\n    metadata:\n      annotations:\n        eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}\n  {{- end }}\n",
                       "description": "(tpl/string) Default template for CNPG clusters. See `example-postgredb.cluster` for reference.\nThis is templated field which is rendered for each cluster from `qvantelGlue.dbs.postgres`.\nWith this field you can override default cluster template for complex cases and utilize helm templating in it.\nScope for the template contains fields: \n\\newline\n* addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.\n\\newline\n* root: root context of 'qvantel-glue' module, containing all Values for the module.\n\\newline\n* cluster: content of 'cluster' field for rendered cluster.",
                       "required": [],
                       "title": "defaultClusterTemplate",
@@ -518,12 +590,6 @@
           "required": [],
           "title": "dbs",
           "type": "object"
-        },
-        "monitoringPlatformEnabled": {
-          "default": true,
-          "required": [],
-          "title": "monitoringPlatformEnabled",
-          "type": "boolean"
         },
         "sqlinstallersCrdSync": {
           "description": "Configuration for SqlInstaller CRDs reconciliation.",

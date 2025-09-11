@@ -161,7 +161,7 @@ Default values for MariaDB clusters. See `example-mariadb.cluster` for reference
       enabled: true
       replicas: 2
     {{- end }}
-    {{- if $.addonOperator.monitoringPlatformEnabled }}
+    {{- if  eq $.addonOperator.monitoringPlatformEnabled "true"}}
     metrics:
       enabled: true
       serviceMonitor:
@@ -245,17 +245,18 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
   {{- if ne $.root.Values.global.configurationProfile "dev" }}
   barmanObjectStore:
     scheduledBackup: "0 0 * * *"
-    retentionPolicy: "7d"
-    configuration:
-      s3Credentials:
-      {{- if $.addonOperator.awsPlatformEnabled }}
-        inheritFromIAMRole: true
-      {{- end }}
-      wal:
-        compression: gzip
-        maxParallel: 9
-        encryption: AES256
-  {{- end }}   
+    spec:
+      retentionPolicy: "7d"
+      configuration:
+        s3Credentials:
+          {{- if eq $.addonOperator.awsPlatformEnabled "true" }}
+          inheritFromIAMRole: true
+          {{- end }}
+        wal:
+          compression: gzip
+          maxParallel: 8
+          encryption: AES256
+  {{- end }} 
   spec:
     {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
     imageCatalogRef:
@@ -308,7 +309,7 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
         cpu: "0.1"
     storage:
       size: 10Gi
-    {{- if $.addonOperator.monitoringPlatformEnabled }}
+    {{- if eq $.addonOperator.monitoringPlatformEnabled "true" }}
     monitoring:
       podMonitorEnabled: true
       customQueriesConfigMap:
@@ -599,6 +600,17 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
     additionalLabels: {}
     annotations: {}
+    barmanObjectStore:
+        scheduledBackup: 0 0 * * *
+        spec:
+            configuration:
+                s3Credentials:
+                    inheritFromIAMRole: true
+                wal:
+                    compression: gzip
+                    encryption: AES256
+                    maxParallel: 8
+            retentionPolicy: 7d
     scheduledBackup: 0 0 0 * * *
     spec:
         affinity:
@@ -688,7 +700,7 @@ Annotations to be configured on cluster resource.
 </td>
 		</tr>
 		<tr>
-			<td style="width: 300px;">example-postgredb.cluster.scheduledBackup</td>
+			<td style="width: 300px;">example-postgredb.cluster.barmanObjectStore.scheduledBackup</td>
 			<td>string</td>
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
@@ -696,6 +708,19 @@ Annotations to be configured on cluster resource.
 			<td><div>
 
 Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.cluster.barmanObjectStore.spec</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Defines ObjectStore specification. See https://cloudnative-pg.io/plugin-barman-cloud/docs/plugin-barman-cloud.v1/#objectstorespec
 
 </div>
 </td>

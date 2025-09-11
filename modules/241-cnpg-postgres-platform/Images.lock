@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-09-10T10:27:53.037089056Z"
+  generatedAt: "2025-09-11T20:52:12.010175143Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: cnpg-postgres-platform
@@ -54,3 +54,19 @@ images:
         arch: linux/arm64
       - digest: sha256:812997eab3cb1ba3c39eea6b465538ed705da1fe829b0d3edebadeec60d873fc
         arch: linux/amd64
+  - name: plugin-barman-cloud-sidecar
+    image: ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.6.0
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:d3c8ee5cb01b7220a9c58e297b8a8e736fcaec7a178bb8d732527ce7a37e4762
+        arch: linux/amd64
+      - digest: sha256:cb7bbf6fba43c2397bb2a974252098172b903ae99d0da89df57d4d37e2f2e96b
+        arch: linux/arm64
+  - name: plugin-barman-cloud
+    image: ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.6.0
+    chart: cnpg-postgres-platform
+    digests:
+      - digest: sha256:6b0e1836fa934b670b9b08a4acf908b140a6fa78e21215e784657e22841c9cda
+        arch: linux/amd64
+      - digest: sha256:7ead36656bc795ccda1575f11a7847c4ba760bff2581fe8c08e817762a9a2a83
+        arch: linux/arm64

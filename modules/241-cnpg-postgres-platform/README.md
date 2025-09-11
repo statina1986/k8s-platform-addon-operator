@@ -100,16 +100,17 @@ Default values for CNPG clusters. See `example-postgredb` for reference. With th
   {{- if ne $.root.Values.global.configurationProfile "dev" }}
   barmanObjectStore:
     scheduledBackup: "0 0 * * *"
-    retentionPolicy: "7d"
-    configuration:
-      s3Credentials:
-      {{- if $.addonOperator.awsPlatformEnabled }}
-        inheritFromIAMRole: true
-      {{- end }}
-      wal:
-        compression: gzip
-        maxParallel: 9
-        encryption: AES256
+    spec:
+      retentionPolicy: "7d"
+      configuration:
+        s3Credentials:
+          {{- if eq $.addonOperator.awsPlatformEnabled "true" }}
+          inheritFromIAMRole: true
+          {{- end }}
+        wal:
+          compression: gzip
+          maxParallel: 8
+          encryption: AES256
   {{- end }}   
   spec:
     {{- if or (not $.cluster.spec) (not $.cluster.spec.imageName) }}
@@ -163,7 +164,7 @@ Default values for CNPG clusters. See `example-postgredb` for reference. With th
         cpu: "0.1"
     storage:
       size: 10Gi
-    {{- if $.addonOperator.monitoringPlatformEnabled }}
+    {{- if eq $.addonOperator.monitoringPlatformEnabled "true" }}
     monitoring:
       podMonitorEnabled: true
       customQueriesConfigMap:
@@ -222,10 +223,19 @@ Default spec for CNPG clusters. See `example-postgredb` for reference. This is t
 			<td style="width: 300px;">example-postgredb</td>
 			<td>object</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>ObjectStore:
-    scheduledBackup: 0 0 * * *
-additionalLabels: {}
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>additionalLabels: {}
 annotations: {}
+barmanObjectStore:
+    scheduledBackup: 0 0 * * *
+    spec:
+        configuration:
+            s3Credentials:
+                inheritFromIAMRole: true
+            wal:
+                compression: gzip
+                encryption: AES256
+                maxParallel: 8
+        retentionPolicy: 7d
 spec:
     affinity:
         nodeSelector:
@@ -244,19 +254,6 @@ vaultConfiguration: true</code></pre>
 			<td><div>
 
 This is example PostgreSQL cluster definition.  Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `cnpgPostgresPlatform.clusters` Values configured in this object are merged with default template from `cnpgPostgresPlatform.common.defaultClusterTemplate` and with default values from `cnpgPostgresPlatform.common.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;">example-postgredb.ObjectStore</td>
-			<td>object</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
-</td>
-			<td><div>
-
-Defines scheduled backup configuration as Cron string (e.g. "0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
 
 </div>
 </td>
@@ -283,6 +280,45 @@ Additional labels to be configured on cluster resource.
 			<td><div>
 
 Annotations to be configured on cluster resource.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.barmanObjectStore</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Barman ObjectStore related configuration
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.barmanObjectStore.scheduledBackup</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.barmanObjectStore.spec</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Defines ObjectStore specification. See https://cloudnative-pg.io/plugin-barman-cloud/docs/plugin-barman-cloud.v1/#objectstorespec
 
 </div>
 </td>

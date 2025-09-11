@@ -4,6 +4,7 @@ import base64
 %>
 
 {{- if .Values.cnpgPostgresPlatform }}
+{{- $addonOperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
 {{- $root := . }}
 {{- range keys .Values.cnpgPostgresPlatform.clusters  }}
 {{- $dbCluster := get $.Values.cnpgPostgresPlatform.clusters . }}
@@ -11,9 +12,8 @@ import base64
 
 {{- if ne $dbCluster nil }}
 
-{{- $cluster := deepCopy $dbCluster }}
-{{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
-{{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $dbCluster "root" $root "addonOperator" $addonoperator "clusterName" .) | fromYaml }}
+{{- $cluster := mergeOverwrite ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict) | deepCopy) (deepCopy $dbCluster) }}
+{{- $defaultTemplate := tpl $root.Values.cnpgPostgresPlatform.common.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.cnpgPostgresPlatform.common.defaultCluster | default (dict) | deepCopy) $cluster }}
 
 ---
@@ -106,28 +106,10 @@ kind: ObjectStore
 metadata:
   name: {{ $dbClusterName }}-objectstore
 spec:
-  retentionPolicy: {{ $cluster.barmanObjectStore.retentionPolicy | default "3d" }}
-  configuration:
-    destinationPath: {{ $cluster.barmanObjectStore.configuration.destinationPath | default "no-path" }}
-    endpointURL: {{ $cluster.barmanObjectStore.configuration.endpointURL | default "https://s3.ap-south-1.amazonaws.com" }}
-    s3Credentials:
-      {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
-      inheritFromIAMRole: true
-      {{- else if hasKey $cluster.barmanObjectStore.configuration.s3Credentials "accessKeyId" }}
-      accessKeyId:
-        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyName }}
-        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyId }}
-      secretAccessKey:
-        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreName }}
-        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreKey }}
-      {{- end }}
-    wal:
-      compression: {{ $cluster.barmanObjectStore.configuration.wal.compression | default "gzip" }}
-      maxParallel: {{ $cluster.barmanObjectStore.configuration.wal.maxParallel | default "8" }}
-      encryption: {{ $cluster.barmanObjectStore.configuration.wal.encryption | default "AES256" }}
+  {{- toYaml $cluster.barmanObjectStore.spec | nindent 2 }}
 {{- end }}
 
-{{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
+{{- if eq $addonOperator.monitoringPlatformEnabled "true" }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -161,7 +143,7 @@ spec:
     name: barman-cloud.cloudnative-pg.io
 {{- end }}
 
-{{- if and $root.Values.cnpgPostgresPlatform.vaultPlatformEnabled $cluster.vaultConfiguration }}
+{{- if and (eq $addonOperator.vaultPlatformEnabled "true") $cluster.vaultConfiguration }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole

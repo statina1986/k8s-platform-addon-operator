@@ -3,6 +3,7 @@ import json
 import base64
 %>
 {{- if and .Values.qvantelGlue.dbs .Values.qvantelGlue.dbs.postgres }}
+{{- $addonOperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
 {{- $root := . }}
 {{- range keys .Values.qvantelGlue.dbs.postgres  }}
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.postgres . }}
@@ -10,9 +11,8 @@ import base64
 
 {{- if ne $dbCluster.cluster nil }}
 
-{{- $cluster := $dbCluster.cluster | default (dict) | deepCopy }}
-{{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
-{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $dbCluster.cluster "root" $root "addonOperator" $addonoperator) | fromYaml }}
+{{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) (deepCopy $dbCluster.cluster) }}
+{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) $cluster }}
 {{- $_ := set $dbCluster "cluster" $cluster}}
 
@@ -107,28 +107,10 @@ kind: ObjectStore
 metadata:
   name: {{ $dbClusterName }}-objectstore
 spec:
-  retentionPolicy: {{ $cluster.barmanObjectStore.retentionPolicy | default "3d" }}
-  configuration:
-    destinationPath: {{ $cluster.barmanObjectStore.configuration.destinationPath | default "no-path" }}
-    endpointURL: {{ $cluster.barmanObjectStore.configuration.endpointURL | default "https://s3.ap-south-1.amazonaws.com" }}
-    s3Credentials:
-      {{- if $root.Values.cnpgPostgresPlatform.monitoringPlatformEnabled }}
-      inheritFromIAMRole: true
-      {{- else if hasKey $cluster.barmanObjectStore.configuration.s3Credentials "accessKeyId" }}
-      accessKeyId:
-        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyName }}
-        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.keyId }}
-      secretAccessKey:
-        name: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreName }}
-        key: {{ $cluster.barmanObjectStore.configuration.s3Credentials.secreKey }}
-      {{- end }}
-    wal:
-      compression: {{ $cluster.barmanObjectStore.configuration.wal.compression | default "gzip" }}
-      maxParallel: {{ $cluster.barmanObjectStore.configuration.wal.maxParallel | default "8" }}
-      encryption: {{ $cluster.barmanObjectStore.configuration.wal.encryption | default "AES256" }}
+  {{- toYaml $cluster.barmanObjectStore.spec | nindent 2 }}
 {{- end }}
 
-{{- if $root.Values.qvantelGlue.monitoringPlatformEnabled }}
+{{- if eq $addonOperator.monitoringPlatformEnabled "true"}}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
