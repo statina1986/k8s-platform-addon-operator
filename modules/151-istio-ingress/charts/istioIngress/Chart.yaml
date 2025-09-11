@@ -5,20 +5,20 @@ dependencies:
   - name: gateway
     alias: privateIngress
     condition: privateIngressEnabled
-    version: "1.23.2"
+    version: "1.27.1"
     repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: publicIngress
     condition: publicIngressEnabled
-    version: "1.23.2"
+    version: "1.27.1"
     repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: integrationsHttpIngress
     condition: integrationsHttpIngressEnabled
-    version: "1.23.2"
+    version: "1.27.1"
     repository: https://istio-release.storage.googleapis.com/charts
   - name: gateway
     alias: integrationsNonHttpIngress
     condition: integrationsNonHttpIngressEnabled
-    version: "1.23.2"
+    version: "1.27.1"
     repository: https://istio-release.storage.googleapis.com/charts

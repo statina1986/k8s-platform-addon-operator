@@ -1,0 +1,16 @@
+{{ template "chart.header" . }}
+
+This module is responsible for deployment of [Istio](https://github.com/istio/istio) control plane to the cluster
+
+Depends on modules:
+- None
+
+Provides:
+- Istio Control Plane
+
+### Default configuration
+Here are important default configs established:
+* HTTP Retries are disabled by default, because they are not safe for Qvantel products
+* Access Logging for Ingress solution is configured with JSON format including Qvantel specifics like X-Trace-Token
+
+{{ template "chart.valuesSectionHtml" . }}

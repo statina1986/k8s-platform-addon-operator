@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-09-25T14:50:44.764781566Z"
+  generatedAt: "2025-09-10T08:52:47.903870601Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: istio-platform
@@ -9,18 +9,18 @@ chart:
   appVersion: ""
 images:
   - name: pilot
-    image: docker.io/istio/pilot:1.23.2
+    image: docker.io/istio/pilot:1.27.1
     chart: istio-platform
     digests:
-      - digest: sha256:59a252ac64fde086b8ea643a673478441e1e76ecd1848bf44e5db67222e210a3
+      - digest: sha256:9bece77a4c5aa9d02d097cbe0cd55d5dafa007cf8050169b7a5466451db23443
         arch: linux/arm64
-      - digest: sha256:72df012f5c6d427cfa90bbdf26bf8fd6a1648da0fcc33394e6a3d00d46531c09
+      - digest: sha256:f0f6ddae993b70bf3f3a79b6d008d761aef5e37172b9049a5cc19889872e53ae
         arch: linux/amd64
   - name: proxyv2
-    image: docker.io/istio/proxyv2:1.23.2
+    image: docker.io/istio/proxyv2:1.27.1
     chart: istio-platform
     digests:
-      - digest: sha256:0ca972533d44be0e903f3fcdfaf881e1739538336e4c7056c8a1b0b536326d8a
+      - digest: sha256:9f58cfb4854e10ed3923c8fd30f77685859d188cf540bce35809545f945c67c0
         arch: linux/arm64
-      - digest: sha256:84fd20ad035413df3883d427a7d13eeb5163f0c18ba38dc973b70c7c25ba1162
+      - digest: sha256:c799357a34f8918cb3cc47ba50c152d8a43f2875f499e46a9aa2b0537d9ba412
         arch: linux/amd64

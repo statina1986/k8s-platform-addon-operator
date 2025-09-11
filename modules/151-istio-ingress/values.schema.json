@@ -6875,7 +6875,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "openproject.qvantel.svc.cluster.local",
+                                              "default": "openproject-web.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"

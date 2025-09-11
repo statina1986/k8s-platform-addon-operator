@@ -1,14 +1,15 @@
-# istioPlatformNamespace: istio-system
 istioPlatform:
+  # -- Configuration for global module values
   % if 'containerRegistryBase' in values['global']:
   global:
     proxy:      
-      image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.23.2
+      image: ${values['global']['containerRegistryBase']}/istio/proxyv2:1.27.1
   % endif
-  
+  # -- Configuration for base values. See https://github.com/istio/istio/tree/master/manifests/charts/base
   base:
     global:
       istioNamespace: ${values['global']['platformNamespace']}
+  # -- Configuration for istio-discovery values. See https://github.com/istio/istio/tree/master/manifests/charts/istio-control/istio-discovery
   istiod:
     % if values['global']['deployOperators'] == "true":
     enabled: true
@@ -17,7 +18,7 @@ istioPlatform:
     % endif
     pilot:
       % if 'containerRegistryBase' in values['global']:
-      image: ${values['global']['containerRegistryBase']}/istio/pilot:1.23.2
+      image: ${values['global']['containerRegistryBase']}/istio/pilot:1.27.1
       % endif
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
@@ -89,5 +90,3 @@ istioPlatform:
               request_body: "%DYNAMIC_METADATA(envoy.lua:request_body)%"
               response_headers: "%DYNAMIC_METADATA(envoy.lua:response_headers)%"
               response_body: "%DYNAMIC_METADATA(envoy.lua:response_body)%"
-
-

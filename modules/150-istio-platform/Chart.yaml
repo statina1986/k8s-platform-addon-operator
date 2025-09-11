@@ -7,6 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: pilot
-      image: docker.io/istio/pilot:1.23.2
+      image: docker.io/istio/pilot:1.27.1
     - name: proxyv2
-      image: docker.io/istio/proxyv2:1.23.2
+      image: docker.io/istio/proxyv2:1.27.1
