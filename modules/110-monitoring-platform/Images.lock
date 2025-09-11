@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-09-05T11:25:31.298891Z"
+  generatedAt: "2025-09-11T11:54:07.552537Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -161,12 +161,12 @@ images:
       - digest: sha256:a9a8d1020ae750bfa6711700546cc979e19ad1b630df3eed20f649bb850f900f
         arch: linux/arm64
   - name: grafana-plugins
-    image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_4_f26bb6e90
+    image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_7_e03920fe8
     chart: monitoring-platform
     digests:
-      - digest: sha256:df171b61de00d913db12992bc6005989ded8215454980bce264608b39fffe88a
+      - digest: sha256:9b1e84b3c741b73ce7477ffe659a6c520503e757272ebce54a396dad7c335f3b
         arch: linux/arm64
-      - digest: sha256:632831c45ad02a28f0309866f100351ca94201f09704431d0f05e6a111288f27
+      - digest: sha256:e8ae1ac0c0e258a22bc070db81c4a7c780d6c85667f3cc7cbda9ff2a5b837e58
         arch: linux/amd64
   - name: alloy
     image: grafana/alloy:v1.10.1
