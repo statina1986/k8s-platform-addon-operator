@@ -1,0 +1,23 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.progress }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{.Release.Name}}-progress.rules
+  namespace: {{.Release.Namespace}}
+  generation: 1
+  labels:
+    app: kube-prometheus-stack
+    release: {{.Release.Name}}
+spec:
+  groups:
+  - name: progress.alerts
+    rules:
+      - alert: DatabaseBackupFailed
+        expr: 'db_stats{indicator="lastbackup"} == 0'
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          brief: "Backup on Database {{` {{ $labels.database }} `}} and Instance {{` {{ $labels.instance }} `}} has failed"
+          procedure: Create a ticket to Platform Team to be reviewed during business hours
+{{- end }}

@@ -31,6 +31,7 @@ monitoringPlatform:
       redis: ${addon_operator['redisPlatformEnabled']}
       rabbitmq: ${addon_operator['rabbitmqPlatformEnabled']}
       mongodb: ${addon_operator['mongodbPlatformEnabled']}
+      progress: ${addon_operator['progressPlatformEnabled']}
   alloy:
     enabled: false
     global:
