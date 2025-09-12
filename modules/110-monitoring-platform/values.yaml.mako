@@ -554,6 +554,11 @@ monitoringPlatform:
            % endif
           repository: platform/platform-k8s-tools-minimal
           tag: 1.3.2_202508131123_master_e140ddde
+        securityContext:
+          capabilities:
+            add:
+            - CHOWN
+            - DAC_READ_SEARCH
       extraContainerVolumes:
         - name: grafana-plugins
           emptyDir: { }
