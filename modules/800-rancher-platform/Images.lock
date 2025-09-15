@@ -1,13 +1,85 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-18T09:34:11.196565897Z"
+  generatedAt: "2025-09-15T08:13:07.405740342Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: rancher-platform
   version: 0.0.1
   appVersion: ""
 images:
+  - name: fleet
+    image: rancher/fleet:v0.12.4
+    chart: rancher-platform
+    digests:
+      - digest: sha256:3deeb761623c9802ddd8d2f3e77859cee36368aec27a6e692874ef4c267e440e
+        arch: linux/amd64
+      - digest: sha256:088a5dc951351ba599f9ae64ed67643962c9f1ee5376d27a57f3b50cbedb3cb9
+        arch: linux/arm64
+  - name: fleet-agent
+    image: rancher/fleet-agent:v0.12.4
+    chart: rancher-platform
+    digests:
+      - digest: sha256:1ef19c841e549ce635f04113491e23581578f948fdaa676be1da50427361456c
+        arch: linux/amd64
+      - digest: sha256:17a2f2363e08eb3e29a333b76055590c49999b2fe18d05e7cf553cce5141c663
+        arch: linux/arm64
+  - name: rancher-webhook
+    image: rancher/rancher-webhook:v0.7.1
+    chart: rancher-platform
+    digests:
+      - digest: sha256:39dd2028d90ea0aa7f197d42c9698172722cead52b10b940fb11c98c19943c71
+        arch: linux/arm64
+      - digest: sha256:46bafcab1444dec88050c56d18aac6c0b2c5b91078c03ceee1cc77127d33d8a1
+        arch: linux/amd64
+  - name: rancher
+    image: rancher/rancher:v2.11.3
+    chart: rancher-platform
+    digests:
+      - digest: sha256:ee0ee68e44f5cf07eb7d519d119c4f6bbfe3542a92dcecb17d734a8fd9124407
+        arch: linux/amd64
+      - digest: sha256:77fc0fc58cc597c2bfe30285292f49dc86fd4e629552a068d6627f96d048cb5e
+        arch: linux/arm64
+  - name: shell
+    image: rancher/shell:v0.4.1
+    chart: rancher-platform
+    digests:
+      - digest: sha256:4d39e2496b8369ff14c48c3e5d463dcc7cdeb07a68866373b3945cd98b7a4f42
+        arch: linux/amd64
+      - digest: sha256:27160b3ef3f4928694f865b384db37dc80291a577d0f53c73d89eff7141c9166
+        arch: linux/arm64
+  - name: rancher-agent
+    image: rancher/rancher-agent:v2.11.3
+    chart: rancher-platform
+    digests:
+      - digest: sha256:f5abf416f8adfc5e2fd5146dcceba34af94c9edc4b372ceef0e6eb674cda58c8
+        arch: linux/amd64
+      - digest: sha256:3dfdf732d54f87cda3d2306aa5521dc9f3238364de43ac7c7b9a6a7a4da9d4ac
+        arch: linux/arm64
+  - name: kubectl
+    image: rancher/kubectl:v1.32.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:9cba6e2d9e40cd48f794de8c3186ab3cdd99f4bf2c29bda5a678fa56ea150aa9
+        arch: linux/amd64
+      - digest: sha256:c99f8764556297a311b46f78fccb0c6cca6b5c51c02103b730a16c66c799dcda
+        arch: linux/arm64
+  - name: mirrored-cluster-api-controller
+    image: rancher/mirrored-cluster-api-controller:v1.9.5
+    chart: rancher-platform
+    digests:
+      - digest: sha256:546c6ec38d4481620f5dd8b8c3f927fed6c8b5e0482aca85e04e134e1d877ce9
+        arch: linux/amd64
+      - digest: sha256:cc75e100fb2ede67a10c3e47499330b8c34c9cd20275ab138af4be3cadb5c054
+        arch: linux/arm64
+  - name: system-upgrade-controller
+    image: rancher/system-upgrade-controller:v0.15.2
+    chart: rancher-platform
+    digests:
+      - digest: sha256:d87432faf7564063dc4e932dfb9aabf8454314b498b1d12754c9f242caf9bba2
+        arch: linux/amd64
+      - digest: sha256:5597d06a908cf8cc793f2eac10e387c71546b292907486303058afe7f782590e
+        arch: linux/arm64
   - name: fleet
     image: rancher/fleet:v0.10.2
     chart: rancher-platform

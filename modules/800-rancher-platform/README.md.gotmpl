@@ -1,0 +1,31 @@
+{{ template "chart.header" . }}
+
+rancher-platform module
+
+This module is created for Rancher installations
+
+Provides: Rancher management cluster
+
+For air-gapped installations please follow the rancher air-gapped installation guide:
+
+https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/air-gapped-helm-cli-install
+
+Greater list of helm values can be found from:
+https://ranchermanager.docs.rancher.com/v2.9/getting-started/installation-and-upgrade/installation-references/helm-chart-options#advanced-options
+
+Dependencies:
+ - [cert-manager](../101-cert-platform/)
+
+Known issues:
+  - configuration for older psp might need to be set in the values file due to older charts residing in the module
+
+### If needed configuration to bypass psp check
+  ```
+    rancher:
+      global:
+        cattle:
+          psp:
+            enabled: false
+  ```
+
+{{ template "chart.valuesSectionHtml" . }}

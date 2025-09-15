@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "rancherHelmVersion": {
+      "default": "2.9.2",
+      "description": "We provide multiple versions of the rancher with same module this can be set to supported version",
+      "required": [],
+      "title": "rancherHelmVersion",
+      "type": "string"
+    },
+    "rancherPlatform": {
+      "description": "Default rancher configurations",
+      "properties": {
+        "rancher": {
+          "properties": {
+            "hostname": {
+              "default": "",
+              "description": "Hostname is required",
+              "required": [],
+              "title": "hostname",
+              "type": "string"
+            },
+            "ingress": {
+              "description": "Ingress set to false due to Istio being prefered",
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "ingress",
+              "type": "object"
+            },
+            "privateCA": {
+              "default": false,
+              "description": "Private Ca set to false by default",
+              "required": [],
+              "title": "privateCA",
+              "type": "boolean"
+            },
+            "rancherImage": {
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/rancher/rancher",
+              "required": [],
+              "title": "rancherImage",
+              "type": "string"
+            },
+            "systemDefaultRegistry": {
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+              "required": [],
+              "title": "systemDefaultRegistry",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "rancher",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "rancherPlatform",
+      "type": "object"
+    },
+    "rancherPlatformNamespace": {
+      "default": "cattle-system",
+      "description": "Rancher uses different default namespace from normal platform",
+      "required": [],
+      "title": "rancherPlatformNamespace",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
