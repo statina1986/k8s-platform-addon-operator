@@ -641,7 +641,7 @@ monitoringPlatform:
             % if 'tempo-distributed' in values['monitoringPlatform'] and values['monitoringPlatform']['tempo-distributed']:
             - name: Tempo
               type: tempo              
-              url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-query-frontend.${values['global']['platformNamespace']}.svc.:3100
+              url: http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-query-frontend.${values['global']['platformNamespace']}.svc.cluster.local.:3200
               jsonData:
                 serviceMap:
                   datasourceUid: 'prometheus'
