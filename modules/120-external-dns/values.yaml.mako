@@ -12,9 +12,6 @@ externalDns:
       zoneType: public
     sources:
       - crd
-      - service
-      - ingress
-      - istio-gateway
       - istio-virtualservice
     txtPrefix: extdns.
     interval: 10m
