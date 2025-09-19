@@ -166,6 +166,13 @@ keycloakPlatform:
                           path: configurator.yml
     configmapValues:
       realms:
+        % if values.get('keycloakPlatform', {}).get('externalEndpointsAvailable', False):
+        master:
+          config:
+            # this is needed because otherwise master realm admin console tries to fetch things via "auth" which does not include master realm
+            # same config will be applied later from system-spec but it is good to have console working out of the box.
+            frontend_url: https://keycloak${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth
+        % endif
         qvantel:
           clients:
             # note: all clients will be created, regardless if they are used.
