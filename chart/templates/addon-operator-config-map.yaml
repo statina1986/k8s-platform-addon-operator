@@ -177,11 +177,6 @@ data:
   rancherPlatform: {{ print "|\n" (.Values.modulesConfig.rancherPlatform | toYaml | indent 4) }}
   {{- end }}
 
-  sftpEnabled: "{{ .Values.modulesConfig.sftpEnabled }}"
-  {{- if .Values.modulesConfig.sftp }}
-  sftp: {{ print "|\n" (.Values.modulesConfig.sftp | toYaml | indent 4) }}
-  {{- end }}
-
   sftpgoPlatformEnabled: "{{ .Values.modulesConfig.sftpgoPlatformEnabled }}"
   {{- if .Values.modulesConfig.sftpgoPlatform }}
   sftpgoPlatform: {{ print "|\n" (.Values.modulesConfig.sftpgoPlatform | toYaml | indent 4) }}

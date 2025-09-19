@@ -70,7 +70,6 @@ rabbitmqPlatformEnabled: "true"
 rancherPlatformEnabled: "true"
 redisPlatform: {}
 redisPlatformEnabled: "true"
-sftpEnabled: "true"
 sftpgoPlatformEnabled: "true"
 vaultPlatform: {}
 vaultPlatformEnabled: "true"
