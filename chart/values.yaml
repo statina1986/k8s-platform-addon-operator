@@ -87,7 +87,6 @@ modulesConfig:
   rabbitmqPlatformEnabled: "false"
   redisPlatformEnabled: "false"
   rancherPlatformEnabled: "false"
-  sftpEnabled: "false"
   sftpgoPlatformEnabled: "false"
   smartsearchPlatformEnabled: "false"
   vaultPlatformEnabled: "false"
