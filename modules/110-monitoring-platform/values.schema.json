@@ -1503,6 +1503,38 @@
                       "required": [],
                       "title": "image",
                       "type": "object"
+                    },
+                    "securityContext": {
+                      "properties": {
+                        "capabilities": {
+                          "properties": {
+                            "add": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  },
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "add",
+                              "type": "array"
+                            }
+                          },
+                          "required": [],
+                          "title": "capabilities",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "securityContext",
+                      "type": "object"
                     }
                   },
                   "required": [],
@@ -4769,6 +4801,12 @@
                   "default": true,
                   "required": [],
                   "title": "mongodb",
+                  "type": "boolean"
+                },
+                "progress": {
+                  "default": true,
+                  "required": [],
+                  "title": "progress",
                   "type": "boolean"
                 },
                 "rabbitmq": {

@@ -167,7 +167,7 @@
                       "type": "string"
                     },
                     "repository": {
-                      "default": "jetstack/cert-manager-ctl",
+                      "default": "jetstack/cert-manager-startupapicheck",
                       "required": [],
                       "title": "repository",
                       "type": "string"
