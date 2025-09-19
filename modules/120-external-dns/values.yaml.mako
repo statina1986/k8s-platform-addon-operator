@@ -1,6 +1,6 @@
 externalDns:
   external-dns:
-    namespace: "platform"
+    namespace: ${values['global']['platformNamespace']}
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
