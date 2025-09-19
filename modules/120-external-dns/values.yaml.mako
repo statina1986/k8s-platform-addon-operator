@@ -1,5 +1,6 @@
 externalDns:
   external-dns:
+    namespace: ${values['global']['platformNamespace']}
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -12,9 +13,6 @@ externalDns:
       zoneType: public
     sources:
       - crd
-      - service
-      - ingress
-      - istio-gateway
       - istio-virtualservice
     txtPrefix: extdns.
     interval: 10m
