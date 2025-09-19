@@ -88,7 +88,7 @@ keycloakPlatform:
   database:
     name: qvt-postgredb
   configurator:
-    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d    
+    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.20.3.20250721061444_develop_e1ae757a
     spec:
       backoffLimit: 5
       template:
@@ -237,9 +237,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     healthPort: 9000
-    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
-    # keycloak 25 moved health to a separate port 9000 https://www.keycloak.org/docs/latest/release_notes/index.html#management-port-for-metrics-and-health-endpoints
-    
+    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.3.4.1.20250915091446_master_91aeae1b
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
