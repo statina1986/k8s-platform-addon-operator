@@ -20,3 +20,5 @@ annotations:
       image: prom/mysqld-exporter:v0.15.1
     - name: maxscale-exporter
       image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+    - name: sql-exporter
+      image: docker.io/burningalchemist/sql_exporter:0.18

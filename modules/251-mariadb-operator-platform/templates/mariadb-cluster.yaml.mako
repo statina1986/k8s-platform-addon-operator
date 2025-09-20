@@ -61,7 +61,7 @@ spec:
   sessionAffinity: None
   type: ClusterIP
 
-{{- if $cluster.vaultConfiguration }}
+{{- if and (eq $addonoperator.vaultPlatformEnabled "true") $cluster.vaultConfiguration }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
@@ -172,6 +172,149 @@ spec:
     cron: {{ $cluster.spec.backup.scheduledBackup | default "0 0 * * *" }}
     suspend: {{ $cluster.spec.backup.suspend | default "false" }}
     immediate: true
+{{- end }}
+
+{{- if eq $addonoperator.monitoringPlatformEnabled "true" }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $dbClusterName }}-init-sql
+  labels:
+    app.kubernetes.io/name: {{ $dbClusterName }}-init-sql
+    app.kubernetes.io/part-of: mariadb
+data:
+  init.sql: |
+    UPDATE performance_schema.setup_instruments
+    SET ENABLED='YES', TIMED='YES'
+    WHERE NAME REGEXP '^(statement/|wait/|stage/)';
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $dbClusterName }}-sql-exporter-config
+  labels:
+    app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+    app.kubernetes.io/part-of: mariadb
+data:
+  config.yml: |
+    {{- tpl $cluster.defaultSqlExporter.config.content $root | nindent 4 }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $dbClusterName }}-sql-exporter
+  labels:
+    app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+    app.kubernetes.io/part-of: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+        app.kubernetes.io/part-of: mariadb
+    spec:
+      initContainers:
+        - name: render-config
+          image: python:3.12-alpine
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              python - <<'PY'
+              import os, urllib.parse
+              pw = os.environ.get('MYSQL_PASSWORD', '')
+              ns = os.environ.get('POD_NAMESPACE', '')
+              host = f"{{ $dbClusterName }}-main.{ns}.svc"
+              # Build URL-style DSN expected by sql_exporter: mysql://user:pass@host:port/
+              dsn = f"mysql://root:{urllib.parse.quote(pw, safe='')}@{host}:3306/"
+              with open('/config-template/config.yml', 'r', encoding='utf-8') as src:
+                  content = src.read().replace('__DSN__', dsn)
+              with open('/config/config.yml', 'w', encoding='utf-8') as dst:
+                  dst.write(content)
+              PY
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $dbClusterName }}-root
+                  key: password
+          volumeMounts:
+            - name: config-template
+              mountPath: /config-template
+            - name: config
+              mountPath: /config
+      containers:
+        - name: sql-exporter
+          image: "{{ (index $root.Values.mariadbOperatorPlatform "mariadb-operator").config.sqlExporterImage }}"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--config.file=/config/config.yml"
+            - "--web.listen-address=:{{ $cluster.defaultSqlExporter.service.port | default 9399 }}"
+          ports:
+            - name: http
+              containerPort: {{ $cluster.defaultSqlExporter.service.port | default 9399 }}
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          resources: {}
+      volumes:
+        - name: config-template
+          configMap:
+            name: {{ $dbClusterName }}-sql-exporter-config
+        - name: config
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $dbClusterName }}-sql-exporter
+  labels:
+    app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+    app.kubernetes.io/part-of: mariadb
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ $cluster.defaultSqlExporter.service.port | default 9399 }}
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $dbClusterName }}-sql-exporter
+  labels:
+    release: "{{ $root.Values.global.helmReleaseNamePrefix }}monitoring-platform"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+  endpoints:
+    - port: http
+      path: /metrics
+      scheme: http
 {{- end }}
 
 {{- end }}
