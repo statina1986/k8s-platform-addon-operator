@@ -91,6 +91,8 @@ class Kv1SecretsHook(Hook):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKV1Secrets', {}).get('enabled') in ('false', False):
                     print("Skipping Vault KV1 Secrets sync as it is disabled in configuration")
                     return
+                
+                vault_client = get_vault_client()
 
                 if eventName == "Deleted":
                     # vault_client.secrets.kv.v1.delete_secret(path)
