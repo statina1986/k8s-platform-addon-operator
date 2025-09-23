@@ -8,6 +8,6 @@
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.releases.hashicorp.com | vault | 0.28.1 |
+| https://helm.releases.hashicorp.com | vault | 0.30.1 |
 | oci://ghcr.io/bank-vaults/helm-charts | vault-secrets-webhook | 1.21.3 |
 
