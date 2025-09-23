@@ -156,6 +156,33 @@ Enable full response logging for Integrations Http Ingress gateway
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressRemoveSecurityHeaders">istioIngress.integrationsHttpIngressRemoveSecurityHeaders</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>[]</code></pre>
+</td>
+			<td><div>
+
+Additional security headers to filter out for Integrations Http Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--integrationsHttpIngressRemoveSecurityHeadersDefaults">istioIngress.integrationsHttpIngressRemoveSecurityHeadersDefaults</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- x-envoy-upstream-service-time
+- server</code></pre>
+</td>
+			<td><div>
+
+Default security headers to filter out for Integrations Http Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngress">istioIngress.integrationsNonHttpIngress</td>
 			<td>object</td>
 			<td>
@@ -280,6 +307,33 @@ Enable full request logging for Integrations Non Http Ingress gateway
 			<td><div>
 
 Enable full response logging for Integrations Non Http Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressRemoveSecurityHeaders">istioIngress.integrationsNonHttpIngressRemoveSecurityHeaders</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>[]</code></pre>
+</td>
+			<td><div>
+
+Additional security headers to filter out for Integrations Non Http Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--integrationsNonHttpIngressRemoveSecurityHeadersDefaults">istioIngress.integrationsNonHttpIngressRemoveSecurityHeadersDefaults</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- x-envoy-upstream-service-time
+- server</code></pre>
+</td>
+			<td><div>
+
+Default security headers to filter out for Integrations Non Http Ingress gateway
 
 </div>
 </td>
@@ -470,6 +524,33 @@ Enable full response logging for Private Ingress gateway
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;" id="istioIngress--privateIngressRemoveSecurityHeaders">istioIngress.privateIngressRemoveSecurityHeaders</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>[]</code></pre>
+</td>
+			<td><div>
+
+Additional security headers to filter out for Private Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--privateIngressRemoveSecurityHeadersDefaults">istioIngress.privateIngressRemoveSecurityHeadersDefaults</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- x-envoy-upstream-service-time
+- server</code></pre>
+</td>
+			<td><div>
+
+Default security headers to filter out for Private Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="istioIngress--publicIngress">istioIngress.publicIngress</td>
 			<td>object</td>
 			<td>
@@ -594,6 +675,33 @@ Enable full request logging for Public Ingress gateway
 			<td><div>
 
 Enable full response logging for Public Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--publicIngressRemoveSecurityHeaders">istioIngress.publicIngressRemoveSecurityHeaders</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>[]</code></pre>
+</td>
+			<td><div>
+
+Additional security headers to filter out for Public Ingress gateway
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--publicIngressRemoveSecurityHeadersDefaults">istioIngress.publicIngressRemoveSecurityHeadersDefaults</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>- x-envoy-upstream-service-time
+- server</code></pre>
+</td>
+			<td><div>
+
+Default security headers to filter out for Public Ingress gateway
 
 </div>
 </td>
