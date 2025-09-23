@@ -113,6 +113,7 @@ mariadbOperatorPlatform:
           serviceMonitor:
             prometheusRelease: "{{ $.root.Values.global.helmReleaseNamePrefix }}monitoring-platform"
         {{- end }}
+        serviceAccountName: "platform"
         affinity:
           antiAffinityEnabled: true  
         tolerations:
