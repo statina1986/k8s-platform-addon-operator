@@ -170,13 +170,13 @@
                           "type": "string"
                         },
                         "repository": {
-                          "default": "ubi9/ubi-minimal",
+                          "default": "platform/platform-k8s-tools-minimal",
                           "required": [],
                           "title": "repository",
                           "type": "string"
                         },
                         "tag": {
-                          "default": "9.4-1194",
+                          "default": "1.3.3_202509080945_master_90384dcc",
                           "required": [],
                           "title": "tag",
                           "type": "string"
@@ -234,12 +234,6 @@
                           "default": "jfrog/router",
                           "required": [],
                           "title": "repository",
-                          "type": "string"
-                        },
-                        "tag": {
-                          "default": "7.118.0",
-                          "required": [],
-                          "title": "tag",
                           "type": "string"
                         }
                       },
@@ -438,13 +432,13 @@
                           "type": "string"
                         },
                         "repository": {
-                          "default": "ubi9/ubi-minimal",
+                          "default": "platform/platform-k8s-tools-minimal",
                           "required": [],
                           "title": "repository",
                           "type": "string"
                         },
                         "tag": {
-                          "default": "9.4-1194",
+                          "default": "1.3.3_202509080945_master_90384dcc",
                           "required": [],
                           "title": "tag",
                           "type": "string"
@@ -502,12 +496,6 @@
                           "default": "jfrog/router",
                           "required": [],
                           "title": "repository",
-                          "type": "string"
-                        },
-                        "tag": {
-                          "default": "7.118.0",
-                          "required": [],
-                          "title": "tag",
                           "type": "string"
                         }
                       },

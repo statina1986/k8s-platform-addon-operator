@@ -6,6 +6,7 @@ This module provides two versions of [Artifactory](https://jfrog.com/artifactory
 
 Depends on modules:
 - [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) which is by default is used as main database for both versions.
+- [qvantel-glue](../320-qvantel-glue/) needed for provisioing secrets.
 
 Provides:
 - OSS artifactory
@@ -168,8 +169,7 @@ Enable PostgreSQL dependency sub-chart. Not required in qvantel platform.
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>image:
     registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-    repository: jfrog/router
-    tag: 7.118.0</code></pre>
+    repository: jfrog/router</code></pre>
 </td>
 			<td><div>
 
@@ -348,8 +348,7 @@ Enable PostgreSQL dependency sub-chart. Not required in qvantel platform.
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>image:
     registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-    repository: jfrog/router
-    tag: 7.118.0</code></pre>
+    repository: jfrog/router</code></pre>
 </td>
 			<td><div>
 

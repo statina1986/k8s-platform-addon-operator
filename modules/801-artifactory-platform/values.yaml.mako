@@ -11,15 +11,16 @@ artifactoryPlatform:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
           repository: jfrog/router
-          tag: 7.118.0
           % endif
       initContainers:
         image:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          repository: ubi9/ubi-minimal
-          tag: 9.4-1194
+          % else:
+          registry: platform.artifactory.qvantel.net
           % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
       artifactory:
         # -- 'name' must be same with the 'fullnameOverride'.
         name: "artifactory-oss"
@@ -69,15 +70,16 @@ artifactoryPlatform:
           % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}        
           repository: jfrog/router
-          tag: 7.118.0
           % endif
       initContainers:
         image:
           % if 'containerRegistryBase' in values['global']:
-          registry: ${values['global']['containerRegistryBase']}      
-          repository: ubi9/ubi-minimal
-          tag: 9.4-1194
+          registry: ${values['global']['containerRegistryBase']}
+          % else:
+          registry: platform.artifactory.qvantel.net
           % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
       artifactory:
         # -- 'name' must be same with the 'fullnameOverride'.
         name: "artifactory-jcr"
