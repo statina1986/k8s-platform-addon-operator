@@ -10,6 +10,12 @@ istioIngress:
   publicIngressLogFullResponse: false
   # -- Configure request buffering (in bytes) for Public Ingress gateway. Set to 0 for disabling buffering.
   publicIngressBufferHttpRequestSize: 0
+  # -- Default security headers to filter out for Public Ingress gateway
+  publicIngressRemoveSecurityHeadersDefaults:
+    - x-envoy-upstream-service-time
+    - server
+  # -- Additional security headers to filter out for Public Ingress gateway
+  publicIngressRemoveSecurityHeaders: []
   # -- Configuration for underlying `gateway` helm-chart for Public Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   publicIngress:
     name: ${values['global']['helmReleaseNamePrefix']}public-ingress
@@ -100,6 +106,12 @@ istioIngress:
   privateIngressLogFullResponse: false
   # -- Configure request buffering (in bytes) for Private Ingress gateway. Set to 0 for disabling buffering.
   privateIngressBufferHttpRequestSize: 0
+  # -- Default security headers to filter out for Private Ingress gateway
+  privateIngressRemoveSecurityHeadersDefaults:
+    - x-envoy-upstream-service-time
+    - server
+  # -- Additional security headers to filter out for Private Ingress gateway
+  privateIngressRemoveSecurityHeaders: []
   # -- Configuration for underlying `gateway` helm-chart for Private Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   privateIngress:
     name: ${values['global']['helmReleaseNamePrefix']}private-ingress
@@ -233,6 +245,12 @@ istioIngress:
   integrationsHttpIngressLogFullResponse: false
   # -- Configure request buffering (in bytes) for Integrations Http Ingress gateway. Set to 0 for disabling buffering.
   integrationsHttpIngressBufferHttpRequestSize: 0
+  # -- Default security headers to filter out for Integrations Http Ingress gateway
+  integrationsHttpIngressRemoveSecurityHeadersDefaults:
+    - x-envoy-upstream-service-time
+    - server
+  # -- Additional security headers to filter out for Integrations Http Ingress gateway
+  integrationsHttpIngressRemoveSecurityHeaders: []
   # -- Configuration for underlying `gateway` helm-chart for Integrations Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsHttpIngress:
     name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
@@ -323,6 +341,12 @@ istioIngress:
   integrationsNonHttpIngressLogFullResponse: false
   # -- Configure request buffering (in bytes) for Integrations Non Http Ingress gateway. Set to 0 for disabling buffering.
   integrationsNonHttpIngressBufferHttpRequestSize: 0
+  # -- Default security headers to filter out for Integrations Non Http Ingress gateway
+  integrationsNonHttpIngressRemoveSecurityHeadersDefaults:
+    - x-envoy-upstream-service-time
+    - server
+  # -- Additional security headers to filter out for Integrations Non Http Ingress gateway
+  integrationsNonHttpIngressRemoveSecurityHeaders: []
   # -- Configuration for underlying `gateway` helm-chart for Integrations Non Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md
   integrationsNonHttpIngress:
     name: ${values['global']['helmReleaseNamePrefix']}integrations-non-http-ingress

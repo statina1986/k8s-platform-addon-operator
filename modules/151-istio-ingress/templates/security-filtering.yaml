@@ -1,0 +1,148 @@
+# Removing these headers is primarily recommended to prevent leakage of privacy information or product data (e.g. version numbers, software) which an attacker could use for targeted attacks
+{{- if .Values.istioIngress.privateIngressEnabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: private-ingress-remove-security-headers
+spec:
+  workloadSelector:
+    labels:
+      istio: {{ .Values.global.helmReleaseNamePrefix }}private-ingress
+  configPatches:
+  - applyTo: NETWORK_FILTER 
+    match:
+      context: GATEWAY
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          server_header_transformation: PASS_THROUGH
+  - applyTo: ROUTE_CONFIGURATION
+    patch:
+      operation: MERGE
+      value:
+        response_headers_to_remove:
+{{- $defaults := .Values.istioIngress.privateIngressRemoveSecurityHeadersDefaults | default (list) -}}
+{{- $extras := .Values.istioIngress.privateIngressRemoveSecurityHeaders | default (list) -}}
+{{- $merged := uniq (concat $defaults $extras) -}}
+{{- range $h := $merged }}
+        - {{ $h | lower | quote }}
+{{- end }}
+{{- end }}
+---
+{{- if .Values.istioIngress.publicIngressEnabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: public-ingress-remove-security-headers
+spec:
+  workloadSelector:
+    labels:
+      istio: {{ .Values.global.helmReleaseNamePrefix }}public-ingress
+  configPatches:
+  - applyTo: NETWORK_FILTER 
+    match:
+      context: GATEWAY
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          server_header_transformation: PASS_THROUGH
+  - applyTo: ROUTE_CONFIGURATION
+    patch:
+      operation: MERGE
+      value:
+        response_headers_to_remove:
+{{- $defaults := .Values.istioIngress.publicIngressRemoveSecurityHeadersDefaults | default (list) -}}
+{{- $extras := .Values.istioIngress.publicIngressRemoveSecurityHeaders | default (list) -}}
+{{- $merged := uniq (concat $defaults $extras) -}}
+{{- range $h := $merged }}
+        - {{ $h | lower | quote }}
+{{- end }}
+{{- end }}
+---
+{{- if .Values.istioIngress.integrationsHttpIngressEnabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: integrations-http-ingress-remove-security-headers
+spec:
+  workloadSelector:
+    labels:
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-http-ingress
+  configPatches:
+  - applyTo: NETWORK_FILTER 
+    match:
+      context: GATEWAY
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          server_header_transformation: PASS_THROUGH
+  - applyTo: ROUTE_CONFIGURATION
+    patch:
+      operation: MERGE
+      value:
+        response_headers_to_remove:
+{{- $defaults := .Values.istioIngress.integrationsHttpIngressRemoveSecurityHeadersDefaults | default (list) -}}
+{{- $extras := .Values.istioIngress.integrationsHttpIngressRemoveSecurityHeaders | default (list) -}}
+{{- $merged := uniq (concat $defaults $extras) -}}
+{{- range $h := $merged }}
+        - {{ $h | lower | quote }}
+{{- end }}
+{{- end }}
+---
+{{- if .Values.istioIngress.integrationsNonHttpIngressEnabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: integrations-non-http-ingress-remove-security-headers
+spec:
+  workloadSelector:
+    labels:
+      istio: {{ .Values.global.helmReleaseNamePrefix }}integrations-non-http-ingress
+  configPatches:
+  - applyTo: NETWORK_FILTER 
+    match:
+      context: GATEWAY
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          server_header_transformation: PASS_THROUGH
+  - applyTo: ROUTE_CONFIGURATION
+    patch:
+      operation: MERGE
+      value:
+        response_headers_to_remove:
+{{- $defaults := .Values.istioIngress.integrationsNonHttpIngressRemoveSecurityHeadersDefaults | default (list) -}}
+{{- $extras := .Values.istioIngress.integrationsNonHttpIngressRemoveSecurityHeaders | default (list) -}}
+{{- $merged := uniq (concat $defaults $extras) -}}
+{{- range $h := $merged }}
+        - {{ $h | lower | quote }}
+{{- end }}
+{{- end }}

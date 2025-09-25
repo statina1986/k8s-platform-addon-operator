@@ -412,6 +412,34 @@
           "title": "integrationsHttpIngressLogFullResponse",
           "type": "boolean"
         },
+        "integrationsHttpIngressRemoveSecurityHeaders": {
+          "description": "Additional security headers to filter out for Integrations Http Ingress gateway",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "integrationsHttpIngressRemoveSecurityHeaders",
+          "type": "array"
+        },
+        "integrationsHttpIngressRemoveSecurityHeadersDefaults": {
+          "description": "Default security headers to filter out for Integrations Http Ingress gateway",
+          "items": {
+            "anyOf": [
+              {
+                "required": [],
+                "type": "string"
+              },
+              {
+                "required": [],
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "integrationsHttpIngressRemoveSecurityHeadersDefaults",
+          "type": "array"
+        },
         "integrationsNonHttpIngress": {
           "description": "Configuration for underlying `gateway` helm-chart for Integrations Non Http Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md",
           "properties": {
@@ -820,6 +848,34 @@
           "required": [],
           "title": "integrationsNonHttpIngressLogFullResponse",
           "type": "boolean"
+        },
+        "integrationsNonHttpIngressRemoveSecurityHeaders": {
+          "description": "Additional security headers to filter out for Integrations Non Http Ingress gateway",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "integrationsNonHttpIngressRemoveSecurityHeaders",
+          "type": "array"
+        },
+        "integrationsNonHttpIngressRemoveSecurityHeadersDefaults": {
+          "description": "Default security headers to filter out for Integrations Non Http Ingress gateway",
+          "items": {
+            "anyOf": [
+              {
+                "required": [],
+                "type": "string"
+              },
+              {
+                "required": [],
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "integrationsNonHttpIngressRemoveSecurityHeadersDefaults",
+          "type": "array"
         },
         "pomeriumEnabled": {
           "default": false,
@@ -1556,6 +1612,34 @@
           "title": "privateIngressLogFullResponse",
           "type": "boolean"
         },
+        "privateIngressRemoveSecurityHeaders": {
+          "description": "Additional security headers to filter out for Private Ingress gateway",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "privateIngressRemoveSecurityHeaders",
+          "type": "array"
+        },
+        "privateIngressRemoveSecurityHeadersDefaults": {
+          "description": "Default security headers to filter out for Private Ingress gateway",
+          "items": {
+            "anyOf": [
+              {
+                "required": [],
+                "type": "string"
+              },
+              {
+                "required": [],
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "privateIngressRemoveSecurityHeadersDefaults",
+          "type": "array"
+        },
         "publicIngress": {
           "description": "Configuration for underlying `gateway` helm-chart for Public Ingress gateway. See https://github.com/istio/istio/blob/master/manifests/charts/gateway/README.md",
           "properties": {
@@ -1958,6 +2042,34 @@
           "required": [],
           "title": "publicIngressLogFullResponse",
           "type": "boolean"
+        },
+        "publicIngressRemoveSecurityHeaders": {
+          "description": "Additional security headers to filter out for Public Ingress gateway",
+          "items": {
+            "required": []
+          },
+          "required": [],
+          "title": "publicIngressRemoveSecurityHeaders",
+          "type": "array"
+        },
+        "publicIngressRemoveSecurityHeadersDefaults": {
+          "description": "Default security headers to filter out for Public Ingress gateway",
+          "items": {
+            "anyOf": [
+              {
+                "required": [],
+                "type": "string"
+              },
+              {
+                "required": [],
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "publicIngressRemoveSecurityHeadersDefaults",
+          "type": "array"
         },
         "virtualServices": {
           "description": "VirtualServices to be provisioned.",
