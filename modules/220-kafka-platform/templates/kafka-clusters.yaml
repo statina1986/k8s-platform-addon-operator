@@ -7,8 +7,12 @@ apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: {{ . }}
+  {{- with $current.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
 spec:
   {{- toYaml $current.spec | nindent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

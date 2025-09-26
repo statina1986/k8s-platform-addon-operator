@@ -14,6 +14,19 @@
           "properties": {
             "kafka-cluster": {
               "properties": {
+                "annotations": {
+                  "properties": {
+                    "strimzi.io/node-pools": {
+                      "default": "enabled",
+                      "required": [],
+                      "title": "strimzi.io/node-pools",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "annotations",
+                  "type": "object"
+                },
                 "enabled": {
                   "default": true,
                   "required": [],
@@ -400,7 +413,7 @@
                                   "properties": {
                                     "podAntiAffinity": {
                                       "properties": {
-                                        "requiredDuringSchedulingIgnoredDuringExecution": {
+                                        "preferredDuringSchedulingIgnoredDuringExecution": {
                                           "items": {
                                             "anyOf": [
                                               {
@@ -500,7 +513,7 @@
                                             "required": []
                                           },
                                           "required": [],
-                                          "title": "requiredDuringSchedulingIgnoredDuringExecution",
+                                          "title": "preferredDuringSchedulingIgnoredDuringExecution",
                                           "type": "array"
                                         }
                                       },
@@ -564,7 +577,7 @@
                           "type": "object"
                         },
                         "version": {
-                          "default": "3.8.0",
+                          "default": "3.9.1",
                           "required": [],
                           "title": "version",
                           "type": "string"
@@ -1187,7 +1200,7 @@
                   "type": "string"
                 },
                 "tag": {
-                  "default": "126980339425e4bff3d98b020fe606778d3c45b1",
+                  "default": "v1.3.0",
                   "required": [],
                   "title": "tag",
                   "type": "string"
@@ -1285,6 +1298,100 @@
           },
           "required": [],
           "title": "kafka-ui",
+          "type": "object"
+        },
+        "nodePool": {
+          "properties": {
+            "broker": {
+              "properties": {
+                "spec": {
+                  "properties": {
+                    "replicas": {
+                      "default": 1,
+                      "required": [],
+                      "title": "replicas",
+                      "type": "integer"
+                    },
+                    "roles": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "roles",
+                      "type": "array"
+                    },
+                    "storage": {
+                      "properties": {
+                        "type": {
+                          "default": "jbod",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        },
+                        "volumes": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "deleteClaim": {
+                                    "default": false,
+                                    "required": [],
+                                    "title": "deleteClaim",
+                                    "type": "boolean"
+                                  },
+                                  "id": {
+                                    "default": 0,
+                                    "required": [],
+                                    "title": "id",
+                                    "type": "integer"
+                                  },
+                                  "size": {
+                                    "default": "20Gi",
+                                    "required": [],
+                                    "title": "size",
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "default": "persistent-claim",
+                                    "required": [],
+                                    "title": "type",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "type": "object"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "volumes",
+                          "type": "array"
+                        }
+                      },
+                      "required": [],
+                      "title": "storage",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "spec",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "broker",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "nodePool",
           "type": "object"
         },
         "strimzi-kafka-operator": {

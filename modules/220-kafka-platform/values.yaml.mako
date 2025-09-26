@@ -4,7 +4,7 @@ kafkaPlatform:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}      
       % endif
-      tag: "126980339425e4bff3d98b020fe606778d3c45b1"
+      tag: "v1.3.0"
     serviceAccount:
       create: false
       name: "platform"
@@ -146,14 +146,44 @@ kafkaPlatform:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
-    
   # -- List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource. ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaClusterSpec-reference )
   clusters:
-    kafka-cluster:
+    kafka-cluster:        
       enabled: true
+      annotations:
+        strimzi.io/node-pools: enabled
+      nodePools:
+        broker:
+          enabled: true
+          spec:
+            % if values['global']['configurationProfile'] in {'test'}:
+            replicas: 1
+            % else:
+            replicas: 3
+            % endif
+            roles:
+              - broker
+            storage:
+              type: persistent-claim
+              size: 10Gi
+              deleteClaim: false
+        controller:
+          enabled: false
+          spec:
+            % if values['global']['configurationProfile'] in {'test'}:
+            replicas: 1
+            % else:
+            replicas: 3
+            % endif
+            roles:
+              - controller
+            storage:
+              type: persistent-claim
+              size: 10Gi
+              deleteClaim: false
       spec:
         kafka:
-          version: 3.8.0
+          version: 3.9.1
           % if values['global']['configurationProfile'] in {'dev'}:
           replicas: 1
           % else:
@@ -219,10 +249,6 @@ kafkaPlatform:
           livenessProbe:
             initialDelaySeconds: 15
             timeoutSeconds: 5
-          storage:
-            type: persistent-claim
-            size: 10Gi
-            deleteClaim: false
           metricsConfig:
             type: jmxPrometheusExporter
             valueFrom:
@@ -242,7 +268,7 @@ kafkaPlatform:
                   effect: "NoSchedule"
               affinity:
                 podAntiAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
+                  preferredDuringSchedulingIgnoredDuringExecution:
                     - labelSelector:
                         matchExpressions:
                           - key: strimzi.io/cluster

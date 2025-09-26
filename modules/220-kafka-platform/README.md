@@ -30,6 +30,8 @@ Current default settings assume High Availability setup with 3 Availability Zone
 			<td>object</td>
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>kafka-cluster:
+    annotations:
+        strimzi.io/node-pools: enabled
     enabled: true
     spec:
         entityOperator:
@@ -92,7 +94,7 @@ Current default settings assume High Availability setup with 3 Availability Zone
                 pod:
                     affinity:
                         podAntiAffinity:
-                            requiredDuringSchedulingIgnoredDuringExecution:
+                            preferredDuringSchedulingIgnoredDuringExecution:
                                 - labelSelector:
                                     matchExpressions:
                                         - key: strimzi.io/cluster
@@ -109,7 +111,7 @@ Current default settings assume High Availability setup with 3 Availability Zone
                           key: dedicated-nodes
                           operator: Equal
                           value: platform-masters
-            version: 3.8.0
+            version: 3.9.1
         kafkaExporter:
             groupRegex: .*
             template:

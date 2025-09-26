@@ -1,0 +1,20 @@
+{{- if .Values.kafkaPlatform.clusters }}
+{{- range $clusterName, $cluster := .Values.kafkaPlatform.clusters }}
+{{- if $cluster.nodePools }}
+{{- range $poolName, $pool := $cluster.nodePools }}
+{{- if $pool.enabled }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: {{ printf "%s-%s" "nodepool" $poolName }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    strimzi.io/cluster: {{ $clusterName }}
+spec:
+{{ toYaml $pool.spec | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

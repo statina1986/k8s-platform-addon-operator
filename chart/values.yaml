@@ -61,7 +61,7 @@ modulesConfig:
   ksixPlatformEnabled: "false"
   kafkaPlatformEnabled: "false"
   kafkaPlatform:
-    strimziHelmVersion: "0.43.0"
+    strimziHelmVersion: "0.45.1"
   kasopePlatformEnabled: "false"
   kyvernoPlatformEnabled: "false"
   logsearchPlatformEnabled: "false"

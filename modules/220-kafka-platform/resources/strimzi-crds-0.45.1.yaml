@@ -479,6 +479,18 @@ spec:
                             publishNotReadyAddresses:
                               type: boolean
                               description: Configures whether the service endpoints are considered "ready" even if the Pods themselves are not. Defaults to `false`. This field can not be used with `internal` listeners.
+                            hostTemplate:
+                              type: string
+                              description: "Configures the template for generating the hostnames of the individual brokers. Valid placeholders that you can use in the template are `{nodeId}` and `{nodePodName}`."
+                            advertisedHostTemplate:
+                              type: string
+                              description: "Configures the template for generating the advertised hostnames of the individual brokers. Valid placeholders that you can use in the template are `{nodeId}` and `{nodePodName}`."
+                            allocateLoadBalancerNodePorts:
+                              type: boolean
+                              description: |-
+                                Configures whether to allocate NodePort automatically for the `Service` with type `LoadBalancer`.
+                                This is a one to one with the `spec.allocateLoadBalancerNodePorts` configuration in the `Service` type
+                                For `loadbalancer` listeners only.
                           description: Additional listener configuration.
                         networkPolicyPeers:
                           type: array
@@ -884,6 +896,8 @@ spec:
                           properties:
                             name:
                               type: string
+                            request:
+                              type: string
                       limits:
                         additionalProperties:
                           anyOf:
@@ -1030,6 +1044,8 @@ spec:
                                 type: boolean
                               runAsUser:
                                 type: integer
+                              seLinuxChangePolicy:
+                                type: string
                               seLinuxOptions:
                                 type: object
                                 properties:
@@ -1052,6 +1068,8 @@ spec:
                                 type: array
                                 items:
                                   type: integer
+                              supplementalGroupsPolicy:
+                                type: string
                               sysctls:
                                 type: array
                                 items:
@@ -1560,13 +1578,32 @@ spec:
                                     readOnly:
                                       type: boolean
                                   description: PersistentVolumeClaim object to use to populate the volume.
+                                csi:
+                                  type: object
+                                  properties:
+                                    driver:
+                                      type: string
+                                    fsType:
+                                      type: string
+                                    nodePublishSecretRef:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                    readOnly:
+                                      type: boolean
+                                    volumeAttributes:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                  description: CSIVolumeSource object to use to populate the volume.
                               oneOf:
                               - properties:
                                   secret: {}
                                   configMap: {}
                                   emptyDir: {}
                                   persistentVolumeClaim: {}
-                                required: []
+                                  csi: {}
                             description: Additional volumes that can be mounted to the pod.
                         description: Template for Kafka `Pods`.
                       bootstrapService:
@@ -1797,6 +1834,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -1898,6 +1977,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -2317,6 +2438,8 @@ spec:
                           properties:
                             name:
                               type: string
+                            request:
+                              type: string
                       limits:
                         additionalProperties:
                           anyOf:
@@ -2481,6 +2604,8 @@ spec:
                                 type: boolean
                               runAsUser:
                                 type: integer
+                              seLinuxChangePolicy:
+                                type: string
                               seLinuxOptions:
                                 type: object
                                 properties:
@@ -2503,6 +2628,8 @@ spec:
                                 type: array
                                 items:
                                   type: integer
+                              supplementalGroupsPolicy:
+                                type: string
                               sysctls:
                                 type: array
                                 items:
@@ -3011,13 +3138,32 @@ spec:
                                     readOnly:
                                       type: boolean
                                   description: PersistentVolumeClaim object to use to populate the volume.
+                                csi:
+                                  type: object
+                                  properties:
+                                    driver:
+                                      type: string
+                                    fsType:
+                                      type: string
+                                    nodePublishSecretRef:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                    readOnly:
+                                      type: boolean
+                                    volumeAttributes:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                  description: CSIVolumeSource object to use to populate the volume.
                               oneOf:
                               - properties:
                                   secret: {}
                                   configMap: {}
                                   emptyDir: {}
                                   persistentVolumeClaim: {}
-                                required: []
+                                  csi: {}
                             description: Additional volumes that can be mounted to the pod.
                         description: Template for ZooKeeper `Pods`.
                       clientService:
@@ -3140,6 +3286,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -3374,6 +3562,8 @@ spec:
                               properties:
                                 name:
                                   type: string
+                                request:
+                                  type: string
                           limits:
                             additionalProperties:
                               anyOf:
@@ -3541,6 +3731,8 @@ spec:
                               properties:
                                 name:
                                   type: string
+                                request:
+                                  type: string
                           limits:
                             additionalProperties:
                               anyOf:
@@ -3637,6 +3829,8 @@ spec:
                               type: object
                               properties:
                                 name:
+                                  type: string
+                                request:
                                   type: string
                           limits:
                             additionalProperties:
@@ -3788,6 +3982,8 @@ spec:
                                 type: boolean
                               runAsUser:
                                 type: integer
+                              seLinuxChangePolicy:
+                                type: string
                               seLinuxOptions:
                                 type: object
                                 properties:
@@ -3810,6 +4006,8 @@ spec:
                                 type: array
                                 items:
                                   type: integer
+                              supplementalGroupsPolicy:
+                                type: string
                               sysctls:
                                 type: array
                                 items:
@@ -4318,13 +4516,32 @@ spec:
                                     readOnly:
                                       type: boolean
                                   description: PersistentVolumeClaim object to use to populate the volume.
+                                csi:
+                                  type: object
+                                  properties:
+                                    driver:
+                                      type: string
+                                    fsType:
+                                      type: string
+                                    nodePublishSecretRef:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                    readOnly:
+                                      type: boolean
+                                    volumeAttributes:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                  description: CSIVolumeSource object to use to populate the volume.
                               oneOf:
                               - properties:
                                   secret: {}
                                   configMap: {}
                                   emptyDir: {}
                                   persistentVolumeClaim: {}
-                                required: []
+                                  csi: {}
                             description: Additional volumes that can be mounted to the pod.
                         description: Template for Entity Operator `Pods`.
                       topicOperatorContainer:
@@ -4341,6 +4558,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -4442,6 +4701,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -4543,6 +4844,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -4774,6 +5117,8 @@ spec:
                               properties:
                                 name:
                                   type: string
+                                request:
+                                  type: string
                           limits:
                             additionalProperties:
                               anyOf:
@@ -4861,6 +5206,8 @@ spec:
                           type: object
                           properties:
                             name:
+                              type: string
+                            request:
                               type: string
                       limits:
                         additionalProperties:
@@ -5062,6 +5409,8 @@ spec:
                                 type: boolean
                               runAsUser:
                                 type: integer
+                              seLinuxChangePolicy:
+                                type: string
                               seLinuxOptions:
                                 type: object
                                 properties:
@@ -5084,6 +5433,8 @@ spec:
                                 type: array
                                 items:
                                   type: integer
+                              supplementalGroupsPolicy:
+                                type: string
                               sysctls:
                                 type: array
                                 items:
@@ -5592,13 +5943,32 @@ spec:
                                     readOnly:
                                       type: boolean
                                   description: PersistentVolumeClaim object to use to populate the volume.
+                                csi:
+                                  type: object
+                                  properties:
+                                    driver:
+                                      type: string
+                                    fsType:
+                                      type: string
+                                    nodePublishSecretRef:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                    readOnly:
+                                      type: boolean
+                                    volumeAttributes:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                  description: CSIVolumeSource object to use to populate the volume.
                               oneOf:
                               - properties:
                                   secret: {}
                                   configMap: {}
                                   emptyDir: {}
                                   persistentVolumeClaim: {}
-                                required: []
+                                  csi: {}
                             description: Additional volumes that can be mounted to the pod.
                         description: Template for Cruise Control `Pods`.
                       apiService:
@@ -5670,6 +6040,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -5771,6 +6183,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -5983,6 +6437,27 @@ spec:
                     - type
                     - valueFrom
                     description: Configuration of the Cruise Control REST API users.
+                  autoRebalance:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        mode:
+                          type: string
+                          enum:
+                          - add-brokers
+                          - remove-brokers
+                          description: "Specifies the mode for automatically rebalancing when brokers are added or removed. Supported modes are `add-brokers` and `remove-brokers`. \n"
+                        template:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                          description: Reference to the KafkaRebalance custom resource to be used as the configuration template for the auto-rebalancing on scaling when running for the corresponding mode.
+                      required:
+                      - mode
+                    description: "Auto-rebalancing on scaling related configuration listing the modes, when brokers are added or removed, with the corresponding rebalance template configurations.If this field is set, at least one mode has to be defined."
                 description: Configuration for Cruise Control deployment. Deploys a Cruise Control instance when specified.
               jmxTrans:
                 type: object
@@ -6054,6 +6529,8 @@ spec:
                           type: object
                           properties:
                             name:
+                              type: string
+                            request:
                               type: string
                       limits:
                         additionalProperties:
@@ -6144,6 +6621,8 @@ spec:
                                 type: boolean
                               runAsUser:
                                 type: integer
+                              seLinuxChangePolicy:
+                                type: string
                               seLinuxOptions:
                                 type: object
                                 properties:
@@ -6166,6 +6645,8 @@ spec:
                                 type: array
                                 items:
                                   type: integer
+                              supplementalGroupsPolicy:
+                                type: string
                               sysctls:
                                 type: array
                                 items:
@@ -6674,13 +7155,32 @@ spec:
                                     readOnly:
                                       type: boolean
                                   description: PersistentVolumeClaim object to use to populate the volume.
+                                csi:
+                                  type: object
+                                  properties:
+                                    driver:
+                                      type: string
+                                    fsType:
+                                      type: string
+                                    nodePublishSecretRef:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                    readOnly:
+                                      type: boolean
+                                    volumeAttributes:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                  description: CSIVolumeSource object to use to populate the volume.
                               oneOf:
                               - properties:
                                   secret: {}
                                   configMap: {}
                                   emptyDir: {}
                                   persistentVolumeClaim: {}
-                                required: []
+                                  csi: {}
                             description: Additional volumes that can be mounted to the pod.
                         description: Template for JmxTrans `Pods`.
                       container:
@@ -6697,6 +7197,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -6834,6 +7376,8 @@ spec:
                           type: object
                           properties:
                             name:
+                              type: string
+                            request:
                               type: string
                       limits:
                         additionalProperties:
@@ -6981,6 +7525,8 @@ spec:
                                 type: boolean
                               runAsUser:
                                 type: integer
+                              seLinuxChangePolicy:
+                                type: string
                               seLinuxOptions:
                                 type: object
                                 properties:
@@ -7003,6 +7549,8 @@ spec:
                                 type: array
                                 items:
                                   type: integer
+                              supplementalGroupsPolicy:
+                                type: string
                               sysctls:
                                 type: array
                                 items:
@@ -7511,13 +8059,32 @@ spec:
                                     readOnly:
                                       type: boolean
                                   description: PersistentVolumeClaim object to use to populate the volume.
+                                csi:
+                                  type: object
+                                  properties:
+                                    driver:
+                                      type: string
+                                    fsType:
+                                      type: string
+                                    nodePublishSecretRef:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                    readOnly:
+                                      type: boolean
+                                    volumeAttributes:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                  description: CSIVolumeSource object to use to populate the volume.
                               oneOf:
                               - properties:
                                   secret: {}
                                   configMap: {}
                                   emptyDir: {}
                                   persistentVolumeClaim: {}
-                                required: []
+                                  csi: {}
                             description: Additional volumes that can be mounted to the pod.
                         description: Template for Kafka Exporter `Pods`.
                       service:
@@ -7552,6 +8119,48 @@ spec:
                                 value:
                                   type: string
                                   description: The environment variable value.
+                                valueFrom:
+                                  type: object
+                                  properties:
+                                    secretKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a secret.
+                                    configMapKeyRef:
+                                      type: object
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      description: Reference to a key in a config map.
+                                  oneOf:
+                                  - properties:
+                                      secretKeyRef: {}
+                                    required:
+                                    - secretKeyRef
+                                  - properties:
+                                      configMapKeyRef: {}
+                                    required:
+                                    - configMapKeyRef
+                                  description: Reference to the secret or config map property to which the environment variable is set.
+                              oneOf:
+                              - properties:
+                                  value: {}
+                                required:
+                                - value
+                              - properties:
+                                  valueFrom: {}
+                                required:
+                                - valueFrom
                             description: Environment variables which should be applied to the container.
                           securityContext:
                             type: object
@@ -7762,6 +8371,37 @@ spec:
                 - PreKRaft
                 - KRaft
                 description: "Defines where cluster metadata are stored. Possible values are: ZooKeeper if the metadata are stored in ZooKeeper; KRaftMigration if the controllers are connected to ZooKeeper, brokers are being rolled with Zookeeper migration enabled and connection information to controllers, and the metadata migration process is running; KRaftDualWriting if the metadata migration process finished and the cluster is in dual-write mode; KRaftPostMigration if the brokers are fully KRaft-based but controllers being rolled to disconnect from ZooKeeper; PreKRaft if brokers and controller are fully KRaft-based, metadata are stored in KRaft, but ZooKeeper must be deleted; KRaft if the metadata are stored in KRaft."
+              autoRebalance:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum:
+                    - Idle
+                    - RebalanceOnScaleDown
+                    - RebalanceOnScaleUp
+                    description: "The current state of an auto-rebalancing operation. Possible values are: \n\n* `Idle` as the initial state when an auto-rebalancing is requested or as final state when it completes or fails.\n* `RebalanceOnScaleDown` if an auto-rebalance related to a scale-down operation is running.\n* `RebalanceOnScaleUp` if an auto-rebalance related to a scale-up operation is running."
+                  lastTransitionTime:
+                    type: string
+                    description: The timestamp of the latest auto-rebalancing state update.
+                  modes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mode:
+                          type: string
+                          enum:
+                          - add-brokers
+                          - remove-brokers
+                          description: "Mode for which there is an auto-rebalancing operation in progress or queued, when brokers are added or removed. The possible modes are `add-brokers` and `remove-brokers`."
+                        brokers:
+                          type: array
+                          items:
+                            type: integer
+                          description: "List of broker IDs involved in an auto-rebalancing operation related to the current mode. \nThe list contains one of the following: \n\n* Broker IDs for a current auto-rebalance. \n* Broker IDs for a queued auto-rebalance (if a previous auto-rebalance is still in progress). \n"
+                    description: "List of modes where an auto-rebalancing operation is either running or queued. \nEach mode entry (`add-brokers` or `remove-brokers`) includes one of the following: \n\n* Broker IDs for a current auto-rebalance. \n* Broker IDs for a queued auto-rebalance (if a previous rebalance is still in progress)."
+                description: The status of an auto-rebalancing triggered by a cluster scaling request.
             description: "The status of the Kafka and ZooKeeper clusters, and Topic Operator."
 
 ---
@@ -8055,6 +8695,8 @@ spec:
                       properties:
                         name:
                           type: string
+                        request:
+                          type: string
                   limits:
                     additionalProperties:
                       anyOf:
@@ -8339,6 +8981,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -8361,6 +9005,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -8869,13 +9515,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka Connect `Pods`.
                   apiService:
@@ -8958,6 +9623,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -9059,6 +9766,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -9249,6 +9998,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -9271,6 +10022,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -9779,13 +10532,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka Connect Build `Pods`. The build pod is used only on Kubernetes.
                   buildContainer:
@@ -9802,6 +10574,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -9981,6 +10795,15 @@ spec:
                                 optional:
                                   type: boolean
                               description: Reference to a key in a ConfigMap.
+                          oneOf:
+                          - properties:
+                              secretKeyRef: {}
+                            required:
+                            - secretKeyRef
+                          - properties:
+                              configMapKeyRef: {}
+                            required:
+                            - configMapKeyRef
                           description: Value of the environment variable which will be passed to the Kafka Connect pods. It can be passed either as a reference to Secret or ConfigMap field. The field has to specify exactly one Secret or ConfigMap.
                       required:
                       - name
@@ -10036,6 +10859,15 @@ spec:
                             optional:
                               type: boolean
                           description: Reference to a key in a ConfigMap. Exactly one Secret or ConfigMap has to be specified.
+                      oneOf:
+                      - properties:
+                          secret: {}
+                        required:
+                        - secret
+                      - properties:
+                          configMap: {}
+                        required:
+                        - configMap
                       required:
                       - name
                     description: Makes data from a Secret or ConfigMap available in the Kafka Connect pods as volumes.
@@ -10050,7 +10882,7 @@ spec:
                         type: array
                         items:
                           type: string
-                        description: "Configures additional options which will be passed to the Kaniko executor when building the new Connect image. Allowed options are: --customPlatform, --insecure, --insecure-pull, --insecure-registry, --log-format, --log-timestamp, --registry-mirror, --reproducible, --single-snapshot, --skip-tls-verify, --skip-tls-verify-pull, --skip-tls-verify-registry, --verbosity, --snapshotMode, --use-new-run. These options will be used only on Kubernetes where the Kaniko executor is used. They will be ignored on OpenShift. The options are described in the link:https://github.com/GoogleContainerTools/kaniko[Kaniko GitHub repository^]. Changing this field does not trigger new build of the Kafka Connect image."
+                        description: "Configures additional options which will be passed to the Kaniko executor when building the new Connect image. Allowed options are: --customPlatform, --custom-platform, --insecure, --insecure-pull, --insecure-registry, --log-format, --log-timestamp, --registry-mirror, --reproducible, --single-snapshot, --skip-tls-verify, --skip-tls-verify-pull, --skip-tls-verify-registry, --verbosity, --snapshotMode, --use-new-run, --registry-certificate, --registry-client-cert, --ignore-path. These options will be used only on Kubernetes where the Kaniko executor is used. They will be ignored on OpenShift. The options are described in the link:https://github.com/GoogleContainerTools/kaniko[Kaniko GitHub repository^]. Changing this field does not trigger new build of the Kafka Connect image."
                       image:
                         type: string
                         description: The name of the image which will be built. Required.
@@ -10131,6 +10963,8 @@ spec:
                           type: object
                           properties:
                             name:
+                              type: string
+                            request:
                               type: string
                       limits:
                         additionalProperties:
@@ -11944,6 +12778,8 @@ spec:
                       properties:
                         name:
                           type: string
+                        request:
+                          type: string
                   limits:
                     additionalProperties:
                       anyOf:
@@ -12140,6 +12976,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -12162,6 +13000,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -12670,13 +13510,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka MirrorMaker `Pods`.
                   podDisruptionBudget:
@@ -12715,6 +13574,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -13266,6 +14167,8 @@ spec:
                       properties:
                         name:
                           type: string
+                        request:
+                          type: string
                   limits:
                     additionalProperties:
                       anyOf:
@@ -13482,6 +14385,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -13504,6 +14409,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -14012,13 +14919,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka Bridge `Pods`.
                   apiService:
@@ -14090,6 +15016,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -14227,6 +15195,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -14462,6 +15472,30 @@ spec:
                 - stopped
                 - running
                 description: The state the connector should be in. Defaults to running.
+              listOffsets:
+                type: object
+                properties:
+                  toConfigMap:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    description: Reference to the ConfigMap where the list of offsets will be written to.
+                required:
+                - toConfigMap
+                description: Configuration for listing offsets.
+              alterOffsets:
+                type: object
+                properties:
+                  fromConfigMap:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    description: Reference to the ConfigMap where the new offsets are stored.
+                required:
+                - fromConfigMap
+                description: Configuration for altering offsets.
             description: The specification of the Kafka Connector.
           status:
             type: object
@@ -14856,6 +15890,30 @@ spec:
                               type: integer
                               description: "The maximum number of connector restarts that the operator will try. If the connector remains in a failed state after reaching this limit, it must be restarted manually by the user. Defaults to an unlimited number of restarts."
                           description: Automatic restart of connector and tasks configuration.
+                        listOffsets:
+                          type: object
+                          properties:
+                            toConfigMap:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                              description: Reference to the ConfigMap where the list of offsets will be written to.
+                          required:
+                          - toConfigMap
+                          description: Configuration for listing offsets.
+                        alterOffsets:
+                          type: object
+                          properties:
+                            fromConfigMap:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                              description: Reference to the ConfigMap where the new offsets are stored.
+                          required:
+                          - fromConfigMap
+                          description: Configuration for altering offsets.
                       description: The specification of the Kafka MirrorMaker 2 source connector.
                     heartbeatConnector:
                       type: object
@@ -14888,6 +15946,30 @@ spec:
                               type: integer
                               description: "The maximum number of connector restarts that the operator will try. If the connector remains in a failed state after reaching this limit, it must be restarted manually by the user. Defaults to an unlimited number of restarts."
                           description: Automatic restart of connector and tasks configuration.
+                        listOffsets:
+                          type: object
+                          properties:
+                            toConfigMap:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                              description: Reference to the ConfigMap where the list of offsets will be written to.
+                          required:
+                          - toConfigMap
+                          description: Configuration for listing offsets.
+                        alterOffsets:
+                          type: object
+                          properties:
+                            fromConfigMap:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                              description: Reference to the ConfigMap where the new offsets are stored.
+                          required:
+                          - fromConfigMap
+                          description: Configuration for altering offsets.
                       description: The specification of the Kafka MirrorMaker 2 heartbeat connector.
                     checkpointConnector:
                       type: object
@@ -14920,6 +16002,30 @@ spec:
                               type: integer
                               description: "The maximum number of connector restarts that the operator will try. If the connector remains in a failed state after reaching this limit, it must be restarted manually by the user. Defaults to an unlimited number of restarts."
                           description: Automatic restart of connector and tasks configuration.
+                        listOffsets:
+                          type: object
+                          properties:
+                            toConfigMap:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                              description: Reference to the ConfigMap where the list of offsets will be written to.
+                          required:
+                          - toConfigMap
+                          description: Configuration for listing offsets.
+                        alterOffsets:
+                          type: object
+                          properties:
+                            fromConfigMap:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                              description: Reference to the ConfigMap where the new offsets are stored.
+                          required:
+                          - fromConfigMap
+                          description: Configuration for altering offsets.
                       description: The specification of the Kafka MirrorMaker 2 checkpoint connector.
                     topicsPattern:
                       type: string
@@ -14952,6 +16058,8 @@ spec:
                       type: object
                       properties:
                         name:
+                          type: string
+                        request:
                           type: string
                   limits:
                     additionalProperties:
@@ -15237,6 +16345,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -15259,6 +16369,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -15767,13 +16879,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka Connect `Pods`.
                   apiService:
@@ -15856,6 +16987,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -15957,6 +17130,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -16147,6 +17362,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -16169,6 +17386,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -16677,13 +17896,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka Connect Build `Pods`. The build pod is used only on Kubernetes.
                   buildContainer:
@@ -16700,6 +17938,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -16879,6 +18159,15 @@ spec:
                                 optional:
                                   type: boolean
                               description: Reference to a key in a ConfigMap.
+                          oneOf:
+                          - properties:
+                              secretKeyRef: {}
+                            required:
+                            - secretKeyRef
+                          - properties:
+                              configMapKeyRef: {}
+                            required:
+                            - configMapKeyRef
                           description: Value of the environment variable which will be passed to the Kafka Connect pods. It can be passed either as a reference to Secret or ConfigMap field. The field has to specify exactly one Secret or ConfigMap.
                       required:
                       - name
@@ -16934,6 +18223,15 @@ spec:
                             optional:
                               type: boolean
                           description: Reference to a key in a ConfigMap. Exactly one Secret or ConfigMap has to be specified.
+                      oneOf:
+                      - properties:
+                          secret: {}
+                        required:
+                        - secret
+                      - properties:
+                          configMap: {}
+                        required:
+                        - configMap
                       required:
                       - name
                     description: Makes data from a Secret or ConfigMap available in the Kafka Connect pods as volumes.
@@ -17048,29 +18346,13 @@ spec:
       description: The name of the Kafka cluster this resource rebalances
       jsonPath: .metadata.labels.strimzi\.io/cluster
       type: string
-    - name: PendingProposal
-      description: A proposal has been requested from Cruise Control
-      jsonPath: ".status.conditions[?(@.type==\"PendingProposal\")].status"
+    - name: Template
+      description: If this rebalance resource is a template
+      jsonPath: .metadata.annotations.strimzi\.io/rebalance-template
       type: string
-    - name: ProposalReady
-      description: A proposal is ready and waiting for approval
-      jsonPath: ".status.conditions[?(@.type==\"ProposalReady\")].status"
-      type: string
-    - name: Rebalancing
-      description: Cruise Control is doing the rebalance
-      jsonPath: ".status.conditions[?(@.type==\"Rebalancing\")].status"
-      type: string
-    - name: Ready
-      description: The rebalance is complete
-      jsonPath: ".status.conditions[?(@.type==\"Ready\")].status"
-      type: string
-    - name: NotReady
-      description: There is an error on the custom resource
-      jsonPath: ".status.conditions[?(@.type==\"NotReady\")].status"
-      type: string
-    - name: Stopped
-      description: Processing the proposal or running rebalancing was stopped
-      jsonPath: ".status.conditions[?(@.type==\"Stopped\")].status"
+    - name: Status
+      description: Status of the current rebalancing operation
+      jsonPath: ".status.conditions[*].type"
       type: string
     schema:
       openAPIV3Schema:
@@ -17093,7 +18375,8 @@ spec:
                 - full
                 - add-brokers
                 - remove-brokers
-                description: "Mode to run the rebalancing. The supported modes are `full`, `add-brokers`, `remove-brokers`.\nIf not specified, the `full` mode is used by default. \n\n* `full` mode runs the rebalancing across all the brokers in the cluster.\n* `add-brokers` mode can be used after scaling up the cluster to move some replicas to the newly added brokers.\n* `remove-brokers` mode can be used before scaling down the cluster to move replicas out of the brokers to be removed.\n"
+                - remove-disks
+                description: "Mode to run the rebalancing. The supported modes are `full`, `add-brokers`, `remove-brokers`.\nIf not specified, the `full` mode is used by default. \n\n* `full` mode runs the rebalancing across all the brokers in the cluster.\n* `add-brokers` mode can be used after scaling up the cluster to move some replicas to the newly added brokers.\n* `remove-brokers` mode can be used before scaling down the cluster to move replicas out of the brokers to be removed.\n* `remove-disks` mode can be used to move data across the volumes within the same broker\n."
               brokers:
                 type: array
                 items:
@@ -17134,6 +18417,22 @@ spec:
                 items:
                   type: string
                 description: "A list of strategy class names used to determine the execution order for the replica movements in the generated optimization proposal. By default BaseReplicaMovementStrategy is used, which will execute the replica movements in the order that they were generated."
+              moveReplicasOffVolumes:
+                type: array
+                minItems: 1
+                items:
+                  type: object
+                  properties:
+                    brokerId:
+                      type: integer
+                      description: ID of the broker that contains the disk from which you want to move the partition replicas.
+                    volumeIds:
+                      type: array
+                      minItems: 1
+                      items:
+                        type: integer
+                      description: IDs of the disks from which the partition replicas need to be moved.
+                description: List of brokers and their corresponding volumes from which replicas need to be moved.
             description: The specification of the Kafka rebalance.
           status:
             type: object
@@ -17358,6 +18657,8 @@ spec:
                       properties:
                         name:
                           type: string
+                        request:
+                          type: string
                   limits:
                     additionalProperties:
                       anyOf:
@@ -17473,6 +18774,8 @@ spec:
                             type: boolean
                           runAsUser:
                             type: integer
+                          seLinuxChangePolicy:
+                            type: string
                           seLinuxOptions:
                             type: object
                             properties:
@@ -17495,6 +18798,8 @@ spec:
                             type: array
                             items:
                               type: integer
+                          supplementalGroupsPolicy:
+                            type: string
                           sysctls:
                             type: array
                             items:
@@ -18003,13 +19308,32 @@ spec:
                                 readOnly:
                                   type: boolean
                               description: PersistentVolumeClaim object to use to populate the volume.
+                            csi:
+                              type: object
+                              properties:
+                                driver:
+                                  type: string
+                                fsType:
+                                  type: string
+                                nodePublishSecretRef:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                readOnly:
+                                  type: boolean
+                                volumeAttributes:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              description: CSIVolumeSource object to use to populate the volume.
                           oneOf:
                           - properties:
                               secret: {}
                               configMap: {}
                               emptyDir: {}
                               persistentVolumeClaim: {}
-                            required: []
+                              csi: {}
                         description: Additional volumes that can be mounted to the pod.
                     description: Template for Kafka `Pods`.
                   perPodService:
@@ -18098,6 +19422,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
@@ -18199,6 +19565,48 @@ spec:
                             value:
                               type: string
                               description: The environment variable value.
+                            valueFrom:
+                              type: object
+                              properties:
+                                secretKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a secret.
+                                configMapKeyRef:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                    name:
+                                      type: string
+                                    optional:
+                                      type: boolean
+                                  description: Reference to a key in a config map.
+                              oneOf:
+                              - properties:
+                                  secretKeyRef: {}
+                                required:
+                                - secretKeyRef
+                              - properties:
+                                  configMapKeyRef: {}
+                                required:
+                                - configMapKeyRef
+                              description: Reference to the secret or config map property to which the environment variable is set.
+                          oneOf:
+                          - properties:
+                              value: {}
+                            required:
+                            - value
+                          - properties:
+                              valueFrom: {}
+                            required:
+                            - valueFrom
                         description: Environment variables which should be applied to the container.
                       securityContext:
                         type: object
