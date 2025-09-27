@@ -33,6 +33,143 @@
                   "title": "enabled",
                   "type": "boolean"
                 },
+                "nodePools": {
+                  "properties": {
+                    "broker": {
+                      "properties": {
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "spec": {
+                          "properties": {
+                            "replicas": {
+                              "default": 1,
+                              "required": [],
+                              "title": "replicas",
+                              "type": "integer"
+                            },
+                            "roles": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "roles",
+                              "type": "array"
+                            },
+                            "storage": {
+                              "properties": {
+                                "deleteClaim": {
+                                  "default": false,
+                                  "required": [],
+                                  "title": "deleteClaim",
+                                  "type": "boolean"
+                                },
+                                "size": {
+                                  "default": "10Gi",
+                                  "required": [],
+                                  "title": "size",
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "default": "persistent-claim",
+                                  "required": [],
+                                  "title": "type",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "storage",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "spec",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "broker",
+                      "type": "object"
+                    },
+                    "controller": {
+                      "properties": {
+                        "enabled": {
+                          "default": false,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "spec": {
+                          "properties": {
+                            "replicas": {
+                              "default": 1,
+                              "required": [],
+                              "title": "replicas",
+                              "type": "integer"
+                            },
+                            "roles": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "roles",
+                              "type": "array"
+                            },
+                            "storage": {
+                              "properties": {
+                                "deleteClaim": {
+                                  "default": false,
+                                  "required": [],
+                                  "title": "deleteClaim",
+                                  "type": "boolean"
+                                },
+                                "size": {
+                                  "default": "10Gi",
+                                  "required": [],
+                                  "title": "size",
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "default": "persistent-claim",
+                                  "required": [],
+                                  "title": "type",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "storage",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "spec",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "controller",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "nodePools",
+                  "type": "object"
+                },
                 "spec": {
                   "properties": {
                     "entityOperator": {
@@ -378,31 +515,6 @@
                           },
                           "required": [],
                           "title": "resources",
-                          "type": "object"
-                        },
-                        "storage": {
-                          "properties": {
-                            "deleteClaim": {
-                              "default": false,
-                              "required": [],
-                              "title": "deleteClaim",
-                              "type": "boolean"
-                            },
-                            "size": {
-                              "default": "10Gi",
-                              "required": [],
-                              "title": "size",
-                              "type": "string"
-                            },
-                            "type": {
-                              "default": "persistent-claim",
-                              "required": [],
-                              "title": "type",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "storage",
                           "type": "object"
                         },
                         "template": {
@@ -1298,100 +1410,6 @@
           },
           "required": [],
           "title": "kafka-ui",
-          "type": "object"
-        },
-        "nodePool": {
-          "properties": {
-            "broker": {
-              "properties": {
-                "spec": {
-                  "properties": {
-                    "replicas": {
-                      "default": 1,
-                      "required": [],
-                      "title": "replicas",
-                      "type": "integer"
-                    },
-                    "roles": {
-                      "items": {
-                        "anyOf": [
-                          {
-                            "required": [],
-                            "type": "string"
-                          }
-                        ],
-                        "required": []
-                      },
-                      "required": [],
-                      "title": "roles",
-                      "type": "array"
-                    },
-                    "storage": {
-                      "properties": {
-                        "type": {
-                          "default": "jbod",
-                          "required": [],
-                          "title": "type",
-                          "type": "string"
-                        },
-                        "volumes": {
-                          "items": {
-                            "anyOf": [
-                              {
-                                "properties": {
-                                  "deleteClaim": {
-                                    "default": false,
-                                    "required": [],
-                                    "title": "deleteClaim",
-                                    "type": "boolean"
-                                  },
-                                  "id": {
-                                    "default": 0,
-                                    "required": [],
-                                    "title": "id",
-                                    "type": "integer"
-                                  },
-                                  "size": {
-                                    "default": "20Gi",
-                                    "required": [],
-                                    "title": "size",
-                                    "type": "string"
-                                  },
-                                  "type": {
-                                    "default": "persistent-claim",
-                                    "required": [],
-                                    "title": "type",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [],
-                                "type": "object"
-                              }
-                            ],
-                            "required": []
-                          },
-                          "required": [],
-                          "title": "volumes",
-                          "type": "array"
-                        }
-                      },
-                      "required": [],
-                      "title": "storage",
-                      "type": "object"
-                    }
-                  },
-                  "required": [],
-                  "title": "spec",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "broker",
-              "type": "object"
-            }
-          },
-          "required": [],
-          "title": "nodePool",
           "type": "object"
         },
         "strimzi-kafka-operator": {

@@ -33,6 +33,27 @@ Current default settings assume High Availability setup with 3 Availability Zone
     annotations:
         strimzi.io/node-pools: enabled
     enabled: true
+    nodePools:
+        broker:
+            enabled: true
+            spec:
+                replicas: 1
+                roles:
+                    - broker
+                storage:
+                    deleteClaim: false
+                    size: 10Gi
+                    type: persistent-claim
+        controller:
+            enabled: false
+            spec:
+                replicas: 1
+                roles:
+                    - controller
+                storage:
+                    deleteClaim: false
+                    size: 10Gi
+                    type: persistent-claim
     spec:
         entityOperator:
             template:
@@ -86,10 +107,6 @@ Current default settings assume High Availability setup with 3 Availability Zone
                 requests:
                     cpu: "0.5"
                     memory: 2Gi
-            storage:
-                deleteClaim: false
-                size: 10Gi
-                type: persistent-claim
             template:
                 pod:
                     affinity:

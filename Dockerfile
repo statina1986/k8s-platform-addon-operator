@@ -1,9 +1,10 @@
-FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.6.15_qvantel-master_3861091e7
+FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.7.17_qvantel-master_abc243f6a
 
 ARG TARGETARCH
 
-RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2
-RUN pip3 install kubernetes
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
+
+RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2 py3-kubernetes
 RUN pip3 install "hvac[parser]"
 RUN pip3 install boto3
 RUN pip3 install python-json-logger
@@ -25,12 +26,14 @@ ENV BUILD_TAG=${BUILD_TAG}
 RUN mkdir /var/run/addon-operator
 RUN chown -R 1001:0 /var/run/addon-operator
 
-USER 1001
+ADD --chown=1001:0 common /common
+RUN chmod -R 775 /common
 
 ADD --chown=1001:0 resources /resources
-ADD --chown=1001:0 common /common
-RUN chmod -R 775 /common /common
+RUN chmod -R 775 /resources
+
 ADD --chown=1001:0 global-hooks /global-hooks
-RUN chmod -R 775 global-hooks /global-hooks
+RUN chmod -R 775 /global-hooks 
+
 ADD --chown=1001:0 modules /modules
-RUN chmod -R 775 modules /modules
+RUN chmod -R 775 /modules
