@@ -132,7 +132,7 @@ spec:
         protocol: MariaDBProtocol
 {{- end }}
 
-{{- if and $cluster.spec (and $cluster.spec.backup $cluster.spec.backup.scheduledBackup) }}
+{{- if and $cluster.spec $cluster.spec.backup (eq $cluster.spec.backup.type "physical") $cluster.spec.backup.scheduledBackup }}
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: PhysicalBackup
@@ -167,6 +167,47 @@ spec:
           storage: {{ $cluster.spec.backup.stagingStorage | default "10Gi" }}
       accessModes:
         - ReadWriteOnce
+  compression: gzip
+  schedule:
+    cron: {{ $cluster.spec.backup.scheduledBackup | default "0 0 * * *" }}
+    suspend: {{ $cluster.spec.backup.suspend | default "false" }}
+    immediate: true
+{{- end }}
+
+{{- if and $cluster.spec $cluster.spec.backup (eq (default "logical" $cluster.spec.backup.type) "logical") $cluster.spec.backup.scheduledBackup }}
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Backup
+metadata:
+  name: {{ $dbClusterName }}-logical-scheduled-backups
+spec:
+  mariaDbRef:
+    name: {{ $dbClusterName }}
+  serviceAccountName: platform
+  maxRetention: {{ $cluster.spec.backup.retention | default "48h" }}
+  storage:
+    s3:
+      bucket: {{ $cluster.spec.backup.bucket }}
+      prefix: {{ $dbClusterName }}
+      endpoint: {{ $cluster.spec.backup.endpoint }}
+      region: {{ $cluster.spec.backup.region }}
+      {{- if $cluster.spec.backup.secretName }}
+      accessKeyIdSecretKeyRef:
+        name: {{ $cluster.spec.backup.secretName }}
+        key: {{ $cluster.spec.backup.secretUserKey }}
+      secretAccessKeySecretKeyRef:
+        name: {{ $cluster.spec.backup.secretName }}
+        key: {{ $cluster.spec.backup.secretKey }}
+      {{- end }}
+      tls:
+        enabled: false
+    stagingStorage:
+      persistentVolumeClaim:
+        resources:
+          requests:
+            storage: {{ $cluster.spec.backup.stagingStorage | default "5Gi" }}
+        accessModes:
+          - ReadWriteOnce
   compression: gzip
   schedule:
     cron: {{ $cluster.spec.backup.scheduledBackup | default "0 0 * * *" }}

@@ -3,7 +3,7 @@ name: mariadbOperatorPlatform
 version: 0.0.1
 dependencies:
   - name: mariadb-operator
-    version: 25.08.3
+    version: 25.08.4
     repository: https://helm.mariadb.com/mariadb-operator
 
 
