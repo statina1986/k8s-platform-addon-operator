@@ -241,16 +241,42 @@ data:
   config.yml: |
     {{- tpl $cluster.defaultSqlExporter.config.content $root | nindent 4 }}
 
+{{- $replicas := int (default 1 $cluster.spec.replicas) }}
+{{- range $i, $_ := until $replicas }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-pod-%d" $dbClusterName $i }}
+  labels:
+    app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
+    app.kubernetes.io/part-of: mariadb
+    mariadb.com/exporter-target: {{ printf "%s-%d" $dbClusterName $i }}
+spec:
+  clusterIP: None
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: {{ $dbClusterName }}
+    apps.kubernetes.io/pod-index: "{{ $i }}"
+  ports:
+    - name: mariadb
+      port: 3306
+      targetPort: 3306
+      protocol: TCP
+{{- end }}
+
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ $dbClusterName }}-sql-exporter
   labels:
     app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
     app.kubernetes.io/part-of: mariadb
 spec:
-  replicas: 1
+  serviceName: {{ $dbClusterName }}-sql-exporter
+  replicas: {{ $replicas }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
@@ -268,14 +294,42 @@ spec:
             - -ec
             - |
               python - <<'PY'
-              import os, urllib.parse
+              import os
+              import urllib.parse
+
               pw = os.environ.get('MYSQL_PASSWORD', '')
               ns = os.environ.get('POD_NAMESPACE', '')
-              host = f"{{ $dbClusterName }}-main.{ns}.svc"
-              # Build URL-style DSN expected by sql_exporter: mysql://user:pass@host:port/
-              dsn = f"mysql://root:{urllib.parse.quote(pw, safe='')}@{host}:3306/"
+              pod_name = os.environ.get('POD_NAME', '')
+              cluster = os.environ.get('EXPORTER_CLUSTER_NAME', '')
+              default_host = os.environ.get('EXPORTER_DEFAULT_HOST', '')
+              cluster_domain = os.environ.get('CLUSTER_DOMAIN', 'cluster.local')
+              port = os.environ.get('EXPORTER_TARGET_PORT', '') or '3306'
+
+              ordinal = ''
+              if pod_name:
+                  suffix = pod_name.rsplit('-', 1)[-1]
+                  if suffix.isdigit():
+                      ordinal = suffix
+
+              host = ''
+              pod_id = ''
+              if ordinal and cluster and ns:
+                  svc_host = f"{cluster}-pod-{ordinal}.{ns}.svc"
+                  host = f"{svc_host}.{cluster_domain}" if cluster_domain else svc_host
+                  pod_id = f"{cluster}-{ordinal}"
+              else:
+                  fallback_host = default_host or (f"{cluster}-main.{ns}.svc" if cluster else '')
+                  host = fallback_host or 'localhost'
+                  pod_id = cluster or host or 'mariadb'
+
+              quoted_pw = urllib.parse.quote(pw, safe='')
+              dsn = f"mysql://root:{quoted_pw}@{host}:{port}/"
+
               with open('/config-template/config.yml', 'r', encoding='utf-8') as src:
-                  content = src.read().replace('__DSN__', dsn)
+                  content = src.read()
+
+              content = content.replace('__DSN__', dsn)
+
               with open('/config/config.yml', 'w', encoding='utf-8') as dst:
                   dst.write(content)
               PY
@@ -284,11 +338,23 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ $dbClusterName }}-root
                   key: password
+            - name: EXPORTER_CLUSTER_NAME
+              value: {{ $dbClusterName | quote }}
+            - name: EXPORTER_DEFAULT_HOST
+              value: {{ printf "%s-main.%s.svc" $dbClusterName $.Release.Namespace | quote }}
+            - name: EXPORTER_TARGET_PORT
+              value: "3306"
+            - name: CLUSTER_DOMAIN
+              value: {{ $root.Values.global.clusterDomain | default "cluster.local" | quote }}
           volumeMounts:
             - name: config-template
               mountPath: /config-template
@@ -333,6 +399,7 @@ metadata:
     app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
     app.kubernetes.io/part-of: mariadb
 spec:
+  clusterIP: None
   type: ClusterIP
   ports:
     - name: http
@@ -356,6 +423,9 @@ spec:
     - port: http
       path: /metrics
       scheme: http
+      metricRelabelings:
+        - targetLabel: mariadb_cluster
+          replacement: {{ $dbClusterName }}
 {{- end }}
 
 {{- end }}

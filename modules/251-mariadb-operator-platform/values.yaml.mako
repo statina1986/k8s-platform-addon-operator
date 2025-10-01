@@ -200,13 +200,12 @@ mariadbOperatorPlatform:
                     values: [uptime]
                     query: |
                       SELECT VARIABLE_VALUE AS uptime FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME = 'UPTIME'
-                  - metric_name: mariadb_wait_event_latency_seconds
+                  - metric_name: mariadb_wait_event_sample_total
                     type: gauge
-                    help: Aggregated wait event latency per query from performance schema
+                    help: Number of wait-event samples observed for a query
                     key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
-                    value_label: metric
-                    values: [wait_count, total_wait_sec, avg_wait_sec, max_wait_sec, exec_count, stmt_total_latency_sec]
-                    query: |
+                    values: [wait_count]
+                    query: &mariadb_wait_event_query |
                       SELECT
                         COALESCE(es.DIGEST, SHA1(COALESCE(es.SQL_TEXT, '')))           AS query_id,
                         COALESCE(es.DIGEST_TEXT, es.SQL_TEXT, '[unknown]')             AS query,
@@ -219,7 +218,7 @@ mariadbOperatorPlatform:
                         ROUND(AVG(w.TIMER_WAIT) / 1e12, 6)                             AS avg_wait_sec,
                         ROUND(MAX(w.TIMER_WAIT) / 1e12, 6)                             AS max_wait_sec,
                         COUNT(DISTINCT es.EVENT_ID)                                    AS exec_count,
-                        ROUND(SUM(es.TIMER_WAIT) / 1e12, 6)                            AS stmt_total_latency_sec
+                        ROUND(SUM(es.TIMER_WAIT) / 1e9, 3)                             AS stmt_total_latency_ms
                       FROM performance_schema.events_waits_history_long AS w
                       LEFT JOIN performance_schema.events_stages_history_long AS s
                         ON  w.NESTING_EVENT_TYPE = 'STAGE'
@@ -238,6 +237,36 @@ mariadbOperatorPlatform:
                         wait_event_name, event_type, event_subtype
                       ORDER BY total_wait_sec DESC
                       LIMIT 100;
+                  - metric_name: mariadb_wait_event_total_seconds
+                    type: gauge
+                    help: Cumulative wait time spent in an event for a query (seconds)
+                    key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                    values: [total_wait_sec]
+                    query: *mariadb_wait_event_query
+                  - metric_name: mariadb_wait_event_average_seconds
+                    type: gauge
+                    help: Average wait time per sample for a query (seconds)
+                    key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                    values: [avg_wait_sec]
+                    query: *mariadb_wait_event_query
+                  - metric_name: mariadb_wait_event_max_seconds
+                    type: gauge
+                    help: Maximum wait time observed for a query (seconds)
+                    key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                    values: [max_wait_sec]
+                    query: *mariadb_wait_event_query
+                  - metric_name: mariadb_wait_event_exec_count
+                    type: gauge
+                    help: Number of statement executions contributing to the wait samples
+                    key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                    values: [exec_count]
+                    query: *mariadb_wait_event_query
+                  - metric_name: mariadb_wait_event_stmt_total_latency
+                    type: gauge
+                    help: Total statement latency contributing to wait samples (milliseconds)
+                    key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                    values: [stmt_total_latency_ms]
+                    query: *mariadb_wait_event_query
   clusters:
     mariadb:
       enabled: true
