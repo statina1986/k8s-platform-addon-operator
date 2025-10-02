@@ -1,15 +1,15 @@
 dependencies:
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
-  version: 1.7.0
+  version: 1.13.4
 - name: aws-efs-csi-driver
   repository: https://kubernetes-sigs.github.io/aws-efs-csi-driver/
-  version: 2.5.4
+  version: 3.2.3
 - name: aws-ebs-csi-driver
   repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver/
-  version: 2.27.0
+  version: 2.49.1
 - name: aws-vpc-cni
   repository: https://aws.github.io/eks-charts
-  version: 1.16.2
-digest: sha256:36910dd61250a6f2a9740c68b6fdf55ad8fffa9835c6a1af561e74bc52caac82
-generated: "2024-02-04T12:05:00.192470928+02:00"
+  version: 1.20.1
+digest: sha256:d00579485dfc4f8f8b8aa1b3d3b47353ebce77ba11e498b74727a25cf26c65f2
+generated: "2025-10-01T10:16:15.037038565+03:00"

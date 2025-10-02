@@ -85,23 +85,23 @@ awsPlatform:
   aws-efs-csi-driver:
     image:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/amazon/aws-efs-csi-driver
+      repository: ${values['global']['containerRegistryBase']}/efs-csi-driver/amazon/aws-efs-csi-driver
       % endif
     sidecars:
       livenessProbe:
         image: 
-          % if 'containerRegistryBase' in values['global']:        
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/livenessprobe
+          % if 'containerRegistryBase' in values['global']:
+          repository: ${values['global']['containerRegistryBase']}/csi-components/livenessprobe
           % endif
       nodeDriverRegistrar:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/node-driver-registrar          
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-node-driver-registrar
           % endif
       csiProvisioner:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-provisioner
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-provisioner
           % endif
     controller:
       serviceAccount:
@@ -152,32 +152,32 @@ awsPlatform:
       provisioner:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-provisioner
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-provisioner
           % endif
       attacher:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-attacher
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-attacher
           % endif
       snapshotter:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/external-snapshotter/csi-snapshotter
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-snapshotter
           % endif
       livenessProbe:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/livenessprobe
+          repository: ${values['global']['containerRegistryBase']}/csi-components/livenessprobe
           % endif
       resizer:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/external-resizer
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-resizer
           % endif
       nodeDriverRegistrar:
         image:
           % if 'containerRegistryBase' in values['global']:
-          repository: ${values['global']['containerRegistryBase']}/kubernetes-csi/node-driver-registrar
+          repository: ${values['global']['containerRegistryBase']}/csi-components/csi-node-driver-registrar
           % endif
       volumemodifier:
         image:
@@ -191,6 +191,7 @@ awsPlatform:
         create: false
         name: platform
     node:
+      enableWindows: false
       serviceAccount:
         create: false
         name: platform
@@ -238,22 +239,22 @@ awsPlatform:
   # -- Deploy EKS kube-proxy.
   awsKubeProxyEnabled: false
   # -- Configuration for EKS kube-proxy. 
-  awsKubeProxy:      
-    % if values['global']['kubernetesVersion'] in {'1.25'}: 
-    image: "v1.25.16-minimal-eksbuild.1"
-    % elif values['global']['kubernetesVersion'] in {'1.26'}:
-    image: "v1.26.11-minimal-eksbuild.4"
-    % elif values['global']['kubernetesVersion'] in {'1.27'}:
-    image: "v1.27.8-minimal-eksbuild.4"
-    % elif values['global']['kubernetesVersion'] in {'1.28'}:
-    image: "v1.28.4-minimal-eksbuild.4"
+  awsKubeProxy:
+    # -- Mako templating to match kube-proxy image to recommended as of 1st of Oct 2025
+    # https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images
+    % if values['global']['kubernetesVersion'] in {'1.28'}:
+    image: "v1.28.15-minimal-eksbuild.31"
     % elif values['global']['kubernetesVersion'] in {'1.29'}:
-    image: "v1.29.0-minimal-eksbuild.1"
+    image: "v1.29.15-minimal-eksbuild.16"
     % elif values['global']['kubernetesVersion'] in {'1.30'}:
-    image: "v1.30.6-minimal-eksbuild.2"
+    image: "v1.30.14-minimal-eksbuild.8"
     % elif values['global']['kubernetesVersion'] in {'1.31'}:
-    image: "v1.31.2-minimal-eksbuild.2"
+    image: "v1.31.10-minimal-eksbuild.8"
+    % elif values['global']['kubernetesVersion'] in {'1.32'}:
+    image: "v1.32.6-minimal-eksbuild.8"
+    % elif values['global']['kubernetesVersion'] in {'1.33'}:
+    image: "v1.33.3-minimal-eksbuild.6"
     % else:
-    image: "v1.25.16-minimal-eksbuild.1"
+    image: "v1.28.15-minimal-eksbuild.31"
     % endif
     

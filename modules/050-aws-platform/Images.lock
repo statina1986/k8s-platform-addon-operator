@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-11-14T09:28:28.525595404Z"
+  generatedAt: "2025-09-29T12:12:38.917350153Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: aws-platform
@@ -9,98 +9,98 @@ chart:
   appVersion: ""
 images:
   - name: aws-ebs-csi-driver
-    image: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.27.0
+    image: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.49.0
     chart: aws-platform
     digests:
-      - digest: sha256:e9171cf47f1c281a184dc148fc7ff225b841b11ed343cf33dbcefcda50a9772a
+      - digest: sha256:fc6bc59f52a1219362935ff4a7366f8cd81da982e1b3b8da7e29be272b22a280
         arch: linux/amd64
-      - digest: sha256:1cc768a74faacf59c6b9d0d4cba55170875f98dcd01a362b2bb15e0f6fa76d43
+      - digest: sha256:041a0782749231be06e5e8e3a06ceda5991c1a6acebf10b75132a9617f13325a
         arch: linux/arm64
-  - name: external-provisioner
-    image: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v3.6.3-eks-1-29-3
+  - name: csi-provisioner
+    image: public.ecr.aws/csi-components/csi-provisioner:v5.3.0-eksbuild.4
     chart: aws-platform
     digests:
-      - digest: sha256:ff6a34bdeff8cfbe4a95a9581f9e7304b755af7042f2905a93c9aef785a9cb70
+      - digest: sha256:d17909b3441b9d6411d03e229627eccf8bf28af1350cdc01083839a0ecd69de5
         arch: linux/amd64
-      - digest: sha256:5d57536082f57525f25c5d483e4483a82fdb5b3ef76c8855e1f5ad4dec6d1c34
+      - digest: sha256:faf5712f2d11476d4df6ec0172f12a95d08bc6ecfa4a0b8319b15e300d792de7
         arch: linux/arm64
-  - name: external-attacher
-    image: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher:v4.4.3-eks-1-29-3
+  - name: csi-attacher
+    image: public.ecr.aws/csi-components/csi-attacher:v4.9.0-eksbuild.4
     chart: aws-platform
     digests:
-      - digest: sha256:e35046e05dbac1db0d891f4dd1ea671aad96215cdd872894dc8b4abab79884c2
+      - digest: sha256:4281d972e738dc6562116b968d7d7b7179749d4989d516fe144e16b544e337af
         arch: linux/amd64
-      - digest: sha256:7d5401a48c9ff4781a3248db2e0f2bc7cb80804d6c57d8775c93f44c75d8a865
+      - digest: sha256:cd851adfe301deba9e02c3bedca28ad592866950012c0302532fb3176a13964f
         arch: linux/arm64
   - name: csi-snapshotter
-    image: public.ecr.aws/eks-distro/kubernetes-csi/external-snapshotter/csi-snapshotter:v6.3.3-eks-1-29-3
+    image: public.ecr.aws/csi-components/csi-snapshotter:v8.3.0-eksbuild.2
     chart: aws-platform
     digests:
-      - digest: sha256:f33d95ff3ee4113f9b7c10f10242b1f964d66402300bacd3aab0a8ad088b382c
+      - digest: sha256:f36037c6de2f2163b6fb650062e5caa49cfc5b6304704f698a7e4a13c796e2a1
         arch: linux/amd64
-      - digest: sha256:daadc6e545669524a37c624d75e99d1499e87081ec0957f42fa66908880b5de9
+      - digest: sha256:09d403eb7bcf1ee782868569f0cd1a8b32cac9c34571c0f0c71ca7c9afc843f8
         arch: linux/arm64
   - name: livenessprobe
-    image: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.11.0-eks-1-29-3
+    image: public.ecr.aws/csi-components/livenessprobe:v2.16.0-eksbuild.5
     chart: aws-platform
     digests:
-      - digest: sha256:f050c8d68a06a28d1dbdd6feb79ac132475d71bc3635577e1acb23e3e119d196
+      - digest: sha256:4e62d38e79da278ded64cfdb33932e0d4fc3b588fd64d3b002b07dcc47a36299
         arch: linux/amd64
-      - digest: sha256:36ce6686436c4a95ea636283fe392b7554c9e334a0f5d8c6a57afc6e4115dd9a
+      - digest: sha256:079aeacb422664fc2eee4ab056600bed9f5e79db81e69b3593f51101ff373beb
         arch: linux/arm64
-  - name: external-resizer
-    image: public.ecr.aws/eks-distro/kubernetes-csi/external-resizer:v1.9.3-eks-1-29-3
+  - name: csi-resizer
+    image: public.ecr.aws/csi-components/csi-resizer:v1.14.0-eksbuild.4
     chart: aws-platform
     digests:
-      - digest: sha256:4382f9c42eac5ef9bef6087bc37405277a13e5494938dcbe7d03f1b6f9f54a73
+      - digest: sha256:d08c72f6dcf6c927d86d09bca547bee59fd72aa6142ed6d7f8fad7c2829e8ea9
         arch: linux/amd64
-      - digest: sha256:8aa3100bdd7278d6da33fbd53ddf9706b2e65decab4186ed5dd2d75c81815550
+      - digest: sha256:5bb84ff912e71bdef94eb1140d84ff3326e12d215d7b02391799763100d6eebd
         arch: linux/arm64
-  - name: node-driver-registrar
-    image: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.9.3-eks-1-29-3
+  - name: csi-node-driver-registrar
+    image: public.ecr.aws/csi-components/csi-node-driver-registrar:v2.14.0-eksbuild.5
     chart: aws-platform
     digests:
-      - digest: sha256:4f220894ca29cd345634cc3bcb4992598acd41046dc85dd6a82aa42961345d4a
+      - digest: sha256:5380f35f99e3721718a5db0a8237bcbf818dfcb369ace327c927fe63a45f82a1
         arch: linux/amd64
-      - digest: sha256:c6c7e483bf01cf47fbd97854deb440ca9d33fbcb99a858b6ea2fad09490cb46b
+      - digest: sha256:452e254e9dbc6a50b056af765e740e509591af2af5bbdceb7f78ed895a047238
         arch: linux/arm64
   - name: volume-modifier-for-k8s
-    image: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s:v0.2.1
+    image: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s:v0.8.0
     chart: aws-platform
     digests:
-      - digest: sha256:1e80ff8d05cc7b7f105bc13dfac4efd52ac62cab91c14cb7bfbc27d0a77f60b9
+      - digest: sha256:46f594957ce00e3669dbbfa9e37a96d0aa2874410a37d87b172480c15943a00c
         arch: linux/amd64
-      - digest: sha256:893a2b02edeb61e73f12926baa1a74b401c4ceb1754be0236c2399d6627a428f
+      - digest: sha256:92aef41c400481d2099ab06c841aa8997d20da7495c8a5e40c0e151d9bb2b53d
         arch: linux/arm64
   - name: aws-efs-csi-driver
-    image: amazon/aws-efs-csi-driver:v1.7.4
+    image: public.ecr.aws/efs-csi-driver/amazon/aws-efs-csi-driver:v2.1.12
     chart: aws-platform
     digests:
-      - digest: sha256:b012f5946e740806d9e008a0388209371e2c07ed6ba335106cebb5f4eb5868af
+      - digest: sha256:32ff26af702abebdc91600ad5a5461b7d182ebc5a213778a7baf0abf92379f54
         arch: linux/amd64
-      - digest: sha256:b4d5c34d47be03e2449bb708841c6f66e69c3e0e832791ba738e133b6862c65c
+      - digest: sha256:222f9cfcabe564907a93f3268120270727423ec34398270246dcc8c4ee4a6485
         arch: linux/arm64
   - name: aws-load-balancer-controller
-    image: public.ecr.aws/eks/aws-load-balancer-controller:v2.7.0
+    image: public.ecr.aws/eks/aws-load-balancer-controller:v2.13.4
     chart: aws-platform
     digests:
-      - digest: sha256:a819361b6a151d42b0df1d1cd59266f6dca9e45e807010baa03889020ca5a489
+      - digest: sha256:20fc8b56e7c8606595530c76f9d95c7432e5dbd86258fbcab46fa5609d0fb17d
         arch: linux/amd64
-      - digest: sha256:ca29996d4c350ff0492059f7a4d41d90bf2df78cf16bfe59a669a911f68cb7da
+      - digest: sha256:c9a24895b20f1d7c2c2e0eb67c5e4bbf9a43a4f99237f4f98a596f1c1268a6cd
         arch: linux/arm64
   - name: init-udev-rule
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: aws-platform
     digests:
-      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64
   - name: dummy-container
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: aws-platform
     digests:
-      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64

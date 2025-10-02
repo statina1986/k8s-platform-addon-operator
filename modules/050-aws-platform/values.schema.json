@@ -58,6 +58,12 @@
             },
             "node": {
               "properties": {
+                "enableWindows": {
+                  "default": false,
+                  "required": [],
+                  "title": "enableWindows",
+                  "type": "boolean"
+                },
                 "serviceAccount": {
                   "properties": {
                     "create": {
@@ -89,7 +95,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-attacher",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-attacher",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -109,7 +115,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/livenessprobe",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -129,7 +135,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-node-driver-registrar",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -149,7 +155,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-provisioner",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -169,7 +175,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-resizer",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-resizer",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -189,7 +195,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/external-snapshotter/csi-snapshotter",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-snapshotter",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -439,7 +445,7 @@
             "image": {
               "properties": {
                 "repository": {
-                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/amazon/aws-efs-csi-driver",
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/efs-csi-driver/amazon/aws-efs-csi-driver",
                   "required": [],
                   "title": "repository",
                   "type": "string"
@@ -482,7 +488,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-provisioner",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -502,7 +508,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/livenessprobe",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -522,7 +528,7 @@
                     "image": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-node-driver-registrar",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -848,7 +854,8 @@
           "description": "Configuration for EKS kube-proxy. ",
           "properties": {
             "image": {
-              "default": "v1.25.16-minimal-eksbuild.1",
+              "default": "v1.28.15-minimal-eksbuild.31",
+              "description": "Mako templating to match kube-proxy image to recommended as of 1st of Oct 2025\nhttps://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images",
               "required": [],
               "title": "image",
               "type": "string"

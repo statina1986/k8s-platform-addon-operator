@@ -57,28 +57,29 @@ Provides:
 image:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ebs-csi-driver/aws-ebs-csi-driver
 node:
+    enableWindows: false
     serviceAccount:
         create: false
         name: platform
 sidecars:
     attacher:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-attacher
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-attacher
     livenessProbe:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/livenessprobe
     nodeDriverRegistrar:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-node-driver-registrar
     provisioner:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-provisioner
     resizer:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-resizer
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-resizer
     snapshotter:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/external-snapshotter/csi-snapshotter
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-snapshotter
     volumemodifier:
         image:
             repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/ebs-csi-driver/volume-modifier-for-k8s
@@ -134,7 +135,7 @@ Deploy aws-ebs-csi-driver helm-chart.
           operator: Equal
           value: platform-masters
 image:
-    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/amazon/aws-efs-csi-driver
+    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/efs-csi-driver/amazon/aws-efs-csi-driver
 node:
     serviceAccount:
         create: false
@@ -142,13 +143,13 @@ node:
 sidecars:
     csiProvisioner:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/external-provisioner
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-provisioner
     livenessProbe:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/livenessprobe
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/livenessprobe
     nodeDriverRegistrar:
         image:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/kubernetes-csi/node-driver-registrar
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/csi-components/csi-node-driver-registrar
 storageClasses:
     - mountOptions:
         - tls
@@ -262,11 +263,24 @@ Deploy aws-vpc-cni helm-chart.
 			<td style="width: 300px;" id="awsPlatform--awsKubeProxy">awsPlatform.awsKubeProxy</td>
 			<td>object</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>image: v1.25.16-minimal-eksbuild.1</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>image: v1.28.15-minimal-eksbuild.31</code></pre>
 </td>
 			<td><div>
 
 Configuration for EKS kube-proxy.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="awsPlatform--awsKubeProxy--image">awsPlatform.awsKubeProxy.image</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>v1.28.15-minimal-eksbuild.31</code></pre>
+</td>
+			<td><div>
+
+Mako templating to match kube-proxy image to recommended as of 1st of Oct 2025 https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images
 
 </div>
 </td>
