@@ -19,7 +19,7 @@ kyvernoPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
     webhooksCleanup:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -28,7 +28,7 @@ kyvernoPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
     test:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -37,4 +37,25 @@ kyvernoPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
+    cleanupJobs:
+      admissionReports:
+        image:
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
+      clusterAdmissionReports:
+        image:
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
+      updateRequests:
+        image:
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
+      ephemeralReports:
+        image:
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
+      clusterEphemeralReports:
+        image:
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc

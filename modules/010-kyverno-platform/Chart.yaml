@@ -9,7 +9,7 @@ annotations:
     - name: kyverno-cli
       image: ghcr.io/kyverno/kyverno-cli:v1.12.5
     - name: tools
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     - name: kyvernopre
       image: ghcr.io/kyverno/kyvernopre:v1.12.5
     - name: kyverno
