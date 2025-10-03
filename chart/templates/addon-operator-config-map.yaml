@@ -141,11 +141,6 @@ data:
   {{- if .Values.modulesConfig.pomeriumPlatform }}
   pomeriumPlatform: {{ print "|\n" (.Values.modulesConfig.pomeriumPlatform | toYaml | indent 4) }}
   {{- end }}
-  
-  postgresPlatformEnabled: "{{ .Values.modulesConfig.postgresPlatformEnabled }}"
-  {{- if .Values.modulesConfig.postgresPlatform }}
-  postgresPlatform: {{ print "|\n" (.Values.modulesConfig.postgresPlatform | toYaml | indent 4) }}
-  {{- end }}
 
   progressPlatformEnabled: "{{ .Values.modulesConfig.progressPlatformEnabled }}"
   {{- if .Values.modulesConfig.progressPlatform }}

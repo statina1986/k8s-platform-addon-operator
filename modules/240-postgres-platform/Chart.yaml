@@ -1,6 +1,0 @@
-apiVersion: v2
-name: postgres-platform
-version: 0.0.1
-dependencies:
-  - name: postgresPlatform
-    version: 0.0.1

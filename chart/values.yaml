@@ -80,7 +80,6 @@ modulesConfig:
   monitoringPlatformEnabled: "false"
   perconaPmmPlatformEnabled: "false"
   pomeriumPlatformEnabled: "false"
-  postgresPlatformEnabled: "false"
   progressPlatformEnabled: "false"
   qvantelGlueEnabled: "false"
   rabbitmqPlatformEnabled: "false"
