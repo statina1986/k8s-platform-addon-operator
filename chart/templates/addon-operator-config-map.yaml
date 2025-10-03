@@ -102,11 +102,6 @@ data:
   lokiPlatform: {{ print "|\n" (.Values.modulesConfig.lokiPlatform | toYaml | indent 4) }}
   {{- end }}
 
-  mariadbPlatformEnabled: "{{ .Values.modulesConfig.mariadbPlatformEnabled }}"
-  {{- if .Values.modulesConfig.mariadbPlatform }}
-  mariadbPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbPlatform | toYaml | indent 4) }}
-  {{- end }}
-
   mariadbOperatorPlatformEnabled: "{{ .Values.modulesConfig.mariadbOperatorPlatformEnabled }}"
   {{- if .Values.modulesConfig.mariadbOperatorPlatform }}
   mariadbOperatorPlatform: {{ print "|\n" (.Values.modulesConfig.mariadbOperatorPlatform | toYaml | indent 4) }}

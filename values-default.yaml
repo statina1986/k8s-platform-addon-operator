@@ -52,7 +52,6 @@ lokiPlatform: {}
 lokiPlatformEnabled: "true"
 mariadbOperatorPlatform: {}
 mariadbOperatorPlatformEnabled: "true"
-mariadbPlatformEnabled: "true"
 metricsPlatformEnabled: "true"
 minioPlatform: {}
 minioPlatformEnabled: "true"

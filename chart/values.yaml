@@ -72,7 +72,6 @@ modulesConfig:
         create: true
         secretName: "loki-s3-readwrite"
   keycloakPlatformEnabled: "false"
-  mariadbPlatformEnabled: "false"
   mariadbOperatorPlatformEnabled: "false"
   metallbPlatformEnabled: "false"
   metricsPlatformEnabled: "false"
