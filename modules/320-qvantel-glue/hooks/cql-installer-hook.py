@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+from gevent import monkey
+monkey.patch_all()
+
 import sys
+
 from common.python.utils import *
 from common.python.hooks import *
 from common.python.vault import *
@@ -9,6 +13,7 @@ from common.python.inline import *
 
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
+
 
 class CqlInstallersHook(Hook):
     def __init__(self):

@@ -4,7 +4,8 @@ ARG TARGETARCH
 
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
-RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2 py3-kubernetes
+RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2 py3-kubernetes py3-gevent
+
 RUN pip3 install "hvac[parser]"
 RUN pip3 install boto3
 RUN pip3 install python-json-logger
