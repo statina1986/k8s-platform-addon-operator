@@ -81,8 +81,9 @@ spec:
 {{- if $current.dbs }}
 {{- range keys $current.dbs  }}
 {{- $db := get $current.dbs . }}
-{{- $db_name := ( . | replace "-" "_") }}
-{{- $db_rf := ( $db.replicationFactors | default "{'class':'NetworkTopologyStrategy', 'DC1': 1}") }}
+{{- $db_name := . }}
+{{- $db_name_underscore := ( . | replace "-" "_") }}
+{{- $db_rf := ( $db.replicationFactors | default "{'class':'NetworkTopologyStrategy', 'dc1': 1}") }}
 
 ---
 apiVersion: platform.qvantel.com/v1
@@ -90,15 +91,15 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: cassandra-{{ . }}-installer
+  name: cassandra-{{ $db_name }}-installer
 spec:  
   {{- if and $db.cql $db.cql.provision }}
   db-provision-cql:
     {{- tpl (toYaml $db.cql.provision) $root | nindent 2 }}
   {{- else }}
   db-provision-cql:
-    - "CREATE KEYSPACE IF NOT EXISTS {{ $db_name }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
-    - "ALTER KEYSPACE {{ $db_name }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
+    - "CREATE KEYSPACE IF NOT EXISTS {{ $db_name_underscore }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
+    - "ALTER KEYSPACE {{ $db_name_underscore }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
   {{ end }}
   {{- if and $db.cql $db.cql.additional }}
   additional-cql:
@@ -136,12 +137,12 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: cassandra-{{ . }}
+  name: cassandra-{{ $db_name }}-{{ $root.Values.global.appsNamespace }}
 spec:
   db-name: cassandra-{{ $current_name }}
   creation-statements: >-
-    {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
-  role-name: cassandra_{{ . }}
+    {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE %s TO {{username}};" $db_name_underscore }}
+  role-name: {{ $root.Values.global.appsNamespace }}-{{ $db_name }}-cassandra
 
 {{- end }}
 
@@ -153,17 +154,18 @@ spec:
 {{- if $current.roles }}
 {{- range keys $current.roles  }}
 {{- $dbrole := get $current.roles . }}
+{{- $dbRoleName := . }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbrole }}
+  name: {{ $dbRoleName }}
 spec:  
   creation-statements: {{ $dbrole.cql }}
   db-name: cassandra-{{ $current_name }}
   default-ttl: "0"
   max-ttl: "0"
-  role-name: {{ $dbrole }}
+  role-name: {{ $dbRoleName }}
 
 {{- end }}
 {{- end }}
