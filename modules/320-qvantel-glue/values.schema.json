@@ -26,6 +26,35 @@
           "title": "cluster",
           "type": "object"
         },
+        "cqls": {
+          "description": "Configures additional CqlInstallers for this cluster. Keys in this map will be used as Vault roles names.",
+          "properties": {
+            "migration-tables": {
+              "properties": {
+                "cql": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "required": [],
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "cql",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "migration-tables",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "cqls",
+          "type": "object"
+        },
         "dbs": {
           "description": "Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions.\nThis is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).",
           "properties": {
@@ -52,6 +81,28 @@
             },
             "revenue-events": {
               "properties": {
+                "cql": {
+                  "properties": {
+                    "additional": {
+                      "description": "It is possible to define additional CQL for the keyspace initialization (handy if you want to keep keyspace creation logic default, but still to add something, like additional tables).",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "additional",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "cql",
+                  "type": "object"
+                },
                 "replicationFactors": {
                   "default": "{'class':'NetworkTopologyStrategy', 'DC1': 1}",
                   "description": "Replication configuration for the Keyspace.",
@@ -95,10 +146,10 @@
           "properties": {
             "custom-role-access-all-keyspaces": {
               "properties": {
-                "sql": {
+                "cql": {
                   "default": "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};\n",
                   "required": [],
-                  "title": "sql",
+                  "title": "cql",
                   "type": "string"
                 }
               },

@@ -456,11 +456,18 @@ Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minu
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
     spec: null
     vaultConfiguration: true
+cqls:
+    migration-tables:
+        cql:
+            - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
 dbs:
     messaging:
         cql:
             provision: "- \"CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"\n- \"ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"   \n"
     revenue-events:
+        cql:
+            additional:
+                - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
         replicationFactors: '{''class'':''NetworkTopologyStrategy'', ''DC1'': 1}'
         roles:
             apps-another-app-to-access-revenue-events:
@@ -468,7 +475,7 @@ dbs:
                     CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE revenue_events TO {{username}};
 roles:
     custom-role-access-all-keyspaces:
-        sql: |
+        cql: |
             CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};</code></pre>
 </td>
 			<td><div>
@@ -518,6 +525,19 @@ Create Vault configuration for this cluster according to Qvantel conventions, i.
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;">example-cassandra.cqls</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configures additional CqlInstallers for this cluster. Keys in this map will be used as Vault roles names.
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;">example-cassandra.dbs</td>
 			<td>object</td>
 			<td>
@@ -539,6 +559,19 @@ Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  data
 			<td><div>
 
 It is possible to define provisioning CQL for the keyspace if customization is required.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.dbs.revenue-events.cql.additional</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+It is possible to define additional CQL for the keyspace initialization (handy if you want to keep keyspace creation logic default, but still to add something, like additional tables).
 
 </div>
 </td>

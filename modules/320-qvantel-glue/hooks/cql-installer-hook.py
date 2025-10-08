@@ -54,6 +54,7 @@ class CqlInstallersHook(Hook):
             name = event['object']['metadata']['name']
             namespace = event['object']['metadata']['namespace']
             db_provision_cql = event['object']['spec']['db-provision-cql']
+            additional_cql = event['object']['spec'].get('additional-cql', [])    
             db_secret = event['object']['spec'].get(
                 'db-secret-name', '')
             db_username = event['object']['spec'].get(
@@ -90,6 +91,11 @@ class CqlInstallersHook(Hook):
                 statement = replace_computed_values(
                     statement, vals)
                 session.execute(statement)                    
+
+            for statement in additional_cql:
+                statement = replace_computed_values(
+                    statement, vals)
+                session.execute(statement)
 
             execute_post_actions(post_actions, vals)
 

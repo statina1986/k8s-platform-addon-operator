@@ -371,6 +371,12 @@ example-cassandra:
           - "CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;"
           - "ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;"   
     revenue-events:
+      cql:
+        # -- It is possible to define additional CQL for the keyspace initialization (handy if you want to keep keyspace creation logic default, but still to add something, like additional tables).
+        # @default -- null
+        # @section -- Examples-Cassandra
+        additional:
+        - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
       # -- Replication configuration for the Keyspace.
       # @default -- {'class':'NetworkTopologyStrategy', 'DC1': 1}
       # @section -- Examples-Cassandra
@@ -388,5 +394,13 @@ example-cassandra:
   # @section -- Examples-Cassandra
   roles:
     custom-role-access-all-keyspaces:
-      sql: |
+      cql: |
         CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};
+
+  # -- Configures additional CqlInstallers for this cluster. Keys in this map will be used as Vault roles names.
+  # @default -- {}
+  # @section -- Examples-Cassandra
+  cqls:
+    migration-tables:
+      cql:
+      - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
