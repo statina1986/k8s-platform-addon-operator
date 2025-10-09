@@ -545,7 +545,7 @@ Configures additional CqlInstallers for this cluster. Keys in this map will be u
 </td>
 			<td><div>
 
-Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions. This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).
+Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions. This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_). E.g. in the following example `messaging` and `revenue_events` Keyspaces will be created.
 
 </div>
 </td>

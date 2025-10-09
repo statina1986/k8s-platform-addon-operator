@@ -12,7 +12,7 @@ import base64
 {{- if ne $dbCluster.cluster nil }}
 
 {{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) (deepCopy $dbCluster.cluster) }}
-{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator) | fromYaml }}
+{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) $cluster }}
 {{- $_ := set $dbCluster "cluster" $cluster}}
 
@@ -32,7 +32,7 @@ metadata:
     {{- with $cluster.additionalLabels }}
       {{ toYaml . | nindent 4 }}
     {{- end }}
-spec:  
+spec:
   {{- toYaml $cluster.spec | nindent 2 }}
 
 ---
