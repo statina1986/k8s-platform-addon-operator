@@ -551,6 +551,12 @@ def initiate_scaleup_eks(ng):
         scalingConfig=scaling_config
     )
 
+    # Remove scaling config from the tags. This is needed to have a clean state similar to what was before scaledown (and Terraforms should feels better). 
+    eks_client.untag_resource(
+        resourceArn=ng["nodegroupArn"],
+        tags=['pre-turndown-scaling-configuration']        
+    )
+
     logger.info("Initiated scale-up for nodegroup " + ng["nodegroupName"])
     return {
         "clusterName": ng["clusterName"],
