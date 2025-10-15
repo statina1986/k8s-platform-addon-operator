@@ -40,10 +40,13 @@ spec:
     {{- else }}
     {{- tpl (toYaml .) $root | nindent 2 }}
     {{ end }}
-    
   {{- end }}
   {{- with $current.tcp }}
   tcp: 
+    {{- tpl (toYaml .) $root | nindent 2 }}
+  {{- end }}
+  {{- with $current.tls }}
+  tls: 
     {{- tpl (toYaml .) $root | nindent 2 }}
   {{- end }}
 {{- end }}
