@@ -3,14 +3,14 @@ name: elasticsearchPlatform
 version: 0.0.1
 dependencies:
   - name: eck-operator
-    version: 2.2.0
+    version: 3.1.0
     repository: https://helm.elastic.co
     condition: eck-operator.enabled
   - name: logstash
-    version: 7.16.2
+    version: 8.5.1
     repository: https://helm.elastic.co
     condition: logstashEnabled
-  - name: filebeat
-    version: 7.16.2
+  - name: eck-beats
+    version: 0.16.0
     repository: https://helm.elastic.co
     condition: filebeatEnabled

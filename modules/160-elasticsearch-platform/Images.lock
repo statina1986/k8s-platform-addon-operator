@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-12-03T08:21:11.520303663Z"
+  generatedAt: "2025-10-06T13:09:58.194502511Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: elasticsearch-platform
@@ -9,42 +9,44 @@ chart:
   appVersion: ""
 images:
   - name: elasticsearch
-    image: docker.io/library/elasticsearch:7.16.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.5
     chart: elasticsearch-platform
     digests:
-      - digest: sha256:3e82c0aefb87f2b716d0d09ffc252076b200a05eb1692c795dcb5c3057952477
+      - digest: sha256:13cfa5a3806c37fac0ca17ed9345c1d3c6b23a847e66621f6fb0acd8594f7b5d
         arch: linux/amd64
-      - digest: sha256:5837d1482e31630c7c8f0b309743361c260c50749dd2ca14d96b8950f727993b
+      - digest: sha256:49daf71a92130e0ee81a45f1eb1c810fd146bee98534d7a4d1ddf65739f793d3
         arch: linux/arm64
   - name: kibana
-    image: docker.io/library/kibana:7.16.2
+    image: docker.elastic.co/kibana/kibana:9.1.5
     chart: elasticsearch-platform
     digests:
-      - digest: sha256:51aec3d4fa9711e712bcd0af984bfc35a6fe0cb1bcaef2f241b5c5fafbf18e4d
+      - digest: sha256:56984179a54b7fa572a031b7e493d163ad7a14574657d031dadaf0bec5fb105e
         arch: linux/amd64
-      - digest: sha256:f4bbb4e68162da8d7b492294e5fbdb8af96fe9149b3f844445b530695327665e
+      - digest: sha256:86dbe2a314725837c974f067be0cf6c9535312aaf20d7bfcae7c9fc47b5253f0
         arch: linux/arm64
   - name: eck-operator
-    image: docker.io/elastic/eck-operator:2.2.0
+    image: docker.elastic.co/eck/eck-operator:3.1.0
     chart: elasticsearch-platform
     digests:
-      - digest: sha256:9f959870f664f36557b7d7163c0eb3498b6f3111b28e90313a7b04fe75a6f42a
+      - digest: sha256:928caa6973be7c6595df1eba48c5b733eb5a0a441db1d941917c9600728124b8
         arch: linux/amd64
-      - digest: sha256:3ef1438ca50c0bd1434658bb2c0870628139fdf9e58e200e7f554ab368532139
+      - digest: sha256:a63e7c7c7f88310fce22baff618faabc57a7eed513f2b275a7e6a4752bec9831
         arch: linux/arm64
   - name: filebeat
-    image: docker.io/elastic/filebeat:7.16.2
+    image: docker.elastic.co/beats/filebeat-oss:9.1.5
     chart: elasticsearch-platform
     digests:
-      - digest: sha256:92aa1b3478d4d1edc9428957999770e6f42516f2435816bdda03b992b18478eb
+      - digest: sha256:78ad4694be8769a1a3f40e4de868315f7cf9d74fa9d88a9d09dac962a295a4ca
         arch: linux/amd64
+      - digest: sha256:89f8b0cdaab05f92b98f3e62e8b48614ee9aedbf29f92f7181bc5764b21de66b
+        arch: linux/arm64
   - name: logstash
-    image: docker.io/library/logstash:7.16.2
+    image: docker.elastic.co/logstash/logstash:9.1.5
     chart: elasticsearch-platform
     digests:
-      - digest: sha256:a3f0ea205881847c0f72c07dd4e8cc49246f34c6cbefae35c3719f81552d812b
+      - digest: sha256:51ef21d5290d4a89a91449d80195d45d8887ca1150a865614f430fd929bfc867
         arch: linux/amd64
-      - digest: sha256:c2350fb6b74b694615e628764b338a2885ea55d7cfdd4344feb1e5ed41b7f12f
+      - digest: sha256:99786b0037289ab3a7b8d61d14d04d6206067e57c31977469d214cbb77df42ec
         arch: linux/arm64
   - name: loggingsetup
     image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
