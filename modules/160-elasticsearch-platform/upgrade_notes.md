@@ -1,37 +1,12 @@
-upgrade procedure:
+Module ships with 7.17.29
 
-eck-operator to 3.1.0
+Version can be set with 
 
-add to configuration:
-
+```
   elasticsearchPlatform:
-    eck-operator:
-      image:
-        repository: docker.elastic.co/eck/eck-operator
-        tag: 3.1.0
-      nameOverride: "elastic-operator"
-      fullnameOverride: "elastic-operator"
+    coreStackVersion: 8.19.5
+```
 
-elasticsearch version upgrade to 7.17.29
+Upgrade to 8.19.5 should be relatively painless.
 
-          image: >-
-            docker.elastic.co/elasticsearch/elasticsearch:7.17.29
-  version: 7.17.29
-
-to kind: Elasticsearch resource (elasticsearch logsearch in this case)
-
-Do the same to kibana
-
-Then check upgrade assistant in Kibana if anything is required, likely only warnings which do not stop from upgrading to 8.x
-
-Then same edits but from 7.17.29 to 8.19.5
-
-Now upgrade assistant shows that system index migration and reindexing is required
-
-then finally 8.19.5 to 9.1.5 for kibana and elasticsearch
-
-(maybe 7.17.29)
-
-plan:
-eck-operator to 3.1.0
-default to 7.17.29 but also mako template upgrading to 8.19.5 and 9.1.5
+Upgrade to 9.1.5 when initial indices are from 7.x or older is less trivial, upgrade assistant is highly recommended - even in local environment with no data system index migration and reindexing is required.
