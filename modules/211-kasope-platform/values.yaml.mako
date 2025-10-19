@@ -13,6 +13,38 @@ kasopePlatform:
       % else:
       clusterScoped: true
       % endif
+      # -- Setting new imageConfig from k8ssandra-operator 1.27.0
+      imageConfig:
+        images:
+          system-logger:
+            repository: "k8ssandra"
+            name: "system-logger"
+            tag: "v1.27.1"
+          config-builder:
+            repository: "datastax"
+            name: "cass-config-builder"
+            tag: "1.0-ubi8"
+          k8ssandra-client:
+            repository: "k8ssandra"
+            name: "k8ssandra-client"
+            tag: "v0.8.3"
+          reaper:
+            repository: "thelastpickle"
+            name: "cassandra-reaper"
+            tag: "4.0.0"
+          medusa:
+            repository: "k8ssandra"
+            name: "medusa"
+            tag: "0.25.1"
+        types:
+          cassandra:
+            repository: "k8ssandra"
+            name: "cass-management-api"
+            suffix: "-ubi8"
+        defaults:
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}
+          % endif
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -37,17 +69,6 @@ kasopePlatform:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
         % endif
-        repositoryOverride: 
-          cassandra:
-            % if 'containerRegistryBase' in values['global']:
-            "3.11.13": ${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13
-            % endif
-      imageConfig:
-        % if 'containerRegistryBase' in values['global']:
-        systemLogger: ${values['global']['containerRegistryBase']}/k8ssandra/system-logger:v1.22.4
-        configBuilder: ${values['global']['containerRegistryBase']}/datastax/cass-config-builder:1.0-ubi8
-        k8ssandraClient: ${values['global']['containerRegistryBase']}/k8ssandra/k8ssandra-client:v0.2.2
-        % endif
       admissionWebhooks:
         enabled: false
       serviceAccount:
@@ -66,6 +87,10 @@ kasopePlatform:
         cassandra:
           serviceAccount: platform
           serverVersion: "3.11.13"
+          # -- Setting serverImage to override the value coming from k8ssandra-operator.global.imageconfig.types
+          % if values.get('kasopePlatform', {}).get('clusters', {}).get('cluster', {}).get('spec', {}).get('cassandra', {}).get('serverVersion', '').strip() == "3.11.13":
+          serverImage: "${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13"
+          % endif
           metadata:
             annotations:
               cassandra.datastax.com/allow-storage-changes: 'true'
@@ -167,26 +192,6 @@ kasopePlatform:
                 release: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
             mcac:
               enabled: false
-        % if values.get('kasopePlatform', {}).get('clusters', {}).get('cluster', {}).get('spec', {}).get('medusa', None) is not None: 
-        medusa:
-          containerImage:
-            % if 'containerRegistryBase' in values['global']:
-            registry: ${values['global']['containerRegistryBase']}
-            tag: "0.22.2"
-            % endif
-        % endif
         reaper:
           autoScheduling:
             enabled: true
-          containerImage:
-            name: "cassandra-reaper"
-            % if 'containerRegistryBase' in values['global']:
-            registry: ${values['global']['containerRegistryBase']}
-            tag: "3.6.1"
-            % endif
-          initContainerImage:
-            name: "cassandra-reaper"
-            % if 'containerRegistryBase' in values['global']:
-            registry: ${values['global']['containerRegistryBase']}
-            tag: "3.6.1"
-            % endif
