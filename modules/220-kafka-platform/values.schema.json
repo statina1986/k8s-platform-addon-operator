@@ -16,6 +16,12 @@
               "properties": {
                 "annotations": {
                   "properties": {
+                    "strimzi.io/kraft": {
+                      "default": "enabled",
+                      "required": [],
+                      "title": "strimzi.io/kraft",
+                      "type": "string"
+                    },
                     "strimzi.io/node-pools": {
                       "default": "enabled",
                       "required": [],
@@ -35,7 +41,7 @@
                 },
                 "nodePools": {
                   "properties": {
-                    "broker": {
+                    "controller": {
                       "properties": {
                         "enabled": {
                           "default": true,
@@ -46,10 +52,55 @@
                         "spec": {
                           "properties": {
                             "replicas": {
-                              "default": 1,
+                              "default": 3,
                               "required": [],
                               "title": "replicas",
                               "type": "integer"
+                            },
+                            "resources": {
+                              "properties": {
+                                "limits": {
+                                  "properties": {
+                                    "cpu": {
+                                      "default": "1",
+                                      "required": [],
+                                      "title": "cpu",
+                                      "type": "string"
+                                    },
+                                    "memory": {
+                                      "default": "2Gi",
+                                      "required": [],
+                                      "title": "memory",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "limits",
+                                  "type": "object"
+                                },
+                                "requests": {
+                                  "properties": {
+                                    "cpu": {
+                                      "default": "0.1",
+                                      "required": [],
+                                      "title": "cpu",
+                                      "type": "string"
+                                    },
+                                    "memory": {
+                                      "default": "1Gi",
+                                      "required": [],
+                                      "title": "memory",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "requests",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "resources",
+                              "type": "object"
                             },
                             "roles": {
                               "items": {
@@ -74,7 +125,7 @@
                                   "type": "boolean"
                                 },
                                 "size": {
-                                  "default": "10Gi",
+                                  "default": "2Gi",
                                   "required": [],
                                   "title": "size",
                                   "type": "string"
@@ -89,70 +140,176 @@
                               "required": [],
                               "title": "storage",
                               "type": "object"
-                            }
-                          },
-                          "required": [],
-                          "title": "spec",
-                          "type": "object"
-                        }
-                      },
-                      "required": [],
-                      "title": "broker",
-                      "type": "object"
-                    },
-                    "controller": {
-                      "properties": {
-                        "enabled": {
-                          "default": false,
-                          "required": [],
-                          "title": "enabled",
-                          "type": "boolean"
-                        },
-                        "spec": {
-                          "properties": {
-                            "replicas": {
-                              "default": 1,
-                              "required": [],
-                              "title": "replicas",
-                              "type": "integer"
                             },
-                            "roles": {
-                              "items": {
-                                "anyOf": [
-                                  {
-                                    "required": [],
-                                    "type": "string"
-                                  }
-                                ],
-                                "required": []
-                              },
-                              "required": [],
-                              "title": "roles",
-                              "type": "array"
-                            },
-                            "storage": {
+                            "template": {
                               "properties": {
-                                "deleteClaim": {
-                                  "default": false,
+                                "pod": {
+                                  "properties": {
+                                    "affinity": {
+                                      "properties": {
+                                        "podAntiAffinity": {
+                                          "properties": {
+                                            "requiredDuringSchedulingIgnoredDuringExecution": {
+                                              "items": {
+                                                "anyOf": [
+                                                  {
+                                                    "properties": {
+                                                      "labelSelector": {
+                                                        "properties": {
+                                                          "matchExpressions": {
+                                                            "items": {
+                                                              "anyOf": [
+                                                                {
+                                                                  "properties": {
+                                                                    "key": {
+                                                                      "default": "strimzi.io/controller-role",
+                                                                      "required": [],
+                                                                      "title": "key",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "operator": {
+                                                                      "default": "In",
+                                                                      "required": [],
+                                                                      "title": "operator",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "values": {
+                                                                      "items": {
+                                                                        "anyOf": [
+                                                                          {
+                                                                            "required": [],
+                                                                            "type": "string"
+                                                                          }
+                                                                        ],
+                                                                        "required": []
+                                                                      },
+                                                                      "required": [],
+                                                                      "title": "values",
+                                                                      "type": "array"
+                                                                    }
+                                                                  },
+                                                                  "required": [],
+                                                                  "type": "object"
+                                                                },
+                                                                {
+                                                                  "properties": {
+                                                                    "key": {
+                                                                      "default": "strimzi.io/cluster",
+                                                                      "required": [],
+                                                                      "title": "key",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "operator": {
+                                                                      "default": "In",
+                                                                      "required": [],
+                                                                      "title": "operator",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "values": {
+                                                                      "items": {
+                                                                        "anyOf": [
+                                                                          {
+                                                                            "required": [],
+                                                                            "type": "string"
+                                                                          }
+                                                                        ],
+                                                                        "required": []
+                                                                      },
+                                                                      "required": [],
+                                                                      "title": "values",
+                                                                      "type": "array"
+                                                                    }
+                                                                  },
+                                                                  "required": [],
+                                                                  "type": "object"
+                                                                }
+                                                              ],
+                                                              "required": []
+                                                            },
+                                                            "required": [],
+                                                            "title": "matchExpressions",
+                                                            "type": "array"
+                                                          }
+                                                        },
+                                                        "required": [],
+                                                        "title": "labelSelector",
+                                                        "type": "object"
+                                                      },
+                                                      "topologyKey": {
+                                                        "default": "kubernetes.io/hostname",
+                                                        "required": [],
+                                                        "title": "topologyKey",
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [],
+                                                    "type": "object"
+                                                  }
+                                                ],
+                                                "required": []
+                                              },
+                                              "required": [],
+                                              "title": "requiredDuringSchedulingIgnoredDuringExecution",
+                                              "type": "array"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "podAntiAffinity",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "affinity",
+                                      "type": "object"
+                                    },
+                                    "tolerations": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "properties": {
+                                              "effect": {
+                                                "default": "NoSchedule",
+                                                "required": [],
+                                                "title": "effect",
+                                                "type": "string"
+                                              },
+                                              "key": {
+                                                "default": "dedicated-nodes",
+                                                "required": [],
+                                                "title": "key",
+                                                "type": "string"
+                                              },
+                                              "operator": {
+                                                "default": "Equal",
+                                                "required": [],
+                                                "title": "operator",
+                                                "type": "string"
+                                              },
+                                              "value": {
+                                                "default": "platform-masters",
+                                                "required": [],
+                                                "title": "value",
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [],
+                                            "type": "object"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "tolerations",
+                                      "type": "array"
+                                    }
+                                  },
                                   "required": [],
-                                  "title": "deleteClaim",
-                                  "type": "boolean"
-                                },
-                                "size": {
-                                  "default": "10Gi",
-                                  "required": [],
-                                  "title": "size",
-                                  "type": "string"
-                                },
-                                "type": {
-                                  "default": "persistent-claim",
-                                  "required": [],
-                                  "title": "type",
-                                  "type": "string"
+                                  "title": "pod",
+                                  "type": "object"
                                 }
                               },
                               "required": [],
-                              "title": "storage",
+                              "title": "template",
                               "type": "object"
                             }
                           },
@@ -163,6 +320,287 @@
                       },
                       "required": [],
                       "title": "controller",
+                      "type": "object"
+                    },
+                    "kafka": {
+                      "properties": {
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        },
+                        "spec": {
+                          "properties": {
+                            "replicas": {
+                              "default": 3,
+                              "required": [],
+                              "title": "replicas",
+                              "type": "integer"
+                            },
+                            "resources": {
+                              "properties": {
+                                "limits": {
+                                  "properties": {
+                                    "cpu": {
+                                      "default": "1",
+                                      "required": [],
+                                      "title": "cpu",
+                                      "type": "string"
+                                    },
+                                    "memory": {
+                                      "default": "4Gi",
+                                      "required": [],
+                                      "title": "memory",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "limits",
+                                  "type": "object"
+                                },
+                                "requests": {
+                                  "properties": {
+                                    "cpu": {
+                                      "default": "0.5",
+                                      "required": [],
+                                      "title": "cpu",
+                                      "type": "string"
+                                    },
+                                    "memory": {
+                                      "default": "2Gi",
+                                      "required": [],
+                                      "title": "memory",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "requests",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "resources",
+                              "type": "object"
+                            },
+                            "roles": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "string"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "roles",
+                              "type": "array"
+                            },
+                            "storage": {
+                              "properties": {
+                                "deleteClaim": {
+                                  "default": false,
+                                  "required": [],
+                                  "title": "deleteClaim",
+                                  "type": "boolean"
+                                },
+                                "size": {
+                                  "default": "10Gi",
+                                  "required": [],
+                                  "title": "size",
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "default": "persistent-claim",
+                                  "required": [],
+                                  "title": "type",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "storage",
+                              "type": "object"
+                            },
+                            "template": {
+                              "properties": {
+                                "pod": {
+                                  "properties": {
+                                    "affinity": {
+                                      "properties": {
+                                        "podAntiAffinity": {
+                                          "properties": {
+                                            "requiredDuringSchedulingIgnoredDuringExecution": {
+                                              "items": {
+                                                "anyOf": [
+                                                  {
+                                                    "properties": {
+                                                      "labelSelector": {
+                                                        "properties": {
+                                                          "matchExpressions": {
+                                                            "items": {
+                                                              "anyOf": [
+                                                                {
+                                                                  "properties": {
+                                                                    "key": {
+                                                                      "default": "strimzi.io/broker-role",
+                                                                      "required": [],
+                                                                      "title": "key",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "operator": {
+                                                                      "default": "In",
+                                                                      "required": [],
+                                                                      "title": "operator",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "values": {
+                                                                      "items": {
+                                                                        "anyOf": [
+                                                                          {
+                                                                            "required": [],
+                                                                            "type": "string"
+                                                                          }
+                                                                        ],
+                                                                        "required": []
+                                                                      },
+                                                                      "required": [],
+                                                                      "title": "values",
+                                                                      "type": "array"
+                                                                    }
+                                                                  },
+                                                                  "required": [],
+                                                                  "type": "object"
+                                                                },
+                                                                {
+                                                                  "properties": {
+                                                                    "key": {
+                                                                      "default": "strimzi.io/cluster",
+                                                                      "required": [],
+                                                                      "title": "key",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "operator": {
+                                                                      "default": "In",
+                                                                      "required": [],
+                                                                      "title": "operator",
+                                                                      "type": "string"
+                                                                    },
+                                                                    "values": {
+                                                                      "items": {
+                                                                        "anyOf": [
+                                                                          {
+                                                                            "required": [],
+                                                                            "type": "string"
+                                                                          }
+                                                                        ],
+                                                                        "required": []
+                                                                      },
+                                                                      "required": [],
+                                                                      "title": "values",
+                                                                      "type": "array"
+                                                                    }
+                                                                  },
+                                                                  "required": [],
+                                                                  "type": "object"
+                                                                }
+                                                              ],
+                                                              "required": []
+                                                            },
+                                                            "required": [],
+                                                            "title": "matchExpressions",
+                                                            "type": "array"
+                                                          }
+                                                        },
+                                                        "required": [],
+                                                        "title": "labelSelector",
+                                                        "type": "object"
+                                                      },
+                                                      "topologyKey": {
+                                                        "default": "kubernetes.io/hostname",
+                                                        "required": [],
+                                                        "title": "topologyKey",
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [],
+                                                    "type": "object"
+                                                  }
+                                                ],
+                                                "required": []
+                                              },
+                                              "required": [],
+                                              "title": "requiredDuringSchedulingIgnoredDuringExecution",
+                                              "type": "array"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "podAntiAffinity",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "title": "affinity",
+                                      "type": "object"
+                                    },
+                                    "tolerations": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "properties": {
+                                              "effect": {
+                                                "default": "NoSchedule",
+                                                "required": [],
+                                                "title": "effect",
+                                                "type": "string"
+                                              },
+                                              "key": {
+                                                "default": "dedicated-nodes",
+                                                "required": [],
+                                                "title": "key",
+                                                "type": "string"
+                                              },
+                                              "operator": {
+                                                "default": "Equal",
+                                                "required": [],
+                                                "title": "operator",
+                                                "type": "string"
+                                              },
+                                              "value": {
+                                                "default": "platform-masters",
+                                                "required": [],
+                                                "title": "value",
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [],
+                                            "type": "object"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "tolerations",
+                                      "type": "array"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "pod",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "template",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "spec",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "kafka",
                       "type": "object"
                     }
                   },
@@ -466,228 +904,6 @@
                           "title": "readinessProbe",
                           "type": "object"
                         },
-                        "replicas": {
-                          "default": 3,
-                          "required": [],
-                          "title": "replicas",
-                          "type": "integer"
-                        },
-                        "resources": {
-                          "properties": {
-                            "limits": {
-                              "properties": {
-                                "cpu": {
-                                  "default": "1",
-                                  "required": [],
-                                  "title": "cpu",
-                                  "type": "string"
-                                },
-                                "memory": {
-                                  "default": "4Gi",
-                                  "required": [],
-                                  "title": "memory",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [],
-                              "title": "limits",
-                              "type": "object"
-                            },
-                            "requests": {
-                              "properties": {
-                                "cpu": {
-                                  "default": "0.5",
-                                  "required": [],
-                                  "title": "cpu",
-                                  "type": "string"
-                                },
-                                "memory": {
-                                  "default": "2Gi",
-                                  "required": [],
-                                  "title": "memory",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [],
-                              "title": "requests",
-                              "type": "object"
-                            }
-                          },
-                          "required": [],
-                          "title": "resources",
-                          "type": "object"
-                        },
-                        "template": {
-                          "properties": {
-                            "pod": {
-                              "properties": {
-                                "affinity": {
-                                  "properties": {
-                                    "podAntiAffinity": {
-                                      "properties": {
-                                        "preferredDuringSchedulingIgnoredDuringExecution": {
-                                          "items": {
-                                            "anyOf": [
-                                              {
-                                                "properties": {
-                                                  "labelSelector": {
-                                                    "properties": {
-                                                      "matchExpressions": {
-                                                        "items": {
-                                                          "anyOf": [
-                                                            {
-                                                              "properties": {
-                                                                "key": {
-                                                                  "default": "strimzi.io/cluster",
-                                                                  "required": [],
-                                                                  "title": "key",
-                                                                  "type": "string"
-                                                                },
-                                                                "operator": {
-                                                                  "default": "In",
-                                                                  "required": [],
-                                                                  "title": "operator",
-                                                                  "type": "string"
-                                                                },
-                                                                "values": {
-                                                                  "items": {
-                                                                    "anyOf": [
-                                                                      {
-                                                                        "required": [],
-                                                                        "type": "string"
-                                                                      }
-                                                                    ],
-                                                                    "required": []
-                                                                  },
-                                                                  "required": [],
-                                                                  "title": "values",
-                                                                  "type": "array"
-                                                                }
-                                                              },
-                                                              "required": [],
-                                                              "type": "object"
-                                                            },
-                                                            {
-                                                              "properties": {
-                                                                "key": {
-                                                                  "default": "strimzi.io/name",
-                                                                  "required": [],
-                                                                  "title": "key",
-                                                                  "type": "string"
-                                                                },
-                                                                "operator": {
-                                                                  "default": "In",
-                                                                  "required": [],
-                                                                  "title": "operator",
-                                                                  "type": "string"
-                                                                },
-                                                                "values": {
-                                                                  "items": {
-                                                                    "anyOf": [
-                                                                      {
-                                                                        "required": [],
-                                                                        "type": "string"
-                                                                      }
-                                                                    ],
-                                                                    "required": []
-                                                                  },
-                                                                  "required": [],
-                                                                  "title": "values",
-                                                                  "type": "array"
-                                                                }
-                                                              },
-                                                              "required": [],
-                                                              "type": "object"
-                                                            }
-                                                          ],
-                                                          "required": []
-                                                        },
-                                                        "required": [],
-                                                        "title": "matchExpressions",
-                                                        "type": "array"
-                                                      }
-                                                    },
-                                                    "required": [],
-                                                    "title": "labelSelector",
-                                                    "type": "object"
-                                                  },
-                                                  "topologyKey": {
-                                                    "default": "kubernetes.io/hostname",
-                                                    "required": [],
-                                                    "title": "topologyKey",
-                                                    "type": "string"
-                                                  }
-                                                },
-                                                "required": [],
-                                                "type": "object"
-                                              }
-                                            ],
-                                            "required": []
-                                          },
-                                          "required": [],
-                                          "title": "preferredDuringSchedulingIgnoredDuringExecution",
-                                          "type": "array"
-                                        }
-                                      },
-                                      "required": [],
-                                      "title": "podAntiAffinity",
-                                      "type": "object"
-                                    }
-                                  },
-                                  "required": [],
-                                  "title": "affinity",
-                                  "type": "object"
-                                },
-                                "tolerations": {
-                                  "items": {
-                                    "anyOf": [
-                                      {
-                                        "properties": {
-                                          "effect": {
-                                            "default": "NoSchedule",
-                                            "required": [],
-                                            "title": "effect",
-                                            "type": "string"
-                                          },
-                                          "key": {
-                                            "default": "dedicated-nodes",
-                                            "required": [],
-                                            "title": "key",
-                                            "type": "string"
-                                          },
-                                          "operator": {
-                                            "default": "Equal",
-                                            "required": [],
-                                            "title": "operator",
-                                            "type": "string"
-                                          },
-                                          "value": {
-                                            "default": "platform-masters",
-                                            "required": [],
-                                            "title": "value",
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [],
-                                        "type": "object"
-                                      }
-                                    ],
-                                    "required": []
-                                  },
-                                  "required": [],
-                                  "title": "tolerations",
-                                  "type": "array"
-                                }
-                              },
-                              "required": [],
-                              "title": "pod",
-                              "type": "object"
-                            }
-                          },
-                          "required": [],
-                          "title": "template",
-                          "type": "object"
-                        },
                         "version": {
                           "default": "3.9.1",
                           "required": [],
@@ -771,338 +987,6 @@
                       },
                       "required": [],
                       "title": "kafkaExporter",
-                      "type": "object"
-                    },
-                    "zookeeper": {
-                      "description": "Kafka zookeeper configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-ZookeeperClusterSpec-reference )",
-                      "properties": {
-                        "livenessProbe": {
-                          "properties": {
-                            "initialDelaySeconds": {
-                              "default": 15,
-                              "required": [],
-                              "title": "initialDelaySeconds",
-                              "type": "integer"
-                            },
-                            "timeoutSeconds": {
-                              "default": 5,
-                              "required": [],
-                              "title": "timeoutSeconds",
-                              "type": "integer"
-                            }
-                          },
-                          "required": [],
-                          "title": "livenessProbe",
-                          "type": "object"
-                        },
-                        "metricsConfig": {
-                          "properties": {
-                            "type": {
-                              "default": "jmxPrometheusExporter",
-                              "required": [],
-                              "title": "type",
-                              "type": "string"
-                            },
-                            "valueFrom": {
-                              "properties": {
-                                "configMapKeyRef": {
-                                  "properties": {
-                                    "key": {
-                                      "default": "zookeeper-metrics-config.yml",
-                                      "required": [],
-                                      "title": "key",
-                                      "type": "string"
-                                    },
-                                    "name": {
-                                      "default": "kafka-metrics",
-                                      "required": [],
-                                      "title": "name",
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [],
-                                  "title": "configMapKeyRef",
-                                  "type": "object"
-                                }
-                              },
-                              "required": [],
-                              "title": "valueFrom",
-                              "type": "object"
-                            }
-                          },
-                          "required": [],
-                          "title": "metricsConfig",
-                          "type": "object"
-                        },
-                        "readinessProbe": {
-                          "properties": {
-                            "initialDelaySeconds": {
-                              "default": 15,
-                              "required": [],
-                              "title": "initialDelaySeconds",
-                              "type": "integer"
-                            },
-                            "timeoutSeconds": {
-                              "default": 5,
-                              "required": [],
-                              "title": "timeoutSeconds",
-                              "type": "integer"
-                            }
-                          },
-                          "required": [],
-                          "title": "readinessProbe",
-                          "type": "object"
-                        },
-                        "replicas": {
-                          "default": 3,
-                          "required": [],
-                          "title": "replicas",
-                          "type": "integer"
-                        },
-                        "resources": {
-                          "properties": {
-                            "limits": {
-                              "properties": {
-                                "cpu": {
-                                  "default": "1",
-                                  "required": [],
-                                  "title": "cpu",
-                                  "type": "string"
-                                },
-                                "memory": {
-                                  "default": "2Gi",
-                                  "required": [],
-                                  "title": "memory",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [],
-                              "title": "limits",
-                              "type": "object"
-                            },
-                            "requests": {
-                              "properties": {
-                                "cpu": {
-                                  "default": "0.5",
-                                  "required": [],
-                                  "title": "cpu",
-                                  "type": "string"
-                                },
-                                "memory": {
-                                  "default": "1.5Gi",
-                                  "required": [],
-                                  "title": "memory",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [],
-                              "title": "requests",
-                              "type": "object"
-                            }
-                          },
-                          "required": [],
-                          "title": "resources",
-                          "type": "object"
-                        },
-                        "storage": {
-                          "properties": {
-                            "deleteClaim": {
-                              "default": false,
-                              "required": [],
-                              "title": "deleteClaim",
-                              "type": "boolean"
-                            },
-                            "size": {
-                              "default": "1Gi",
-                              "required": [],
-                              "title": "size",
-                              "type": "string"
-                            },
-                            "type": {
-                              "default": "persistent-claim",
-                              "required": [],
-                              "title": "type",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "storage",
-                          "type": "object"
-                        },
-                        "template": {
-                          "properties": {
-                            "pod": {
-                              "properties": {
-                                "affinity": {
-                                  "properties": {
-                                    "podAntiAffinity": {
-                                      "properties": {
-                                        "requiredDuringSchedulingIgnoredDuringExecution": {
-                                          "items": {
-                                            "anyOf": [
-                                              {
-                                                "properties": {
-                                                  "labelSelector": {
-                                                    "properties": {
-                                                      "matchExpressions": {
-                                                        "items": {
-                                                          "anyOf": [
-                                                            {
-                                                              "properties": {
-                                                                "key": {
-                                                                  "default": "strimzi.io/cluster",
-                                                                  "required": [],
-                                                                  "title": "key",
-                                                                  "type": "string"
-                                                                },
-                                                                "operator": {
-                                                                  "default": "In",
-                                                                  "required": [],
-                                                                  "title": "operator",
-                                                                  "type": "string"
-                                                                },
-                                                                "values": {
-                                                                  "items": {
-                                                                    "anyOf": [
-                                                                      {
-                                                                        "required": [],
-                                                                        "type": "string"
-                                                                      }
-                                                                    ],
-                                                                    "required": []
-                                                                  },
-                                                                  "required": [],
-                                                                  "title": "values",
-                                                                  "type": "array"
-                                                                }
-                                                              },
-                                                              "required": [],
-                                                              "type": "object"
-                                                            },
-                                                            {
-                                                              "properties": {
-                                                                "key": {
-                                                                  "default": "strimzi.io/name",
-                                                                  "required": [],
-                                                                  "title": "key",
-                                                                  "type": "string"
-                                                                },
-                                                                "operator": {
-                                                                  "default": "In",
-                                                                  "required": [],
-                                                                  "title": "operator",
-                                                                  "type": "string"
-                                                                },
-                                                                "values": {
-                                                                  "items": {
-                                                                    "anyOf": [
-                                                                      {
-                                                                        "required": [],
-                                                                        "type": "string"
-                                                                      }
-                                                                    ],
-                                                                    "required": []
-                                                                  },
-                                                                  "required": [],
-                                                                  "title": "values",
-                                                                  "type": "array"
-                                                                }
-                                                              },
-                                                              "required": [],
-                                                              "type": "object"
-                                                            }
-                                                          ],
-                                                          "required": []
-                                                        },
-                                                        "required": [],
-                                                        "title": "matchExpressions",
-                                                        "type": "array"
-                                                      }
-                                                    },
-                                                    "required": [],
-                                                    "title": "labelSelector",
-                                                    "type": "object"
-                                                  },
-                                                  "topologyKey": {
-                                                    "default": "kubernetes.io/hostname",
-                                                    "required": [],
-                                                    "title": "topologyKey",
-                                                    "type": "string"
-                                                  }
-                                                },
-                                                "required": [],
-                                                "type": "object"
-                                              }
-                                            ],
-                                            "required": []
-                                          },
-                                          "required": [],
-                                          "title": "requiredDuringSchedulingIgnoredDuringExecution",
-                                          "type": "array"
-                                        }
-                                      },
-                                      "required": [],
-                                      "title": "podAntiAffinity",
-                                      "type": "object"
-                                    }
-                                  },
-                                  "required": [],
-                                  "title": "affinity",
-                                  "type": "object"
-                                },
-                                "tolerations": {
-                                  "items": {
-                                    "anyOf": [
-                                      {
-                                        "properties": {
-                                          "effect": {
-                                            "default": "NoSchedule",
-                                            "required": [],
-                                            "title": "effect",
-                                            "type": "string"
-                                          },
-                                          "key": {
-                                            "default": "dedicated-nodes",
-                                            "required": [],
-                                            "title": "key",
-                                            "type": "string"
-                                          },
-                                          "operator": {
-                                            "default": "Equal",
-                                            "required": [],
-                                            "title": "operator",
-                                            "type": "string"
-                                          },
-                                          "value": {
-                                            "default": "platform-masters",
-                                            "required": [],
-                                            "title": "value",
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [],
-                                        "type": "object"
-                                      }
-                                    ],
-                                    "required": []
-                                  },
-                                  "required": [],
-                                  "title": "tolerations",
-                                  "type": "array"
-                                }
-                              },
-                              "required": [],
-                              "title": "pod",
-                              "type": "object"
-                            }
-                          },
-                          "required": [],
-                          "title": "template",
-                          "type": "object"
-                        }
-                      },
-                      "required": [],
-                      "title": "zookeeper",
                       "type": "object"
                     }
                   },

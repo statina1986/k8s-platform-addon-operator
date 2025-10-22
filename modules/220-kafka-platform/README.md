@@ -31,29 +31,86 @@ Current default settings assume High Availability setup with 3 Availability Zone
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>kafka-cluster:
     annotations:
+        strimzi.io/kraft: enabled
         strimzi.io/node-pools: enabled
     enabled: true
     nodePools:
-        broker:
+        controller:
             enabled: true
             spec:
-                replicas: 1
+                replicas: 3
+                resources:
+                    limits:
+                        cpu: "1"
+                        memory: 2Gi
+                    requests:
+                        cpu: "0.1"
+                        memory: 1Gi
+                roles:
+                    - controller
+                storage:
+                    deleteClaim: false
+                    size: 2Gi
+                    type: persistent-claim
+                template:
+                    pod:
+                        affinity:
+                            podAntiAffinity:
+                                requiredDuringSchedulingIgnoredDuringExecution:
+                                    - labelSelector:
+                                        matchExpressions:
+                                            - key: strimzi.io/controller-role
+                                              operator: In
+                                              values:
+                                                - "true"
+                                            - key: strimzi.io/cluster
+                                              operator: In
+                                              values:
+                                                - kafka-cluster
+                                      topologyKey: kubernetes.io/hostname
+                        tolerations:
+                            - effect: NoSchedule
+                              key: dedicated-nodes
+                              operator: Equal
+                              value: platform-masters
+        kafka:
+            enabled: true
+            spec:
+                replicas: 3
+                resources:
+                    limits:
+                        cpu: "1"
+                        memory: 4Gi
+                    requests:
+                        cpu: "0.5"
+                        memory: 2Gi
                 roles:
                     - broker
                 storage:
                     deleteClaim: false
                     size: 10Gi
                     type: persistent-claim
-        controller:
-            enabled: false
-            spec:
-                replicas: 1
-                roles:
-                    - controller
-                storage:
-                    deleteClaim: false
-                    size: 10Gi
-                    type: persistent-claim
+                template:
+                    pod:
+                        affinity:
+                            podAntiAffinity:
+                                requiredDuringSchedulingIgnoredDuringExecution:
+                                    - labelSelector:
+                                        matchExpressions:
+                                            - key: strimzi.io/broker-role
+                                              operator: In
+                                              values:
+                                                - "true"
+                                            - key: strimzi.io/cluster
+                                              operator: In
+                                              values:
+                                                - kafka-cluster
+                                      topologyKey: kubernetes.io/hostname
+                        tolerations:
+                            - effect: NoSchedule
+                              key: dedicated-nodes
+                              operator: Equal
+                              value: platform-masters
     spec:
         entityOperator:
             template:
@@ -99,35 +156,6 @@ Current default settings assume High Availability setup with 3 Availability Zone
             readinessProbe:
                 initialDelaySeconds: 15
                 timeoutSeconds: 5
-            replicas: 3
-            resources:
-                limits:
-                    cpu: "1"
-                    memory: 4Gi
-                requests:
-                    cpu: "0.5"
-                    memory: 2Gi
-            template:
-                pod:
-                    affinity:
-                        podAntiAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution:
-                                - labelSelector:
-                                    matchExpressions:
-                                        - key: strimzi.io/cluster
-                                          operator: In
-                                          values:
-                                            - kafka-cluster
-                                        - key: strimzi.io/name
-                                          operator: In
-                                          values:
-                                            - kafka-cluster-kafka
-                                  topologyKey: kubernetes.io/hostname
-                    tolerations:
-                        - effect: NoSchedule
-                          key: dedicated-nodes
-                          operator: Equal
-                          value: platform-masters
             version: 3.9.1
         kafkaExporter:
             groupRegex: .*
@@ -138,53 +166,7 @@ Current default settings assume High Availability setup with 3 Availability Zone
                           key: dedicated-nodes
                           operator: Equal
                           value: platform-masters
-            topicRegex: .*
-        zookeeper:
-            livenessProbe:
-                initialDelaySeconds: 15
-                timeoutSeconds: 5
-            metricsConfig:
-                type: jmxPrometheusExporter
-                valueFrom:
-                    configMapKeyRef:
-                        key: zookeeper-metrics-config.yml
-                        name: kafka-metrics
-            readinessProbe:
-                initialDelaySeconds: 15
-                timeoutSeconds: 5
-            replicas: 3
-            resources:
-                limits:
-                    cpu: "1"
-                    memory: 2Gi
-                requests:
-                    cpu: "0.5"
-                    memory: 1.5Gi
-            storage:
-                deleteClaim: false
-                size: 1Gi
-                type: persistent-claim
-            template:
-                pod:
-                    affinity:
-                        podAntiAffinity:
-                            requiredDuringSchedulingIgnoredDuringExecution:
-                                - labelSelector:
-                                    matchExpressions:
-                                        - key: strimzi.io/cluster
-                                          operator: In
-                                          values:
-                                            - kafka-cluster
-                                        - key: strimzi.io/name
-                                          operator: In
-                                          values:
-                                            - kafka-cluster-zookeeper
-                                  topologyKey: kubernetes.io/hostname
-                    tolerations:
-                        - effect: NoSchedule
-                          key: dedicated-nodes
-                          operator: Equal
-                          value: platform-masters</code></pre>
+            topicRegex: .*</code></pre>
 </td>
 			<td><div>
 
@@ -230,63 +212,6 @@ topicRegex: .*</code></pre>
 			<td><div>
 
 KafkaExporter configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaExporterSpec-reference )
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;" id="kafkaPlatform--clusters--kafka-cluster--spec--zookeeper">kafkaPlatform.clusters.kafka-cluster.spec.zookeeper</td>
-			<td>object</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>livenessProbe:
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-metricsConfig:
-    type: jmxPrometheusExporter
-    valueFrom:
-        configMapKeyRef:
-            key: zookeeper-metrics-config.yml
-            name: kafka-metrics
-readinessProbe:
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-replicas: 3
-resources:
-    limits:
-        cpu: "1"
-        memory: 2Gi
-    requests:
-        cpu: "0.5"
-        memory: 1.5Gi
-storage:
-    deleteClaim: false
-    size: 1Gi
-    type: persistent-claim
-template:
-    pod:
-        affinity:
-            podAntiAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                    - labelSelector:
-                        matchExpressions:
-                            - key: strimzi.io/cluster
-                              operator: In
-                              values:
-                                - kafka-cluster
-                            - key: strimzi.io/name
-                              operator: In
-                              values:
-                                - kafka-cluster-zookeeper
-                      topologyKey: kubernetes.io/hostname
-        tolerations:
-            - effect: NoSchedule
-              key: dedicated-nodes
-              operator: Equal
-              value: platform-masters</code></pre>
-</td>
-			<td><div>
-
-Kafka zookeeper configuration ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-ZookeeperClusterSpec-reference )
 
 </div>
 </td>
