@@ -244,7 +244,7 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
   {{- end }}
   {{- if ne $.root.Values.global.configurationProfile "dev" }}
   barmanObjectStore:
-    scheduledBackup: "0 0 * * *"
+    scheduledBackup: "0 0 0 * * *"
     spec:
       retentionPolicy: "7d"
       configuration:
@@ -634,7 +634,7 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
     additionalLabels: {}
     annotations: {}
     barmanObjectStore:
-        scheduledBackup: 0 0 * * *
+        scheduledBackup: 0 0 0 * * *
         spec:
             configuration:
                 s3Credentials:
@@ -701,7 +701,7 @@ This is example PostgreSQL glue definition.  In this example CNPG cluster is con
 </td>
 			<td><div>
 
-Defines CNPG database cluster (kind: Cluster) to deploy.  If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally. Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object). Cluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module.
+Defines CNPG database cluster (kind: Cluster) to deploy.  Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
 
 </div>
 </td>

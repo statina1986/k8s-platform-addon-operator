@@ -9,13 +9,12 @@ import base64
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.postgres . }}
 {{- $dbClusterName := . }}
 
-{{- if ne $dbCluster.cluster nil }}
-
-{{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) (deepCopy $dbCluster.cluster) }}
+{{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) ($dbCluster.cluster | default (dict) | deepCopy) }}
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.postgres.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.postgres.defaultCluster | default (dict) | deepCopy) $cluster }}
 {{- $_ := set $dbCluster "cluster" $cluster}}
 
+### CNPG Cluster resource
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -35,6 +34,7 @@ metadata:
 spec:
   {{- toYaml $cluster.spec | nindent 2 }}
 
+### Additional service pointing to cluster primary node named according to Qvantel previous conventions
 ---
 apiVersion: v1
 kind: Service
@@ -55,6 +55,7 @@ spec:
   sessionAffinity: None
   type: ClusterIP
 
+### CronJob for stats cleanup per cluster
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -100,6 +101,39 @@ spec:
   schedule: "@midnight"
 
 
+### Partman related metrics queries
+{{- if and $cluster.spec $cluster.spec.postgresql $cluster.spec.postgresql.parameters (hasKey $cluster.spec.postgresql.parameters "pg_partman_bgw.dbname") }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cnpg-partitions-alerts-{{ $dbClusterName }}
+  namespace: platform
+  labels:
+    cnpg.io/reload: ""
+data:
+  partitions-alerts-queries: |
+    partitions_alerts:
+      query: |
+        select current_database() as cur_db, parent_table as table_name, extract(EPOCH FROM (now() - maintenance_last_run)) as last_run_sec from partman.part_config;
+      metrics:
+        - cur_db:
+            usage: "LABEL"
+            description: "Database Name"
+        - table_name:
+            usage: "LABEL"
+            description: "Partitioned table Name"
+        - last_run_sec:
+            usage: "GAUGE"
+            description: "Last successful maintenance execution in seconds"
+      target_databases:
+{{- $dbs := split "," (index $cluster.spec.postgresql.parameters "pg_partman_bgw.dbname") }}
+{{- range $db := $dbs }}
+        - {{ trim $db }}
+{{- end }}
+{{- end }}
+
+### Barman ObjectStore for cluster
 {{- if $cluster.barmanObjectStore }}
 ---
 apiVersion: barmancloud.cnpg.io/v1
@@ -110,6 +144,7 @@ spec:
   {{- toYaml $cluster.barmanObjectStore.spec | nindent 2 }}
 {{- end }}
 
+### Pod Monitor for cluster
 {{- if eq $addonOperator.monitoringPlatformEnabled "true"}}
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -128,6 +163,7 @@ spec:
 {{- end }}
 
 
+### ScheduledBackup for cluster
 {{- if and $cluster.spec.backup $cluster.scheduledBackup }}
 ---
 apiVersion: postgresql.cnpg.io/v1
@@ -146,7 +182,10 @@ spec:
 {{- end }}
 
 
+### Cluster level Vault Configuration, i.e. DB Connection and cluster scoped roles
 {{- if $cluster.vaultConfiguration }}
+
+### Vault DB Admin Role
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
@@ -157,6 +196,7 @@ spec:
   creation-statements: >-
     {{ printf "CREATE USER \"{{name}}\" SUPERUSER PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';" }}
 
+### Vault DB Readonly Role
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
@@ -167,6 +207,7 @@ spec:
   creation-statements: >-
     {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data TO \"{{name}}\"" }}
 
+### Vault DB ReadWrite Role
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
@@ -177,6 +218,7 @@ spec:
   creation-statements: >-
     {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT pg_read_all_data, pg_write_all_data TO \"{{name}}\"" }}
 
+### Vault DB Connection
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbConnection
@@ -198,6 +240,7 @@ spec:
   db-username: '{secret-username}'
   db-password: '{secret-password}'
 
+### If additional roles defined for cluster
 {{- if $dbCluster.roles }}
 {{- range keys $dbCluster.roles  }}
 {{- $dbRole := get $dbCluster.roles . }}
@@ -213,21 +256,22 @@ spec:
   default-ttl: "0"
   max-ttl: "0"
   role-name: {{ $dbRoleName }}
-
 {{- end }}
 {{- end }}
+### End of additional Vault roles
 
 {{- end }}
+### End of Cluster level Vault configuration block
 
-{{- end }}
 
-
+### Resources per Cluster database
 {{- if $dbCluster.dbs }}
 {{- range keys $dbCluster.dbs  }}
 {{- $db := get $dbCluster.dbs . }}
 {{- $dbName := . }}
 {{- $dbNameUnderscored := ( . | replace "-" "_") }}
 
+### SqlInstaller for database creation per Qvantel conventions
 ---
 apiVersion: platform.qvantel.com/v1
 kind: SqlInstaller
@@ -256,6 +300,7 @@ spec:
     - name: "postgres-user"
       expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
+### SqlInstaller for static (not Vault) database owner user. Password is copied to k8s secrets
 ---
 apiVersion: platform.qvantel.com/v1
 kind: SqlInstaller
@@ -287,7 +332,24 @@ spec:
     - name: "store password in secrets"
       expression: "k8s_store_secret_value('{{ $dbClusterName }}-{{ $dbName }}-secret', '{{ $.Values.global.appsNamespace }}', 'password', '{user-password}')"
 
+### Vault roles per database
 {{- if $dbCluster.cluster.vaultConfiguration }}
+
+### Default Vault role for DB owner application per Qvantel conventions
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $root.Values.global.appsNamespace }}
+spec:
+  creation-statements: >-
+    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_%s TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_%s;" $dbNameUnderscored $dbNameUnderscored }}
+  db-name: {{ $dbClusterName }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
+
+### Legacy Vault role for DB owner application per Old Qvantel conventions
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
@@ -301,7 +363,7 @@ spec:
   max-ttl: "0"
   role-name: postgresql_{{ $dbName }}
 
-
+### Vault roles for additional owners roles, if defined
 {{- if $db.owners }}
 {{- range keys $db.owners  }}
 {{- $dbRole := get $db.owners . }}
@@ -319,24 +381,13 @@ spec:
   default-ttl: "0"
   max-ttl: "0"
   role-name: {{ $dbRoleName }}
-
 {{- end }}
 {{- end }}
 
----
-apiVersion: platform-vault.qvantel.com/v1
-kind: DbRole
-metadata:
-  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $root.Values.global.appsNamespace }}
-spec:
-  creation-statements: >-
-    {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_%s TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_%s;" $dbNameUnderscored $dbNameUnderscored }}
-  db-name: {{ $dbClusterName }}
-  default-ttl: "0"
-  max-ttl: "0"
-  role-name: {{ $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
 {{- end }}
+### End of Database level Vault configuration block
 
+### Installer for Timescale extension for database, if defined
 {{- if and $db.extensions $db.extensions.timescaledb }}
 ---
 apiVersion: platform.qvantel.com/v1
@@ -362,7 +413,7 @@ spec:
 
 {{- end }}
 {{- end }}
-
+### End of per-database resources section
 
 {{- end }}
 {{- end }}

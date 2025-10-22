@@ -123,7 +123,7 @@ qvantelGlue:
           {{- end }}
           {{- if ne $.root.Values.global.configurationProfile "dev" }}
           barmanObjectStore:
-            scheduledBackup: "0 0 * * *"
+            scheduledBackup: "0 0 0 * * *"
             spec:
               retentionPolicy: "7d"
               configuration:
@@ -237,10 +237,8 @@ qvantelGlue:
 # @section -- Examples-PostgreSQL
 example-postgredb:
   # -- Defines CNPG database cluster (kind: Cluster) to deploy. 
-  # If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.
   # Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`.
   # Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
-  # Cluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module. 
   # @default -- null
   # @section -- Examples-PostgreSQL
   cluster:
@@ -253,7 +251,7 @@ example-postgredb:
       # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
       # @default --  null
       # @section -- Examples-PostgreSQL
-      scheduledBackup: "0 0 * * *"
+      scheduledBackup: "0 0 0 * * *"
       # -- Defines ObjectStore specification. See https://cloudnative-pg.io/plugin-barman-cloud/docs/plugin-barman-cloud.v1/#objectstorespec
       # @default --  null
       # @section -- Examples-PostgreSQL
