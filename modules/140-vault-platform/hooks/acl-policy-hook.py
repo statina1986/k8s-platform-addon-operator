@@ -135,7 +135,7 @@ class AclPoliciesHook(Hook):
                 for event in binding.get('objects', []):
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        logger.debug("Skipping KV1Secret " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping AclPolicy " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.registerResource(event, vault_client)
             case _:
