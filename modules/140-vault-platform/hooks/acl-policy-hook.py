@@ -7,7 +7,6 @@ from common.python.inline import *
 from common.python.utils import get_exception_string
 from common.python.vault import *
 import hvac
-from hvac.exceptions import InvalidPath, Forbidden, VaultError
 
 config.load_incluster_config()
 v1 = client.CoreV1Api()
