@@ -108,7 +108,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cnpg-partitions-alerts-{{ $dbClusterName }}
-  namespace: platform
   labels:
     cnpg.io/reload: ""
 data:
