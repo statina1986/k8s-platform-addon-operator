@@ -179,7 +179,7 @@ class SqlInstallersHook(Hook):
                     # Skipping 'Ready' Installers from scheduled execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        print("Skipping SqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping SqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.executeSql(event, k8s)
 
@@ -194,7 +194,7 @@ class SqlInstallersHook(Hook):
                     # Skipping 'Ready' Installers from synchronization execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        print("Skipping SqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping SqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.executeSql(event, k8s)
 

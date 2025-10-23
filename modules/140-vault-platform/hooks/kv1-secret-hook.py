@@ -6,6 +6,7 @@ from common.python.hooks import *
 from common.python.utils import get_exception_string
 from common.python.vault import *
 import hvac
+from hvac.exceptions import InvalidPath, Forbidden, VaultError
 
 config.load_incluster_config()
 v1 = client.CoreV1Api()
@@ -56,13 +57,28 @@ class Kv1SecretsHook(Hook):
                 path = path.replace("secret/", "", 1)
 
             values = event['object']['spec']['secret']
-            # Merge data from CRD with existing values. Existing values takes priority.
+
+            # Strict read: ignore only "not found"
             try:
-                existing = vault_client.secrets.kv.v1.read_secret(path)['data']
-                values = {**values, **existing}
-            except:
-                pass
-            vault_client.secrets.kv.v1.create_or_update_secret(path, secret=values)
+                resp = vault_client.secrets.kv.v1.read_secret(path=path)  # default mount_point='secret'
+                existing = resp.get('data', {}) or {}
+            except InvalidPath:
+                existing = {}
+            except Forbidden as e:
+                raise RuntimeError(f"Vault read forbidden for KV1 path 'secret/{path}': {e}") from e
+            except VaultError as e:
+                raise RuntimeError(f"Vault read failed for KV1 path 'secret/{path}': {e}") from e
+
+            # Existing wins (preserve GUI edits)
+            merged = {**values, **existing}
+
+            # Diff guard
+            if merged != existing:
+                vault_client.secrets.kv.v1.create_or_update_secret(path=path, secret=merged)
+                logger.debug("[KV1Secret] Updated secret/" + path + " (applied merged values).")
+            else:
+                logger.debug("[KV1Secret] No change for secret/" + path + " (skipping write).")
+
 
             update_crd_status(
                 group="platform-vault.qvantel.com",
@@ -85,6 +101,13 @@ class Kv1SecretsHook(Hook):
             )
             raise
 
+    def checkIfReady(self, event):
+        conditions = event['object'].get('status', {}).get('conditions', [])
+        for idx, item in enumerate(conditions):
+            if ((item["type"] == "Ready") and (item["status"] == "True")):
+                return True
+        return False
+
     def handle_binding(self, binding):
         match(binding):
             case EventHook(eventName, event, values):
@@ -95,7 +118,7 @@ class Kv1SecretsHook(Hook):
                 vault_client = get_vault_client()
 
                 if eventName == "Deleted":
-                    # vault_client.secrets.kv.v1.delete_secret(path)
+                    # Intentionally not deleting from Vault
                     return
                 else:
                     self.registerResource(event, vault_client)
@@ -108,7 +131,12 @@ class Kv1SecretsHook(Hook):
                 vault_client = get_vault_client()
 
                 for event in binding.get('snapshots', {}).get('monitor-vault-kv1secrets', []):
-                    self.registerResource(event, vault_client)
+                    # Skipping 'Ready' resources from scheduled execution as those were already applied
+                    if self.checkIfReady(event):
+                        name = event['object']['metadata']['name']
+                        logger.debug("Skipping KV1Secret " + name + " scheduled execution because it is already 'Ready'.")
+                    else:
+                        self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncKV1Secrets', {}).get('enabled') in ('false', False):
@@ -118,7 +146,11 @@ class Kv1SecretsHook(Hook):
                 vault_client = get_vault_client()
 
                 for event in binding.get('objects', []):
-                    self.registerResource(event, vault_client)
+                    if self.checkIfReady(event):
+                        name = event['object']['metadata']['name']
+                        logger.debug("Skipping KV1Secret " + name + " scheduled execution because it is already 'Ready'.")
+                    else:
+                        self.registerResource(event, vault_client)
             case _:
                 print("Unknown hook data")
 

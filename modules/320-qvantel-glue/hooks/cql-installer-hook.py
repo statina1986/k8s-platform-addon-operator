@@ -163,7 +163,7 @@ class CqlInstallersHook(Hook):
                     # Skipping 'Ready' Installers from scheduled execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        print("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.executeCql(event, k8s)
 
@@ -178,7 +178,7 @@ class CqlInstallersHook(Hook):
                     # Skipping 'Ready' Installers from synchronization execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        print("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.executeCql(event, k8s)
 
