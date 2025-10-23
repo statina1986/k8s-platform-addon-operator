@@ -1,14 +1,25 @@
 redisPlatform:
   redis:
+    global:
+      security:
+        allowInsecureImages: true
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % else:
+      registry: platform.artifactory.qvantel.net
       % endif
+      repository: platform/bitnami-redis
+      tag: 8.2.2
     volumePermissions:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
         % endif
+        repository: platform/platform-k8s-tools-minimal
+        tag: 1.3.3_202509080945_master_90384dcc
     sysctl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -17,7 +28,7 @@ redisPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
     kubectl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -26,7 +37,7 @@ redisPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
     architecture: replication
     auth:
       enabled: true
@@ -82,7 +93,11 @@ redisPlatform:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
         % endif
+        repository: platform/bitnami-redis-sentinel
+        tag: 8.2.2
       masterSet: redis
       % if values['global']['configurationProfile'] in {'dev'}:
       quorum: 1
@@ -101,4 +116,8 @@ redisPlatform:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
         % endif
+        repository: platform/bitnami-redis-exporter
+        tag: 1.79.0

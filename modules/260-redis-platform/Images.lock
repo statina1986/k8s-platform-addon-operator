@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-20T15:29:46.224113296Z"
+  generatedAt: "2025-10-23T06:00:22.881707184Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: redis-platform
@@ -9,34 +9,34 @@ chart:
   appVersion: ""
 images:
   - name: kubectl
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: redis-platform
     digests:
-      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64
-  - name: redis
-    image: docker.io/bitnami/redis:7.2.5-debian-12-r4
-    chart: redis
+  - name: redis-qvantel
+    image: platform.artifactory.qvantel.net/platform/bitnami-redis:8.2.2
+    chart: redis-platform
     digests:
-      - digest: sha256:79a1d020032eec29b58762f7add09cf4fd7d4987ae487ab73c8f20e57b30c2d4
+      - digest: sha256:4d72e7177754163493d075496d22409d3a8065cb910374c21f6b0ab9d40a1287
         arch: linux/amd64
-      - digest: sha256:947014a1ad8fd2e86fa04cc9d34723f916370ecb009336c5ef5e9f0d918f33a3
+      - digest: sha256:a04a64acde49a639e73c4c72fcad2c8225c4d740f9632a5f529a816ca3ae3023
         arch: linux/arm64
-  - name: redis-exporter
-    image: docker.io/bitnami/redis-exporter:1.62.0-debian-12-r2
-    chart: redis
+  - name: redis-sentinel-qvantel
+    image: platform.artifactory.qvantel.net/platform/bitnami-redis-sentinel:8.2.2
+    chart: redis-platform
     digests:
-      - digest: sha256:87eb1444a891b22dec2a1f1e65355bdb77b645c3cc5cd78bc7e5eb5fe3af5eac
+      - digest: sha256:aec72f3d0324bf48894a1a146dfd9fc0c9d9c2a8341d888acf25431214ca1bd5
         arch: linux/amd64
-      - digest: sha256:d42aabf4159783bb07810a8d0530c9b76c047c3528b0bfeb1b632b08f15706cf
+      - digest: sha256:f42baabb68d0479593aa0ee2d1960a3da6d4860954f037950996ac16e25f21c0
         arch: linux/arm64
-  - name: redis-sentinel
-    image: docker.io/bitnami/redis-sentinel:7.2.5-debian-12-r4
-    chart: redis
+  - name: redis-exporter-qvantel
+    image: platform.artifactory.qvantel.net/platform/bitnami-redis-exporter:1.79.0
+    chart: redis-platform
     digests:
-      - digest: sha256:1ca6e5192137cb3f618e217a03e57f9f09ed61247c7892af721415061ecd4c40
+      - digest: sha256:a91fc7985eda534c1676dce282d77c79790467d266b0d469b6fcebddc61a8fd7
         arch: linux/amd64
-      - digest: sha256:8d33769466e10e0ffc86f05fd73ae567aa86d8e0a2b29884f5f8231f70a88bf0
+      - digest: sha256:6c827d3aa2fa55aa4c16b739b573c3edffd8e6de75c032a6d323ff34b779ba90
         arch: linux/arm64

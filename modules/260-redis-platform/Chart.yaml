@@ -4,7 +4,16 @@ version: 0.0.1
 dependencies:
   - name: redisPlatform
     version: 0.0.1
+# Platform tools instead of bitnami kubectl / os-base image
+# Bitnami images pulled from docker.io/bitnamisecure with latest tag on October 22nd
+# and tagged to the de facto version
 annotations:
   images: |
     - name: kubectl
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    - name: redis-qvantel
+      image: platform.artifactory.qvantel.net/platform/bitnami-redis:8.2.2
+    - name: redis-sentinel-qvantel
+      image: platform.artifactory.qvantel.net/platform/bitnami-redis-sentinel:8.2.2
+    - name: redis-exporter-qvantel
+      image: platform.artifactory.qvantel.net/platform/bitnami-redis-exporter:1.79.0

@@ -6,7 +6,7 @@ dependencies:
     % if values['redisPlatform'][key]:
   - name: redis
     alias: ${key}    
-    version: 19.6.4
+    version: 23.1.7
     repository: https://charts.bitnami.com/bitnami
     % endif  
   % endfor
