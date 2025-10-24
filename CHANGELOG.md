@@ -2,10 +2,13 @@
 
 ## 1.3.0 (WIP)
 
+* Redis is now configured with support for single load-balanced ClusterIP endpoint (`redis-platform-master`). This allows applications without Sentinel support or External application outside of K8s cluster to use HA Redis platform service. Direct use of Sentinels is still recommended approach within cluster as it provides faster switchover. 
 * Most of the modules are upgraded to latest stable versions of packages and helm-charts
 * Bitnami OSS catalog closure related changes: images references are moved to bitnami-legacy repo and charts are updated to latests available version.
 
-### Breaking changes affecting applications running on top of the Platform
+
+### Changes affecting applications running on top of the Platform
+* Redis is configured with Dynamic Vault credentials. Static shared redis credentials are deprecated and planned to be disabled by default n future releases. Applications should start migrating to Dynamic Vault credentials and should start using `readwrite-role-redis-platform` role. 
 
 ### Major changes, deprecations, and removals
 

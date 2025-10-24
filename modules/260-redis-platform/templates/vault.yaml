@@ -1,0 +1,47 @@
+### Vault DB Connection
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: redis-platform-vault-connection
+spec:
+  connection-name: redis-platform
+  plugin-name: redis-database-plugin
+  allowed-roles: '*'
+  additional-params:
+    host: "redis-platform-master.platform.svc"
+    port: 6379    
+  computed-values:
+  - expression: k8s_get_secret_value('redis-platform','{{ $.Release.Namespace }}','redis-password')
+    name: secret-password
+  db-username: 'default'
+  db-password: '{secret-password}'
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: admin-role-redis-platform
+spec:
+  db-name: redis-platform
+  creation-statements: '["~*", "&*", "+@all"]'
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readonly-role-redis-platform
+spec:
+  db-name: redis-platform
+  creation-statements: '["%R~*", "&*", "+@read"]'
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readwrite-role-redis-platform
+spec:
+  db-name: redis-platform
+  creation-statements: '["~*", "&*", "+@all", "-@admin"]'

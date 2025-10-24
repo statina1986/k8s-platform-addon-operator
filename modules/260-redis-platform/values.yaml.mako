@@ -1,5 +1,10 @@
 redisPlatform:
   redis:
+    rbac:
+        create: true
+    serviceAccount:
+      create: true
+      name: redis 
     global:
       security:
         allowInsecureImages: true
@@ -67,6 +72,7 @@ redisPlatform:
         storageClass: ""
         size: 8Gi
     replica:
+      automountServiceAccountToken: true
       % if values['global']['configurationProfile'] in {'dev'}:
       replicaCount: 1
       % else:
@@ -90,6 +96,8 @@ redisPlatform:
         size: 8Gi
     sentinel:      
       enabled: true
+      masterService:
+        enabled: true
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
@@ -108,6 +116,7 @@ redisPlatform:
         limits: {}
         requests: {}
       service:
+        createMaster: true
         annotations:
           platform.qvantel.com/consul-service-port: "26379"
           consul.hashicorp.com/service-port: tcp-sentinel
