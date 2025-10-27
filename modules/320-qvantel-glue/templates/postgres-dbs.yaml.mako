@@ -327,9 +327,9 @@ spec:
       expression: "get_random_string(8)"
   post-actions:
     - name: "store username in secrets"
-      expression: "k8s_store_secret_value('{{ $dbClusterName }}-{{ $dbName }}-secret', '{{ $.Values.global.appsNamespace }}', 'username', '{user-username}')"
+      expression: "k8s_store_secret_value('{{ $dbClusterName }}-{{ $dbName }}-secret', '{{ $db.namespace | default $.Values.global.appsNamespace }}', 'username', '{user-username}')"
     - name: "store password in secrets"
-      expression: "k8s_store_secret_value('{{ $dbClusterName }}-{{ $dbName }}-secret', '{{ $.Values.global.appsNamespace }}', 'password', '{user-password}')"
+      expression: "k8s_store_secret_value('{{ $dbClusterName }}-{{ $dbName }}-secret', '{{ $db.namespace | default $.Values.global.appsNamespace }}', 'password', '{user-password}')"
 
 ### Vault roles per database
 {{- if $dbCluster.cluster.vaultConfiguration }}
@@ -339,14 +339,14 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $root.Values.global.appsNamespace }}
+  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
 spec:
   creation-statements: >-
     {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_%s TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_%s;" $dbNameUnderscored $dbNameUnderscored }}
   db-name: {{ $dbClusterName }}
   default-ttl: "0"
   max-ttl: "0"
-  role-name: {{ $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
+  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
 
 ### Legacy Vault role for DB owner application per Old Qvantel conventions
 ---

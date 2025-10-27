@@ -167,6 +167,194 @@
       "title": "example-cassandra",
       "type": "object"
     },
+    "example-mariadb": {
+      "description": "This is example MariaDB glue definition. \nIn this example MariaDB cluster is configured with 1 db created in this cluster(`mnp-gw`) and few additional roles.\nNote: It is used for documentation purposes only. Real MariaDB clusters should be defined under `qvantelGlue.db.mariadb`",
+      "properties": {
+        "cluster": {
+          "description": "Defines MariaDB database cluster (kind: MariaDB) to deploy. \nValues configured in this object are merged with default template from `qvantelGlue.dbs.common.mariadb.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.mariadb.defaultCluster`.\nPrecedence is following defaultClusterTemplate \u003c- defaultCluster \u003c- cluster (values in this object).",
+          "properties": {
+            "additionalLabels": {
+              "description": "Additional labels to be configured on cluster resource.",
+              "required": [],
+              "title": "additionalLabels",
+              "type": "object"
+            },
+            "annotations": {
+              "description": "Annotations to be configured on cluster resource.",
+              "required": [],
+              "title": "annotations",
+              "type": "object"
+            },
+            "spec": {
+              "description": "Configure MariaDB cluster details. See https://github.com/mariadb-operator/mariadb-operator/blob/main/docs/api_reference.md#mariadb for API reference.",
+              "properties": {
+                "storage": {
+                  "properties": {
+                    "size": {
+                      "default": "1Gi",
+                      "required": [],
+                      "title": "size",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "storage",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "spec",
+              "type": "object"
+            },
+            "vaultConfiguration": {
+              "default": true,
+              "description": "Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.",
+              "required": [],
+              "title": "vaultConfiguration",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "cluster",
+          "type": "object"
+        },
+        "dbs": {
+          "description": "Defines Databases to deploy in the MariaDB Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  \nThis is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).",
+          "properties": {
+            "catalog-deployer": {
+              "properties": {
+                "sql": {
+                  "properties": {
+                    "provision": {
+                      "default": "- \"CREATE ROLE db_catalog_deployer NOLOGIN\"\n- \"GRANT db_catalog_deployer TO CURRENT_USER\"\n- \"CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer\"    \n",
+                      "description": "It is possible to define provisioning SQL for the database if customization is required.",
+                      "required": [],
+                      "title": "provision",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "sql",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "catalog-deployer",
+              "type": "object"
+            },
+            "ddl": {
+              "properties": {
+                "extensions": {
+                  "description": "Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.",
+                  "properties": {
+                    "timescaledb": {
+                      "description": "Enables `timescaledb` extensions for database.",
+                      "required": [],
+                      "title": "timescaledb",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "extensions",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "ddl",
+              "type": "object"
+            },
+            "flex-bpmn-executor": {
+              "properties": {
+                "owners": {
+                  "description": "Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.",
+                  "properties": {
+                    "apps-another-app-to-access-flex": {
+                      "required": [],
+                      "title": "apps-another-app-to-access-flex",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "owners",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "flex-bpmn-executor",
+              "type": "object"
+            },
+            "mnp-gw": {
+              "properties": {
+                "namespace": {
+                  "default": "mnp",
+                  "description": "Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.",
+                  "required": [],
+                  "title": "namespace",
+                  "type": "string"
+                },
+                "owners": {
+                  "description": "Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.",
+                  "properties": {
+                    "apps-another-app-to-access-mnp": {
+                      "required": [],
+                      "title": "apps-another-app-to-access-mnp",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "owners",
+                  "type": "object"
+                },
+                "sql": {
+                  "properties": {
+                    "provision": {
+                      "default": "- \"\u003ccustom SQL goes here\u003e\"\n- \"\u003ccustom SQL goes here\u003e\"\n",
+                      "description": "It is possible to define provisioning SQL for the database if customization is required.",
+                      "required": [],
+                      "title": "provision",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "sql",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "mnp-gw",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "dbs",
+          "type": "object"
+        },
+        "roles": {
+          "description": "Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.",
+          "properties": {
+            "custom-role-access-multiple-dbs": {
+              "properties": {
+                "sql": {
+                  "default": "\u003ccustom Vault templated SQL goes here\u003e\n",
+                  "required": [],
+                  "title": "sql",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "custom-role-access-multiple-dbs",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "roles",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "example-mariadb",
+      "type": "object"
+    },
     "example-postgredb": {
       "description": "This is example PostgreSQL glue definition. \nIn this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.\nNote: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`",
       "properties": {
@@ -476,6 +664,20 @@
               "required": [],
               "title": "flex-bpmn-executor",
               "type": "object"
+            },
+            "mnp-gw": {
+              "properties": {
+                "namespace": {
+                  "default": "mnp-gw",
+                  "description": "Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.",
+                  "required": [],
+                  "title": "namespace",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "mnp-gw",
+              "type": "object"
             }
           },
           "required": [],
@@ -626,7 +828,7 @@
               "type": "object"
             },
             "mariadb": {
-              "description": "MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster \nand associated configuration like dbs, roles and extensions.",
+              "description": "MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster \nand associated configuration like dbs, roles and extensions.\nFor Example, see `example-mariadb` definition in Examples-MariaDB section below.",
               "required": [],
               "title": "mariadb",
               "type": "object"

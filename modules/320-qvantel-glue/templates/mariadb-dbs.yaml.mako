@@ -3,25 +3,23 @@ import json
 import base64
 %>
 {{- if and .Values.qvantelGlue.dbs .Values.qvantelGlue.dbs.mariadb }}
+{{- $addonOperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
 {{- $root := . }}
 {{- range keys .Values.qvantelGlue.dbs.mariadb  }}
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.mariadb . }}
 {{- $dbClusterName := . }}
 
-
-{{- if ne $dbCluster.cluster nil }}
-
-{{- $cluster := $dbCluster.cluster | default (dict) | deepCopy }}
-{{- $addonoperator := "${ base64.b64encode(json.dumps(addon_operator).encode('utf-8')).decode('utf-8')}" | b64dec | fromJson }}
-{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.mariadb.defaultClusterTemplate (dict "cluster" $dbCluster.cluster "root" $root "addonOperator" $addonoperator "clusterName" .) | fromYaml }}
+{{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.mariadb.defaultCluster | default (dict) | deepCopy) ($dbCluster.cluster | default (dict) | deepCopy) }}
+{{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.mariadb.defaultClusterTemplate (dict "cluster" $dbCluster.cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.mariadb.defaultCluster | default (dict) | deepCopy) $cluster }}
 {{- $_ := set $dbCluster "cluster" $cluster}}
 
+### MariaDB Cluster resource
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
 metadata:
-  name: {{ . }}
+  name: {{ $dbClusterName }}
   {{- with $cluster.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -30,12 +28,13 @@ metadata:
     app.kubernetes.io/name: {{ $dbClusterName }}
     app.kubernetes.io/instance: {{ $dbClusterName }}
     app.kubernetes.io/part-of: mariadb
-  {{- with $cluster.additionalLabels }}
-    {{ toYaml . | nindent 4 }}
-  {{- end }}
+    {{- with $cluster.additionalLabels }}
+      {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- toYaml $cluster.spec | nindent 2 }}
 
+### Additional service pointing to cluster "primary" entrypoint be used by applications
 ---
 apiVersion: v1
 kind: Service
@@ -61,58 +60,7 @@ spec:
   sessionAffinity: None
   type: ClusterIP
 
-
-{{- if $cluster.vaultConfiguration }}
----
-apiVersion: platform-vault.qvantel.com/v1
-kind: DbRole
-metadata:
-  name: admin-role-{{ $dbClusterName }}
-spec:
-  db-name: {{ $dbClusterName }}
-  creation-statements: >-
-    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT GRANT OPTION, SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER ON *.* TO '{{name}}'@'%%';" }}
-
----
-apiVersion: platform-vault.qvantel.com/v1
-kind: DbRole
-metadata:
-  name: readonly-role-{{ $dbClusterName }}
-spec:
-  db-name: {{ $dbClusterName }}
-  creation-statements: >-
-    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, SHOW DATABASES, SHOW VIEW ON *.* TO '{{name}}'@'%%';" }}
-
----
-apiVersion: platform-vault.qvantel.com/v1
-kind: DbRole
-metadata:
-  name: readwrite-role-{{ $dbClusterName }}
-spec:
-  db-name: {{ $dbClusterName }}
-  creation-statements: >-
-    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, SHOW DATABASES, SHOW VIEW, INSERT, UPDATE, DELETE, EXECUTE ON *.* TO '{{name}}'@'%%';" }}
-
----
-apiVersion: platform-vault.qvantel.com/v1
-kind: DbConnection
-metadata:
-  annotations:
-    platform.qvantel.com/retry-count: "100"
-  name: {{ $dbClusterName }}
-spec:
-  connection-name: {{ $dbClusterName }}
-  plugin-name: mysql-database-plugin
-  allowed-roles: '*'
-  computed-values:
-  - expression: k8s_get_secret_value('{{ $dbClusterName }}-root','{{ $.Release.Namespace }}','password')
-    name: secret-password
-  db-url: >-
-    {{ printf "{{username}}:{{password}}@tcp(%s-main.%s.svc:3306)/" $dbClusterName $.Release.Namespace }}
-  db-username: 'root'
-  db-password: '{secret-password}'
-{{- end }}
-
+### Additional MaxScale deployment if enabled for the cluster
 {{- if and (hasKey $cluster.spec "maxScale") $cluster.spec.maxScale.enabled }}
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
@@ -133,6 +81,8 @@ spec:
         protocol: MariaDBProtocol
 {{- end }}
 
+
+### ScheduledBackup for cluster
 {{- if and $cluster.spec (and $cluster.spec.backup $cluster.spec.backup.scheduledBackup) }}
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
@@ -175,14 +125,93 @@ spec:
     immediate: true
 {{- end }}
 
+### Cluster level Vault Configuration, i.e. DB Connection and cluster scoped roles
+{{- if $cluster.vaultConfiguration }}
+#
+## Vault DB Admin Role
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: admin-role-{{ $dbClusterName }}
+spec:
+  db-name: {{ $dbClusterName }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT GRANT OPTION, SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER ON *.* TO '{{name}}'@'%%';" }}
+
+### Vault DB Readonly Role
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readonly-role-{{ $dbClusterName }}
+spec:
+  db-name: {{ $dbClusterName }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, SHOW DATABASES, SHOW VIEW ON *.* TO '{{name}}'@'%%';" }}
+
+### Vault DB ReadWrite Role
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: readwrite-role-{{ $dbClusterName }}
+spec:
+  db-name: {{ $dbClusterName }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, SHOW DATABASES, SHOW VIEW, INSERT, UPDATE, DELETE, EXECUTE ON *.* TO '{{name}}'@'%%';" }}
+
+### Vault DB Connection
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbConnection
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ $dbClusterName }}
+spec:
+  connection-name: {{ $dbClusterName }}
+  plugin-name: mysql-database-plugin
+  allowed-roles: '*'
+  computed-values:
+  - expression: k8s_get_secret_value('{{ $dbClusterName }}-root','{{ $.Release.Namespace }}','password')
+    name: secret-password
+  db-url: >-
+    {{ printf "{{username}}:{{password}}@tcp(%s-main.%s.svc:3306)/" $dbClusterName $.Release.Namespace }}
+  db-username: 'root'
+  db-password: '{secret-password}'
+
+### If additional roles defined for cluster
+{{- if $dbCluster.roles }}
+{{- range keys $dbCluster.roles  }}
+{{- $dbrole := get $dbCluster.roles . }}
+{{- $dbRoleName := . }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbRoleName }}
+spec:  
+  creation-statements: {{ $dbrole.sql }}
+  db-name: {{ $dbClusterName }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $dbRoleName }}
 {{- end }}
+{{- end }}
+### End of additional Vault roles
 
+{{- end }}
+### End of Cluster level Vault configuration block
 
+### Resources per Cluster database
 {{- if $dbCluster.dbs }}
 {{- range keys $dbCluster.dbs  }}
 {{- $db := get $dbCluster.dbs . }}
 {{- $dbName := . }}
 {{- $dbNameUnderscored := ( . | replace "-" "_") }}
+
+### SqlInstaller for database creation per Qvantel conventions
 ---
 apiVersion: platform.qvantel.com/v1
 kind: SqlInstaller
@@ -206,62 +235,51 @@ spec:
     - name: "mariadb-password"
       expression: "k8s_get_secret_value('{{ $dbClusterName }}-root', '{{ $.Release.Namespace }}', 'password')"
 
-{{- if $db.roles }}
-{{- range keys $db.roles  }}
-{{- $dbrole := get $db.roles . }}
+### Vault roles per database
+{{- if $dbCluster.cluster.vaultConfiguration }}
+
+### Default Vault role for DB owner application per Qvantel conventions
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbrole }}
-spec:
-  creation-statements: {{ $dbrole.sql }} 
-  db-name: {{ $dbClusterName }}
-  default-ttl: "0"
-  max-ttl: "0"
-  role-name: {{ $dbrole }}
-
-{{- end }}
-{{- else }}
-
----
-apiVersion: platform-vault.qvantel.com/v1
-kind: DbRole
-metadata:
-  name: mariadb-{{ . }}
+  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
 spec:
   creation-statements: >-
     {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REFERENCES, CREATE VIEW, CREATE ROUTINE, SHOW VIEW ON %s.* TO '{{name}}'@'%%';" $dbNameUnderscored }}
   db-name: {{ $dbClusterName }}
   default-ttl: "0"
   max-ttl: "0"
-  role-name: mariadb_{{ . }}
+  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
 
-{{- end }}
-
-
-{{- end }}
-{{- end }}
-
-
-{{- if $dbCluster.roles }}
-{{- range keys $dbCluster.roles  }}
-{{- $dbrole := get $dbCluster.roles . }}
+### Vault roles for additional owners roles, if defined
+{{- if $db.owners }}
+{{- range keys $db.owners  }}
+{{- $dbrole := get $db.owners . }}
+{{- $dbRoleName := . }}
+{{- $objName := printf "%s-%s-%s" $dbClusterName $dbName $dbRoleName | replace "_" "-" }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
   name: {{ $dbrole }}
-spec:  
-  creation-statements: {{ $dbrole.sql }}
+spec:
+  creation-statements: >-
+    {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REFERENCES, CREATE VIEW, CREATE ROUTINE, SHOW VIEW ON %s.* TO '{{name}}'@'%%';" $dbNameUnderscored }}
   db-name: {{ $dbClusterName }}
   default-ttl: "0"
   max-ttl: "0"
-  role-name: {{ $dbrole }}
-
+  role-name: {{ $dbRoleName }}
 {{- end }}
 {{- end }}
 
+{{- end }}
+### End of Database level Vault configuration block
+
+
+{{- end }}
+{{- end }}
+### End of per-database resources section
 
 {{- end }}
 {{- end }}

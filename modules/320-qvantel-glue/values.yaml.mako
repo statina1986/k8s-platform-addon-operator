@@ -225,6 +225,7 @@ qvantelGlue:
     postgres: {}
     # -- MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster 
     # and associated configuration like dbs, roles and extensions.
+    # For Example, see `example-mariadb` definition in Examples-MariaDB section below.
     mariadb: {}
     # -- Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster 
     # and associated configuration like keyspaces and roles.
@@ -325,6 +326,11 @@ example-postgredb:
       # @section -- Examples-PostgreSQL
       owners:
         apps-another-app-to-access-flex: {}
+    mnp-gw:
+      # -- Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.  
+      # @default -- null
+      # @section -- Examples-PostgreSQL
+      namespace: mnp-gw
   # -- Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
   # @default -- {}
   # @section -- Examples-PostgreSQL
@@ -403,3 +409,86 @@ example-cassandra:
     migration-tables:
       cql:
       - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
+
+# -- This is example MariaDB glue definition. 
+# In this example MariaDB cluster is configured with 1 db created in this cluster(`mnp-gw`) and few additional roles.
+# Note: It is used for documentation purposes only. Real MariaDB clusters should be defined under `qvantelGlue.db.mariadb`
+# @section -- Examples-MariaDB
+example-mariadb:
+  # -- Defines MariaDB database cluster (kind: MariaDB) to deploy. 
+  # Values configured in this object are merged with default template from `qvantelGlue.dbs.common.mariadb.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.mariadb.defaultCluster`.
+  # Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
+  # @default -- null
+  # @section -- Examples-MariaDB
+  cluster:
+    # -- Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
+    # @default --  by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
+    # @section -- Examples-MariaDB
+    vaultConfiguration: true
+    # -- Annotations to be configured on cluster resource.
+    # @default --  null
+    # @section -- Examples-MariaDB
+    annotations: {}
+    # -- Additional labels to be configured on cluster resource.
+    # @default --  null
+    # @section -- Examples-MariaDB
+    additionalLabels: {}
+    # -- Configure MariaDB cluster details. See https://github.com/mariadb-operator/mariadb-operator/blob/main/docs/api_reference.md#mariadb for API reference.    
+    # @default -- {}
+    # @section -- Examples-MariaDB
+    spec:
+      storage:
+        size: 1Gi
+  # -- Defines Databases to deploy in the MariaDB Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  
+  # This is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).
+  # @default -- {}
+  # @section -- Examples-MariaDB
+  dbs:
+    catalog-deployer:
+      sql:
+        # -- It is possible to define provisioning SQL for the database if customization is required.
+        # @default -- {}
+        # @section -- Examples-PostgreSQL
+        provision: |
+          - "CREATE ROLE db_catalog_deployer NOLOGIN"
+          - "GRANT db_catalog_deployer TO CURRENT_USER"
+          - "CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer"    
+    ddl:
+      # -- Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.
+      # @default -- null
+      # @section -- Examples-PostgreSQL
+      extensions:
+        # -- Enables `timescaledb` extensions for database.
+        # @default -- {}
+        # @section -- Examples-PostgreSQL
+        timescaledb: {}
+    flex-bpmn-executor:
+      # -- Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+      # @default -- {}
+      # @section -- Examples-PostgreSQL
+      owners:
+        apps-another-app-to-access-flex: {}
+    mnp-gw:
+      # -- Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.  
+      # @default -- null
+      # @section -- Examples-MariaDB
+      namespace: mnp
+      # -- Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+      # @default -- {}
+      # @section -- Examples-MariaDB
+      owners:
+        apps-another-app-to-access-mnp: {}
+      sql:
+        # -- It is possible to define provisioning SQL for the database if customization is required.
+        # @default -- {}
+        # @section -- Examples-MariaDB
+        provision: |
+          - "<custom SQL goes here>"
+          - "<custom SQL goes here>"
+  # -- Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
+  # @default -- {}
+  # @section -- Examples-MariaDB
+  roles:
+    custom-role-access-multiple-dbs:
+      sql: |
+        <custom Vault templated SQL goes here>
