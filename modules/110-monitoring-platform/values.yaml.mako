@@ -295,7 +295,14 @@ monitoringPlatform:
             headers:
               Content-Type: application/json
             body: '{"ResultText": "OK}'
-            preferred_ip_protocol: "ip4"    
+            preferred_ip_protocol: "ip4"
+        http_401:
+          prober: http
+          timeout: 5s
+          http:
+            method: GET
+            valid_status_codes:
+            - 401
   yet-another-cloudwatch-exporter:
     enabled: false
     image:
