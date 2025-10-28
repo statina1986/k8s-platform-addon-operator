@@ -9,13 +9,41 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 
 ## Available Modules
 - [platform-core](modules/001-platform-core/README.md) for core parts of platform
+- [kyverno-platform](modules/010-kyverno-platform/README.md) for Kyverno policy engine platform service
 - [aws-platform](modules/050-aws-platform/README.md) configures needed plugins and services to manage Qvantel K8S Platform on AWS Cloud
-- [cert-platform](modules/101-cert-platform/README.md) for certificate management with **cert-manager**
+- [cert-platform](modules/101-cert-platform/README.md) for certificate management with Cert Manager
 - [monitoring-platform](modules/110-monitoring-platform/README.md) for Prometheus/Grafana monitoring stack
-- [consul-platform](modules/130-consul-platform/README.md) for **consul** deployment
-- [vault-platform](modules/140-vault-platform/README.md) for **vault** deployment and configuration via CRDs
-- [istio-platform](modules/150-istio-platform/README.md) for **istio** control-plane deployment and configuration
-- [istio-ingress](modules/151-istio-ingress/README.md) for **istio** Ingress Gateways deployment and configuration
+- [metrics-platform](modules/111-metrics-platform/README.md) for metrics server in the cluster
+- [external-dns](modules/120-external-dns/README.md) for External DNS in the cluster
+- [consul-platform](modules/130-consul-platform/README.md) for Consul deployment and configuration
+- [vault-platform](modules/140-vault-platform/README.md) for Vault deployment and configuration
+- [minio-platform](modules/145-minio-platform/README.md) for MinIO deployment and configuration
+- [istio-platform](modules/150-istio-platform/README.md) for Istio control-plane deployment and configuration
+- [istio-ingress](modules/151-istio-ingress/README.md) for Istio Ingress Gateways deployment and configuration
+- [elasticsearch-platform](modules/160-elasticsearch-platform/README.md) for ECK Operator and ELK stack configuration
+- [logsearch-platform](modules/161-logsearch-platform/README.md) for Logsearch cluster without ECK Operator ( only for OCP platform so far )
+- [smartsearch-platform](modules/162-smartsearch-platform/README.md) for Smartsearch cluster without ECK Operator ( only for OCP platform so far )
+- [loki-platform](modules/163-loki-platform/README.md) for Loki deployment and configuration
+- [vector-platform](modules/164-vector-platform/README.md) for Vector deployment and configuration
+- [kasope-platform](modules/211-kasope-platform/README.md) for K8ssandra Operator deployment and configuration, Cassandra clusters
+- [kafka-platform](modules/220-kafka-platform/README.md) for Strimzi Kafka Operator deployment and configuration, Kafka clusters
+- [progress-platform](modules/230-progress-platform/README.md) for auxiliary stuff needed to support external Progress DB
+- [cnpg-postgres-platform](modules/241-cnpg-postgres-platform/README.md) for CNPG Operator deployment and configuration, clusterwide Postgres resources
+- [mariadb-operator-platform](modules/251-mariadb-operator-platform/README.md) for MariaDB Operator deployment and configuration, clusterwide MariaDB resources
+- [redis-platform](modules/260-redis-platform/README.md) for Redis deployment and configuration
+- [rabbitmq-platform](modules/270-rabbitmq-platform/README.md) for RabbitMQ deployment and configuration
+- [mongodb-platform](modules/280-mongodb-platform/README.md) for MongoDB deployment and configuration
+- [percona-pmm-platform](modules/290-percona-pmm-platform/README.md) for Percona PMM deployment and configuration
+- [pomerium-platform](modules/315-pomerium-platform/README.md) for Pomerium deployment and configuration
+- [qvantel-glue](modules/320-qvantel-glue/README.md) for providing abstractions and automations to support Qvantel workloads deployments and operations
+- [instana-platform](modules/370-instana-platform/README.md) for Instana deployment and configuration
+- [sftpgo-platform](modules/410-sftpgo-platform/README.md) for SFTPGo deployment and configuration
+- [apisix-platform](modules/500-apisix-platform/README.md) for APISIX deployment and configuration
+- [ksix-platform](modules/600-ksix-platform/README.md) for K6 deployment and configuration
+- [rancher-platform](modules/800-rancher-platform/README.md) for Rancher deployment and configuration
+- [artifactory-platform](modules/801-artifactory-platform/README.md) for Artifactory OSS / JCR deployment and configuration
+- [metallb-platform](modules/802-metallb-platform/README.md) for MetalLB deployment and configuration
+- [keycloak-platform](modules/810-keycloak-platform/README.md) for Keycloak deployment and configuration
 
 ## Modules Order
 Modules are ordered alphanumerically based on their folder names. This is the order of the deployment.

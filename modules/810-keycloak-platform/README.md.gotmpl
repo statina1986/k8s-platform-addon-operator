@@ -1,0 +1,12 @@
+{{ template "chart.header" . }}
+
+`keycloak-platform` module is responsible for deployment of [Keycloak](https://www.keycloak.org/) in the cluster.
+Keycloak is an open-source identity and access management (IAM) solution to secure applications with minimal effort. 
+It acts as a centralized identity broker, enabling features like multi-factor authentication, fine-grained authorization, and user account management, while also allowing for customization and integration with existing user directories like LDAP and Active Directory. 
+
+Dependencies:
+- [cnpg-postgres-platform](https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/241-cnpg-postgres-platform/README.md) which deploys the CNPG Operator for managing Postgres clusters.
+- [qvantel-glue](https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/320-qvantel-glue/README.md) which is needed for the actual Postgres DB acting as Keycloak backend and for SQL installers support.
+- [vault-platform](https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/140-vault-platform/README.md) which is used to manage DB credentials.
+
+{{ template "chart.valuesSectionHtml" . }}

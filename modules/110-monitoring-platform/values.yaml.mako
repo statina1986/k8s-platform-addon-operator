@@ -295,7 +295,14 @@ monitoringPlatform:
             headers:
               Content-Type: application/json
             body: '{"ResultText": "OK}'
-            preferred_ip_protocol: "ip4"    
+            preferred_ip_protocol: "ip4"
+        http_401:
+          prober: http
+          timeout: 5s
+          http:
+            method: GET
+            valid_status_codes:
+            - 401
   yet-another-cloudwatch-exporter:
     enabled: false
     image:
@@ -1043,8 +1050,8 @@ monitoringPlatform:
             % endif
           'podMonitor/metrics/kafka-resources-metrics/0' :
             honor_timestamps: true
-            scrape_interval: 30s
-            scrape_timeout: 10s
+            scrape_interval: 5m
+            scrape_timeout: 2m
             metrics_path: /metrics
             scheme: http
             follow_redirects: true

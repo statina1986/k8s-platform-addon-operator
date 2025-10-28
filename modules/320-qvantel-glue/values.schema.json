@@ -221,68 +221,6 @@
         "dbs": {
           "description": "Defines Databases to deploy in the MariaDB Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  \nThis is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).",
           "properties": {
-            "catalog-deployer": {
-              "properties": {
-                "sql": {
-                  "properties": {
-                    "provision": {
-                      "default": "- \"CREATE ROLE db_catalog_deployer NOLOGIN\"\n- \"GRANT db_catalog_deployer TO CURRENT_USER\"\n- \"CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer\"    \n",
-                      "description": "It is possible to define provisioning SQL for the database if customization is required.",
-                      "required": [],
-                      "title": "provision",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "sql",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "catalog-deployer",
-              "type": "object"
-            },
-            "ddl": {
-              "properties": {
-                "extensions": {
-                  "description": "Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.",
-                  "properties": {
-                    "timescaledb": {
-                      "description": "Enables `timescaledb` extensions for database.",
-                      "required": [],
-                      "title": "timescaledb",
-                      "type": "object"
-                    }
-                  },
-                  "required": [],
-                  "title": "extensions",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "ddl",
-              "type": "object"
-            },
-            "flex-bpmn-executor": {
-              "properties": {
-                "owners": {
-                  "description": "Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.",
-                  "properties": {
-                    "apps-another-app-to-access-flex": {
-                      "required": [],
-                      "title": "apps-another-app-to-access-flex",
-                      "type": "object"
-                    }
-                  },
-                  "required": [],
-                  "title": "owners",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "flex-bpmn-executor",
-              "type": "object"
-            },
             "mnp-gw": {
               "properties": {
                 "namespace": {

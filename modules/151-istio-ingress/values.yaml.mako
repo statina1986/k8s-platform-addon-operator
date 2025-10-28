@@ -1287,3 +1287,13 @@ istioIngress:
               host: ${values['global']['helmReleaseNamePrefix']}vault-platform.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 8200
+      vector-aggregator-logstash:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - route:
+          - destination:
+              host: ${values['global']['helmReleaseNamePrefix']}vector-platform-aggregator.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 9000
