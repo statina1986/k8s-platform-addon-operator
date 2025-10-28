@@ -444,30 +444,6 @@ example-mariadb:
   # @default -- {}
   # @section -- Examples-MariaDB
   dbs:
-    catalog-deployer:
-      sql:
-        # -- It is possible to define provisioning SQL for the database if customization is required.
-        # @default -- {}
-        # @section -- Examples-PostgreSQL
-        provision: |
-          - "CREATE ROLE db_catalog_deployer NOLOGIN"
-          - "GRANT db_catalog_deployer TO CURRENT_USER"
-          - "CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer"    
-    ddl:
-      # -- Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.
-      # @default -- null
-      # @section -- Examples-PostgreSQL
-      extensions:
-        # -- Enables `timescaledb` extensions for database.
-        # @default -- {}
-        # @section -- Examples-PostgreSQL
-        timescaledb: {}
-    flex-bpmn-executor:
-      # -- Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
-      # @default -- {}
-      # @section -- Examples-PostgreSQL
-      owners:
-        apps-another-app-to-access-flex: {}
     mnp-gw:
       # -- Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.  
       # @default -- null

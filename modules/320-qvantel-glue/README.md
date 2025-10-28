@@ -638,15 +638,6 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
             size: 1Gi
     vaultConfiguration: true
 dbs:
-    catalog-deployer:
-        sql:
-            provision: "- \"CREATE ROLE db_catalog_deployer NOLOGIN\"\n- \"GRANT db_catalog_deployer TO CURRENT_USER\"\n- \"CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer\"    \n"
-    ddl:
-        extensions:
-            timescaledb: {}
-    flex-bpmn-executor:
-        owners:
-            apps-another-app-to-access-flex: {}
     mnp-gw:
         namespace: mnp
         owners:
@@ -808,58 +799,6 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
 		<th>Description</th>
 	</thead>
 	<tbody>
-		<tr>
-			<td style="width: 300px;">example-mariadb.dbs.catalog-deployer.sql.provision</td>
-			<td>string</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
-</td>
-			<td><div>
-
-It is possible to define provisioning SQL for the database if customization is required.
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;">example-mariadb.dbs.ddl.extensions</td>
-			<td>object</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
-</td>
-			<td><div>
-
-Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;">example-mariadb.dbs.ddl.extensions.timescaledb</td>
-			<td>object</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
-</td>
-			<td><div>
-
-Enables `timescaledb` extensions for database.
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;">example-mariadb.dbs.flex-bpmn-executor.owners</td>
-			<td>object</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
-</td>
-			<td><div>
-
-Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
-
-</div>
-</td>
-		</tr>
 		<tr>
 			<td style="width: 300px;">example-postgredb</td>
 			<td>object</td>

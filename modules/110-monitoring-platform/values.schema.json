@@ -3679,13 +3679,13 @@
                               "type": "string"
                             },
                             "scrape_interval": {
-                              "default": "30s",
+                              "default": "5m",
                               "required": [],
                               "title": "scrape_interval",
                               "type": "string"
                             },
                             "scrape_timeout": {
-                              "default": "10s",
+                              "default": "2m",
                               "required": [],
                               "title": "scrape_timeout",
                               "type": "string"
