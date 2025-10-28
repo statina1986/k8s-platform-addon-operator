@@ -16,6 +16,9 @@ spec:
     path "auth/token/renew-self" {
         capabilities = ["update"]
     }
+    path "database/creds/readwrite-role-redis*" {
+        capabilities = ["read"]
+    }
   computed-values:
     - name: "kubernetes-accessor"
       expression: "vault_get_accessor('kubernetes/')"

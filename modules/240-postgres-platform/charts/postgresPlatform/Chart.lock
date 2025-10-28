@@ -1,9 +1,0 @@
-dependencies:
-- name: postgres-operator
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.10.1
-- name: postgres-operator-ui
-  repository: https://artifactory.qvantel.net/artifactory/helm-platform/
-  version: 1.10.1
-digest: sha256:41c038846388c5a8c8102d3cdc2a014544259d37c9b0b061a33bea92559e2f50
-generated: "2023-12-07T14:27:11.753442378+02:00"

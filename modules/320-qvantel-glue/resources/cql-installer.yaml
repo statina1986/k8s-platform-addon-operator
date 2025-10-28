@@ -41,6 +41,10 @@ spec:
                 type: array
                 items:
                   type: string
+              additional-cql:
+                type: array
+                items:
+                  type: string
               db-secret-name:
                 type: string
               db-url:

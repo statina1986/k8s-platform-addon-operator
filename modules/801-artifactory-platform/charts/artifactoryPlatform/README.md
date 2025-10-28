@@ -8,6 +8,6 @@
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.jfrog.io | artifactory-jcr | 107.90.5 |
-| https://charts.jfrog.io | artifactory-oss | 107.90.5 |
+| https://charts.jfrog.io | artifactory-jcr | 107.117.16 |
+| https://charts.jfrog.io | artifactory-oss | 107.117.16 |
 

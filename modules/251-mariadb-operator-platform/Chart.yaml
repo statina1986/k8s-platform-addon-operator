@@ -7,7 +7,7 @@ dependencies:
 annotations:
   images: |
     - name: mariadb-operator
-      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:25.8.4
+      image: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator:25.10.1
     - name: mariadb-10-6
       image: docker.io/mariadb:10.6.19
     - name: mariadb-10-11
@@ -20,5 +20,3 @@ annotations:
       image: prom/mysqld-exporter:v0.15.1
     - name: maxscale-exporter
       image: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
-    - name: sql-exporter
-      image: docker.io/burningalchemist/sql_exporter:0.18

@@ -85,6 +85,7 @@ lokiPlatform:
       auth_enabled: false
 
       commonConfig:
+        path_prefix: /var/loki
         % if values['global']['configurationProfile'] == 'dev':
         replication_factor: 1
         ring:

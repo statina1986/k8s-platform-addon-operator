@@ -1,14 +1,30 @@
 redisPlatform:
   redis:
+    rbac:
+        create: true
+    serviceAccount:
+      create: true
+      name: redis 
+    global:
+      security:
+        allowInsecureImages: true
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
+      % else:
+      registry: platform.artifactory.qvantel.net
       % endif
+      repository: platform/bitnami-redis
+      tag: 8.2.2
     volumePermissions:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
         % endif
+        repository: platform/platform-k8s-tools-minimal
+        tag: 1.3.3_202509080945_master_90384dcc
     sysctl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -17,7 +33,7 @@ redisPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
     kubectl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -26,7 +42,7 @@ redisPlatform:
         registry: platform.artifactory.qvantel.net
         % endif
         repository: platform/platform-k8s-tools-minimal
-        tag: 1.2.0_10_5193dbce5
+        tag: 1.3.3_202509080945_master_90384dcc
     architecture: replication
     auth:
       enabled: true
@@ -56,6 +72,7 @@ redisPlatform:
         storageClass: ""
         size: 8Gi
     replica:
+      automountServiceAccountToken: true
       % if values['global']['configurationProfile'] in {'dev'}:
       replicaCount: 1
       % else:
@@ -79,10 +96,16 @@ redisPlatform:
         size: 8Gi
     sentinel:      
       enabled: true
+      masterService:
+        enabled: true
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
         % endif
+        repository: platform/bitnami-redis-sentinel
+        tag: 8.2.2
       masterSet: redis
       % if values['global']['configurationProfile'] in {'dev'}:
       quorum: 1
@@ -93,6 +116,7 @@ redisPlatform:
         limits: {}
         requests: {}
       service:
+        createMaster: true
         annotations:
           platform.qvantel.com/consul-service-port: "26379"
           consul.hashicorp.com/service-port: tcp-sentinel
@@ -101,4 +125,8 @@ redisPlatform:
       image:
         % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: platform.artifactory.qvantel.net
         % endif
+        repository: platform/bitnami-redis-exporter
+        tag: 1.79.0

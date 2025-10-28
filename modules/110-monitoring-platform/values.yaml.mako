@@ -879,7 +879,9 @@ monitoringPlatform:
                         path: [status, failed]
                         labelsFromPath:
                           ref: []
-              % endif
+              % else:
+              []   
+              % endif              
     thanosRuler:
       thanosRulerSpec:
         image:
@@ -1183,3 +1185,4 @@ monitoringPlatform:
           - job_name: '{{ $k }}'
           {{ $v | toYaml | indent 2}}
           {{- end }}
+          

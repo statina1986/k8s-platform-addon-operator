@@ -1,21 +1,13 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-08T08:55:17.977073879Z"
+  generatedAt: "2025-09-15T13:46:10.72508644Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kafka-platform
   version: 0.0.1
   appVersion: ""
 images:
-  - name: operator-037
-    image: quay.io/strimzi/operator:0.37.0
-    chart: kafka-platform
-    digests:
-      - digest: sha256:202cb9d2cd20602b622cd09e5d522b650e6e327c9c54dfa8f3c2e559949aa477
-        arch: linux/amd64
-      - digest: sha256:205c994d398ef948960e3253ce5fae3ccac9771745c389fbd6bd9cd422b8bfa3
-        arch: linux/arm64
   - name: operator-043
     image: quay.io/strimzi/operator:0.43.0
     chart: kafka-platform
@@ -24,13 +16,13 @@ images:
         arch: linux/amd64
       - digest: sha256:ed74d92ce60aae006457e5e80210330f898a575e8bf99b41b13eafb9f68d06e9
         arch: linux/arm64
-  - name: kafka-037-351
-    image: quay.io/strimzi/kafka:0.37.0-kafka-3.5.1
+  - name: operator-0451
+    image: quay.io/strimzi/operator:0.45.1
     chart: kafka-platform
     digests:
-      - digest: sha256:17fffbb06201b9ab73c431eaa4e506ceaf855e8c29b844131cbfdf8067426234
+      - digest: sha256:86d9a5907df693c31cdb27f042a1488e4390bd21cf786df2f278e7c32c86dbb0
         arch: linux/amd64
-      - digest: sha256:ed433b82aa76529a6f8245ae967c8bddbd6c7da012474980e8e9845baeb9e99d
+      - digest: sha256:1dbced54450e8b4281096847df5e4e0f4df84a728a09340f645745f91c373e70
         arch: linux/arm64
   - name: kafka-043-380
     image: quay.io/strimzi/kafka:0.43.0-kafka-3.8.0
@@ -40,29 +32,29 @@ images:
         arch: linux/amd64
       - digest: sha256:7c7ae30c87c2c0a9b19f6e828a10a900bf15962bc08f5511c7862f25ee5f2ac3
         arch: linux/arm64
-  - name: kafka-bridge-026
-    image: quay.io/strimzi/kafka-bridge:0.26.1
+  - name: kafka-0451-391
+    image: quay.io/strimzi/kafka:0.45.1-kafka-3.9.1
     chart: kafka-platform
     digests:
-      - digest: sha256:0c8077ff5983ffdb4786aae89cd4a76007e317e84be88ecd55e64600726ccdf1
+      - digest: sha256:86ddf1c56a012a55f3c41247437e52de7743becd66fa0f8dc9d79f7ce29d2955
         arch: linux/amd64
-      - digest: sha256:e93ff46ea3546fde10c0d3cf8d59bbbd397a70269392e7532f09239c7016882d
+      - digest: sha256:d961f1ba60dc3d9a543237aed1fa30088cc90c0a81005dffaa4e492b8642c030
         arch: linux/arm64
   - name: kafka-bridge-030
     image: quay.io/strimzi/kafka-bridge:0.30.0
     chart: kafka-platform
     digests:
-      - digest: sha256:e394bffb35c13a0673d4291264dac1dc59de34f18bae5ec97a92f5ac29be4961
+      - digest: sha256:0211a913f18c0c9b1e67a710ca66d6fcce472f0670622aa690a67896886babed
         arch: linux/amd64
-      - digest: sha256:d0ab44a918948a04280c23edcd4a957278773ad2095f6d52541b969969088454
+      - digest: sha256:0c49437ac53293dd6d8e61b67f2e2842b78b9857b64fbb245bd1322996aacd76
         arch: linux/arm64
-  - name: kaniko-executor-037
-    image: quay.io/strimzi/kaniko-executor:0.37.0
+  - name: kafka-bridge-0311
+    image: quay.io/strimzi/kafka-bridge:0.31.1
     chart: kafka-platform
     digests:
-      - digest: sha256:71d30172bd94d6c39fb0f9ea4cb42b05bb428fd81b031e17f28828be2876cd08
+      - digest: sha256:c64d62549d0daf1680abcc3cc9361333bce45de452523ad7e91eb00319a6221f
         arch: linux/amd64
-      - digest: sha256:a3348eb562f60b3afec727b266013bc43cbf8f9f1876ab6c089b5011760f6a4c
+      - digest: sha256:bd922a93c41e2e839bc5ba7d40f5a0da831e44e03dd5da880e32b16f015d2092
         arch: linux/arm64
   - name: kaniko-executor-043
     image: quay.io/strimzi/kaniko-executor:0.43.0
@@ -72,13 +64,13 @@ images:
         arch: linux/amd64
       - digest: sha256:3edced8385a32cb6de7b3a843a0fc695ed1c33fdbd7f58ad330937cc2475bb23
         arch: linux/arm64
-  - name: maven-builder-037
-    image: quay.io/strimzi/maven-builder:0.37.0
+  - name: kaniko-executor-0451
+    image: quay.io/strimzi/kaniko-executor:0.45.1
     chart: kafka-platform
     digests:
-      - digest: sha256:408e0d7498ab8a35b647c249344a32b69ce9df857587117770b5454019b21013
+      - digest: sha256:b9fda52720a8c6ae739df862b988abcc29dd6b223b681afc2dc7387bcd42c9e0
         arch: linux/amd64
-      - digest: sha256:e98dfbe7bbf8d99c3ce649abe249fd1e1b5f2e5f91c77bf0af551ff2f71dd358
+      - digest: sha256:3edced8385a32cb6de7b3a843a0fc695ed1c33fdbd7f58ad330937cc2475bb23
         arch: linux/arm64
   - name: maven-builder-043
     image: quay.io/strimzi/maven-builder:0.43.0
@@ -88,11 +80,19 @@ images:
         arch: linux/amd64
       - digest: sha256:5584be35b9ff52a9edc3f6a45509c8832ecc639bd605d73eaa65d9784bc61f25
         arch: linux/arm64
-  - name: kafka-ui
-    image: ghcr.io/kafbat/kafka-ui:126980339425e4bff3d98b020fe606778d3c45b1
+  - name: maven-builder-0451
+    image: quay.io/strimzi/maven-builder:0.45.1
     chart: kafka-platform
     digests:
-      - digest: sha256:cc86297eeab7963056ac7bdcf8f96fb275570e9aa505fd8004c00ea4dc20839f
+      - digest: sha256:cc19b660a48447039f6d963677237b2b8e30277f7f1c393b2f4b7f456576889b
         arch: linux/amd64
-      - digest: sha256:ccf3db646533f4bb76845f4e032d4facd40e012fd87cea08c6bfd780d1831814
+      - digest: sha256:0c808905348a66e37c1afcc392d396835b04c55a326c01c0aa10b7297061b2eb
+        arch: linux/arm64
+  - name: kafka-ui
+    image: quay.io/kafbat/kafka-ui:v1.3.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:f06fc2cefb961b2afaf43936022c32e40358833b803dc2d845948ef413991fe6
+        arch: linux/amd64
+      - digest: sha256:8d0973a77247c53f5775f0da723f9db0f75e36d304e3c411c5085893d2718f6b
         arch: linux/arm64

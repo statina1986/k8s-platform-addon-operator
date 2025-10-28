@@ -1,0 +1,516 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mariadb-queries-analyzer-grafana-dashboard
+  namespace: {{.Release.Namespace}}
+  labels:
+    grafana_dashboard: '1'
+  annotations:
+    grafana_folder: /tmp/dashboards/Qvantel_platform
+data:
+  mariadb-queries-analyzer.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 1149,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Min",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.1.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "expr": "rate(mariadb_wait_event_exec_count{database_name=~\"$datname\", instance=~\"$instances\", query_id=~\"$queryid\"}[$__rate_interval])",
+              "instant": false,
+              "legendFormat": "{{ "{{query_id}} - {{instance}} - {{query}}" }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Queries Request Rate",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "default": true,
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ms"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "id": 3,
+          "options": {
+            "legend": {
+              "calcs": [
+                "max",
+                "min",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Max",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.1.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "(sort_desc(topk(20,\n$MinLatency < (rate(mariadb_wait_event_stmt_total_latency{database_name=~\"$datname\", instance=~\"$instances\", query_id=~\"$queryid\"}[2m])\n/\nrate(mariadb_wait_event_exec_count{database_name=~\"$datname\", instance=~\"$instances\", query_id=~\"$queryid\"}[2m])\n) < $MaxLatency\n)))",
+              "instant": false,
+              "legendFormat": "{{ "{{query_id}} - {{instance}} - {{query}}" }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Top Latency Queries ",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "It allows to filter out per Wait_event and retrieve the wait_event, wait_event_type and query",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 11,
+            "w": 24,
+            "x": 0,
+            "y": 16
+          },
+          "id": 1,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "max",
+                "mean"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Name",
+              "sortDesc": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.1.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "expr": "sum (increase(mariadb_wait_event_sample_total{event_type=~\"$wait_event\", instance=~\"$instances\", database_name=~\"$datname\", query_id=~\"$queryid\"}[$__rate_interval])) by(query,query_id,event_type,event_subtype,database_name,metric)",
+              "hide": false,
+              "legendFormat": "{{ "{{query_id}} - {{database_name}} - {{event_type}} - {{event_subtype}} - {{query}}" }}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Queries CPU & Wait events",
+          "type": "timeseries"
+        }
+      ],
+      "preload": false,
+      "schemaVersion": 41,
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "text": "platform",
+              "value": "platform"
+            },
+            "definition": "mariadb_wait_event_sample_total",
+            "description": "Namespace where the database cluster is located",
+            "label": "namespace",
+            "name": "namespace",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "mariadb_wait_event_sample_total",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/namespace=\"(?<text>[^\"]+)/g",
+            "type": "query"
+          },
+          {
+            "current": {
+              "text": "mariadb",
+              "value": "mariadb"
+            },
+            "definition": "mariadb_wait_event_sample_total{namespace=~\"$namespace\"}",
+            "name": "cluster",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "mariadb_wait_event_sample_total{namespace=~\"$namespace\"}",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/\\bmariadb_cluster\\b=\"(?<text>[^\"]+)/g",
+            "type": "query"
+          },
+          {
+            "current": {
+              "text": "All",
+              "value": "$__all"
+            },
+            "definition": "mariadb_wait_event_sample_total{namespace=~\"$namespace\", mariadb_cluster=~\"$cluster\"}",
+            "includeAll": true,
+            "label": "instances",
+            "name": "instances",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "mariadb_wait_event_sample_total{namespace=~\"$namespace\", mariadb_cluster=~\"$cluster\"}",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "/instance=\"(?<text>[^\"]+)/g",
+            "type": "query"
+          },
+          {
+            "current": {
+              "text": "unknown",
+              "value": "unknown"
+            },
+            "definition": "mariadb_wait_event_sample_total",
+            "label": "datname",
+            "name": "datname",
+            "options": [],
+            "query": {
+              "qryType": 4,
+              "query": "mariadb_wait_event_sample_total",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 2,
+            "regex": "/\\bdatabase_name\\b=\"(?<text>[^\"]+)/g",
+            "type": "query"
+          },
+          {
+            "current": {
+              "text": "All",
+              "value": "$__all"
+            },
+            "definition": "label_values(mariadb_wait_event_sample_total{instance=~\"$instances\", namespace=~\"$namespace\", database_name=\"$datname\"},event_type)",
+            "includeAll": true,
+            "label": "wait_event",
+            "name": "wait_event",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(mariadb_wait_event_sample_total{instance=~\"$instances\", namespace=~\"$namespace\", database_name=\"$datname\"},event_type)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "type": "query"
+          },
+          {
+            "allowCustomValue": true,
+            "current": {
+              "text": "All",
+              "value": "$__all"
+            },
+            "definition": "label_values(mariadb_wait_event_sample_total{event_type=~\"$wait_event\", instance=~\"$instances\", database_name=~\"$datname\"},query_id)",
+            "includeAll": true,
+            "label": "queryid",
+            "name": "queryid",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(mariadb_wait_event_sample_total{event_type=~\"$wait_event\", instance=~\"$instances\", database_name=~\"$datname\"},query_id)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 2,
+            "regex": "",
+            "type": "query"
+          },
+          {
+            "current": {
+              "text": "0",
+              "value": "0"
+            },
+            "label": "Min Latency",
+            "name": "MinLatency",
+            "options": [
+              {
+                "selected": true,
+                "text": "0",
+                "value": "0"
+              }
+            ],
+            "query": "0",
+            "type": "textbox"
+          },
+          {
+            "current": {
+              "text": "999999",
+              "value": "999999"
+            },
+            "label": "Max Latency",
+            "name": "MaxLatency",
+            "options": [
+              {
+                "selected": true,
+                "text": "999999",
+                "value": "999999"
+              }
+            ],
+            "query": "999999",
+            "type": "textbox"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-3h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "MariaDB Query Analyzer",
+      "uid": "e4bc3c62-3ff2-439d-89c0-9dc3b48e8b4b",
+      "version": 25
+    }

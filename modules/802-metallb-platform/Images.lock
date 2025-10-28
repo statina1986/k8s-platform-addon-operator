@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-10-21T09:38:22.789017985Z"
+  generatedAt: "2025-09-25T07:25:34.123275967Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: metallb-platform
@@ -17,18 +17,18 @@ images:
       - digest: sha256:b3b67aaee35bea1c1cb0e6bb9f1cc4c75fad5bc6d1fcf9e0516bc3187e5faad5
         arch: linux/arm64
   - name: metallb-speaker
-    image: quay.io/metallb/speaker:v0.14.8
+    image: quay.io/metallb/speaker:v0.15.2
     chart: metallb-platform
     digests:
-      - digest: sha256:c50578d7aaf9147c95e828d6d4a38d817de554cd6f8dd5512790eae48d18129e
+      - digest: sha256:7dbe5e4b1ee3be1638b1620e2670649e9900768972060a31d2e809855e31e344
         arch: linux/amd64
-      - digest: sha256:09add5fa2289bcdcb6b3320daeb773bff874a8147c93f1be0ee9697e62aae2ab
+      - digest: sha256:07f99146adbafd9a15abfc397d24b70a1fbb2b63bed3bd2652a8bb2f77179b2b
         arch: linux/arm64
   - name: metallb-controller
-    image: quay.io/metallb/controller:v0.14.8
+    image: quay.io/metallb/controller:v0.15.2
     chart: metallb-platform
     digests:
-      - digest: sha256:741e029d1c5b5b3dad2749cba166b9e2695d63dc9e8879dbeda90d5d1275aa7e
+      - digest: sha256:9bd30b4ee165ad6bababa6334594d854b8c1037c385af83832fb07a4b2c23212
         arch: linux/amd64
-      - digest: sha256:1ae4a9d498a8fed94b0d8461f47f66ffd4e68a1a07bda3ede8de9b52699bea82
+      - digest: sha256:c7377460d90132eb603820aec16ad1fa8328a8cca85203be6138877ad4439e5a
         arch: linux/arm64

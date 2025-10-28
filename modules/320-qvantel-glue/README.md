@@ -244,7 +244,7 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
   {{- end }}
   {{- if ne $.root.Values.global.configurationProfile "dev" }}
   barmanObjectStore:
-    scheduledBackup: "0 0 * * *"
+    scheduledBackup: "0 0 0 * * *"
     spec:
       retentionPolicy: "7d"
       configuration:
@@ -360,7 +360,7 @@ Default template for CNPG clusters. See `example-postgredb.cluster` for referenc
 </td>
 		<td><div>
 
-MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster  and associated configuration like dbs, roles and extensions.
+MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster  and associated configuration like dbs, roles and extensions. For Example, see `example-mariadb` definition in Examples-MariaDB section below.
 
 </div>
 </td>
@@ -456,11 +456,18 @@ Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minu
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
     spec: null
     vaultConfiguration: true
+cqls:
+    migration-tables:
+        cql:
+            - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
 dbs:
     messaging:
         cql:
             provision: "- \"CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"\n- \"ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;\"   \n"
     revenue-events:
+        cql:
+            additional:
+                - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
         replicationFactors: '{''class'':''NetworkTopologyStrategy'', ''DC1'': 1}'
         roles:
             apps-another-app-to-access-revenue-events:
@@ -468,7 +475,7 @@ dbs:
                     CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE revenue_events TO {{username}};
 roles:
     custom-role-access-all-keyspaces:
-        sql: |
+        cql: |
             CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};</code></pre>
 </td>
 			<td><div>
@@ -518,6 +525,19 @@ Create Vault configuration for this cluster according to Qvantel conventions, i.
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;">example-cassandra.cqls</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configures additional CqlInstallers for this cluster. Keys in this map will be used as Vault roles names.
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;">example-cassandra.dbs</td>
 			<td>object</td>
 			<td>
@@ -525,7 +545,7 @@ Create Vault configuration for this cluster according to Qvantel conventions, i.
 </td>
 			<td><div>
 
-Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions. This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).
+Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions. This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_). E.g. in the following example `messaging` and `revenue_events` Keyspaces will be created.
 
 </div>
 </td>
@@ -539,6 +559,19 @@ Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  data
 			<td><div>
 
 It is possible to define provisioning CQL for the keyspace if customization is required.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.dbs.revenue-events.cql.additional</td>
+			<td>list</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+It is possible to define additional CQL for the keyspace initialization (handy if you want to keep keyspace creation logic default, but still to add something, like additional tables).
 
 </div>
 </td>
@@ -584,6 +617,188 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
 		</tr>
 	</tbody>
 </table>
+<h3>Examples-MariaDB</h3>
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 300px;">example-mariadb</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
+    additionalLabels: {}
+    annotations: {}
+    spec:
+        storage:
+            size: 1Gi
+    vaultConfiguration: true
+dbs:
+    catalog-deployer:
+        sql:
+            provision: "- \"CREATE ROLE db_catalog_deployer NOLOGIN\"\n- \"GRANT db_catalog_deployer TO CURRENT_USER\"\n- \"CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer\"    \n"
+    ddl:
+        extensions:
+            timescaledb: {}
+    flex-bpmn-executor:
+        owners:
+            apps-another-app-to-access-flex: {}
+    mnp-gw:
+        namespace: mnp
+        owners:
+            apps-another-app-to-access-mnp: {}
+        sql:
+            provision: |
+                - "<custom SQL goes here>"
+                - "<custom SQL goes here>"
+roles:
+    custom-role-access-multiple-dbs:
+        sql: |
+            <custom Vault templated SQL goes here></code></pre>
+</td>
+			<td><div>
+
+This is example MariaDB glue definition.  In this example MariaDB cluster is configured with 1 db created in this cluster(`mnp-gw`) and few additional roles. Note: It is used for documentation purposes only. Real MariaDB clusters should be defined under `qvantelGlue.db.mariadb`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.cluster</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Defines MariaDB database cluster (kind: MariaDB) to deploy.  Values configured in this object are merged with default template from `qvantelGlue.dbs.common.mariadb.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.mariadb.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.cluster.additionalLabels</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Additional labels to be configured on cluster resource.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.cluster.annotations</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> null</code></pre>
+</td>
+			<td><div>
+
+Annotations to be configured on cluster resource.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.cluster.spec</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configure MariaDB cluster details. See https://github.com/mariadb-operator/mariadb-operator/blob/main/docs/api_reference.md#mariadb for API reference.   
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.cluster.vaultConfiguration</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'</code></pre>
+</td>
+			<td><div>
+
+Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Defines Databases to deploy in the MariaDB Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.   This is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.mnp-gw.namespace</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used. 
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.mnp-gw.owners</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.mnp-gw.sql.provision</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+It is possible to define provisioning SQL for the database if customization is required.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.roles</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
+
+</div>
+</td>
+		</tr>
+	</tbody>
+</table>
 <h3>Examples-PostgreSQL</h3>
 <table>
 	<thead>
@@ -594,6 +809,58 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
 	</thead>
 	<tbody>
 		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.catalog-deployer.sql.provision</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+It is possible to define provisioning SQL for the database if customization is required.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.ddl.extensions</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.ddl.extensions.timescaledb</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Enables `timescaledb` extensions for database.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-mariadb.dbs.flex-bpmn-executor.owners</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>{}</code></pre>
+</td>
+			<td><div>
+
+Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;">example-postgredb</td>
 			<td>object</td>
 			<td>
@@ -601,7 +868,7 @@ Configures additional custom roles for this cluster in Vault. Keys in this map w
     additionalLabels: {}
     annotations: {}
     barmanObjectStore:
-        scheduledBackup: 0 0 * * *
+        scheduledBackup: 0 0 0 * * *
         spec:
             configuration:
                 s3Credentials:
@@ -644,6 +911,8 @@ dbs:
     flex-bpmn-executor:
         owners:
             apps-another-app-to-access-flex: {}
+    mnp-gw:
+        namespace: mnp-gw
 roles:
     custom-role-access-multiple-dbs:
         sql: |
@@ -668,7 +937,7 @@ This is example PostgreSQL glue definition.  In this example CNPG cluster is con
 </td>
 			<td><div>
 
-Defines CNPG database cluster (kind: Cluster) to deploy.  If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally. Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object). Cluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module.
+Defines CNPG database cluster (kind: Cluster) to deploy.  Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
 
 </div>
 </td>
@@ -812,6 +1081,19 @@ Enables `timescaledb` extensions for database.
 			<td><div>
 
 Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-postgredb.dbs.mnp-gw.namespace</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used. 
 
 </div>
 </td>

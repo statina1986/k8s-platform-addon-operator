@@ -276,6 +276,7 @@
                           "type": "array"
                         },
                         "metadata": {
+                          "description": "Setting serverImage to override the value coming from k8ssandra-operator.global.imageconfig.types",
                           "properties": {
                             "annotations": {
                               "properties": {
@@ -568,56 +569,6 @@
                           "required": [],
                           "title": "autoScheduling",
                           "type": "object"
-                        },
-                        "containerImage": {
-                          "properties": {
-                            "name": {
-                              "default": "cassandra-reaper",
-                              "required": [],
-                              "title": "name",
-                              "type": "string"
-                            },
-                            "registry": {
-                              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                              "required": [],
-                              "title": "registry",
-                              "type": "string"
-                            },
-                            "tag": {
-                              "default": "3.6.1",
-                              "required": [],
-                              "title": "tag",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "containerImage",
-                          "type": "object"
-                        },
-                        "initContainerImage": {
-                          "properties": {
-                            "name": {
-                              "default": "cassandra-reaper",
-                              "required": [],
-                              "title": "name",
-                              "type": "string"
-                            },
-                            "registry": {
-                              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                              "required": [],
-                              "title": "registry",
-                              "type": "string"
-                            },
-                            "tag": {
-                              "default": "3.6.1",
-                              "required": [],
-                              "title": "tag",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "initContainerImage",
-                          "type": "object"
                         }
                       },
                       "required": [],
@@ -665,55 +616,10 @@
                       "required": [],
                       "title": "registry",
                       "type": "string"
-                    },
-                    "repositoryOverride": {
-                      "properties": {
-                        "cassandra": {
-                          "properties": {
-                            "3.11.13": {
-                              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:3.11.13",
-                              "required": [],
-                              "title": "3.11.13",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "cassandra",
-                          "type": "object"
-                        }
-                      },
-                      "required": [],
-                      "title": "repositoryOverride",
-                      "type": "object"
                     }
                   },
                   "required": [],
                   "title": "image",
-                  "type": "object"
-                },
-                "imageConfig": {
-                  "properties": {
-                    "configBuilder": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/datastax/cass-config-builder:1.0-ubi8",
-                      "required": [],
-                      "title": "configBuilder",
-                      "type": "string"
-                    },
-                    "k8ssandraClient": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/k8ssandra-client:v0.2.2",
-                      "required": [],
-                      "title": "k8ssandraClient",
-                      "type": "string"
-                    },
-                    "systemLogger": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/system-logger:v1.22.4",
-                      "required": [],
-                      "title": "systemLogger",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "imageConfig",
                   "type": "object"
                 },
                 "serviceAccount": {
@@ -806,6 +712,191 @@
                   "required": [],
                   "title": "clusterScoped",
                   "type": "boolean"
+                },
+                "imageConfig": {
+                  "description": "Setting new imageConfig from k8ssandra-operator 1.27.0",
+                  "properties": {
+                    "defaults": {
+                      "properties": {
+                        "registry": {
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                          "required": [],
+                          "title": "registry",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "defaults",
+                      "type": "object"
+                    },
+                    "images": {
+                      "properties": {
+                        "config-builder": {
+                          "properties": {
+                            "name": {
+                              "default": "cass-config-builder",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "repository": {
+                              "default": "datastax",
+                              "required": [],
+                              "title": "repository",
+                              "type": "string"
+                            },
+                            "tag": {
+                              "default": "1.0-ubi8",
+                              "required": [],
+                              "title": "tag",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "config-builder",
+                          "type": "object"
+                        },
+                        "k8ssandra-client": {
+                          "properties": {
+                            "name": {
+                              "default": "k8ssandra-client",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "repository": {
+                              "default": "k8ssandra",
+                              "required": [],
+                              "title": "repository",
+                              "type": "string"
+                            },
+                            "tag": {
+                              "default": "v0.8.3",
+                              "required": [],
+                              "title": "tag",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "k8ssandra-client",
+                          "type": "object"
+                        },
+                        "medusa": {
+                          "properties": {
+                            "name": {
+                              "default": "medusa",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "repository": {
+                              "default": "k8ssandra",
+                              "required": [],
+                              "title": "repository",
+                              "type": "string"
+                            },
+                            "tag": {
+                              "default": "0.25.1",
+                              "required": [],
+                              "title": "tag",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "medusa",
+                          "type": "object"
+                        },
+                        "reaper": {
+                          "properties": {
+                            "name": {
+                              "default": "cassandra-reaper",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "repository": {
+                              "default": "thelastpickle",
+                              "required": [],
+                              "title": "repository",
+                              "type": "string"
+                            },
+                            "tag": {
+                              "default": "4.0.0",
+                              "required": [],
+                              "title": "tag",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "reaper",
+                          "type": "object"
+                        },
+                        "system-logger": {
+                          "properties": {
+                            "name": {
+                              "default": "system-logger",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "repository": {
+                              "default": "k8ssandra",
+                              "required": [],
+                              "title": "repository",
+                              "type": "string"
+                            },
+                            "tag": {
+                              "default": "v1.27.1",
+                              "required": [],
+                              "title": "tag",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "system-logger",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "images",
+                      "type": "object"
+                    },
+                    "types": {
+                      "properties": {
+                        "cassandra": {
+                          "properties": {
+                            "name": {
+                              "default": "cass-management-api",
+                              "required": [],
+                              "title": "name",
+                              "type": "string"
+                            },
+                            "repository": {
+                              "default": "k8ssandra",
+                              "required": [],
+                              "title": "repository",
+                              "type": "string"
+                            },
+                            "suffix": {
+                              "default": "-ubi8",
+                              "required": [],
+                              "title": "suffix",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "cassandra",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "types",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "imageConfig",
+                  "type": "object"
                 }
               },
               "required": [],

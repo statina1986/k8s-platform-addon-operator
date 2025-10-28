@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+from gevent import monkey
+monkey.patch_all()
+
 import sys
+
 from common.python.utils import *
 from common.python.hooks import *
 from common.python.vault import *
@@ -9,6 +13,7 @@ from common.python.inline import *
 
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
+
 
 class CqlInstallersHook(Hook):
     def __init__(self):
@@ -49,6 +54,7 @@ class CqlInstallersHook(Hook):
             name = event['object']['metadata']['name']
             namespace = event['object']['metadata']['namespace']
             db_provision_cql = event['object']['spec']['db-provision-cql']
+            additional_cql = event['object']['spec'].get('additional-cql', [])    
             db_secret = event['object']['spec'].get(
                 'db-secret-name', '')
             db_username = event['object']['spec'].get(
@@ -85,6 +91,11 @@ class CqlInstallersHook(Hook):
                 statement = replace_computed_values(
                     statement, vals)
                 session.execute(statement)                    
+
+            for statement in additional_cql:
+                statement = replace_computed_values(
+                    statement, vals)
+                session.execute(statement)
 
             execute_post_actions(post_actions, vals)
 
@@ -152,7 +163,7 @@ class CqlInstallersHook(Hook):
                     # Skipping 'Ready' Installers from scheduled execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        print("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.executeCql(event, k8s)
 
@@ -167,7 +178,7 @@ class CqlInstallersHook(Hook):
                     # Skipping 'Ready' Installers from synchronization execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        print("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping CqlInstaller " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.executeCql(event, k8s)
 

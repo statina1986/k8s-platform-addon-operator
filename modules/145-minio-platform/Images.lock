@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-03-26T15:05:29.936660262Z"
+  generatedAt: "2025-10-22T11:51:45.3792472Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: minio-platform
@@ -9,18 +9,18 @@ chart:
   appVersion: ""
 images:
   - name: minio
-    image: quay.io/minio/minio:RELEASE.2024-12-18T13-15-44Z
+    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
     chart: minio-platform
     digests:
-      - digest: sha256:dca4c608031e569387ebb9dbc5738542a4ddd68f57464c1f7ad5a2d31cefcb8d
+      - digest: sha256:54d3d6a0a58fb25b4e9943d1db3828d3b4de44666f911381b4fda57175488194
         arch: linux/arm64
-      - digest: sha256:34c8e2f52a5984492555427fee07254c80036bdb7079bb91679232abd7a4fa20
+      - digest: sha256:3f97c5651cb6662b880c787a232b6b34fec8d8922e08d6617b25d241a21164bb
         arch: linux/amd64
   - name: mc
-    image: quay.io/minio/mc:RELEASE.2024-11-21T17-21-54Z
+    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
     chart: minio-platform
     digests:
-      - digest: sha256:25abaf60c1654a0c36089eb6885b966496bfe2766a44a8b2941d50aa8bc2d73c
+      - digest: sha256:37d109dddbbb2c95873f5fc81ac93f37023264770fc580a7564148892087b1b7
         arch: linux/arm64
-      - digest: sha256:771f5ad7925a6b5e069786d8e847a292de320f1e3e3203647e29f47ec9b3d93b
+      - digest: sha256:eb4ea9884b77704230e2423e9004d2fa738dc272876b9cc41a297d29443b8780
         arch: linux/amd64

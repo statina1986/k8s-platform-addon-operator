@@ -4,12 +4,12 @@ minioPlatform:
     image:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/minio/minio
-      tag: RELEASE.2024-12-18T13-15-44Z
+      tag: RELEASE.2025-04-22T22-12-26Z
       % endif
     mcImage:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/minio/mc
-      tag: RELEASE.2024-11-21T17-21-54Z
+      tag: RELEASE.2025-08-13T08-35-41Z
       % endif
 
     % if values['global']['configurationProfile'] in {'dev'}:

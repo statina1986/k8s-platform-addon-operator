@@ -88,7 +88,7 @@ keycloakPlatform:
   database:
     name: qvt-postgredb
   configurator:
-    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.18.1.20250115062040_develop_c85e3e6d    
+    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.20.3.20250721061444_develop_e1ae757a
     spec:
       backoffLimit: 5
       template:
@@ -166,6 +166,13 @@ keycloakPlatform:
                           path: configurator.yml
     configmapValues:
       realms:
+        % if values.get('keycloakPlatform', {}).get('externalEndpointsAvailable', False):
+        master:
+          config:
+            # this is needed because otherwise master realm admin console tries to fetch things via "auth" which does not include master realm
+            # same config will be applied later from system-spec but it is good to have console working out of the box.
+            frontend_url: https://keycloak${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth
+        % endif
         qvantel:
           clients:
             # note: all clients will be created, regardless if they are used.
@@ -237,9 +244,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     healthPort: 9000
-    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.1.2.1.20250211132528_master_f8fcbe3c
-    # keycloak 25 moved health to a separate port 9000 https://www.keycloak.org/docs/latest/release_notes/index.html#management-port-for-metrics-and-health-endpoints
-    
+    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.3.5.1.20250925074649_master_cfc4de77
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:

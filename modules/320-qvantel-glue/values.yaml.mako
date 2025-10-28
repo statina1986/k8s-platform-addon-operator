@@ -93,13 +93,135 @@ qvantelGlue:
               binlog_format=row
               innodb_autoinc_lock_mode=2
               max_allowed_packet=256M
+            {{- if eq $.addonOperator.monitoringPlatformEnabled "true" }}
+              performance_schema=on
+              init_file=/etc/mysql/init-sql/init.sql
+
+              # statements consumers
+              performance-schema-consumer-events-statements-current=ON
+              performance-schema-consumer-events-statements-history=ON
+              performance-schema-consumer-events-statements-history-long=ON
+              performance-schema-consumer-statements-digest=ON
+
+              # waits consumers
+              performance-schema-consumer-events-waits-current=ON
+              performance-schema-consumer-events-waits-history=ON
+              performance-schema-consumer-events-waits-history-long=ON
+
+              # stages consumers
+              performance-schema-consumer-events-stages-current=ON
+              performance-schema-consumer-events-stages-history=ON
+              performance-schema-consumer-events-stages-history-long=ON
+            volumes:
+              - name: init-sql
+                configMap:
+                  name: {{ $.clusterName }}-init-sql
+            volumeMounts:
+              - name: init-sql
+                mountPath: /etc/mysql/init-sql
+                readOnly: true
+            {{- end }} 
             resources:
               requests:
                 cpu: 100m
                 memory: 128Mi
               limits:
                 memory: 1Gi  
-                
+          defaultSqlExporter:
+          service:
+            port: 9399
+          # Main config for sql_exporter. DSN is injected at runtime by init container.
+          config:
+            content: |
+              global:
+                scrape_timeout_offset: 500ms
+              target:
+                # DSN injected by init container via placeholder substitution
+                data_source_name: "__DSN__"
+                collectors:
+                  - mariadb_custom
+              collectors:
+                - collector_name: mariadb_custom
+                  metrics:
+                    - metric_name: mariadb_threads_connected
+                      type: gauge
+                      help: Number of currently open connections
+                      values: [threads_connected]
+                      query: |
+                        SELECT VARIABLE_VALUE AS threads_connected FROM information_schema.GLOBAL_STATUS  WHERE VARIABLE_NAME = 'Threads_connected'
+                    - metric_name: mariadb_uptime_seconds
+                      type: gauge
+                      help: Server uptime in seconds
+                      values: [uptime]
+                      query: |
+                        SELECT VARIABLE_VALUE AS uptime FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME = 'UPTIME'
+                    - metric_name: mariadb_wait_event_sample_total
+                      type: gauge
+                      help: Number of wait-event samples observed for a query
+                      key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                      values: [wait_count]
+                      query: &mariadb_wait_event_query |
+                        SELECT
+                          COALESCE(es.DIGEST, SHA1(COALESCE(es.SQL_TEXT, '')))           AS query_id,
+                          COALESCE(es.DIGEST_TEXT, es.SQL_TEXT, '[unknown]')             AS query,
+                          COALESCE(es.CURRENT_SCHEMA, 'unknown')                         AS database_name,
+                          w.EVENT_NAME                                                   AS wait_event_name,
+                          SUBSTRING_INDEX(w.EVENT_NAME, '/', 1)                          AS event_type,
+                          SUBSTRING_INDEX(SUBSTRING_INDEX(w.EVENT_NAME,'/',3), '/', -2)  AS event_subtype,
+                          COUNT(*)                                                       AS wait_count,
+                          ROUND(SUM(w.TIMER_WAIT) / 1e12, 6)                             AS total_wait_sec,
+                          ROUND(AVG(w.TIMER_WAIT) / 1e12, 6)                             AS avg_wait_sec,
+                          ROUND(MAX(w.TIMER_WAIT) / 1e12, 6)                             AS max_wait_sec,
+                          COUNT(DISTINCT es.EVENT_ID)                                    AS exec_count,
+                          ROUND(SUM(es.TIMER_WAIT) / 1e9, 3)                             AS stmt_total_latency_ms
+                        FROM performance_schema.events_waits_history_long AS w
+                        LEFT JOIN performance_schema.events_stages_history_long AS s
+                          ON  w.NESTING_EVENT_TYPE = 'STAGE'
+                          AND s.THREAD_ID          = w.THREAD_ID
+                          AND s.EVENT_ID           = w.NESTING_EVENT_ID
+                          AND s.NESTING_EVENT_TYPE = 'STATEMENT'
+                        JOIN performance_schema.events_statements_history_long AS es
+                          ON es.THREAD_ID = w.THREAD_ID
+                        AND es.EVENT_ID  = CASE
+                                              WHEN w.NESTING_EVENT_TYPE = 'STATEMENT'
+                                                THEN w.NESTING_EVENT_ID
+                                              ELSE s.NESTING_EVENT_ID
+                                            END
+                        GROUP BY
+                          query_id, query, database_name,
+                          wait_event_name, event_type, event_subtype
+                        ORDER BY total_wait_sec DESC
+                        LIMIT 100;
+                    - metric_name: mariadb_wait_event_total_seconds
+                      type: gauge
+                      help: Cumulative wait time spent in an event for a query (seconds)
+                      key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                      values: [total_wait_sec]
+                      query: *mariadb_wait_event_query
+                    - metric_name: mariadb_wait_event_average_seconds
+                      type: gauge
+                      help: Average wait time per sample for a query (seconds)
+                      key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                      values: [avg_wait_sec]
+                      query: *mariadb_wait_event_query
+                    - metric_name: mariadb_wait_event_max_seconds
+                      type: gauge
+                      help: Maximum wait time observed for a query (seconds)
+                      key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                      values: [max_wait_sec]
+                      query: *mariadb_wait_event_query
+                    - metric_name: mariadb_wait_event_exec_count
+                      type: gauge
+                      help: Number of statement executions contributing to the wait samples
+                      key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                      values: [exec_count]
+                      query: *mariadb_wait_event_query
+                    - metric_name: mariadb_wait_event_stmt_total_latency
+                      type: gauge
+                      help: Total statement latency contributing to wait samples (milliseconds)
+                      key_labels: [query_id, query, database_name, wait_event_name, event_type, event_subtype]
+                      values: [stmt_total_latency_ms]
+                      query: *mariadb_wait_event_query                
       # -- Common configurations for PostgreSQL databases
       # @default -- see child items docs
       postgres:
@@ -123,7 +245,7 @@ qvantelGlue:
           {{- end }}
           {{- if ne $.root.Values.global.configurationProfile "dev" }}
           barmanObjectStore:
-            scheduledBackup: "0 0 * * *"
+            scheduledBackup: "0 0 0 * * *"
             spec:
               retentionPolicy: "7d"
               configuration:
@@ -225,6 +347,7 @@ qvantelGlue:
     postgres: {}
     # -- MariaDB databases configuration. This is a map where each key corresponds to the MariaDB cluster 
     # and associated configuration like dbs, roles and extensions.
+    # For Example, see `example-mariadb` definition in Examples-MariaDB section below.
     mariadb: {}
     # -- Cassandra databases configuration. This is a map where each key corresponds to the K8ssandra cluster 
     # and associated configuration like keyspaces and roles.
@@ -237,10 +360,8 @@ qvantelGlue:
 # @section -- Examples-PostgreSQL
 example-postgredb:
   # -- Defines CNPG database cluster (kind: Cluster) to deploy. 
-  # If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.
   # Values configured in this object are merged with default template from `qvantelGlue.dbs.common.postgres.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.postgres.defaultCluster`.
   # Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
-  # Cluster configuration follows same structure which is defined in [cnpg-postgres-platform](/modules/241-cnpg-postgres-platform/README.md) module. 
   # @default -- null
   # @section -- Examples-PostgreSQL
   cluster:
@@ -253,7 +374,7 @@ example-postgredb:
       # -- Defines scheduled backup configuration as Cron string (e.g. "0 0 0 * * *" - every midnight). If configured, then (kind: ScheduledBackup) will be created for the cluster with provided schedule.
       # @default --  null
       # @section -- Examples-PostgreSQL
-      scheduledBackup: "0 0 * * *"
+      scheduledBackup: "0 0 0 * * *"
       # -- Defines ObjectStore specification. See https://cloudnative-pg.io/plugin-barman-cloud/docs/plugin-barman-cloud.v1/#objectstorespec
       # @default --  null
       # @section -- Examples-PostgreSQL
@@ -327,6 +448,11 @@ example-postgredb:
       # @section -- Examples-PostgreSQL
       owners:
         apps-another-app-to-access-flex: {}
+    mnp-gw:
+      # -- Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.  
+      # @default -- null
+      # @section -- Examples-PostgreSQL
+      namespace: mnp-gw
   # -- Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
   # @default -- {}
   # @section -- Examples-PostgreSQL
@@ -359,6 +485,7 @@ example-cassandra:
     spec: null
   # -- Defines Databases (Keyspaces) to deploy in the K8ssandra Cluster. For each  database `CqlInstaller` is created which will execute Keyspace creation logic according to Qvantel conventions.
   # This is a map where each key corresponds to the Keyspace to be created. If keyspace name contains hyphens (-) those will be replaced with underscores (_).
+  # E.g. in the following example `messaging` and `revenue_events` Keyspaces will be created.
   # @default -- {}
   # @section -- Examples-Cassandra
   dbs:
@@ -371,6 +498,12 @@ example-cassandra:
           - "CREATE KEYSPACE IF NOT EXISTS messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;"
           - "ALTER KEYSPACE messaging WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 1} AND durable_writes = true;"   
     revenue-events:
+      cql:
+        # -- It is possible to define additional CQL for the keyspace initialization (handy if you want to keep keyspace creation logic default, but still to add something, like additional tables).
+        # @default -- null
+        # @section -- Examples-Cassandra
+        additional:
+        - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
       # -- Replication configuration for the Keyspace.
       # @default -- {'class':'NetworkTopologyStrategy', 'DC1': 1}
       # @section -- Examples-Cassandra
@@ -388,5 +521,96 @@ example-cassandra:
   # @section -- Examples-Cassandra
   roles:
     custom-role-access-all-keyspaces:
-      sql: |
+      cql: |
         CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};
+
+  # -- Configures additional CqlInstallers for this cluster. Keys in this map will be used as Vault roles names.
+  # @default -- {}
+  # @section -- Examples-Cassandra
+  cqls:
+    migration-tables:
+      cql:
+      - CREATE TABLE IF NOT EXISTS revenue_events.schema_versions ( version int, schema_type text, PRIMARY KEY (version, schema_type) ) WITH CLUSTERING ORDER BY (schema_type DESC);
+
+# -- This is example MariaDB glue definition. 
+# In this example MariaDB cluster is configured with 1 db created in this cluster(`mnp-gw`) and few additional roles.
+# Note: It is used for documentation purposes only. Real MariaDB clusters should be defined under `qvantelGlue.db.mariadb`
+# @section -- Examples-MariaDB
+example-mariadb:
+  # -- Defines MariaDB database cluster (kind: MariaDB) to deploy. 
+  # Values configured in this object are merged with default template from `qvantelGlue.dbs.common.mariadb.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.mariadb.defaultCluster`.
+  # Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
+  # @default -- null
+  # @section -- Examples-MariaDB
+  cluster:
+    # -- Create Vault configuration for this cluster according to Qvantel conventions, i.e. DbConnection and common DbRoles.
+    # @default --  by default equals to 'vaultPlatformEnabled' in addon-operator configmap, so if Vault module is enabled then 'true'
+    # @section -- Examples-MariaDB
+    vaultConfiguration: true
+    # -- Annotations to be configured on cluster resource.
+    # @default --  null
+    # @section -- Examples-MariaDB
+    annotations: {}
+    # -- Additional labels to be configured on cluster resource.
+    # @default --  null
+    # @section -- Examples-MariaDB
+    additionalLabels: {}
+    # -- Configure MariaDB cluster details. See https://github.com/mariadb-operator/mariadb-operator/blob/main/docs/api_reference.md#mariadb for API reference.    
+    # @default -- {}
+    # @section -- Examples-MariaDB
+    spec:
+      storage:
+        size: 1Gi
+  # -- Defines Databases to deploy in the MariaDB Cluster. For each  database `SqlInstaller` is created which will execute database creation logic according to Qvantel conventions.  
+  # This is a map where each key corresponds to the Database to be created. If Database name contains hyphens (-) those will be replaced with underscores (_).
+  # @default -- {}
+  # @section -- Examples-MariaDB
+  dbs:
+    catalog-deployer:
+      sql:
+        # -- It is possible to define provisioning SQL for the database if customization is required.
+        # @default -- {}
+        # @section -- Examples-PostgreSQL
+        provision: |
+          - "CREATE ROLE db_catalog_deployer NOLOGIN"
+          - "GRANT db_catalog_deployer TO CURRENT_USER"
+          - "CREATE DATABASE catalog_deployer WITH OWNER db_catalog_deployer"    
+    ddl:
+      # -- Configures PostgreSQL extensions for database. Currently only `timescaledb` is supported.
+      # @default -- null
+      # @section -- Examples-PostgreSQL
+      extensions:
+        # -- Enables `timescaledb` extensions for database.
+        # @default -- {}
+        # @section -- Examples-PostgreSQL
+        timescaledb: {}
+    flex-bpmn-executor:
+      # -- Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+      # @default -- {}
+      # @section -- Examples-PostgreSQL
+      owners:
+        apps-another-app-to-access-flex: {}
+    mnp-gw:
+      # -- Specify namespace for the database. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.  
+      # @default -- null
+      # @section -- Examples-MariaDB
+      namespace: mnp
+      # -- Additional owners roles to configure in Vault. Each key from this map will be added to Vault with database owner role.
+      # @default -- {}
+      # @section -- Examples-MariaDB
+      owners:
+        apps-another-app-to-access-mnp: {}
+      sql:
+        # -- It is possible to define provisioning SQL for the database if customization is required.
+        # @default -- {}
+        # @section -- Examples-MariaDB
+        provision: |
+          - "<custom SQL goes here>"
+          - "<custom SQL goes here>"
+  # -- Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
+  # @default -- {}
+  # @section -- Examples-MariaDB
+  roles:
+    custom-role-access-multiple-dbs:
+      sql: |
+        <custom Vault templated SQL goes here>

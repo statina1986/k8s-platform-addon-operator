@@ -54,10 +54,10 @@ existingSecret: platform-minio-root
 ignoreChartChecksums: true
 image:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/minio/minio
-    tag: RELEASE.2024-12-18T13-15-44Z
+    tag: RELEASE.2025-04-22T22-12-26Z
 mcImage:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/minio/mc
-    tag: RELEASE.2024-11-21T17-21-54Z
+    tag: RELEASE.2025-08-13T08-35-41Z
 minioAPIPort: "9000"
 minioConsolePort: "9001"
 mode: distributed
@@ -130,83 +130,93 @@ Enables advanced metrics in MinIO Console if monitoring-platform module is enabl
 CASSANDRA
 
 ```
-cluster:
-  enabled: true
-  spec:
-    medusa:
-      storageProperties:
-        storageProvider: s3_compatible
-        bucketName: cassandra-backup
-        prefix: cluster
-        storageSecretRef:
-          name: platform-minio-medusa ## This secret from kasope-platform module
-        host: minio-platform.platform.svc.cluster.local
-        port: 9000
-        secure: false
+kasopePlatform:
+  clusters:
+    cluster:
+      enabled: true
+      spec:
+        cassandra:
+          serverVersion: "4.1.8"
+          serverImage: "platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:4.1.8-ubi8"
+          config:
+            cassandraYaml:
+              num_tokens: 16
+        medusa:
+          storageProperties:
+            storageProvider: s3_compatible
+            bucketName: cassandra-backup
+            prefix: cluster
+            storageSecretRef:
+              name: platform-minio-medusa ## This secret from kasope-platform module
+            host: minio-platform.platform.svc.cluster.local
+            port: 9000
+            secure: false
 ```
 
 LOKI
 
 ```
-loki:
-  objectStorageSecret:
-    create: false
-    secretName: "platform-minio-readwrite"
-    userName: "platform-minio-readwrite"
-    userKey: "readwriteUser"
-    secretKey: "readwritePassword"
+lokiPlatform:
   loki:
-    storage:
-      type: s3
-      s3:
-        s3: http://${OBJECT_STORAGE_USER}:${OBJECT_STORAGE_SECRET}@minio-platform.platform.svc.cluster.local:9000/loki-logs
-        endpoint: http://minio-platform.platform.svc.cluster.local:9000
-        s3ForcePathStyle: true
-      bucketNames:
-        chunks: loki-logs
-    storage_config:
-      boltdb_shipper:
-        active_index_directory: /loki/index
-        cache_location: /loki/index_cache
-        resync_interval: 5s
+    objectStorageSecret:
+      create: false
+      secretName: "platform-minio-readwrite"
+      userKey: "readwriteUser"
+      secretKey: "readwritePassword"
+    loki:
+      storage:
+        s3:
+          s3: http://${OBJECT_STORAGE_USER}:${OBJECT_STORAGE_SECRET}@minio-platform.platform.svc.cluster.local:9000/loki-logs
+          endpoint: http://minio-platform.platform.svc.cluster.local:9000
+          s3ForcePathStyle: true
+        bucketNames:
+          chunks: loki-logs
 ```
 
 
 MARIADB
 
 ```
-clusters:
-  mariadb:
-    spec:
-      backup:
-        bucketName: mariadb-backup
-        endpoint: minio-platform.platform.svc.cluster.local:9000
-        secretName: platform-minio-readwrite-mariadb ## This secret from mariadb-operator-platform module
-        secretUserKey: readwriteUser
-        secretKey: readwritePassword
-        scheduledBackup: "0 0 * * *"
-        retention: 72h
+mariadbOperatorPlatform:
+  clusters:
+    mariadb:
+      spec:
+        backup:
+          bucket: mariadb-backup
+          endpoint: minio-platform.platform.svc.cluster.local:9000
+          secretName: platform-minio-readwrite-mariadb ## This secret from mariadb-operator-platform module
+          secretUserKey: readwriteUser
+          secretKey: readwritePassword
+          scheduledBackup: "0 0 * * *"
+          retention: 72h
 ```
 
-CNPG
+POSTGRES FROM GLUE MODULE
 
 ```
-clusters:
-  qvt-postgredb:
-    enabled: true
-    spec:
-      backup:
-        barmanObjectStore:
-        destinationPath: "s3://postgres-backup/qvt-postgredb"
-        endpointURL: http://minio-platform.platform.svc.cluster.local:9000
-        s3Credentials:
-          inheritFromIAMRole: false
-          accessKeyId:
-            name: platform-minio-readwrite-postgres ## This secret from cnpg-postgres-platform module
-            key: readwriteUser
-          secretAccessKey:
-            name: platform-minio-readwrite-postgres ## This secret from cnpg-postgres-platform module
-            key: readwritePassword
+qvantelGlue:
+  dbs:
+    postgres:
+      qvt-postgredb:
+        cluster:
+          spec:
+            storage:
+              size: 25Gi
+          barmanObjectStore:
+            spec:
+              configuration:
+                destinationPath: "s3://postgres-backup/"
+                endpointURL: http://minio-platform.platform.svc.cluster.local:9000
+                wal:
+                  encryption: null ## as MinIO does not provide SSE capabilities by default
+                s3Credentials:
+                  inheritFromIAMRole: false
+                  accessKeyId:
+                    name: platform-minio-readwrite-postgres ## This secret from cnpg-postgres-platform module
+                    key: readwriteUser
+                  secretAccessKey:
+                    name: platform-minio-readwrite-postgres ## This secret from cnpg-postgres-platform module
+                    key: readwritePassword
 ```
 
 

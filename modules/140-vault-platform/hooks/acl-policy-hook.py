@@ -85,6 +85,13 @@ class AclPoliciesHook(Hook):
             )
             raise
 
+    def checkIfReady(self, event):
+        conditions = event['object'].get('status', {}).get('conditions', [])
+        for idx, item in enumerate(conditions):
+            if ((item["type"] == "Ready") and (item["status"] == "True")):
+                return True
+        return False
+
     def handle_binding(self, binding):
         match(binding):
             case EventHook(eventName, event, values):
@@ -111,7 +118,12 @@ class AclPoliciesHook(Hook):
                 vault_client = get_vault_client()
 
                 for event in binding.get('snapshots', {}).get('monitor-vault-aclpolicy', []):
-                    self.registerResource(event, vault_client)
+                    # Skipping 'Ready' resources from scheduled execution as those were already applied
+                    if self.checkIfReady(event):
+                        name = event['object']['metadata']['name']
+                        logger.debug("Skipping AclPolicy " + name + " scheduled execution because it is already 'Ready'.")
+                    else:
+                        self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncAclPolicies', {}).get('enabled') in ('false', False):
@@ -121,7 +133,11 @@ class AclPoliciesHook(Hook):
                 vault_client = get_vault_client()
 
                 for event in binding.get('objects', []):
-                    self.registerResource(event, vault_client)
+                    if self.checkIfReady(event):
+                        name = event['object']['metadata']['name']
+                        logger.debug("Skipping AclPolicy " + name + " scheduled execution because it is already 'Ready'.")
+                    else:
+                        self.registerResource(event, vault_client)
             case _:
                 print("Unknown hook data")
 

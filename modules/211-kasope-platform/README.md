@@ -114,19 +114,32 @@ Configured profiles:
             enabled: true
 reaper:
     autoScheduling:
-        enabled: true
-    containerImage:
-        name: cassandra-reaper
-        registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-        tag: 3.6.1
-    initContainerImage:
-        name: cassandra-reaper
-        registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-        tag: 3.6.1</code></pre>
+        enabled: true</code></pre>
 </td>
 			<td><div>
 
 Cassandra cluster spec section
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="kasopePlatform--clusters--cluster--spec--cassandra--metadata">kasopePlatform.clusters.cluster.spec.cassandra.metadata</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>annotations:
+    cassandra.datastax.com/allow-storage-changes: "true"
+services:
+    allPodsService:
+        annotations:
+            consul.hashicorp.com/service-port: native
+    dcService:
+        annotations:
+            consul.hashicorp.com/service-port: native</code></pre>
+</td>
+			<td><div>
+
+Setting serverImage to override the value coming from k8ssandra-operator.global.imageconfig.types
 
 </div>
 </td>
@@ -140,13 +153,6 @@ Cassandra cluster spec section
         enabled: false
     image:
         registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-        repositoryOverride:
-            cassandra:
-                3.11.13: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:3.11.13
-    imageConfig:
-        configBuilder: platform.artifactory.qvantel.net/k8s-platform-1-2-0/datastax/cass-config-builder:1.0-ubi8
-        k8ssandraClient: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/k8ssandra-client:v0.2.2
-        systemLogger: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/system-logger:v1.22.4
     serviceAccount:
         create: false
         name: platform
@@ -161,6 +167,35 @@ disableCrdUpgraderJob: true
 enabled: true
 global:
     clusterScoped: true
+    imageConfig:
+        defaults:
+            registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
+        images:
+            config-builder:
+                name: cass-config-builder
+                repository: datastax
+                tag: 1.0-ubi8
+            k8ssandra-client:
+                name: k8ssandra-client
+                repository: k8ssandra
+                tag: v0.8.3
+            medusa:
+                name: medusa
+                repository: k8ssandra
+                tag: 0.25.1
+            reaper:
+                name: cassandra-reaper
+                repository: thelastpickle
+                tag: 4.0.0
+            system-logger:
+                name: system-logger
+                repository: k8ssandra
+                tag: v1.27.1
+        types:
+            cassandra:
+                name: cass-management-api
+                repository: k8ssandra
+                suffix: -ubi8
 image:
     registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
 serviceAccount:
@@ -182,13 +217,6 @@ Configuration for underlying k8ssandra-operator helm-chart. See https://github.c
     enabled: false
 image:
     registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-    repositoryOverride:
-        cassandra:
-            3.11.13: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:3.11.13
-imageConfig:
-    configBuilder: platform.artifactory.qvantel.net/k8s-platform-1-2-0/datastax/cass-config-builder:1.0-ubi8
-    k8ssandraClient: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/k8ssandra-client:v0.2.2
-    systemLogger: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/system-logger:v1.22.4
 serviceAccount:
     create: false
     name: platform</code></pre>
@@ -209,6 +237,46 @@ Configuration for underlying cass-operator helm-chart. See https://github.com/k8
 			<td><div>
 
 In clusters where we can't or won't deploy operators, then this can be set to false.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="kasopePlatform--k8ssandra-operator--global--imageConfig">kasopePlatform.k8ssandra-operator.global.imageConfig</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>defaults:
+    registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
+images:
+    config-builder:
+        name: cass-config-builder
+        repository: datastax
+        tag: 1.0-ubi8
+    k8ssandra-client:
+        name: k8ssandra-client
+        repository: k8ssandra
+        tag: v0.8.3
+    medusa:
+        name: medusa
+        repository: k8ssandra
+        tag: 0.25.1
+    reaper:
+        name: cassandra-reaper
+        repository: thelastpickle
+        tag: 4.0.0
+    system-logger:
+        name: system-logger
+        repository: k8ssandra
+        tag: v1.27.1
+types:
+    cassandra:
+        name: cass-management-api
+        repository: k8ssandra
+        suffix: -ubi8</code></pre>
+</td>
+			<td><div>
+
+Setting new imageConfig from k8ssandra-operator 1.27.0
 
 </div>
 </td>

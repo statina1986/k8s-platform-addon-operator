@@ -37,7 +37,7 @@ annotations:
     - name: grafana-sidecar
       image: quay.io/kiwigrid/k8s-sidecar:1.30.10
     - name: imageRenderer
-      image: docker.io/grafana/grafana-image-renderer:v4.0.11
+      image: docker.io/grafana/grafana-image-renderer:v4.0.17
     - name: prometheus-node-exporter
       image: quay.io/prometheus/node-exporter:v1.9.1
     - name: kubeRBACProxy

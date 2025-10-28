@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-20T11:54:29.339030862Z"
+  generatedAt: "2025-09-24T12:33:23.911228439Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: artifactory-platform
@@ -9,34 +9,34 @@ chart:
   appVersion: ""
 images:
   - name: artifactory-oss
-    image: releases-docker.jfrog.io/jfrog/artifactory-oss:7.90.5
+    image: releases-docker.jfrog.io/jfrog/artifactory-oss:7.117.17
     chart: artifactory-platform
     digests:
-      - digest: sha256:fb0b84cea8e80220b442f0eb70550d789363b898a769958630dc91ec1388ad51
+      - digest: sha256:27d180f1c8c27fdf66f794fcf4df2965a790b7c4b275252a827e6e6bb14524f9
         arch: linux/arm64
-      - digest: sha256:1c837eb4005621ecd48518b8383e2b94546bdf11cee29a4fa6dd2753aa01fe7e
+      - digest: sha256:c9492a2fb7a357733ec60b808a183b557772a4bdefcc6066ef6361acc8cc0d54
         arch: linux/amd64
   - name: artifactory-jcr
-    image: releases-docker.jfrog.io/jfrog/artifactory-jcr:7.90.5
+    image: releases-docker.jfrog.io/jfrog/artifactory-jcr:7.117.17
     chart: artifactory-platform
     digests:
-      - digest: sha256:dc7b9c9de235de285039aa98beec08f273c6559ce8cd5532ce0652b13589d259
+      - digest: sha256:7a875378481a5265edb7bc5754f217724c010274b1207fd67cacaa23f06d2a7d
         arch: linux/arm64
-      - digest: sha256:068fb8dcc122682f256db81e356367d63732af93995579688aaa9952e24a214c
+      - digest: sha256:e3b5862b2600c6dcdeee86de08c84cfa0183758128085301f777ddab09c450ef
         arch: linux/amd64
   - name: router
-    image: releases-docker.jfrog.io/jfrog/router:7.118.0
+    image: releases-docker.jfrog.io/jfrog/router:7.177.6
     chart: artifactory-platform
     digests:
-      - digest: sha256:7c2cce12365c29e58289e6399a82104dd3dc6286599f5f3d503bcc8266e90f95
+      - digest: sha256:426b0fcd6545b9ea83e76d81a1ca64d1d8c97e5c14c482430d925dba967a9447
         arch: linux/arm64
-      - digest: sha256:987138a8db4e90b6c2cf666596795fbb322eceb2ba3da4b1db8862c2d179bd26
+      - digest: sha256:6a73604306c2736795086a236aef6a96ee87f8dee71a103fbac205d8344767be
         arch: linux/amd64
   - name: init-container
-    image: registry.access.redhat.com/ubi9/ubi-minimal:9.4-1194
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: artifactory-platform
     digests:
-      - digest: sha256:73f7dcacb460dad137a58f24668470a5a2e47378838a0190eef0ab532c6e8998
-        arch: linux/amd64
-      - digest: sha256:8e2db05c13c422bfd50dbe48b8e075b8d9d735e7c5a2a54b4aec340b1ad2e6cd
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
+        arch: linux/amd64

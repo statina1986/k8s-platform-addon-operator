@@ -24,14 +24,11 @@ beforeHelm: 2
                     if "strimzi-kafka-operator-helm-3-chart" in f:
                         os.remove(f)
                         
-                if (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.27.1'):
-                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.27.1.tgz"
-                    os.popen('cp ' + source + ' ' + path)
-                elif (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.37.0'):
-                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.37.0.tgz"
+                if (values_json['kafkaPlatform']['strimziHelmVersion'] == '0.43.0'):
+                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.43.0.tgz"
                     os.popen('cp ' + source + ' ' + path)
                 else:
-                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.43.0.tgz"
+                    source = os.path.dirname(__file__) + "/../subcharts/strimzi-kafka-operator-helm-3-chart-0.45.1.tgz"
                     os.popen('cp ' + source + ' ' + path)
             case _:
                 print("Unknown hook data")
