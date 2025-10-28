@@ -1043,8 +1043,8 @@ monitoringPlatform:
             % endif
           'podMonitor/metrics/kafka-resources-metrics/0' :
             honor_timestamps: true
-            scrape_interval: 30s
-            scrape_timeout: 10s
+            scrape_interval: 5m
+            scrape_timeout: 2m
             metrics_path: /metrics
             scheme: http
             follow_redirects: true
