@@ -1287,7 +1287,7 @@ istioIngress:
               host: ${values['global']['helmReleaseNamePrefix']}vault-platform.${values['global']['platformNamespace']}.svc.cluster.local
               port:
                 number: 8200
-      vector-aggregator:
+      vector-aggregator-logstash:
         enabled: false
         gateways:
         - ${values['global']['helmReleaseNamePrefix']}private-ingress
