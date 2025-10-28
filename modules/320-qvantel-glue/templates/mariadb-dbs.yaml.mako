@@ -168,7 +168,7 @@ spec:
 {{- end }}
 # end logical backup block
 
-{{- if eq $addonoperator.monitoringPlatformEnabled "true" }}
+{{- if eq $addonOperator.monitoringPlatformEnabled "true" }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -192,7 +192,7 @@ metadata:
     app.kubernetes.io/part-of: mariadb
 data:
   config.yml: |
-    {{- tpl $cluster.defaultSqlExporter.config.content $root | nindent 4 }}
+    {{- tpl $defaultTemplate.defaultSqlExporter.config.content $root | nindent 4 }}
 
 {{- $replicas := int (default 1 $cluster.spec.replicas) }}
 {{- range $i, $_ := until $replicas }}
@@ -320,10 +320,10 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - "--config.file=/config/config.yml"
-            - "--web.listen-address=:{{ $cluster.defaultSqlExporter.service.port | default 9399 }}"
+            - "--web.listen-address=:{{ $defaultTemplate.defaultSqlExporter.service.port | default 9399 }}"
           ports:
             - name: http
-              containerPort: {{ $cluster.defaultSqlExporter.service.port | default 9399 }}
+              containerPort: {{ $defaultTemplate.defaultSqlExporter.service.port | default 9399 }}
           readinessProbe:
             httpGet:
               path: /metrics
@@ -357,7 +357,7 @@ spec:
   type: ClusterIP
   ports:
     - name: http
-      port: {{ $cluster.defaultSqlExporter.service.port | default 9399 }}
+      port: {{ $defaultTemplate.defaultSqlExporter.service.port | default 9399 }}
       targetPort: http
   selector:
     app.kubernetes.io/name: {{ $dbClusterName }}-sql-exporter
