@@ -17,44 +17,44 @@ certPlatform:
       % endif
     extraArgs:
       - --issuer-ambient-credentials
-    image:
-      % if 'containerRegistryBase' in values['global']:
+    % if 'containerRegistryBase' in values['global']:
+    image:      
       registry: ${values['global']['containerRegistryBase']}
       repository: jetstack/cert-manager-controller
-      % endif
+    % endif
     cainjector:
-      image:
-        % if 'containerRegistryBase' in values['global']:
+      % if 'containerRegistryBase' in values['global']:
+      image:      
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-cainjector
-        % endif
+      % endif
       serviceAccount:
         create: false
         name: "platform"
     webhook:
-      image:
-        % if 'containerRegistryBase' in values['global']:
+      % if 'containerRegistryBase' in values['global']:
+      image:        
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-webhook
-        % endif
+      % endif
       serviceAccount:
         create: false
         name: "platform"
     startupapicheck:
-      image:
-        % if 'containerRegistryBase' in values['global']:
+      % if 'containerRegistryBase' in values['global']:
+      image:        
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-startupapicheck
-        % endif
+      % endif
       serviceAccount:
         create: false
         name: platform
-    acmesolver:
-      image:
-        % if 'containerRegistryBase' in values['global']:
+    % if 'containerRegistryBase' in values['global']:
+    acmesolver:      
+      image:        
         registry: ${values['global']['containerRegistryBase']}
         repository: jetstack/cert-manager-acmesolver
-        % endif   
+    % endif  
     serviceAccount:
       create: false
       name: platform
