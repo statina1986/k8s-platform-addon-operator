@@ -63,13 +63,15 @@ vaultPlatform:
     image:
       % if 'containerRegistryBase' in values['global']:
       # Original vault-secrets-webhook image is replaced with Qvantel fork https://stash.qvantel.net/projects/CP/repos/qvantel-vault-secrets-webhook/browse
-      repository: ${values['global']['containerRegistryBase']}/platform/qvantel-vault-secrets-webhook
+      repository: ${values['global']['containerRegistryBase']}/platform/qvantel-vault-secrets-webhook      
+      % else:
+      repository: platform.artifactory.qvantel.net/platform/qvantel-vault-secrets-webhook
+      % endif
       tag: "1.0.0.1_master_e5e0236d8"
-      % endif
-    vaultEnv:
-      % if 'containerRegistryBase' in values['global']:
+    % if 'containerRegistryBase' in values['global']:
+    vaultEnv:      
       repository: ${values['global']['containerRegistryBase']}/bank-vaults/vault-env
-      % endif
+    % endif
     certificate:
       useCertManager: false
       servingCertificate: "${values['global']['helmReleaseNamePrefix']}vault-platform-vault-secrets-webhook-ca"
@@ -127,10 +129,10 @@ vaultPlatform:
       authDelegator:
         enabled: false
       % endif
-      image:
-        % if 'containerRegistryBase' in values['global']:
+      % if 'containerRegistryBase' in values['global']:
+      image:        
         repository: ${values['global']['containerRegistryBase']}/hashicorp/vault
-        % endif
+      % endif
       standalone:
         config: |
           ui = true

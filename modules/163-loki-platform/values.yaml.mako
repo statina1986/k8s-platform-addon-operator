@@ -36,11 +36,11 @@ lokiPlatform:
     rbac:
       namespaced: true
     % endif
+    % if 'containerRegistryBase' in values['global']:
     memcached:
-      % if 'containerRegistryBase' in values['global']:
       image:
         repository: ${values['global']['containerRegistryBase']}/library/memcached
-      % endif
+    % endif
     sidecar:
       % if 'containerRegistryBase' in values['global']:
       image:

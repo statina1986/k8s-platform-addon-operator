@@ -2,8 +2,8 @@ apiVersion: v2
 name: kasope-platform
 version: 0.0.1
 dependencies:
-  - name: kasopePlatform
-    version: 0.0.1
+- name: kasopePlatform
+  version: 0.0.1
 annotations:
   images: |
     - name: cass-operator
@@ -20,8 +20,6 @@ annotations:
       image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
     - name: k8ssandraClient
       image: docker.io/k8ssandra/k8ssandra-client:v0.8.3
-    - name: k8ssandra-tools
-      image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
     - name: k8ssandra-operator
       image: docker.io/k8ssandra/k8ssandra-operator:v1.27.0
     - name: reaper

@@ -12,10 +12,10 @@ elasticsearchPlatform:
     % endif
     # Leave this false so that the CRDs in the resources folder are used.
     installCRDs: false
-    image:
-      % if 'containerRegistryBase' in values['global']:
+    % if 'containerRegistryBase' in values['global']:
+    image:      
       repository: ${values['global']['containerRegistryBase']}/elastic/eck-operator
-      % endif
+    % endif
     nameOverride: "elastic-operator"
     fullnameOverride: "elastic-operator"
     managedNamespaces: []

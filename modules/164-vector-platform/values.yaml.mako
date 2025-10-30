@@ -1,10 +1,10 @@
 vectorPlatform:
   # -- Vector Agent configuration
   agent:
-    image:
-      % if 'containerRegistryBase' in values['global']:
+    % if 'containerRegistryBase' in values['global']:
+    image:      
       repository: ${values['global']['containerRegistryBase']}/timberio/vector
-      % endif
+    % endif
     role: "Agent"
     % if values['global']['deployOperators'] == "true":
     enabled: true
@@ -110,10 +110,10 @@ vectorPlatform:
               port 9002
   # -- Vector Aggregator configuration
   aggregator:
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/timberio/vector
-      % endif
+    % endif
     % if values['global']['deployOperators'] == "true":
     enabled: true
     % else:
@@ -157,11 +157,11 @@ vectorPlatform:
             name: logsearch-elastic
             key: elasticsearch-password
     % endif
+    % if 'containerRegistryBase' in values['global']:
     haproxy:
       image:
-        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/haproxytech/haproxy-alpine
-        % endif
+    % endif
     customConfig:
       api:
         address: 0.0.0.0:8686

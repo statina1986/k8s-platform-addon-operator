@@ -1,6 +1,6 @@
 kasopePlatform:
   # -- Configuration for underlying k8ssandra-operator helm-chart. See https://github.com/k8ssandra/k8ssandra-operator/tree/main/charts/k8ssandra-operator
-  k8ssandra-operator:
+  k8ssandra-operator:    
     # -- In clusters where we can't or won't deploy operators, then this can be set to false.
     % if values['global']['deployOperators'] == "false":
     enabled: false
@@ -41,39 +41,34 @@ kasopePlatform:
             repository: "k8ssandra"
             name: "cass-management-api"
             suffix: "-ubi8"
-        defaults:
-          % if 'containerRegistryBase' in values['global']:
-          registry: ${values['global']['containerRegistryBase']}
-          % endif
-    image:
-      % if 'containerRegistryBase' in values['global']:
-      registry: ${values['global']['containerRegistryBase']}
-      % endif
-    client:
-      image:
         % if 'containerRegistryBase' in values['global']:
-        registry: ${values['global']['containerRegistryBase']}
+        defaults:
+          registry: ${values['global']['containerRegistryBase']}
         % endif
-        tag: "1.6.0-20240506112248-96d77628"        
+    % if 'containerRegistryBase' in values['global']:
+    image:
+      registry: ${values['global']['containerRegistryBase']}
+    % endif     
+    % if 'containerRegistryBase' in values['global']:
     cleaner:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+    % endif
     serviceAccount:
       create: false
       name: "platform"
     # -- Configuration for underlying cass-operator helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/cass-operator
     cass-operator:
-      image:
-        % if 'containerRegistryBase' in values['global']:
+      % if 'containerRegistryBase' in values['global']:
+      image:      
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+      % endif
       admissionWebhooks:
         enabled: false
       serviceAccount:
         create: false
         name: "platform"
+    # -- CRD Upgrader is disabled by default as we manage CRDs ourselves
     disableCrdUpgraderJob: true
   # -- If true, will create DbConnection and DbRoles. See [cassandra-vault](templates/cassandra-vault.yaml)
   vaultConfiguration: true
@@ -134,7 +129,7 @@ kasopePlatform:
               memory: 4Gi
               cpu: "0.1"
             limits:
-              memory: 8Gi 
+              memory: 8Gi
           % endif
           datacenters:
             - metadata:

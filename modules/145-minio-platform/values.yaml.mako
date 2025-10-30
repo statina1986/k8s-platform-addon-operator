@@ -3,15 +3,15 @@ minioPlatform:
   minio:
     image:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/minio/minio
-      tag: RELEASE.2025-04-22T22-12-26Z
+      repository: ${values['global']['containerRegistryBase']}/minio/minio      
       % endif
+      tag: RELEASE.2025-04-22T22-12-26Z
     mcImage:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/minio/mc
-      tag: RELEASE.2025-08-13T08-35-41Z
+      repository: ${values['global']['containerRegistryBase']}/minio/mc     
       % endif
-
+      tag: RELEASE.2025-08-13T08-35-41Z
+      
     % if values['global']['configurationProfile'] in {'dev'}:
     mode: standalone
     % else:

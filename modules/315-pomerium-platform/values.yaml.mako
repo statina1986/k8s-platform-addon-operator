@@ -2,17 +2,17 @@
 pomeriumPlatform:
   pomerium:
     baseUrl: ${values['global']['ingressBaseUrl']}
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/pomerium/pomerium
-      % endif
+    % endif
     ingress:
       enabled: false
+    % if 'containerRegistryBase' in values['global']: 
     ingressController:
       image:
-        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/pomerium/ingress-controller
-        % endif
+    % endif
     proxy:
       authenticateServiceUrl: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
     config:
