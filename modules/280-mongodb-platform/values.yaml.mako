@@ -21,30 +21,28 @@ mongodbPlatform:
       % else:
       registry: platform.artifactory.qvantel.net
       % endif
+    % if 'containerRegistryBase' in values['global']:
     tls:
-      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
-      % endif
+    % endif
+    % if 'containerRegistryBase' in values['global']:
     externalAccess:
       autoDiscovery:
         image:
-          % if 'containerRegistryBase' in values['global']:
-          registry: ${values['global']['containerRegistryBase']}
-          % endif
+          registry: ${values['global']['containerRegistryBase']}          
       dnsCheck:
         image:
-          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+    % endif
+    % if 'containerRegistryBase' in values['global']:
     volumePermissions:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+    % endif
     metrics:
       enabled: false
+      % if 'containerRegistryBase' in values['global']:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+      % endif
       

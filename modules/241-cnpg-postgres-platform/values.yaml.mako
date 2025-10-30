@@ -6,10 +6,10 @@ cnpgPostgresPlatform:
     % else:
     enabled: false
     % endif
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/cloudnative-pg/cloudnative-pg
-      % endif
+    % endif
     crds:
       create: false
     % if values['global']['clusterwideResources'] == "false":

@@ -1,10 +1,10 @@
 externalDns:
   external-dns:
     namespace: ${values['global']['platformNamespace']}
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
-      % endif
+    % endif
     serviceAccount:
       create: false
       name: platform

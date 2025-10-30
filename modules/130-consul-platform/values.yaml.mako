@@ -33,10 +33,10 @@ consulPlatform:
     # -- CoreDNS configmap namespace to update with Consul DNS entries
     configmapNamespace: "kube-system"
   consul:
-    apiGateway:
-      % if 'containerRegistryBase' in values['global']:
+    % if 'containerRegistryBase' in values['global']:
+    apiGateway:      
       imageEnvoy: ${values['global']['containerRegistryBase']}/envoyproxy/envoy:v1.23.1
-      % endif
+    % endif
     server:
       % if values['global']['configurationProfile'] in {'dev'}: 
       replicas: 1

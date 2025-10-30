@@ -666,34 +666,9 @@
               "title": "cleaner",
               "type": "object"
             },
-            "client": {
-              "properties": {
-                "image": {
-                  "properties": {
-                    "registry": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
-                      "required": [],
-                      "title": "registry",
-                      "type": "string"
-                    },
-                    "tag": {
-                      "default": "1.6.0-20240506112248-96d77628",
-                      "required": [],
-                      "title": "tag",
-                      "type": "string"
-                    }
-                  },
-                  "required": [],
-                  "title": "image",
-                  "type": "object"
-                }
-              },
-              "required": [],
-              "title": "client",
-              "type": "object"
-            },
             "disableCrdUpgraderJob": {
               "default": true,
+              "description": "CRD Upgrader is disabled by default as we manage CRDs ourselves",
               "required": [],
               "title": "disableCrdUpgraderJob",
               "type": "boolean"

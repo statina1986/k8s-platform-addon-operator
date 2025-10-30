@@ -159,10 +159,6 @@ Setting serverImage to override the value coming from k8ssandra-operator.global.
 cleaner:
     image:
         registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-client:
-    image:
-        registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
-        tag: 1.6.0-20240506112248-96d77628
 disableCrdUpgraderJob: true
 enabled: true
 global:
@@ -224,6 +220,19 @@ serviceAccount:
 			<td><div>
 
 Configuration for underlying cass-operator helm-chart. See https://github.com/k8ssandra/k8ssandra/tree/main/charts/cass-operator
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="kasopePlatform--k8ssandra-operator--disableCrdUpgraderJob">kasopePlatform.k8ssandra-operator.disableCrdUpgraderJob</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+			<td><div>
+
+CRD Upgrader is disabled by default as we manage CRDs ourselves
 
 </div>
 </td>

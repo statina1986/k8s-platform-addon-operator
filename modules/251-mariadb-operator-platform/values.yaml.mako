@@ -4,10 +4,10 @@ mariadbOperatorPlatform:
     % if values['global']['clusterwideResources'] == "false":
     currentNamespaceOnly: true
     % endif
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/mariadb-operator/mariadb-operator
-      % endif
+    % endif
     webhook:
       % if values['global']['clusterwideResources'] == "false":
       enabled: false
@@ -21,7 +21,7 @@ mariadbOperatorPlatform:
         enabled: true
         additionalLabels:
           "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
-       % endif
+      % endif
       cert:
         certManager:
           enabled: true

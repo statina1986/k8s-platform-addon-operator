@@ -34,11 +34,11 @@ monitoringPlatform:
       progress: ${addon_operator['progressPlatformEnabled']}
   alloy:
     enabled: false
+    % if 'containerRegistryBase' in values['global']:
     global:
-      image:
-        % if 'containerRegistryBase' in values['global']:
+      image:        
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+    % endif
     crds:
       create: false
     controller:
@@ -107,11 +107,11 @@ monitoringPlatform:
           }
   beyla:
     enabled: false
+    % if 'containerRegistryBase' in values['global']:
     global:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+    % endif
     service:
       enabled: true
       labels:
@@ -141,11 +141,11 @@ monitoringPlatform:
             path: /metrics 
   tempo-distributed:
     enabled: false
+    % if 'containerRegistryBase' in values['global']:
     global:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+    % endif
     metaMonitoring:
       serviceMonitor:
         enabled: true
@@ -159,11 +159,11 @@ monitoringPlatform:
     serviceAccount:
       create: false
       name: platform
+    % if 'containerRegistryBase' in values['global']:
     memcached:
       image:
-        % if 'containerRegistryBase' in values['global']:
         repository: library/memcached
-        % endif
+    % endif
     traces:
       otlp:
         grpc:
@@ -207,10 +207,10 @@ monitoringPlatform:
       secretsExporter:
         serviceAccountName: platform
     % endif
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
-      % endif
+    % endif
     % if values['global']['platformMasters']:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
@@ -253,10 +253,10 @@ monitoringPlatform:
         "release": "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
   prometheus-blackbox-exporter:
     enabled: true
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
-      % endif
+    % endif
     pspEnabled: false
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
@@ -305,10 +305,10 @@ monitoringPlatform:
             - 401
   yet-another-cloudwatch-exporter:
     enabled: false
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
-      % endif
+    % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
@@ -437,10 +437,10 @@ monitoringPlatform:
         enabled: true
       % endif
       alertmanagerSpec:
+        % if 'containerRegistryBase' in values['global']:
         image:
-          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+        % endif
         tolerations:
           - key: "${values['global']['platformMastersKey']}"
             value: "${values['global']['platformMastersValue']}"
@@ -482,10 +482,10 @@ monitoringPlatform:
       kubeletService:
         namespace: ${values['global']['platformNamespace']}
       % endif
+      % if 'containerRegistryBase' in values['global']:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+      % endif
       tolerations:
         - key: "${values['global']['platformMastersKey']}"
           value: "${values['global']['platformMastersValue']}"
@@ -494,33 +494,33 @@ monitoringPlatform:
       serviceAccount:
         create: false
         name: platform
-      prometheusConfigReloader:
+      % if 'containerRegistryBase' in values['global']:
+      prometheusConfigReloader:        
         image:
-          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+      % endif
       admissionWebhooks:
         % if values['global']['clusterwideResources'] == "false":
         enabled: false
         % endif
+        % if 'containerRegistryBase' in values['global']:
         image:
-          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+        % endif
         patch:
-          image:
-            % if 'containerRegistryBase' in values['global']:
+          % if 'containerRegistryBase' in values['global']:
+          image:            
             registry: ${values['global']['containerRegistryBase']}
-            % endif
+          % endif
           tolerations:
           - key: "${values['global']['platformMastersKey']}"
             value: "${values['global']['platformMastersValue']}"
             operator: "Equal"
             effect: "NoSchedule"
+      % if 'containerRegistryBase' in values['global']:
       thanosImage:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+      % endif
     grafana:    
       enabled: true
       % if values['global']['clusterwideResources'] == "false":
@@ -771,10 +771,10 @@ monitoringPlatform:
           use_pkce: true
       envFromSecret: grafana-keycloak-client-secret
       sidecar:
+        % if 'containerRegistryBase' in values['global']:
         image:
-          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+        % endif
         datasources:
           enabled: true
           defaultDatasourceEnabled: true
@@ -801,11 +801,11 @@ monitoringPlatform:
     nodeExporter:
       enabled: false
     % endif
+    % if 'containerRegistryBase' in values['global']:
     prometheus-node-exporter:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+    % endif
     kube-state-metrics:
       % if values['global']['namespaceRestricted'] == "true":
       prometheus:
@@ -830,10 +830,10 @@ monitoringPlatform:
       serviceAccount:
         create: false
         name: platform
+      % if 'containerRegistryBase' in values['global']:
       image:
-        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-        % endif
+      % endif
       rbac:
         % if values['global']['clusterwideResources'] == "false":
         useClusterRole: false
@@ -846,10 +846,10 @@ monitoringPlatform:
         % endif       
       kubeRBACProxy:
         enabled: false
-        image:
-          % if 'containerRegistryBase' in values['global']:
+        % if 'containerRegistryBase' in values['global']:
+        image:        
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+        % endif
       customResourceState:
         enabled: true
         config:
@@ -891,10 +891,10 @@ monitoringPlatform:
               % endif              
     thanosRuler:
       thanosRulerSpec:
+        % if 'containerRegistryBase' in values['global']:
         image:
-          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+        % endif
     prometheus:
       enabled: true
       % if values['global']['namespaceRestricted'] == "true":
@@ -924,10 +924,10 @@ monitoringPlatform:
         ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
       % endif
       prometheusSpec:
-        image:
-          % if 'containerRegistryBase' in values['global']:
+        % if 'containerRegistryBase' in values['global']:
+        image:          
           registry: ${values['global']['containerRegistryBase']}
-          % endif
+        % endif
         retention: 12d
         externalLabels:
           country: need-to-define

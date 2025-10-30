@@ -4483,6 +4483,52 @@
                       "required": [],
                       "title": "http_2xxs_post",
                       "type": "object"
+                    },
+                    "http_401": {
+                      "properties": {
+                        "http": {
+                          "properties": {
+                            "method": {
+                              "default": "GET",
+                              "required": [],
+                              "title": "method",
+                              "type": "string"
+                            },
+                            "valid_status_codes": {
+                              "items": {
+                                "anyOf": [
+                                  {
+                                    "required": [],
+                                    "type": "integer"
+                                  }
+                                ],
+                                "required": []
+                              },
+                              "required": [],
+                              "title": "valid_status_codes",
+                              "type": "array"
+                            }
+                          },
+                          "required": [],
+                          "title": "http",
+                          "type": "object"
+                        },
+                        "prober": {
+                          "default": "http",
+                          "required": [],
+                          "title": "prober",
+                          "type": "string"
+                        },
+                        "timeout": {
+                          "default": "5s",
+                          "required": [],
+                          "title": "timeout",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "http_401",
+                      "type": "object"
                     }
                   },
                   "required": [],

@@ -8854,6 +8854,91 @@
                   "title": "vault-ui",
                   "type": "object"
                 },
+                "vector-aggregator-logstash": {
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "gateways": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "gateways",
+                      "type": "array"
+                    },
+                    "http": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "vector-platform-aggregator.platform.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 9000,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "http",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "vector-aggregator-logstash",
+                  "type": "object"
+                },
                 "zipkin": {
                   "properties": {
                     "enabled": {
