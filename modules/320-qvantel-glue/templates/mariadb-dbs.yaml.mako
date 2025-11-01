@@ -170,18 +170,23 @@ spec:
 
 {{- if eq $addonOperator.monitoringPlatformEnabled "true" }}
 ---
-apiVersion: v1
-kind: ConfigMap
+apiVersion: platform.qvantel.com/v1
+kind: SqlInstaller
 metadata:
-  name: {{ $dbClusterName }}-init-sql
-  labels:
-    app.kubernetes.io/name: {{ $dbClusterName }}-init-sql
-    app.kubernetes.io/part-of: mariadb
-data:
-  init.sql: |
-    UPDATE performance_schema.setup_instruments
-    SET ENABLED='YES', TIMED='YES'
-    WHERE NAME REGEXP '^(statement/|wait/|stage/)';
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ $dbClusterName }}-init-monitoring
+spec:
+  type: mariadb  
+  db-provision-sql:
+    - "UPDATE performance_schema.setup_instruments SET ENABLED='YES', TIMED='YES' WHERE NAME REGEXP '^(statement/|wait/|stage/)';"
+  db-username: 'root'
+  db-password: "{mariadb-password}"
+  db-url: {{ $dbClusterName }}-main.{{$.Release.Namespace}}.svc
+  computed-values:
+    - name: "mariadb-password"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-root', '{{ $.Release.Namespace }}', 'password')"
+
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -41,7 +41,7 @@ qvantelGlue:
         # \newline
         # * cluster: content of 'cluster' field for rendered cluster.
         # @notationType -- tpl
-        defaultClusterTemplate: |+
+        defaultClusterTemplate: |
           {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
           vaultConfiguration: true
           {{- end }}
@@ -95,7 +95,6 @@ qvantelGlue:
               max_allowed_packet=256M
             {{- if eq $.addonOperator.monitoringPlatformEnabled "true" }}
               performance_schema=on
-              init_file=/etc/mysql/init-sql/init.sql
 
               # statements consumers
               performance-schema-consumer-events-statements-current=ON
@@ -116,14 +115,6 @@ qvantelGlue:
               # hold long history
               # performance_schema_events_statements_history_long_size=10000
               # performance_schema_events_waits_history_long_size=10000
-            volumes:
-              - name: init-sql
-                configMap:
-                  name: {{ $.clusterName }}-init-sql
-            volumeMounts:
-              - name: init-sql
-                mountPath: /etc/mysql/init-sql
-                readOnly: true
             {{- end }} 
             resources:
               requests:
