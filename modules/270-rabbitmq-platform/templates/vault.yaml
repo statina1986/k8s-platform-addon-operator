@@ -1,0 +1,15 @@
+### Vault DB Connection
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: RabbitMqConnection
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: rabbitmq-platform-vault-connection
+spec:
+  connection-url: "http://rabbitmq-platform.platform.svc:15672"
+  computed-values:
+  - expression: k8s_get_secret_value('rabbitmq-platform','{{ $.Release.Namespace }}','rabbitmq-password')
+    name: secret-password
+  username: 'admin'
+  password: '{secret-password}'

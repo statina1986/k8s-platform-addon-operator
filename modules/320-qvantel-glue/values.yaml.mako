@@ -10,11 +10,20 @@ qvantelGlue:
       nameSelector:
         matchNames: [ "${values['global']['platformNamespace']}" ]
   cqlinstallersCrdSync:
-    # -- Enables SqlInstaller CRDs reconciliation
+    # -- Enables CqlInstaller CRDs reconciliation
     enabled: true
     # -- Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
     schedule: "*/5 * * * *"
-    # -- Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.
+    # -- Selector for namespaces from which sync CqlInstaller resources. Default is `platform` namespace.
+    namespaceSelector:
+      nameSelector:
+        matchNames: [ "${values['global']['platformNamespace']}" ]
+  shellinstallersCrdSync:
+    # -- Enables ShellInstaller CRDs reconciliation
+    enabled: true
+    # -- Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
+    schedule: "*/5 * * * *"
+    # -- Selector for namespaces from which sync ShellInstaller resources. Default is `platform` namespace.
     namespaceSelector:
       nameSelector:
         matchNames: [ "${values['global']['platformNamespace']}" ]
@@ -231,6 +240,10 @@ qvantelGlue:
     # and associated configuration like keyspaces and roles.
     # For Example, see `example-cassandra` definition in Examples-Cassandra section below.
     cassandra: {}
+    # -- RabbitMQ vhosts configuration. This is a map where each key corresponds to the dedicated vhost 
+    # and associated configuration like roles and permissions.
+    # For Example, see `example-rabbitmq` definition in Examples-RabbitMQ section below.
+    rabbitmq: {}
 
 # -- This is example PostgreSQL glue definition. 
 # In this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles.
@@ -468,3 +481,13 @@ example-mariadb:
     custom-role-access-multiple-dbs:
       sql: |
         <custom Vault templated SQL goes here>
+
+# -- This is example RabbitMQ glue definition. 
+# In this example RabbitMQ cluster is configured with vhost `example-rabbitmq`.
+# Note: It is used for documentation purposes only. Real RabbitMQ vhosts should be defined under `qvantelGlue.dbs.rabbitmq`
+# @section -- Examples-RabbitMQ
+example-rabbitmq:
+  # -- Specify namespace for the vhosts roles. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.  
+  # @default -- null
+  # @section -- Examples-RabbitMQ
+  namespace: mnp

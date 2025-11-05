@@ -226,7 +226,7 @@ spec:
     {{- tpl (toYaml $db.sql.provision) $root | nindent 2 }}
   {{- else }}
   db-provision-sql:
-    - "CREATE DATABASE IF NOT EXISTS {{ $dbNameUnderscored }} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    - "CREATE DATABASE IF NOT EXISTS {{ $dbNameUnderscored }} CHARACTER SET utf8mb4 COLLATE uca1400_ai_ci;"
   {{ end }}  
   db-username: 'root'
   db-password: "{mariadb-password}"

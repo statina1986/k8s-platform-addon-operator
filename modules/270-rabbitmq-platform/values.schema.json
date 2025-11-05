@@ -93,7 +93,7 @@
                   "type": "object"
                 },
                 "username": {
-                  "default": "user",
+                  "default": "admin",
                   "required": [],
                   "title": "username",
                   "type": "string"

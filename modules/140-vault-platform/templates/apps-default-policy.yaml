@@ -13,6 +13,9 @@ spec:
     {{ printf "path \"database/creds/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}-{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}*\" {" }}
       capabilities = [ "read" ]
     }
+    {{ printf "path \"rabbitmq/creds/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}-{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}*\" {" }}
+      capabilities = [ "read" ]
+    }
     path "auth/token/renew-self" {
         capabilities = ["update"]
     }

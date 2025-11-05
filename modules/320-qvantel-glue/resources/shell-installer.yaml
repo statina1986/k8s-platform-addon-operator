@@ -1,0 +1,100 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: shellinstallers.platform.qvantel.com
+spec:
+  group: platform.qvantel.com
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: shellinstallers
+    # singular name to be used as an alias on the CLI and for display
+    singular: shellinstaller
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: ShellInstaller
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - shinsts
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    additionalPrinterColumns:
+    - description: The state of the the shellinstaller
+      jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: string
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: RabbitMQ QInstaller for provisioning of shell entities
+        required:
+        - spec
+        properties:
+          spec:
+            type: object
+            properties:
+              forceGeneration:
+                type: integer
+                default: 1
+              provision-commands:
+                type: array
+                items:
+                  type: string
+              unprovision-commands:
+                type: array
+                items:
+                  type: string
+              env:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              computed-values:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    expression:
+                      type: string
+              post-actions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    expression:
+                      type: string
+          status:
+            description: The status of the deployment.
+            type: object
+            properties:
+              conditions:
+                description: List of status conditions.
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition of a type changed from one status to another. The required format is 'yyyy-MM-ddTHH:mm:ssZ', in the UTC time zone.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about the condition's last transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition (a single word in CamelCase).
+                      type: string
+                    status:
+                      description: The status of the condition, either True, False or Unknown.
+                      type: string
+                    type:
+                      description: The unique identifier of a condition, used to distinguish between other conditions in the resource.
+                      type: string
+                  type: object
+                type: array
+              observedGeneration:
+                description: The generation of the CRD that was last reconciled by the operator.
+                type: integer
+      # subresources for the custom resource
+    subresources:
+      # enables the status subresource                
+      status: {}

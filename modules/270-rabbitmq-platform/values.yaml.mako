@@ -34,7 +34,7 @@ rabbitmqPlatform:
           - rabbitmq-diagnostics -q ping
       timeoutSeconds: 10
     auth:
-      username: user
+      username: admin
       securePassword: true
       existingPasswordSecret: ""
       existingErlangSecret: "rabbitmq-erlang-secret"

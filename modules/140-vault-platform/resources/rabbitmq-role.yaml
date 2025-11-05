@@ -1,0 +1,107 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: rabbitmqroles.platform-vault.qvantel.com
+spec:
+  group: platform-vault.qvantel.com
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: rabbitmqroles
+    # singular name to be used as an alias on the CLI and for display
+    singular: rabbitmqrole
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: RabbitMqRole
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - rmqr
+  versions:
+  - name: v1
+    additionalPrinterColumns:
+    - description: The state of the the RabbitMqRole
+      jsonPath: .status.conditions[?(@.type=="Ready")].status
+      name: Ready
+      type: string
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: Vault RabbitMQ Role definition
+        required:
+        - spec
+        properties:
+          spec:
+            type: object
+            properties:
+              forceSync:
+                type: integer
+              mount-point:
+                type: string
+                description: Mount path of RabbitMQ secrets engine. Default to 'rabbitmq'.
+              role-name:
+                type: string
+                description: The name of the role to provision to Vault.
+              vhosts:
+                type: string
+                description: vhosts.
+              vhost-topics:
+                type: string
+                description: vhost-topics.
+              tags:
+                type: string
+                description: tags.
+              additional-params:
+                type: object
+                description: Key-value pairs of additional params.
+                additionalProperties: true
+              computed-values:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    expression:
+                      type: string
+              post-actions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    expression:
+                      type: string
+          status:
+            description: The status of the deployment.
+            type: object
+            properties:
+              conditions:
+                description: List of status conditions.
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition of a type changed from one status to another. The required format is 'yyyy-MM-ddTHH:mm:ssZ', in the UTC time zone.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about the condition's last transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition (a single word in CamelCase).
+                      type: string
+                    status:
+                      description: The status of the condition, either True, False or Unknown.
+                      type: string
+                    type:
+                      description: The unique identifier of a condition, used to distinguish between other conditions in the resource.
+                      type: string
+                  type: object
+                type: array
+              observedGeneration:
+                description: The generation of the CRD that was last reconciled by the operator.
+                type: integer
+      # subresources for the custom resource
+    subresources:
+      # enables the status subresource                
+      status: {}

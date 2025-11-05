@@ -48,12 +48,20 @@ keycloakPlatform:
         path "database/creds/readonly-role*" {
           capabilities = ["read"]
         }
+
+        path "rabbitmq/creds/readonly*" {
+          capabilities = ["read"]
+        }
       policydbrw: |
         path "database/*" {
           capabilities = ["list"]
         }
 
         path "database/creds/readwrite-role*" {
+          capabilities = ["read"]
+        }
+
+        path "rabbitmq/creds/readwrite*" {
           capabilities = ["read"]
         }
       policyadmin: |

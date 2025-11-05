@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
 import sys
-
-from hvac import Client
 from common.python.hooks import *
 from common.python.utils import get_exception_string
 from common.python.vault import *
 from common.python.inline import *
 
 
-class DbConnectionHook(Hook):
+class RabbitMqRoleHook(Hook):
     def __init__(self):
         vaultPlatform = self.get_addon_operator_config("vaultPlatform")
         platformNamespace = self.get_addon_operator_config('global').get('platformNamespace','platform')
@@ -18,19 +16,19 @@ class DbConnectionHook(Hook):
                 "configVersion": "v1",
                 "schedule": [
                     {
-                        "name": "dbconnections-periodic-checking",
+                        "name": "rabbitmqroles-periodic-checking",
                         "crontab": vaultPlatform.get("vaultCrdSync", {}).get("schedule", "*/5 * * * *"),
-                        "includeSnapshotsFrom": ["monitor-vault-dbconnections"]
+                        "includeSnapshotsFrom": ["monitor-vault-rabbitmqroles"]
                     }
                 ],
                 "kubernetes": [
                     {
-                        "name": "monitor-vault-dbconnections",
+                        "name": "monitor-vault-rabbitmqroles",
                         "apiVersion": "platform-vault.qvantel.com/v1",
-                        "kind": "DbConnection",
+                        "kind": "RabbitMqRole",
                         "executeHookOnEvent": ["Added", "Modified", "Deleted"],
-                        "queue": "VaultDbConnectionQueue",
-                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncDbConnections", {}).get("namespaceSelector", {
+                        "queue": "VaultRabbitMqRoleQueue",
+                        "namespace": vaultPlatform.get("vaultCrdSync", {}).get("syncRabbitMqRoles", {}).get("namespaceSelector", {
                             "nameSelector": {
                                 "matchNames": [ platformNamespace ]
                             }
@@ -42,42 +40,33 @@ class DbConnectionHook(Hook):
             })
         )
 
-    def registerResource(self, event, vault_client: Client):
+    def registerResource(self, event, vault_client):
         try:
+            vhosts = event['object']['spec'].get('vhosts', "")
+            vhost_topics = event['object']['spec'].get('vhost-topics', "")
+            tags = event['object']['spec'].get('tags', "")
+            additional_params = event['object']['spec'].get('additional-params', {})            
+            computed_values = event['object']['spec'].get('computed-values', {})
+            post_actions = event['object']['spec'].get('post-actions', {})
+            mount_point = event['object']['spec'].get('mount-point', 'rabbitmq')
             name = event['object']['metadata']['name']
-            connection_name = event['object']['spec']['connection-name']
             namespace = event['object']['metadata']['namespace']
-            plugin_name = event['object']['spec']['plugin-name']
-            allowed_roles = event['object']['spec']['allowed-roles']
-            additional_params = event['object']['spec'].get(
-                'additional-params', {})
-            computed_values = event['object']['spec'].get(
-                'computed-values', {})
-            post_actions = event['object']['spec'].get(
-                'post-actions', {})
-            db_username = event['object']['spec'].get(
-                'db-username', '')
-            db_password = event['object']['spec'].get(
-                'db-password', '')
-            db_url = event['object']['spec'].get(
-                'db-url', '')
+            role_name = event['object']['spec'].get('role-name', name)
 
             vals = get_computed_values(computed_values)
 
-            db_url = replace_computed_values(db_url, vals)
-            db_username = replace_computed_values(
-                db_username, vals)
-            db_password = replace_computed_values(
-                db_password, vals)
+            role_name = replace_computed_values(role_name, vals)
+            vhosts = replace_computed_values(vhosts, vals)
+            vhost_topics = replace_computed_values(vhost_topics, vals)
+            tags = replace_computed_values(tags, vals)
 
-            vault_client.secrets.database.configure(
-                name=connection_name,
-                plugin_name=plugin_name,
-                allowed_roles=allowed_roles,
-                connection_url=db_url,
-                username=db_username,
-                password=db_password,
-                **additional_params)
+            vault_client.secrets.rabbitmq.create_role(
+                name=role_name,
+                vhosts=vhosts,
+                vhost_topics=vhost_topics,
+                tags=tags,
+                mount_point=mount_point,
+                ** additional_params)
 
             execute_post_actions(post_actions, vals)
 
@@ -86,9 +75,9 @@ class DbConnectionHook(Hook):
                 version="v1",
                 name=name,
                 namespace=namespace,
-                plural="dbconnections",
+                plural="rabbitmqroles",
                 update=lambda response: updateCrdStatusCondition(
-                        response, "Ready", "True", "DbConnectionProvisioned")
+                        response, "Ready", "True", "RabbitMqRoleProvisioned")
             )
         except:
             update_crd_status(
@@ -96,9 +85,9 @@ class DbConnectionHook(Hook):
                 version="v1",
                 name=name,
                 namespace=namespace,
-                plural="dbconnections",
+                plural="rabbitmqroles",
                 update=lambda response: updateCrdStatusCondition(
-                    response, "Ready", "False", "DbConnectionFailed", get_exception_string())
+                    response, "Ready", "False", "RabbitMqRoleFailed", get_exception_string())
             )
             raise
 
@@ -112,41 +101,42 @@ class DbConnectionHook(Hook):
     def handle_binding(self, binding):
         match(binding):
             case EventHook(eventName, event, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbConnections', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault DB connections sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
                     return
 
                 name = event['object']['metadata']['name']
-                connection_name = event['object']['spec']['connection-name']
-                namespace = event['object']['metadata']['namespace']
-                
+                mount_point = event['object']['spec'].get('mount-point', 'rabbitmq')
+                role_name = event['object']['spec'].get('role-name', name)
+
                 vault_client = get_vault_client()
 
                 if eventName == "Deleted":
-                    vault_client.secrets.database.delete_connection(
-                        connection_name)
+                    vault_client.secrets.rabbitmq.delete_role(
+                        name=role_name,
+                        mount_point=mount_point)
                     return
                 else:
                     self.registerResource(event, vault_client)
-
+                    
             case ScheduleHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbConnections', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault DB connections sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
 
-                for event in binding.get('snapshots', {}).get('monitor-vault-dbconnections', []):
+                for event in binding.get('snapshots', {}).get('monitor-vault-rabbitmqroles', []):
                     # Skipping 'Ready' resources from scheduled execution as those were already applied
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        logger.debug("Skipping DbConnection " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping RabbitMqRole " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.registerResource(event, vault_client)
 
             case SynchronizationHook(binding, values):
-                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncDbConnections', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault DB connections sync as it is disabled in configuration")
+                if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqRoles', {}).get('enabled') in ('false', False):
+                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -154,12 +144,12 @@ class DbConnectionHook(Hook):
                 for event in binding.get('objects', []):
                     if self.checkIfReady(event):
                         name = event['object']['metadata']['name']
-                        logger.debug("Skipping DbConnection " + name + " scheduled execution because it is already 'Ready'.")
+                        logger.debug("Skipping RabbitMqRole " + name + " scheduled execution because it is already 'Ready'.")
                     else:
                         self.registerResource(event, vault_client)
             case _:
                 print("Unknown hook data")
 
 
-hook = DbConnectionHook()
+hook = RabbitMqRoleHook()
 hook.handle_hook()

@@ -34,7 +34,7 @@ Provides:
 </td>
 		<td><div>
 
-Enables SqlInstaller CRDs reconciliation
+Enables CqlInstaller CRDs reconciliation
 
 </div>
 </td>
@@ -49,7 +49,7 @@ Enables SqlInstaller CRDs reconciliation
 </td>
 		<td><div>
 
-Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.
+Selector for namespaces from which sync CqlInstaller resources. Default is `platform` namespace.
 
 </div>
 </td>
@@ -374,6 +374,60 @@ MariaDB databases configuration. This is a map where each key corresponds to the
 		<td><div>
 
 PostgreSQL databases configuration. This is a map where each key corresponds to the PostgreSQL cluster  and associated configuration like dbs, roles and extensions. For Example, see `example-postgredb` definition in Examples-PostgreSQL section below.
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.rabbitmq</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>{}</code></pre>
+</td>
+		<td><div>
+
+RabbitMQ vhosts configuration. This is a map where each key corresponds to the dedicated vhost  and associated configuration like roles and permissions. For Example, see `example-rabbitmq` definition in Examples-RabbitMQ section below.
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.shellinstallersCrdSync.enabled</td>
+		<td>bool</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+		<td><div>
+
+Enables ShellInstaller CRDs reconciliation
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.shellinstallersCrdSync.namespaceSelector</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>nameSelector:
+    matchNames:
+        - platform</code></pre>
+</td>
+		<td><div>
+
+Selector for namespaces from which sync ShellInstaller resources. Default is `platform` namespace.
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.shellinstallersCrdSync.schedule</td>
+		<td>string</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>'*/5 * * * *'</code></pre>
+</td>
+		<td><div>
+
+Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minutes.
 
 </div>
 </td>
@@ -1046,6 +1100,43 @@ Specify namespace for the database. Default Vault roles will be generated with t
 			<td><div>
 
 Configures additional custom roles for this cluster in Vault. Keys in this map will be used as Vault roles names.
+
+</div>
+</td>
+		</tr>
+	</tbody>
+</table>
+<h3>Examples-RabbitMQ</h3>
+<table>
+	<thead>
+		<th>Key</th>
+		<th>Type</th>
+		<th>Default</th>
+		<th>Description</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 300px;">example-rabbitmq</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>namespace: mnp</code></pre>
+</td>
+			<td><div>
+
+This is example RabbitMQ glue definition.  In this example RabbitMQ cluster is configured with vhost `example-rabbitmq`. Note: It is used for documentation purposes only. Real RabbitMQ vhosts should be defined under `qvantelGlue.dbs.rabbitmq`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-rabbitmq.namespace</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Specify namespace for the vhosts roles. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used. 
 
 </div>
 </td>

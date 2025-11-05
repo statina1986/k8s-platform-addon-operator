@@ -8,7 +8,10 @@
 
 
 ### Changes affecting applications running on top of the Platform
-* Redis is configured with Dynamic Vault credentials. Static shared redis credentials are deprecated and planned to be disabled by default n future releases. Applications should start migrating to Dynamic Vault credentials and should start using `readwrite-role-redis-platform` role. 
+* Redis is configured with Dynamic Vault credentials. Static shared redis credentials are deprecated and planned to be disabled by default in future releases. Applications should start migrating to Dynamic Vault credentials and should start using `readwrite-role-redis-platform` role. 
+* RabbitMQ is configured with Dynamic Vault credentials. Static shared RabbitMQ credentials are deprecated and should be used only for legacy workloads not integrated with Vault.
+* RabbitMQ is configured to use virtual hosts isolation. Each dedicated application/domain should use it's own virtual host.
+* RabbitMQ default admin username is changed to be `admin`. It will be accessible only within `platform` namespace.
 
 ### Major changes, deprecations, and removals
 

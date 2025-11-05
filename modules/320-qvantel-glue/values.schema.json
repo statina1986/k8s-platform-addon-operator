@@ -648,6 +648,21 @@
       "title": "example-postgredb",
       "type": "object"
     },
+    "example-rabbitmq": {
+      "description": "This is example RabbitMQ glue definition. \nIn this example RabbitMQ cluster is configured with vhost `example-rabbitmq`.\nNote: It is used for documentation purposes only. Real RabbitMQ vhosts should be defined under `qvantelGlue.dbs.rabbitmq`",
+      "properties": {
+        "namespace": {
+          "default": "mnp",
+          "description": "Specify namespace for the vhosts roles. Default Vault roles will be generated with this namespace in mind. When not specified value from `Values.global.appsNamespace` is used.",
+          "required": [],
+          "title": "namespace",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "example-rabbitmq",
+      "type": "object"
+    },
     "global": {
       "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
       "required": [],
@@ -660,13 +675,13 @@
           "properties": {
             "enabled": {
               "default": true,
-              "description": "Enables SqlInstaller CRDs reconciliation",
+              "description": "Enables CqlInstaller CRDs reconciliation",
               "required": [],
               "title": "enabled",
               "type": "boolean"
             },
             "namespaceSelector": {
-              "description": "Selector for namespaces from which sync SqlInstaller resources. Default is `platform` namespace.",
+              "description": "Selector for namespaces from which sync CqlInstaller resources. Default is `platform` namespace.",
               "properties": {
                 "nameSelector": {
                   "properties": {
@@ -776,10 +791,66 @@
               "required": [],
               "title": "postgres",
               "type": "object"
+            },
+            "rabbitmq": {
+              "description": "RabbitMQ vhosts configuration. This is a map where each key corresponds to the dedicated vhost \nand associated configuration like roles and permissions.\nFor Example, see `example-rabbitmq` definition in Examples-RabbitMQ section below.",
+              "required": [],
+              "title": "rabbitmq",
+              "type": "object"
             }
           },
           "required": [],
           "title": "dbs",
+          "type": "object"
+        },
+        "shellinstallersCrdSync": {
+          "properties": {
+            "enabled": {
+              "default": true,
+              "description": "Enables ShellInstaller CRDs reconciliation",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "namespaceSelector": {
+              "description": "Selector for namespaces from which sync ShellInstaller resources. Default is `platform` namespace.",
+              "properties": {
+                "nameSelector": {
+                  "properties": {
+                    "matchNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "matchNames",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "nameSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "namespaceSelector",
+              "type": "object"
+            },
+            "schedule": {
+              "default": "*/5 * * * *",
+              "description": "Schedule for periodic reconciliation. Default is \"*/5 * * * *\" - so every 5 minutes.",
+              "required": [],
+              "title": "schedule",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "shellinstallersCrdSync",
           "type": "object"
         },
         "sqlinstallersCrdSync": {

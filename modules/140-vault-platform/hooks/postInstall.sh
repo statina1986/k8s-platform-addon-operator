@@ -50,6 +50,15 @@ hook::trigger() {
     qlog "Database secrets already enabled"
   fi
 
+  qlog "Ensuring RabbitMQ secrets engine enabled"
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/sys/mounts'" 200
+  if [ ! "$(jq 'has("rabbitmq/")' $CURL_RESULT)" == "true" ]; then
+    kubectl exec -n $ADDON_OPERATOR_NAMESPACE $VAULT_RELEASE_NAME-0 -- /bin/sh -c "vault login -no-print $token && \
+        vault secrets enable -path='rabbitmq' rabbitmq"
+  else
+    qlog "RabbitMQ secrets already enabled"
+  fi
+
   qlog "Checking audit logging"
   curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/sys/audit'" 200
   if [ ! "$(jq 'has("file/")' $CURL_RESULT)" == "true" ]

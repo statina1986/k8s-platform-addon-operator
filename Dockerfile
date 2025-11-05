@@ -1,3 +1,6 @@
+# ---------- Stage 1: Build rabbitmqadmin from source ----------
+FROM platform.artifactory.qvantel.net/platform/rabbitmqadmin-builder:alpine-3.22 AS rabbitmqadmin
+
 FROM platform.artifactory.qvantel.net/platform/qvantel-addon-operator:1.0.7.17_qvantel-master_abc243f6a
 
 ARG TARGETARCH
@@ -14,11 +17,15 @@ RUN pip3 install mako
 RUN pip3 install py-consul
 RUN pip3 install cassandra-driver
 
-RUN curl -fvSL -o /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.2/yq_linux_${TARGETARCH} && \    
-    chmod +x /usr/bin/yq
+# Copy rabbitmqadmin
+COPY --from=rabbitmqadmin /out/bin/rabbitmqadmin /bin/rabbitmqadmin
+RUN chmod +x /bin/rabbitmqadmin
+
+RUN curl -fvSL -o /bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.2/yq_linux_${TARGETARCH} && \    
+    chmod +x /bin/yq
 
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash 
-RUN mv kustomize /usr/bin/kustomize
+RUN mv kustomize /bin/kustomize
 
 ENV PYTHONPATH=/
 ARG BUILD_TAG=latest

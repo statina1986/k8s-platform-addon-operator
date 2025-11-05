@@ -1,0 +1,87 @@
+{{- if .Values.qvantelGlue.dbs.rabbitmq }}
+{{- $root := . }}
+
+{{- range keys .Values.qvantelGlue.dbs.rabbitmq  }}
+{{- $db := get $.Values.qvantelGlue.dbs.rabbitmq . }}
+{{- $db_name := . }}
+
+---
+apiVersion: platform.qvantel.com/v1
+kind: ShellInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: rmq-{{ $db_name }}-installer
+spec:
+  env:
+    "RABBITMQADMIN_USERNAME": 'admin'
+    "RABBITMQADMIN_PASSWORD": '{password}'
+    "RABBITMQADMIN_TARGET_HOST": 'rabbitmq-platform.platform.svc'
+  provision-commands:
+  - rabbitmqadmin vhosts declare --name {{ $db_name }}
+  connection-url: rabbitmq-platform.platform.svc
+  username: admin
+  computed-values:
+    - name: "password"
+      expression: "k8s_get_secret_value('rabbitmq-platform', '{{ $.Release.Namespace }}', 'rabbitmq-password')"
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: RabbitMqRole
+metadata:
+  name: {{ $db.namespace | default $.Values.global.appsNamespace }}-{{ $db_name }}
+spec:
+  vhosts: '{"{{ $db_name }}":{"write": ".*", "read": ".*", "configure": ".*"}}'
+
+{{- end }}
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: RabbitMqRole
+metadata:
+  name: admin-rabbitmq
+spec:
+  vhosts: |
+    {    
+{{- range keys .Values.qvantelGlue.dbs.rabbitmq  }}
+{{- $db := get $.Values.qvantelGlue.dbs.rabbitmq . }}
+{{- $db_name := . }}
+    "{{ $db_name }}" : { "write": ".*", "read": ".*", "configure": ".*" },
+{{- end }}
+    "/" : { "write": ".*", "read": ".*", "configure": ".*" }
+    }
+
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: RabbitMqRole
+metadata:
+  name: readwrite-rabbitmq
+spec:
+  vhosts: |
+    {    
+{{- range keys .Values.qvantelGlue.dbs.rabbitmq  }}
+{{- $db := get $.Values.qvantelGlue.dbs.rabbitmq . }}
+{{- $db_name := . }}
+    "{{ $db_name }}" : { "write": ".*", "read": ".*" },
+{{- end }}
+    "/" : { "write": ".*", "read": ".*" }
+    }
+
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: RabbitMqRole
+metadata:
+  name: readonly-rabbitmq
+spec:
+  vhosts: |
+    {    
+{{- range keys .Values.qvantelGlue.dbs.rabbitmq  }}
+{{- $db := get $.Values.qvantelGlue.dbs.rabbitmq . }}
+{{- $db_name := . }}
+    "{{ $db_name }}" : { "read": ".*"},
+{{- end }}
+    "/" : { "read": ".*"}
+    }
+
+{{- end }}

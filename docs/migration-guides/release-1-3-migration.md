@@ -129,7 +129,7 @@ In this version all cluster definitions were removed from `cnpg-platform` module
 3. Deploy new platform configuration. Testing this procedure in lower environments first is highly recommended. 
 
 ## MariaDB
-* Default cluster definitions were updated to be Galera cluster with max-scale. This is the only setup for now  which enabled true HA. Existing cluster will require logical backup/restore migration procedure.
+* Default cluster definitions were updated to be Galera cluster with max-scale. Existing cluster will require logical backup/restore migration procedure.
 
 * In this version all cluster definitions were removed from `mariadb-operator-platform` module and `qvantel-glue` should be used instead. All cluster definitions should be migrated to `qvantel-glue`. There are steps to avoid data loss:
   1. Manually change ownership of the cluster resources from `mariadb-operator-platform` to `qvantel-glue` with helm annotations. Otherwise cluster resources will be deleted by new `mariadb-operator-platform` module.
