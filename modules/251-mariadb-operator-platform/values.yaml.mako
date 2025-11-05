@@ -46,20 +46,24 @@ mariadbOperatorPlatform:
     config:
       % if 'containerRegistryBase' in values['global']:
       # -- Default MariaDB image
-      mariadbImage: ${values['global']['containerRegistryBase']}/library/mariadb:11.4.3
+      mariadbImage: ${values['global']['containerRegistryBase']}/library/mariadb:11.4.8
       # -- Default MaxScale image
       maxscaleImage: ${values['global']['containerRegistryBase']}/mariadb/maxscale:23.08.5
       # -- Default MariaDB exporter image
       exporterImage: ${values['global']['containerRegistryBase']}/prom/mysqld-exporter:v0.15.1
       # -- Default MaxScale exporter image
       exporterMaxscaleImage: ${values['global']['containerRegistryBase']}/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+      # -- Default SQL exporter image
+      sqlExporterImage: ${values['global']['containerRegistryBase']}/burningalchemist/sql_exporter:0.18
       % else:
       # -- Default MariaDB image
-      mariadbImage: docker-registry1.mariadb.com/library/mariadb:11.4.3
+      mariadbImage: docker-registry1.mariadb.com/library/mariadb:11.4.8
       # -- Default MaxScale image
       maxscaleImage: docker-registry2.mariadb.com/mariadb/maxscale:23.08.5
       # -- Default MariaDB exporter image
       exporterImage: prom/mysqld-exporter:v0.15.1
       # -- Default MaxScale exporter image
       exporterMaxscaleImage: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+      # -- Default SQL exporter image
+      sqlExporterImage: docker.io/burningalchemist/sql_exporter:0.18
       % endif
