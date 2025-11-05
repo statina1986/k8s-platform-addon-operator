@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-11-14T07:15:22.008593234Z"
+  generatedAt: "2025-11-05T22:16:53.649146858Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: platform-core
@@ -28,9 +28,9 @@ images:
     image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
     chart: platform-core
     digests:
-      - digest: sha256:8cc2c9ccaf6445fff8f030eacaebb666d715d6f0134c0a8dc17442029565efa5
+      - digest: sha256:fdab9cee2ee16cec785676c27053b5ead83b104baa75bb607e60bb4ea8479fee
         arch: linux/amd64
-      - digest: sha256:1985fe37af0ca7306ddac8aae5c9d8ebbeeae0287cab020b94a94d69b5704c8c
+      - digest: sha256:5d43cb7d4f7a632d2b8c5221edfc0d6f3bf6ac55c5c877a615dc047a86b60b4e
         arch: linux/arm64
   - name: local-static-provisioner
     image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
@@ -40,19 +40,3 @@ images:
         arch: linux/amd64
       - digest: sha256:6124b5c17a188c753c7d6eaf2c48bc91b513e0ec6489a744d2521458fe31c3e0
         arch: linux/arm64
-  - name: init-udev-rule
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
-    chart: platform-core
-    digests:
-      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
-        arch: linux/arm64
-      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
-        arch: linux/amd64
-  - name: dummy-container
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_13_8115747a9
-    chart: platform-core
-    digests:
-      - digest: sha256:da2f66d7218a777a978e5f4289fdc910a0b54a243ff73cf5f9b78ec1394eb850
-        arch: linux/arm64
-      - digest: sha256:b39986ea80881f9a291a0b321083116f1f7f94e9201430fa4c1fe1a266edbf3d
-        arch: linux/amd64
