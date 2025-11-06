@@ -1,3 +1,9 @@
 apiVersion: v2
 name: qvantel-glue
 version: 0.1.0
+annotations:
+  images: |
+    - name: python
+      image: docker.io/library/python:3.12-alpine
+    - name: sql-exporter
+      image: docker.io/burningalchemist/sql_exporter:0.18

@@ -1,10 +1,26 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-01T11:05:34.267414996Z"
+  generatedAt: "2025-11-06T15:32:03.854287053Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: qvantel-glue
   version: 0.1.0
   appVersion: ""
-images: []
+images:
+  - name: python
+    image: docker.io/library/python:3.12-alpine
+    chart: qvantel-glue
+    digests:
+      - digest: sha256:86261eed02b2cf50dec59ff9550464ed1fb3bc4cd25d29785b4027ca723e6fa3
+        arch: linux/amd64
+      - digest: sha256:b3445332d98e1df5e6951d675b70b3858cf466fcd72ca8149a63ca77517cf27c
+        arch: linux/arm64
+  - name: sql-exporter
+    image: docker.io/burningalchemist/sql_exporter:0.18
+    chart: qvantel-glue
+    digests:
+      - digest: sha256:32690e5bea6f420604545399c338fe13298f965da3beeb657bd8133b3d54ebe1
+        arch: linux/amd64
+      - digest: sha256:9338ecf7732f39e5137ab7a3877954434c4ad6002fee6ddedefe0e768d16304c
+        arch: linux/arm64

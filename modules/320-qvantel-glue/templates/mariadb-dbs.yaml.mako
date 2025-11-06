@@ -247,7 +247,7 @@ spec:
     spec:
       initContainers:
         - name: render-config
-          image: python:3.12-alpine
+          image: {{ $.Values.global.containerRegistryBase | default "docker.io" }}/library/python:3.12-alpine
           command:
             - /bin/sh
             - -ec
@@ -321,7 +321,7 @@ spec:
               mountPath: /config
       containers:
         - name: sql-exporter
-          image: docker.io/burningalchemist/sql_exporter:0.18
+          image: {{ $.Values.global.containerRegistryBase | default "docker.io" }}/burningalchemist/sql_exporter:0.18
           imagePullPolicy: IfNotPresent
           args:
             - "--config.file=/config/config.yml"
