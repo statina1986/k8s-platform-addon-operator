@@ -188,13 +188,148 @@ Default values for MariaDB clusters. See `example-mariadb.cluster` for reference
       binlog_format=row
       innodb_autoinc_lock_mode=2
       max_allowed_packet=256M
+    {{- if eq $.addonOperator.monitoringPlatformEnabled "true" }}
+      performance_schema=on
+ 
+      # statements consumers
+      performance-schema-consumer-events-statements-current=ON
+      performance-schema-consumer-events-statements-history=ON
+      performance-schema-consumer-events-statements-history-long=ON
+      performance-schema-consumer-statements-digest=ON
+ 
+      # waits consumers
+      performance-schema-consumer-events-waits-current=ON
+      performance-schema-consumer-events-waits-history=ON
+      performance-schema-consumer-events-waits-history-long=ON
+ 
+      # stages consumers
+      performance-schema-consumer-events-stages-current=ON
+      performance-schema-consumer-events-stages-history=ON
+      performance-schema-consumer-events-stages-history-long=ON
+ 
+      # hold long history
+      # performance_schema_events_statements_history_long_size=10000
+      # performance_schema_events_waits_history_long_size=10000
+    {{- end }}
     resources:
       requests:
         cpu: 100m
         memory: 128Mi
       limits:
         memory: 1Gi 
-       
+  defaultSqlExporter:
+    service:
+      port: 9399
+    # Main config for sql_exporter. DSN is injected at runtime by init container.
+    config:
+      content: |
+        global:
+          scrape_timeout_offset: 500ms
+        target:
+          # DSN injected by init container via placeholder substitution
+          data_source_name: "__DSN__"
+          collectors:
+            - mariadb_custom
+        collectors:
+          - collector_name: mariadb_custom
+            metrics:
+              - metric_name: mariadb_threads_connected
+                type: gauge
+                help: Number of currently open connections
+                values: [threads_connected]
+                query: |
+                  SELECT VARIABLE_VALUE AS threads_connected
+                  FROM information_schema.GLOBAL_STATUS
+                  WHERE VARIABLE_NAME = 'Threads_connected'
+ 
+              - metric_name: mariadb_uptime_seconds
+                type: gauge
+                help: Server uptime in seconds
+                values: [uptime]
+                query: |
+                  SELECT VARIABLE_VALUE AS uptime
+                  FROM INFORMATION_SCHEMA.GLOBAL_STATUS
+                  WHERE VARIABLE_NAME = 'UPTIME'
+ 
+              - metric_name: _anchor_only_exec_query
+                type: gauge
+                help: "Anchor row to define &mariadb_exec_query (ignored by scraper if not referenced)"
+                values: [exec_count]
+                query: &mariadb_exec_query |
+                  SELECT
+                    sd.DIGEST                                   AS query_id,
+                    sd.DIGEST_TEXT                              AS query,
+                    COALESCE(sd.SCHEMA_NAME, 'unknown')         AS database_name,
+                    sd.COUNT_STAR                                AS exec_count,
+                    ROUND(sd.SUM_TIMER_WAIT / 1e12, 6)           AS total_exec_time_sec,
+                    ROUND(sd.AVG_TIMER_WAIT / 1e12, 6)           AS avg_exec_time_sec,
+                    ROUND(sd.MAX_TIMER_WAIT / 1e12, 6)           AS max_exec_time_sec,
+                    ROUND(sd.SUM_TIMER_WAIT / 1e9,  3)           AS stmt_total_latency_ms,
+                    sd.LAST_SEEN                                  AS last_seen
+                  FROM performance_schema.events_statements_summary_by_digest AS sd
+                  WHERE sd.DIGEST_TEXT IS NOT NULL
+                  ORDER BY sd.SUM_TIMER_WAIT DESC
+                  LIMIT 100;
+ 
+              - metric_name: _anchor_only_waits_query
+                type: gauge
+                help: "Anchor row to define &mariadb_waits_query (ignored by scraper if not referenced)"
+                values: [wait_count]
+                query: &mariadb_waits_query |
+                  SELECT
+                    w.EVENT_NAME                                                     AS wait_event_name,
+                    SUBSTRING_INDEX(w.EVENT_NAME, '/', 1)                            AS event_type,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(w.EVENT_NAME,'/',3), '/', -2)    AS event_subtype,
+                    w.COUNT_STAR                                                     AS wait_count,
+                    ROUND(w.SUM_TIMER_WAIT / 1e12, 6)                                AS total_wait_sec,
+                    ROUND(w.AVG_TIMER_WAIT / 1e12, 6)                                AS avg_wait_sec,
+                    ROUND(w.MAX_TIMER_WAIT / 1e12, 6)                                AS max_wait_sec
+                  FROM performance_schema.events_waits_summary_global_by_event_name AS w
+                  HAVING wait_event_name <> 'idle'
+                  ORDER BY w.SUM_TIMER_WAIT DESC
+                  LIMIT 100;
+ 
+              - metric_name: mariadb_wait_event_sample_total
+                type: gauge
+                help: Number of wait-event samples observed (global, by event)
+                key_labels: [wait_event_name, event_type, event_subtype]
+                values: [wait_count]
+                query: *mariadb_waits_query
+ 
+              - metric_name: mariadb_wait_event_total_seconds
+                type: gauge
+                help: Cumulative wait time spent in an event (seconds)
+                key_labels: [wait_event_name, event_type, event_subtype]
+                values: [total_wait_sec]
+                query: *mariadb_waits_query
+ 
+              - metric_name: mariadb_wait_event_average_seconds
+                type: gauge
+                help: Average wait time per sample for an event (seconds)
+                key_labels: [wait_event_name, event_type, event_subtype]
+                values: [avg_wait_sec]
+                query: *mariadb_waits_query
+ 
+              - metric_name: mariadb_wait_event_max_seconds
+                type: gauge
+                help: Maximum wait time observed for an event (seconds)
+                key_labels: [wait_event_name, event_type, event_subtype]
+                values: [max_wait_sec]
+                query: *mariadb_waits_query
+ 
+              - metric_name: mariadb_wait_event_exec_count
+                type: gauge
+                help: Number of statement executions (by digest)
+                key_labels: [query_id, query, database_name]
+                values: [exec_count]
+                query: *mariadb_exec_query
+ 
+              - metric_name: mariadb_wait_event_stmt_total_latency
+                type: gauge
+                help: Total statement latency (milliseconds, by digest)
+                key_labels: [query_id, query, database_name]
+                values: [stmt_total_latency_ms]
+                query: *mariadb_exec_query
  
 </code></pre>
 </td>
