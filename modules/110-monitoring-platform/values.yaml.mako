@@ -1002,6 +1002,7 @@ monitoringPlatform:
         % endif
         additionalScrapeConfigsAsMap:
           kubernetes-pods:
+            fallback_scrape_protocol: PrometheusText0.0.4
             kubernetes_sd_configs:
             - role: pod
             relabel_configs:  # If first two labels are present, pod should be scraped  by the istio-secure job.
