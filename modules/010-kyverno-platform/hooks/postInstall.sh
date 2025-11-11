@@ -7,7 +7,7 @@ hook::config() {
 }
 
 hook::trigger() {
-  qlog "Sleeping for 30 seconds in order to let Kyverno start and being able to rewrite images from subsecquent modules"
+  qlog "Sleeping for 30 seconds in order to let Kyverno start and being able to rewrite images from subsequent modules"
   sleep 30
 }
 

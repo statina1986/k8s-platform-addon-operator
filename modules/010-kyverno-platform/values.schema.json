@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "kyvernoPlatform": {
+      "properties": {
+        "kyverno": {
+          "description": "Configuration for underlying Kyverno helm-chart. See https://github.com/kyverno/kyverno/blob/main/charts/kyverno/README.md",
+          "properties": {
+            "crds": {
+              "properties": {
+                "install": {
+                  "default": false,
+                  "description": "We deploy all CRDs under /resources folder.",
+                  "required": [],
+                  "title": "install",
+                  "type": "boolean"
+                },
+                "migration": {
+                  "properties": {
+                    "enabled": {
+                      "default": false,
+                      "description": "Enable CRDs migration using helm post upgrade hook",
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "migration",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "crds",
+              "type": "object"
+            },
+            "global": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "description": "(string) Global value that allows to set a single image registry across all deployments.\nWhen set, it will override any values set under `.image.registry` across the chart.",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "global",
+              "type": "object"
+            },
+            "policyExceptions": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "description": "Enables the feature",
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "namespace": {
+                  "default": "",
+                  "description": "Restrict policy exceptions to a single namespace\nSet to \"*\" to allow exceptions in all namespaces",
+                  "required": [],
+                  "title": "namespace",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "policyExceptions",
+              "type": "object"
+            },
+            "test": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/platform-k8s-tools-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.3.3_202509080945_master_90384dcc",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "test",
+              "type": "object"
+            },
+            "webhooksCleanup": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/platform-k8s-tools-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.3.3_202509080945_master_90384dcc",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "webhooksCleanup",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "kyverno",
+          "type": "object"
+        },
+        "kyverno-policies": {
+          "description": "Configuration for underlying Kyverno Policies helm-chart. See https://github.com/kyverno/kyverno/blob/main/charts/kyverno-policies/README.md",
+          "properties": {
+            "enabled": {
+              "default": false,
+              "description": "Toggle to enable Kyverno Policies chart deployment",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "podSecuritySeverity": {
+              "default": "medium",
+              "description": "Pod Security Standard (`low`, `medium`, `high`).",
+              "required": [],
+              "title": "podSecuritySeverity",
+              "type": "string"
+            },
+            "podSecurityStandard": {
+              "default": "baseline",
+              "description": "Pod Security Standard profile (`baseline`, `restricted`, `privileged`, `custom`).\nFor more info https://kyverno.io/policies/pod-security.",
+              "required": [],
+              "title": "podSecurityStandard",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "kyverno-policies",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "kyvernoPlatform",
+      "type": "object"
+    },
+    "kyvernoPlatformNamespace": {
+      "default": "kyverno",
+      "required": [],
+      "title": "kyvernoPlatformNamespace",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-10-03T13:51:05.895939716Z"
+  generatedAt: "2025-10-30T15:02:30.173685916Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kyverno-platform
@@ -9,12 +9,12 @@ chart:
   appVersion: ""
 images:
   - name: kyverno-cli
-    image: ghcr.io/kyverno/kyverno-cli:v1.12.5
+    image: reg.kyverno.io/kyverno/kyverno-cli:v1.15.2
     chart: kyverno-platform
     digests:
-      - digest: sha256:b0f12027c2e1ff3ff0646a09b773e0648a0f8ace6c9fb77e7ddc77d3f96d0ed6
+      - digest: sha256:a0e474012757206edbf45f69e5dbc80ac142169a42f9e1de86e1413f997810df
         arch: linux/amd64
-      - digest: sha256:38936ba7613a607f87f641b83b5223eb6f75e64f9ba162b32e216b0f0b4068f5
+      - digest: sha256:989d1beb063e551dba1c3da2d58857e31c98c7b0f6ebd24ff3f2d5d9f5d92701
         arch: linux/arm64
   - name: tools
     image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
@@ -25,42 +25,42 @@ images:
       - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64
   - name: kyvernopre
-    image: ghcr.io/kyverno/kyvernopre:v1.12.5
+    image: reg.kyverno.io/kyverno/kyvernopre:v1.15.2
     chart: kyverno-platform
     digests:
-      - digest: sha256:887f6fc3c2526d3f9fda09ad2f5d2e4a95ca6966846c52796bb2bd0aba14cedf
+      - digest: sha256:325b2e396ad8d125f47da84480864a875bc3dc31e889130bdd2cfea62c4e9781
         arch: linux/amd64
-      - digest: sha256:0b8065473f3bbf6cae71cf8a4aebc50cab9ce6ba6fa4967882b81e5efbba2248
+      - digest: sha256:92ba0dfe50d7ccd5cbf0ce4cb357744f9049b376eb9a1f0344af817eba98920a
         arch: linux/arm64
   - name: kyverno
-    image: ghcr.io/kyverno/kyverno:v1.12.5
+    image: reg.kyverno.io/kyverno/kyverno:v1.15.2
     chart: kyverno-platform
     digests:
-      - digest: sha256:2a713842f1bfe3f621f942c9389c4d862c82b5f190fec9a94888aa5e749479ca
+      - digest: sha256:a9abe6e6648320451e81a6fad105d13c8fc40bd3a5068e915fe2e73e1600675e
         arch: linux/amd64
-      - digest: sha256:fa577cc6d84bdb6e90bb5430401d4b0acf84be7c9519760d7da57f289f3f12be
+      - digest: sha256:fd4e0299e32f00bcde1c9afcfc74cc30fadc0d3f9bda34e69d4e20d57c8b67a5
         arch: linux/arm64
   - name: background-controller
-    image: ghcr.io/kyverno/background-controller:v1.12.5
+    image: reg.kyverno.io/kyverno/background-controller:v1.15.2
     chart: kyverno-platform
     digests:
-      - digest: sha256:8be71f2a3915e5523f8ec16b62aadebe08d712a08205cff8ebc277a3fa7b44a7
+      - digest: sha256:7c4644a7ccccc9f3d2b84cc8520e3f833dd5335af0cd0686e8aa33a8f4e9ba5e
         arch: linux/amd64
-      - digest: sha256:ca41990e70a1483e7d75a49ba25573fbfe4a4a59a29ca98a014a61127ce43f8d
+      - digest: sha256:c3b25c8cedb699c582cc897c77b0588e4cba1455b7cca68cd1890ff834cd2162
         arch: linux/arm64
   - name: cleanup-controller
-    image: ghcr.io/kyverno/cleanup-controller:v1.12.5
+    image: reg.kyverno.io/kyverno/cleanup-controller:v1.15.2
     chart: kyverno-platform
     digests:
-      - digest: sha256:af53fecd47b5409255c91ab8e6fd48dcb68316652233f4ebc250b58431b14c3e
+      - digest: sha256:1db0e6ca15cabba4015755ac0715f04330a433eaa41c584997b930a146b5e3af
         arch: linux/amd64
-      - digest: sha256:8d62c43256681bbcbfcad5c1c137d1ce67d710f882d19bad68831d13a9a08cf5
+      - digest: sha256:0cba465548c51ef45a79d65bc107322d6aba9bfae090065350f0247a375eef5f
         arch: linux/arm64
   - name: reports-controller
-    image: ghcr.io/kyverno/reports-controller:v1.12.5
+    image: reg.kyverno.io/kyverno/reports-controller:v1.15.2
     chart: kyverno-platform
     digests:
-      - digest: sha256:fd0c94551ae0be794c850cc2509a26fab42cc518c1f1bdff4f5594a2c55329e7
+      - digest: sha256:11a50735b651515688f39a2fc3be62e07c2fc3ca9519edf6c8218579faddcc15
         arch: linux/amd64
-      - digest: sha256:72ab55fabc7757db9f0048ff42f02eee8274f0e97abb0cea33403349fa1b2bf8
+      - digest: sha256:2d0f891471239b3e0b9c8ef38b688a5458df4860195f3f4817495f06196c86d7
         arch: linux/arm64
