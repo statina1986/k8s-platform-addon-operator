@@ -934,6 +934,7 @@ monitoringPlatform:
           customer: need-to-define
           datacenter: need-to-define
           environment: need-to-define
+        externalUrl: https://prometheus${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}
         enableRemoteWriteReceiver: true
         # we need to put something here in order to add additionalAlertRelabelConfigs to prometheus
         additionalAlertRelabelConfigs: "Actual value not important, will be overridden from additionalAlertRelabelConfigAsMap"
