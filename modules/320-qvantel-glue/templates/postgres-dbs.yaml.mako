@@ -163,7 +163,7 @@ spec:
 
 
 ### ScheduledBackup for cluster
-{{- if and $cluster.spec.backup $cluster.scheduledBackup }}
+{{- if and $cluster.barmanObjectStore $cluster.barmanObjectStore.scheduledBackup }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
