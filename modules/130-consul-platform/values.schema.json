@@ -1,0 +1,378 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "consulPlatform": {
+      "properties": {
+        "consul": {
+          "properties": {
+            "apiGateway": {
+              "properties": {
+                "imageEnvoy": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/envoyproxy/envoy:v1.23.1",
+                  "required": [],
+                  "title": "imageEnvoy",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "apiGateway",
+              "type": "object"
+            },
+            "client": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "client",
+              "type": "object"
+            },
+            "connectInject": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "connectInject",
+              "type": "object"
+            },
+            "server": {
+              "properties": {
+                "affinity": {
+                  "default": "podAntiAffinity:\n  requiredDuringSchedulingIgnoredDuringExecution:\n    - labelSelector:\n        matchLabels:\n          app: {{ template \"consul.name\" . }}\n          release: \"{{ .Release.Name }}\"\n          component: server\n      topologyKey: kubernetes.io/hostname\n",
+                  "required": [],
+                  "title": "affinity",
+                  "type": "string"
+                },
+                "extraConfig": {
+                  "default": "{\n  \"limits\": {\n    \"http_max_conns_per_client\": 2000\n  },\n  \"rpc\": {\n    \"enable_streaming\": false\n  },\n  \"telemetry\": {\n    \"disable_hostname\": true,\n    \"prometheus_retention_time\": \"168h\"\n  }\n}\n",
+                  "required": [],
+                  "title": "extraConfig",
+                  "type": "string"
+                },
+                "replicas": {
+                  "default": 3,
+                  "required": [],
+                  "title": "replicas",
+                  "type": "integer"
+                },
+                "resources": {
+                  "properties": {
+                    "limits": {
+                      "properties": {
+                        "cpu": {
+                          "default": "100",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "1Gi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "requests": {
+                      "properties": {
+                        "cpu": {
+                          "default": "100m",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "100Mi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "default": "- key: \"dedicated-nodes\"\n  value: \"platform-masters\"\n  operator: \"Equal\"\n  effect: \"NoSchedule\"      \n",
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "server",
+              "type": "object"
+            },
+            "syncCatalog": {
+              "description": "Consul Sync Catalog configuration",
+              "properties": {
+                "addK8SNamespaceSuffix": {
+                  "default": false,
+                  "required": [],
+                  "title": "addK8SNamespaceSuffix",
+                  "type": "boolean"
+                },
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "k8sAllowNamespaces": {
+                  "description": "Sync Catalog is restricted to apps namespace by default since platform 1.3.0",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "required": [],
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "k8sAllowNamespaces",
+                  "type": "array"
+                },
+                "k8sPrefix": {
+                  "default": "null",
+                  "required": [],
+                  "title": "k8sPrefix",
+                  "type": "null"
+                },
+                "nodePortSyncType": {
+                  "default": "InternalOnly",
+                  "required": [],
+                  "title": "nodePortSyncType",
+                  "type": "string"
+                },
+                "resources": {
+                  "properties": {
+                    "limits": {
+                      "properties": {
+                        "cpu": {
+                          "default": "100",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "250Mi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "requests": {
+                      "properties": {
+                        "cpu": {
+                          "default": "50m",
+                          "required": [],
+                          "title": "cpu",
+                          "type": "string"
+                        },
+                        "memory": {
+                          "default": "50Mi",
+                          "required": [],
+                          "title": "memory",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "toK8S": {
+                  "default": false,
+                  "required": [],
+                  "title": "toK8S",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "syncCatalog",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "consul",
+          "type": "object"
+        },
+        "global": {
+          "properties": {
+            "image": {
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/consul:1.14.4",
+              "required": [],
+              "title": "image",
+              "type": "string"
+            },
+            "imageConsulDataplane": {
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/consul-dataplane:1.0.1",
+              "required": [],
+              "title": "imageConsulDataplane",
+              "type": "string"
+            },
+            "imageK8S": {
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/hashicorp/consul-k8s-control-plane:1.0.3",
+              "required": [],
+              "title": "imageK8S",
+              "type": "string"
+            },
+            "openshift": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "openshift",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "global",
+          "type": "object"
+        },
+        "serviceSyncForClusterIP": {
+          "properties": {
+            "enabled": {
+              "default": "true",
+              "description": "Enables services sync to Consul with ClusterIPs. Instead of 'original' Hashicorp services sync in this case ClusterIPs will be registered in Consul instead of individual pod IPs.\nEnabled by default since platform 1.3.0",
+              "required": [],
+              "title": "enabled",
+              "type": "string"
+            },
+            "namespaceSelector": {
+              "description": "Selector for namespaces from which sync services, restricted to platform namespace by default since platform 1.3.0",
+              "properties": {
+                "nameSelector": {
+                  "properties": {
+                    "matchNames": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "matchNames",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "nameSelector",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "namespaceSelector",
+              "type": "object"
+            },
+            "prefix": {
+              "default": "",
+              "description": "Optional prefix for service names registered to Consul.",
+              "required": [],
+              "title": "prefix",
+              "type": "string"
+            },
+            "purgeClusterIPConsulSyncServicesOnStartup": {
+              "default": "false",
+              "description": "Purge services in Consul from ClusterIP services sync",
+              "required": [],
+              "title": "purgeClusterIPConsulSyncServicesOnStartup",
+              "type": "string"
+            },
+            "purgeHashicorpConsulSyncServicesOnStartup": {
+              "default": "false",
+              "description": "Purge services in Consul from Hashicorp services sync",
+              "required": [],
+              "title": "purgeHashicorpConsulSyncServicesOnStartup",
+              "type": "string"
+            },
+            "schedule": {
+              "default": "*/5 * * * *",
+              "description": "Schedule for reconciliation. Default is \"*/5 * * * *\" - so every 5 minutes.",
+              "required": [],
+              "title": "schedule",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "serviceSyncForClusterIP",
+          "type": "object"
+        },
+        "updateCoreDns": {
+          "description": "Configuration for Consul DNS service discovery",
+          "properties": {
+            "configmapName": {
+              "default": "coredns",
+              "description": "CoreDNS configmap to update with Consul DNS entries   ",
+              "required": [],
+              "title": "configmapName",
+              "type": "string"
+            },
+            "configmapNamespace": {
+              "default": "kube-system",
+              "description": "CoreDNS configmap namespace to update with Consul DNS entries",
+              "required": [],
+              "title": "configmapNamespace",
+              "type": "string"
+            },
+            "enabled": {
+              "default": "false",
+              "description": "Consul DNS service discovery is disabled by default since platform 1.2.0",
+              "required": [],
+              "title": "enabled",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "updateCoreDns",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "consulPlatform",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

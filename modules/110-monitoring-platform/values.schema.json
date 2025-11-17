@@ -2542,6 +2542,12 @@
                         },
                         "kubernetes-pods": {
                           "properties": {
+                            "fallback_scrape_protocol": {
+                              "default": "PrometheusText0.0.4",
+                              "required": [],
+                              "title": "fallback_scrape_protocol",
+                              "type": "string"
+                            },
                             "kubernetes_sd_configs": {
                               "items": {
                                 "anyOf": [

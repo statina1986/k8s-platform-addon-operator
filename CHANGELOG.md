@@ -12,6 +12,7 @@
 * RabbitMQ is configured with Dynamic Vault credentials. Static shared RabbitMQ credentials are deprecated and should be used only for legacy workloads not integrated with Vault.
 * RabbitMQ is configured to use virtual hosts isolation. Each dedicated application/domain should use it's own virtual host.
 * RabbitMQ default admin username is changed to be `admin`. It will be accessible only within `platform` namespace.
+* Consul syncing methods have changed. Applications will keep using Consul Catalog Sync to sync themselves, but platform services will have ClusterIP, this is what applications need to use to communicate to platform services.
 
 ### Major changes, deprecations, and removals
 
@@ -19,6 +20,4 @@
 * Zalando based Postgres module (`240-postgres-platform`) was removed. CNPG based Postgres (`241-cnpg-postgres-platform`) should be used everywhere instead.
 * CNPG clusters definitions were removed from `241-cnpg-postgres-platform` module completely. `320-qvantel-glue` module should be used to provision clusters and DBs. All cluster definitions should be migrated to `320-qvantel-glue` module with proper helm ownership change. See [KPLAT-453](https://qvantel.atlassian.net/browse/KPLAT-453) for details.
 * MariaDB clusters definitions were removed from `251-mariadb-operator-platform` module completely. `320-qvantel-glue` module should be used to provision clusters and DBs. All cluster definitions should be migrated to `320-qvantel-glue` module with proper helm ownership change. See [KPLAT-460](https://qvantel.atlassian.net/browse/KPLAT-460) for details.
-* MariaDB default cluster definitions were updated to be Galera cluster with max-scale. This is the only setup for now  which enabled true HA.
-
-
+* MariaDB default cluster definitions were updated to be Galera cluster with max-scale. This is the only setup for now which enabled true HA.

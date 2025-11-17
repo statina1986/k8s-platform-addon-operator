@@ -10,7 +10,8 @@ consulPlatform:
   
   serviceSyncForClusterIP:
     # -- Enables services sync to Consul with ClusterIPs. Instead of 'original' Hashicorp services sync in this case ClusterIPs will be registered in Consul instead of individual pod IPs.
-    enabled: "false"
+    # Enabled by default since platform 1.3.0
+    enabled: "true"
     # -- Purge services in Consul from Hashicorp services sync
     purgeHashicorpConsulSyncServicesOnStartup: "false"
     # -- Purge services in Consul from ClusterIP services sync
@@ -19,10 +20,10 @@ consulPlatform:
     schedule: "*/5 * * * *"
     # -- Optional prefix for service names registered to Consul.
     prefix: ""
-    # -- Selector for namespaces from which sync services.
+    # -- Selector for namespaces from which sync services, restricted to platform namespace by default since platform 1.3.0
     namespaceSelector:
       nameSelector:
-        matchNames: ["${values['global']['appsNamespace']}", "${values['global']['platformNamespace']}"]
+        matchNames: ["${values['global']['platformNamespace']}"]
 
   # -- Configuration for Consul DNS service discovery
   updateCoreDns:
@@ -94,17 +95,16 @@ consulPlatform:
         }
     client:
       enabled: false
+    # -- Consul Sync Catalog configuration
     syncCatalog:
       enabled: true
       toK8S: false
       k8sPrefix: null
       nodePortSyncType: InternalOnly
       addK8SNamespaceSuffix: false
-      % if values['global']['namespaceRestricted'] == "true":
+      # -- Sync Catalog is restricted to apps namespace by default since platform 1.3.0
       k8sAllowNamespaces:
         - ${values['global']['appsNamespace']}
-        - ${values['global']['platformNamespace']}        
-      % endif
       resources:
         limits:
           cpu: "100"
@@ -114,4 +114,3 @@ consulPlatform:
           memory: "50Mi"
     connectInject:
       enabled: false
-      
