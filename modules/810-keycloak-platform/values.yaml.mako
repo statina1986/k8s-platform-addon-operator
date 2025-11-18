@@ -29,11 +29,19 @@ keycloakPlatform:
           capabilities = ["list"]
         }
 
+        path "secret-v2/*" {
+          capabilities = ["list"]
+        }
+
         path "secret/data/platform/readonly/*" {
           capabilities = ["read"]
         }
       policysecretappsadmin: |
         path "secret/*" {
+          capabilities = ["read", "list", "create", "update", "patch", "delete"]
+        }
+
+        path "secret-v2/*" {
           capabilities = ["read", "list", "create", "update", "patch", "delete"]
         }
 
@@ -70,6 +78,10 @@ keycloakPlatform:
         }
 
         path "secret/*" {
+          capabilities = ["read", "list", "create", "update", "delete", "sudo"]
+        }
+
+        path "secret-v2/*" {
           capabilities = ["read", "list", "create", "update", "delete", "sudo"]
         }
 
