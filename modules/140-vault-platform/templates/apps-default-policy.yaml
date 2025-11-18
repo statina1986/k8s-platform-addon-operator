@@ -10,10 +10,10 @@ spec:
     {{ printf "path \"secret/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}/*\" {" }}
       capabilities = [ "read" ]
     }
-    {{ printf "path \"secret-v2/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}\" {" }}
+    {{ printf "path \"secret-v2/data/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}\" {" }}
       capabilities = [ "read" ]
     }
-    {{ printf "path \"secret-v2/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}/*\" {" }}
+    {{ printf "path \"secret-v2/data/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}/*\" {" }}
       capabilities = [ "read" ]
     }
     {{ printf "path \"database/creds/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}-{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}*\" {" }}
