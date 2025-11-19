@@ -29,7 +29,7 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
               version: 3.9.1
 	```
 	
-	- Enable `kafka` (broker role) NodePool and disable `controller` (controller role) NodePool in the cluster. Set `spec` (e.g. storage size, replicas) of the NodePools according to the existing deployment. Disable KRaft migration by setting `strimzi.io/kraft: disabled` annotation. At least one of the brokers nodepool needs to be named "kafka" in order to create the brokers with the same names that were used before, and reuse their PVC's.
+	- Enable `kafka` (broker role) NodePool and disable `controller` (controller role) NodePool in the cluster. Set `spec` (e.g. storage size, replicas) of the NodePools according to the existing deployment. Disable KRaft migration by setting `strimzi.io/kraft: disabled` annotation.
 
 	```yaml
       clusters:
@@ -59,7 +59,31 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
 	```	
 4. Deploy new configuration to the cluster. Some restarts will happen on all the kafka/strimzi pods due to Kafka version upgrade and introduction of brokers NodePool. After that, we will have our cluster migrated to NodePools, which is the first step for KRaft migration.
 
-5. Migrate to KRaft.
+5. After migration, we will have a new set of kafka brokers with the name kafka-cluster-kafka-cluster-kafka-X. That will cause the creation of new PVC's instead of reusing the existing ones from the old cluster. We will perform a set of operations to use them.
+
+    - Pause reconciliation:
+
+    ```kubectl annotate --overwrite Kafka kafka-cluster strimzi.io/pause-reconciliation="true" -n platform```
+
+    - Terminate strimzipodset and pods.
+
+    ```kubectl delete StrimziPodSet kafka-cluster-kafka-cluster-kafka -n platform```
+
+    - Set Retain on the old cluster PV's (persistentVolumeReclaimPolicy)
+
+    - Delete the old brokers PVC's (PV status will change to released)
+
+    - Delete the ClaimRef section from the PV's (status will change to available)
+
+    - Create new PVC's manually pointing to existing PV (spec.volumeName)
+
+    - Start reconciliation
+
+    ```kubectl annotate --overwrite Kafka kafka-cluster strimzi.io/pause-reconciliation="false" -n platform```
+
+    - Pod set will pop up and kafka brokers will back online.
+
+6. Migrate to KRaft.
     - First we will enable the controller nodepool by just setting the enabled: true and redeploying.
 
     ```yaml
@@ -91,7 +115,7 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
 	NAME            DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   METADATA STATE   WARNINGS
 	kafka-cluster   1                        3                     True    KRaft            True
     ```
-6. Prepare configuration for migrated Kafka. Remove the lines which were disabling `controller` NodePool and KRaft annotation. Most ofthe configuration should be taken from default values now. Make sure your broker nodepool has correct configuration (mainly storage , replicas, resources)
+7. Prepare configuration for migrated Kafka. Remove the lines which were disabling `controller` NodePool and KRaft annotation. Most ofthe configuration should be taken from default values now. Make sure your broker nodepool has correct configuration (mainly storage , replicas, resources)
 	```yaml
     clusters:
       kafka-cluster:
@@ -106,7 +130,7 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
                 deleteClaim: false
     ```
 
-7. Deploy to have a final state aligned
+8. Deploy to have a final state aligned
 
 #### For new Kafka deployments:
 1. Configure cluster with needed nodepools and resources (e.g. storage). KRaft and nodepools enabled by default.
