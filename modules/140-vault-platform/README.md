@@ -219,7 +219,7 @@ server:
     livenessProbe:
         enabled: true
         initialDelaySeconds: 60
-        path: /v1/sys/health?standbyok=true&sealedcode=204
+        path: /v1/sys/health?standbyok=true&sealedcode=503
     readinessProbe:
         enabled: true
         path: /v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204

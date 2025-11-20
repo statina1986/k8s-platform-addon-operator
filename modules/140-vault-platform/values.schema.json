@@ -406,7 +406,7 @@
                       "type": "integer"
                     },
                     "path": {
-                      "default": "/v1/sys/health?standbyok=true\u0026sealedcode=204",
+                      "default": "/v1/sys/health?standbyok=true\u0026sealedcode=503",
                       "required": [],
                       "title": "path",
                       "type": "string"

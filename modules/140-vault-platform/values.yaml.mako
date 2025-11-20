@@ -189,7 +189,7 @@ vaultPlatform:
         path: "/v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204"
       livenessProbe:
         enabled: true
-        path: "/v1/sys/health?standbyok=true&sealedcode=204"
+        path: "/v1/sys/health?standbyok=true&sealedcode=503"
         initialDelaySeconds: 60
       extraVolumes:
         - type: configMap

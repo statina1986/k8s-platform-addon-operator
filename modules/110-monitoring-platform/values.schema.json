@@ -3743,6 +3743,12 @@
                       "title": "externalLabels",
                       "type": "object"
                     },
+                    "externalUrl": {
+                      "default": "https://prometheus-some-env.qvantel.solutions",
+                      "required": [],
+                      "title": "externalUrl",
+                      "type": "string"
+                    },
                     "image": {
                       "properties": {
                         "registry": {
