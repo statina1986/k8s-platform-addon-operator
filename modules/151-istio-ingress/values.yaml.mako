@@ -436,6 +436,149 @@ istioIngress:
           name: sftp
           number: 22
           protocol: TCP
+  envoyFilters:
+    instances:
+      listener-timeout-tcp:
+        enabled: false
+        spec:
+          configPatches:
+          - applyTo: NETWORK_FILTER
+            match:
+              context: SIDECAR_INBOUND
+              listener:
+                filterChain:
+                  filter:
+                    name: envoy.filters.network.tcp_proxy
+            patch:
+              operation: MERGE
+              value:
+                name: envoy.filters.network.tcp_proxy
+                typed_config:
+                  '@type': type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+                  idle_timeout: 168h
+          - applyTo: NETWORK_FILTER
+            match:
+              context: SIDECAR_OUTBOUND
+              listener:
+                filterChain:
+                  filter:
+                    name: envoy.filters.network.tcp_proxy
+            patch:
+              operation: MERGE
+              value:
+                name: envoy.filters.network.tcp_proxy
+                typed_config:
+                  '@type': type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+                  idle_timeout: 168h
+      ingress-gateway-opts:
+        enabled: false
+        spec:
+          configPatches:
+          # Enable TCP Keepalives for ingress gateway HTTP(S) port (6443)
+          # See https://github.com/istio/istio/issues/28879
+          # (For some reason ingress gateways are not affected by global mesh keepalive options).
+          - applyTo: LISTENER
+            match:
+              context: GATEWAY
+              listener:
+                name: 0.0.0.0_6443
+                portNumber: 6443
+            patch:
+              operation: MERGE
+              value:
+                socket_options:
+                - description: enable keep-alive
+                  int_value: 1
+                  level: 1
+                  name: 9
+                  state: STATE_PREBIND
+                - description: idle time before first keep-alive probe is sent
+                  int_value: 91  # 91 seconds
+                  level: 6
+                  name: 4
+                  state: STATE_PREBIND
+                - description: keep-alive interval
+                  int_value: 11  # 11 seconds
+                  level: 6
+                  name: 5
+                  state: STATE_PREBIND
+                - description: keep-alive probes count
+                  int_value: 5
+                  level: 6
+                  name: 6
+                  state: STATE_PREBIND
+    multiInstances:
+      bss-integrator-ingress-gateway-opts:
+        enabled: false
+        variables:
+          ports:
+          - 3000
+          - 2095
+          - 2075
+          - 2045
+          - 2035
+          - 2050
+          - 2055
+          - 10000
+          - 3010
+          - 2065
+          - 2085
+          - 9093
+          - 9094
+          - 9095
+          - 9096
+        specTemplate: |
+          configPatches:
+          {{- range .ports }}
+          - applyTo: LISTENER
+            match:
+              context: GATEWAY
+              listener:
+                name: 0.0.0.0_{{ . }}
+                portNumber: {{ . }}
+            patch:
+              operation: MERGE
+              value:
+                socket_options:
+                - description: enable keep-alive
+                  int_value: 1
+                  level: 1
+                  name: 9
+                  state: STATE_PREBIND
+                - description: idle time before first keep-alive probe is sent
+                  int_value: 91
+                  level: 6
+                  name: 4
+                  state: STATE_PREBIND
+                - description: keep-alive interval
+                  int_value: 11
+                  level: 6
+                  name: 5
+                  state: STATE_PREBIND
+                - description: keep-alive probes count
+                  int_value: 5
+                  level: 6
+                  name: 6
+                  state: STATE_PREBIND
+          - applyTo: NETWORK_FILTER
+            match:
+              context: GATEWAY
+              listener:
+                name: 0.0.0.0_{{ . }}
+                portNumber: {{ . }}
+                filterChain:
+                  filter:
+                    name: "envoy.filters.network.http_connection_manager"
+            patch:
+              operation: MERGE
+              value:
+                name: "envoy.filters.network.http_connection_manager"
+                typed_config:
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+                  common_http_protocol_options:
+                    idle_timeout: 24h
+          {{- end }}
+
   # -- VirtualServices to be provisioned.
   # @default -- see values.yaml.mako
   virtualServices:
