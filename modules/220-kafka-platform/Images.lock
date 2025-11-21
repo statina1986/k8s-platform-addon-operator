@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-09-15T13:46:10.72508644Z"
+  generatedAt: "2025-11-21T13:23:41.95492882Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kafka-platform
@@ -20,9 +20,9 @@ images:
     image: quay.io/strimzi/operator:0.45.1
     chart: kafka-platform
     digests:
-      - digest: sha256:86d9a5907df693c31cdb27f042a1488e4390bd21cf786df2f278e7c32c86dbb0
+      - digest: sha256:27f3055b8c592b3b1a34fb0ce551161b387a496a987e1e9467e978c5fb297d34
         arch: linux/amd64
-      - digest: sha256:1dbced54450e8b4281096847df5e4e0f4df84a728a09340f645745f91c373e70
+      - digest: sha256:4ded6b4a2678ac42ae59a547c4f9c01c03fe3e353497a830692e7b16374eb18f
         arch: linux/arm64
   - name: kafka-043-380
     image: quay.io/strimzi/kafka:0.43.0-kafka-3.8.0
@@ -36,9 +36,9 @@ images:
     image: quay.io/strimzi/kafka:0.45.1-kafka-3.9.1
     chart: kafka-platform
     digests:
-      - digest: sha256:86ddf1c56a012a55f3c41247437e52de7743becd66fa0f8dc9d79f7ce29d2955
+      - digest: sha256:8bb64e372fdef6c4e4125658fe5b8151720e1082d98f1ac8240c5790d1077910
         arch: linux/amd64
-      - digest: sha256:d961f1ba60dc3d9a543237aed1fa30088cc90c0a81005dffaa4e492b8642c030
+      - digest: sha256:02009a524eaa75b362e715ffa068b7d99c412ea7d1be56184ab92c8695c92575
         arch: linux/arm64
   - name: kafka-bridge-030
     image: quay.io/strimzi/kafka-bridge:0.30.0
@@ -84,15 +84,23 @@ images:
     image: quay.io/strimzi/maven-builder:0.45.1
     chart: kafka-platform
     digests:
-      - digest: sha256:cc19b660a48447039f6d963677237b2b8e30277f7f1c393b2f4b7f456576889b
+      - digest: sha256:b8194e41fb3aece637c0d8effef20f2255040778a5b36e9b5f896a97927db7ce
         arch: linux/amd64
-      - digest: sha256:0c808905348a66e37c1afcc392d396835b04c55a326c01c0aa10b7297061b2eb
+      - digest: sha256:5af4d5f4385d0a8fcd1bcf8d9bc87bf13e3e8ea352bbbe39588918aca8fc1b2b
         arch: linux/arm64
   - name: kafka-ui
-    image: quay.io/kafbat/kafka-ui:v1.3.0
+    image: ghcr.io/kafbat/kafka-ui:v1.3.0
     chart: kafka-platform
     digests:
       - digest: sha256:f06fc2cefb961b2afaf43936022c32e40358833b803dc2d845948ef413991fe6
         arch: linux/amd64
       - digest: sha256:8d0973a77247c53f5775f0da723f9db0f75e36d304e3c411c5085893d2718f6b
+        arch: linux/arm64
+  - name: strimzi-shutdown
+    image: ghcr.io/scholzj/strimzi-shutdown:0.1.0
+    chart: kafka-platform
+    digests:
+      - digest: sha256:c38455729ed464f33667ccce75513846b914ae67312982c4936b5738388e1012
+        arch: linux/amd64
+      - digest: sha256:4c9ec3321063d3e14a1c2a6d771f9462298ce54a66327ccc057d010ca8992c32
         arch: linux/arm64

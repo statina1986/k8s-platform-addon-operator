@@ -9,6 +9,7 @@ from common.python.logger import logger
 k8s = None
 k8s_crd = None
 k8s_apps = None
+k8s_batch = None
 
 
 def get_k8s_crd_client():
@@ -42,6 +43,16 @@ def get_k8s_apps_client():
             config.load_kube_config()
         k8s_apps = client.AppsV1Api()
     return k8s_apps
+
+def get_k8s_batch_client():
+    global k8s_batch
+    if k8s_batch is None:
+        if environ.get("INSIDE_CLUSTER", "false") == "true":
+            config.load_incluster_config()
+        else:
+            config.load_kube_config()
+        k8s_batch = client.BatchV1Api()
+    return k8s_batch
 
 
 def get_config_map(namespace, name):

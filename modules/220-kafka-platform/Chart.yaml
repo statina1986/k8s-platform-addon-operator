@@ -28,3 +28,5 @@ annotations:
       image: quay.io/strimzi/maven-builder:0.45.1
     - name: kafka-ui
       image: ghcr.io/kafbat/kafka-ui:v1.3.0
+    - name: strimzi-shutdown
+      image: ghcr.io/scholzj/strimzi-shutdown:0.1.0

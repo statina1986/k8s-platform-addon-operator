@@ -2,7 +2,7 @@ apiVersion: platform.qvantel.com/v1
 kind: ClusterTurndown
 metadata:
   name: cluster-turndown
-  namespace: platform
+  namespace: platform-shutdown
 spec:
   desiredState: current
   strategy:
@@ -11,12 +11,14 @@ spec:
         name: scaledown_namespace_deployments_fleet
       - expression: onoff.scaledown_namespace_deployments('qvantel')
         name: scaledown_namespace_deployments_qvantel
-      - expression: onoff.scaledown_namespace_deployments('platform')
+      - expression: onoff.scaledown_namespace_deployments('platform', ['mariadb-metrics','strimzi-cluster-operator','kafka-cluster-kafka-exporter','kafka-cluster-entity-operator'])
         name: scaledown_namespace_deployments_platform
       - expression: onoff.scaledown_namespace_statefulsets('platform')
         name: scaledown_namespace_statefulsets_platform
-      - expression: onoff.delete_namespace_strimzipodsets('platform')
-        name: delete_namespace_strimzipodsets_platform
+      - expression: onoff.trigger_strimzi_shutdown('platform', 'stop')
+        name: shutdown_kafka_platform
+      - expression: onoff.scaledown_deployment('strimzi-cluster-operator','platform')
+        name: scaledown_strimzi-cluster-operator
       - expression: onoff.scaledown_nodegroups_eks('{clusterName}')
         name: scaledown_nodegroups_eks
     up:
@@ -24,21 +26,31 @@ spec:
         name: scaleup_nodegroups_eks
       - expression: onoff.scaleup_deployment('ebs-csi-controller','platform')
         name: scaleup_ebs-csi-controller_to_provision_volumes
+      - expression: onoff.scaleup_deployment('strimzi-cluster-operator','platform')
+        name: scaleup_strimzi-cluster-operator
+      - expression: onoff.scaleup_deployment('mariadb-operator-platform-webhook','platform')
+        name: scaleup_mariadb-operator-platform-webhook_to_get_mariadb_ready
+      - expression: onoff.scaleup_deployment('mariadb-operator-platform','platform')
+        name: scaleup_mariadb-operator-platform_to_get_mariadb_ready
+      - expression: onoff.scaleup_deployment('barman-cloud','platform')
+        name: scaleup_barman-cloud_is_dependency_for_cnpg
       - expression: onoff.scaleup_deployment('cnpg-postgres-platform-cloudnative-pg','platform')
         name: scaleup_cnpg-postgres-platform-cloudnative-pg_to_get_postgres_ready
-      - expression: onoff.scaleup_deployment('strimzi-cluster-operator','platform')
-        name: scaleup_strimzi-cluster-operator_to_get_kafka_ready
       - expression: onoff.scaleup_deployment('kasope-platform-k8ssandra-operator','platform')
         name: scaleup_kasope-platform-k8ssandra-operator_to_get_cassandra_ready
       - expression: onoff.scaleup_deployment('kasope-platform-cass-operator','platform')
         name: scaleup_kasope-platform-cass-operator_to_get_cassandra_ready
-      - expression: onoff.scaleup_deployment('mariadb-operator-platform-webhook','platform')
-        name: scaleup_mariadb-operator-platform-webhook_to_get_mariadb_ready
+      - expression: onoff.trigger_strimzi_shutdown('platform', 'continue')
+        name: start_kafka_platform
       - expression: onoff.scaleup_namespace_statefulsets('platform')
         name: scaleup_namespace_statefulsets_platform
-      - expression: onoff.scaleup_namespace_deployments('platform')
+      - expression: onoff.scaleup_namespace_deployments('platform', ['addon-operator'])
         name: scaleup_namespace_deployments_platform
+      - expression: onoff.scaleup_deployment('addon-operator','platform')
+        name: scaleup_main_addon-operator
       - expression: onoff.scaleup_namespace_deployments('cattle-fleet-system')
         name: scaleup_namespace_deployments_fleet
-      - expression: onoff.check_pods_ready_in_namespaces(['cattle-fleet-system', 'qvantel', 'platform'])
+      - expression: onoff.scaleup_deployment('catalog-qflow-catalog-data','qvantel')
+        name: scaleup_bssapi_aggregator_deployment
+      - expression: onoff.check_pods_ready_in_namespaces(['cattle-fleet-system', 'platform'])
         name: check_pods_ready_in_namespaces

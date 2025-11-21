@@ -63,13 +63,13 @@ kubernetes:
             case EventHook(eventName, event, values, config_values):
                 try:
                     cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")
-                    platform_core = yaml.safe_load(cm.data["platformCore"])
-                    if platform_core.get("turndown", {}).get("enabled", "false") != "true":
+                    platform_shutdown = yaml.safe_load(cm.data["shutdownOperator"])
+                    if platform_shutdown.get("turndown", {}).get("enabled", "false") != "true":
                         logger.info("Turndown is disabled. Skipping operation.")
                         return
 
                     crdName = event["object"]["metadata"]["name"]
-                    clusterName = values['awsPlatform']['clusterName']
+                    clusterName = values['global']['clusterName']
                     desiredState = event["object"]["spec"]["desiredState"]
                     generation = event.get("object", {}).get("metadata", {}).get("generation", 0)
                     observed_generation = event.get("object", {}).get("status", {}).get("observedGeneration", 0)
@@ -89,8 +89,8 @@ kubernetes:
                         **args
                     )
 
-                    default_strategy_up = platform_core.get("turndown", {}).get("defaultStrategy", {}).get("up", {})
-                    default_strategy_down = platform_core.get("turndown", {}).get("defaultStrategy", {}).get("down", {})
+                    default_strategy_up = platform_shutdown.get("turndown", {}).get("defaultStrategy", {}).get("up", {})
+                    default_strategy_down = platform_shutdown.get("turndown", {}).get("defaultStrategy", {}).get("down", {})
 
                     strategy_up = event["object"]["spec"].get("strategy", {}).get("up", default_strategy_up)
                     strategy_down = event["object"]["spec"].get("strategy", {}).get("down", default_strategy_down)
