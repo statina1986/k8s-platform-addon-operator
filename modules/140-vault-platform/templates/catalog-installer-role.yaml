@@ -1,0 +1,12 @@
+## Custom role that allows catalog-data installer to work, needs special access to secret/data/installer/catalog/data
+apiVersion: platform-vault.qvantel.com/v1
+kind: KubernetesAuthRole
+metadata:
+  name: installer-catalog-data
+spec:
+  bound_service_account_names:
+    - catalog-installer
+  bound_service_account_namespaces:
+    - {{ .Values.global.appsNamespace }}
+  token_policies:
+    - installer-catalog-data
