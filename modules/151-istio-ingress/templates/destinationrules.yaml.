@@ -1,0 +1,56 @@
+{{- if and .Values.istioIngress .Values.istioIngress.destinationRules }}
+{{- if .Values.istioIngress.destinationRules.instances }}
+{{- $root := . }}
+{{- range keys .Values.istioIngress.destinationRules.instances  }}
+{{- $current := get $.Values.istioIngress.destinationRules.instances . }}
+{{- if $current.enabled }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  {{- $empty := dict}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.destinationRules.annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
+  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
+  {{- if $joinedAnnotations }}
+  annotations:
+    {{- toYaml $joinedAnnotations | nindent 4 }}
+  {{- end }}
+  name: {{ . }}
+{{- with $current.spec }}
+spec:
+  {{- tpl (toYaml .) $root | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.istioIngress.destinationRules.multipleInstances }}
+{{- $root := . }}
+{{- range keys .Values.istioIngress.destinationRules.multipleInstances  }}
+{{- $current := get $.Values.istioIngress.destinationRules.multipleInstances . }}
+{{- if $current.enabled }}
+{{- range keys $current.entries }}
+{{- $currentEntry := get $current.entries . }}
+{{- if $currentEntry }}
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  {{- $empty := dict}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.destinationRules.annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
+  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
+  {{- if $joinedAnnotations }}
+  annotations:
+    {{- toYaml $joinedAnnotations | nindent 4 }}
+  {{- end }}
+  name: {{ . }}
+spec:
+  {{- tpl $current.specTemplate $currentEntry | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
