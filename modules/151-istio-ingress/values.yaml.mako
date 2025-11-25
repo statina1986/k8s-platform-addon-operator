@@ -1309,7 +1309,7 @@ istioIngress:
         enabled: false
         gateways:
         - ${values['global']['helmReleaseNamePrefix']}private-ingress
-        http:
+        tcp:
         - route:
           - destination:
               host: ${values['global']['helmReleaseNamePrefix']}vector-platform-aggregator.${values['global']['platformNamespace']}.svc.cluster.local
