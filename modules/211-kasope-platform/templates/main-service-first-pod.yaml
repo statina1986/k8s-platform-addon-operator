@@ -1,0 +1,36 @@
+{{- if .Values.kasopePlatform.mainCassandraCluster }}
+{{- $main := get .Values.kasopePlatform.clusters .Values.kasopePlatform.mainCassandraCluster }}
+{{- if $main.enabled }}
+{{- $clusterName := nospace (default .Values.kasopePlatform.mainCassandraCluster $main.spec.cassandra.clusterName) }}
+{{- $dataCenter := first $main.spec.cassandra.datacenters }}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    consul.hashicorp.com/service-port: native
+    platform.qvantel.com/consul-service-port: "9042"
+  labels:
+    app: main-cassandra-service-0-headless
+  name: main-cassandra-service-0-headless
+spec:
+  ports:
+  - name: native
+    port: 9042
+    protocol: TCP
+    targetPort: 9042
+  - name: tls-native
+    port: 9142
+    protocol: TCP
+    targetPort: 9142
+  selector:
+    cassandra.datastax.com/cluster: {{ $clusterName }}
+    cassandra.datastax.com/datacenter: {{ $dataCenter.metadata.name }}
+{{- if $dataCenter.racks }}
+    statefulset.kubernetes.io/pod-name: {{ lower $clusterName }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
+{{- else }}    
+    statefulset.kubernetes.io/pod-name: {{ lower $clusterName }}-{{ $dataCenter.metadata.name }}-default-sts-0
+{{- end }}
+
+{{- end }}
+{{- end }}
+

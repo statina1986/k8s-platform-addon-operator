@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: reaper
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - name: app
+      port: 8080
+      protocol: TCP
+      targetPort: app
+    - name: admin
+      port: 8081
+      protocol: TCP
+      targetPort: admin
+  selector:
+    app.kubernetes.io/component: reaper
+    app.kubernetes.io/managed-by: k8ssandra-operator
+    app.kubernetes.io/name: k8ssandra-operator
+    app.kubernetes.io/part-of: k8ssandra
+  sessionAffinity: None
+  type: ClusterIP
