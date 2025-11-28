@@ -13,6 +13,7 @@ spec:
       port: 9092
       targetPort: 9092
   selector:
+    strimzi.io/broker-role: 'true'
     strimzi.io/cluster: kafka-cluster
     strimzi.io/kind: Kafka
     strimzi.io/name: kafka-cluster-kafka
