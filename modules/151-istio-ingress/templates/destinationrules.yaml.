@@ -33,7 +33,6 @@ spec:
 {{- range keys $current.entries }}
 {{- $currentEntry := get $current.entries . }}
 {{- if $currentEntry }}
-
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule

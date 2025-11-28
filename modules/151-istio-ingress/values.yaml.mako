@@ -610,104 +610,107 @@ istioIngress:
       dna-destinationrules:
         enabled: false
         entries:
+          # RBS-related
           rbs-master-xmlrpc-dr:
             host: rbs-master-xmlrpc.qvantel.svc.cluster.local
           rbs-xmlrpc-dr:
             host: rbs-xmlrpc.qvantel.svc.cluster.local
-          zipkin-dr:
-            host: dna-zipkin.qrp.svc.cluster.local
-          vault-ui-dr:
-            host: vault-ui.platform.svc.cluster.local
-          sentry-ui-dr:
-            host: dna-sentry-nginx.sentry.svc.cluster.local
-          crm-gatekeeper-api-dr:
-            host: crm-gatekeeper-api.qvantel.svc.cluster.local
-          dnapy-navision-api-dr:
-            host: dnapy-soap-navision.qvantel.svc.cluster.local
-          bssapi-aggregator-dr:
-            host: bssapi-aggregator.qrp.svc.cluster.local
-          rbs-gatekeeper-api-dr:
-            host: rbs-gatekeeper-api.qvantel.svc.cluster.local
-          dnapy-rest-dil-listener-dr:
-            host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
-          pyprov-network-listener-dr:
-            host: pyprov-network-listener-8080.qvantel.svc.cluster.local
-          orders-event-receiver-dr:
-            host: orders-event-receiver.qrp.svc.cluster.local
-          hybris-inventory-api-dr:
-            host: hybris-inventory-api-8080.qvantel.svc.cluster.local
-          hybris-shop-api-dr:
-            host: dnapy-rest-bssapi-shop.qvantel.svc.cluster.local
-          dnapy-mobile-id-api-v1-dr:
-            host: dnapy-api-mobile-id.qvantel.svc.cluster.local
-          mobile-id-api-dr:
-            host: mobile-id-app-api.qvantel.svc.cluster.local
-          hybris-gatekeeper-api-dr:
-            host: hybris-gatekeeper-api.qvantel.svc.cluster.local
-          dnapy-proq-dr:
-            host: dnapy-web-proq.qvantel.svc.cluster.local
+          # Qvantel namespace related
+          activation-frontend-dr:
+            host: activation-frontend.qvantel.svc.cluster.local
+          audit-admin-dr:
+            host: audit-admin.qvantel.svc.cluster.local
           billingui-backend-dr:
             host: billingui-backend.qvantel.svc.cluster.local
           billingui-frontend-log-proxy-dr:
             host: billingui-frontend-log-proxy-8181.qvantel.svc.cluster.local
           billingui-frontend-dr:
             host: billingui-frontend.qvantel.svc.cluster.local
-          salestool-backend-telesales-dr:
-            host: salestool-backend-telesales.qvantel.svc.cluster.local
-          salestool-frontend-telesales-dr:
-            host: salestool-frontend-telesales.qvantel.svc.cluster.local
+          crm-gatekeeper-api-dr:
+            host: crm-gatekeeper-api.qvantel.svc.cluster.local
+          dnapy-proq-dr:
+            host: dnapy-web-proq.qvantel.svc.cluster.local
+          dnapy-selfservice-dr:
+            host: dnapy-web-selfservice.qvantel.svc.cluster.local
+          dnapy-navision-api-dr:
+            host: dnapy-soap-navision.qvantel.svc.cluster.local
+          dnapy-rest-dil-listener-dr:
+            host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
+          dnapy-mobile-id-api-v1-dr:
+            host: dnapy-api-mobile-id.qvantel.svc.cluster.local
           dnapy-robot-dr:
             host: dnapy-web-robot.qvantel.svc.cluster.local
-          flex-app-store-dr:
-            host: flex-app-store.qrp.svc.cluster.local
-          catalog-deployer-dr:
-            host: qflow-catalog-deployer.qrp.svc.cluster.local
-          catalog-designer-dr:
-            host: qflow-product-catalog-designer-9003.qrp.svc.cluster.local
-          keycloak-auth-dr:
-            host: operational-keycloak-8080.qvantel.svc.cluster.local
-          operational-index-dr:
-            host: operational-index-8080.qvantel.svc.cluster.local
+          dnapy-extcc-dr:
+            host: dnapy-web-extcc.qvantel.svc.cluster.local
+          dnapy-frontback-activation-dr:
+            host: dnapy-frontback-activation.qvantel.svc.cluster.local
           fake-dil-dr:
             host: fake-dil-admin.qvantel.svc.cluster.local
+          hybris-inventory-api-dr:
+            host: hybris-inventory-api-8080.qvantel.svc.cluster.local
+          hybris-shop-api-dr:
+            host: dnapy-rest-bssapi-shop.qvantel.svc.cluster.local
+          hybris-gatekeeper-api-dr:
+            host: hybris-gatekeeper-api.qvantel.svc.cluster.local
+          kafka-admin-web-dr:
+            host: kafka-admin-web.qvantel.svc.cluster.local
+          keycloak-auth-dr:
+            host: operational-keycloak-8080.qvantel.svc.cluster.local
+          mobile-id-api-dr:
+            host: mobile-id-app-api.qvantel.svc.cluster.local
+          operational-index-dr:
+            host: operational-index-8080.qvantel.svc.cluster.local
           peon-admin-frontend-dr:
             host: peon-admin-frontend.qvantel.svc.cluster.local
           peon-admin-backend-dr:
             host: peon-admin-backend-8080.qvantel.svc.cluster.local
-          pyprov-admin-dr:
-            host: pyprov-admin.qvantel.svc.cluster.local
-          rbs-gatekeeper-admin-dr:
-            host: rbs-gatekeeper-admin.qvantel.svc.cluster.local
-          kafka-admin-web-dr:
-            host: kafka-admin-web.qvantel.svc.cluster.local
-          audit-admin-dr:
-            host: audit-admin.qvantel.svc.cluster.local
           product-catalog-visualizer-dr:
             host: product-catalog-visualizer.qvantel.svc.cluster.local
-          bssapi-documentation-dr:
-            host: bssapi-documentation-service.qrp.svc.cluster.local
-          dnapy-extcc-dr:
-            host: dnapy-web-extcc.qvantel.svc.cluster.local
+          pyprov-admin-dr:
+            host: pyprov-admin.qvantel.svc.cluster.local
+          pyprov-network-listener-dr:
+            host: pyprov-network-listener-8080.qvantel.svc.cluster.local
+          rbs-gatekeeper-admin-dr:
+            host: rbs-gatekeeper-admin.qvantel.svc.cluster.local
+          rbs-gatekeeper-api-dr:
+            host: rbs-gatekeeper-api.qvantel.svc.cluster.local
+          salestool-backend-telesales-dr:
+            host: salestool-backend-telesales.qvantel.svc.cluster.local
+          salestool-frontend-telesales-dr:
+            host: salestool-frontend-telesales.qvantel.svc.cluster.local
           salestool-backend-pos-dr:
             host: salestool-backend-pos.qvantel.svc.cluster.local
           salestool-frontend-pos-dr:
             host: salestool-frontend-pos.qvantel.svc.cluster.local
-          dnapy-selfservice-dr:
-            host: dnapy-web-selfservice.qvantel.svc.cluster.local
-          dnapy-frontback-activation-dr:
-            host: dnapy-frontback-activation.qvantel.svc.cluster.local
-          activation-frontend-dr:
-            host: activation-frontend.qvantel.svc.cluster.local
+          # qrp namespace related
+          bssapi-aggregator-dr:
+            host: bssapi-aggregator.qrp.svc.cluster.local
           bssapi-explorer-dr:
             host: bssapi-explorer.qrp.svc.cluster.local
+          bssapi-documentation-dr:
+            host: bssapi-documentation-service.qrp.svc.cluster.local
+          catalog-deployer-dr:
+            host: qflow-catalog-deployer.qrp.svc.cluster.local
+          catalog-designer-dr:
+            host: qflow-product-catalog-designer-9003.qrp.svc.cluster.local
           flex-admin-dr:
             host: flex-admin.qrp.svc.cluster.local
+          flex-app-store-dr:
+            host: flex-app-store.qrp.svc.cluster.local
+          orders-event-receiver-dr:
+            host: orders-event-receiver.qrp.svc.cluster.local
+          zipkin-dr:
+            host: dna-zipkin.qrp.svc.cluster.local
+          # misc
+          sentry-ui-dr:
+            host: dna-sentry-nginx.sentry.svc.cluster.local
+          vault-ui-dr:
+            host: vault-ui.platform.svc.cluster.local
         specTemplate: |
           host: {{ .host }}
           trafficPolicy:
             tls:
               mode: ISTIO_MUTUAL
-
   # -- VirtualServices to be provisioned.
   # @default -- see values.yaml.mako
   virtualServices:
