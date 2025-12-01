@@ -12,13 +12,13 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 - [kyverno-platform](modules/010-kyverno-platform/README.md) for Kyverno policy engine platform service
 - [aws-platform](modules/050-aws-platform/README.md) configures needed plugins and services to manage Qvantel K8S Platform on AWS Cloud
 - [cert-platform](modules/101-cert-platform/README.md) for certificate management with Cert Manager
+- [istio-platform](modules/105-istio-platform/README.md) for Istio control-plane deployment and configuration
 - [monitoring-platform](modules/110-monitoring-platform/README.md) for Prometheus/Grafana monitoring stack
 - [metrics-platform](modules/111-metrics-platform/README.md) for metrics server in the cluster
 - [external-dns](modules/120-external-dns/README.md) for External DNS in the cluster
 - [consul-platform](modules/130-consul-platform/README.md) for Consul deployment and configuration
 - [vault-platform](modules/140-vault-platform/README.md) for Vault deployment and configuration
 - [minio-platform](modules/145-minio-platform/README.md) for MinIO deployment and configuration
-- [istio-platform](modules/150-istio-platform/README.md) for Istio control-plane deployment and configuration
 - [istio-ingress](modules/151-istio-ingress/README.md) for Istio Ingress Gateways deployment and configuration
 - [elasticsearch-platform](modules/160-elasticsearch-platform/README.md) for ECK Operator and ELK stack configuration
 - [logsearch-platform](modules/161-logsearch-platform/README.md) for Logsearch cluster without ECK Operator ( only for OCP platform so far )
