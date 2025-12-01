@@ -1261,6 +1261,427 @@ istioIngress:
               host: zipkin.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 9411
+      ## DNA Program/Product managed services
+      aktivoi:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "activation-frontback-api-route"
+          match:
+            - uri:
+                prefix: "/api"
+            - uri:
+                prefix: "/tupas"
+            - uri:
+                prefix: "/remember_company_id"
+            - uri:
+                prefix: "/saml2"
+            - uri:
+                prefix: "/static"
+            - uri:
+                prefix: "/oidc"
+          route:
+            - destination:
+                host: dnapy-frontback-activation.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "activation-frontend-route"
+          route:
+          - destination:
+              host: activation-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      billing:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "billingui-backend-route"
+          match:
+            - uri:
+                prefix: "/api/"
+            - uri:
+                prefix: "/ws/"
+            - uri:
+                prefix: "/sso/"
+          route:
+            - destination:
+                host: billingui-backend.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "billingui-frontend-log-proxy-route"
+          match:
+            - uri:
+                prefix: "/logging/"
+          route:
+            - destination:
+                host: billingui-frontend-log-proxy-8181.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8181
+        - name: "billingui-frontend-route"
+          route:
+          - destination:
+              host: billingui-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      aspaauvo:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-extcc-route"
+          route:
+            - destination:
+                host: dnapy-web-extcc.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      robot:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-robot-route"
+          route:
+            - destination:
+                host: dnapy-web-robot.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      aspa:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-proq-static-route"
+          match:
+            - uri:
+                prefix: "/static"
+          headers:
+            response:
+              set:
+                X-Frame-Options: "DENY"
+                X-XSS-Protection: "1"
+                X-Content-Type-Options: "nosniff"
+                Cache-Control: "max-age=86400"
+                Strict-Transport-Security: "max-age=1500"
+          route:
+            - destination:
+                host: dnapy-web-proq.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "dnapy-proq-route"
+          route:
+            - destination:
+                host: dnapy-web-proq.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      operational:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        ### KEYCLOAK ###
+        - name: "keycloak-auth-route"
+          match:
+            - uri:
+                prefix: "/auth/"
+          route:
+            - destination:
+                host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 80
+        ### AUDIT ADMIN ###
+        - name: "operational-audit-admin-route"
+          match:
+            - uri:
+                prefix: "/audit/"
+          route:
+            - destination:
+                host: audit-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### FAKE DIL ###
+        - name: "fake-dil-admin-route"
+          match:
+            - uri:
+                prefix: "/fake_dil/"
+          route:
+            - destination:
+                host: fake-dil-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### PEON ADMIN ###
+        - name: "operational-peon-admin-backend-route"
+          match:
+            - uri:
+                prefix: "/peon/api"
+            - uri:
+                prefix: "/peon/oidc"
+          route:
+            - destination:
+                host: peon-admin-backend-8080.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "operational-peon-admin-frontend-route"
+          match:
+            - uri:
+                prefix: "/peon/"
+          route:
+            - destination:
+                host: peon-admin-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 80
+        ### PYPROV ADMIN ###
+        - name: "operational-pyprov-admin-route"
+          match:
+            - uri:
+                prefix: "/pyprov/"
+          route:
+            - destination:
+                host: pyprov-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### RBS GATEKEEPER ADMIN ###
+        - name: "operational-rbs-gatekeeper-admin-route"
+          match:
+            - uri:
+                prefix: "/rbs-gatekeeper"
+          route:
+            - destination:
+                host: rbs-gatekeeper-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### RBS TASKER ADMIN ###
+        - name: "operational-rbs-tasker-admin-backend-route"
+          match:
+            - uri:
+                prefix: "/rbs_tasker/api"
+            - uri:
+                prefix: "/rbs_tasker/oidc"
+          route:
+            - destination:
+                host: rbs-tasker-admin-backend-8080.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "operational-rbs-tasker-admin-frontend-route"
+          match:
+            - uri:
+                prefix: "/rbs_tasker/"
+          route:
+            - destination:
+                host: rbs-tasker-admin-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 80
+        ### KAFKA ADMIN ###
+        - name: "operational-kafka-admin-route"
+          match:
+            - uri:
+                prefix: "/kafka/"
+          route:
+            - destination:
+                host: kafka-admin-web.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+          ### PRODUCT CATALOG VISUALIZER ###
+        - name: "product-catalog-visualizer-route"
+          match:
+            - uri:
+                prefix: "/product-catalog-visualizer/"
+          route:
+            - destination:
+                host: product-catalog-visualizer.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### INDEX PAGE ###
+        - name: "operational-index-page-route"
+          match:
+            - uri:
+                prefix: "/"
+          route:
+            - destination:
+                host: operational-index-8080.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      pos:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "salestool-backend-pos-route"
+          match:
+            - uri:
+                prefix: "/api"
+            - uri:
+                prefix: "/sso"
+          route:
+            - destination:
+                host: salestool-backend-pos.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "salestool-frontend-pos-route"
+          route:
+          - destination:
+              host: salestool-frontend-pos.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      telesales:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "salestool-backend-telesales-route"
+          match:
+            - uri:
+                prefix: "/api"
+            - uri:
+                prefix: "/sso"
+          route:
+            - destination:
+                host: salestool-backend-telesales.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "salestool-frontend-telesales-route"
+          route:
+          - destination:
+              host: salestool-frontend-telesales.qvantel.svc.cluster.local
+              port:
+                number: 80
+      # This is DNA specific
+      bss-integrator:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - match:
+          - port: 3000
+          route:
+          - destination:
+              host: bssapi-aggregator.qrp.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2095
+          route:
+            - destination:
+                host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 2075
+          route:
+          - destination:
+              host: hybris-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2045
+          route:
+          - destination:
+              host: hybris-inventory-api-8080.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2035
+            uri:
+              prefix: "/api/"
+          rewrite:
+            uri: "/"
+          route:
+            - destination:
+                host: dnapy-rest-bssapi-shop.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 2050
+          route:
+            - destination:
+                host: dnapy-api-mobile-id.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 2055
+          route:
+            - destination:
+                host: mobile-id-app-api.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 10000
+          route:
+            - destination:
+                host: dnapy-soap-navision.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "bss-integrator-orders-event-receiver-health-route"
+          match:
+          - port: 3010
+            uri:
+              prefix: "/health"
+          route:
+          - destination:
+              host: orders-event-receiver-management.qrp.svc.cluster.local
+              port:
+                number: 21061
+        - name: "bss-integrator-orders-event-receiver-route"
+          match:
+          - port: 3010
+          route:
+          - destination:
+              host: orders-event-receiver.qrp.svc.cluster.local
+              port:
+                number: 21060
+        - match:
+          - port: 2065
+          route:
+          - destination:
+              host: pyprov-network-listener-8080.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2085
+          route:
+          - destination:
+              host: rbs-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        tls:
+        - match:
+          - port: 9093
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-external-bootstrap.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+        - match:
+          - port: 9094
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-cluster-kafka-external-1.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+        - match:
+          - port: 9095
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-cluster-kafka-external-2.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+        - match:
+          - port: 9096
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-cluster-kafka-external-3.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+
       # Platform Managed services    
       auth:
         enabled: false
