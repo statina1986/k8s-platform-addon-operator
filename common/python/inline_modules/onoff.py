@@ -1,4 +1,5 @@
 import json
+import yaml
 import time
 from time import sleep
 import boto3
@@ -370,8 +371,8 @@ def trigger_strimzi_shutdown(namespace, shutdown_command):
             cluster_name = item["metadata"]["name"]
             
             cm = get_config_map(ADDON_OPERATOR_NAMESPACE, ADDON_OPERATOR_CONFIG_MAP)
-            registry_base = yaml.safe_load(cm.data["global"]).get("containerRegistryBase", "ghcr.io/scholzj").rstrip("/")
-            image = f"{registry_base}/strimzi-shutdown:0.1.0"
+            registry_base = yaml.safe_load(cm.data["global"]).get("containerRegistryBase", "ghcr.io")
+            image = f"{registry_base}/scholzj/strimzi-shutdown:0.1.0"
 
             job_name = f"strimzi-shutdown-{cluster_name}"
             job = client.V1Job(
