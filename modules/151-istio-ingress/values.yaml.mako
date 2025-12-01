@@ -1914,7 +1914,27 @@ istioIngress:
                 host: kafka-cluster-kafka-cluster-kafka-external-3.${values['global']['platformNamespace']}.svc.cluster.local
                 port:
                   number: 9093
-    
+      rabbitmq-hpd:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "rabbitmq-hpd-admin-route"
+          route:
+            - destination:
+                host: hpd-rabbitmq.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 15672
+      sentry:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - route:
+          - destination:
+              host: dna-sentry-nginx.${values['global']['sentryNamespace']}.svc.cluster.local
+              port:
+                number: 80
       # Platform Managed services
       istiod:
         enabled: false

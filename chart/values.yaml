@@ -38,6 +38,7 @@ globalConfig:
   ingressBaseUrlSeparator: "-"
   appsNamespace: "qvantel"
   platformNamespace: "platform"
+  sentryNamespace: "sentry"
   operatorNamespace: ""
   kubernetesVersion: "1.25"
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-3-0-prerelease"

@@ -10,6 +10,7 @@ global:
   ingressBaseUrlSeparator: "-"
   appsNamespace: "qvantel"
   platformNamespace: "platform"
+  sentryNamespace: "sentry"
   kubernetesVersion: "1.25"
   containerRegistryBase: "platform.artifactory.qvantel.net/k8s-platform-1-2-0"
   helmReleaseNamePrefix: ""
