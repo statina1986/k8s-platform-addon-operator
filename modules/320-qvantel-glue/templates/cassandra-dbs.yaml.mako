@@ -13,49 +13,6 @@ import base64
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.cassandra.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) $cluster }}
 
-# Deep merge .spec and .spec.cassandra
-{{- $specDefault := ($defaultTemplate.spec | default dict) }}
-{{- $specUser := ($cluster.spec | default dict) }}
-{{- $spec := mergeOverwrite ((deepCopy $specDefault)) ((deepCopy $specUser)) }}
-
-{{- $cassDefault := ($specDefault.cassandra | default dict) }}
-{{- $cassUser := ($specUser.cassandra | default dict) }}
-{{- $cassandra := mergeOverwrite ((deepCopy $cassDefault)) ((deepCopy $cassUser)) }}
-
-# Deep merge datacenters by index
-{{- $dcsDefault := ($cassDefault.datacenters | default (list)) }}
-{{- $dcsUser := ($cassUser.datacenters | default (list)) }}
-{{- $dcs := list }}
-
-# For each default DC, merge with user defined DC at same index (if any)
-{{- range $i, $dcDef := $dcsDefault }}
-  {{- $dcUsr := (index $dcsUser $i) | default dict }}
-  {{- $dcMerged := mergeOverwrite ((deepCopy $dcDef)) ((deepCopy $dcUsr)) }}
-  {{- $dcs = append $dcs $dcMerged }}
-{{- end }}
-
-# If more DCs than defaults, append them as-is
-{{- if gt (len $dcsUser) (len $dcsDefault) }}
-  {{- range $j, $extra := (slice $dcsUser (len $dcsDefault)) }}
-    {{- $dcs = append $dcs $extra }}
-  {{- end }}
-{{- end }}
-
-# Set merged datacenters
-{{- $_ := set $cassandra "datacenters" $dcs }}
-
-# Ensure cluster-level storageConfig exists (so K8ssandra Admission webhook is happy even if DCs don’t define it)
-{{- if not (hasKey $cassandra "storageConfig") }}
-  {{- $_ := set $cassandra "storageConfig" (dict "cassandraDataVolumeClaimSpec" (dict
-      "accessModes" (list "ReadWriteOnce")
-      "resources" (dict "requests" (dict "storage" (ternary "10Gi" "20Gi" (eq $.root.Values.global.configurationProfile "dev")))))) }}
-{{- end }}
-
-# Finalize .spec and assign to cluster
-{{- $_ := set $spec "cassandra" $cassandra }}
-{{- $_ := set $cluster "spec" $spec }}
-{{- $_ := set $dbCluster "cluster" $cluster }}
-
 ### Cassandra cluster resource
 ---
 apiVersion: k8ssandra.io/v1alpha1
@@ -91,7 +48,7 @@ spec:
 
 ### Job that patches Reaper DC availability
 ---
-{{- $dataCenter := (index $dcs 0)}}
+{{- $dataCenter := (index $cluster.spec.cassandra.datacenters 0)}}
 {{- if and $cluster.spec.reaper (hasKey $cluster.spec.reaper "datacenterAvailability") }}
 {{- $availability := (index $cluster.spec.reaper.datacenterAvailability) }}
 apiVersion: batch/v1
