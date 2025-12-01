@@ -28,6 +28,9 @@ spec:
     path "database/creds/readwrite-role-redis*" {
         capabilities = ["read"]
     }
+    {{- if .Values.vaultPlatform.additionalAppsPolicies }}
+    {{ .Values.vaultPlatform.additionalAppsPolicies | nindent 4 }}
+    {{- end }}
   computed-values:
     - name: "kubernetes-accessor"
       expression: "vault_get_accessor('kubernetes/')"

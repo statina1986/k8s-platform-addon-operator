@@ -56,6 +56,8 @@ vaultPlatform:
   useBackwardsCompatibilityService: true
   # -- Sets the validity duration in hours for the vault-webhook certificate, must be larger than renewaltime ( 360h = 15 days), default is 10 years
   webhookCertificateDuration: "87600h"
+  # -- Configuration for additional entries to be added to apps-default-policy.yaml. See [apps-default-policy](templates/apps-default-policy.yaml)
+  additionalAppsPolicies: ""
   
   # -- Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
   vault-secrets-webhook:

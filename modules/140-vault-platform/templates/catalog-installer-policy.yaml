@@ -1,0 +1,13 @@
+## Custom policy that allows catalog-data installer to work, needs special access to secret/data/installer/catalog/data
+apiVersion: platform-vault.qvantel.com/v1
+kind: AclPolicy
+metadata:
+  name: installer-catalog-data
+spec:
+  policy-hcl: |
+    path "auth/token/renew-self" {
+        capabilities = ["update"]
+    }
+    path "secret/data/installer/catalog/data" {
+      capabilities = ["read"]
+    }

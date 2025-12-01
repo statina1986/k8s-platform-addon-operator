@@ -82,6 +82,19 @@ For details of each resource please check CRD definition.
 	</thead>
 	<tbody>
 		<tr>
+			<td style="width: 300px;" id="vaultPlatform--additionalAppsPolicies">vaultPlatform.additionalAppsPolicies</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>""</code></pre>
+</td>
+			<td><div>
+
+Configuration for additional entries to be added to apps-default-policy.yaml. See [apps-default-policy](templates/apps-default-policy.yaml)
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="vaultPlatform--autoUnseal">vaultPlatform.autoUnseal</td>
 			<td>bool</td>
 			<td>

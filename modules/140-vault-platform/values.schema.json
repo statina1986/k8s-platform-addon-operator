@@ -10,6 +10,13 @@
     "vaultPlatform": {
       "description": "vaultPlatformNamespace: vault",
       "properties": {
+        "additionalAppsPolicies": {
+          "default": "",
+          "description": "Configuration for additional entries to be added to apps-default-policy.yaml. See [apps-default-policy](templates/apps-default-policy.yaml)",
+          "required": [],
+          "title": "additionalAppsPolicies",
+          "type": "string"
+        },
         "autoUnseal": {
           "default": false,
           "description": "Enable auto unseal with external Cloud secrets service (KMS). See https://developer.hashicorp.com/vault/docs/concepts/seal#auto-unseal",
