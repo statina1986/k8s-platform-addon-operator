@@ -863,8 +863,6 @@ istioIngress:
             host: crm-gatekeeper-api.qvantel.svc.cluster.local
           dnapy-proq-dr:
             host: dnapy-web-proq.qvantel.svc.cluster.local
-          dnapy-selfservice-dr:
-            host: dnapy-web-selfservice.qvantel.svc.cluster.local
           dnapy-navision-api-dr:
             host: dnapy-soap-navision.qvantel.svc.cluster.local
           dnapy-rest-dil-listener-dr:
@@ -1770,15 +1768,26 @@ istioIngress:
                 prefix: "/sso"
           route:
             - destination:
-                host: salestool-backend-telesales.qvantel.svc.cluster.local
+                host: salestool-backend-telesales.${values['global']['appsNamespace']}.svc.cluster.local
                 port:
                   number: 8080
         - name: "salestool-frontend-telesales-route"
           route:
           - destination:
-              host: salestool-frontend-telesales.qvantel.svc.cluster.local
+              host: salestool-frontend-telesales.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 80
+      robot:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-robot-route"
+          route:
+            - destination:
+                host: dnapy-web-robot.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
       # This is DNA specific
       bss-integrator:
         enabled: false
