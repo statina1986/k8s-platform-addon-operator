@@ -2,8 +2,6 @@ platformCore:
   corednsEnabled: false
   localStorageEnabled: false
   cleanUpControllerEnabled: false
-  turndown:
-    enabled: "false"
   coredns:
     image:
       % if 'containerRegistryBase' in values['global']:

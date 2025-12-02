@@ -265,6 +265,9 @@ qvantelGlue:
           {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
           vaultConfiguration: true
           {{- end }}
+          {{- if eq $.addonOperator.shutdownOperatorEnabled "true" }}
+          enablePDB: false
+          {{- end }}
           {{- if ne $.root.Values.global.configurationProfile "dev" }}
           barmanObjectStore:
             scheduledBackup: "0 0 0 * * *"

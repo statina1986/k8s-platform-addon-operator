@@ -1768,7 +1768,7 @@
             "policies": {
               "properties": {
                 "policyadmin": {
-                  "default": "path \"*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"delete\", \"sudo\"]\n}\n\npath \"secret/*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"delete\", \"sudo\"]\n}\n",
+                  "default": "path \"*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"delete\", \"sudo\"]\n}\n\npath \"secret/*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"delete\", \"sudo\"]\n}\n\npath \"secret-v2/*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"delete\", \"sudo\"]\n}\n",
                   "required": [],
                   "title": "policyadmin",
                   "type": "string"
@@ -1786,13 +1786,13 @@
                   "type": "string"
                 },
                 "policyreadonly": {
-                  "default": "path \"secret/*\" {\n  capabilities = [\"list\"]\n}\n\npath \"secret/data/platform/readonly/*\" {\n  capabilities = [\"read\"]\n}\n",
+                  "default": "path \"secret/*\" {\n  capabilities = [\"list\"]\n}\n\npath \"secret-v2/*\" {\n  capabilities = [\"list\"]\n}\n\npath \"secret/data/platform/readonly/*\" {\n  capabilities = [\"read\"]\n}\n",
                   "required": [],
                   "title": "policyreadonly",
                   "type": "string"
                 },
                 "policysecretappsadmin": {
-                  "default": "path \"secret/*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"patch\", \"delete\"]\n}\n\npath \"secret/data/installer/qvaa/*\" {\n  capabilities = [\"deny\"]\n}\n",
+                  "default": "path \"secret/*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"patch\", \"delete\"]\n}\n\npath \"secret-v2/*\" {\n  capabilities = [\"read\", \"list\", \"create\", \"update\", \"patch\", \"delete\"]\n}\n\npath \"secret/data/installer/qvaa/*\" {\n  capabilities = [\"deny\"]\n}\n",
                   "required": [],
                   "title": "policysecretappsadmin",
                   "type": "string"

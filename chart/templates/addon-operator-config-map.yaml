@@ -12,6 +12,11 @@ data:
   platformCore: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
   {{- end }}
 
+  shutdownOperatorEnabled: "{{ .Values.modulesConfig.shutdownOperatorEnabled }}"
+  {{- if .Values.modulesConfig.shutdownOperator }}
+  shutdownOperator: {{ print "|\n" (.Values.modulesConfig.shutdownOperator | toYaml | indent 4) }}
+  {{- end }}
+
   apisixPlatformEnabled: "{{ .Values.modulesConfig.apisixPlatformEnabled }}"
   {{- if .Values.modulesConfig.apisixPlatform }}
   apisixPlatform: {{ print "|\n" (.Values.modulesConfig.apisixPlatform | toYaml | indent 4) }}
@@ -186,5 +191,18 @@ data:
   {{- if .Values.modulesConfig.vectorPlatform }}
   vectorPlatform: {{ print "|\n" (.Values.modulesConfig.vectorPlatform | toYaml | indent 4) }}
   {{- end }}
+---
+{{ if eq .Values.modulesConfig.shutdownOperatorEnabled "true" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: addon-operator
+  namespace: {{ .Values.shutdownOperatorNamespace }}
+data:
+  global: {{ print "|\n" (.Values.globalConfig | toYaml | indent 4) }}
 
-
+  shutdownOperatorEnabled: "{{ .Values.modulesConfig.shutdownOperatorEnabled }}"
+  {{- if .Values.modulesConfig.shutdownOperator }}
+  shutdownOperator: {{ print "|\n" (.Values.modulesConfig.shutdownOperator | toYaml | indent 4) }}
+  {{- end }}
+{{- end }}

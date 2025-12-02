@@ -1,0 +1,4 @@
+## Dummy chart for schema and docs generation
+apiVersion: v2
+name: shutdown-operator
+version: 0.0.1

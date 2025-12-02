@@ -189,3 +189,44 @@ subjects:
     name: platform
     namespace: {{ .Release.Namespace }}
 {{- end }}
+---
+{{ if and (eq .Values.globalConfig.clusterwideResources "true") (eq .Values.modulesConfig.shutdownOperatorEnabled "true") }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.shutdownOperator.deployment.serviceAccountName }}
+  namespace: {{ .Values.shutdownOperatorNamespace }}
+  annotations:
+  {{- if .Values.globalConfig.shutdownRole}}
+    eks.amazonaws.com/role-arn: {{ .Values.globalConfig.shutdownRole }}
+  {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: addon-operator-{{ .Values.shutdownOperatorNamespace }}
+rules:
+- apiGroups:
+    - "*"
+  resources:
+    - "*"
+  verbs:
+    - "*"
+- nonResourceURLs:
+    - "*"
+  verbs:
+    - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: addon-operator-{{ .Values.shutdownOperatorNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: addon-operator-{{ .Values.shutdownOperatorNamespace }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.shutdownOperator.deployment.serviceAccountName }}
+    namespace: {{ .Values.shutdownOperatorNamespace }}
+{{- end }}

@@ -1,0 +1,12 @@
+## Custom role that allows keycloak installer to work, needs special access to secret/* and secret/data/installer/qvaa/keycloak
+apiVersion: platform-vault.qvantel.com/v1
+kind: KubernetesAuthRole
+metadata:
+  name: installer-qvaa-keycloak
+spec:
+  bound_service_account_names:
+    - keycloak-installer
+  bound_service_account_namespaces:
+    - {{ .Values.global.appsNamespace }}
+  token_policies:
+    - apps-qvaa-keycloak

@@ -10,10 +10,10 @@ spec:
     {{ printf "path \"secret/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}/*\" {" }}
       capabilities = [ "read" ]
     }
-    {{ printf "path \"secret-v2/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}\" {" }}
+    {{ printf "path \"secret-v2/data/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}\" {" }}
       capabilities = [ "read" ]
     }
-    {{ printf "path \"secret-v2/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}/*\" {" }}
+    {{ printf "path \"secret-v2/data/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}/*\" {" }}
       capabilities = [ "read" ]
     }
     {{ printf "path \"database/creds/{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_namespace}}-{{identity.entity.aliases.{kubernetes-accessor}.metadata.service_account_name}}*\" {" }}
@@ -28,6 +28,9 @@ spec:
     path "database/creds/readwrite-role-redis*" {
         capabilities = ["read"]
     }
+    {{- if .Values.vaultPlatform.additionalAppsPolicies }}
+    {{ .Values.vaultPlatform.additionalAppsPolicies | nindent 4 }}
+    {{- end }}
   computed-values:
     - name: "kubernetes-accessor"
       expression: "vault_get_accessor('kubernetes/')"

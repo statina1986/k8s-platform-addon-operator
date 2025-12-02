@@ -62,6 +62,7 @@ monitoringPlatform: {}
 monitoringPlatformEnabled: "true"
 perconaPmmPlatformEnabled: "true"
 platformCoreEnabled: "true"
+shutdownOperatorEnabled: "true"
 pomeriumPlatformEnabled: "true"
 progressPlatformEnabled: "true"
 qvantelGlueEnabled: "true"

@@ -16,21 +16,21 @@ args = {
 }
 
 
-class ClusterScaledownScheduleHook(Hook):
+class ClusterScaleupScheduleHook(Hook):
     def __init__(self):
         cm = get_config_map(ADDON_OPERATOR_NAMESPACE, ADDON_OPERATOR_CONFIG_MAP)
         try: 
-            platform_core = yaml.safe_load(cm.data["platformCore"])
+            platform_shutdown = yaml.safe_load(cm.data["shutdownOperator"])
         except:
-            platform_core = {}
+            platform_shutdown = {}
 
         super().__init__(str(
             {
                 "configVersion": "v1",
                 "schedule": [
                     {
-                        "name": "ScaleDown Schedule",
-                        "crontab": platform_core.get("turndown", {}).get("scaledownSchedule", "0 5 31 2 *")
+                        "name": "ScaleUp Schedule",
+                        "crontab": platform_shutdown.get("turndown", {}).get("scaleupSchedule", "0 5 31 2 *")
                     }
                 ]
             })
@@ -50,12 +50,12 @@ class ClusterScaledownScheduleHook(Hook):
                         **args
                     )
 
-                    if res["spec"]["desiredState"] == "down":
-                        logger.info("Desired state is already 'down'. Skipping changes")
+                    if res["spec"]["desiredState"] == "up":
+                        logger.info("Desired state is already 'up'. Skipping changes")
                         return
 
                     update_crd(
-                        update=lambda response: {"spec": {"desiredState": "down"}},
+                        update=lambda response: {"spec": {"desiredState": "up"}},
                         **args
                     )
 
@@ -64,8 +64,8 @@ class ClusterScaledownScheduleHook(Hook):
                             response,
                             "Phase",
                             "True",
-                            "TriggeredScaledownOperation",
-                            "Scaledown Operation has been triggered based on schedule '" + context['binding'] + "'"
+                            "TriggeredScaleupOperation",
+                            "Scaleup Operation has been triggered based on schedule '" + context['binding'] + "'"
                         ),
                         **args
                     )
@@ -74,17 +74,17 @@ class ClusterScaledownScheduleHook(Hook):
                             response,
                             "Ready",
                             "False",
-                            "TriggeredScaledownOperation",
-                            "Scaledown Operation has been triggered based on schedule '" + context['binding'] + "'"
+                            "TriggeredScaleupOperation",
+                            "Scaleup Operation has been triggered based on schedule '" + context['binding'] + "'"
                         ),
                         **args
                     )
                 except:
-                    logger.info("Error during triggering teardown")
+                    logger.info("Error during triggering scaleup")
                     raise
             case _:
                 print("Unknown hook data")
 
 
-hook = ClusterScaledownScheduleHook()
+hook = ClusterScaleupScheduleHook()
 hook.handle_hook()

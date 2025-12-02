@@ -1,5 +1,6 @@
 logLevel: info
 addonOperatorNamespace: "platform"
+shutdownOperatorNamespace: "platform-shutdown"
 platformCore: {}
 helmIgnoreRelease: "k8s-platform"
 deployResources: "true"
@@ -7,6 +8,12 @@ imageBase: "platform.artifactory.qvantel.net/platform/k8s-platform-addon-operato
 deployment:
   replicas: 1
   additionalEnvironmentVars: []
+shutdownOperator:
+  deployment:
+    replicas: 1
+    serviceAccountName: "platform-shutdown"
+    logLevel: info
+    additionalEnvironmentVars: []
   # nodeSelector:
   #   cluster-controller: "true"
 
@@ -80,6 +87,7 @@ modulesConfig:
   mongodbPlatformEnabled: "false"
   monitoringPlatformEnabled: "false"
   perconaPmmPlatformEnabled: "false"
+  shutdownOperatorEnabled: "false"
   pomeriumPlatformEnabled: "false"
   progressPlatformEnabled: "false"
   qvantelGlueEnabled: "false"

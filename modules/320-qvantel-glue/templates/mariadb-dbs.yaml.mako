@@ -67,6 +67,12 @@ apiVersion: k8s.mariadb.com/v1alpha1
 kind: MaxScale
 metadata:
   name: {{ $dbClusterName }}-maxscale
+  annotations:
+    meta.helm.sh/release-name: {{$.Release.Name}}
+    meta.helm.sh/release-namespace: {{$.Release.Namespace}}
+    helm.sh/resource-policy: keep
+  labels:
+    app.kubernetes.io/managed-by: Helm
 spec:
   replicas: {{ $cluster.spec.maxScale.replicas | default "1" }}
   mariaDbRef:

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "shutdownOperator": {
+      "properties": {
+        "turndown": {
+          "properties": {
+            "enabled": {
+              "default": "false",
+              "description": "Enables the clusterturndown feature",
+              "required": [],
+              "title": "enabled",
+              "type": "string"
+            },
+            "scaledownSchedule": {
+              "default": "0 5 31 2 *",
+              "description": "Scheduled time when cluster will be scaled down",
+              "required": [],
+              "title": "scaledownSchedule",
+              "type": "string"
+            },
+            "scaleupSchedule": {
+              "default": "0 5 31 2 *",
+              "description": "Scheduled time when cluster will be scaled up",
+              "required": [],
+              "title": "scaleupSchedule",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "turndown",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "shutdownOperator",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

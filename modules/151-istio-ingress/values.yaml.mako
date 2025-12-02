@@ -195,6 +195,10 @@ istioIngress:
         port: 15674
         protocol: TCP
         targetPort: 15674
+      - name: vector-logs
+        port: 9000
+        protocol: TCP
+        targetPort: 9000
       annotations:
         % if addon_operator['awsPlatformEnabled'] == 'true':
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -249,6 +253,12 @@ istioIngress:
           name: rabbitmq-webstomp
           number: 15674
           protocol: HTTP
+      - hosts:
+        - '*'
+        port:
+          name: vector-logs
+          number: 9000
+          protocol: TCP
   - name: ${values['global']['helmReleaseNamePrefix']}istio-eastwestgateway
     spec:
       selector:
@@ -2298,7 +2308,7 @@ istioIngress:
         enabled: false
         gateways:
         - ${values['global']['helmReleaseNamePrefix']}private-ingress
-        http:
+        tcp:
         - route:
           - destination:
               host: ${values['global']['helmReleaseNamePrefix']}vector-platform-aggregator.${values['global']['platformNamespace']}.svc.cluster.local

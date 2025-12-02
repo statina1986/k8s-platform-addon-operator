@@ -1,0 +1,20 @@
+## Custom policy that allows keycloak installer to work, needs special access to secret/* and secret/data/installer/qvaa/keycloak
+## Added KV2 also for future use cases
+apiVersion: platform-vault.qvantel.com/v1
+kind: AclPolicy
+metadata:
+  name: apps-qvaa-keycloak
+spec:
+  policy-hcl: |
+    path "auth/token/renew-self" {
+        capabilities = ["update"]
+    }
+    path "secret/*" {
+      capabilities = ["create", "read", "update"]
+    }
+    path "secret-v2/*" {
+      capabilities = ["create", "read", "update"]
+    }
+    path "secret/data/installer/qvaa/keycloak" {
+      capabilities = ["read"]
+    }

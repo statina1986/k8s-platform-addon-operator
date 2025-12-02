@@ -1,4 +1,6 @@
 import json
+import yaml
+import time
 from time import sleep
 import boto3
 from common.python.vault import *
@@ -6,11 +8,7 @@ from common.python.k8s import *
 from kubernetes.client.rest import ApiException
 from concurrent.futures import ThreadPoolExecutor
 
-# SCALEUP/SCALEDOWN
-
-# UTILITY FUNCTIONS
-def wait(time):
-    sleep(time)
+# CLUSTER SHUTDOWN / STARTUP
 
 # K8S WORKLOAD SCALING FUNCTIONS
 
@@ -24,11 +22,8 @@ def scaledown_deployment(name, namespace):
     if replicas == 0:
         logger.info("Skipping deployment " + deployment.metadata.name + " in namespace " +  deployment.metadata.namespace + " because it already has 0 replicas")
         return
-    if deployment.metadata.name == "addon-operator":
+    if deployment.metadata.name == "shutdown-addon-operator":
         logger.info("Skipping deployment " + deployment.metadata.name + " in namespace " +  deployment.metadata.namespace + " as it controls the scaling operations")
-        return
-    if deployment.metadata.name == "mariadb-metrics":
-        logger.info("Skipping deployment " + deployment.metadata.name + " in namespace " +  deployment.metadata.namespace + " as it is controlled by MariaDB cluster")
         return
     # Ensure annotations dict exists
     if deployment.metadata.annotations is None:
@@ -41,22 +36,46 @@ def scaledown_deployment(name, namespace):
     except ApiException as e:
         logger.info("Failed to patch deployment " + deployment.metadata.name + " : " + e)
 
-def scaledown_namespace_deployments(namespace):
+def scaledown_namespace_deployments(namespace, exclude=None):
     """
-    Scale down all deployments in the specified namespace to 0 replicas.
-    Waits for all deployments to scale down and terminate.
+    Scale down all deployments in the specified namespace to 0 replicas,
+    except those in 'exclude'. Waits for all non-excluded deployments to
+    scale down and terminate.
+
+    Args:
+        namespace (str): The Kubernetes namespace to act on.
+        exclude (list[str] or None): Deployment names to skip.
+            Example: ['deployment-a', 'deployment-b', 'deployment-c']
     """
+
     k8s_apps = get_k8s_apps_client()
+
+    exclude = exclude or []
+
     try:
         deployments = k8s_apps.list_namespaced_deployment(namespace)
     except ApiException as e:
         logger.info("Failed to list deployments in namespace " + namespace + ": " + str(e))
         return
-
-    logger.info("Scaling down deployments in namespace " + namespace)
+    
+    if exclude:
+        logger.info(
+            "Scaling down deployments in namespace %s (excluding: %s)",
+            namespace,
+            ", ".join(sorted(exclude))
+        )
+    else:
+        logger.info("Scaling down deployments in namespace %s", namespace)
 
     for deployment in deployments.items:
-        scaledown_deployment(deployment.metadata.name, namespace)
+        name = deployment.metadata.name
+        if name in exclude:
+            logger.info(
+                "Skipping scale-down for deployment %s in namespace %s (excluded)",
+                name, namespace
+            )
+            continue
+        scaledown_deployment(name, namespace)
 
     while True:
         all_scaled_down = True
@@ -68,11 +87,14 @@ def scaledown_namespace_deployments(namespace):
 
         for deploy in current_deployments.items:
             name = deploy.metadata.name
-            if name == "addon-operator":
-                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it controls the scaling operations")
+            if name == "shutdown-addon-operator":
+                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it controls the shutdown operations")
                 continue
-            if name == "mariadb-metrics":
-                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it is controlled by MariaDB cluster")
+            if name in exclude:
+                logger.info(
+                    "Skipping checking deployment %s in namespace %s (excluded)",
+                    name, namespace
+                )
                 continue
             desired = deploy.spec.replicas or 0
             ready = deploy.status.ready_replicas or 0
@@ -83,7 +105,7 @@ def scaledown_namespace_deployments(namespace):
                 logger.debug("Deployment " + name + " in namespace " + namespace + " scaled down: " + str(ready) + "/" + str(desired))
 
         if all_scaled_down:
-            logger.info("All deployments scaled down successfully in namespace " + namespace)
+            logger.info("All non-excluded deployments scaled down successfully in namespace " + namespace)
             break
         sleep(10)
 
@@ -108,35 +130,64 @@ def scaledown_statefulset(name, namespace):
     except ApiException as e:
         logger.info("Failed to patch statefulset " + statefulset.metadata.name + " : " + e)
 
-def scaledown_namespace_statefulsets(namespace):
+def scaledown_namespace_statefulsets(namespace, exclude=None):
     """
-    Scale down all statefulsets in the specified namespace to 0 replicas.
-    Waits for all StatefulSets to scale down and terminate.
+    Scale down all statefulsets in the specified namespace to 0 replicas,
+    except those in 'exclude'. Waits for all non-excluded statefulsets to
+    scale down and terminate.
+
+    Args:
+        namespace (str): The Kubernetes namespace to act on.
+        exclude (list[str] or None): Statefulsets names to skip.
+            Example: ['statefulset-a', 'statefulset-b', 'statefulset-c']
     """
     k8s_apps = get_k8s_apps_client()
+
+    exclude = exclude or []
+
     try:
         statefulsets = k8s_apps.list_namespaced_stateful_set(namespace)
     except ApiException as e:
         logger.info("Failed to list statefulsets in namespace " + namespace +":"+ e)
         return
 
-    logger.info("Scaling down statefulsets in namespace " + namespace)
+    if exclude:
+        logger.info(
+            "Scaling down statefulsets in namespace %s (excluding: %s)",
+            namespace,
+            ", ".join(sorted(exclude))
+        )
+    else:
+        logger.info("Scaling down statefulsets in namespace %s", namespace)
 
     for statefulset in statefulsets.items:
-        scaledown_statefulset(statefulset.metadata.name, namespace)
+        name = statefulset.metadata.name
+        if name in exclude:
+            logger.info(
+                "Skipping scale-down for statefulset %s in namespace %s (excluded)",
+                name, namespace
+            )
+            continue
+        scaledown_statefulset(name, namespace)
 
     while True:
         all_scaled_down = True
         try:
             current_sets = k8s_apps.list_namespaced_stateful_set(namespace)
         except ApiException as e:
-            logger.info("Error fetching statefulSet status in namespace " + namespace + " : " + e)
+            logger.info("Error fetching statefulset status in namespace " + namespace + " : " + e)
             break
 
         for sts in current_sets.items:
             name = sts.metadata.name
             desired = sts.spec.replicas or 0
             ready = sts.status.ready_replicas or 0
+            if name in exclude:
+                logger.info(
+                    "Skipping checking statefulset %s in namespace %s (excluded)",
+                    name, namespace
+                )
+                continue
             if ready > 0:
                 logger.info("Statefulset " + name + " in namespace " + namespace + " not yet scaled down: " + str(ready) + "/" + str(desired))
                 all_scaled_down = False
@@ -144,27 +195,92 @@ def scaledown_namespace_statefulsets(namespace):
                 logger.debug("Statefulset " + name + " in namespace " + namespace + " scaled down: " + str(ready) + "/" + str(desired))
 
         if all_scaled_down:
-            logger.info("All statefulSets scaled down successfully in namespace " + namespace)
+            logger.info("All statefulsets scaled down successfully in namespace " + namespace)
             break
         sleep(10)
 
+def delete_strimzipodset(name, namespace):
+    """
+    Delete a single strimzipodset.
+    """
+    
+    # Defining the group, version, and plural for StrimziPodSet
+    group = "core.strimzi.io"
+    version = "v1beta2"
+    plural = "strimzipodsets"
 
-def delete_namespace_strimzipodsets(namespace):
-    """
-    Delete all StrimziPodSet resources from a given namespace.
-    This is required for Kafka Strimzi clusters before scaling down.
-    Waits for all StrimziPodSet pods to terminate.
-    """
     k8s_crd = get_k8s_crd_client()
     k8s_core = get_k8s_client()
 
-    logger.info("Deleting strimzipodsets in namespace " + namespace)
+    try:
+        podset = k8s_crd.get_namespaced_custom_object(
+            group=group,
+            version=version,
+            namespace=namespace,
+            plural=plural,
+            name=name
+        )
+    except ApiException as e:
+        logger.info("Failed to list strimzipodset " + name + " in namespace " + namespace + " : " + e)
+        return
+
+    # Determine label selector to find pods belonging to this PodSet
+    # StrimziPodSet typically manages pods using a label like 'strimzi.io/name'
+    labels = podset["spec"].get("template", {}).get("metadata", {}).get("labels", {})
+    label_selector = ",".join([f"{k}={v}" for k, v in labels.items()]) if labels else f"strimzi.io/name={name}"
+
+    try:
+        logger.info("Deleting strimzipodset " + name + " in namespace " + namespace)
+        k8s_crd.delete_namespaced_custom_object(
+            group=group,
+            version=version,
+            namespace=namespace,
+            plural=plural,
+            name=name,
+            body=client.V1DeleteOptions()
+        )
+    except ApiException as e:
+        logger.info("Failed to delete strimzipodset " + name + " in namespace " + namespace + " : " + e)
+
+    while True:
+        try:
+            pods = k8s_core.list_namespaced_pod(
+                namespace=namespace,
+                label_selector=label_selector
+            )
+        except ApiException as e:
+            logger.info("Error listing pods for strimzipodset " + name + " in namespace " + namespace + " : " + e)
+            break
+
+        if not pods.items:
+            logger.info("All pods for strimzipodset " + name + " in namespace " + namespace + " have been terminated")
+            break
+        else:
+            pod_names = [p.metadata.name for p in pods.items]
+            logger.info("Still waiting on pods from strimzipodset " + name + " in namespace " + namespace + " : " + ", ".join(pod_names))
+        sleep(10)
+
+def delete_namespace_strimzipodsets(namespace, exclude=None):
+    """
+    Delete all StrimziPodSet resources in the specified namespace,
+    except those in 'exclude'. Waits for all non-excluded StrimziPodSet pods to terminate.
+    This is required for Kafka Strimzi clusters before scaling down when they are using ZooKeeper.
+
+    Args:
+        namespace (str): The Kubernetes namespace to act on.
+        exclude (list[str] or None): StrimziPodSet names to skip.
+            Example: ['strimzipodset-a', 'strimzipodset-b', 'strimzipodset-c']
+    """
 
     # Defining the group, version, and plural for StrimziPodSet
     group = "core.strimzi.io"
     version = "v1beta2"
     plural = "strimzipodsets"
-    namespace = namespace
+
+    k8s_crd = get_k8s_crd_client()
+    k8s_core = get_k8s_client()
+
+    exclude = exclude or []
 
     try:
         podsets = k8s_crd.list_namespaced_custom_object(
@@ -177,44 +293,127 @@ def delete_namespace_strimzipodsets(namespace):
         logger.info("Failed to list strimzipodsets in namespace " + namespace + " : " + e)
         return
 
-    for podset in podsets.get("items", []):
-        podsetname = podset["metadata"]["name"]
+    if exclude:
+        logger.info(
+            "Deleting strimzipodsets in namespace %s (excluding: %s)",
+            namespace,
+            ", ".join(sorted(exclude))
+        )
+    else:
+        logger.info("Deleting strimzipodsets in namespace %s", namespace)
 
-        # Determine label selector to find pods belonging to this PodSet
-        # StrimziPodSet typically manages pods using a label like 'strimzi.io/name'
-        labels = podset["spec"].get("template", {}).get("metadata", {}).get("labels", {})
-        label_selector = ",".join([f"{k}={v}" for k, v in labels.items()]) if labels else f"strimzi.io/name={podsetname}"
-
-        try:
-            logger.info("Deleting strimzipodset " + podsetname + " in namespace " + namespace)
-            k8s_crd.delete_namespaced_custom_object(
-                group=group,
-                version=version,
-                namespace=namespace,
-                plural=plural,
-                name=podsetname,
-                body=client.V1DeleteOptions()
+    for ps in podsets.get("items", []):
+        podsetname = ps["metadata"]["name"]
+        if podsetname in exclude:
+            logger.info(
+                "Skipping deletion for strimzipodset %s in namespace %s (excluded)",
+                podsetname, namespace
             )
-        except ApiException as e:
-            logger.info("Failed to delete strimzipodset " + podsetname + " in namespace " + namespace + " : " + e)
+            continue
+        delete_strimzipodset(podsetname, namespace)
 
+
+def monitor_job(batch_api, job_name, namespace, timeout=600, poll_interval=10):
+    """Monitor a Kubernetes Job until it succeeds or fails."""
+    start_time = time.time()
     while True:
-        try:
-            pods = k8s_core.list_namespaced_pod(
-                namespace=namespace,
-                label_selector=label_selector
-            )
-        except ApiException as e:
-            logger.info("Error listing pods for strimzipodset " + podsetname + " in namespace " + namespace + " : " + e)
-            break
+        job_status = batch_api.read_namespaced_job_status(job_name, namespace)
+        succeeded = job_status.status.succeeded or 0
+        failed = job_status.status.failed or 0
 
-        if not pods.items:
-            logger.info("All pods for strimzipodset " + podsetname + " in namespace " + namespace + " have been terminated")
-            break
-        else:
-            pod_names = [p.metadata.name for p in pods.items]
-            logger.info("Still waiting on pods from strimzipodset " + podsetname + " in namespace " + namespace + " : " + ", ".join(pod_names))
-        sleep(10)
+        if succeeded > 0:
+            logger.info(f"Job {job_name} succeeded.")
+            return True
+        if failed > 0:
+            logger.info(f"Job {job_name} failed.")
+            return False
+        if time.time() - start_time > timeout:
+            logger.info(f"Timeout waiting for Job {job_name}.")
+            return False
+        sleep(poll_interval)
+
+
+def trigger_strimzi_shutdown(namespace, shutdown_command):
+    """
+    Creates a shutdown Job for each Kafka cluster in the namespace using strimzi-shutdown ( Ref: https://github.com/scholzj/strimzi-shutdown ).
+    Waits until each Job succeeds or times out.
+    This is required for Kafka Strimzi clusters before scaling down when they are using KRaft, ref: https://github.com/orgs/strimzi/discussions/10082
+
+    Args:
+        namespace (str): The Kubernetes namespace to act on.
+        shutdown_command (str): 'stop' or 'continue'
+    """
+
+    # Defining the group, version, and plural for Kafkas
+    group = "kafka.strimzi.io"
+    version = "v1beta2"
+    plural = "kafkas"
+
+    # API clients
+    k8s_crd = get_k8s_crd_client()
+    k8s_batch = get_k8s_batch_client()
+
+    try:
+        kafka_clusters = k8s_crd.list_namespaced_custom_object(
+            group=group,
+            version=version,
+            namespace=namespace,
+            plural=plural
+        )
+    except ApiException as e:
+        logger.info("Failed to list Kafkas in namespace " + namespace +":"+ e)
+        return
+
+    monitoring_tasks = []
+    
+    with ThreadPoolExecutor(max_workers=len(kafka_clusters.get("items", []))) as executor:
+        for item in kafka_clusters.get("items", []):
+            cluster_name = item["metadata"]["name"]
+            
+            cm = get_config_map(ADDON_OPERATOR_NAMESPACE, ADDON_OPERATOR_CONFIG_MAP)
+            registry_base = yaml.safe_load(cm.data["global"]).get("containerRegistryBase", "ghcr.io")
+            image = f"{registry_base}/scholzj/strimzi-shutdown:0.1.0"
+
+            job_name = f"strimzi-shutdown-{cluster_name}"
+            job = client.V1Job(
+                api_version="batch/v1",
+                kind="Job",
+                metadata=client.V1ObjectMeta(name=job_name),
+                spec=client.V1JobSpec(
+                    ttl_seconds_after_finished=30, ## Time after job gets deleted once finished
+                    backoff_limit=3, ## Retry limit
+                    template=client.V1PodTemplateSpec(
+                        spec=client.V1PodSpec(
+                            service_account_name="strimzi-shutdown",
+                            containers=[
+                                client.V1Container(
+                                    name="strimzi-shutdown",
+                                    image=image,
+                                    command=["/strimzi-shutdown", shutdown_command, f"--namespace={namespace}", f"--name={cluster_name}"]
+                                )
+                            ],
+                            restart_policy="OnFailure"
+                        )
+                    )
+                )
+            )
+
+            # Create the Job
+            response = k8s_batch.create_namespaced_job(namespace=namespace, body=job)
+            logger.info(f"Created Job: {response.metadata.name}")
+
+            # Submit monitoring task
+            future = executor.submit(monitor_job, k8s_batch, job_name, namespace)
+            monitoring_tasks.append(future)
+
+    #Wait for all monitoring tasks to finish
+    for task in monitoring_tasks:
+        try:
+            task.result()
+        except Exception as e:
+            logger.error(f"Monitoring task failed: {e}")
+
+    logger.info("All Strimzi Jobs completed!")
 
 def scaleup_deployment(name, namespace):
     """
@@ -230,36 +429,69 @@ def scaleup_deployment(name, namespace):
         except ApiException as e:
             logger.info("Failed to patch deployment " + deployment.metadata.name + " in namespace " + deployment.metadata.namespace + " : " + e)
 
-def scaleup_namespace_deployments(namespace):
+def scaleup_namespace_deployments(namespace, exclude=None):
     """
     Scale up all deployments in the specified namespace using previously
-    stored replica counts from annotations. Waits for all Deployments to become ready.
+    stored replica counts from annotations, except those in 'exclude'. 
+    Waits for all non-excluded deployments to become ready.
+
+    Args:
+        namespace (str): The Kubernetes namespace to act on.
+        exclude (list[str] or None): Deployment names to skip.
+            Example: ['deployment-a', 'deployment-b', 'deployment-c']
     """
+
     k8s_apps = get_k8s_apps_client()
+
+    exclude = exclude or []
+
     try:
         deployments = k8s_apps.list_namespaced_deployment(namespace)
     except ApiException as e:
         logger.info("Failed to list deployments in namespace " + namespace + " : " + e)
         return
 
-    logger.info("Scaling up deployments in namespace " + namespace)
+    if exclude:
+        logger.info(
+            "Scaling up deployments in namespace %s (excluding: %s)",
+            namespace,
+            ", ".join(sorted(exclude))
+        )
+    else:
+        logger.info("Scaling up deployments in namespace %s", namespace)
 
     # Start scaling up
     for deployment in deployments.items:
-        scaleup_deployment(deployment.metadata.name, namespace)
+        name = deployment.metadata.name
+        if name in exclude:
+            logger.info(
+                "Skipping scale-up for deployment %s in namespace %s (excluded)",
+                name, namespace
+            )
+            continue
+        scaleup_deployment(name, namespace)
 
     while True:
         all_ready = True
         try:
-            current_deps = k8s_apps.list_namespaced_deployment(namespace)
+            current_deployments = k8s_apps.list_namespaced_deployment(namespace)
         except ApiException as e:
             logger.info("Error fetching deployment status in namespace " + namespace + " : " + e)
             break
 
-        for dep in current_deps.items:
-            name = dep.metadata.name
-            desired = dep.spec.replicas
-            ready = dep.status.ready_replicas or 0
+        for deploy in current_deployments.items:
+            name = deploy.metadata.name
+            desired = deploy.spec.replicas
+            ready = deploy.status.ready_replicas or 0
+            if name == "shutdown-addon-operator":
+                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it controls the shutdown operations")
+                continue
+            if name in exclude:
+                logger.info(
+                    "Skipping checking deployment %s in namespace %s (excluded)",
+                    name, namespace
+                )
+                continue
             if ready < desired:
                 logger.info("Deployment " + name + " in namespace " + namespace + " not yet ready: " + str(ready) + "/" + str(desired))
                 all_ready = False
@@ -269,7 +501,6 @@ def scaleup_namespace_deployments(namespace):
         if all_ready:
             logger.info("All deployments are ready in namespace " + namespace)
             break
-
         sleep(10)
 
 def scaleup_statefulset(name, namespace):
@@ -286,23 +517,45 @@ def scaleup_statefulset(name, namespace):
         except ApiException as e:
             logger.info("Failed to patch statefulset " + statefulset.metadata.name + " in namespace " + statefulset.metadata.namespace + " : " + e)
 
-def scaleup_namespace_statefulsets(namespace):
+def scaleup_namespace_statefulsets(namespace, exclude=None):
     """
     Scale up all statefulsets in the specified namespace using previously
-    stored replica counts from annotations. Waits for all StatefulSets to become ready.
+    stored replica counts from annotations, except those in 'exclude'.
+    Waits for all non-excluded statefulsets to become ready.
+
+    Args:
+        namespace (str): The Kubernetes namespace to act on.
+        exclude (list[str] or None): Statefulsets names to skip.
+            Example: ['statefulset-a', 'statefulset-b', 'statefulset-c']
     """
     k8s_apps = get_k8s_apps_client()
+
+    exclude = exclude or []
+
     try:
         statefulsets = k8s_apps.list_namespaced_stateful_set(namespace)
     except ApiException as e:
         logger.info("Failed to list statefulsets in namespace " + namespace + " : " + e)
         return
 
-    logger.info("Scaling up statefulsets in namespace " + namespace)
+    if exclude:
+        logger.info(
+            "Scaling up statefulsets in namespace %s (excluding: %s)",
+            namespace,
+            ", ".join(sorted(exclude))
+        )
+    else:
+        logger.info("Scaling up statefulsets in namespace %s", namespace)
 
-    # Start scaling up
     for statefulset in statefulsets.items:
-        scaleup_statefulset(statefulset.metadata.name, namespace)
+        name = statefulset.metadata.name
+        if name in exclude:
+            logger.info(
+                "Skipping scale-up for statefulset %s in namespace %s (excluded)",
+                name, namespace
+            )
+            continue
+        scaleup_statefulset(name, namespace)
 
     while True:
         all_ready = True
@@ -316,6 +569,12 @@ def scaleup_namespace_statefulsets(namespace):
             name = sts.metadata.name
             desired = sts.spec.replicas
             ready = sts.status.ready_replicas or 0
+            if name in exclude:
+                logger.info(
+                    "Skipping checking statefulset %s in namespace %s (excluded)",
+                    name, namespace
+                )
+                continue
             if ready < desired:
                 logger.info("StatefulSet " + name + " in namespace " + namespace + " not yet ready: " + str(ready) + "/" + str(desired))
                 all_ready = False
@@ -325,7 +584,6 @@ def scaleup_namespace_statefulsets(namespace):
         if all_ready:
             logger.info("All statefulsets are ready in namespace " + namespace)
             break
-
         sleep(10)
 
 def check_pods_ready_in_namespaces(namespaces):
