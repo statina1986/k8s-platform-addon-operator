@@ -61,6 +61,7 @@ vaultPlatform:
   
   # -- Configuration for underlying vault-secrets-webhook helm-chart. See https://github.com/bank-vaults/vault-secrets-webhook/blob/main/deploy/charts/vault-secrets-webhook/README.md#values
   vault-secrets-webhook:
+    ignoreReleaseNamespace: false
     secretsMutation: false
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -105,13 +106,14 @@ vaultPlatform:
     # -- This is important! If Vault is down (or sealed), then webhooks will fail and potentially block everything else in the cluster. "Ignore" is recommended with Vault without auto-unsealing.
     secretsFailurePolicy: Fail
 
-    # Limit Vault secrets to apps namespace only by default
+    # Limit Vault secrets to apps and platform namespaces only by default
     namespaceSelector:      
       matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
             - ${values['global']['appsNamespace']}
+            - ${values['global']['platformNamespace']}
   
   # -- Configuration for underlying vault helm-chart. See https://developer.hashicorp.com/vault/docs/platform/k8s/helm/configuration
   vault:
