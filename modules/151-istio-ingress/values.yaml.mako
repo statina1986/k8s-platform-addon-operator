@@ -669,7 +669,13 @@ istioIngress:
           name: sftp
           number: 22
           protocol: TCP
+  # -- EnvoyFilters to be provisioned.
+  # @default -- see values.yaml.mako
   envoyFilters:
+    # -- Common annotations for all EnvoyFilters resources provisioned
+    annotations:
+    # -- List of  `EnvoyFilters` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  
+    # @default -- see values.yaml.mako  
     instances:
       listener-timeout-tcp:
         enabled: false
@@ -740,6 +746,8 @@ istioIngress:
                   level: 6
                   name: 6
                   state: STATE_PREBIND
+    # -- List of multiInstances `EnvoyFilters` resources to be provisioned. Meant for large and repetitive `EnvoyFilters`
+    # @default -- see values.yaml.mako  
     multiInstances:
       bss-integrator-ingress-gateway-opts:
         enabled: false
@@ -811,7 +819,13 @@ istioIngress:
                   common_http_protocol_options:
                     idle_timeout: 24h
           {{- end }}
+  # -- DestinationRules to be provisioned.
+  # @default -- see values.yaml.mako
   destinationRules:
+    # -- Common annotations for all EnvoyFilters resources provisioned
+    annotations:
+    # -- List of  `DestinationRules` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  
+    # @default -- see values.yaml.mako  
     instances:
       rabbitmq-hpd-dr:
         enabled: false
@@ -839,6 +853,8 @@ istioIngress:
                   probes: 9
                   time: 65s
                   interval: 10s
+    # -- List of multiInstances `DestinationRules` resources to be provisioned. Meant for repetitive `DestinationRules`. Individual entries can be negated by setting them as `null`
+    # @default -- see values.yaml.mako  
     multipleInstances:
       dna-destinationrules:
         enabled: false
@@ -885,8 +901,6 @@ istioIngress:
             host: hybris-gatekeeper-api.qvantel.svc.cluster.local
           kafka-admin-web-dr:
             host: kafka-admin-web.qvantel.svc.cluster.local
-          keycloak-auth-dr:
-            host: operational-keycloak-8080.qvantel.svc.cluster.local
           mobile-id-api-dr:
             host: mobile-id-app-api.qvantel.svc.cluster.local
           operational-index-dr:
@@ -932,11 +946,13 @@ istioIngress:
             host: orders-event-receiver.qrp.svc.cluster.local
           zipkin-dr:
             host: dna-zipkin.qrp.svc.cluster.local
-          # misc
+          # platform related
           sentry-ui-dr:
             host: dna-sentry-nginx.sentry.svc.cluster.local
           vault-ui-dr:
             host: vault-ui.platform.svc.cluster.local
+          keycloak-auth-dr:
+            host: qvaa-proxy-80.platform.svc.cluster.local
         specTemplate: |
           host: {{ .host }}
           trafficPolicy:
