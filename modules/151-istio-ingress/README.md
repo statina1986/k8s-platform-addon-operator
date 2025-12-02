@@ -27,6 +27,110 @@ Additional documentation can be found in Platform Docs https://intra.qvantel.com
 	</thead>
 	<tbody>
 		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules">istioIngress.destinationRules</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako</code></pre>
+</td>
+			<td><div>
+
+DestinationRules to be provisioned.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules--annotations">istioIngress.destinationRules.annotations</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
+</td>
+			<td><div>
+
+Common annotations for all EnvoyFilters resources provisioned
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules--instances">istioIngress.destinationRules.instances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of  `DestinationRule` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules--multipleInstances">istioIngress.destinationRules.multipleInstances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of multiInstances `DestinationRule` resources to be provisioned. Meant for repetitive `DestinationRules`. Individual entries can be disabled by setting them as `null`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters">istioIngress.envoyFilters</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako</code></pre>
+</td>
+			<td><div>
+
+EnvoyFilters to be provisioned.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters--annotations">istioIngress.envoyFilters.annotations</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
+</td>
+			<td><div>
+
+Common annotations for all EnvoyFilters resources provisioned
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters--instances">istioIngress.envoyFilters.instances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of `EnvoyFilter` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files. Note that `configPatches` under spec of individual filter is a list.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters--multiInstances">istioIngress.envoyFilters.multiInstances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of multiInstances `EnvoyFilter` resources to be provisioned. Meant for large and repetitive `EnvoyFilter`
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngress">istioIngress.integrationsHttpIngress</td>
 			<td>object</td>
 			<td>
@@ -58,6 +162,67 @@ service:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
         service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         service.beta.kubernetes.io/aws-load-balancer-type: external
+    ports:
+        - name: status-port
+          port: 15021
+          protocol: TCP
+          targetPort: 15021
+        - name: http
+          port: 80
+          protocol: TCP
+          targetPort: 80
+        - name: https
+          port: 443
+          protocol: TCP
+          targetPort: 443
+        - name: bss-integrator-hybris-shop-api
+          port: 2035
+          targetPort: 2035
+        - name: bss-integrator-hybris-inventory-api
+          port: 2045
+          targetPort: 2045
+        - name: bss-integrator-mobile-id-api-v1
+          port: 2050
+          targetPort: 2050
+        - name: bss-integrator-mobile-id-api-v2
+          port: 2055
+          targetPort: 2055
+        - name: bss-integrator-pyprov-network-listener-api
+          port: 2065
+          targetPort: 2065
+        - name: bss-integrator-hybris-gatekeeper-api
+          port: 2075
+          targetPort: 2075
+        - name: bss-integrator-crm-gatekeeper-api
+          port: 2080
+          targetPort: 2080
+        - name: bss-integrator-rbs-gatekeeper-api
+          port: 2085
+          targetPort: 2085
+        - name: bss-integrator-dil-listener-api
+          port: 2095
+          targetPort: 2095
+        - name: bss-integrator-bssapi-aggregator
+          port: 3000
+          targetPort: 3000
+        - name: bss-integrator-orders-event-receiver
+          port: 3010
+          targetPort: 3010
+        - name: bss-integrator-kafka-bootstrap
+          port: 9093
+          targetPort: 9093
+        - name: bss-integrator-kafka-broker1
+          port: 9094
+          targetPort: 9094
+        - name: bss-integrator-kafka-broker2
+          port: 9095
+          targetPort: 9095
+        - name: bss-integrator-kafka-broker3
+          port: 9096
+          targetPort: 9096
+        - name: bss-integrator-navision-api
+          port: 10000
+          targetPort: 10000
 tolerations:
     - effect: NoSchedule
       key: dedicated-nodes
@@ -120,7 +285,147 @@ Enables Integrations Http Ingress gateway
             protocol: HTTPS
           tls:
             credentialName: qvantel-wildcard
-            mode: SIMPLE</code></pre>
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-bssapi-aggregator
+            number: 3000
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-crm-gatekeeper-api
+            number: 2080
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-dil-listener-api
+            number: 2095
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-hybris-gatekeeper-api
+            number: 2075
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-hybris-inventory-api
+            number: 2045
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-hybris-shop-api
+            number: 2035
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-mobile-id-api-v1
+            number: 2050
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-mobile-id-api-v2
+            number: 2055
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-navision-api
+            number: 10000
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-orders-event-receiver
+            number: 3010
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-pyprov-network-listener-api
+            number: 2065
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-rbs-gatekeeper-api
+            number: 2085
+            protocol: HTTPS
+          tls:
+            credentialName: ingress-cert-dna
+            mode: SIMPLE
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-kafka-bootstrap
+            number: 9093
+            protocol: TLS
+          tls:
+            mode: PASSTHROUGH
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-kafka-broker1
+            number: 9094
+            protocol: TLS
+          tls:
+            mode: PASSTHROUGH
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-kafka-broker2
+            number: 9095
+            protocol: TLS
+          tls:
+            mode: PASSTHROUGH
+        - hosts:
+            - '*'
+          port:
+            name: public-bss-integrator-kafka-broker3
+            number: 9096
+            protocol: TLS
+          tls:
+            mode: PASSTHROUGH</code></pre>
 </td>
 			<td><div>
 
@@ -388,6 +693,15 @@ service:
           port: 15021
           protocol: TCP
           targetPort: 15021
+        - name: tls
+          port: 15443
+          targetPort: 15443
+        - name: tls-istiod
+          port: 15012
+          targetPort: 15012
+        - name: tls-webhook
+          port: 15017
+          targetPort: 15017
         - name: http
           port: 80
           protocol: TCP
@@ -488,7 +802,28 @@ Enables Private Ingress gateway
           port:
             name: rabbitmq-webstomp
             number: 15674
-            protocol: HTTP</code></pre>
+            protocol: HTTP
+- name: istio-eastwestgateway
+  spec:
+    selector:
+        istio: private-ingress
+    servers:
+        - hosts:
+            - '*'
+          port:
+            name: tls-istiod
+            number: 15012
+            protocol: tls
+          tls:
+            mode: PASSTHROUGH
+        - hosts:
+            - '*'
+          port:
+            name: tls-istiodwebhook
+            number: 15017
+            protocol: tls
+          tls:
+            mode: PASSTHROUGH</code></pre>
 </td>
 			<td><div>
 

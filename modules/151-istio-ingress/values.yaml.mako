@@ -674,7 +674,7 @@ istioIngress:
   envoyFilters:
     # -- Common annotations for all EnvoyFilters resources provisioned
     annotations:
-    # -- List of  `EnvoyFilters` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  
+    # -- List of `EnvoyFilter` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files. Note that `configPatches` under spec of individual filter is a list.
     # @default -- see values.yaml.mako  
     instances:
       listener-timeout-tcp:
@@ -746,7 +746,7 @@ istioIngress:
                   level: 6
                   name: 6
                   state: STATE_PREBIND
-    # -- List of multiInstances `EnvoyFilters` resources to be provisioned. Meant for large and repetitive `EnvoyFilters`
+    # -- List of multiInstances `EnvoyFilter` resources to be provisioned. Meant for large and repetitive `EnvoyFilter`
     # @default -- see values.yaml.mako  
     multiInstances:
       bss-integrator-ingress-gateway-opts:
@@ -824,7 +824,7 @@ istioIngress:
   destinationRules:
     # -- Common annotations for all EnvoyFilters resources provisioned
     annotations:
-    # -- List of  `DestinationRules` resources to be provisioned. It is a map, so it can be configuration may be inherited/extended in multiple valyes.yaml files.  
+    # -- List of  `DestinationRule` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files.
     # @default -- see values.yaml.mako  
     instances:
       rabbitmq-hpd-dr:
@@ -853,7 +853,7 @@ istioIngress:
                   probes: 9
                   time: 65s
                   interval: 10s
-    # -- List of multiInstances `DestinationRules` resources to be provisioned. Meant for repetitive `DestinationRules`. Individual entries can be negated by setting them as `null`
+    # -- List of multiInstances `DestinationRule` resources to be provisioned. Meant for repetitive `DestinationRules`. Individual entries can be disabled by setting them as `null`
     # @default -- see values.yaml.mako  
     multipleInstances:
       dna-destinationrules:
