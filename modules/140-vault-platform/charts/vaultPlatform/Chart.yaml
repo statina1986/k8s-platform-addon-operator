@@ -2,10 +2,10 @@ apiVersion: v2
 name: vaultPlatform
 version: 0.0.1
 dependencies:
-  - name: vault-secrets-webhook
-    version: 1.21.3
-    repository: oci://ghcr.io/bank-vaults/helm-charts
-    condition: vaultWebhooksEnabled
-  - name: vault
-    version: 0.30.1
-    repository: https://helm.releases.hashicorp.com
+- name: vault-secrets-webhook
+  version: 1.22.1
+  repository: oci://ghcr.io/bank-vaults/helm-charts
+  condition: vaultWebhooksEnabled
+- name: vault
+  version: 0.30.1
+  repository: https://helm.releases.hashicorp.com
