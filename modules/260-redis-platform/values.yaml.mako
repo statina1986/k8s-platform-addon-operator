@@ -3,6 +3,7 @@ redisPlatform:
     # -- RBAC configuration
     rbac:
         create: true
+    # -- Service Account
     serviceAccount:
       create: true
       name: redis
@@ -19,7 +20,7 @@ redisPlatform:
       % endif
       repository: platform/bitnami-redis
       tag: 8.2.2
-    # -- Volume configuration
+    # -- Volume permission configuration
     volumePermissions:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -29,7 +30,7 @@ redisPlatform:
         % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.3.3_202509080945_master_90384dcc
-    # -- Sysctl configuration
+    # -- Sysctl image configuration to use Platform tools image
     sysctl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -39,7 +40,7 @@ redisPlatform:
         % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.3.3_202509080945_master_90384dcc
-    # -- Kubectl configuration
+    # -- Kubectl image configuration to use Platform tools image
     kubectl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -51,7 +52,7 @@ redisPlatform:
         tag: 1.3.3_202509080945_master_90384dcc
     # -- Architecture type
     architecture: replication
-    # -- Auth configurations
+    # -- Auth configurations to enable authentication and redis sentinels
     auth:
       enabled: true
       sentinel: true
@@ -63,7 +64,7 @@ redisPlatform:
       save 900 1
       save 300 10
       save 60 10000
-    # -- Master configuration
+    # -- Master configuration to set resource / toleration / volume configurations
     master:
       resources:
         limits: {}
@@ -81,7 +82,7 @@ redisPlatform:
         enabled: true
         storageClass: ""
         size: 8Gi
-    # -- Replica configuration
+    # -- Replica configuration set resource / toleration / volume configurations
     replica:
       automountServiceAccountToken: true
       % if values['global']['configurationProfile'] in {'dev'}:
@@ -105,6 +106,7 @@ redisPlatform:
         enabled: true
         storageClass: ""
         size: 8Gi
+    # -- Sentinel configurations if Sentinels are enabled Contains important configurations like masterSet name
     sentinel:      
       enabled: true
       masterService:
