@@ -40,7 +40,7 @@ sentinel: true</code></pre>
 </td>
 			<td><div>
 
-Auth configurations
+Auth configurations to enable authentication and redis sentinels
 
 </div>
 </td>
@@ -104,7 +104,7 @@ Image configuration
 </td>
 			<td><div>
 
-Kubectl configuration
+Kubectl image configuration to use Platform tools image
 
 </div>
 </td>
@@ -128,7 +128,7 @@ tolerations:
 </td>
 			<td><div>
 
-Master configuration
+Master configuration to set resource / toleration / volume configurations
 
 </div>
 </td>
@@ -184,7 +184,50 @@ tolerations:
 </td>
 			<td><div>
 
-Replica configuration
+Replica configuration set resource / toleration / volume configurations
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="redisPlatform--redis--sentinel">redisPlatform.redis.sentinel</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>enabled: true
+image:
+    registry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
+    repository: platform/bitnami-redis-sentinel
+    tag: 8.2.2
+masterService:
+    enabled: true
+masterSet: redis
+quorum: 2
+resources:
+    limits: {}
+    requests: {}
+service:
+    annotations:
+        consul.hashicorp.com/service-port: tcp-sentinel
+        platform.qvantel.com/consul-service-port: "26379"
+    createMaster: true</code></pre>
+</td>
+			<td><div>
+
+Sentinel configurations if Sentinels are enabled Contains important configurations like masterSet name
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="redisPlatform--redis--serviceAccount">redisPlatform.redis.serviceAccount</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>create: true
+name: redis</code></pre>
+</td>
+			<td><div>
+
+Service Account
 
 </div>
 </td>
@@ -200,7 +243,7 @@ Replica configuration
 </td>
 			<td><div>
 
-Sysctl configuration
+Sysctl image configuration to use Platform tools image
 
 </div>
 </td>
@@ -216,7 +259,7 @@ Sysctl configuration
 </td>
 			<td><div>
 
-Volume configuration
+Volume permission configuration
 
 </div>
 </td>

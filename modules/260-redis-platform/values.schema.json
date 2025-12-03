@@ -19,7 +19,7 @@
               "type": "string"
             },
             "auth": {
-              "description": "Auth configurations",
+              "description": "Auth configurations to enable authentication and redis sentinels",
               "properties": {
                 "enabled": {
                   "default": true,
@@ -93,7 +93,7 @@
               "type": "object"
             },
             "kubectl": {
-              "description": "Kubectl configuration",
+              "description": "Kubectl image configuration to use Platform tools image",
               "properties": {
                 "image": {
                   "properties": {
@@ -126,7 +126,7 @@
               "type": "object"
             },
             "master": {
-              "description": "Master configuration",
+              "description": "Master configuration to set resource / toleration / volume configurations",
               "properties": {
                 "persistence": {
                   "properties": {
@@ -269,7 +269,7 @@
               "type": "object"
             },
             "replica": {
-              "description": "Replica configuration",
+              "description": "Replica configuration set resource / toleration / volume configurations",
               "properties": {
                 "automountServiceAccountToken": {
                   "default": true,
@@ -371,6 +371,7 @@
               "type": "object"
             },
             "sentinel": {
+              "description": "Sentinel configurations if Sentinels are enabled Contains important configurations like masterSet name",
               "properties": {
                 "enabled": {
                   "default": true,
@@ -483,6 +484,7 @@
               "type": "object"
             },
             "serviceAccount": {
+              "description": "Service Account",
               "properties": {
                 "create": {
                   "default": true,
@@ -502,7 +504,7 @@
               "type": "object"
             },
             "sysctl": {
-              "description": "Sysctl configuration",
+              "description": "Sysctl image configuration to use Platform tools image",
               "properties": {
                 "image": {
                   "properties": {
@@ -535,7 +537,7 @@
               "type": "object"
             },
             "volumePermissions": {
-              "description": "Volume configuration",
+              "description": "Volume permission configuration",
               "properties": {
                 "image": {
                   "properties": {
