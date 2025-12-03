@@ -1,13 +1,16 @@
 redisPlatform:
   redis:
+    # -- RBAC configuration
     rbac:
         create: true
     serviceAccount:
       create: true
-      name: redis 
+      name: redis
+    # -- Global configuration
     global:
       security:
         allowInsecureImages: true
+    # -- Image configuration
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
@@ -16,6 +19,7 @@ redisPlatform:
       % endif
       repository: platform/bitnami-redis
       tag: 8.2.2
+    # -- Volume configuration
     volumePermissions:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -25,6 +29,7 @@ redisPlatform:
         % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.3.3_202509080945_master_90384dcc
+    # -- Sysctl configuration
     sysctl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -34,6 +39,7 @@ redisPlatform:
         % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.3.3_202509080945_master_90384dcc
+    # -- Kubectl configuration
     kubectl:
       image:
         % if 'containerRegistryBase' in values['global']:
@@ -43,10 +49,13 @@ redisPlatform:
         % endif
         repository: platform/platform-k8s-tools-minimal
         tag: 1.3.3_202509080945_master_90384dcc
+    # -- Architecture type
     architecture: replication
+    # -- Auth configurations
     auth:
       enabled: true
       sentinel: true
+    # -- Common configurations
     commonConfiguration: |-
       # Enable AOF https://redis.io/topics/persistence#append-only-file
       appendonly no
@@ -54,6 +63,7 @@ redisPlatform:
       save 900 1
       save 300 10
       save 60 10000
+    # -- Master configuration
     master:
       resources:
         limits: {}
@@ -71,6 +81,7 @@ redisPlatform:
         enabled: true
         storageClass: ""
         size: 8Gi
+    # -- Replica configuration
     replica:
       automountServiceAccountToken: true
       % if values['global']['configurationProfile'] in {'dev'}:
@@ -120,6 +131,7 @@ redisPlatform:
         annotations:
           platform.qvantel.com/consul-service-port: "26379"
           consul.hashicorp.com/service-port: tcp-sentinel
+    # -- Metrics Configuration
     metrics:
       enabled: true
       image:
