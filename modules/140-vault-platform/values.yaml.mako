@@ -220,9 +220,9 @@ vaultPlatform:
               value: ${values['global']['helmReleaseNamePrefix']}vault-platform-0
 
           % if 'containerRegistryBase' in values['global']:
-          image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          image: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
           % else:
-          image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
           % endif
           imagePullPolicy: IfNotPresent
           volumeMounts:

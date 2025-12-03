@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2024-08-20T15:29:29.573226018Z"
+  generatedAt: "2025-12-03T08:21:11.520303663Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: elasticsearch-platform
@@ -47,10 +47,10 @@ images:
       - digest: sha256:c2350fb6b74b694615e628764b338a2885ea55d7cfdd4344feb1e5ed41b7f12f
         arch: linux/arm64
   - name: loggingsetup
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: elasticsearch-platform
     digests:
-      - digest: sha256:052563c36febf8a1995cc6048f09106eb6b523f4d13e0554cdfb2e00af6a19df
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:aa6ee22f409e725b29e9f7e5a4bf37073bfda8da3bb44102460109c696ac6381
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64

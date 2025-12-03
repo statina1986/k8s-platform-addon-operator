@@ -543,7 +543,7 @@ monitoringPlatform:
           registry: platform.artifactory.qvantel.net
           % endif
           repository: platform/platform-k8s-tools-minimal
-          tag: 1.3.2_202508131123_master_e140ddde
+          tag: 1.3.3_202509080945_master_90384dcc
       downloadDashboardsImage:
         image:
           % if 'containerRegistryBase' in values['global']:
@@ -552,7 +552,7 @@ monitoringPlatform:
           registry: platform.artifactory.qvantel.net
            % endif
           repository: platform/platform-k8s-tools-minimal
-          tag: 1.3.2_202508131123_master_e140ddde
+          tag: 1.3.3_202509080945_master_90384dcc
       initChownData:
         image:
           % if 'containerRegistryBase' in values['global']:
@@ -561,7 +561,7 @@ monitoringPlatform:
           registry: platform.artifactory.qvantel.net
            % endif
           repository: platform/platform-k8s-tools-minimal
-          tag: 1.3.2_202508131123_master_e140ddde
+          tag: 1.3.3_202509080945_master_90384dcc
         securityContext:
           capabilities:
             add:

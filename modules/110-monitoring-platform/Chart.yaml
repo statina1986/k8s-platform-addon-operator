@@ -33,7 +33,7 @@ annotations:
     - name: grafana
       image: docker.io/grafana/grafana-enterprise:12.1.1
     - name: initChownData
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     - name: grafana-sidecar
       image: quay.io/kiwigrid/k8s-sidecar:1.30.10
     - name: imageRenderer

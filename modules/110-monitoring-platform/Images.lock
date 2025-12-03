@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-10-10T05:28:38.664380213Z"
+  generatedAt: "2025-12-03T08:22:41.570580292Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -113,12 +113,12 @@ images:
       - digest: sha256:990acff9514d4ead0e65a8dd5f4017c2a732ba551485168a9cad9b01bc9d0005
         arch: linux/arm64
   - name: initChownData
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: monitoring-platform
     digests:
-      - digest: sha256:f08f36571c5d4eb5822b25e200278674b4be241f35a473f01c47376f28f1077f
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:92bfa2085396600574e3a0141dc1ba4196d1811d24ed20512d08a4e58d8542ea
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64
   - name: grafana-sidecar
     image: quay.io/kiwigrid/k8s-sidecar:1.30.10

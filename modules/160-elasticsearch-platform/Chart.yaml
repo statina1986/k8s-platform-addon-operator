@@ -17,4 +17,4 @@ annotations:
     - name: logstash
       image: docker.io/library/logstash:7.16.2
     - name: loggingsetup
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
