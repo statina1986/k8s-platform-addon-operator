@@ -219,7 +219,7 @@ Default values for Cassandra clusters. See `example-cassandra.cluster` for refer
               requests:
                 cpu: '0.1'
                 memory: 256M
-          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
           racks:
             - name: default
               {{- if $.root.Values.global.platformMasters }}

@@ -155,9 +155,9 @@ kasopePlatform:
                     cpu: '0.1'
                     memory: 256M
               % if 'containerRegistryBase' in values['global']:              
-              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
               % else:
-              perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+              perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
               % endif
               racks:
                 - name: default

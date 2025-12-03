@@ -65,7 +65,7 @@ spec:
       serviceAccountName: platform
       containers:
       - name: patch-reaper
-        image: {{ $.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net" }}/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+        image: {{ $.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net" }}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
         command:
         - /bin/sh
         - -c
@@ -94,7 +94,7 @@ spec:
           serviceAccountName: platform
           containers:
             - name: snapshot-cleaner
-              image: {{ $.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net" }}/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+              image: {{ $.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net" }}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
               command:
               - /bin/sh
               - -c
