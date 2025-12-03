@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-09-22T05:47:50.887448472Z"
+  generatedAt: "2025-12-03T06:56:40.108634395Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: vault-platform
@@ -25,12 +25,12 @@ images:
       - digest: sha256:7a743ec9d43dcfcb2bbc0bcee1936e7d657be2f2b3ccbc880d3ffd24e760602f
         arch: linux/amd64
   - name: vault-env
-    image: ghcr.io/bank-vaults/vault-env:v1.21.6
+    image: ghcr.io/bank-vaults/vault-env:v1.22.0
     chart: vault-platform
     digests:
-      - digest: sha256:ba99d5178db6bbd536fd35dc0d07c84ccc254855c16f4ad446f6402ecde94178
+      - digest: sha256:8f9ff384565fda02cba68c1d7284be831b7ff50081f20d2c918eba610db8b223
         arch: linux/amd64
-      - digest: sha256:0fea8271e2f8ec09706f6541c180b52888d93016ea60e50e4c7c14d739b82d05
+      - digest: sha256:64af269130470f24822a4cd5a198f3fd929523004df84be8d001999d6bcb2226
         arch: linux/arm64
   - name: platform-tools
     image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc

@@ -2,8 +2,8 @@ apiVersion: v2
 name: vault-platform
 version: 0.0.1
 dependencies:
-  - name: vaultPlatform
-    version: 0.0.1
+- name: vaultPlatform
+  version: 0.0.1
 annotations:
   images: |
     - name: vault
@@ -11,6 +11,6 @@ annotations:
     - name: vault-secrets-webhook
       image: platform.artifactory.qvantel.net/platform/qvantel-vault-secrets-webhook:1.0.0.1_master_e5e0236d8
     - name: vault-env
-      image: ghcr.io/bank-vaults/vault-env:v1.21.6
+      image: ghcr.io/bank-vaults/vault-env:v1.22.0
     - name: platform-tools
       image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
