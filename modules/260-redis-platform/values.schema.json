@@ -1,0 +1,585 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "redisPlatform": {
+      "properties": {
+        "redis": {
+          "properties": {
+            "architecture": {
+              "default": "replication",
+              "description": "Architecture type",
+              "required": [],
+              "title": "architecture",
+              "type": "string"
+            },
+            "auth": {
+              "description": "Auth configurations to enable authentication and redis sentinels",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "sentinel": {
+                  "default": true,
+                  "required": [],
+                  "title": "sentinel",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "auth",
+              "type": "object"
+            },
+            "commonConfiguration": {
+              "default": "# Enable AOF https://redis.io/topics/persistence#append-only-file\nappendonly no\n# Enable RDB persistence, AOF persistence already enabled.\nsave 900 1\nsave 300 10\nsave 60 10000",
+              "description": "Common configurations",
+              "required": [],
+              "title": "commonConfiguration",
+              "type": "string"
+            },
+            "global": {
+              "description": "Global configuration",
+              "properties": {
+                "security": {
+                  "properties": {
+                    "allowInsecureImages": {
+                      "default": true,
+                      "required": [],
+                      "title": "allowInsecureImages",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "security",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "global",
+              "type": "object"
+            },
+            "image": {
+              "description": "Image configuration",
+              "properties": {
+                "registry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "registry",
+                  "type": "string"
+                },
+                "repository": {
+                  "default": "platform/bitnami-redis",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "8.2.2",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "kubectl": {
+              "description": "Kubectl image configuration to use Platform tools image",
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/platform-k8s-tools-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.3.3_202509080945_master_90384dcc",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "kubectl",
+              "type": "object"
+            },
+            "master": {
+              "description": "Master configuration to set resource / toleration / volume configurations",
+              "properties": {
+                "persistence": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "size": {
+                      "default": "8Gi",
+                      "required": [],
+                      "title": "size",
+                      "type": "string"
+                    },
+                    "storageClass": {
+                      "default": "",
+                      "required": [],
+                      "title": "storageClass",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "persistence",
+                  "type": "object"
+                },
+                "resources": {
+                  "properties": {
+                    "limits": {
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "requests": {
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "master",
+              "type": "object"
+            },
+            "metrics": {
+              "description": "Metrics Configuration",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/bitnami-redis-exporter",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.79.0",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "metrics",
+              "type": "object"
+            },
+            "rbac": {
+              "description": "RBAC configuration",
+              "properties": {
+                "create": {
+                  "default": true,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "rbac",
+              "type": "object"
+            },
+            "replica": {
+              "description": "Replica configuration set resource / toleration / volume configurations",
+              "properties": {
+                "automountServiceAccountToken": {
+                  "default": true,
+                  "required": [],
+                  "title": "automountServiceAccountToken",
+                  "type": "boolean"
+                },
+                "persistence": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    },
+                    "size": {
+                      "default": "8Gi",
+                      "required": [],
+                      "title": "size",
+                      "type": "string"
+                    },
+                    "storageClass": {
+                      "default": "",
+                      "required": [],
+                      "title": "storageClass",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "persistence",
+                  "type": "object"
+                },
+                "replicaCount": {
+                  "default": 3,
+                  "required": [],
+                  "title": "replicaCount",
+                  "type": "integer"
+                },
+                "resources": {
+                  "properties": {
+                    "limits": {
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "requests": {
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "tolerations": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "effect": {
+                            "default": "NoSchedule",
+                            "required": [],
+                            "title": "effect",
+                            "type": "string"
+                          },
+                          "key": {
+                            "default": "dedicated-nodes",
+                            "required": [],
+                            "title": "key",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "default": "Equal",
+                            "required": [],
+                            "title": "operator",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "platform-masters",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "tolerations",
+                  "type": "array"
+                }
+              },
+              "required": [],
+              "title": "replica",
+              "type": "object"
+            },
+            "sentinel": {
+              "description": "Sentinel configurations if Sentinels are enabled Contains important configurations like masterSet name",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/bitnami-redis-sentinel",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "8.2.2",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                },
+                "masterService": {
+                  "properties": {
+                    "enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "masterService",
+                  "type": "object"
+                },
+                "masterSet": {
+                  "default": "redis",
+                  "required": [],
+                  "title": "masterSet",
+                  "type": "string"
+                },
+                "quorum": {
+                  "default": 2,
+                  "required": [],
+                  "title": "quorum",
+                  "type": "integer"
+                },
+                "resources": {
+                  "properties": {
+                    "limits": {
+                      "required": [],
+                      "title": "limits",
+                      "type": "object"
+                    },
+                    "requests": {
+                      "required": [],
+                      "title": "requests",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "resources",
+                  "type": "object"
+                },
+                "service": {
+                  "properties": {
+                    "annotations": {
+                      "properties": {
+                        "consul.hashicorp.com/service-port": {
+                          "default": "tcp-sentinel",
+                          "required": [],
+                          "title": "consul.hashicorp.com/service-port",
+                          "type": "string"
+                        },
+                        "platform.qvantel.com/consul-service-port": {
+                          "default": "26379",
+                          "required": [],
+                          "title": "platform.qvantel.com/consul-service-port",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "annotations",
+                      "type": "object"
+                    },
+                    "createMaster": {
+                      "default": true,
+                      "required": [],
+                      "title": "createMaster",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "service",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "sentinel",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "description": "Service Account",
+              "properties": {
+                "create": {
+                  "default": true,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "redis",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "sysctl": {
+              "description": "Sysctl image configuration to use Platform tools image",
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/platform-k8s-tools-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.3.3_202509080945_master_90384dcc",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "sysctl",
+              "type": "object"
+            },
+            "volumePermissions": {
+              "description": "Volume permission configuration",
+              "properties": {
+                "image": {
+                  "properties": {
+                    "registry": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                      "required": [],
+                      "title": "registry",
+                      "type": "string"
+                    },
+                    "repository": {
+                      "default": "platform/platform-k8s-tools-minimal",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "default": "1.3.3_202509080945_master_90384dcc",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "volumePermissions",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "redis",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "redisPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
