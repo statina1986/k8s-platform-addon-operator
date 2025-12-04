@@ -57,9 +57,11 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
           zookeeper:
             <zookeper configuration copied here>
 	```	
-4. Deploy new configuration to the cluster. Some restarts will happen on all the kafka/strimzi pods due to Kafka version upgrade and introduction of brokers NodePool. After that, we will have our cluster migrated to NodePools, which is the first step for KRaft migration.
+4. Set Retain on the old cluster Kafka PV's (persistentVolumeReclaimPolicy) to not loose the data. 
 
-5. After migration, we will have a new set of kafka brokers with the name kafka-cluster-kafka-cluster-kafka-X. That will cause the creation of new PVC's instead of reusing the existing ones from the old cluster. We will perform a set of operations to use them.
+5. Deploy new configuration to the cluster. Some restarts will happen on all the kafka/strimzi pods due to Kafka version upgrade and introduction of brokers NodePool. After that, we will have our cluster migrated to NodePools, which is the first step for KRaft migration.
+
+6. After migration, we will have a new set of kafka brokers with the name kafka-cluster-kafka-cluster-kafka-X. That will cause the creation of new PVC's instead of reusing the existing ones from the old cluster. We will perform a set of operations to use them.
 
     - Pause reconciliation:
 
@@ -68,8 +70,6 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
     - Terminate strimzipodset and pods.
 
     ```kubectl delete StrimziPodSet kafka-cluster-kafka-cluster-kafka -n platform```
-
-    - Set Retain on the old cluster PV's (persistentVolumeReclaimPolicy)
 
     - Delete the old brokers PVC's (PV status will change to released)
 
