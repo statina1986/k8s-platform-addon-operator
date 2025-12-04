@@ -169,7 +169,7 @@ server:
                     fieldPath: metadata.namespace
             - name: VAULT_INIT_NODE
               value: vault-platform-0
-          image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.2.0_10_5193dbce5
+          image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
           imagePullPolicy: IfNotPresent
           name: auto-init-and-unseal-sidecar
           volumeMounts:
@@ -286,6 +286,7 @@ Configuration for underlying vault helm-chart. See https://developer.hashicorp.c
     servingCertificate: vault-platform-vault-secrets-webhook-ca
     useCertManager: false
 configMapFailurePolicy: Fail
+ignoreReleaseNamespace: false
 image:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/qvantel-vault-secrets-webhook
     tag: 1.0.0.1_master_e5e0236d8
@@ -295,6 +296,7 @@ namespaceSelector:
           operator: In
           values:
             - qvantel
+            - platform
 podsFailurePolicy: Fail
 secretsFailurePolicy: Fail
 secretsMutation: false

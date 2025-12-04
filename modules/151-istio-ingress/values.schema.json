@@ -1229,6 +1229,36 @@
                         },
                         "required": [],
                         "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "vector-logs",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "port": {
+                            "default": 9000,
+                            "required": [],
+                            "title": "port",
+                            "type": "integer"
+                          },
+                          "protocol": {
+                            "default": "TCP",
+                            "required": [],
+                            "title": "protocol",
+                            "type": "string"
+                          },
+                          "targetPort": {
+                            "default": 9000,
+                            "required": [],
+                            "title": "targetPort",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
                       }
                     ],
                     "required": []
@@ -1562,6 +1592,51 @@
                                     },
                                     "protocol": {
                                       "default": "HTTP",
+                                      "required": [],
+                                      "title": "protocol",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "port",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "hosts": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "required": [],
+                                        "type": "string"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "hosts",
+                                  "type": "array"
+                                },
+                                "port": {
+                                  "properties": {
+                                    "name": {
+                                      "default": "vector-logs",
+                                      "required": [],
+                                      "title": "name",
+                                      "type": "string"
+                                    },
+                                    "number": {
+                                      "default": 9000,
+                                      "required": [],
+                                      "title": "number",
+                                      "type": "integer"
+                                    },
+                                    "protocol": {
+                                      "default": "TCP",
                                       "required": [],
                                       "title": "protocol",
                                       "type": "string"
@@ -8876,7 +8951,7 @@
                       "title": "gateways",
                       "type": "array"
                     },
-                    "http": {
+                    "tcp": {
                       "items": {
                         "anyOf": [
                           {
@@ -8931,7 +9006,7 @@
                         "required": []
                       },
                       "required": [],
-                      "title": "http",
+                      "title": "tcp",
                       "type": "array"
                     }
                   },

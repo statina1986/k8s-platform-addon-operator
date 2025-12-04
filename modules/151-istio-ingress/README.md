@@ -408,6 +408,10 @@ service:
           port: 15674
           protocol: TCP
           targetPort: 15674
+        - name: vector-logs
+          port: 9000
+          protocol: TCP
+          targetPort: 9000
 tolerations:
     - effect: NoSchedule
       key: dedicated-nodes
@@ -488,7 +492,13 @@ Enables Private Ingress gateway
           port:
             name: rabbitmq-webstomp
             number: 15674
-            protocol: HTTP</code></pre>
+            protocol: HTTP
+        - hosts:
+            - '*'
+          port:
+            name: vector-logs
+            number: 9000
+            protocol: TCP</code></pre>
 </td>
 			<td><div>
 
