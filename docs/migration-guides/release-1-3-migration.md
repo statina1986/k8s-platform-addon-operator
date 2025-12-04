@@ -83,7 +83,7 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
 
     - Pod set will pop up and kafka brokers will back online.
 
-6. Migrate to KRaft.
+7. Migrate to KRaft.
     - First we will enable the controller nodepool by just setting the enabled: true and redeploying.
 
     ```yaml
@@ -115,7 +115,7 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
 	NAME            DESIRED KAFKA REPLICAS   DESIRED ZK REPLICAS   READY   METADATA STATE   WARNINGS
 	kafka-cluster   1                        3                     True    KRaft            True
     ```
-7. Prepare configuration for migrated Kafka. Remove the lines which were disabling `controller` NodePool and KRaft annotation. Most ofthe configuration should be taken from default values now. Make sure your broker nodepool has correct configuration (mainly storage , replicas, resources)
+8. Prepare configuration for migrated Kafka. Remove the lines which were disabling `controller` NodePool and KRaft annotation. Most ofthe configuration should be taken from default values now. Make sure your broker nodepool has correct configuration (mainly storage , replicas, resources)
 	```yaml
     clusters:
       kafka-cluster:
@@ -130,7 +130,7 @@ If your deployments were using Kafka in Zookeeper mode, then you need to plan mi
                 deleteClaim: false
     ```
 
-8. Deploy to have a final state aligned
+9. Deploy to have a final state aligned
 
 #### For new Kafka deployments:
 1. Configure cluster with needed nodepools and resources (e.g. storage). KRaft and nodepools enabled by default.
