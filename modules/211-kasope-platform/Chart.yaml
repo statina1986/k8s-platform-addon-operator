@@ -17,7 +17,7 @@ annotations:
     - name: configBuilder
       image: docker.io/datastax/cass-config-builder:1.0-ubi8
     - name: per-node-config
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     - name: k8ssandraClient
       image: docker.io/k8ssandra/k8ssandra-client:v0.8.3
     - name: k8ssandra-operator
@@ -27,4 +27,4 @@ annotations:
     - name: medusa
       image: docker.io/k8ssandra/medusa:0.25.1
     - name: kubectl
-      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc

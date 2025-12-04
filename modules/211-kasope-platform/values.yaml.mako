@@ -83,9 +83,7 @@ kasopePlatform:
           serviceAccount: platform
           serverVersion: "3.11.13"
           # -- Setting serverImage to override the value coming from k8ssandra-operator.global.imageconfig.types
-          % if values.get('kasopePlatform', {}).get('clusters', {}).get('cluster', {}).get('spec', {}).get('cassandra', {}).get('serverVersion', '').strip() == "3.11.13":
           serverImage: "${values['global']['containerRegistryBase']}/k8ssandra/cass-management-api:3.11.13"
-          % endif
           metadata:
             annotations:
               cassandra.datastax.com/allow-storage-changes: 'true'
@@ -157,9 +155,9 @@ kasopePlatform:
                     cpu: '0.1'
                     memory: 256M
               % if 'containerRegistryBase' in values['global']:              
-              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+              perNodeConfigInitContainerImage: ${values['global']['containerRegistryBase']}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
               % else:
-              perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+              perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
               % endif
               racks:
                 - name: default

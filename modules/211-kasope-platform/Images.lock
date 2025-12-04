@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-10-03T10:49:20.526366796Z"
+  generatedAt: "2025-12-03T08:06:11.426564466Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kasope-platform
@@ -49,12 +49,12 @@ images:
       - digest: sha256:c7c0c543d458c4da023372ed5ed8f2e6b098f279f2a58c5dadc4cee8ac38a90b
         arch: linux/arm64
   - name: per-node-config
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: kasope-platform
     digests:
-      - digest: sha256:f08f36571c5d4eb5822b25e200278674b4be241f35a473f01c47376f28f1077f
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:92bfa2085396600574e3a0141dc1ba4196d1811d24ed20512d08a4e58d8542ea
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64
   - name: k8ssandraClient
     image: docker.io/k8ssandra/k8ssandra-client:v0.8.3
@@ -63,14 +63,6 @@ images:
       - digest: sha256:f80a3841957d813bf1429fa0ffb672a21e49c9db8fa402fd192fd84afdc9b468
         arch: linux/amd64
       - digest: sha256:93a57444c14cec724942103543db6bb140ea444dca19b001701cc736b9e0d959
-        arch: linux/arm64
-  - name: k8ssandra-tools
-    image: k8ssandra/k8ssandra-tools:1.6.0-20240506112248-96d77628
-    chart: kasope-platform
-    digests:
-      - digest: sha256:4db559c3b2f139fda7cd63c774048d20d9ec9c205f34226eacbe70d203a2cbc2
-        arch: linux/amd64
-      - digest: sha256:82fa0c265f3e21613123e9bb52e16146be6f59aa66494ed6c3e964cea5a53cd1
         arch: linux/arm64
   - name: k8ssandra-operator
     image: docker.io/k8ssandra/k8ssandra-operator:v1.27.0
@@ -97,10 +89,10 @@ images:
       - digest: sha256:bceb122a97e31e47e8cb7d1352ee4f58eefee6b2b47e9594a481ec8982b67b5b
         arch: linux/arm64
   - name: kubectl
-    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     chart: kasope-platform
     digests:
-      - digest: sha256:f08f36571c5d4eb5822b25e200278674b4be241f35a473f01c47376f28f1077f
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-      - digest: sha256:92bfa2085396600574e3a0141dc1ba4196d1811d24ed20512d08a4e58d8542ea
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64

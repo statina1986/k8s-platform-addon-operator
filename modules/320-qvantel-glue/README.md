@@ -107,6 +107,162 @@ Common configurations to be used across databases
 </td>
 	</tr>
 	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.common.cassandra</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see child items docs</code></pre>
+</td>
+		<td><div>
+
+Common configurations for Cassandra databases
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.common.cassandra.defaultCluster</td>
+		<td>object</td>
+		<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>{}</code></pre>
+</td>
+		<td><div>
+
+Default values for Cassandra clusters. See `example-cassandra.cluster` for reference. With this field you can configure common values for all Cassandra clusters, e.g. backup location and schedule.
+
+</div>
+</td>
+	</tr>
+	<tr>
+		<td style="width: 300px;">qvantelGlue.dbs.common.cassandra.defaultClusterTemplate</td>
+		<td>tpl/string</td>
+		<td>
+<pre style="max-width:500px; overflow-x:auto; white-space: pre;" lang="tpl"><code>qvantelGlue.dbs.common.cassandra.defaultClusterTemplate: |
+  {{- if eq $.addonOperator.vaultPlatformEnabled "true" }}
+  vaultConfiguration: true
+  {{- end }}
+  medusaBackupSchedule: "05 02 * * *"
+  medusaBackupType: differential
+  snaphotCleanerSchedule: "0 0 1 * *"
+  spec:
+    cassandra:
+      serviceAccount: platform
+      serverVersion: "4.1.8"
+      serverImage: "platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:4.1.8-ubi8"
+      metadata:
+        annotations:
+          cassandra.datastax.com/allow-storage-changes: 'true'
+        services:
+          dcService:
+            annotations:
+              consul.hashicorp.com/service-port: native
+          allPodsService:
+            annotations:
+              consul.hashicorp.com/service-port: native
+      config:
+        cassandraYaml:
+          num_tokens: 16
+          materialized_views_enabled: true
+        jvmOptions:
+          {{- if eq $.root.Values.global.configurationProfile "dev" }} 
+          heapSize: 500Mi
+          {{- else }}
+          heapSize: 2Gi
+          {{- end }}
+      storageConfig:
+        cassandraDataVolumeClaimSpec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              {{- if eq $.root.Values.global.configurationProfile "dev" }}
+              storage: 10Gi
+              {{- else }}
+              storage: 20Gi
+              {{- end }}      
+      {{- if eq $.root.Values.global.configurationProfile "dev" }}
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: "0.1"
+        limits:
+          memory: 8Gi
+      {{- else }}
+      resources:
+        requests:
+          memory: 4Gi
+          cpu: "0.1"
+        limits:
+          memory: 8Gi
+      {{- end }}
+      datacenters:
+        - metadata:
+            name: dc1
+            services:
+              dcService:
+                annotations:
+                  consul.hashicorp.com/service-port: native
+              allPodsService:
+                annotations:
+                  consul.hashicorp.com/service-port: native 
+          {{- if eq $.root.Values.global.configurationProfile "dev" }}
+          size: 1
+          {{- else }}
+          size: 3
+          {{- end }}
+          # Universal limits for init containers
+          initContainers:
+          - name: server-config-init
+            resources:
+              limits:
+                cpu: '0.5'
+                memory: 384M
+              requests:
+                cpu: '0.1'
+                memory: 256M
+          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+          racks:
+            - name: default
+              {{- if $.root.Values.global.platformMasters }}
+              nodeAffinityLabels:
+                {{ $.root.Values.global.platformMastersKey }}: {{ $.root.Values.global.platformMastersValue }}
+              {{- end }}
+          tolerations:
+            - effect: NoSchedule
+              key: {{ $.root.Values.global.platformMastersKey }}
+              operator: Equal
+              value: {{ $.root.Values.global.platformMastersValue }}
+      telemetry:
+        cassandra:
+          endpoint:
+            address: "0.0.0.0"
+          relabels:
+            - action: drop
+              regex: ^org_apache_cassandra_metrics_table_cas_prepare_latency$|^org_apache_cassandra_metrics_table_cas_propose_latency$|^org_apache_cassandra_metrics_table_cas_commit_latency$|^org_apache_cassandra_metrics_table_view_read_time$|^org_apache_cassandra_metrics_table_view_lock_acquire_time$|^org_apache_cassandra_metrics_table_read_latency$|^org_apache_cassandra_metrics_table_coordinator_scan_latency$|^org_apache_cassandra_metrics_table_coordinator_read_latency$|^org_apache_cassandra_metrics_table_range_latency$|^org_apache_cassandra_metrics_table_write_latency$|^org_apache_cassandra_metrics_table_ss_tables_per_read$|^org_apache_cassandra_metrics_table_waiting_on_free_memtable_space$|^org_apache_cassandra_metrics_table_replica_filtering_protection_rows_cached_per_query$|^org_apache_cassandra_metrics_table_live_scanned$|^org_apache_cassandra_metrics_table_col_update_time_delta$|^org_apache_cassandra_metrics_cache_capacity$|^org_apache_cassandra_metrics_table_col_update_time_delta_histogram$|^org_apache_cassandra_metrics_table_live_scanned_histogram$|^org_apache_cassandra_metrics_table_ss_tables_per_read_histogram$|^org_apache_cassandra_metrics_table_estimated_partition_size_histogram$|^org_apache_cassandra_metrics_table_estimated_column_count_histogram$|^org_apache_cassandra_metrics_table_cas_prepare_total_latency$|^org_apache_cassandra_metrics_table_cas_commit_total_latency$|^org_apache_cassandra_metrics_table_cas_propose_total_latency$|^org_apache_cassandra_metrics_table_row_cache_hit_out_of_range$|^org_apache_cassandra_metrics_table_compression_metadata_off_heap_memory_used$|^org_apache_cassandra_metrics_table_bloom_filter_false_positives$|^org_apache_cassandra_metrics_table_bloom_filter_disk_space_used$|^org_apache_cassandra_metrics_table_all_memtables_live_data_size$|^org_apache_cassandra_metrics_table_all_memtables_heap_size$|^org_apache_cassandra_metrics_table_bytes_flushed$|^org_apache_cassandra_metrics_table_bloom_filter_off_heap_memory_used$|^org_apache_cassandra_metrics_table_recent_bloom_filter_false_positives$|^org_apache_cassandra_metrics_table_speculative_retries$|^org_apache_cassandra_metrics_table_key_cache_hit_rate$|^org_apache_cassandra_metrics_table_percent_repaired$|^org_apache_cassandra_metrics_table_row_cache_miss$|^org_apache_cassandra_metrics_table_short_read_protection_requests_total$|^org_apache_cassandra_metrics_table_recent_bloom_filter_false_ratio$|^org_apache_cassandra_metrics_table_col_update_time_delta_histogram_count$|^org_apache_cassandra_metrics_table_ss_tables_per_read_histogram_count$|^org_apache_cassandra_metrics_table_snapshots_size$|^org_apache_cassandra_metrics_table_row_cache_hit$|^org_apache_cassandra_metrics_table_replica_filtering_protection_requests_total$|^org_apache_cassandra_metrics_table_estimated_column_count_histogram_count$|^org_apache_cassandra_metrics_table_max_partition_size$|^org_apache_cassandra_metrics_table_range_total_latency$|^org_apache_cassandra_metrics_table_read_repair_requests_total$|^org_apache_cassandra_metrics_table_all_memtables_off_heap_size$|^org_apache_cassandra_metrics_table_bloom_filter_false_ratio$|^org_apache_cassandra_metrics_table_estimated_partition_size_histogram_count$|^org_apache_cassandra_metrics_table_compression_ratio$|^org_apache_cassandra_metrics_table_index_summary_off_heap_memory_used$|^org_apache_cassandra_metrics_table_live_scanned_histogram_count$|^org_apache_cassandra_metrics_table_mean_partition_size$|^org_apache_cassandra_metrics_table_memtable_live_data_size$|^org_apache_cassandra_metrics_table_memtable_columns_count$|^org_apache_cassandra_metrics_table_min_partition_size$|^org_apache_cassandra_metrics_keyspace_cas_commit_latency_bucket$|^org_apache_cassandra_metrics_keyspace_view_lock_acquire_time_bucket$|^org_apache_cassandra_metrics_keyspace_cas_propose_latency_bucket$|^org_apache_cassandra_metrics_keyspace_read_latency_bucket$|^org_apache_cassandra_metrics_keyspace_cas_prepare_latency_bucket$|^org_apache_cassandra_metrics_keyspace_view_read_time_bucket$|^org_apache_cassandra_metrics_keyspace_range_latency_bucket$|^org_apache_cassandra_metrics_keyspace_write_latency_bucket$|^org_apache_cassandra_metrics_dropped_message_internal_dropped_latency_bucket$|^org_apache_cassandra_metrics_dropped_message_cross_node_dropped_latency_bucket$|^org_apache_cassandra_metrics_keyspace_live_scanned_histogram$|^org_apache_cassandra_metrics_keyspace_ss_tables_per_read_histogram$|^org_apache_cassandra_metrics_keyspace_tombstone_scanned_histogram$|^org_apache_cassandra_metrics_keyspace_col_update_time_delta_histogram$
+              sourceLabels:
+                - __name__
+        prometheus:
+          enabled: true
+          commonLabels:
+            release: monitoring-platform
+        mcac:
+          enabled: false
+    reaper:
+      autoScheduling:
+        enabled: true
+ 
+</code></pre>
+</td>
+		<td><div>
+
+Default template for Cassandra clusters. See `example-cassandra.cluster` for reference. This is templated field which is rendered for each cluster from `qvantelGlue.dbs.cassandra`. With this field you can override default cluster template for complex cases and utilize helm templating in it. Scope for the template contains fields: 
+ * addonOperator: content from Addon Operator configmap. You can check if some modules, e.f. monitoring-platform are enabled.
+ * root: root context of 'qvantel-glue' module, containing all Values for the module.
+ * cluster: content of 'cluster' field for rendered cluster.
+
+</div>
+</td>
+	</tr>
+	<tr>
 		<td style="width: 300px;">qvantelGlue.dbs.common.mariadb</td>
 		<td>object</td>
 		<td>
@@ -646,7 +802,29 @@ Schedule for periodic reconciliation. Default is "*/5 * * * *" - so every 5 minu
 			<td>object</td>
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cluster:
-    spec: null
+    mainCassandraCluster: ""
+    medusaBackupSchedule: 05 02 * * *
+    medusaBackupType: differential
+    snaphotCleanerSchedule: 0 0 1 * *
+    spec:
+        cassandra:
+            datacenters:
+                - metadata:
+                    name: dc3
+                  size: 1
+            storageConfig:
+                cassandraDataVolumeClaimSpec:
+                    StorageClassName: local-path
+                    accessModes:
+                        - ReadWriteOnce
+                    resources:
+                        requests:
+                            storage: 50Gi
+        medusa:
+            storageProperties:
+                prefix: example-cassandra
+        reaper:
+            datacenterAvailability: LOCAL
     vaultConfiguration: true
 cqls:
     migration-tables:
@@ -672,7 +850,7 @@ roles:
 </td>
 			<td><div>
 
-This is example Cassandra glue definition.  In this example CNPG cluster is configured with 3 dbs created in this cluster(`catalog-deployer`, `ddl`, `flex-bpmn-executor`) and few additional roles. Note: It is used for documentation purposes only. Real PostgreSQL clusters should be defined under `qvantelGlue.dbs.postgres`
+This is example Cassandra glue definition.  In this example Cassandra cluster is configured with 2 keyspaces created in this cluster(`messaging`,`revenue_events`) and few additional roles. Note: It is used for documentation purposes only. Real Cassandra clusters should be defined under `qvantelGlue.dbs.cassandra`
 
 </div>
 </td>
@@ -685,16 +863,85 @@ This is example Cassandra glue definition.  In this example CNPG cluster is conf
 </td>
 			<td><div>
 
-Defines K8ssandra cluster (kind: K8ssandraCluster) to deploy.  If it is omitted, no cluster will be deployed as part of `glue` module and it is assumed cluster is deployed externally.
+Defines K8ssandra cluster (kind: K8ssandraCluster) to deploy.  Values configured in this object are merged with default template from `qvantelGlue.dbs.common.cassandra.defaultClusterTemplate` and with default values from `qvantelGlue.dbs.common.cassandra.defaultCluster`. Precedence is following defaultClusterTemplate <- defaultCluster <- cluster (values in this object).
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster.mainCassandraCluster</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+</td>
+			<td><div>
+
+Name of the cassandra cluster used as a backend for main-cassandra-service. See [main-service](templates/cassandra-dbs.yaml.mako)
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster.medusaBackupSchedule</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> "05 02 * * *"</code></pre>
+</td>
+			<td><div>
+
+Sets time for when to take Medusa backup, if medusa is configured under cluster.spec.medusa
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster.medusaBackupType</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>"differential"</code></pre>
+</td>
+			<td><div>
+
+Sets type for Medusa backup, if medusa is configured under cluster.spec.medusa
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;">example-cassandra.cluster.snaphotCleanerSchedule</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code> "0 0 1 * *"</code></pre>
+</td>
+			<td><div>
+
+Sets time for when to run snapshot-cleaner cronjob. Runs 'nodetool clearsnapshot --all' against each Cassandra pod in a cluster
 
 </div>
 </td>
 		</tr>
 		<tr>
 			<td style="width: 300px;">example-cassandra.cluster.spec</td>
-			<td>string</td>
+			<td>object</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>null</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>cassandra:
+    datacenters:
+        - metadata:
+            name: dc3
+          size: 1
+    storageConfig:
+        cassandraDataVolumeClaimSpec:
+            StorageClassName: local-path
+            accessModes:
+                - ReadWriteOnce
+            resources:
+                requests:
+                    storage: 50Gi
+medusa:
+    storageProperties:
+        prefix: example-cassandra
+reaper:
+    datacenterAvailability: LOCAL</code></pre>
 </td>
 			<td><div>
 

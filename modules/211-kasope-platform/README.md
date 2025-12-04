@@ -63,7 +63,7 @@ Configured profiles:
                 dcService:
                     annotations:
                         consul.hashicorp.com/service-port: native
-          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.2_202508131123_master_e140ddde
+          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
           racks:
             - name: default
           size: 3
@@ -88,6 +88,7 @@ Configured profiles:
         requests:
             cpu: "0.1"
             memory: 4Gi
+    serverImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:3.11.13
     serverVersion: 3.11.13
     serviceAccount: platform
     storageConfig:
@@ -124,18 +125,10 @@ Cassandra cluster spec section
 </td>
 		</tr>
 		<tr>
-			<td style="width: 300px;" id="kasopePlatform--clusters--cluster--spec--cassandra--metadata">kasopePlatform.clusters.cluster.spec.cassandra.metadata</td>
-			<td>object</td>
+			<td style="width: 300px;" id="kasopePlatform--clusters--cluster--spec--cassandra--serverImage">kasopePlatform.clusters.cluster.spec.cassandra.serverImage</td>
+			<td>string</td>
 			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>annotations:
-    cassandra.datastax.com/allow-storage-changes: "true"
-services:
-    allPodsService:
-        annotations:
-            consul.hashicorp.com/service-port: native
-    dcService:
-        annotations:
-            consul.hashicorp.com/service-port: native</code></pre>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:3.11.13</code></pre>
 </td>
 			<td><div>
 
