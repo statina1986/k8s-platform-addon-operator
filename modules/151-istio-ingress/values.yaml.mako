@@ -2,6 +2,9 @@ istioIngress:
   # -- Enables Pomerium Authorization proxy. This will affect only VirtualServices which have `pomeriumProtected: true` attributes
   pomeriumEnabled: false
   
+  dnaIstioProfile: false
+  externalIstioProxy: false
+
   # -- Enables Public Ingress gateway
   publicIngressEnabled: false
   # -- Enable full request logging for Public Ingress gateway
@@ -166,6 +169,7 @@ istioIngress:
         port: 15021
         protocol: TCP
         targetPort: 15021
+      % if values.get("istioIngress", {}).get("externalIstioProxy", False):
       - name: tls
         port: 15443
         targetPort: 15443
@@ -175,6 +179,7 @@ istioIngress:
       - name: tls-webhook
         port: 15017
         targetPort: 15017
+      % endif
       - name: http
         port: 80
         protocol: TCP
@@ -259,6 +264,7 @@ istioIngress:
           name: vector-logs
           number: 9000
           protocol: TCP
+  % if values.get("istioIngress", {}).get("externalIstioProxy", False):
   - name: ${values['global']['helmReleaseNamePrefix']}istio-eastwestgateway
     spec:
       selector:
@@ -280,6 +286,7 @@ istioIngress:
             protocol: tls
           tls:
             mode: PASSTHROUGH
+  % endif
 
   # -- Enables Integrations Http Ingress gateway
   integrationsHttpIngressEnabled: false
@@ -370,6 +377,7 @@ istioIngress:
         protocol: TCP
         targetPort: 443
       ## DNA specific
+      % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
       - name: bss-integrator-hybris-shop-api
         port: 2035
         targetPort: 2035
@@ -418,6 +426,7 @@ istioIngress:
       - name: bss-integrator-navision-api
         port: 10000
         targetPort: 10000
+      % endif
   # -- List of  `Gateway` resources provisioned for Integrations Http Ingress gateway.
   integrationsHttpIngressGateways:
   - name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
@@ -441,6 +450,7 @@ istioIngress:
           mode: SIMPLE
           credentialName: qvantel-wildcard
       ## DNA specific
+      % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
       - hosts:
           - '*'
         port:
@@ -581,6 +591,7 @@ istioIngress:
           protocol: TLS
         tls:
           mode: PASSTHROUGH
+      % endif
 
   # -- Enables Integrations Non Http Ingress gateway
   integrationsNonHttpIngressEnabled: false
