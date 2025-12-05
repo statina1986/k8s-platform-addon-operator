@@ -9,6 +9,8 @@ import base64
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.cassandra . }}
 {{- $dbClusterName := . }}
 
+{{- if ne $dbCluster.cluster nil }}
+
 {{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) ($dbCluster.cluster | default (dict) | deepCopy) }}
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.cassandra.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) $cluster }}
@@ -258,12 +260,13 @@ spec:
   creation-statements: >-
     {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}};" }}
 {{- end }}
+
 ### End of Cluster level Vault configuration block
 
-## Additional CQL installer resources per Cluster database
-{{- if $dbCluster.dbs }}
-{{- range keys $dbCluster.dbs  }}
-{{- $db := get $dbCluster.dbs . }}
+## Additional CQL installer resources per defined Cluster database
+{{- if $cluster.dbs }}
+{{- range keys $cluster.dbs  }}
+{{- $db := get $cluster.dbs . }}
 {{- $db_name := . }}
 {{- $db_name_underscore := ( . | replace "-" "_") }}
 {{- $db_rf := ( $db.replicationFactors | default "{'class':'NetworkTopologyStrategy', 'dc1': 1}") }}
@@ -296,35 +299,10 @@ spec:
     - name: "cass-user"
       expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
-## Additional global CQL installer resources
-{{- if $dbCluster.cqls }}
-{{- range keys $dbCluster.cqls  }}
-{{- $cql := get $dbCluster.cqls . }}
----
-apiVersion: platform.qvantel.com/v1
-kind: CqlInstaller
-metadata:
-  annotations:
-    platform.qvantel.com/retry-count: "100"
-  name: {{ $dbClusterName }}-{{ $db_name }}-installer
-spec:    
-  db-provision-cql:
-    {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
-  db-username: "{cass-user}"
-  db-password: "{cass-password}"
-  db-url: {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
-  computed-values:
-    - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
-    - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
-{{- end }}
-{{- end }}
-
 ### If additional roles defined for cluster
-{{- if $dbCluster.roles }}
-{{- range keys $dbCluster.roles  }}
-{{- $dbRole := get $dbCluster.roles . }}
+{{- if $cluster.roles }}
+{{- range keys $cluster.roles  }}
+{{- $dbRole := get $cluster.roles . }}
 {{- $dbRoleName := . }}
 ---
 apiVersion: platform-vault.qvantel.com/v1
@@ -351,10 +329,132 @@ spec:
   role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
 {{- end }}
 
+## Additional global CQL installer resources per Cluster
+{{- if $cluster.cqls }}
+{{- range keys $cluster.cqls  }}
+{{- $cql := get $cluster.cqls . }}
+{{- $cql_name := . }}
+---
+apiVersion: platform.qvantel.com/v1
+kind: CqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ $dbClusterName }}-{{ $cql_name }}-installer
+spec:    
+  db-provision-cql:
+    {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
+  db-username: "{cass-user}"
+  db-password: "{cass-password}"
+  db-url: {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  computed-values:
+    - name: "cass-password"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "cass-user"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+{{- end }}
+{{- end }}
 
 {{- end }}
 {{- end }}
 
+{{- end }}
+
+## END OF GLUE CLUSTER SPECIFIC RESOURCES
+
+## START OF EXTERNAL CLUSTER SPECIFIC RESOURCES
+## Additional CQL installer resources per external Cluster database
+{{- if $dbCluster.dbs }}
+{{- range keys $dbCluster.dbs  }}
+{{- $db := get $dbCluster.dbs . }}
+{{- $db_name := . }}
+{{- $db_name_underscore := ( . | replace "-" "_") }}
+{{- $db_rf := ( $db.replicationFactors | default "{'class':'NetworkTopologyStrategy', 'dc1': 1}") }}
+---
+apiVersion: platform.qvantel.com/v1
+kind: CqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ $dbClusterName }}-{{ $db_name }}-installer
+spec:  
+  {{- if and $db.cql $db.cql.provision }}
+  db-provision-cql:
+    {{- tpl (toYaml $db.cql.provision) $root | nindent 2 }}
+  {{- else }}
+  db-provision-cql:
+    - "CREATE KEYSPACE IF NOT EXISTS {{ $db_name_underscore }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
+    - "ALTER KEYSPACE {{ $db_name_underscore }} WITH replication = {{ $db_rf }} AND durable_writes = true;"
+  {{ end }}
+  {{- if and $db.cql $db.cql.additional }}
+  additional-cql:
+    {{- tpl (toYaml $db.cql.additional) $root | nindent 2 }}
+  {{ end }}
+  db-username: "{cass-user}"
+  db-password: "{cass-password}"
+  db-url: "main-cassandra-service-0-headless.{{ $.Release.Namespace }}.svc"
+  computed-values:
+    - name: "cass-password"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "cass-user"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+
+### If additional roles defined for cluster
+{{- if $db.roles }}
+{{- range keys $db.roles  }}
+{{- $dbrole := get $db.roles . }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbrole }}
+spec:
+  creation-statements: {{ $dbrole.cql }}
+  db-name: {{ $dbClusterName }}
+  default-ttl: "0"
+  max-ttl: "0"
+  role-name: {{ $dbrole }}
+{{- end }}
+{{- else }}
+---
+apiVersion: platform-vault.qvantel.com/v1
+kind: DbRole
+metadata:
+  name: {{ $dbClusterName }}-{{ $db_name }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
+spec:
+  db-name: {{ $dbClusterName }}
+  creation-statements: >-
+    {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE %s TO {{username}};" $db_name_underscore }}
+  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
+{{- end }}
+
+## Additional global CQL installer resources
+{{- if $dbCluster.cqls }}
+{{- range keys $dbCluster.cqls  }}
+{{- $cql := get $dbCluster.cqls . }}
+---
+apiVersion: platform.qvantel.com/v1
+kind: CqlInstaller
+metadata:
+  annotations:
+    platform.qvantel.com/retry-count: "100"
+  name: {{ $dbClusterName }}-{{ $db_name }}-installer
+spec:    
+  db-provision-cql:
+    {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
+  db-username: "{cass-user}"
+  db-password: "{cass-password}"
+  db-url: "main-cassandra-service-0-headless.{{ $.Release.Namespace }}.svc"
+  computed-values:
+    - name: "cass-password"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+    - name: "cass-user"
+      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+{{- end }}
+{{- end }}
+
+{{- end }}
+{{- end }}
 
 {{- end }}
 {{- end }}
