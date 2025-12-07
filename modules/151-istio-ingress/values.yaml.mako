@@ -1,8 +1,9 @@
 istioIngress:
   # -- Enables Pomerium Authorization proxy. This will affect only VirtualServices which have `pomeriumProtected: true` attributes
   pomeriumEnabled: false
-  
+  # -- Variable to enable DNA program specific values and configurations.
   dnaIstioProfile: false
+  # -- Variable to enable external-VM connections which is based on Istio-proxy installation.
   externalIstioProxy: false
 
   # -- Enables Public Ingress gateway
