@@ -455,35 +455,8 @@ istioIngress:
       - hosts:
           - '*'
         port:
-          name: public-bss-integrator-bssapi-aggregator
-          number: 3000
-          protocol: HTTPS
-        tls:
-          credentialName: ingress-cert-dna
-          mode: SIMPLE
-      - hosts:
-          - '*'
-        port:
-          name: public-bss-integrator-crm-gatekeeper-api
-          number: 2080
-          protocol: HTTPS
-        tls:
-          credentialName: ingress-cert-dna
-          mode: SIMPLE
-      - hosts:
-          - '*'
-        port:
-          name: public-bss-integrator-dil-listener-api
-          number: 2095
-          protocol: HTTPS
-        tls:
-          credentialName: ingress-cert-dna
-          mode: SIMPLE
-      - hosts:
-          - '*'
-        port:
-          name: public-bss-integrator-hybris-gatekeeper-api
-          number: 2075
+          name: public-bss-integrator-hybris-shop-api
+          number: 2035
           protocol: HTTPS
         tls:
           credentialName: ingress-cert-dna
@@ -493,15 +466,6 @@ istioIngress:
         port:
           name: public-bss-integrator-hybris-inventory-api
           number: 2045
-          protocol: HTTPS
-        tls:
-          credentialName: ingress-cert-dna
-          mode: SIMPLE
-      - hosts:
-          - '*'
-        port:
-          name: public-bss-integrator-hybris-shop-api
-          number: 2035
           protocol: HTTPS
         tls:
           credentialName: ingress-cert-dna
@@ -527,8 +491,53 @@ istioIngress:
       - hosts:
           - '*'
         port:
-          name: public-bss-integrator-navision-api
-          number: 10000
+          name: public-bss-integrator-pyprov-network-listener-api
+          number: 2065
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-hybris-gatekeeper-api
+          number: 2075
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-crm-gatekeeper-api
+          number: 2080
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-rbs-gatekeeper-api
+          number: 2085
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-dil-listener-api
+          number: 2095
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-bssapi-aggregator
+          number: 3000
           protocol: HTTPS
         tls:
           credentialName: ingress-cert-dna
@@ -545,17 +554,8 @@ istioIngress:
       - hosts:
           - '*'
         port:
-          name: public-bss-integrator-pyprov-network-listener-api
-          number: 2065
-          protocol: HTTPS
-        tls:
-          credentialName: ingress-cert-dna
-          mode: SIMPLE
-      - hosts:
-          - '*'
-        port:
-          name: public-bss-integrator-rbs-gatekeeper-api
-          number: 2085
+          name: public-bss-integrator-navision-api
+          number: 10000
           protocol: HTTPS
         tls:
           credentialName: ingress-cert-dna
