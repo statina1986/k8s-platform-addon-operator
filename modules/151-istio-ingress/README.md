@@ -27,6 +27,136 @@ Additional documentation can be found in Platform Docs https://intra.qvantel.com
 	</thead>
 	<tbody>
 		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules">istioIngress.destinationRules</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako</code></pre>
+</td>
+			<td><div>
+
+DestinationRules to be provisioned.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules--annotations">istioIngress.destinationRules.annotations</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
+</td>
+			<td><div>
+
+Common annotations for all EnvoyFilters resources provisioned
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules--instances">istioIngress.destinationRules.instances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of  `DestinationRule` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--destinationRules--multipleInstances">istioIngress.destinationRules.multipleInstances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of multiInstances `DestinationRule` resources to be provisioned. Meant for repetitive `DestinationRules`. Individual entries can be disabled by setting them as `null`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--dnaIstioProfile">istioIngress.dnaIstioProfile</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</td>
+			<td><div>
+
+Variable to enable DNA program specific values and configurations.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters">istioIngress.envoyFilters</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako</code></pre>
+</td>
+			<td><div>
+
+EnvoyFilters to be provisioned.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters--annotations">istioIngress.envoyFilters.annotations</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>null</code></pre>
+</td>
+			<td><div>
+
+Common annotations for all EnvoyFilters resources provisioned
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters--instances">istioIngress.envoyFilters.instances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of `EnvoyFilter` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files. Note that `configPatches` under spec of individual filter is a list.
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--envoyFilters--multiInstances">istioIngress.envoyFilters.multiInstances</td>
+			<td>object</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang=""><code>see values.yaml.mako  </code></pre>
+</td>
+			<td><div>
+
+List of multiInstances `EnvoyFilter` resources to be provisioned. Meant for large and repetitive `EnvoyFilter`
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--externalIstioProxy">istioIngress.externalIstioProxy</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</td>
+			<td><div>
+
+Variable to enable external-VM connections which is based on Istio-proxy installation.
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="istioIngress--integrationsHttpIngress">istioIngress.integrationsHttpIngress</td>
 			<td>object</td>
 			<td>
@@ -58,6 +188,19 @@ service:
         service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
         service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: deregistration_delay.timeout_seconds=30
         service.beta.kubernetes.io/aws-load-balancer-type: external
+    ports:
+        - name: status-port
+          port: 15021
+          protocol: TCP
+          targetPort: 15021
+        - name: http
+          port: 80
+          protocol: TCP
+          targetPort: 80
+        - name: https
+          port: 443
+          protocol: TCP
+          targetPort: 443
 tolerations:
     - effect: NoSchedule
       key: dedicated-nodes

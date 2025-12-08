@@ -1,0 +1,51 @@
+{{- if and .Values.istioIngress .Values.istioIngress.envoyFilters }}
+{{- if .Values.istioIngress.envoyFilters.instances }}
+{{- $root := . }}
+{{- range keys .Values.istioIngress.envoyFilters.instances  }}
+{{- $current := get $.Values.istioIngress.envoyFilters.instances . }}
+{{- if $current.enabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  {{- $empty := dict}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.envoyFilters.annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
+  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
+  {{- if $joinedAnnotations }}
+  annotations:
+    {{- toYaml $joinedAnnotations | nindent 4 }}
+  {{- end }}
+  name: {{ . }}
+{{- with $current.spec }}
+spec:
+  {{- tpl (toYaml .) $root | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.istioIngress.envoyFilters.multiInstances }}
+{{- $root := . }}
+{{- range keys .Values.istioIngress.envoyFilters.multiInstances  }}
+{{- $current := get $.Values.istioIngress.envoyFilters.multiInstances . }}
+{{- $variables := $current.variables }}
+{{- if $current.enabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  {{- $empty := dict}}
+  {{- $commonAnnotations := (default $empty $.Values.istioIngress.envoyFilters.annotations | deepCopy)}}
+  {{- $serviceAnnotations := (default $empty $current.annotations | deepCopy)}}
+  {{- $joinedAnnotations := merge $serviceAnnotations $commonAnnotations }}
+  {{- if $joinedAnnotations }}
+  annotations:
+    {{- toYaml $joinedAnnotations | nindent 4 }}
+  {{- end }}
+  name: {{ . }}
+spec:
+  {{- tpl $current.specTemplate $variables | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}

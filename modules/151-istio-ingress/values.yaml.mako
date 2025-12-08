@@ -1,7 +1,11 @@
 istioIngress:
   # -- Enables Pomerium Authorization proxy. This will affect only VirtualServices which have `pomeriumProtected: true` attributes
   pomeriumEnabled: false
-  
+  # -- Variable to enable DNA program specific values and configurations.
+  dnaIstioProfile: false
+  # -- Variable to enable external-VM connections which is based on Istio-proxy installation.
+  externalIstioProxy: false
+
   # -- Enables Public Ingress gateway
   publicIngressEnabled: false
   # -- Enable full request logging for Public Ingress gateway
@@ -166,6 +170,17 @@ istioIngress:
         port: 15021
         protocol: TCP
         targetPort: 15021
+      % if values.get("istioIngress", {}).get("externalIstioProxy", False):
+      - name: tls
+        port: 15443
+        targetPort: 15443
+      - name: tls-istiod
+        port: 15012
+        targetPort: 15012
+      - name: tls-webhook
+        port: 15017
+        targetPort: 15017
+      % endif
       - name: http
         port: 80
         protocol: TCP
@@ -250,6 +265,29 @@ istioIngress:
           name: vector-logs
           number: 9000
           protocol: TCP
+  % if values.get("istioIngress", {}).get("externalIstioProxy", False):
+  - name: ${values['global']['helmReleaseNamePrefix']}istio-eastwestgateway
+    spec:
+      selector:
+        istio: ${values['global']['helmReleaseNamePrefix']}private-ingress
+      servers:
+        - hosts:
+            - '*'
+          port:
+            name: tls-istiod
+            number: 15012
+            protocol: tls
+          tls:
+            mode: PASSTHROUGH
+        - hosts:
+            - '*'
+          port:
+            name: tls-istiodwebhook
+            number: 15017
+            protocol: tls
+          tls:
+            mode: PASSTHROUGH
+  % endif
 
   # -- Enables Integrations Http Ingress gateway
   integrationsHttpIngressEnabled: false
@@ -326,6 +364,70 @@ istioIngress:
         % else:
         {}
         % endif
+      ports:
+      - name: status-port
+        port: 15021
+        protocol: TCP
+        targetPort: 15021
+      - name: http
+        port: 80
+        protocol: TCP
+        targetPort: 80
+      - name: https
+        port: 443
+        protocol: TCP
+        targetPort: 443
+      ## DNA specific
+      % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
+      - name: bss-integrator-hybris-shop-api
+        port: 2035
+        targetPort: 2035
+      - name: bss-integrator-hybris-inventory-api
+        port: 2045
+        targetPort: 2045
+      - name: bss-integrator-mobile-id-api-v1
+        port: 2050
+        targetPort: 2050
+      - name: bss-integrator-mobile-id-api-v2
+        port: 2055
+        targetPort: 2055
+      - name: bss-integrator-pyprov-network-listener-api
+        port: 2065
+        targetPort: 2065
+      - name: bss-integrator-hybris-gatekeeper-api
+        port: 2075
+        targetPort: 2075
+      - name: bss-integrator-crm-gatekeeper-api
+        port: 2080
+        targetPort: 2080
+      - name: bss-integrator-rbs-gatekeeper-api
+        port: 2085
+        targetPort: 2085
+      - name: bss-integrator-dil-listener-api
+        port: 2095
+        targetPort: 2095
+      - name: bss-integrator-bssapi-aggregator
+        port: 3000
+        targetPort: 3000
+      - name: bss-integrator-orders-event-receiver
+        port: 3010
+        targetPort: 3010
+      - name: bss-integrator-kafka-bootstrap
+        port: 9093
+        targetPort: 9093
+      - name: bss-integrator-kafka-broker1
+        port: 9094
+        targetPort: 9094
+      - name: bss-integrator-kafka-broker2
+        port: 9095
+        targetPort: 9095
+      - name: bss-integrator-kafka-broker3
+        port: 9096
+        targetPort: 9096
+      - name: bss-integrator-navision-api
+        port: 10000
+        targetPort: 10000
+      % endif
   # -- List of  `Gateway` resources provisioned for Integrations Http Ingress gateway.
   integrationsHttpIngressGateways:
   - name: ${values['global']['helmReleaseNamePrefix']}integrations-http-ingress
@@ -348,6 +450,149 @@ istioIngress:
         tls:
           mode: SIMPLE
           credentialName: qvantel-wildcard
+      ## DNA specific
+      % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-bssapi-aggregator
+          number: 3000
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-crm-gatekeeper-api
+          number: 2080
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-dil-listener-api
+          number: 2095
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-hybris-gatekeeper-api
+          number: 2075
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-hybris-inventory-api
+          number: 2045
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-hybris-shop-api
+          number: 2035
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-mobile-id-api-v1
+          number: 2050
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-mobile-id-api-v2
+          number: 2055
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-navision-api
+          number: 10000
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-orders-event-receiver
+          number: 3010
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-pyprov-network-listener-api
+          number: 2065
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-rbs-gatekeeper-api
+          number: 2085
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-kafka-bootstrap
+          number: 9093
+          protocol: TLS
+        tls:
+          mode: PASSTHROUGH
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-kafka-broker1
+          number: 9094
+          protocol: TLS
+        tls:
+          mode: PASSTHROUGH
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-kafka-broker2
+          number: 9095
+          protocol: TLS
+        tls:
+          mode: PASSTHROUGH
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-kafka-broker3
+          number: 9096
+          protocol: TLS
+        tls:
+          mode: PASSTHROUGH
+      % endif
 
   # -- Enables Integrations Non Http Ingress gateway
   integrationsNonHttpIngressEnabled: false
@@ -446,6 +691,295 @@ istioIngress:
           name: sftp
           number: 22
           protocol: TCP
+  # -- EnvoyFilters to be provisioned.
+  # @default -- see values.yaml.mako
+  envoyFilters:
+    # -- Common annotations for all EnvoyFilters resources provisioned
+    annotations:
+    # -- List of `EnvoyFilter` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files. Note that `configPatches` under spec of individual filter is a list.
+    # @default -- see values.yaml.mako  
+    instances:
+      listener-timeout-tcp:
+        enabled: false
+        spec:
+          configPatches:
+          - applyTo: NETWORK_FILTER
+            match:
+              context: SIDECAR_INBOUND
+              listener:
+                filterChain:
+                  filter:
+                    name: envoy.filters.network.tcp_proxy
+            patch:
+              operation: MERGE
+              value:
+                name: envoy.filters.network.tcp_proxy
+                typed_config:
+                  '@type': type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+                  idle_timeout: 168h
+          - applyTo: NETWORK_FILTER
+            match:
+              context: SIDECAR_OUTBOUND
+              listener:
+                filterChain:
+                  filter:
+                    name: envoy.filters.network.tcp_proxy
+            patch:
+              operation: MERGE
+              value:
+                name: envoy.filters.network.tcp_proxy
+                typed_config:
+                  '@type': type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+                  idle_timeout: 168h
+      ingress-gateway-opts:
+        enabled: false
+        spec:
+          configPatches:
+          # Enable TCP Keepalives for ingress gateway HTTP(S) port (6443)
+          # See https://github.com/istio/istio/issues/28879
+          # (For some reason ingress gateways are not affected by global mesh keepalive options).
+          - applyTo: LISTENER
+            match:
+              context: GATEWAY
+              listener:
+                name: 0.0.0.0_6443
+                portNumber: 6443
+            patch:
+              operation: MERGE
+              value:
+                socket_options:
+                - description: enable keep-alive
+                  int_value: 1
+                  level: 1
+                  name: 9
+                  state: STATE_PREBIND
+                - description: idle time before first keep-alive probe is sent
+                  int_value: 91  # 91 seconds
+                  level: 6
+                  name: 4
+                  state: STATE_PREBIND
+                - description: keep-alive interval
+                  int_value: 11  # 11 seconds
+                  level: 6
+                  name: 5
+                  state: STATE_PREBIND
+                - description: keep-alive probes count
+                  int_value: 5
+                  level: 6
+                  name: 6
+                  state: STATE_PREBIND
+    # -- List of multiInstances `EnvoyFilter` resources to be provisioned. Meant for large and repetitive `EnvoyFilter`
+    # @default -- see values.yaml.mako  
+    multiInstances:
+      bss-integrator-ingress-gateway-opts:
+        enabled: false
+        variables:
+          ports:
+          - 3000
+          - 2095
+          - 2075
+          - 2045
+          - 2035
+          - 2050
+          - 2055
+          - 10000
+          - 3010
+          - 2065
+          - 2085
+          - 9093
+          - 9094
+          - 9095
+          - 9096
+        specTemplate: |
+          configPatches:
+          {{- range .ports }}
+          - applyTo: LISTENER
+            match:
+              context: GATEWAY
+              listener:
+                name: 0.0.0.0_{{ . }}
+                portNumber: {{ . }}
+            patch:
+              operation: MERGE
+              value:
+                socket_options:
+                - description: enable keep-alive
+                  int_value: 1
+                  level: 1
+                  name: 9
+                  state: STATE_PREBIND
+                - description: idle time before first keep-alive probe is sent
+                  int_value: 91
+                  level: 6
+                  name: 4
+                  state: STATE_PREBIND
+                - description: keep-alive interval
+                  int_value: 11
+                  level: 6
+                  name: 5
+                  state: STATE_PREBIND
+                - description: keep-alive probes count
+                  int_value: 5
+                  level: 6
+                  name: 6
+                  state: STATE_PREBIND
+          - applyTo: NETWORK_FILTER
+            match:
+              context: GATEWAY
+              listener:
+                name: 0.0.0.0_{{ . }}
+                portNumber: {{ . }}
+                filterChain:
+                  filter:
+                    name: "envoy.filters.network.http_connection_manager"
+            patch:
+              operation: MERGE
+              value:
+                name: "envoy.filters.network.http_connection_manager"
+                typed_config:
+                  "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+                  common_http_protocol_options:
+                    idle_timeout: 24h
+          {{- end }}
+  # -- DestinationRules to be provisioned.
+  # @default -- see values.yaml.mako
+  destinationRules:
+    # -- Common annotations for all EnvoyFilters resources provisioned
+    annotations:
+    # -- List of  `DestinationRule` resources to be provisioned. It is a map, so its' configuration can be inherited/extended in multiple valyes.yaml files.
+    # @default -- see values.yaml.mako  
+    instances:
+      rabbitmq-hpd-dr:
+        enabled: false
+        spec:
+          host: hpd-rabbitmq.platform.svc.cluster.local
+          trafficPolicy:
+            tls:
+              mode: ISTIO_MUTUAL
+            connectionPool:
+              tcp:
+                tcpKeepalive:
+                  probes: 9
+                  time: 65s
+                  interval: 10s
+      rabbitmq-dr:
+        enabled: false
+        spec:
+          host: dna-rabbitmq.platform.svc.cluster.local
+          trafficPolicy:
+            tls:
+              mode: ISTIO_MUTUAL
+            connectionPool:
+              tcp:
+                tcpKeepalive:
+                  probes: 9
+                  time: 65s
+                  interval: 10s
+    # -- List of multiInstances `DestinationRule` resources to be provisioned. Meant for repetitive `DestinationRules`. Individual entries can be disabled by setting them as `null`
+    # @default -- see values.yaml.mako  
+    multipleInstances:
+      dna-destinationrules:
+        enabled: false
+        entries:
+          # RBS-related
+          rbs-master-xmlrpc-dr:
+            host: rbs-master-xmlrpc.qvantel.svc.cluster.local
+          rbs-xmlrpc-dr:
+            host: rbs-xmlrpc.qvantel.svc.cluster.local
+          # Qvantel namespace related
+          activation-frontend-dr:
+            host: activation-frontend.qvantel.svc.cluster.local
+          audit-admin-dr:
+            host: audit-admin.qvantel.svc.cluster.local
+          billingui-backend-dr:
+            host: billingui-backend.qvantel.svc.cluster.local
+          billingui-frontend-log-proxy-dr:
+            host: billingui-frontend-log-proxy-8181.qvantel.svc.cluster.local
+          billingui-frontend-dr:
+            host: billingui-frontend.qvantel.svc.cluster.local
+          crm-gatekeeper-api-dr:
+            host: crm-gatekeeper-api.qvantel.svc.cluster.local
+          dnapy-proq-dr:
+            host: dnapy-web-proq.qvantel.svc.cluster.local
+          dnapy-navision-api-dr:
+            host: dnapy-soap-navision.qvantel.svc.cluster.local
+          dnapy-rest-dil-listener-dr:
+            host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
+          dnapy-mobile-id-api-v1-dr:
+            host: dnapy-api-mobile-id.qvantel.svc.cluster.local
+          dnapy-robot-dr:
+            host: dnapy-web-robot.qvantel.svc.cluster.local
+          dnapy-extcc-dr:
+            host: dnapy-web-extcc.qvantel.svc.cluster.local
+          dnapy-frontback-activation-dr:
+            host: dnapy-frontback-activation.qvantel.svc.cluster.local
+          fake-dil-dr:
+            host: fake-dil-admin.qvantel.svc.cluster.local
+          hybris-inventory-api-dr:
+            host: hybris-inventory-api-8080.qvantel.svc.cluster.local
+          hybris-shop-api-dr:
+            host: dnapy-rest-bssapi-shop.qvantel.svc.cluster.local
+          hybris-gatekeeper-api-dr:
+            host: hybris-gatekeeper-api.qvantel.svc.cluster.local
+          kafka-admin-web-dr:
+            host: kafka-admin-web.qvantel.svc.cluster.local
+          mobile-id-api-dr:
+            host: mobile-id-app-api.qvantel.svc.cluster.local
+          operational-index-dr:
+            host: operational-index-8080.qvantel.svc.cluster.local
+          peon-admin-frontend-dr:
+            host: peon-admin-frontend.qvantel.svc.cluster.local
+          peon-admin-backend-dr:
+            host: peon-admin-backend-8080.qvantel.svc.cluster.local
+          product-catalog-visualizer-dr:
+            host: product-catalog-visualizer.qvantel.svc.cluster.local
+          pyprov-admin-dr:
+            host: pyprov-admin.qvantel.svc.cluster.local
+          pyprov-network-listener-dr:
+            host: pyprov-network-listener-8080.qvantel.svc.cluster.local
+          rbs-gatekeeper-admin-dr:
+            host: rbs-gatekeeper-admin.qvantel.svc.cluster.local
+          rbs-gatekeeper-api-dr:
+            host: rbs-gatekeeper-api.qvantel.svc.cluster.local
+          salestool-backend-telesales-dr:
+            host: salestool-backend-telesales.qvantel.svc.cluster.local
+          salestool-frontend-telesales-dr:
+            host: salestool-frontend-telesales.qvantel.svc.cluster.local
+          salestool-backend-pos-dr:
+            host: salestool-backend-pos.qvantel.svc.cluster.local
+          salestool-frontend-pos-dr:
+            host: salestool-frontend-pos.qvantel.svc.cluster.local
+          # qrp namespace related
+          bssapi-aggregator-dr:
+            host: bssapi-aggregator.qrp.svc.cluster.local
+          bssapi-explorer-dr:
+            host: bssapi-explorer.qrp.svc.cluster.local
+          bssapi-documentation-dr:
+            host: bssapi-documentation-service.qrp.svc.cluster.local
+          catalog-deployer-dr:
+            host: qflow-catalog-deployer.qrp.svc.cluster.local
+          catalog-designer-dr:
+            host: qflow-product-catalog-designer-9003.qrp.svc.cluster.local
+          flex-admin-dr:
+            host: flex-admin.qrp.svc.cluster.local
+          flex-app-store-dr:
+            host: flex-app-store.qrp.svc.cluster.local
+          orders-event-receiver-dr:
+            host: orders-event-receiver.qrp.svc.cluster.local
+          zipkin-dr:
+            host: dna-zipkin.qrp.svc.cluster.local
+          # platform related
+          sentry-ui-dr:
+            host: dna-sentry-nginx.sentry.svc.cluster.local
+          vault-ui-dr:
+            host: vault-ui.platform.svc.cluster.local
+          keycloak-auth-dr:
+            host: qvaa-proxy-80.platform.svc.cluster.local
+        specTemplate: |
+          host: {{ .host }}
+          trafficPolicy:
+            tls:
+              mode: ISTIO_MUTUAL
   # -- VirtualServices to be provisioned.
   # @default -- see values.yaml.mako
   virtualServices:
@@ -996,7 +1530,484 @@ istioIngress:
               host: zipkin.${values['global']['appsNamespace']}.svc.cluster.local
               port:
                 number: 9411
-      # Platform Managed services    
+      ## DNA Program/Product managed services
+      aktivoi:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "activation-frontback-api-route"
+          match:
+            - uri:
+                prefix: "/api"
+            - uri:
+                prefix: "/tupas"
+            - uri:
+                prefix: "/remember_company_id"
+            - uri:
+                prefix: "/saml2"
+            - uri:
+                prefix: "/static"
+            - uri:
+                prefix: "/oidc"
+          route:
+            - destination:
+                host: dnapy-frontback-activation.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "activation-frontend-route"
+          route:
+          - destination:
+              host: activation-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      billing:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "billingui-backend-route"
+          match:
+            - uri:
+                prefix: "/api/"
+            - uri:
+                prefix: "/ws/"
+            - uri:
+                prefix: "/sso/"
+          route:
+            - destination:
+                host: billingui-backend.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "billingui-frontend-log-proxy-route"
+          match:
+            - uri:
+                prefix: "/logging/"
+          route:
+            - destination:
+                host: billingui-frontend-log-proxy-8181.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8181
+        - name: "billingui-frontend-route"
+          route:
+          - destination:
+              host: billingui-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      aspaauvo:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-extcc-route"
+          route:
+            - destination:
+                host: dnapy-web-extcc.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      robot:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-robot-route"
+          route:
+            - destination:
+                host: dnapy-web-robot.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      aspa:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-proq-static-route"
+          match:
+            - uri:
+                prefix: "/static"
+          headers:
+            response:
+              set:
+                X-Frame-Options: "DENY"
+                X-XSS-Protection: "1"
+                X-Content-Type-Options: "nosniff"
+                Cache-Control: "max-age=86400"
+                Strict-Transport-Security: "max-age=1500"
+          route:
+            - destination:
+                host: dnapy-web-proq.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "dnapy-proq-route"
+          route:
+            - destination:
+                host: dnapy-web-proq.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      operational:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        ### KEYCLOAK ###
+        - name: "keycloak-auth-route"
+          match:
+            - uri:
+                prefix: "/auth/"
+          route:
+            - destination:
+                host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 80
+        ### AUDIT ADMIN ###
+        - name: "operational-audit-admin-route"
+          match:
+            - uri:
+                prefix: "/audit/"
+          route:
+            - destination:
+                host: audit-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### FAKE DIL ###
+        - name: "fake-dil-admin-route"
+          match:
+            - uri:
+                prefix: "/fake_dil/"
+          route:
+            - destination:
+                host: fake-dil-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### PEON ADMIN ###
+        - name: "operational-peon-admin-backend-route"
+          match:
+            - uri:
+                prefix: "/peon/api"
+            - uri:
+                prefix: "/peon/oidc"
+          route:
+            - destination:
+                host: peon-admin-backend-8080.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "operational-peon-admin-frontend-route"
+          match:
+            - uri:
+                prefix: "/peon/"
+          route:
+            - destination:
+                host: peon-admin-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 80
+        ### PYPROV ADMIN ###
+        - name: "operational-pyprov-admin-route"
+          match:
+            - uri:
+                prefix: "/pyprov/"
+          route:
+            - destination:
+                host: pyprov-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### RBS GATEKEEPER ADMIN ###
+        - name: "operational-rbs-gatekeeper-admin-route"
+          match:
+            - uri:
+                prefix: "/rbs-gatekeeper"
+          route:
+            - destination:
+                host: rbs-gatekeeper-admin.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### RBS TASKER ADMIN ###
+        - name: "operational-rbs-tasker-admin-backend-route"
+          match:
+            - uri:
+                prefix: "/rbs_tasker/api"
+            - uri:
+                prefix: "/rbs_tasker/oidc"
+          route:
+            - destination:
+                host: rbs-tasker-admin-backend-8080.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "operational-rbs-tasker-admin-frontend-route"
+          match:
+            - uri:
+                prefix: "/rbs_tasker/"
+          route:
+            - destination:
+                host: rbs-tasker-admin-frontend.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 80
+        ### KAFKA ADMIN ###
+        - name: "operational-kafka-admin-route"
+          match:
+            - uri:
+                prefix: "/kafka/"
+          route:
+            - destination:
+                host: kafka-admin-web.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+          ### PRODUCT CATALOG VISUALIZER ###
+        - name: "product-catalog-visualizer-route"
+          match:
+            - uri:
+                prefix: "/product-catalog-visualizer/"
+          route:
+            - destination:
+                host: product-catalog-visualizer.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        ### INDEX PAGE ###
+        - name: "operational-index-page-route"
+          match:
+            - uri:
+                prefix: "/"
+          route:
+            - destination:
+                host: operational-index-8080.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      pos:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "salestool-backend-pos-route"
+          match:
+            - uri:
+                prefix: "/api"
+            - uri:
+                prefix: "/sso"
+          route:
+            - destination:
+                host: salestool-backend-pos.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "salestool-frontend-pos-route"
+          route:
+          - destination:
+              host: salestool-frontend-pos.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      telesales:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "salestool-backend-telesales-route"
+          match:
+            - uri:
+                prefix: "/api"
+            - uri:
+                prefix: "/sso"
+          route:
+            - destination:
+                host: salestool-backend-telesales.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "salestool-frontend-telesales-route"
+          route:
+          - destination:
+              host: salestool-frontend-telesales.${values['global']['appsNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      robot:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "dnapy-robot-route"
+          route:
+            - destination:
+                host: dnapy-web-robot.${values['global']['appsNamespace']}.svc.cluster.local
+                port:
+                  number: 8080
+      # This is DNA specific
+      bss-integrator:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - match:
+          - port: 3000
+          route:
+          - destination:
+              host: bssapi-aggregator.qrp.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2095
+          route:
+            - destination:
+                host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 2075
+          route:
+          - destination:
+              host: hybris-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2045
+          route:
+          - destination:
+              host: hybris-inventory-api-8080.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2035
+            uri:
+              prefix: "/api/"
+          rewrite:
+            uri: "/"
+          route:
+            - destination:
+                host: dnapy-rest-bssapi-shop.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 2050
+          route:
+            - destination:
+                host: dnapy-api-mobile-id.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 2055
+          route:
+            - destination:
+                host: mobile-id-app-api.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - match:
+          - port: 10000
+          route:
+            - destination:
+                host: dnapy-soap-navision.qvantel.svc.cluster.local
+                port:
+                  number: 8080
+        - name: "bss-integrator-orders-event-receiver-health-route"
+          match:
+          - port: 3010
+            uri:
+              prefix: "/health"
+          route:
+          - destination:
+              host: orders-event-receiver-management.qrp.svc.cluster.local
+              port:
+                number: 21061
+        - name: "bss-integrator-orders-event-receiver-route"
+          match:
+          - port: 3010
+          route:
+          - destination:
+              host: orders-event-receiver.qrp.svc.cluster.local
+              port:
+                number: 21060
+        - match:
+          - port: 2065
+          route:
+          - destination:
+              host: pyprov-network-listener-8080.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2085
+          route:
+          - destination:
+              host: rbs-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        tls:
+        - match:
+          - port: 9093
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-external-bootstrap.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+        - match:
+          - port: 9094
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-cluster-kafka-external-1.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+        - match:
+          - port: 9095
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-cluster-kafka-external-2.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+        - match:
+          - port: 9096
+            sniHosts:
+            - make-this-be-same-as-vshost
+          route:
+            - destination:
+                host: kafka-cluster-kafka-cluster-kafka-external-3.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 9093
+      rabbitmq-hpd:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - name: "rabbitmq-hpd-admin-route"
+          route:
+            - destination:
+                host: hpd-rabbitmq.${values['global']['platformNamespace']}.svc.cluster.local
+                port:
+                  number: 15672
+      sentry:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        http:
+        - route:
+          - destination:
+              host: dna-sentry-nginx.${values['global']['sentryNamespace']}.svc.cluster.local
+              port:
+                number: 80
+      # Platform Managed services
+      istiod:
+        enabled: false
+        gateways:
+        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        hosts:
+        - "*"
+        tls:
+        - match:
+          - port: 15012
+            sniHosts:
+            - "*"
+          route:
+          - destination:
+              host: istiod.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 15012
+        - match:
+          - port: 15017
+            sniHosts:
+            - "*"
+          route:
+          - destination:
+              host: istiod.${values['global']['platformNamespace']}.svc.cluster.local
+              port:
+                number: 443
       auth:
         enabled: false
         gateways:
