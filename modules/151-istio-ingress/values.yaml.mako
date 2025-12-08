@@ -775,21 +775,22 @@ istioIngress:
         enabled: false
         variables:
           ports:
-          - 3000
-          - 2095
-          - 2075
-          - 2045
           - 2035
+          - 2045
           - 2050
           - 2055
-          - 10000
-          - 3010
           - 2065
+          - 2075
           - 2085
+          - 2080
+          - 2095
+          - 3000
+          - 3010
           - 9093
           - 9094
           - 9095
           - 9096
+          - 10000
         specTemplate: |
           configPatches:
           {{- range .ports }}
