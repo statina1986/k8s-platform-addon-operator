@@ -884,8 +884,6 @@ istioIngress:
           # RBS-related
           rbs-master-xmlrpc-dr:
             host: rbs-master-xmlrpc.qvantel.svc.cluster.local
-          rbs-xmlrpc-dr:
-            host: rbs-xmlrpc.qvantel.svc.cluster.local
           # Qvantel namespace related
           activation-frontend-dr:
             host: activation-frontend.qvantel.svc.cluster.local
@@ -969,10 +967,8 @@ istioIngress:
           zipkin-dr:
             host: dna-zipkin.qrp.svc.cluster.local
           # platform related
-          sentry-ui-dr:
-            host: dna-sentry-nginx.sentry.svc.cluster.local
           vault-ui-dr:
-            host: vault-ui.platform.svc.cluster.local
+            host: vault.platform.svc.cluster.local
           keycloak-auth-dr:
             host: qvaa-proxy-80.platform.svc.cluster.local
         specTemplate: |
@@ -1833,34 +1829,6 @@ istioIngress:
         - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
         - match:
-          - port: 3000
-          route:
-          - destination:
-              host: bssapi-aggregator.qrp.svc.cluster.local
-              port:
-                number: 8080
-        - match:
-          - port: 2095
-          route:
-            - destination:
-                host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
-                port:
-                  number: 8080
-        - match:
-          - port: 2075
-          route:
-          - destination:
-              host: hybris-gatekeeper-api.qvantel.svc.cluster.local
-              port:
-                number: 8080
-        - match:
-          - port: 2045
-          route:
-          - destination:
-              host: hybris-inventory-api-8080.qvantel.svc.cluster.local
-              port:
-                number: 8080
-        - match:
           - port: 2035
             uri:
               prefix: "/api/"
@@ -1871,6 +1839,13 @@ istioIngress:
                 host: dnapy-rest-bssapi-shop.qvantel.svc.cluster.local
                 port:
                   number: 8080
+        - match:
+          - port: 2045
+          route:
+          - destination:
+              host: hybris-inventory-api-8080.qvantel.svc.cluster.local
+              port:
+                number: 8080
         - match:
           - port: 2050
           route:
@@ -1886,12 +1861,55 @@ istioIngress:
                 port:
                   number: 8080
         - match:
-          - port: 10000
+          - port: 2065
+          route:
+          - destination:
+              host: pyprov-network-listener-8080.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2075
+          route:
+          - destination:
+              host: hybris-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2080
+          route:
+          - destination:
+              host: crm-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2085
+          route:
+          - destination:
+              host: rbs-gatekeeper-api.qvantel.svc.cluster.local
+              port:
+                number: 8080
+        - match:
+          - port: 2095
           route:
             - destination:
-                host: dnapy-soap-navision.qvantel.svc.cluster.local
+                host: dnapy-rest-dil-listener.qvantel.svc.cluster.local
                 port:
                   number: 8080
+        - match:
+          - port: 3000
+          route:
+          - destination:
+              host: bssapi-aggregator.qrp.svc.cluster.local
+              port:
+                number: 8080
+        - name: "bss-integrator-orders-event-receiver-route"
+          match:
+          - port: 3010
+          route:
+          - destination:
+              host: orders-event-receiver.qrp.svc.cluster.local
+              port:
+                number: 21060
         - name: "bss-integrator-orders-event-receiver-health-route"
           match:
           - port: 3010
@@ -1902,28 +1920,13 @@ istioIngress:
               host: orders-event-receiver-management.qrp.svc.cluster.local
               port:
                 number: 21061
-        - name: "bss-integrator-orders-event-receiver-route"
-          match:
-          - port: 3010
-          route:
-          - destination:
-              host: orders-event-receiver.qrp.svc.cluster.local
-              port:
-                number: 21060
         - match:
-          - port: 2065
+          - port: 10000
           route:
-          - destination:
-              host: pyprov-network-listener-8080.qvantel.svc.cluster.local
-              port:
-                number: 8080
-        - match:
-          - port: 2085
-          route:
-          - destination:
-              host: rbs-gatekeeper-api.qvantel.svc.cluster.local
-              port:
-                number: 8080
+            - destination:
+                host: dnapy-soap-navision.qvantel.svc.cluster.local
+                port:
+                  number: 8080
         tls:
         - match:
           - port: 9093
