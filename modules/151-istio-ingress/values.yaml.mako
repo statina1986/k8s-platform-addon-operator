@@ -170,17 +170,6 @@ istioIngress:
         port: 15021
         protocol: TCP
         targetPort: 15021
-      % if values.get("istioIngress", {}).get("externalIstioProxy", False):
-      - name: tls
-        port: 15443
-        targetPort: 15443
-      - name: tls-istiod
-        port: 15012
-        targetPort: 15012
-      - name: tls-webhook
-        port: 15017
-        targetPort: 15017
-      % endif
       - name: http
         port: 80
         protocol: TCP
@@ -189,6 +178,7 @@ istioIngress:
         port: 443
         protocol: TCP
         targetPort: 443
+      % if not values.get("istioIngress", {}).get("dnaIstioProfile"):
       - name: rabbitmq
         port: 5672
         protocol: TCP
@@ -205,6 +195,18 @@ istioIngress:
         port: 9000
         protocol: TCP
         targetPort: 9000
+      % endif
+      % if values.get("istioIngress", {}).get("externalIstioProxy", False):
+      - name: tls
+        port: 15443
+        targetPort: 15443
+      - name: tls-istiod
+        port: 15012
+        targetPort: 15012
+      - name: tls-webhook
+        port: 15017
+        targetPort: 15017
+      % endif
       annotations:
         % if addon_operator['awsPlatformEnabled'] == 'true':
         service.beta.kubernetes.io/aws-load-balancer-type: "external"
@@ -232,6 +234,10 @@ istioIngress:
           name: http
           number: 80
           protocol: HTTP
+        % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
+        tls:
+          httpsRedirect: true
+        % endif
       - hosts:
         - '*'
         port:
@@ -240,7 +246,14 @@ istioIngress:
           protocol: HTTPS
         tls:
           mode: SIMPLE
+          % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
+          credentialName: ingress-cert-k8s-qvantel-net
+          maxProtocolVersion: TLSV1_3
+          minProtocolVersion: TLSV1_2
+          % else:
           credentialName: qvantel-wildcard
+          % endif
+      % if not values.get("istioIngress", {}).get("dnaIstioProfile"):
       - hosts:
         - '*'
         port:
@@ -265,6 +278,7 @@ istioIngress:
           name: vector-logs
           number: 9000
           protocol: TCP
+      % endif
   % if values.get("istioIngress", {}).get("externalIstioProxy", False):
   - name: ${values['global']['helmReleaseNamePrefix']}istio-eastwestgateway
     spec:
@@ -418,12 +432,14 @@ istioIngress:
       - name: bss-integrator-kafka-broker1
         port: 9094
         targetPort: 9094
+      % if values.get('global', {}).get('configurationProfile') in {'prod', 'perf'}:
       - name: bss-integrator-kafka-broker2
         port: 9095
         targetPort: 9095
       - name: bss-integrator-kafka-broker3
         port: 9096
         targetPort: 9096
+      % endif
       - name: bss-integrator-navision-api
         port: 10000
         targetPort: 10000
@@ -441,6 +457,10 @@ istioIngress:
           name: http
           number: 80
           protocol: HTTP
+        % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
+        tls:
+          httpsRedirect: true
+        % endif
       - hosts:
         - '*'
         port:
@@ -449,7 +469,13 @@ istioIngress:
           protocol: HTTPS
         tls:
           mode: SIMPLE
+          % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
+          credentialName: ingress-cert-dna
+          maxProtocolVersion: TLSV1_3
+          minProtocolVersion: TLSV1_2
+          % else:
           credentialName: qvantel-wildcard
+          % endif
       ## DNA specific
       % if values.get("istioIngress", {}).get("dnaIstioProfile", False):
       - hosts:
@@ -576,6 +602,7 @@ istioIngress:
           protocol: TLS
         tls:
           mode: PASSTHROUGH
+      % if values.get('global', {}).get('configurationProfile') in {'prod', 'perf'}:
       - hosts:
           - '*'
         port:
@@ -592,6 +619,7 @@ istioIngress:
           protocol: TLS
         tls:
           mode: PASSTHROUGH
+      % endif
       % endif
 
   # -- Enables Integrations Non Http Ingress gateway
