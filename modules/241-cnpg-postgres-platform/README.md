@@ -2,7 +2,7 @@
 
 # cnpg-postgres-platform
 
-This module is responsible for deployment of [CNPG Operator](https://cloudnative-pg.io/documentation/current/) and managed PostgresSQL clusters.
+This module is responsible for deployment of [CNPG Operator](https://cloudnative-pg.io/documentation/current/).
 
 Depends on modules:
 - [platform-core](/modules/101-platform-core/README.md) from which *platform* Service Account is used

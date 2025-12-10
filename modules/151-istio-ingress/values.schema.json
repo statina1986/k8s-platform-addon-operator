@@ -694,19 +694,6 @@
                           "title": "rbs-master-xmlrpc-dr",
                           "type": "object"
                         },
-                        "rbs-xmlrpc-dr": {
-                          "properties": {
-                            "host": {
-                              "default": "rbs-xmlrpc.qvantel.svc.cluster.local",
-                              "required": [],
-                              "title": "host",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "rbs-xmlrpc-dr",
-                          "type": "object"
-                        },
                         "salestool-backend-pos-dr": {
                           "properties": {
                             "host": {
@@ -759,24 +746,11 @@
                           "title": "salestool-frontend-telesales-dr",
                           "type": "object"
                         },
-                        "sentry-ui-dr": {
+                        "vault-ui-dr": {
                           "description": "platform related",
                           "properties": {
                             "host": {
-                              "default": "dna-sentry-nginx.sentry.svc.cluster.local",
-                              "required": [],
-                              "title": "host",
-                              "type": "string"
-                            }
-                          },
-                          "required": [],
-                          "title": "sentry-ui-dr",
-                          "type": "object"
-                        },
-                        "vault-ui-dr": {
-                          "properties": {
-                            "host": {
-                              "default": "vault-ui.platform.svc.cluster.local",
+                              "default": "vault.platform.svc.cluster.local",
                               "required": [],
                               "title": "host",
                               "type": "string"
@@ -1344,6 +1318,10 @@
                         "ports": {
                           "items": {
                             "anyOf": [
+                              {
+                                "required": [],
+                                "type": "integer"
+                              },
                               {
                                 "required": [],
                                 "type": "integer"
@@ -5947,51 +5925,22 @@
                                     {
                                       "properties": {
                                         "port": {
-                                          "default": 3000,
+                                          "default": 2035,
                                           "required": [],
                                           "title": "port",
                                           "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
+                                        },
+                                        "uri": {
                                           "properties": {
-                                            "host": {
-                                              "default": "bssapi-aggregator.qrp.svc.cluster.local",
+                                            "prefix": {
+                                              "default": "/api/",
                                               "required": [],
-                                              "title": "host",
+                                              "title": "prefix",
                                               "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 8080,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
                                             }
                                           },
                                           "required": [],
-                                          "title": "destination",
+                                          "title": "uri",
                                           "type": "object"
                                         }
                                       },
@@ -6002,36 +5951,21 @@
                                   "required": []
                                 },
                                 "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 2095,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
                                 "title": "match",
                                 "type": "array"
+                              },
+                              "rewrite": {
+                                "properties": {
+                                  "uri": {
+                                    "default": "/",
+                                    "required": [],
+                                    "title": "uri",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "title": "rewrite",
+                                "type": "object"
                               },
                               "route": {
                                 "items": {
@@ -6041,77 +5975,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "dnapy-rest-dil-listener.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 8080,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 2075,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "hybris-gatekeeper-api.qvantel.svc.cluster.local",
+                                              "default": "dnapy-rest-bssapi-shop.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6182,102 +6046,6 @@
                                           "properties": {
                                             "host": {
                                               "default": "hybris-inventory-api-8080.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 8080,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 2035,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
-                                        },
-                                        "uri": {
-                                          "properties": {
-                                            "prefix": {
-                                              "default": "/api/",
-                                              "required": [],
-                                              "title": "prefix",
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "uri",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "rewrite": {
-                                "properties": {
-                                  "uri": {
-                                    "default": "/",
-                                    "required": [],
-                                    "title": "uri",
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [],
-                                "title": "rewrite",
-                                "type": "object"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "dnapy-rest-bssapi-shop.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6463,7 +6231,7 @@
                                     {
                                       "properties": {
                                         "port": {
-                                          "default": 10000,
+                                          "default": 2065,
                                           "required": [],
                                           "title": "port",
                                           "type": "integer"
@@ -6487,7 +6255,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "dnapy-soap-navision.qvantel.svc.cluster.local",
+                                              "default": "pyprov-network-listener-8080.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6496,6 +6264,432 @@
                                               "properties": {
                                                 "number": {
                                                   "default": 8080,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 2075,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "hybris-gatekeeper-api.qvantel.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 8080,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 2080,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "crm-gatekeeper-api.qvantel.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 8080,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 2085,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "rbs-gatekeeper-api.qvantel.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 8080,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 2095,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "dnapy-rest-dil-listener.qvantel.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 8080,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 3000,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "bssapi-aggregator.qrp.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 8080,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 3010,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "name": {
+                                "default": "bss-integrator-orders-event-receiver-route",
+                                "required": [],
+                                "title": "name",
+                                "type": "string"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "orders-event-receiver.qrp.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 21060,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -6622,83 +6816,7 @@
                                     {
                                       "properties": {
                                         "port": {
-                                          "default": 3010,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "name": {
-                                "default": "bss-integrator-orders-event-receiver-route",
-                                "required": [],
-                                "title": "name",
-                                "type": "string"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "orders-event-receiver.qrp.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 21060,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 2065,
+                                          "default": 10000,
                                           "required": [],
                                           "title": "port",
                                           "type": "integer"
@@ -6722,77 +6840,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "pyprov-network-listener-8080.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 8080,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 2085,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "rbs-gatekeeper-api.qvantel.svc.cluster.local",
+                                              "default": "dnapy-soap-navision.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
