@@ -2018,7 +2018,7 @@ istioIngress:
       istiod:
         enabled: false
         gateways:
-        - ${values['global']['helmReleaseNamePrefix']}private-ingress
+        - ${values['global']['helmReleaseNamePrefix']}istio-eastwestgateway
         hosts:
         - "*"
         tls:
