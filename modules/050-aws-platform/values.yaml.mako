@@ -85,7 +85,7 @@ awsPlatform:
   aws-efs-csi-driver:
     image:
       % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/efs-csi-driver/amazon/aws-efs-csi-driver
+      repository: ${values['global']['containerRegistryBase']}/amazon/aws-efs-csi-driver
       % endif
     sidecars:
       livenessProbe:
