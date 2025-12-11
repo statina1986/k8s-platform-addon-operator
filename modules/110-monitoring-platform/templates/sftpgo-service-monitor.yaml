@@ -1,0 +1,21 @@
+{{- if $.Values.monitoringPlatform.qvantelMonitoring.modules.stfpgo }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: {{.Release.Name}}
+  name: sftpgo-service-monitor
+spec:
+  endpoints:
+    - honorTimestamps: true
+      path: '/metrics'
+      scheme: http
+      scrapeTimeout: 30s
+      params:
+        format: ['prometheus']
+      targetPort: 10000
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Values.global.helmReleaseNamePrefix }}sftpgo-platform
+      app.kubernetes.io/name: sftpgo
+{{- end }}

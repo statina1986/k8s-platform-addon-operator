@@ -32,6 +32,7 @@ monitoringPlatform:
       rabbitmq: ${addon_operator['rabbitmqPlatformEnabled']}
       mongodb: ${addon_operator['mongodbPlatformEnabled']}
       progress: ${addon_operator['progressPlatformEnabled']}
+      stfpgo: ${addon_operator['sftpgoPlatformEnabled']}
   alloy:
     enabled: false
     % if 'containerRegistryBase' in values['global']:
