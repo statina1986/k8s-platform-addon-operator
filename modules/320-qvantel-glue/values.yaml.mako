@@ -366,6 +366,12 @@ qvantelGlue:
                 annotations:
                   eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}
             {{- end }}
+            {{- if $.root.Values.global.gcpRole }}
+            serviceAccountTemplate:
+              metadata:
+                annotations:
+                  iam.gke.io/gcp-service-account: {{ $.root.Values.global.gcpRole }}
+            {{- end }}
       # -- Common configurations for Cassandra databases
       # @default -- see child items docs
       cassandra:
