@@ -7,6 +7,12 @@ metadata:
   {{- if .Values.globalConfig.awsRole}}
     eks.amazonaws.com/role-arn: {{ .Values.globalConfig.awsRole }}
   {{- end }}
+  {{- if .Values.globalConfig.gcpRole}}
+    iam.gke.io/gcp-service-account: {{ .Values.globalConfig.gcpRole }}
+  {{- end }}
+  {{- with .Values.globalConfig.platformServiceaccountAnnotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 ---
 {{- if eq .Values.globalConfig.clusterwideResources "true" }}
 ---
