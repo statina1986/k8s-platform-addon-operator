@@ -8,9 +8,9 @@
       "type": "object"
     },
     "metricsPlatform": {
+      "description": "Default configurations for metric platform",
       "properties": {
         "metrics-server": {
-          "description": "Default configurations for metric platform",
           "properties": {
             "addonResizer": {
               "properties": {
@@ -46,7 +46,6 @@
               "type": "object"
             },
             "tolerations": {
-              "description": "Tolerations if platform masters are enabled",
               "items": {
                 "anyOf": [
                   {
