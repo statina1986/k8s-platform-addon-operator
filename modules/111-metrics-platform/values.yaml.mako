@@ -1,15 +1,18 @@
 # -- Default configurations for metric platform
 metricsPlatform:
   metrics-server:
+    % if 'containerRegistryBase' in values['global']:
     image:
-      % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/metrics-server/metrics-server
-      % endif
+    % endif
     addonResizer:
+      % if 'containerRegistryBase' in values['global']:
       image:
-        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/autoscaling/addon-resizer
-        % endif
+      % else:
+      image:
+        repository: registry.k8s.io/autoscaling/addon-resizer
+      % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
