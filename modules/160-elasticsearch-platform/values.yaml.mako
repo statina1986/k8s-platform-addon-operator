@@ -4,11 +4,6 @@ elasticsearchPlatform:
   % else:
   loggingSetupimage: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
   % endif
-  # -- This has to be set in global values file for mako templating to work
-  # currently supported versions are 7.17.29 8.19.5 or 9.1.5
-  # upgrading from 7 to 8 is generally painless, 8 to 9 is not
-  # see [upgrade notes](./upgrade_notes.md) for more detail.
-  coreStackVersion: 7.17.29
   eck-operator:
     % if values['global']['deployOperators'] == "false":
     enabled: false
@@ -70,7 +65,7 @@ elasticsearchPlatform:
           memory: 1000Mi
           cpu: "0.1"
       spec: |
-        version: ${values['elasticsearchPlatform']['coreStackVersion']}
+        version: 7.17.29
         volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
         http:
           tls:
@@ -99,7 +94,7 @@ elasticsearchPlatform:
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
-                  image: docker.elastic.co/elasticsearch/elasticsearch:${values['elasticsearchPlatform']['coreStackVersion']}
+                  image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
                   % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.logsearch.resources | nindent 12  }}                    
                   env:
@@ -141,7 +136,7 @@ elasticsearchPlatform:
           memory: 2Gi
           cpu: 1
       spec: |
-        version: ${values['elasticsearchPlatform']['coreStackVersion']}
+        version: 7.17.29
         volumeClaimDeletePolicy: DeleteOnScaledownOnly
         http:
           tls:
@@ -190,7 +185,7 @@ elasticsearchPlatform:
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
-                  image: docker.elastic.co/elasticsearch/elasticsearch:${values['elasticsearchPlatform']['coreStackVersion']}
+                  image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
                   % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
@@ -209,7 +204,7 @@ elasticsearchPlatform:
           tls:
             selfSignedCertificate:
               disabled: true
-        version: ${values['elasticsearchPlatform']['coreStackVersion']}
+        version: 7.17.29
         count: 1
         elasticsearchRef:
           name: logsearch
@@ -219,7 +214,7 @@ elasticsearchPlatform:
             containers:
               - name: kibana
                 % if 'containerRegistryBase' in values['global']:
-                image: docker.elastic.co/kibana/kibana:${values['elasticsearchPlatform']['coreStackVersion']}
+                image: docker.elastic.co/kibana/kibana:7.17.29
                 % endif
                 resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
             tolerations:
@@ -393,7 +388,7 @@ elasticsearchPlatform:
     % if 'containerRegistryBase' in values['global']:
     image:  docker.elastic.co/logstash/logstash
     % endif
-    imageTag: "${values['elasticsearchPlatform']['coreStackVersion']}"
+    imageTag: "7.17.29"
     imagePullPolicy: "IfNotPresent"
     logstashJavaOpts: "-Xmx1g -Xms1g"
     resources:
@@ -429,7 +424,7 @@ elasticsearchPlatform:
     labels:
       k8s-app: filebeat
     type: filebeat
-    version: ${values['elasticsearchPlatform']['coreStackVersion']}
+    version: 7.17.29
     elasticsearchRef: 
       name: ''
     serviceAccount: 

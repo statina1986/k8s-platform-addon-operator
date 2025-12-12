@@ -62,8 +62,6 @@ modulesConfig:
   cnpgPostgresPlatformEnabled: "false"
   consulPlatformEnabled: "false"
   elasticsearchPlatformEnabled: "false"
-  elasticsearchPlatform:
-    coreStackVersion: "7.17.29"
   externalDnsEnabled: "false"
   instanaPlatformEnabled: "false"
   istioIngressEnabled: "false"
