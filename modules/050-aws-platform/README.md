@@ -135,7 +135,7 @@ Deploy aws-ebs-csi-driver helm-chart.
           operator: Equal
           value: platform-masters
 image:
-    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/efs-csi-driver/amazon/aws-efs-csi-driver
+    repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/amazon/aws-efs-csi-driver
 node:
     serviceAccount:
         create: false

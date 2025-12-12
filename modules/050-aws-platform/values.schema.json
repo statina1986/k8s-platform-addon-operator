@@ -445,7 +445,7 @@
             "image": {
               "properties": {
                 "repository": {
-                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/efs-csi-driver/amazon/aws-efs-csi-driver",
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/amazon/aws-efs-csi-driver",
                   "required": [],
                   "title": "repository",
                   "type": "string"
