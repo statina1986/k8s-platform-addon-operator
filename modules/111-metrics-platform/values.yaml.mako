@@ -1,4 +1,5 @@
 metricsPlatform:
+  # -- Default configurations for metric platform
   metrics-server:
     image:
       % if 'containerRegistryBase' in values['global']:
@@ -9,6 +10,7 @@ metricsPlatform:
         % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/autoscaling/addon-resizer
         % endif
+    # -- Tolerations if platform masters are enabled
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
