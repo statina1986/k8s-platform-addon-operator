@@ -169,7 +169,7 @@ keycloakPlatform:
                 # https://stash.qvantel.net/projects/CP/repos/k8s-platform-addon-operator/browse/modules/411-sftpgo-platform/templates/secrets.yaml
                 valueFrom:
                   secretKeyRef:
-                    name: {{ .Values.keycloakPlatform.sftpgoSecretName }}
+                    name: "{{ .Values.keycloakPlatform.sftpgoSecretName }}"
                     key: SFTPGO_HTTPD__BINDINGS__0__OIDC__CLIENT_SECRET
               % endif
               - name: VAULT_CLIENT_SECRET

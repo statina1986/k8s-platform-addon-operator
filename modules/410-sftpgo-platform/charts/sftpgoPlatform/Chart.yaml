@@ -3,5 +3,5 @@ name: sftpgoPlatform
 version: 0.0.1
 dependencies:
   - name: sftpgo
-    version: "0.22.0"
-    repository: "https://charts.sagikazarmark.dev"
+    version: "0.41.0"
+    repository: "oci://ghcr.io/sftpgo/helm-charts"

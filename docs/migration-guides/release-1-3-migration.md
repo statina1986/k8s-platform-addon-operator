@@ -163,3 +163,12 @@ In this version all cluster definitions were removed from `cnpg-platform` module
   2. Migrate cluster definitions from `mariadb-operator-platform` to `qvantel-glue` in the values files. Check documentation of `qvantel-glue` module for current up-to-date configuration options and defaults.
   3. Deploy new platform configuration. Testing this procedure in lower environments first is highly recommended. 
 
+## SFTPGo
+If environment has prior installation of SFTPGo, migration between release-branches is needed: https://docs.sftpgo.com/latest/data-provider/.
+Assuming that env is running prior installation with 2.5.4, you need to deploy SFTPGo first with 2.6.0 and only then 2.7.0 versions. You can set image version via:
+```
+sftpgoPlatform:
+  sftpgo:
+    image:
+      tag: v2.7.0
+```

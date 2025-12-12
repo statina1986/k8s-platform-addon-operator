@@ -18,9 +18,11 @@ sftpgoPlatform:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/drakkan/sftpgo
       % endif
-      tag: v2.5.4
+      # -- Image tag for to-be-deployed version of SFTPGo. If upgrading more than one release-branch version, refer to [release-1-3-migration.md](../../docs/migration-guides/release-1-3-migration.md) for details. 2.7.0 is the new default version, but for cases where rsync is required, use 2.6.6 instead.
+      tag: v2.7.0
     sftpd:
       enabled: true
+    # -- Web-GUI related configurations
     httpd:
       enabled: true
     serviceAccount:
@@ -32,9 +34,11 @@ sftpgoPlatform:
         value: "info"
       - name: SFTPGO_LOG_UTC_TIME
         value: "1"
+    # -- Keycloak-platform used client-secret
     envFrom:
       - secretRef:
           name: sftpgo-shared-secrets
+    # -- Configurations for persistence of metadata related information, such as users and their data-path and permissions.
     persistence:
       enabled: true
       pvc:
@@ -44,10 +48,10 @@ sftpgoPlatform:
           requests:
             storage: 10Gi
         storageClassName: gp3
-    ## This qvantelCaVolumes value works when makotemplate is re-rendered, eg when pod is re-created
+    # -- Enables qvantel-root-ca pre-configured mounting.
     qvantelCaVolumes: false
     volumes:
-      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']:
+      % if values.get("sftpgoPlatform", {}).get("sftpgo", {}).get("qvantelCaVolumes", False):
       - name: trusted-ca-tls
         secret:
           defaultMode: 420
@@ -55,7 +59,7 @@ sftpgoPlatform:
           secretName: qvantel-root-ca
       % endif
     volumeMounts:
-      % if 'qvantelCaVolumes' in values['sftpgoPlatform']['sftpgo'] and values['sftpgoPlatform']['sftpgo']['qvantelCaVolumes']:
+      % if values.get("sftpgoPlatform", {}).get("sftpgo", {}).get("qvantelCaVolumes", False):
       - name: trusted-ca-tls
         mountPath: /etc/ssl/certs 
       % endif
@@ -67,6 +71,7 @@ sftpgoPlatform:
       common:
         max_per_host_connections: 0 # remove limit, as our MEF publisher do not support it.
       httpd:
+        # -- OIDC-binding configuration requires `keycloak-platform` deployment. Can be by-passed by setting to `null` or `{}`
         bindings:
           - oidc:
               client_id: sftpgo
@@ -80,5 +85,6 @@ sftpgoPlatform:
               username_field: "preferred_username"
               implicit_roles: true # until we have proper role from Keycloak
       sftpd:
+        # -- Enabled SSH compatible commands.
         enabled_ssh_commands:
           ["md5sum", "sha1sum", "sha256sum", "cd", "pwd", "scp"]

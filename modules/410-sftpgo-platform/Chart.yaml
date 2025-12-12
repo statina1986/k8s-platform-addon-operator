@@ -7,6 +7,6 @@ dependencies:
 annotations:
   images: |
     - name: sftpgo
-      image: ghcr.io/drakkan/sftpgo:v2.5.4
+      image: ghcr.io/drakkan/sftpgo:v2.7.0
     - name: sftpgo-alpine
-      image: ghcr.io/drakkan/sftpgo:v2.5.4-alpine
+      image: ghcr.io/drakkan/sftpgo:v2.7.0-alpine

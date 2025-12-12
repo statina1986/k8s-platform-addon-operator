@@ -1,0 +1,501 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "sftpgoPlatform": {
+      "properties": {
+        "secrets": {
+          "properties": {
+            "existingSecretName": {
+              "default": "sftpgo-shared-secrets",
+              "required": [],
+              "title": "existingSecretName",
+              "type": "string"
+            },
+            "extraSharedSecretLabels": {
+              "items": {
+                "required": []
+              },
+              "required": [],
+              "title": "extraSharedSecretLabels",
+              "type": "array"
+            },
+            "forceGenerateServiceSecrets": {
+              "default": false,
+              "required": [],
+              "title": "forceGenerateServiceSecrets",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "secrets",
+          "type": "object"
+        },
+        "sftpgo": {
+          "properties": {
+            "config": {
+              "properties": {
+                "common": {
+                  "properties": {
+                    "max_per_host_connections": {
+                      "default": 0,
+                      "required": [],
+                      "title": "max_per_host_connections",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [],
+                  "title": "common",
+                  "type": "object"
+                },
+                "httpd": {
+                  "properties": {
+                    "bindings": {
+                      "description": "OIDC-binding configuration requires `keycloak-platform` deployment. Can be by-passed by setting to `null` or `{}`",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "properties": {
+                              "oidc": {
+                                "properties": {
+                                  "client_id": {
+                                    "default": "sftpgo",
+                                    "required": [],
+                                    "title": "client_id",
+                                    "type": "string"
+                                  },
+                                  "config_url": {
+                                    "default": "https://auth-some-env.qvantel.solutions/auth/realms/qvantel",
+                                    "required": [],
+                                    "title": "config_url",
+                                    "type": "string"
+                                  },
+                                  "implicit_roles": {
+                                    "default": true,
+                                    "required": [],
+                                    "title": "implicit_roles",
+                                    "type": "boolean"
+                                  },
+                                  "redirect_base_url": {
+                                    "default": "https://sftp-ui-some-env.qvantel.solutions",
+                                    "required": [],
+                                    "title": "redirect_base_url",
+                                    "type": "string"
+                                  },
+                                  "scopes": {
+                                    "items": {
+                                      "anyOf": [
+                                        {
+                                          "required": [],
+                                          "type": "string"
+                                        },
+                                        {
+                                          "required": [],
+                                          "type": "string"
+                                        },
+                                        {
+                                          "required": [],
+                                          "type": "string"
+                                        },
+                                        {
+                                          "required": [],
+                                          "type": "string"
+                                        }
+                                      ],
+                                      "required": []
+                                    },
+                                    "required": [],
+                                    "title": "scopes",
+                                    "type": "array"
+                                  },
+                                  "username_field": {
+                                    "default": "preferred_username",
+                                    "required": [],
+                                    "title": "username_field",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [],
+                                "title": "oidc",
+                                "type": "object"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "bindings",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "httpd",
+                  "type": "object"
+                },
+                "sftpd": {
+                  "properties": {
+                    "enabled_ssh_commands": {
+                      "description": "Enabled SSH compatible commands.",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          },
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "enabled_ssh_commands",
+                      "type": "array"
+                    }
+                  },
+                  "required": [],
+                  "title": "sftpd",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "config",
+              "type": "object"
+            },
+            "envFrom": {
+              "description": "Keycloak-platform used client-secret",
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "secretRef": {
+                        "properties": {
+                          "name": {
+                            "default": "sftpgo-shared-secrets",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "title": "secretRef",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "envFrom",
+              "type": "array"
+            },
+            "envVars": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "SFTPGO_LOG_LEVEL",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "info",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "SFTPGO_LOG_UTC_TIME",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "1",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "envVars",
+              "type": "array"
+            },
+            "httpd": {
+              "description": "Web-GUI related configurations",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "httpd",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/drakkan/sftpgo",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "v2.7.0",
+                  "description": "Image tag for to-be-deployed version of SFTPGo. If upgrading more than one release-branch version, refer to [release-1-3-migration.md](../../docs/migration-guides/release-1-3-migration.md) for details. 2.7.0 is the new default version, but for cases where rsync is required, use 2.6.6 instead.",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "persistence": {
+              "description": "Configurations for persistence of metadata related information, such as users and their data-path and permissions.",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "pvc": {
+                  "properties": {
+                    "accessModes": {
+                      "items": {
+                        "anyOf": [
+                          {
+                            "required": [],
+                            "type": "string"
+                          }
+                        ],
+                        "required": []
+                      },
+                      "required": [],
+                      "title": "accessModes",
+                      "type": "array"
+                    },
+                    "resources": {
+                      "properties": {
+                        "requests": {
+                          "properties": {
+                            "storage": {
+                              "default": "10Gi",
+                              "required": [],
+                              "title": "storage",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "requests",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "resources",
+                      "type": "object"
+                    },
+                    "storageClassName": {
+                      "default": "gp3",
+                      "required": [],
+                      "title": "storageClassName",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "pvc",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "persistence",
+              "type": "object"
+            },
+            "podSecurityContext": {
+              "properties": {
+                "fsGroup": {
+                  "default": 0,
+                  "required": [],
+                  "title": "fsGroup",
+                  "type": "integer"
+                },
+                "runAsGroup": {
+                  "default": 0,
+                  "required": [],
+                  "title": "runAsGroup",
+                  "type": "integer"
+                },
+                "runAsUser": {
+                  "default": 0,
+                  "required": [],
+                  "title": "runAsUser",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "podSecurityContext",
+              "type": "object"
+            },
+            "qvantelCaVolumes": {
+              "default": false,
+              "description": "Enables qvantel-root-ca pre-configured mounting.",
+              "required": [],
+              "title": "qvantelCaVolumes",
+              "type": "boolean"
+            },
+            "replicaCount": {
+              "default": 1,
+              "required": [],
+              "title": "replicaCount",
+              "type": "integer"
+            },
+            "serviceAccount": {
+              "properties": {
+                "annotations": {
+                  "required": [],
+                  "title": "annotations",
+                  "type": "object"
+                },
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "sftpd": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "sftpd",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            },
+            "volumeMounts": {
+              "default": "",
+              "required": [],
+              "title": "volumeMounts",
+              "type": "null"
+            },
+            "volumes": {
+              "default": "",
+              "required": [],
+              "title": "volumes",
+              "type": "null"
+            }
+          },
+          "required": [],
+          "title": "sftpgo",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "sftpgoPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}
