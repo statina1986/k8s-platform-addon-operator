@@ -1,3 +1,4 @@
+# -- Default configurations for metric platform
 metricsPlatform:
   metrics-server:
     image:
