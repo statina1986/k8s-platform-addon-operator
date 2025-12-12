@@ -5,6 +5,7 @@ dependencies:
   - name: externalDns
     version: 0.0.1
 annotations:
-  images: |
+  images-key: platform-images
+  platform-images: |
     - name: external-dns
-      image: docker.io/bitnami/external-dns:0.13.4-debian-11-r2
+      image: docker.io/bitnamilegacy/external-dns:0.13.4-debian-11-r2

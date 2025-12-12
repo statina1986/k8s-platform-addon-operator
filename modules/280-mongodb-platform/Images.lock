@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-08-20T16:36:03.229722777Z"
+  generatedAt: "2025-12-11T07:21:55.630010689Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: mongodb-platform
@@ -17,40 +17,34 @@ images:
       - digest: sha256:f28468a375c50d0661bf5bb4ada1e85a9bad342559ac749a6c5f5e7018160ff3
         arch: linux/arm64
   - name: kubectl
-    image: docker.io/bitnami/kubectl:1.30.2-debian-12-r0
-    chart: mongodb
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    chart: mongodb-platform
     digests:
-      - digest: sha256:3ec696e5ce1b79f78eb0eac1fed4ef20fa6584662cdf3c7ad933b0b03b9ce3f6
-        arch: linux/amd64
-      - digest: sha256:cde63381127786f694d6ceb39168593f8dd7e0564f2534f1ca4e7d1aaa70d3db
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
-  - name: mongodb
-    image: docker.io/bitnami/mongodb:7.0.12-debian-12-r0
-    chart: mongodb
-    digests:
-      - digest: sha256:22ce4d823b0938340885de5cc39d1f93617a7686e60363c33c78e179d42fe404
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
         arch: linux/amd64
   - name: mongodb-exporter
-    image: docker.io/bitnami/mongodb-exporter:0.40.0-debian-12-r30
-    chart: mongodb
+    image: docker.io/bitnamilegacy/mongodb-exporter:0.40.0-debian-12-r30
+    chart: mongodb-platform
     digests:
       - digest: sha256:4111a9be9fea7ee34a7f16bae3a07fbaaa903ee652551dcf94051c3823bf941c
         arch: linux/amd64
       - digest: sha256:ae3f85d4cc555a5f214cedf00fe4ebdca469f7669b1e71fb75cd7098ba27679c
         arch: linux/arm64
   - name: nginx
-    image: docker.io/bitnami/nginx:1.27.0-debian-12-r2
-    chart: mongodb
+    image: docker.io/bitnamilegacy/nginx:1.27.0-debian-12-r2
+    chart: mongodb-platform
     digests:
       - digest: sha256:f228971a40e1c5de326428123cd044650b02f19baa8aac1c28f6e29fe43ecc81
         arch: linux/amd64
       - digest: sha256:21f6a568d4f30701576ea8c9ed89d77c5ecf6443746232555f594b0825a87c8c
         arch: linux/arm64
   - name: os-shell
-    image: docker.io/bitnami/os-shell:12-debian-12-r23
-    chart: mongodb
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    chart: mongodb-platform
     digests:
-      - digest: sha256:1c6aa5c51d48458b8cb00c59efb89bb9dbbb38906aeac24e57e719ab61e33e59
-        arch: linux/amd64
-      - digest: sha256:6b87753e9928bbe6f85fba5d8eba67f408de53bb03082953342ff9a2eec9890c
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
         arch: linux/arm64
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
+        arch: linux/amd64

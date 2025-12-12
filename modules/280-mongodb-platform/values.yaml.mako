@@ -21,28 +21,51 @@ mongodbPlatform:
       % else:
       registry: platform.artifactory.qvantel.net
       % endif
-    % if 'containerRegistryBase' in values['global']:
     tls:
-      registry: ${values['global']['containerRegistryBase']}
-    % endif
-    % if 'containerRegistryBase' in values['global']:
+      image:
+        repository: bitnamilegacy/nginx
+        % if 'containerRegistryBase' in values['global']:
+        registry: ${values['global']['containerRegistryBase']}
+        % else:
+        registry: docker.io
+        % endif
+        tag: 1.27.0-debian-12-r2
     externalAccess:
       autoDiscovery:
         image:
-          registry: ${values['global']['containerRegistryBase']}          
+          % if 'containerRegistryBase' in values['global']:
+          registry: ${values['global']['containerRegistryBase']}
+          % else:
+          registry: platform.artifactory.qvantel.net
+          % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
       dnsCheck:
         image:
+          % if 'containerRegistryBase' in values['global']:
           registry: ${values['global']['containerRegistryBase']}
-    % endif
-    % if 'containerRegistryBase' in values['global']:
+          % else:
+          registry: platform.artifactory.qvantel.net
+          % endif
+          repository: platform/platform-k8s-tools-minimal
+          tag: 1.3.3_202509080945_master_90384dcc
     volumePermissions:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-    % endif
+        % else:
+        registry: platform.artifactory.qvantel.net
+        % endif
+        repository: platform/platform-k8s-tools-minimal
+        tag: 1.3.3_202509080945_master_90384dcc
     metrics:
       enabled: false
-      % if 'containerRegistryBase' in values['global']:
       image:
+        % if 'containerRegistryBase' in values['global']:
         registry: ${values['global']['containerRegistryBase']}
-      % endif
+        % else:
+        registry: docker.io
+        % endif
+        repository: bitnamilegacy/mongodb-exporter
+        tag: 0.40.0-debian-12-r30
       

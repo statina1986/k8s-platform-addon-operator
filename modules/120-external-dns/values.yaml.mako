@@ -1,10 +1,14 @@
 externalDns:
   external-dns:
     namespace: ${values['global']['platformNamespace']}
-    % if 'containerRegistryBase' in values['global']:
     image:
+      % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
-    % endif
+      % else:
+      registry: docker.io
+      % endif
+      repository: bitnamilegacy/external-dns
+      tag: 0.13.4-debian-11-r2
     serviceAccount:
       create: false
       name: platform
