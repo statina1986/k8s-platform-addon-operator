@@ -11,10 +11,15 @@ hook::config() {
 
 hook::trigger() {
 
+  if ! common::module_is_enabled "vault-platform"; then
+    qlog "Vault is not enabled, skipping admin credentials hook"
+    exit 0
+  fi
+
   qlog "Inserting RabbitMQ credentials to legacy kv1 Vault"
   token="$(vault::get_vault_token)"
   FULL_RELEASE_NAME="${HELM_RELEASE_NAME_PREFIX}rabbitmq-platform"
-  username="user"
+  username="admin"
   password="$(kubectl::get_secret_opaque_kv $FULL_RELEASE_NAME rabbitmq-password $VAULT_SECRET_NAMESPACE)"
   credentials_old=`mktemp`
   credentials_add=`mktemp`

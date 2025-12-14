@@ -76,6 +76,14 @@ function common::get_config_values_value() {
   echo "$(jq -r $1 $CONFIG_VALUES_PATH)"
 }
 
+function common::module_is_enabled() {
+  query="jq -r '.global.enabledModules | index( \"$1\" )' $VALUES_PATH"
+  result=$(eval $query)
+  re='^[0-9]+$'
+  [[ $result =~ $re ]]
+  return
+}
+
 function helm::run_helm_dependency_update_hook() {
   if [[ $1 == "--config" ]] ; then
     echo '{"configVersion":"v1", "beforeHelm": 1}'

@@ -8,6 +8,12 @@ hook::config() {
 }
 
 hook::trigger() {
+
+  if ! common::module_is_enabled "vault-platform"; then
+    qlog "Vault is not enabled, skipping admin credentials hook"
+    exit 0
+  fi
+  
   qlog "Inserting MariaDB credentials for all clusters to platform-secret KV2 Vault"
 
   token="$(vault::get_vault_token)"

@@ -10,6 +10,12 @@ hook::config() {
 }
 
 hook::trigger() {
+  
+  if ! common::module_is_enabled "vault-platform"; then
+    qlog "Vault is not enabled, skipping admin credentials hook"
+    exit 0
+  fi
+
   qlog "Inserting MinIO root credentials to platform-secret kv2 Vault"
   token="$(vault::get_vault_token)"
   

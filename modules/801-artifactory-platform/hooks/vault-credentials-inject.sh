@@ -10,6 +10,12 @@ hook::config() {
 }
 
 hook::trigger() {
+
+  if ! common::module_is_enabled "vault-platform"; then
+    qlog "Vault is not enabled, skipping admin credentials hook"
+    exit 0
+  fi
+  
   qlog "Inserting Artifactory JCR / OSS credentials to legacy kv1 Vault"
   token="$(vault::get_vault_token)"
 

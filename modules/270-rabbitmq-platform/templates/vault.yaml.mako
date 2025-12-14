@@ -1,3 +1,4 @@
+% if addon_operator['vaultPlatformEnabled'] == 'true':
 ### Vault DB Connection
 ---
 apiVersion: platform-vault.qvantel.com/v1
@@ -11,5 +12,6 @@ spec:
   computed-values:
   - expression: k8s_get_secret_value('rabbitmq-platform','{{ $.Release.Namespace }}','rabbitmq-password')
     name: secret-password
-  username: 'admin'
+  username: '{{ $.Values.rabbitmqPlatform.rabbitmq.auth.username }}'
   password: '{secret-password}'
+% endif

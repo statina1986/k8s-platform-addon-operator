@@ -10,6 +10,12 @@ hook::config() {
 }
 
 hook::trigger() {
+
+  if ! common::module_is_enabled "vault-platform"; then
+    qlog "Vault is not enabled, skipping admin credentials hook"
+    exit 0
+  fi
+  
   qlog "Inserting keycloak admin password to vault for system-spec qinstaller"
   token="$(vault::get_vault_token)"
   password="$(kubectl::get_secret_opaque_kv keycloak-admin-secret KEYCLOAK_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
