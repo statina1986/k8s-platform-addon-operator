@@ -94,7 +94,7 @@ elasticsearchPlatform:
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
-                  image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
+                  image: ${values['global']['containerRegistryBase']}/elasticsearch/elasticsearch:7.17.29
                   % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.logsearch.resources | nindent 12  }}                    
                   env:
@@ -185,7 +185,7 @@ elasticsearchPlatform:
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
-                  image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
+                  image: ${values['global']['containerRegistryBase']}/elasticsearch/elasticsearch:7.17.29
                   % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
@@ -214,7 +214,7 @@ elasticsearchPlatform:
             containers:
               - name: kibana
                 % if 'containerRegistryBase' in values['global']:
-                image: docker.elastic.co/kibana/kibana:7.17.29
+                image: ${values['global']['containerRegistryBase']}/kibana/kibana:7.17.29
                 % endif
                 resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
             tolerations:
@@ -240,7 +240,7 @@ elasticsearchPlatform:
   logstash:
     replicas: 1
     maxUnavailable: {}
-    version: 7.17.29
+    version: 7.17.3
     logstashConfig: 
       logstash.yml: |
         http.host: 0.0.0.0
@@ -387,7 +387,7 @@ elasticsearchPlatform:
       - name: ELASTICSEARCH_PORT
         value: "9200"
     % if 'containerRegistryBase' in values['global']:
-    image:  docker.elastic.co/logstash/logstash
+    image:  ${values['global']['containerRegistryBase']}/logstash/logstash
     % endif
     imagePullPolicy: "IfNotPresent"
     logstashJavaOpts: "-Xmx1g -Xms1g"
