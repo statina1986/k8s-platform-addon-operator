@@ -6,8 +6,8 @@ dependencies:
     version: 3.2.0
     repository: https://helm.elastic.co
     condition: eck-operator.enabled
-  - name: eck-logstash
-    version: 0.17.0
+  - name: logstash
+    version: 7.17.3
     repository: https://helm.elastic.co
     condition: logstashEnabled
   - name: eck-beats

@@ -2,11 +2,11 @@ dependencies:
 - name: eck-operator
   repository: https://helm.elastic.co
   version: 3.2.0
-- name: eck-logstash
+- name: logstash
   repository: https://helm.elastic.co
-  version: 0.17.0
+  version: 7.17.3
 - name: eck-beats
   repository: https://helm.elastic.co
   version: 0.17.0
-digest: sha256:55a5785e84943e00b302db398d76fd655fd2c3437ce972fc6779c28cd689a6da
-generated: "2025-12-12T13:35:43.677422854+02:00"
+digest: sha256:130bfc5b4e999c1edd7bd5edd5fccd26376067fe1c67c24373f0f7fd668d4823
+generated: "2025-12-15T12:23:10.660990555+02:00"

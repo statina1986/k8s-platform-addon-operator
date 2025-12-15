@@ -240,6 +240,7 @@ elasticsearchPlatform:
   logstash:
     replicas: 1
     maxUnavailable: {}
+    version: 7.17.29
     logstashConfig: 
       logstash.yml: |
         http.host: 0.0.0.0
@@ -388,7 +389,6 @@ elasticsearchPlatform:
     % if 'containerRegistryBase' in values['global']:
     image:  docker.elastic.co/logstash/logstash
     % endif
-    imageTag: "7.17.29"
     imagePullPolicy: "IfNotPresent"
     logstashJavaOpts: "-Xmx1g -Xms1g"
     resources:
