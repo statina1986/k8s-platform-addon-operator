@@ -506,6 +506,7 @@ vectorPlatform:
           inputs:
             - tibco_transform
           type: elasticsearch
+          api_version: v7
           tls:
             verify_certificate: false
             verify_hostname: false
@@ -527,6 +528,7 @@ vectorPlatform:
             - qvantel_apps_no_debug
             - rbs_transform
           type: elasticsearch
+          api_version: v7
           tls:
             verify_certificate: false
             verify_hostname: false
@@ -547,6 +549,7 @@ vectorPlatform:
           inputs:
             - istio_to_elk_transform
           type: elasticsearch
+          api_version: v7
           tls:
             verify_certificate: false
             verify_hostname: false
