@@ -126,8 +126,7 @@ spec:
                       valueFrom:
                         secretKeyRef:
                             key: SFTPGO_HTTPD__BINDINGS__0__OIDC__CLIENT_SECRET
-                            name:
-                                "": null
+                            name: '{{ .Values.keycloakPlatform.sftpgoSecretName }}'
                     - name: VAULT_CLIENT_SECRET
                       valueFrom:
                         secretKeyRef:

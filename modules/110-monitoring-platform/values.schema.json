@@ -4879,6 +4879,12 @@
                   "title": "redis",
                   "type": "boolean"
                 },
+                "stfpgo": {
+                  "default": true,
+                  "required": [],
+                  "title": "stfpgo",
+                  "type": "boolean"
+                },
                 "vault": {
                   "default": true,
                   "required": [],

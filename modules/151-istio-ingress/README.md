@@ -539,22 +539,6 @@ service:
           port: 443
           protocol: TCP
           targetPort: 443
-        - name: rabbitmq
-          port: 5672
-          protocol: TCP
-          targetPort: 5672
-        - name: rabbitmq-stomp
-          port: 61613
-          protocol: TCP
-          targetPort: 61613
-        - name: rabbitmq-webstomp
-          port: 15674
-          protocol: TCP
-          targetPort: 15674
-        - name: vector-logs
-          port: 9000
-          protocol: TCP
-          targetPort: 9000
 tolerations:
     - effect: NoSchedule
       key: dedicated-nodes
@@ -617,31 +601,7 @@ Enables Private Ingress gateway
             protocol: HTTPS
           tls:
             credentialName: qvantel-wildcard
-            mode: SIMPLE
-        - hosts:
-            - '*'
-          port:
-            name: rabbitmq
-            number: 5672
-            protocol: TCP
-        - hosts:
-            - '*'
-          port:
-            name: rabbitmq-stomp
-            number: 61613
-            protocol: TCP
-        - hosts:
-            - '*'
-          port:
-            name: rabbitmq-webstomp
-            number: 15674
-            protocol: HTTP
-        - hosts:
-            - '*'
-          port:
-            name: vector-logs
-            number: 9000
-            protocol: TCP</code></pre>
+            mode: SIMPLE</code></pre>
 </td>
 			<td><div>
 

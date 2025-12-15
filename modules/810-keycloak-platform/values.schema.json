@@ -598,16 +598,10 @@
                                                       "type": "string"
                                                     },
                                                     "name": {
-                                                      "properties": {
-                                                        "": {
-                                                          "default": "",
-                                                          "required": [],
-                                                          "type": "null"
-                                                        }
-                                                      },
+                                                      "default": "{{ .Values.keycloakPlatform.sftpgoSecretName }}",
                                                       "required": [],
                                                       "title": "name",
-                                                      "type": "object"
+                                                      "type": "string"
                                                     }
                                                   },
                                                   "required": [],

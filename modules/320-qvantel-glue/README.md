@@ -147,7 +147,7 @@ Default values for Cassandra clusters. See `example-cassandra.cluster` for refer
     cassandra:
       serviceAccount: platform
       serverVersion: "4.1.8"
-      serverImage: "platform.artifactory.qvantel.net/k8s-platform-1-2-0/k8ssandra/cass-management-api:4.1.8-ubi8"
+      serverImage: "{{$.Values.global.containerRegistryBase | default "docker.io"}}/k8ssandra/cass-management-api:4.1.8-ubi8"
       metadata:
         annotations:
           cassandra.datastax.com/allow-storage-changes: 'true'
@@ -219,7 +219,8 @@ Default values for Cassandra clusters. See `example-cassandra.cluster` for refer
               requests:
                 cpu: '0.1'
                 memory: 256M
-          perNodeConfigInitContainerImage: platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+          perNodeConfigInitContainerImage: {{$.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net}}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+         
           racks:
             - name: default
               {{- if $.root.Values.global.platformMasters }}
@@ -632,6 +633,12 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
       metadata:
         annotations:
           eks.amazonaws.com/role-arn: {{ $.root.Values.global.awsRole }}
+    {{- end }}
+    {{- if $.root.Values.global.gcpRole }}
+    serviceAccountTemplate:
+      metadata:
+        annotations:
+          iam.gke.io/gcp-service-account: {{ $.root.Values.global.gcpRole }}
     {{- end }}
  
 </code></pre>

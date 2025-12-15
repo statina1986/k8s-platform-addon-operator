@@ -179,6 +179,7 @@ istioIngress:
         protocol: TCP
         targetPort: 443
       % if not values.get("istioIngress", {}).get("dnaIstioProfile"):
+      % if values.get("istioIngress", {}).get("virtualServices", {}).get("instances", {}).get("rabbitmq", False):
       - name: rabbitmq
         port: 5672
         protocol: TCP
@@ -191,10 +192,13 @@ istioIngress:
         port: 15674
         protocol: TCP
         targetPort: 15674
+      % endif
+      % if values.get("istioIngress", {}).get("virtualServices", {}).get("instances", {}).get("vector-aggregator-logstash", False):
       - name: vector-logs
         port: 9000
         protocol: TCP
         targetPort: 9000
+      % endif
       % endif
       % if values.get("istioIngress", {}).get("externalIstioProxy", False):
       - name: tls
@@ -254,6 +258,7 @@ istioIngress:
           credentialName: qvantel-wildcard
           % endif
       % if not values.get("istioIngress", {}).get("dnaIstioProfile"):
+      % if values.get("istioIngress", {}).get("virtualServices", {}).get("instances", {}).get("rabbitmq", False):
       - hosts:
         - '*'
         port:
@@ -272,12 +277,15 @@ istioIngress:
           name: rabbitmq-webstomp
           number: 15674
           protocol: HTTP
+      % endif
+      % if values.get("istioIngress", {}).get("virtualServices", {}).get("instances", {}).get("vector-aggregator-logstash", False):
       - hosts:
         - '*'
         port:
           name: vector-logs
           number: 9000
           protocol: TCP
+      % endif
       % endif
   % if values.get("istioIngress", {}).get("externalIstioProxy", False):
   - name: ${values['global']['helmReleaseNamePrefix']}istio-eastwestgateway
