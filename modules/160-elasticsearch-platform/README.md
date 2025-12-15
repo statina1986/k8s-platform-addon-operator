@@ -18,4 +18,4 @@ Filebeat can be utilized on VM nodes, like Tibco nodes, to transmit traffic to t
 
 # Dependencies:
 
-[vault-credentials-inject.sh](./hooks/vault-credentials-inject.sh) requires VaultPlatform to be present.
+No dependencies.
