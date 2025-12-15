@@ -472,7 +472,7 @@ qvantelGlue:
                       requests:
                         cpu: '0.1'
                         memory: 256M
-                  perNodeConfigInitContainerImage: {{$.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net}}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+                  perNodeConfigInitContainerImage: {{$.Values.global.containerRegistryBase | default "platform.artifactory.qvantel.net"}}/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
                   
                   racks:
                     - name: default
