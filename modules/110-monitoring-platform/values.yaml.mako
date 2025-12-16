@@ -54,55 +54,93 @@ monitoringPlatform:
         enabled: true
       extraPorts:
       - name: otlp-grpc
-        port: 4318
-        targetPort: 4318
-        protocol: "TCP"
-      - name: otlp-http
         port: 4317
         targetPort: 4317
+        protocol: "TCP"
+      - name: otlp-http
+        port: 4318
+        targetPort: 4318
         protocol: "TCP"
       extraEnv:
       - name: PROMETHEUS_ENDPOINT
         value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local.:9090"
-      - name: TEMPO_ENDPOINT
+      - name: TEMPO_HTTP_ENDPOINT
+        value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-distributor.${values['global']['platformNamespace']}.svc.cluster.local.:4318"
+      - name: TEMPO_GRPC_ENDPOINT
         value: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-tempo-distributor.${values['global']['platformNamespace']}.svc.cluster.local.:4317"
       configMap:
         create: true
         content: |
-          otelcol.receiver.otlp "default" {
-            grpc {}
+          otelcol.receiver.otlp "http_receiver" {
             http {}
-          
+
             output {
-              metrics = [otelcol.processor.batch.default.input]
-              traces = [otelcol.processor.batch.default.input]
+              traces  = [otelcol.processor.batch.http_traces.input]
+              metrics = [otelcol.processor.batch.metrics.input]
             }
           }
             
-          otelcol.processor.batch "default" {
+          otelcol.receiver.otlp "grpc_receiver" {
+            grpc {}
+
+            output {
+              traces  = [otelcol.processor.batch.grpc_traces.input]
+              metrics = [otelcol.processor.batch.metrics.input]
+            }
+          }
+            
+          otelcol.processor.batch "http_traces" {
+            send_batch_size = 1024
+            timeout         = "2s"
+
+            output {
+              traces = [otelcol.exporter.otlphttp.tempo_http.input]
+            }
+          }
+            
+          otelcol.processor.batch "grpc_traces" {
+            send_batch_size = 1024
+            timeout         = "2s"
+
+            output {
+              traces = [otelcol.exporter.otlp.tempo_grpc.input]
+            }
+          }
+
+          otelcol.processor.batch "metrics" {
+            send_batch_size = 1000
+            timeout         = "5s"
+
             output {
               metrics = [otelcol.exporter.prometheus.default.input]
-              traces  = [otelcol.exporter.otlp.tempo.input]
             }
           }
             
           otelcol.exporter.prometheus "default" {
             forward_to = [prometheus.remote_write.prometheus.receiver]
           }
-            
+
           prometheus.remote_write "prometheus" {
             endpoint {
               url = env("PROMETHEUS_ENDPOINT") + "/api/v1/write"
-              }
             }
-            
-          otelcol.exporter.otlp "tempo" {
-            // Send traces to a locally running Tempo without TLS enabled.
+          }
+
+          otelcol.exporter.otlphttp "tempo_http" {
             client {
-              endpoint = env("TEMPO_ENDPOINT")
+              endpoint = env("TEMPO_HTTP_ENDPOINT")
               tls {
                 insecure = true
                 insecure_skip_verify = true
+              }
+            }
+          }
+
+          otelcol.exporter.otlp "tempo_grpc" {
+            client {
+              endpoint = env("TEMPO_GRPC_ENDPOINT")
+              tls {
+                insecure = true
               }
             }
           }
@@ -139,9 +177,12 @@ monitoringPlatform:
         internal_metrics:
           prometheus:
             port: 9090
-            path: /metrics 
+            path: /metrics
   tempo-distributed:
     enabled: false
+    tempo:
+      structuredConfig:
+        stream_over_http_enabled: true
     % if 'containerRegistryBase' in values['global']:
     global:
       image:
@@ -169,11 +210,17 @@ monitoringPlatform:
       otlp:
         grpc:
           enabled: true
+          receiverConfig:
+            max_recv_msg_size_mib: 50
         http:
           enabled: true
     metricsGenerator:
       enabled: true
       config:
+        processor:
+          local_blocks:
+            filter_server_spans: false
+            flush_to_storage: true
         storage:
           remote_write:
             - url: "http://${values['global']['helmReleaseNamePrefix']}monitoring-platform-prometheus.${values['global']['platformNamespace']}.svc.cluster.local.:9090/api/v1/write"
@@ -183,13 +230,33 @@ monitoringPlatform:
           processors:
             - service-graphs
             - span-metrics
+            - local-blocks
       per_tenant_override_config: /runtime-config/overrides.yaml
     overrides:
       defaults:
+        global:
+          max_bytes_per_trace: 50000000
+        ingestion:
+          max_traces_per_user: 100000      
         metrics_generator:
           processors:
             - service-graphs
             - span-metrics
+            - local-blocks
+    compactor:
+      replicas: 2
+    ingester:
+      config:
+        trace_idle_period: 120s
+    querier:
+      config:
+        frontend_worker:
+          grpc_client_config:
+            max_send_msg_size: 8388608
+        max_concurrent_queries: 20
+    server:
+      grpc_server_max_recv_msg_size: 8388608
+      grpc_server_max_send_msg_size: 8388608
     storage:
       trace:
         backend: local #s3 to be changed 
