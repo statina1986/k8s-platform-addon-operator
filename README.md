@@ -20,6 +20,7 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 - [vault-platform](modules/140-vault-platform/README.md) for Vault deployment and configuration
 - [minio-platform](modules/145-minio-platform/README.md) for MinIO deployment and configuration
 - [istio-ingress](modules/151-istio-ingress/README.md) for Istio Ingress Gateways deployment and configuration
+- [opensearch-platform](modules/159-opensearch-platform/README.md) for OpenSearch and OpenSearch Dashboards configuration
 - [elasticsearch-platform](modules/160-elasticsearch-platform/README.md) for ECK Operator and ELK stack configuration
 - [logsearch-platform](modules/161-logsearch-platform/README.md) for Logsearch cluster without ECK Operator ( only for OCP platform so far )
 - [smartsearch-platform](modules/162-smartsearch-platform/README.md) for Smartsearch cluster without ECK Operator ( only for OCP platform so far )

@@ -1199,7 +1199,7 @@
                             "type": "array"
                           },
                           "image": {
-                            "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:1.2.0_7_e03920fe8",
+                            "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/platform/grafana-plugins:1.2.0_8_b278cb9c4",
                             "required": [],
                             "title": "image",
                             "type": "string"

@@ -1,0 +1,16 @@
+apiVersion: v2
+name: opensearchPlatform
+version: 0.0.1
+dependencies:
+  - name: opensearch
+    version: 3.3.0
+    repository: https://opensearch-project.github.io/helm-charts
+    condition: opensearchEnabled
+  - name: opensearchDashboards
+    version: 3.3.0
+    repository: https://opensearch-project.github.io/helm-charts
+    condition: opensearchDashboardsEnabled
+  - name: dataPrepper
+    version: 0.3.1
+    repository: https://opensearch-project.github.io/helm-charts
+    condition: dataPrepperEnabled

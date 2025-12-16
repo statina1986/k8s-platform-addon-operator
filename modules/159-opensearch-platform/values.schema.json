@@ -1,0 +1,624 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "opensearchPlatform": {
+      "properties": {
+        "dataPrepper": {
+          "properties": {
+            "global": {
+              "properties": {
+                "dockerRegistry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "dockerRegistry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "global",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "dataPrepper",
+          "type": "object"
+        },
+        "dataPrepperEnabled": {
+          "default": false,
+          "required": [],
+          "title": "dataPrepperEnabled",
+          "type": "boolean"
+        },
+        "loggingSetup": {
+          "properties": {
+            "enabled": {
+              "default": "true",
+              "required": [],
+              "title": "enabled",
+              "type": "string"
+            },
+            "longtermIndices": {
+              "items": {
+                "anyOf": [
+                  {
+                    "required": [],
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "longtermIndices",
+              "type": "array"
+            },
+            "longtermRetentionPeriod": {
+              "default": "45d",
+              "required": [],
+              "title": "longtermRetentionPeriod",
+              "type": "string"
+            },
+            "shorttermIndices": {
+              "description": "Index configuration - Indices are split in two\nto long and short term with respective retentions",
+              "items": {
+                "anyOf": [
+                  {
+                    "required": [],
+                    "type": "string"
+                  },
+                  {
+                    "required": [],
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "shorttermIndices",
+              "type": "array"
+            },
+            "shorttermRetentionPeriod": {
+              "default": "2d",
+              "required": [],
+              "title": "shorttermRetentionPeriod",
+              "type": "string"
+            }
+          },
+          "required": [],
+          "title": "loggingSetup",
+          "type": "object"
+        },
+        "opensearch": {
+          "properties": {
+            "antiAffinity": {
+              "default": "soft",
+              "required": [],
+              "title": "antiAffinity",
+              "type": "string"
+            },
+            "antiAffinityTopologyKey": {
+              "default": "kubernetes.io/hostname",
+              "required": [],
+              "title": "antiAffinityTopologyKey",
+              "type": "string"
+            },
+            "clusterName": {
+              "default": "opensearch-cluster",
+              "required": [],
+              "title": "clusterName",
+              "type": "string"
+            },
+            "enableServiceLinks": {
+              "default": false,
+              "required": [],
+              "title": "enableServiceLinks",
+              "type": "boolean"
+            },
+            "envFrom": {
+              "description": "Secret is generated by [secrets.yaml](./templates/secrets.yaml) - it is used by the admin user.",
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "secretRef": {
+                        "properties": {
+                          "name": {
+                            "default": "opensearch-initial-password",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "title": "secretRef",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "envFrom",
+              "type": "array"
+            },
+            "global": {
+              "properties": {
+                "dockerRegistry": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0",
+                  "required": [],
+                  "title": "dockerRegistry",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "global",
+              "type": "object"
+            },
+            "masterService": {
+              "default": "opensearch-cluster-master",
+              "required": [],
+              "title": "masterService",
+              "type": "string"
+            },
+            "maxUnavailable": {
+              "default": 1,
+              "required": [],
+              "title": "maxUnavailable",
+              "type": "integer"
+            },
+            "nodeGroup": {
+              "default": "master",
+              "required": [],
+              "title": "nodeGroup",
+              "type": "string"
+            },
+            "persistence": {
+              "properties": {
+                "accessModes": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "required": [],
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "required": [],
+                  "title": "accessModes",
+                  "type": "array"
+                },
+                "enableInitChown": {
+                  "default": true,
+                  "required": [],
+                  "title": "enableInitChown",
+                  "type": "boolean"
+                },
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "image": {
+                  "default": "platform/platform-k8s-tools-minimal",
+                  "required": [],
+                  "title": "image",
+                  "type": "string"
+                },
+                "imageTag": {
+                  "default": "1.3.3_202509080945_master_90384dcc",
+                  "required": [],
+                  "title": "imageTag",
+                  "type": "string"
+                },
+                "size": {
+                  "default": "8Gi",
+                  "required": [],
+                  "title": "size",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "persistence",
+              "type": "object"
+            },
+            "rbac": {
+              "properties": {
+                "serviceAccountName": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "serviceAccountName",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "rbac",
+              "type": "object"
+            },
+            "replicas": {
+              "default": 3,
+              "required": [],
+              "title": "replicas",
+              "type": "integer"
+            },
+            "resources": {
+              "properties": {
+                "limits": {
+                  "properties": {
+                    "cpu": {
+                      "default": "2",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "8000Mi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "limits",
+                  "type": "object"
+                },
+                "requests": {
+                  "properties": {
+                    "cpu": {
+                      "default": "1000m",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "100Mi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "requests",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "resources",
+              "type": "object"
+            },
+            "roles": {
+              "items": {
+                "anyOf": [
+                  {
+                    "required": [],
+                    "type": "string"
+                  },
+                  {
+                    "required": [],
+                    "type": "string"
+                  },
+                  {
+                    "required": [],
+                    "type": "string"
+                  },
+                  {
+                    "required": [],
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "roles",
+              "type": "array"
+            },
+            "sysctlInit": {
+              "properties": {
+                "enabled": {
+                  "default": false,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "image": {
+                  "default": "platform/platform-k8s-tools",
+                  "description": "Needs to use full tools image, as needs to run 'sysctl'",
+                  "required": [],
+                  "title": "image",
+                  "type": "string"
+                },
+                "imageTag": {
+                  "default": "1.3.3_202509080945_master_90384dcc",
+                  "required": [],
+                  "title": "imageTag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "sysctlInit",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "opensearch",
+          "type": "object"
+        },
+        "opensearchDashboards": {
+          "properties": {
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opensearchproject/opensearch-dashboards:3.3.0",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "opensearchHosts": {
+              "default": "https://opensearch-cluster-master.platform.svc:9200",
+              "required": [],
+              "title": "opensearchHosts",
+              "type": "string"
+            },
+            "rbac": {
+              "properties": {
+                "create": {
+                  "default": true,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "rbac",
+              "type": "object"
+            },
+            "replicaCount": {
+              "default": 1,
+              "required": [],
+              "title": "replicaCount",
+              "type": "integer"
+            },
+            "resources": {
+              "properties": {
+                "limits": {
+                  "properties": {
+                    "cpu": {
+                      "default": "500m",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "1024M",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "limits",
+                  "type": "object"
+                },
+                "requests": {
+                  "properties": {
+                    "cpu": {
+                      "default": "100m",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "512M",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "requests",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "resources",
+              "type": "object"
+            },
+            "serviceAccount": {
+              "properties": {
+                "create": {
+                  "default": false,
+                  "required": [],
+                  "title": "create",
+                  "type": "boolean"
+                },
+                "name": {
+                  "default": "platform",
+                  "required": [],
+                  "title": "name",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            },
+            "tolerations": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "dedicated-nodes",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Equal",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      },
+                      "value": {
+                        "default": "platform-masters",
+                        "required": [],
+                        "title": "value",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "tolerations",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "opensearchDashboards",
+          "type": "object"
+        },
+        "opensearchDashboardsEnabled": {
+          "default": false,
+          "description": "Enables OpenSearch Dashboards, which is their Kibana equivalent",
+          "required": [],
+          "title": "opensearchDashboardsEnabled",
+          "type": "boolean"
+        },
+        "opensearchEnabled": {
+          "default": true,
+          "required": [],
+          "title": "opensearchEnabled",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "opensearchPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

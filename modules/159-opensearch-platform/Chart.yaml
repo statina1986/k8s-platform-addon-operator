@@ -1,0 +1,20 @@
+apiVersion: v2
+name: opensearch-platform
+version: 0.0.1
+dependencies:
+  - name: opensearchPlatform
+    version: 0.0.1
+annotations:
+  images: |
+    - name: opensearch
+      image: docker.io/opensearchproject/opensearch:3.3.0
+    - name: opensearchDashboards
+      image: docker.io/opensearchproject/opensearch-dashboards:3.3.0
+    - name: dataPrepper
+      image: docker.io/opensearchproject/data-prepper:2.8.0
+    - name: fsgroup-volume
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    - name: sysctl-init
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools:1.3.3_202509080945_master_90384dcc
+    - name: loggingsetup
+      image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc

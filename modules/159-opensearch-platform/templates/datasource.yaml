@@ -1,0 +1,79 @@
+--- 
+## Opensearch readonly secret, used by Grafana
+{{- $osdbreadonlysecret := (randAscii 32 | b64enc) }}
+{{- $readonlysecretData := (lookup "v1" "Secret" .Release.Namespace "opensearch-dashboards-readonly").data }}
+{{- if $readonlysecretData }}
+{{- $osdbreadonlysecret = (index $readonlysecretData "password" | b64dec) }}
+{{- end }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opensearch-dashboards-readonly
+type: Opaque
+data:
+  username: {{ "readonly" | b64enc }}
+  password: {{ $osdbreadonlysecret | b64enc }}
+--- 
+## Opensearch datasource that gets picked up by Grafana
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opensearch-grafana-datasource
+  labels:
+    grafana_datasource: "1"
+stringData:
+  datasource-opensearch.yaml: |-
+    apiVersion: 1
+    datasources:
+    - name: Elasticsearch-Ingress
+      type: grafana-opensearch-datasource
+      access: http
+      {{- if eq .Values.global.deployOperators "true" }}
+      url: https://{{ .Values.global.helmReleaseNamePrefix }}opensearch-cluster-master.{{ .Values.global.platformNamespace }}.svc.cluster.local.:9200
+      {{- else}}
+      url: https://{{ .Values.global.helmReleaseNamePrefix }}opensearch-cluster-master.{{ .Values.global.operatorNamespace }}.svc.cluster.local.:9200
+      {{- end }} 
+      basicAuth: true
+      basicAuthUser: readonly
+      version: 1
+      isDefault: false
+      jsonData:
+        tlsSkipVerify: true
+        pplEnabled: false
+        version: 3.3.0
+        maxConcurrentShardRequests: 5
+        flavor: 'Opensearch'
+        timeField: '@timestamp'
+        database: "[ingress-]YYYY-MM-DD"
+        interval: Daily
+        logMessageField: qvantel_message
+        logLevelField: log_level
+      secureJsonData:
+        basicAuthPassword: {{ $osdbreadonlysecret }}
+      editable: true
+    - name: Elasticsearch-Application
+      type: grafana-opensearch-datasource
+      access: http
+      {{- if eq .Values.global.deployOperators "true" }}
+      url: https://{{ .Values.global.helmReleaseNamePrefix }}opensearch-cluster-master.{{ .Values.global.platformNamespace }}.svc.cluster.local.:9200
+      {{- else}}
+      url: https://{{ .Values.global.helmReleaseNamePrefix }}opensearch-cluster-master.{{ .Values.global.operatorNamespace }}.svc.cluster.local.:9200
+      {{- end }}
+      basicAuth: true
+      basicAuthUser: readonly
+      version: 1
+      isDefault: false
+      jsonData:
+        tlsSkipVerify: true
+        pplEnabled: false
+        version: 3.3.0
+        maxConcurrentShardRequests: 5
+        flavor: 'Opensearch'
+        timeField: '@timestamp'
+        database: "[application-]YYYY-MM-DD"
+        interval: Daily
+        logMessageField: message
+        logLevelField: level
+      secureJsonData:
+        basicAuthPassword: {{ $osdbreadonlysecret }}
+      editable: true

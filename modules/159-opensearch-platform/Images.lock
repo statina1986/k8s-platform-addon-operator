@@ -1,0 +1,56 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2025-12-08T14:53:53.242084489Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: opensearch-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: opensearch
+    image: docker.io/opensearchproject/opensearch:3.3.0
+    chart: opensearch-platform
+    digests:
+      - digest: sha256:59e9e49ac00f19c2af9094e367c8e6586f7d07e6c06465c3f4c43b40934309f2
+        arch: linux/amd64
+      - digest: sha256:98db5375d94a62ee3d9073681bb40fe1087657d036f3dfa79053b0b1f83f5577
+        arch: linux/arm64
+  - name: opensearchDashboards
+    image: docker.io/opensearchproject/opensearch-dashboards:3.3.0
+    chart: opensearch-platform
+    digests:
+      - digest: sha256:0dc52b9730b6855584e615d2bf13e49f474d00d2a858cdd7211cf3f53351d4c6
+        arch: linux/amd64
+      - digest: sha256:65fc94609447b6b798156cd5916c922a812504994f3bcba24ccf2ab211e886b8
+        arch: linux/arm64
+  - name: dataPrepper
+    image: docker.io/opensearchproject/data-prepper:2.8.0
+    chart: opensearch-platform
+    digests:
+      - digest: sha256:57c25fa01d3ca6d0c7fafbb2f243bd4366ba1be31aea751681e87d40b82feb78
+        arch: linux/amd64
+  - name: fsgroup-volume
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    chart: opensearch-platform
+    digests:
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
+        arch: linux/arm64
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
+        arch: linux/amd64
+  - name: sysctl-init
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools:1.3.3_202509080945_master_90384dcc
+    chart: opensearch-platform
+    digests:
+      - digest: sha256:c918de01c561d3eb189a78e50b4eee4ebd6aee35acc37a498a181365d7097005
+        arch: linux/arm64
+      - digest: sha256:15accc26e64de375598a9e243d4b7cc817de7ee0d246b5a9630ac2f036be513b
+        arch: linux/amd64
+  - name: loggingsetup
+    image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
+    chart: opensearch-platform
+    digests:
+      - digest: sha256:01d431df5a9acc9973316961a7c911382bd0446c37e46b3ab69c4af6dec04118
+        arch: linux/arm64
+      - digest: sha256:381a4bb1cccb3892b1ca064c706f7b390f1ecc1d126d4df0d58bf34ee4f2ec40
+        arch: linux/amd64

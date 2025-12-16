@@ -157,11 +157,21 @@ vectorPlatform:
             name: logsearch-elastic
             key: elasticsearch-password
     % endif
-    % if 'containerRegistryBase' in values['global']:
+    % if addon_operator['opensearchPlatformEnabled'] == 'true':
+    env:
+      - name: OPENSEARCH_READWRITE
+        valueFrom:
+          secretKeyRef:
+            name: opensearch-dashboards-readwrite
+            key: password
+    % endif
     haproxy:
       image:
+        % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/haproxytech/haproxy-alpine
-    % endif
+        % else:
+        repository: docker.io/haproxytech/haproxy-alpine
+        % endif
     customConfig:
       api:
         address: 0.0.0.0:8686
@@ -262,7 +272,7 @@ vectorPlatform:
                 .timestamp = parsed_timestamp
               }
             }
-        % if addon_operator['elasticsearchPlatformEnabled'] == 'true' or addon_operator['logsearchPlatformEnabled'] == 'true':
+        % if addon_operator['elasticsearchPlatformEnabled'] == 'true' or addon_operator['logsearchPlatformEnabled'] or addon_operator['opensearchPlatformEnabled'] == 'true':
         # -- Transformation in case ELK is enabled - forwards access logs from Istio
         istio_to_elk_transform:
           inputs:
@@ -620,6 +630,72 @@ vectorPlatform:
             strategy: basic
             password: <%text>"${ELASTICSEARCH_PASSWORD}"</%text> ## here we need to escape ${} from mako templates
             user: elastic
+          bulk:
+            index: "ingress-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
+        % endif
+        % if addon_operator['opensearchPlatformEnabled'] == 'true':
+        opensearch_tibco:
+          compression: none
+          endpoints: 
+            - "https://${values['global']['helmReleaseNamePrefix']}opensearch-cluster-master.${values['global']['platformNamespace']}.svc.cluster.local:9200"
+          inputs:
+            - tibco_transform
+          type: elasticsearch
+          api_version: v7
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${OPENSEARCH_READWRITE}"</%text> ## here we need to escape ${} from mako templates
+            user: readwrite
+          bulk:
+            index: "all-tibco-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
+        opensearch_apps:
+          compression: none
+          endpoints: 
+            - "https://${values['global']['helmReleaseNamePrefix']}opensearch-cluster-master.${values['global']['platformNamespace']}.svc.cluster.local:9200"
+          inputs:
+            - qvantel_apps_no_debug
+            - rbs_transform
+          type: elasticsearch
+          api_version: v7
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${OPENSEARCH_READWRITE}"</%text> ## here we need to escape ${} from mako templates
+            user: readwrite
+          bulk:
+            index: "application-%Y-%m-%d"
+          buffer:
+            max_size: 268435488
+            when_full: drop_newest
+            type: disk
+        opensearch_ingress:
+          compression: none
+          endpoints: 
+            - "https://${values['global']['helmReleaseNamePrefix']}opensearch-cluster-master.${values['global']['platformNamespace']}.svc.cluster.local:9200"
+          inputs:
+            - istio_to_elk_transform
+          type: elasticsearch
+          api_version: v7
+          tls:
+            verify_certificate: false
+            verify_hostname: false
+          auth:
+            strategy: basic
+            password: <%text>"${OPENSEARCH_READWRITE}"</%text> ## here we need to escape ${} from mako templates
+            user: readwrite
           bulk:
             index: "ingress-%Y-%m-%d"
           buffer:

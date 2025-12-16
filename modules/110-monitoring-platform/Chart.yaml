@@ -45,7 +45,7 @@ annotations:
     - name: kube-state-metrics
       image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
     - name: grafana-plugins
-      image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_7_e03920fe8
+      image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_8_b278cb9c4
     - name: alloy
       image: grafana/alloy:v1.10.1
     - name: prometheusConfigReloader

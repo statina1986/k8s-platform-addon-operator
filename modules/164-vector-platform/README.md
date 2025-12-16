@@ -211,6 +211,70 @@ Vector Agent configuration
                 source_type: '{{ print "{{ source_type }}" }}'
             out_of_order_action: accept
             type: loki
+        opensearch_apps:
+            api_version: v7
+            auth:
+                password: ${OPENSEARCH_READWRITE}
+                strategy: basic
+                user: readwrite
+            buffer:
+                max_size: 2.68435488e+08
+                type: disk
+                when_full: drop_newest
+            bulk:
+                index: application-%Y-%m-%d
+            compression: none
+            endpoints:
+                - https://opensearch-cluster-master.platform.svc.cluster.local:9200
+            inputs:
+                - qvantel_apps_no_debug
+                - rbs_transform
+            tls:
+                verify_certificate: false
+                verify_hostname: false
+            type: elasticsearch
+        opensearch_ingress:
+            api_version: v7
+            auth:
+                password: ${OPENSEARCH_READWRITE}
+                strategy: basic
+                user: readwrite
+            buffer:
+                max_size: 2.68435488e+08
+                type: disk
+                when_full: drop_newest
+            bulk:
+                index: ingress-%Y-%m-%d
+            compression: none
+            endpoints:
+                - https://opensearch-cluster-master.platform.svc.cluster.local:9200
+            inputs:
+                - istio_to_elk_transform
+            tls:
+                verify_certificate: false
+                verify_hostname: false
+            type: elasticsearch
+        opensearch_tibco:
+            api_version: v7
+            auth:
+                password: ${OPENSEARCH_READWRITE}
+                strategy: basic
+                user: readwrite
+            buffer:
+                max_size: 2.68435488e+08
+                type: disk
+                when_full: drop_newest
+            bulk:
+                index: all-tibco-%Y-%m-%d
+            compression: none
+            endpoints:
+                - https://opensearch-cluster-master.platform.svc.cluster.local:9200
+            inputs:
+                - tibco_transform
+            tls:
+                verify_certificate: false
+                verify_hostname: false
+            type: elasticsearch
         prometheus:
             address: 0.0.0.0:9598
             buffer:
@@ -421,11 +485,11 @@ Vector Agent configuration
             type: remap
 enabled: true
 env:
-    - name: ELASTICSEARCH_PASSWORD
+    - name: OPENSEARCH_READWRITE
       valueFrom:
         secretKeyRef:
-            key: elasticsearch-password
-            name: logsearch-elastic
+            key: password
+            name: opensearch-dashboards-readwrite
 haproxy:
     image:
         repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/haproxytech/haproxy-alpine

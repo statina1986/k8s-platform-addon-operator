@@ -161,12 +161,12 @@ images:
       - digest: sha256:a9a8d1020ae750bfa6711700546cc979e19ad1b630df3eed20f649bb850f900f
         arch: linux/arm64
   - name: grafana-plugins
-    image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_7_e03920fe8
+    image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_8_b278cb9c4
     chart: monitoring-platform
     digests:
-      - digest: sha256:9b1e84b3c741b73ce7477ffe659a6c520503e757272ebce54a396dad7c335f3b
+      - digest: sha256:99d5c034f7c47e5f24121458e792d06946598da7c8dbc95f64dd13bb672906b6
         arch: linux/arm64
-      - digest: sha256:e8ae1ac0c0e258a22bc070db81c4a7c780d6c85667f3cc7cbda9ff2a5b837e58
+      - digest: sha256:82c912dc262bdd27d30d5cbe48c4ce21d305a3be8d11bbd0a5d222df184e95f1
         arch: linux/amd64
   - name: alloy
     image: grafana/alloy:v1.10.1

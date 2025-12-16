@@ -32,6 +32,8 @@ cnpgPostgresPlatformEnabled: "true"
 consulPlatformEnabled: "true"
 elasticsearchPlatform: {}
 elasticsearchPlatformEnabled: "true"
+opensearchPlatform: {}
+opensearchPlatformEnabled: "true"
 externalDns: {}
 externalDnsEnabled: "true"
 instanaPlatformEnabled: "true"

@@ -996,6 +996,415 @@
                       "title": "loki",
                       "type": "object"
                     },
+                    "opensearch_apps": {
+                      "properties": {
+                        "api_version": {
+                          "default": "v7",
+                          "required": [],
+                          "title": "api_version",
+                          "type": "string"
+                        },
+                        "auth": {
+                          "properties": {
+                            "password": {
+                              "default": "${OPENSEARCH_READWRITE}",
+                              "required": [],
+                              "title": "password",
+                              "type": "string"
+                            },
+                            "strategy": {
+                              "default": "basic",
+                              "required": [],
+                              "title": "strategy",
+                              "type": "string"
+                            },
+                            "user": {
+                              "default": "readwrite",
+                              "required": [],
+                              "title": "user",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "auth",
+                          "type": "object"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "bulk": {
+                          "properties": {
+                            "index": {
+                              "default": "application-%Y-%m-%d",
+                              "required": [],
+                              "title": "index",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "bulk",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "none",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "endpoints": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "endpoints",
+                          "type": "array"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "tls": {
+                          "properties": {
+                            "verify_certificate": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_certificate",
+                              "type": "boolean"
+                            },
+                            "verify_hostname": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_hostname",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "tls",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "elasticsearch",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "opensearch_apps",
+                      "type": "object"
+                    },
+                    "opensearch_ingress": {
+                      "properties": {
+                        "api_version": {
+                          "default": "v7",
+                          "required": [],
+                          "title": "api_version",
+                          "type": "string"
+                        },
+                        "auth": {
+                          "properties": {
+                            "password": {
+                              "default": "${OPENSEARCH_READWRITE}",
+                              "required": [],
+                              "title": "password",
+                              "type": "string"
+                            },
+                            "strategy": {
+                              "default": "basic",
+                              "required": [],
+                              "title": "strategy",
+                              "type": "string"
+                            },
+                            "user": {
+                              "default": "readwrite",
+                              "required": [],
+                              "title": "user",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "auth",
+                          "type": "object"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "bulk": {
+                          "properties": {
+                            "index": {
+                              "default": "ingress-%Y-%m-%d",
+                              "required": [],
+                              "title": "index",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "bulk",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "none",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "endpoints": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "endpoints",
+                          "type": "array"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "tls": {
+                          "properties": {
+                            "verify_certificate": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_certificate",
+                              "type": "boolean"
+                            },
+                            "verify_hostname": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_hostname",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "tls",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "elasticsearch",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "opensearch_ingress",
+                      "type": "object"
+                    },
+                    "opensearch_tibco": {
+                      "properties": {
+                        "api_version": {
+                          "default": "v7",
+                          "required": [],
+                          "title": "api_version",
+                          "type": "string"
+                        },
+                        "auth": {
+                          "properties": {
+                            "password": {
+                              "default": "${OPENSEARCH_READWRITE}",
+                              "required": [],
+                              "title": "password",
+                              "type": "string"
+                            },
+                            "strategy": {
+                              "default": "basic",
+                              "required": [],
+                              "title": "strategy",
+                              "type": "string"
+                            },
+                            "user": {
+                              "default": "readwrite",
+                              "required": [],
+                              "title": "user",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "auth",
+                          "type": "object"
+                        },
+                        "buffer": {
+                          "properties": {
+                            "max_size": {
+                              "default": 268435488,
+                              "required": [],
+                              "title": "max_size",
+                              "type": "integer"
+                            },
+                            "type": {
+                              "default": "disk",
+                              "required": [],
+                              "title": "type",
+                              "type": "string"
+                            },
+                            "when_full": {
+                              "default": "drop_newest",
+                              "required": [],
+                              "title": "when_full",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "buffer",
+                          "type": "object"
+                        },
+                        "bulk": {
+                          "properties": {
+                            "index": {
+                              "default": "all-tibco-%Y-%m-%d",
+                              "required": [],
+                              "title": "index",
+                              "type": "string"
+                            }
+                          },
+                          "required": [],
+                          "title": "bulk",
+                          "type": "object"
+                        },
+                        "compression": {
+                          "default": "none",
+                          "required": [],
+                          "title": "compression",
+                          "type": "string"
+                        },
+                        "endpoints": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "endpoints",
+                          "type": "array"
+                        },
+                        "inputs": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              }
+                            ],
+                            "required": []
+                          },
+                          "required": [],
+                          "title": "inputs",
+                          "type": "array"
+                        },
+                        "tls": {
+                          "properties": {
+                            "verify_certificate": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_certificate",
+                              "type": "boolean"
+                            },
+                            "verify_hostname": {
+                              "default": false,
+                              "required": [],
+                              "title": "verify_hostname",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "tls",
+                          "type": "object"
+                        },
+                        "type": {
+                          "default": "elasticsearch",
+                          "required": [],
+                          "title": "type",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "opensearch_tibco",
+                      "type": "object"
+                    },
                     "prometheus": {
                       "properties": {
                         "address": {
@@ -1813,7 +2222,7 @@
                   {
                     "properties": {
                       "name": {
-                        "default": "ELASTICSEARCH_PASSWORD",
+                        "default": "OPENSEARCH_READWRITE",
                         "required": [],
                         "title": "name",
                         "type": "string"
@@ -1823,13 +2232,13 @@
                           "secretKeyRef": {
                             "properties": {
                               "key": {
-                                "default": "elasticsearch-password",
+                                "default": "password",
                                 "required": [],
                                 "title": "key",
                                 "type": "string"
                               },
                               "name": {
-                                "default": "logsearch-elastic",
+                                "default": "opensearch-dashboards-readwrite",
                                 "required": [],
                                 "title": "name",
                                 "type": "string"

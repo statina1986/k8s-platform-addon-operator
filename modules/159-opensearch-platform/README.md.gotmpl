@@ -1,0 +1,19 @@
+{{ template "chart.header" . }}
+
+Basic OpenSearch module.
+
+Adds a grafana data source with [datasource.yaml](./templates/datasource.yaml). Optionally creates indices with [logging-setup.sh](./hooks/logging-setup.sh)
+
+Known issues:
+* OpenSearch Dashboards Discover will spam you with errors until indices actually have data in them
+    * Once Vector has written data to the index, it will work as expected
+* If you want to add an Index, you will need to add the defaults to your environment configuration
+	* For example to add all-tibco to shorttermIndices, you need the following configuration:
+    * ``` 
+        shorttermIndices:
+        - application
+        - audit
+        - all-tibco
+        ```
+
+{{ template "chart.valuesSectionHtml" . }}

@@ -577,9 +577,9 @@ monitoringPlatform:
       extraInitContainers: 
         - name: plugin-sidecar
           % if 'containerRegistryBase' in values['global']:
-          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:1.2.0_7_e03920fe8
+          image: ${values['global']['containerRegistryBase']}/platform/grafana-plugins:1.2.0_8_b278cb9c4
           % else:
-          image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_7_e03920fe8
+          image: platform.artifactory.qvantel.net/platform/grafana-plugins:1.2.0_8_b278cb9c4
           % endif
           command: ["/bin/sh", "-c"]
           args:

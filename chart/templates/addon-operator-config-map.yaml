@@ -51,6 +51,11 @@ data:
   {{- if .Values.modulesConfig.elasticsearchPlatform }}
   elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}
   {{- end }}
+  
+  opensearchPlatformEnabled: "{{ .Values.modulesConfig.opensearchPlatformEnabled }}"
+  {{- if .Values.modulesConfig.opensearchPlatform }}
+  opensearchPlatform: {{ print "|\n" (.Values.modulesConfig.opensearchPlatform | toYaml | indent 4) }}
+  {{- end }}
 
   externalDnsEnabled: "{{ .Values.modulesConfig.externalDnsEnabled }}"
   {{- if .Values.modulesConfig.externalDns }}
