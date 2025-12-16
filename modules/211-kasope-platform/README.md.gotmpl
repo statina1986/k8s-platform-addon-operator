@@ -9,15 +9,6 @@ Dependencies:
 Provides:
 - K8ssandra Operator for multi-cluster support
 - Cass Operator for Cassandra cluster management
-- Apache Cassandra 3.11.13 cluster named 'cluster' deployed by default
-- Possibility to enable Medusa backups
 - Automated secret creation for connection to Platform MinIO
-
-Configured profiles:
-- dev
-  - 1 Cassandra node instead of default 3
-  - 500Mi JVM heap instead of default 2Gi
-  - 10Gi of storage instead of default 20Gi
-  - requests only 1Gi of memory instead of default 4Gi
 
 {{ template "chart.valuesSectionHtml" . }}
