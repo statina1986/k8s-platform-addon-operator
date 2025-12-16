@@ -15,3 +15,7 @@ Filebeat can be utilized on VM nodes, like Tibco nodes, to transmit traffic to t
     output.logstash:
       hosts:
       	- vector-platform-aggregator.service.consul:9000
+
+# Dependencies:
+
+No dependencies.

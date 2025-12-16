@@ -65,7 +65,7 @@ elasticsearchPlatform:
           memory: 1000Mi
           cpu: "0.1"
       spec: |
-        version: 7.16.2
+        version: 7.17.29
         volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
         http:
           tls:
@@ -94,7 +94,7 @@ elasticsearchPlatform:
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
-                  image: ${values['global']['containerRegistryBase']}/library/elasticsearch:7.16.2
+                  image: ${values['global']['containerRegistryBase']}/elasticsearch/elasticsearch:7.17.29
                   % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.logsearch.resources | nindent 12  }}                    
                   env:
@@ -136,7 +136,7 @@ elasticsearchPlatform:
           memory: 2Gi
           cpu: 1
       spec: |
-        version: 7.16.2
+        version: 7.17.29
         volumeClaimDeletePolicy: DeleteOnScaledownOnly
         http:
           tls:
@@ -146,10 +146,7 @@ elasticsearchPlatform:
         - name: smartsearch
           count: 1
           config:
-            node.master: true
-            node.data: true
-            node.ingest: true
-            node.store.allow_mmap: false    
+            node.roles: ["master", "data", "ingest", "data_hot"]
             xpack.security.authc:
               anonymous:
                 authz_exception: false
@@ -188,7 +185,7 @@ elasticsearchPlatform:
               containers:
                 - name: elasticsearch
                   % if 'containerRegistryBase' in values['global']:
-                  image: ${values['global']['containerRegistryBase']}/library/elasticsearch:7.16.2
+                  image: ${values['global']['containerRegistryBase']}/elasticsearch/elasticsearch:7.17.29
                   % endif
                   resources: {{ toYaml .Values.elasticsearchPlatform.clusters.smartsearch.resources | nindent 12 }}
   kibanas:
@@ -207,7 +204,7 @@ elasticsearchPlatform:
           tls:
             selfSignedCertificate:
               disabled: true
-        version: 7.16.2
+        version: 7.17.29
         count: 1
         elasticsearchRef:
           name: logsearch
@@ -217,7 +214,7 @@ elasticsearchPlatform:
             containers:
               - name: kibana
                 % if 'containerRegistryBase' in values['global']:
-                image: ${values['global']['containerRegistryBase']}/library/kibana:7.16.2
+                image: ${values['global']['containerRegistryBase']}/kibana/kibana:7.17.29
                 % endif
                 resources: {{  toYaml .Values.elasticsearchPlatform.kibanas.kibana.resources  | nindent 10 }}
             tolerations:
@@ -243,6 +240,7 @@ elasticsearchPlatform:
   logstash:
     replicas: 1
     maxUnavailable: {}
+    version: 7.17.3
     logstashConfig: 
       logstash.yml: |
         http.host: 0.0.0.0
@@ -389,9 +387,8 @@ elasticsearchPlatform:
       - name: ELASTICSEARCH_PORT
         value: "9200"
     % if 'containerRegistryBase' in values['global']:
-    image:  ${values['global']['containerRegistryBase']}/library/logstash
+    image:  ${values['global']['containerRegistryBase']}/logstash/logstash
     % endif
-    imageTag: "7.16.2"
     imagePullPolicy: "IfNotPresent"
     logstashJavaOpts: "-Xmx1g -Xms1g"
     resources:
@@ -423,83 +420,72 @@ elasticsearchPlatform:
           port: 5044
           protocol: TCP
           targetPort: 5044
-  filebeat: 
-    daemonset:
-      # additionals labels
-      labels:
-        k8s-app: filebeat
-      # Include the daemonset
-      enabled: true
-      # - configMapRef:
-      #     name: config-secret
-      extraEnvs:
-      - name: LOGSTASH_HOST
-        value: elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local
-      - name: LOGSTASH_PORT
-        value: "5044"
-      hostNetworking: true
-      # Allows you to add any config files in /usr/share/filebeat
-      # such as filebeat.yml for daemonset
-      filebeatConfig:
-        filebeat.yml: |
-          filebeat.inputs:
-          - type: container
-            paths:
-              - /var/log/containers/*.log
-            processors:
-              - add_kubernetes_metadata:
-                  host: <%text>${NODE_NAME}</%text>
-                  matchers:
-                  - logs_path:
-                      logs_path: "/var/log/containers/"
-
-          processors:
-            - add_cloud_metadata:
-            - add_host_metadata:
-          output.logstash:
-            loadbalance: false
-            bulk_max_size: 1024
-            hosts: <%text>['${LOGSTASH_HOST:elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local}:${LOGSTASH_PORT:5044}']</%text>
-            logging.level: info
-      resources:
-        requests:
-          cpu: "100m"
-          memory: "200Mi"
-        limits:
-          cpu: "100"
-          memory: 1Gi
-      tolerations: []
-    % if 'containerRegistryBase' in values['global']:
-    image:  ${values['global']['containerRegistryBase']}/library/filebeat
-    % endif
-    imageTag: "7.16.2"
-    imagePullPolicy: "IfNotPresent"
-    imagePullSecrets: []
-    livenessProbe:
-      exec:
-        command:
-          - sh
-          - -c
-          - |
-            #!/usr/bin/env bash -e
-            curl --fail 127.0.0.1:5066
-      failureThreshold: 3
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-    readinessProbe:
-      exec:
-        command:
-          - sh
-          - -c
-          - |
-            #!/usr/bin/env bash -e
-            filebeat test output
-      failureThreshold: 3
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-    # Whether this chart should self-manage its service account, role, and associated role binding.
-    managedServiceAccount: true
-    # Custom service account override that the pod will use
-    serviceAccount: "filebeat"
+  eck-beats:
+    labels:
+      k8s-app: filebeat
+    type: filebeat
+    version: 7.17.29
+    elasticsearchRef: 
+      name: ''
+    serviceAccount: 
+      name: "filebeat"
+      namespace: ${values['global']['platformNamespace']}
+    config:
+      filebeat.inputs:
+      - type: filestream
+        id: container_logs
+        prospector.scanner.symlinks: true
+        parsers:
+          - container: {}
+        paths:
+          - "/var/log/containers/*.log"
+        processors:
+          - add_kubernetes_metadata:
+              host: <%text>${NODE_NAME}</%text>
+              matchers:
+              - logs_path:
+                  logs_path: /var/log/containers
+          - add_host_metadata: {}
+          - add_cloud_metadata: {}
+      output.logstash:
+        loadbalance: false
+        bulk_max_size: 1024
+        hosts:
+          - "elasticsearch-platform-logstash.${values['global']['platformNamespace']}.svc.cluster.local"
+        logging.level: info
+    daemonSet:
+      podTemplate:
+        spec:
+          serviceAccount: platform
+          automountServiceAccountToken: true
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirstWithHostNet
+          hostNetwork: true # Allows to provide richer host metadata
+          containers:
+          - name: filebeat
+            env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            securityContext:
+              runAsUser: 0
+              # If using Red Hat OpenShift uncomment this:
+              #privileged: true
+            volumeMounts:
+            - name: varlogcontainers
+              mountPath: /var/log/containers
+            - name: varlogpods
+              mountPath: /var/log/pods
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+          volumes:
+          - name: varlogcontainers
+            hostPath:
+              path: /var/log/containers
+          - name: varlogpods
+            hostPath:
+              path: /var/log/pods
+          - name: varlibdockercontainers
+            hostPath:
+              path: /var/lib/docker/containers
