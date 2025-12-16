@@ -14,7 +14,7 @@ elasticsearchPlatform:
     installCRDs: false
     % if 'containerRegistryBase' in values['global']:
     image:      
-      repository: ${values['global']['containerRegistryBase']}/elastic/eck-operator
+      repository: ${values['global']['containerRegistryBase']}/eck/eck-operator
     % endif
     nameOverride: "elastic-operator"
     fullnameOverride: "elastic-operator"
