@@ -855,7 +855,7 @@
           "properties": {
             "image": {
               "default": "v1.28.15-minimal-eksbuild.31",
-              "description": "Mako templating to match kube-proxy image to recommended as of 1st of Oct 2025\nhttps://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images",
+              "description": "Mako templating to match kube-proxy image to recommended as of 16th of Dec 2025\nhttps://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images",
               "required": [],
               "title": "image",
               "type": "string"

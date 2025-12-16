@@ -280,7 +280,7 @@ Configuration for EKS kube-proxy.
 </td>
 			<td><div>
 
-Mako templating to match kube-proxy image to recommended as of 1st of Oct 2025 https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images
+Mako templating to match kube-proxy image to recommended as of 16th of Dec 2025 https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images
 
 </div>
 </td>
