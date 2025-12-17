@@ -57,6 +57,16 @@ rabbitmqPlatform:
     # -- Enabled rabbitmq extra plugins
     extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_web_stomp rabbitmq_stomp"
 
+    metrics:
+      enabled: true
+      serviceMonitor:
+        labels: 
+          release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
+        default:
+          enabled: false
+        perObject:
+          enabled: true
+
     extraContainerPorts:
       - name: web-stomp
         containerPort: 15674
