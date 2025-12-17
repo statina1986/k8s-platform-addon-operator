@@ -1,4 +1,5 @@
 # pomerium-platform module
+<!-- BRIEF -->
 This module is responsible for deployment of [Pomerium](https://www.pomerium.com/)
 
 ## Depends on modules:

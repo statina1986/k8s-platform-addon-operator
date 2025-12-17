@@ -2,6 +2,7 @@
 
 # sftpgo-platform
 
+<!-- BRIEF -->
 This module offers [Drakkan's SFTPGo](https://github.com/drakkan/sftpgo), providing SFTPGo version 2.7.0 by default.
 Deployment uses [sftpgo/helm-chart](https://github.com/sftpgo/helm-chart) to deploy it via Helm.
 

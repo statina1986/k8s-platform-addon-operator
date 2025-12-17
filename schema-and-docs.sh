@@ -14,3 +14,5 @@ for val in ${dirs[@]}; do
         [ -f "$val/values.yaml.mako" ] && rm $val/values.yaml
     fi
 done
+
+./generate_doc_tables.py

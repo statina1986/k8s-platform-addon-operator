@@ -3,6 +3,7 @@
 # redis-platform
 
 # redis-platform module
+<!-- BRIEF -->
 This module is responsible for deployment of Redis (https://github.com/redis/redis)
 
 Depends on modules:

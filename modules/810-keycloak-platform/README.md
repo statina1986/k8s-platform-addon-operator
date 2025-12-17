@@ -2,6 +2,7 @@
 
 # keycloak-platform
 
+<!-- BRIEF -->
 `keycloak-platform` module is responsible for deployment of [Keycloak](https://www.keycloak.org/) in the cluster.
 Keycloak is an open-source identity and access management (IAM) solution to secure applications with minimal effort.
 It acts as a centralized identity broker, enabling features like multi-factor authentication, fine-grained authorization, and user account management, while also allowing for customization and integration with existing user directories like LDAP and Active Directory.

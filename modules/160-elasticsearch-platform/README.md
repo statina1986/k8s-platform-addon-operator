@@ -1,6 +1,9 @@
 
 # ECK-operator upgrades
 
+<!-- BRIEF -->
+Deploys Elasticsearch and Kibana using ECK Operator
+
 ECK-operator was tested that the upgrade from 1.9.1 to 2.2.0 can be done by normally running the addon-operator, with the new charts and configurations. When doing a upgrade the PVCs are going to be lost if the following configuration is not defined in the target elasticsearch configuration:
 - volumeClaimDeletePolicy: DeleteOnScaledownOnly
 This configuration is also definable in the values by the name of volumePolicy.

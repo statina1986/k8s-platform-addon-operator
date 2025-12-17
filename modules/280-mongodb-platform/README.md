@@ -2,6 +2,7 @@
 
 # mongodb-platform
 
+<!-- BRIEF -->
 This module deploys [Bitnami's MongoDB](https://artifacthub.io/packages/helm/bitnami/mongodb/15.6.12) chart.
 
 Refer to [values.yaml with comments](./examples/values.yaml.with.comments) for more detailed documentation.

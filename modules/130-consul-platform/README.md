@@ -2,6 +2,7 @@
 
 # consul-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [Consul](https://www.consul.io/) in the cluster
 
 Depends on modules:

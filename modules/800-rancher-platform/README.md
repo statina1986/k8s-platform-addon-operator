@@ -4,6 +4,7 @@
 
 rancher-platform module
 
+<!-- BRIEF -->
 This module is created for Rancher installations
 
 Provides: Rancher management cluster

@@ -2,6 +2,7 @@
 
 # istio-ingress
 
+<!-- BRIEF -->
 This module is responsible for deployment of [Istio](https://github.com/istio/istio) Ingress Gateway solution in the cluster.
 This module deploys only Ingress Gateways, not Istio control plane itself
 

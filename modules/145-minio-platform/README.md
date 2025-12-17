@@ -3,6 +3,7 @@
 # minio-platform
 
 
+<!-- BRIEF -->
 `minio-platform` module is responsible for deployment of [MinIO](https://min.io/) in the cluster. Most common use case for this is when off site S3 backend such as AWS S3 is not available.
 
 Depends on modules:

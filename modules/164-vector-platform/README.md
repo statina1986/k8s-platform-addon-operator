@@ -2,6 +2,7 @@
 
 # vector-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [Vector](https://vector.dev/) and [Fluent Bit](https://fluentbit.io/).
 
 Current pipeline configuration:

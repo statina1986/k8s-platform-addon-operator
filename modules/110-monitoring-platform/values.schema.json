@@ -36,7 +36,7 @@
                 "configMap": {
                   "properties": {
                     "content": {
-                      "default": "otelcol.receiver.otlp \"default\" {\n  grpc {}\n  http {}\n\n  output {\n    metrics = [otelcol.processor.batch.default.input]\n    traces = [otelcol.processor.batch.default.input]\n  }\n}\n  \notelcol.processor.batch \"default\" {\n  output {\n    metrics = [otelcol.exporter.prometheus.default.input]\n    traces  = [otelcol.exporter.otlp.tempo.input]\n  }\n}\n  \notelcol.exporter.prometheus \"default\" {\n  forward_to = [prometheus.remote_write.prometheus.receiver]\n}\n  \nprometheus.remote_write \"prometheus\" {\n  endpoint {\n    url = env(\"PROMETHEUS_ENDPOINT\") + \"/api/v1/write\"\n    }\n  }\n  \notelcol.exporter.otlp \"tempo\" {\n  // Send traces to a locally running Tempo without TLS enabled.\n  client {\n    endpoint = env(\"TEMPO_ENDPOINT\")\n    tls {\n      insecure = true\n      insecure_skip_verify = true\n    }\n  }\n}\n",
+                      "default": "otelcol.receiver.otlp \"http_receiver\" {\n  http {}\n\n  output {\n    traces  = [otelcol.processor.batch.http_traces.input]\n    metrics = [otelcol.processor.batch.metrics.input]\n  }\n}\n  \notelcol.receiver.otlp \"grpc_receiver\" {\n  grpc {}\n\n  output {\n    traces  = [otelcol.processor.batch.grpc_traces.input]\n    metrics = [otelcol.processor.batch.metrics.input]\n  }\n}\n  \notelcol.processor.batch \"http_traces\" {\n  send_batch_size = 1024\n  timeout         = \"2s\"\n\n  output {\n    traces = [otelcol.exporter.otlphttp.tempo_http.input]\n  }\n}\n  \notelcol.processor.batch \"grpc_traces\" {\n  send_batch_size = 1024\n  timeout         = \"2s\"\n\n  output {\n    traces = [otelcol.exporter.otlp.tempo_grpc.input]\n  }\n}\n\notelcol.processor.batch \"metrics\" {\n  send_batch_size = 1000\n  timeout         = \"5s\"\n\n  output {\n    metrics = [otelcol.exporter.prometheus.default.input]\n  }\n}\n  \notelcol.exporter.prometheus \"default\" {\n  forward_to = [prometheus.remote_write.prometheus.receiver]\n}\n\nprometheus.remote_write \"prometheus\" {\n  endpoint {\n    url = env(\"PROMETHEUS_ENDPOINT\") + \"/api/v1/write\"\n  }\n}\n\notelcol.exporter.otlphttp \"tempo_http\" {\n  client {\n    endpoint = env(\"TEMPO_HTTP_ENDPOINT\")\n    tls {\n      insecure = true\n      insecure_skip_verify = true\n    }\n  }\n}\n\notelcol.exporter.otlp \"tempo_grpc\" {\n  client {\n    endpoint = env(\"TEMPO_GRPC_ENDPOINT\")\n    tls {\n      insecure = true\n    }\n  }\n}\n",
                       "required": [],
                       "title": "content",
                       "type": "string"
@@ -76,7 +76,25 @@
                       {
                         "properties": {
                           "name": {
-                            "default": "TEMPO_ENDPOINT",
+                            "default": "TEMPO_HTTP_ENDPOINT",
+                            "required": [],
+                            "title": "name",
+                            "type": "string"
+                          },
+                          "value": {
+                            "default": "http://monitoring-platform-tempo-distributor.platform.svc.cluster.local.:4318",
+                            "required": [],
+                            "title": "value",
+                            "type": "string"
+                          }
+                        },
+                        "required": [],
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "name": {
+                            "default": "TEMPO_GRPC_ENDPOINT",
                             "required": [],
                             "title": "name",
                             "type": "string"
@@ -110,7 +128,7 @@
                             "type": "string"
                           },
                           "port": {
-                            "default": 4318,
+                            "default": 4317,
                             "required": [],
                             "title": "port",
                             "type": "integer"
@@ -122,7 +140,7 @@
                             "type": "string"
                           },
                           "targetPort": {
-                            "default": 4318,
+                            "default": 4317,
                             "required": [],
                             "title": "targetPort",
                             "type": "integer"
@@ -140,7 +158,7 @@
                             "type": "string"
                           },
                           "port": {
-                            "default": 4317,
+                            "default": 4318,
                             "required": [],
                             "title": "port",
                             "type": "integer"
@@ -152,7 +170,7 @@
                             "type": "string"
                           },
                           "targetPort": {
-                            "default": 4317,
+                            "default": 4318,
                             "required": [],
                             "title": "targetPort",
                             "type": "integer"
@@ -4935,6 +4953,19 @@
         },
         "tempo-distributed": {
           "properties": {
+            "compactor": {
+              "properties": {
+                "replicas": {
+                  "default": 2,
+                  "required": [],
+                  "title": "replicas",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "compactor",
+              "type": "object"
+            },
             "enabled": {
               "default": false,
               "required": [],
@@ -4977,6 +5008,10 @@
                               {
                                 "required": [],
                                 "type": "string"
+                              },
+                              {
+                                "required": [],
+                                "type": "string"
                               }
                             ],
                             "required": []
@@ -5004,6 +5039,26 @@
               },
               "required": [],
               "title": "global_overrides",
+              "type": "object"
+            },
+            "ingester": {
+              "properties": {
+                "config": {
+                  "properties": {
+                    "trace_idle_period": {
+                      "default": "120s",
+                      "required": [],
+                      "title": "trace_idle_period",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "config",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "ingester",
               "type": "object"
             },
             "memcached": {
@@ -5063,6 +5118,32 @@
               "properties": {
                 "config": {
                   "properties": {
+                    "processor": {
+                      "properties": {
+                        "local_blocks": {
+                          "properties": {
+                            "filter_server_spans": {
+                              "default": false,
+                              "required": [],
+                              "title": "filter_server_spans",
+                              "type": "boolean"
+                            },
+                            "flush_to_storage": {
+                              "default": true,
+                              "required": [],
+                              "title": "flush_to_storage",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [],
+                          "title": "local_blocks",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "processor",
+                      "type": "object"
+                    },
                     "storage": {
                       "properties": {
                         "remote_write": {
@@ -5112,11 +5193,41 @@
               "properties": {
                 "defaults": {
                   "properties": {
+                    "global": {
+                      "properties": {
+                        "max_bytes_per_trace": {
+                          "default": 50000000,
+                          "required": [],
+                          "title": "max_bytes_per_trace",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [],
+                      "title": "global",
+                      "type": "object"
+                    },
+                    "ingestion": {
+                      "properties": {
+                        "max_traces_per_user": {
+                          "default": 100000,
+                          "required": [],
+                          "title": "max_traces_per_user",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [],
+                      "title": "ingestion",
+                      "type": "object"
+                    },
                     "metrics_generator": {
                       "properties": {
                         "processors": {
                           "items": {
                             "anyOf": [
+                              {
+                                "required": [],
+                                "type": "string"
+                              },
                               {
                                 "required": [],
                                 "type": "string"
@@ -5145,6 +5256,65 @@
               },
               "required": [],
               "title": "overrides",
+              "type": "object"
+            },
+            "querier": {
+              "properties": {
+                "config": {
+                  "properties": {
+                    "frontend_worker": {
+                      "properties": {
+                        "grpc_client_config": {
+                          "properties": {
+                            "max_send_msg_size": {
+                              "default": 8388608,
+                              "required": [],
+                              "title": "max_send_msg_size",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "grpc_client_config",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "frontend_worker",
+                      "type": "object"
+                    },
+                    "max_concurrent_queries": {
+                      "default": 20,
+                      "required": [],
+                      "title": "max_concurrent_queries",
+                      "type": "integer"
+                    }
+                  },
+                  "required": [],
+                  "title": "config",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "querier",
+              "type": "object"
+            },
+            "server": {
+              "properties": {
+                "grpc_server_max_recv_msg_size": {
+                  "default": 8388608,
+                  "required": [],
+                  "title": "grpc_server_max_recv_msg_size",
+                  "type": "integer"
+                },
+                "grpc_server_max_send_msg_size": {
+                  "default": 8388608,
+                  "required": [],
+                  "title": "grpc_server_max_send_msg_size",
+                  "type": "integer"
+                }
+              },
+              "required": [],
+              "title": "server",
               "type": "object"
             },
             "serviceAccount": {
@@ -5212,6 +5382,26 @@
               "title": "storage",
               "type": "object"
             },
+            "tempo": {
+              "properties": {
+                "structuredConfig": {
+                  "properties": {
+                    "stream_over_http_enabled": {
+                      "default": true,
+                      "required": [],
+                      "title": "stream_over_http_enabled",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "structuredConfig",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "tempo",
+              "type": "object"
+            },
             "tolerations": {
               "items": {
                 "anyOf": [
@@ -5263,6 +5453,19 @@
                           "required": [],
                           "title": "enabled",
                           "type": "boolean"
+                        },
+                        "receiverConfig": {
+                          "properties": {
+                            "max_recv_msg_size_mib": {
+                              "default": 50,
+                              "required": [],
+                              "title": "max_recv_msg_size_mib",
+                              "type": "integer"
+                            }
+                          },
+                          "required": [],
+                          "title": "receiverConfig",
+                          "type": "object"
                         }
                       },
                       "required": [],

@@ -2,6 +2,7 @@
 
 # aws-platform
 
+<!-- BRIEF -->
 This module configures needed plugins and services to run Qvantel K8S Platfrom on AWS EKS clusters and within AWS Cloud
 
 Depends on modules:

@@ -1,5 +1,6 @@
 # platform-core module
-Provides common core features of the platform. **SHould be always enabled**.
+<!-- BRIEF -->
+Provides common core features of the platform. **Should be always enabled**.
 
 Depends on modules:
 - no dependencies

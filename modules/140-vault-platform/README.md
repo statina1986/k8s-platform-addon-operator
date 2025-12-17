@@ -2,6 +2,7 @@
 
 # vault-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [vault](https://www.vaultproject.io/) in the cluster
 
 Depends on modules:

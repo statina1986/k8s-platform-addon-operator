@@ -2,6 +2,7 @@
 
 # kyverno-platform
 
+<!-- BRIEF -->
 This module provides https://kyverno.io/ policy engine platform service.
 
 Depends on modules:

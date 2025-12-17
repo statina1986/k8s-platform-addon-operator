@@ -3,7 +3,8 @@
 # opensearch-platform
 
 
-Basic OpenSearch module.
+<!-- BRIEF -->
+Basic [OpenSearch](https://opensearch.org/) module.
 
 Adds a grafana data source with [datasource.yaml](./templates/datasource.yaml). Optionally creates indices with [logging-setup.sh](./hooks/logging-setup.sh)
 

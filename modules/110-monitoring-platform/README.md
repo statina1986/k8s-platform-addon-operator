@@ -3,6 +3,7 @@
 # monitoring-platform
 
 
+<!-- BRIEF -->
 This module configures Qvantel monitoring platform components to provide visibility to all that is happening inside the K8s cluster.
 More detailed descriptions of each component can be found from [Platform Monitoring Overview](https://qvantel.atlassian.net/wiki/spaces/ICS/pages/1358177368/Monitoring+Overview)
 

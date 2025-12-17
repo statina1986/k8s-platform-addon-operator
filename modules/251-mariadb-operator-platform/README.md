@@ -1,4 +1,5 @@
 # mariadb-operator-platform module
+<!-- BRIEF -->
 This module is responsible for deployment of MariaDB Operator (https://github.com/mariadb-operator/mariadb-operator)
 
 Depends on modules:

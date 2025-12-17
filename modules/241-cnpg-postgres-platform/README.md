@@ -2,6 +2,7 @@
 
 # cnpg-postgres-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [CNPG Operator](https://cloudnative-pg.io/documentation/current/).
 
 Depends on modules:

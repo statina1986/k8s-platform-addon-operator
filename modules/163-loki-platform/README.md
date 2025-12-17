@@ -1,3 +1,7 @@
+# loki-platform module
+<!-- BRIEF -->
+This module is responsible for deploying [Grafana Loki](https://grafana.com/oss/loki/).
+
 # Deployment Models
 
 Loki deployment can be done in High Availability mode or in a single node mode, which creates a single instance of Loki using local filesystem. Loki module is configured, with premade configurations so the deployment can be easily deployed using either way. 

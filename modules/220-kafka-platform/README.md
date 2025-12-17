@@ -2,6 +2,7 @@
 
 # kafka-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [Strimzi Kafka Operator](https://github.com/strimzi/strimzi-kafka-operator) in the cluster.
 
 Depends on modules:

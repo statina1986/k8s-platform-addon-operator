@@ -7,44 +7,49 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 > Please check [addon-operator](https://github.com/flant/addon-operator) documentation first
 > 
 
-## Available Modules
-- [platform-core](modules/001-platform-core/README.md) for core parts of platform
-- [kyverno-platform](modules/010-kyverno-platform/README.md) for Kyverno policy engine platform service
-- [aws-platform](modules/050-aws-platform/README.md) configures needed plugins and services to manage Qvantel K8S Platform on AWS Cloud
-- [cert-platform](modules/101-cert-platform/README.md) for certificate management with Cert Manager
-- [istio-platform](modules/105-istio-platform/README.md) for Istio control-plane deployment and configuration
-- [monitoring-platform](modules/110-monitoring-platform/README.md) for Prometheus/Grafana monitoring stack
-- [metrics-platform](modules/111-metrics-platform/README.md) for metrics server in the cluster
-- [external-dns](modules/120-external-dns/README.md) for External DNS in the cluster
-- [consul-platform](modules/130-consul-platform/README.md) for Consul deployment and configuration
-- [vault-platform](modules/140-vault-platform/README.md) for Vault deployment and configuration
-- [minio-platform](modules/145-minio-platform/README.md) for MinIO deployment and configuration
-- [istio-ingress](modules/151-istio-ingress/README.md) for Istio Ingress Gateways deployment and configuration
-- [opensearch-platform](modules/159-opensearch-platform/README.md) for OpenSearch and OpenSearch Dashboards configuration
-- [elasticsearch-platform](modules/160-elasticsearch-platform/README.md) for ECK Operator and ELK stack configuration
-- [logsearch-platform](modules/161-logsearch-platform/README.md) for Logsearch cluster without ECK Operator ( only for OCP platform so far )
-- [smartsearch-platform](modules/162-smartsearch-platform/README.md) for Smartsearch cluster without ECK Operator ( only for OCP platform so far )
-- [loki-platform](modules/163-loki-platform/README.md) for Loki deployment and configuration
-- [vector-platform](modules/164-vector-platform/README.md) for Vector deployment and configuration
-- [kasope-platform](modules/211-kasope-platform/README.md) for K8ssandra Operator deployment and configuration, Cassandra clusters
-- [kafka-platform](modules/220-kafka-platform/README.md) for Strimzi Kafka Operator deployment and configuration, Kafka clusters
-- [progress-platform](modules/230-progress-platform/README.md) for auxiliary stuff needed to support external Progress DB
-- [cnpg-postgres-platform](modules/241-cnpg-postgres-platform/README.md) for CNPG Operator deployment and configuration, clusterwide Postgres resources
-- [mariadb-operator-platform](modules/251-mariadb-operator-platform/README.md) for MariaDB Operator deployment and configuration, clusterwide MariaDB resources
-- [redis-platform](modules/260-redis-platform/README.md) for Redis deployment and configuration
-- [rabbitmq-platform](modules/270-rabbitmq-platform/README.md) for RabbitMQ deployment and configuration
-- [mongodb-platform](modules/280-mongodb-platform/README.md) for MongoDB deployment and configuration
-- [percona-pmm-platform](modules/290-percona-pmm-platform/README.md) for Percona PMM deployment and configuration
-- [pomerium-platform](modules/315-pomerium-platform/README.md) for Pomerium deployment and configuration
-- [qvantel-glue](modules/320-qvantel-glue/README.md) for providing abstractions and automations to support Qvantel workloads deployments and operations
-- [instana-platform](modules/370-instana-platform/README.md) for Instana deployment and configuration
-- [sftpgo-platform](modules/410-sftpgo-platform/README.md) for SFTPGo deployment and configuration
-- [apisix-platform](modules/500-apisix-platform/README.md) for APISIX deployment and configuration
-- [ksix-platform](modules/600-ksix-platform/README.md) for K6 deployment and configuration
-- [rancher-platform](modules/800-rancher-platform/README.md) for Rancher deployment and configuration
-- [artifactory-platform](modules/801-artifactory-platform/README.md) for Artifactory OSS / JCR deployment and configuration
-- [metallb-platform](modules/802-metallb-platform/README.md) for MetalLB deployment and configuration
-- [keycloak-platform](modules/810-keycloak-platform/README.md) for Keycloak deployment and configuration
+## Available modules
+<!-- TABLEMARKER -->
+| module | brief description |
+|:-|:-|
+| [001-platform-core](./modules/001-platform-core) | Provides common core features of the platform. **Should be always enabled**. | 
+| [010-kyverno-platform](./modules/010-kyverno-platform) | This module provides https://kyverno.io/ policy engine platform service. | 
+| [050-aws-platform](./modules/050-aws-platform) | This module configures needed plugins and services to run Qvantel K8S Platfrom on AWS EKS clusters and within AWS Cloud | 
+| [101-cert-platform](./modules/101-cert-platform) | This module is responsible for deployment of [cert-manager](https://cert-manager.io/docs/) in the cluster and configuration of required platform certificates | 
+| [105-istio-platform](./modules/105-istio-platform) | This module is responsible for deployment of [Istio](https://github.com/istio/istio) control plane to the cluster | 
+| [110-monitoring-platform](./modules/110-monitoring-platform) | This module configures Qvantel monitoring platform components to provide visibility to all that is happening inside the K8s cluster. | 
+| [111-metrics-platform](./modules/111-metrics-platform) | This module is responsible for deployment of [metrics-server](https://github.com/kubernetes-sigs/metrics-server/) in the cluster | 
+| [120-external-dns](./modules/120-external-dns) | This module is responsible for deployment of [external-dns](https://github.com/kubernetes-sigs/external-dns) in the cluster | 
+| [130-consul-platform](./modules/130-consul-platform) | This module is responsible for deployment of [Consul](https://www.consul.io/) in the cluster | 
+| [140-vault-platform](./modules/140-vault-platform) | This module is responsible for deployment of [vault](https://www.vaultproject.io/) in the cluster | 
+| [145-minio-platform](./modules/145-minio-platform) | `minio-platform` module is responsible for deployment of [MinIO](https://min.io/) in the cluster. Most common use case for this is when off site S3 backend such as AWS S3 is not available. | 
+| [151-istio-ingress](./modules/151-istio-ingress) | This module is responsible for deployment of [Istio](https://github.com/istio/istio) Ingress Gateway solution in the cluster. | 
+| [159-opensearch-platform](./modules/159-opensearch-platform) | Basic [OpenSearch](https://opensearch.org/) module. | 
+| [160-elasticsearch-platform](./modules/160-elasticsearch-platform) | Deploys Elasticsearch and Kibana using ECK Operator | 
+| [161-logsearch-platform](./modules/161-logsearch-platform) | This module is responsible for deployment of Bitnami ElasticSearch ( LogSearch ). | 
+| [162-smartsearch-platform](./modules/162-smartsearch-platform) | This module is responsible for deployment of Bitnami ElasticSearch ( SmartSearch ). | 
+| [163-loki-platform](./modules/163-loki-platform) | This module is responsible for deploying [Grafana Loki](https://grafana.com/oss/loki/). | 
+| [164-vector-platform](./modules/164-vector-platform) | This module is responsible for deployment of [Vector](https://vector.dev/) and [Fluent Bit](https://fluentbit.io/). | 
+| [211-kasope-platform](./modules/211-kasope-platform) | `kasope-platform` module is responsible for deployment of [K8ssandra Operator](https://docs.k8ssandra.io/components/k8ssandra-operator/) in the cluster. | 
+| [220-kafka-platform](./modules/220-kafka-platform) | This module is responsible for deployment of [Strimzi Kafka Operator](https://github.com/strimzi/strimzi-kafka-operator) in the cluster. | 
+| [230-progress-platform](./modules/230-progress-platform) | This module is now responsible to bring auxilary needed stuff to support external Progress DB. | 
+| [241-cnpg-postgres-platform](./modules/241-cnpg-postgres-platform) | This module is responsible for deployment of [CNPG Operator](https://cloudnative-pg.io/documentation/current/). | 
+| [251-mariadb-operator-platform](./modules/251-mariadb-operator-platform) | This module is responsible for deployment of MariaDB Operator (https://github.com/mariadb-operator/mariadb-operator) | 
+| [260-redis-platform](./modules/260-redis-platform) | This module is responsible for deployment of Redis (https://github.com/redis/redis) | 
+| [270-rabbitmq-platform](./modules/270-rabbitmq-platform) | This module deploys [Bitnami's Rabbitmq](https://artifacthub.io/packages/helm/bitnami/rabbitmq/15.2.4) chart, providing RabbitMQ version 4.0.5. | 
+| [280-mongodb-platform](./modules/280-mongodb-platform) | This module deploys [Bitnami's MongoDB](https://artifacthub.io/packages/helm/bitnami/mongodb/15.6.12) chart. | 
+| [290-percona-pmm-platform](./modules/290-percona-pmm-platform) | open-source database monitoring, management, and observability platform for MySQL, PostgreSQL, and MongoDB | 
+| [315-pomerium-platform](./modules/315-pomerium-platform) | This module is responsible for deployment of [Pomerium](https://www.pomerium.com/) | 
+| [320-qvantel-glue](./modules/320-qvantel-glue) | `qvantel-glue` module provides abstractions and automations to support Qvantel workloads deployments and operations. | 
+| [370-instana-platform](./modules/370-instana-platform) | This module is responsible for [instana](https://www.instana.com) deployment | 
+| [410-sftpgo-platform](./modules/410-sftpgo-platform) | This module offers [Drakkan's SFTPGo](https://github.com/drakkan/sftpgo), providing SFTPGo version 2.7.0 by default. | 
+| [500-apisix-platform](./modules/500-apisix-platform) | This module is responsible for [apisix](https://apisix.apache.org/) deployment | 
+| [600-ksix-platform](./modules/600-ksix-platform) | This module is responsible for [K6](https://github.com/grafana/k6) deployment | 
+| [800-rancher-platform](./modules/800-rancher-platform) | This module is created for Rancher installations | 
+| [801-artifactory-platform](./modules/801-artifactory-platform) | This module provides two versions of [Artifactory](https://jfrog.com/artifactory/) deployment on kubernetes. [OSS](https://artifacthub.io/packages/helm/jfrog/artifactory-oss) and [JCR](https://artifacthub.io/packages/helm/jfrog/artifactory-jcr). | 
+| [802-metallb-platform](./modules/802-metallb-platform) | This module is responsible for deployment of [MetalLB](https://github.com/metallb/metallb) in the cluster and the helm chart was community made, which can be found in [Github](https://github.com/metallb/metallb/tree/main/charts/metallb). | 
+| [810-keycloak-platform](./modules/810-keycloak-platform) | `keycloak-platform` module is responsible for deployment of [Keycloak](https://www.keycloak.org/) in the cluster. | 
+| [900-shutdown-operator](./modules/900-shutdown-operator) | This module deploys the shutdown-addon-operator, that is used to manage the cluster scaledown / up separate from the main addon-operator. | 
+<!-- TABLEMARKER -->
 
 ## Modules Order
 Modules are ordered alphanumerically based on their folder names. This is the order of the deployment.

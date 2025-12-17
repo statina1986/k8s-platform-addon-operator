@@ -2,6 +2,7 @@
 
 # qvantel-glue
 
+<!-- BRIEF -->
 `qvantel-glue` module provides abstractions and automations to support Qvantel workloads deployments and operations.
 Those are opiniated templates which utilize Qvantel specific conventions.
 

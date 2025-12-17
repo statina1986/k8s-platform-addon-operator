@@ -2,6 +2,7 @@
 
 # shutdown-operator
 
+<!-- BRIEF -->
 This module deploys the shutdown-addon-operator, that is used to manage the cluster scaledown / up separate from the main addon-operator.
 The main resources for this module are deployed under the k8s-platform chart /templates:
 

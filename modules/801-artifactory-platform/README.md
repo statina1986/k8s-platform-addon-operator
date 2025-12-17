@@ -2,6 +2,7 @@
 
 # artifactory-platform
 
+<!-- BRIEF -->
 This module provides two versions of [Artifactory](https://jfrog.com/artifactory/) deployment on kubernetes. [OSS](https://artifacthub.io/packages/helm/jfrog/artifactory-oss) and [JCR](https://artifacthub.io/packages/helm/jfrog/artifactory-jcr).
 
 Depends on modules:

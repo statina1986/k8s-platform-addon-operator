@@ -2,6 +2,7 @@
 
 # istio-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [Istio](https://github.com/istio/istio) control plane to the cluster
 
 Depends on modules:

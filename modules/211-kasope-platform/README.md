@@ -3,6 +3,7 @@
 # kasope-platform
 
 
+<!-- BRIEF -->
 `kasope-platform` module is responsible for deployment of [K8ssandra Operator](https://docs.k8ssandra.io/components/k8ssandra-operator/) in the cluster.
 
 Dependencies:
