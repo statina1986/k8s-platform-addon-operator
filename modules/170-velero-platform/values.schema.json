@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "veleroPlatform": {
+      "properties": {
+        "velero": {
+          "description": "Configuration for underlying velero helm-chart. See https://github.com/vmware-tanzu/helm-charts/tree/main/charts/velero#configuration",
+          "properties": {
+            "configuration": {
+              "properties": {
+                "defaultSnapshotMoveData": {
+                  "default": true,
+                  "required": [],
+                  "title": "defaultSnapshotMoveData",
+                  "type": "boolean"
+                },
+                "features": {
+                  "default": "EnableCSI",
+                  "required": [],
+                  "title": "features",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "configuration",
+              "type": "object"
+            },
+            "credentials": {
+              "properties": {
+                "useSecret": {
+                  "default": false,
+                  "required": [],
+                  "title": "useSecret",
+                  "type": "boolean"
+                }
+              },
+              "required": [],
+              "title": "credentials",
+              "type": "object"
+            },
+            "deployNodeAgent": {
+              "default": true,
+              "required": [],
+              "title": "deployNodeAgent",
+              "type": "boolean"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/velero/velero",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "v1.17.0",
+                  "required": [],
+                  "title": "tag",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "initContainers": {
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "image": {
+                        "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/velero/velero-plugin-for-aws:v1.13.0",
+                        "required": [],
+                        "title": "image",
+                        "type": "string"
+                      },
+                      "name": {
+                        "default": "velero-plugin-for-aws",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "volumeMounts": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "properties": {
+                                "mountPath": {
+                                  "default": "/target",
+                                  "required": [],
+                                  "title": "mountPath",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "default": "plugins",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "volumeMounts",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "initContainers",
+              "type": "array"
+            },
+            "serviceAccount": {
+              "properties": {
+                "server": {
+                  "properties": {
+                    "create": {
+                      "default": false,
+                      "required": [],
+                      "title": "create",
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "default": "platform",
+                      "required": [],
+                      "title": "name",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "server",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "serviceAccount",
+              "type": "object"
+            }
+          },
+          "required": [],
+          "title": "velero",
+          "type": "object"
+        }
+      },
+      "required": [],
+      "title": "veleroPlatform",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

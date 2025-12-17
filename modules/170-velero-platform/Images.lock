@@ -1,0 +1,26 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2025-11-12T09:53:47.908005786Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: velero-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: velero
+    image: docker.io/velero/velero:v1.17.0
+    chart: velero-platform
+    digests:
+      - digest: sha256:367a1d2deb5adf3acc8056715aefe398850cd33b8d7a68e5a6f1f13b691a1c58
+        arch: linux/amd64
+      - digest: sha256:cadc9d5a51a060e6e9083fbfae2afc8dc0be8d10be91f58cc9c243971403a37c
+        arch: linux/arm64
+  - name: velero-plugin-for-aws
+    image: docker.io/velero/velero-plugin-for-aws:v1.13.0
+    chart: velero-platform
+    digests:
+      - digest: sha256:b6ecf1a86975475d6bf27259ac0c7afbdc6aff2e15dc79f9dc4a0d77f142e558
+        arch: linux/amd64
+      - digest: sha256:2d8235347b096e9d524ea84992ad4acd3be96dea18a1f4d3bb50e10ca134c08c
+        arch: linux/arm64

@@ -2,6 +2,7 @@ platformCore:
   corednsEnabled: false
   localStorageEnabled: false
   cleanUpControllerEnabled: false
+  snapshotControllerEnabled: false
   coredns:
     image:
       % if 'containerRegistryBase' in values['global']:

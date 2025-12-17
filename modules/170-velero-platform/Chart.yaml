@@ -1,0 +1,12 @@
+apiVersion: v2
+name: velero-platform
+version: 0.0.1
+dependencies:
+  - name: veleroPlatform
+    version: 0.0.1
+annotations:
+  images: |
+    - name: velero
+      image: docker.io/velero/velero:v1.17.0
+    - name: velero-plugin-for-aws
+      image: docker.io/velero/velero-plugin-for-aws:v1.13.0

@@ -196,6 +196,11 @@ data:
   {{- if .Values.modulesConfig.vectorPlatform }}
   vectorPlatform: {{ print "|\n" (.Values.modulesConfig.vectorPlatform | toYaml | indent 4) }}
   {{- end }}
+
+  veleroPlatformEnabled: "{{ .Values.modulesConfig.veleroPlatformEnabled }}"
+  {{- if .Values.modulesConfig.veleroPlatform }}
+  veleroPlatform: {{ print "|\n" (.Values.modulesConfig.veleroPlatform | toYaml | indent 4) }}
+  {{- end }}
 ---
 {{ if eq .Values.modulesConfig.shutdownOperatorEnabled "true" }}
 apiVersion: v1
@@ -211,3 +216,4 @@ data:
   shutdownOperator: {{ print "|\n" (.Values.modulesConfig.shutdownOperator | toYaml | indent 4) }}
   {{- end }}
 {{- end }}
+
