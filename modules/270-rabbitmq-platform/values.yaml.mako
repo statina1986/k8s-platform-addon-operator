@@ -58,7 +58,7 @@ rabbitmqPlatform:
     extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_web_stomp rabbitmq_stomp"
 
     metrics:
-      enabled: true
+      enabled: ${addon_operator['monitoringPlatformEnabled']}
       serviceMonitor:
         labels: 
           release: "${values['global']['helmReleaseNamePrefix']}monitoring-platform"
