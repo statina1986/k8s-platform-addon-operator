@@ -31,8 +31,10 @@ Used helm-charts:
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>autoscaler:
     image:
         repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/cpa/cluster-proportional-autoscaler
+        tag: v1.9.0
 image:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/coredns/coredns
+    tag: 1.13.1
 k8sAppLabelOverride: kube-dns
 replicaCount: 2
 resources:

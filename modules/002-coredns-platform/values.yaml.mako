@@ -8,11 +8,13 @@ corednsPlatform:
       % if 'containerRegistryBase' in values['global']:
       repository: ${values['global']['containerRegistryBase']}/coredns/coredns
       % endif
+      tag: "1.13.1"
     autoscaler:
       image:
         % if 'containerRegistryBase' in values['global']:
         repository: ${values['global']['containerRegistryBase']}/cpa/cluster-proportional-autoscaler
         % endif
+        tag: "v1.9.0"
     replicaCount: 2
     resources:
       limits:
