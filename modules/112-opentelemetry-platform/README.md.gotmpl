@@ -5,13 +5,14 @@ To be able to manage automatic instrumentation, the Operator needs to be configu
 
 
 Depends on modules:
-- cert-platform needed for opentelemetry-operator because it uses Kubernetes admission webhooks, and webhooks require TLS certificates.
-- grafana Alloy to send metrics and traces to the collector.
+- `cert-platform` needed for opentelemetry-operator because it uses Kubernetes admission webhooks, and webhooks require TLS certificates.
+- `monitoring-platform` which contains Alloy collector and metrics/traces backends.
 
 Used helm-charts:
 - `opentelemetry-operator`
 
 Provides:
 - `opentelemetry-operator` deployment
+
 
 {{ template "chart.valuesSectionHtml" . }}

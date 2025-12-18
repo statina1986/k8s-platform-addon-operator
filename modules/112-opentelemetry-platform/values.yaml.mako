@@ -1,4 +1,5 @@
 opentelemetryPlatform:
+  # --  Configuration for OpenTelemetry Operator helm chart. See https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo
   opentelemetry-operator:
     enabled: true
     manager:

@@ -64,7 +64,8 @@ mongodbPlatform: {}
 mongodbPlatformEnabled: "true"
 monitoringPlatform: {}
 monitoringPlatformEnabled: "true"
-perconaPmmPlatformEnabled: "true"
+opentelemetryPlatform: {}
+opentelemetryPlatformEnabled: "true"
 platformCoreEnabled: "true"
 shutdownOperatorEnabled: "true"
 pomeriumPlatformEnabled: "true"

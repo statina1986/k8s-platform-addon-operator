@@ -19,6 +19,7 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 | [105-istio-platform](./modules/105-istio-platform) | This module is responsible for deployment of [Istio](https://github.com/istio/istio) control plane to the cluster | 
 | [110-monitoring-platform](./modules/110-monitoring-platform) | This module configures Qvantel monitoring platform components to provide visibility to all that is happening inside the K8s cluster. | 
 | [111-metrics-platform](./modules/111-metrics-platform) | This module is responsible for deployment of [metrics-server](https://github.com/kubernetes-sigs/metrics-server/) in the cluster | 
+| [112-opentelemetry-platform](./modules/112-opentelemetry-platform) | This module is responsible for deployment of[opentelemetry-operator](https://opentelemetry.io/docs) in the cluster. | 
 | [120-external-dns](./modules/120-external-dns) | This module is responsible for deployment of [external-dns](https://github.com/kubernetes-sigs/external-dns) in the cluster | 
 | [130-consul-platform](./modules/130-consul-platform) | This module is responsible for deployment of [Consul](https://www.consul.io/) in the cluster | 
 | [140-vault-platform](./modules/140-vault-platform) | This module is responsible for deployment of [vault](https://www.vaultproject.io/) in the cluster | 
