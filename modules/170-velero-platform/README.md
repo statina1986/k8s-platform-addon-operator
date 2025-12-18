@@ -2,20 +2,12 @@
 
 # velero-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [Velero](https://cert-manager.io/docs/)
 
 Depends on modules:
 - no dependencies
 
-Used helm-charts:
-- Velero : v11.1.1
-=======
-​
-This module is responsible for deployment of [Velero](https://cert-manager.io/docs/)
-​
-Depends on modules:
-- no dependencies
-​
 Used helm-charts:
 - Velero : v11.1.1
 ​

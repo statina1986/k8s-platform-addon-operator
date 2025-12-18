@@ -251,6 +251,65 @@
               "title": "image",
               "type": "object"
             },
+            "metrics": {
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "required": [],
+                  "title": "enabled",
+                  "type": "boolean"
+                },
+                "serviceMonitor": {
+                  "properties": {
+                    "default": {
+                      "properties": {
+                        "enabled": {
+                          "default": false,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "default",
+                      "type": "object"
+                    },
+                    "labels": {
+                      "properties": {
+                        "release": {
+                          "default": "monitoring-platform",
+                          "required": [],
+                          "title": "release",
+                          "type": "string"
+                        }
+                      },
+                      "required": [],
+                      "title": "labels",
+                      "type": "object"
+                    },
+                    "perObject": {
+                      "properties": {
+                        "enabled": {
+                          "default": true,
+                          "required": [],
+                          "title": "enabled",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [],
+                      "title": "perObject",
+                      "type": "object"
+                    }
+                  },
+                  "required": [],
+                  "title": "serviceMonitor",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "metrics",
+              "type": "object"
+            },
             "networkPolicy": {
               "properties": {
                 "enabled": {

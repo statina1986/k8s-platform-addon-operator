@@ -16,11 +16,10 @@ veleroPlatform:
       server:
         create: false
         name: platform
-    initContainers:
     % if addon_operator['awsPlatformEnabled'] == 'true':
+    initContainers:
       - name: velero-plugin-for-aws
         image: ${values['global'].get('containerRegistryBase','docker.io')}/velero/velero-plugin-for-aws:v1.13.0
-    % endif
         volumeMounts:
           - mountPath: /target
             name: plugins

@@ -29,6 +29,7 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 | [162-smartsearch-platform](./modules/162-smartsearch-platform) | This module is responsible for deployment of Bitnami ElasticSearch ( SmartSearch ). | 
 | [163-loki-platform](./modules/163-loki-platform) | This module is responsible for deploying [Grafana Loki](https://grafana.com/oss/loki/). | 
 | [164-vector-platform](./modules/164-vector-platform) | This module is responsible for deployment of [Vector](https://vector.dev/) and [Fluent Bit](https://fluentbit.io/). | 
+| [170-velero-platform](./modules/170-velero-platform) | This module is responsible for deployment of [Velero](https://cert-manager.io/docs/) | 
 | [211-kasope-platform](./modules/211-kasope-platform) | `kasope-platform` module is responsible for deployment of [K8ssandra Operator](https://docs.k8ssandra.io/components/k8ssandra-operator/) in the cluster. | 
 | [220-kafka-platform](./modules/220-kafka-platform) | This module is responsible for deployment of [Strimzi Kafka Operator](https://github.com/strimzi/strimzi-kafka-operator) in the cluster. | 
 | [230-progress-platform](./modules/230-progress-platform) | This module is now responsible to bring auxilary needed stuff to support external Progress DB. | 
