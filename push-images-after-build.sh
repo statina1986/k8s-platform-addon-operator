@@ -14,9 +14,11 @@ for file in ${changed_files[@]}; do
 done
 
 
-commit_comment=( `git log --format=%B -n 1` )
+commit_comment="$(git log --format=%B -n 1)"
+echo $commit_comment
 
 if [[ $commit_comment == *"other: push-images"* ]]; then
+echo $commit_comment
     ./utils/dt --plain images pull chart
     ./utils/dt --plain charts relocate chart $1
     ./utils/dt --plain images push chart
