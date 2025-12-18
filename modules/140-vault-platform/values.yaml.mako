@@ -80,14 +80,25 @@ vaultPlatform:
       servingCertificate: "${values['global']['helmReleaseNamePrefix']}vault-platform-vault-secrets-webhook-ca"
       generate: false
     % if values['global']['platformMasters']:
-    nodeSelector:
-      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: "${values['global']['platformMastersKey']}"
+                operator: In
+                values:
+                - "${values['global']['platformMastersValue']}"
     % endif
     tolerations:
       - key: "${values['global']['platformMastersKey']}"
         value: "${values['global']['platformMastersValue']}"
         operator: "Equal"
         effect: "NoSchedule"
+      - key: CriticalAddonsOnly
+        effect: "NoSchedule"
+        operator: "Exists"
     % if values['global']['multiZone']['enabled']:
     topologySpreadConstraints:
       - labelSelector:

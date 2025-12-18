@@ -695,6 +695,30 @@
                     },
                     "required": [],
                     "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "effect": {
+                        "default": "NoSchedule",
+                        "required": [],
+                        "title": "effect",
+                        "type": "string"
+                      },
+                      "key": {
+                        "default": "CriticalAddonsOnly",
+                        "required": [],
+                        "title": "key",
+                        "type": "string"
+                      },
+                      "operator": {
+                        "default": "Exists",
+                        "required": [],
+                        "title": "operator",
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
                   }
                 ],
                 "required": []

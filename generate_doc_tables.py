@@ -43,7 +43,7 @@ def list_charts(module, module_dir):
                     chart_data.append("```" + field["repository"] + "/" + field["name"] + ":" +  field["version"] + "```" + "<br>")
                 else:
                     chart_data.append("```" + field["name"] + ":" +  field["version"] + "```" + "<br>")
-    chart_data = set(chart_data)
+    chart_data = sorted(set(chart_data))
     chart_data = "".join(chart_data)
     return chart_data
 

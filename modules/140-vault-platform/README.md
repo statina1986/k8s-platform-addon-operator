@@ -306,6 +306,9 @@ tolerations:
       key: dedicated-nodes
       operator: Equal
       value: platform-masters
+    - effect: NoSchedule
+      key: CriticalAddonsOnly
+      operator: Exists
 vaultEnv:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/bank-vaults/vault-env</code></pre>
 </td>
