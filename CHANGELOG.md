@@ -29,11 +29,13 @@
 * Consul DNS is deprecated and disabled by default.
 
 ### Major changes, deprecations, and removals
+* Postgres 18 is the default CNPG version now. Make sure that existing clusters will have current PG version pinned, or properly migrated to new version. 
 * Kafka module is upgraded to Strimzi 0.45.0. It is the latest Strimzi version which supports both Zookeeper and KRaft. Deployments which are using Kafka will need to upgrade to KRaft, because in the future version it will be only available method. See detailed steps in the migration guide.
 * Zalando based Postgres module (`240-postgres-platform`) was removed. CNPG based Postgres (`241-cnpg-postgres-platform`) should be used everywhere instead.
 * CNPG clusters definitions were removed from `241-cnpg-postgres-platform` module completely. `320-qvantel-glue` module should be used to provision clusters and DBs. All cluster definitions should be migrated to `320-qvantel-glue` module with proper helm ownership change. See [KPLAT-453](https://qvantel.atlassian.net/browse/KPLAT-453) for details.
 * MariaDB clusters definitions were removed from `251-mariadb-operator-platform` module completely. `320-qvantel-glue` module should be used to provision clusters and DBs. All cluster definitions should be migrated to `320-qvantel-glue` module with proper helm ownership change. See [KPLAT-460](https://qvantel.atlassian.net/browse/KPLAT-460) for details.
 * MariaDB default cluster definitions were updated to be Galera cluster with max-scale by default. This is the main setup for now which support fully tested HA.
 * Cassandra clusters definitions were removed from `211-kasope-platform` module completely. `320-qvantel-glue` module should be used to provision clusters and DBs. All cluster definitions should be migrated to `320-qvantel-glue` module with proper helm ownership change.
+* Cassandra 4 is enabled by default. Make sure that existing clusters will have current version pinned, or properly migrated to new version. 
 * Vault Webhook configuration has changed. There is no more additional webhook for "platform" namespace, instead `namespaceSelector` of `vault-secrets-webhook` should be used to configure namespace selector of common vault secrets webhook. If your deployments have custom `namespaceSelector` then you might want to double-check it and add "platform" namespace there.
-* Postgres 18 is the default CNPG version now. Make sure that existing clusters will have current PG version pinned, or properly migrated to new version. 
+* Percona-PMM module has been removed as it is not used anymore anywhere.

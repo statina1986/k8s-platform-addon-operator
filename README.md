@@ -39,7 +39,6 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 | [260-redis-platform](./modules/260-redis-platform) | This module is responsible for deployment of Redis (https://github.com/redis/redis) | 
 | [270-rabbitmq-platform](./modules/270-rabbitmq-platform) | This module deploys [Bitnami's Rabbitmq](https://artifacthub.io/packages/helm/bitnami/rabbitmq/15.2.4) chart, providing RabbitMQ version 4.0.5. | 
 | [280-mongodb-platform](./modules/280-mongodb-platform) | This module deploys [Bitnami's MongoDB](https://artifacthub.io/packages/helm/bitnami/mongodb/15.6.12) chart. | 
-| [290-percona-pmm-platform](./modules/290-percona-pmm-platform) | open-source database monitoring, management, and observability platform for MySQL, PostgreSQL, and MongoDB | 
 | [315-pomerium-platform](./modules/315-pomerium-platform) | This module is responsible for deployment of [Pomerium](https://www.pomerium.com/) | 
 | [320-qvantel-glue](./modules/320-qvantel-glue) | `qvantel-glue` module provides abstractions and automations to support Qvantel workloads deployments and operations. | 
 | [370-instana-platform](./modules/370-instana-platform) | This module is responsible for [instana](https://www.instana.com) deployment | 
