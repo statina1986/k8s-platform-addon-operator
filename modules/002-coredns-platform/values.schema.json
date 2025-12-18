@@ -15,6 +15,12 @@
                       "required": [],
                       "title": "repository",
                       "type": "string"
+                    },
+                    "tag": {
+                      "default": "v1.9.0",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
                     }
                   },
                   "required": [],
@@ -32,6 +38,12 @@
                   "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/coredns/coredns",
                   "required": [],
                   "title": "repository",
+                  "type": "string"
+                },
+                "tag": {
+                  "default": "1.13.1",
+                  "required": [],
+                  "title": "tag",
                   "type": "string"
                 }
               },
@@ -324,13 +336,6 @@
           "required": [],
           "title": "coredns",
           "type": "object"
-        },
-        "overrideSystemCoredns": {
-          "default": true,
-          "description": "Override and scale down the original coredns.",
-          "required": [],
-          "title": "overrideSystemCoredns",
-          "type": "boolean"
         }
       },
       "required": [],

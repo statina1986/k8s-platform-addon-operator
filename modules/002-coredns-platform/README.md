@@ -2,6 +2,7 @@
 
 # coredns-platform
 
+<!-- BRIEF -->
 This module is responsible for deployment of [coredns-platform](https://coredns.io/manual/toc/) in the cluster.
 This module exposes a new customizable Corefile and doesn't remove any original coredns resources.
 
@@ -10,6 +11,8 @@ Depends on modules:
 
 Used helm-charts:
 - coredns : 1.45.0
+
+**Note:** This deployment does not modify any existing coredns deployments. The coredns shipped with the cluster has to be disabled manually.
 
 ## Values
 
@@ -28,8 +31,10 @@ Used helm-charts:
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>autoscaler:
     image:
         repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/cpa/cluster-proportional-autoscaler
+        tag: v1.9.0
 image:
     repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/coredns/coredns
+    tag: 1.13.1
 k8sAppLabelOverride: kube-dns
 replicaCount: 2
 resources:
@@ -119,19 +124,6 @@ Label selector for the pod, used by the the original coredns service.
 			<td><div>
 
 List of zones. Default zone only applied when no zones are configured.
-
-</div>
-</td>
-		</tr>
-		<tr>
-			<td style="width: 300px;" id="corednsPlatform--overrideSystemCoredns">corednsPlatform.overrideSystemCoredns</td>
-			<td>bool</td>
-			<td>
-<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
-</td>
-			<td><div>
-
-Override and scale down the original coredns.
 
 </div>
 </td>

@@ -2,8 +2,6 @@ platformCore:
   localStorageEnabled: false
   cleanUpControllerEnabled: false
   snapshotControllerEnabled: false
-  turndown:
-    enabled: "false"
   local-static-provisioner:
     classes:
       - name: nvme-ssd
