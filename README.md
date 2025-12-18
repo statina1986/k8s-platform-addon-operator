@@ -12,6 +12,7 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 | module | brief description |
 |:-|:-|
 | [001-platform-core](./modules/001-platform-core) | Provides common core features of the platform. **Should be always enabled**. | 
+| [002-coredns-platform](./modules/002-coredns-platform) | This module is responsible for deployment of [coredns-platform](https://coredns.io/manual/toc/) in the cluster. | 
 | [010-kyverno-platform](./modules/010-kyverno-platform) | This module provides https://kyverno.io/ policy engine platform service. | 
 | [050-aws-platform](./modules/050-aws-platform) | This module configures needed plugins and services to run Qvantel K8S Platfrom on AWS EKS clusters and within AWS Cloud | 
 | [101-cert-platform](./modules/101-cert-platform) | This module is responsible for deployment of [cert-manager](https://cert-manager.io/docs/) in the cluster and configuration of required platform certificates | 

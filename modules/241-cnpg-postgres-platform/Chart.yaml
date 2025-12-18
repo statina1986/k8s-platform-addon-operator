@@ -6,14 +6,14 @@ dependencies:
   version: 0.0.1
 annotations:
   images: |
-    - name: q-cnpg-timescale-13
-      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:13.18-33_1.2.1_202503141111_master_facc7d5c
     - name: q-cnpg-timescale-15
-      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.10-32_1.2.1_202503141111_master_facc7d5c
+      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:15.10-32_1.3.0_202512172101_master_2123be80
     - name: q-cnpg-timescale-16
-      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.6-32_1.2.1_202503141111_master_facc7d5c
+      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:16.6-32_1.3.0_202512172101_master_2123be80
     - name: q-cnpg-timescale-17
-      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:17.2-32_1.2.1_202503141111_master_facc7d5c
+      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:17.2-32_1.3.0_202512172101_master_2123be80
+    - name: q-cnpg-timescale-18
+      image: platform.artifactory.qvantel.net/cloudnative-pg/q-cnpg-timescale:18.1-standard-trixie_1.3.0_202512172101_master_2123be80
     - name: cloudnative-pg
       image: ghcr.io/cloudnative-pg/cloudnative-pg:1.27.0
     - name: db-tools

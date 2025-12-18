@@ -324,13 +324,6 @@
           "required": [],
           "title": "coredns",
           "type": "object"
-        },
-        "overrideSystemCoredns": {
-          "default": true,
-          "description": "Override and scale down the original coredns.",
-          "required": [],
-          "title": "overrideSystemCoredns",
-          "type": "boolean"
         }
       },
       "required": [],

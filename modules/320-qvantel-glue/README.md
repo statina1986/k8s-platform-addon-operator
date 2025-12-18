@@ -559,7 +559,7 @@ Default values for CNPG clusters. See `example-postgredb.cluster` for reference.
       apiGroup: postgresql.cnpg.io
       kind: ImageCatalog
       name: qvantel-base-cnpg-images
-      major: 15
+      major: 18
     {{- end }}
     enableSuperuserAccess: true
     {{- if eq $.root.Values.global.configurationProfile "dev" }}
