@@ -147,6 +147,11 @@ data:
   monitoringPlatform: {{ print "|\n" (.Values.modulesConfig.monitoringPlatform | toYaml | indent 4) }}
   {{- end }}
 
+  opentelemetryPlatformEnabled: "{{ .Values.modulesConfig.opentelemetryPlatformEnabled }}"
+  {{- if .Values.modulesConfig.opentelemetryPlatform }}
+  opentelemetryPlatform: {{ print "|\n" (.Values.modulesConfig.opentelemetryPlatform | toYaml | indent 4) }}
+  {{- end }}
+
   perconaPmmPlatformEnabled: "{{ .Values.modulesConfig.perconaPmmPlatformEnabled }}"
   {{- if .Values.modulesConfig.perconaPmmPlatform }}
   perconaPmmPlatform: {{ print "|\n" (.Values.modulesConfig.perconaPmmPlatform | toYaml | indent 4) }}

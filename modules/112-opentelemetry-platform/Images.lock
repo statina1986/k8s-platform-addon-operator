@@ -1,0 +1,72 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2025-12-18T11:04:03.358615903Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: opentelemetry-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: kubeRBACProxy
+    image: quay.io/brancz/kube-rbac-proxy:v0.19.1
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:ea7bdc09a4929c8cad2b84b06ea4455721e75d4b86aa3dddf41f29b4817db358
+        arch: linux/amd64
+      - digest: sha256:e42357253b5d791092745fd413eeed05f180ede3433bc085f3b3d5e355a7a6a8
+        arch: linux/arm64
+  - name: otel-operator
+    image: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:v0.93.0
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:0356f541ad980c070d2cff542d2d6a60b7ee75f9c9662b6bd9b027aa7dd462a3
+        arch: linux/amd64
+      - digest: sha256:b8db500af771e9d52a126aff58d26dae4e324b461f399f4d0659a66b47b950d8
+        arch: linux/arm64
+  - name: otel-collector
+    image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s:0.131.1
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:9612ef6a99c72454ceb0f44aa5b9210724a21a49974b90b88ca6809c48389e76
+        arch: linux/amd64
+      - digest: sha256:e6b777b9ecec6820f14360d641f7b255397bce5905553c3f904828a81257b185
+        arch: linux/arm64
+  - name: java-auto-instrumentation
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:2.18.1
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:a91004081fda6c7ff5f42de89a378d7a84d24289acd06df2ef364021e93bdeba
+        arch: linux/amd64
+      - digest: sha256:3738ae8692d1b218defdfe1dc07db095920bc2ac6ffd15886e4e345f4525245c
+        arch: linux/arm64
+  - name: python-auto-instrumentation
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:0.57b0
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:7b99dd9a261730b0dd3792887aa4b304d6e56edb8d5fc1ad5ad70dab908567ce
+        arch: linux/amd64
+      - digest: sha256:58c948442e0cbfb7093dbfb58ee03ad050313b6fb50a1d7fc5779b52bcf1416d
+        arch: linux/arm64
+  - name: nodejs-auto-instrumentation
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:0.62.0
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:782d648c7c7eb9aca3650b20b9d28374115a985ea935540ed5caf37cc708c2d3
+        arch: linux/amd64
+      - digest: sha256:042a792c7a73e2a72469e0c3ec369c06d273e863cc5136b7eb144a00b93507fe
+        arch: linux/arm64
+  - name: dotnet-auto-instrumentation
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-dotnet:1.12.0
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:b2ee83405228c9a2e30d4676987433ae34526557e4eba4bc096ef608812d3c4c
+        arch: linux/amd64
+      - digest: sha256:7705f2176d97a8c7f54aea1ac985799b24f0f239ef1706191e8a897c0ec0fbbd
+        arch: linux/arm64
+  - name: apache-httpd-auto-instrumentation
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-apache-httpd:1.0.4
+    chart: opentelemetry-platform
+    digests:
+      - digest: sha256:7c4e491c752e1dc7ab06caa8e9dcdc7f66dc1465bf43bd5c262d916eadb9b5c6
+        arch: linux/amd64

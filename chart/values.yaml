@@ -88,6 +88,7 @@ modulesConfig:
   minioPlatformEnabled: "false"
   mongodbPlatformEnabled: "false"
   monitoringPlatformEnabled: "false"
+  opentelemetryPlatformEnabled: "false"
   perconaPmmPlatformEnabled: "false"
   shutdownOperatorEnabled: "false"
   pomeriumPlatformEnabled: "false"
@@ -98,6 +99,7 @@ modulesConfig:
   rancherPlatformEnabled: "false"
   sftpgoPlatformEnabled: "false"
   smartsearchPlatformEnabled: "false"
+  tracingPlatformEnabled: "false"
   vaultPlatformEnabled: "false"
   vaultPlatform:
     autoUnseal: false

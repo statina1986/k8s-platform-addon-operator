@@ -1,0 +1,67 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: instrumentation
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "5"
+spec:
+  exporter:
+    endpoint: http://{{ .Values.global.helmReleaseNamePrefix }}monitoring-platform-alloy.{{ .Values.global.platformNamespace }}.svc.cluster.local.:4318
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1"
+  python:
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://{{ .Values.global.helmReleaseNamePrefix }}monitoring-platform-alloy.{{ .Values.global.platformNamespace }}.svc.cluster.local.:4318
+      - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+        value: http/protobuf
+      - name: OTEL_EXPORTER_OTLP_METRICS_PROTOCOL
+        value: http/protobuf
+      - name: OTEL_PROPAGATORS
+        value: b3,tracecontext,baggage,b3multi
+      - name: OTEL_TRACES_SAMPLER_ARG
+        value: '1'
+      - name: OTEL_INSTRUMENTATION_JDBC_ENABLED
+        value: 'false'
+      - name: OTEL_INSTRUMENTATION_KAFKA_ENABLED
+        value: 'false'
+  go:
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://{{ .Values.global.helmReleaseNamePrefix }}monitoring-platform-alloy.{{ .Values.global.platformNamespace }}.svc.cluster.local.:4318
+      - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+        value: http/protobuf
+      - name: OTEL_EXPORTER_OTLP_METRICS_PROTOCOL
+        value: http/protobuf
+      - name: OTEL_PROPAGATORS
+        value: b3,tracecontext,baggage,b3multi
+      - name: OTEL_TRACES_SAMPLER_ARG
+        value: '1'
+      - name: OTEL_INSTRUMENTATION_JDBC_ENABLED
+        value: 'false'
+      - name: OTEL_INSTRUMENTATION_KAFKA_ENABLED
+        value: 'false'
+  java:
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://{{ .Values.global.helmReleaseNamePrefix }}monitoring-platform-alloy.{{ .Values.global.platformNamespace }}.svc.cluster.local.:4318
+      - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+        value: http/protobuf
+      - name: OTEL_TRACES_SAMPLER
+        value: parentbased_traceidratio
+      - name: OTEL_EXPORTER_OTLP_METRICS_PROTOCOL
+        value: http/protobuf
+      - name: OTEL_PROPAGATORS
+        value: b3,tracecontext,baggage,b3multi
+      - name: OTEL_TRACES_SAMPLER_ARG
+        value: '1'
+      - name: OTEL_INSTRUMENTATION_JDBC_ENABLED
+        value: 'false'
+      - name: OTEL_INSTRUMENTATION_KAFKA_ENABLED
+        value: 'false'
