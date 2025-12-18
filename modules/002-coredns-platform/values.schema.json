@@ -1,0 +1,355 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "corednsPlatform": {
+      "properties": {
+        "coredns": {
+          "description": "Configuration for underlying coredns helm-chart. See https://github.com/coredns/helm/tree/master/charts/coredns",
+          "properties": {
+            "autoscaler": {
+              "properties": {
+                "image": {
+                  "properties": {
+                    "repository": {
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/cpa/cluster-proportional-autoscaler",
+                      "required": [],
+                      "title": "repository",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "image",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "autoscaler",
+              "type": "object"
+            },
+            "image": {
+              "properties": {
+                "repository": {
+                  "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/coredns/coredns",
+                  "required": [],
+                  "title": "repository",
+                  "type": "string"
+                }
+              },
+              "required": [],
+              "title": "image",
+              "type": "object"
+            },
+            "k8sAppLabelOverride": {
+              "default": "kube-dns",
+              "description": "Label selector for the pod, used by the the original coredns service.",
+              "required": [],
+              "title": "k8sAppLabelOverride",
+              "type": "string"
+            },
+            "replicaCount": {
+              "default": 2,
+              "required": [],
+              "title": "replicaCount",
+              "type": "integer"
+            },
+            "resources": {
+              "properties": {
+                "limits": {
+                  "properties": {
+                    "cpu": {
+                      "default": "200m",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "256Mi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "limits",
+                  "type": "object"
+                },
+                "requests": {
+                  "properties": {
+                    "cpu": {
+                      "default": "100m",
+                      "required": [],
+                      "title": "cpu",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "default": "128Mi",
+                      "required": [],
+                      "title": "memory",
+                      "type": "string"
+                    }
+                  },
+                  "required": [],
+                  "title": "requests",
+                  "type": "object"
+                }
+              },
+              "required": [],
+              "title": "resources",
+              "type": "object"
+            },
+            "servers": {
+              "description": "List of zones. Default zone only applied when no zones are configured.",
+              "items": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "default",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "plugins": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "errors",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "configBlock": {
+                                  "default": "lameduck 10s",
+                                  "required": [],
+                                  "title": "configBlock",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "default": "health",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "ready",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "configBlock": {
+                                  "default": "pods insecure\nfallthrough in-addr.arpa ip6.arpa\nttl 30",
+                                  "required": [],
+                                  "title": "configBlock",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "default": "kubernetes",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                },
+                                "parameters": {
+                                  "default": "cluster.local in-addr.arpa ip6.arpa",
+                                  "required": [],
+                                  "title": "parameters",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "prometheus",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                },
+                                "parameters": {
+                                  "default": "0.0.0.0:9153",
+                                  "required": [],
+                                  "title": "parameters",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "forward",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                },
+                                "parameters": {
+                                  "default": ". /etc/resolv.conf",
+                                  "required": [],
+                                  "title": "parameters",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "cache",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                },
+                                "parameters": {
+                                  "default": 30,
+                                  "required": [],
+                                  "title": "parameters",
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "loop",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "reload",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            },
+                            {
+                              "properties": {
+                                "name": {
+                                  "default": "loadbalance",
+                                  "required": [],
+                                  "title": "name",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "plugins",
+                        "type": "array"
+                      },
+                      "port": {
+                        "default": 53,
+                        "required": [],
+                        "title": "port",
+                        "type": "integer"
+                      },
+                      "zones": {
+                        "items": {
+                          "anyOf": [
+                            {
+                              "properties": {
+                                "use_tcp": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "use_tcp",
+                                  "type": "boolean"
+                                },
+                                "zone": {
+                                  "default": ".",
+                                  "required": [],
+                                  "title": "zone",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "type": "object"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "zones",
+                        "type": "array"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  }
+                ],
+                "required": []
+              },
+              "required": [],
+              "title": "servers",
+              "type": "array"
+            }
+          },
+          "required": [],
+          "title": "coredns",
+          "type": "object"
+        },
+        "overrideSystemCoredns": {
+          "default": true,
+          "description": "Override and scale down the original coredns.",
+          "required": [],
+          "title": "overrideSystemCoredns",
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "corednsPlatform",
+      "type": "object"
+    },
+    "corednsPlatformNamespace": {
+      "default": "kube-system",
+      "required": [],
+      "title": "corednsPlatformNamespace",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

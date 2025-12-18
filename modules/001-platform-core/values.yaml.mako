@@ -1,18 +1,9 @@
 platformCore:
-  corednsEnabled: false
   localStorageEnabled: false
   cleanUpControllerEnabled: false
   snapshotControllerEnabled: false
-  coredns:
-    image:
-      % if 'containerRegistryBase' in values['global']:
-      repository: ${values['global']['containerRegistryBase']}/coredns/coredns
-      % endif
-    autoscaler:
-      image:
-        % if 'containerRegistryBase' in values['global']:
-        repository: ${values['global']['containerRegistryBase']}/cpa/cluster-proportional-autoscaler
-        % endif
+  turndown:
+    enabled: "false"
   local-static-provisioner:
     classes:
       - name: nvme-ssd

@@ -68,6 +68,15 @@ function common::run_hook() {
   fi
 }
 
+function kubectl::get_configmap() {
+  local namespace="$1"
+  local name="$2"
+  local module_name="$3"
+
+  kubectl get configmap -n "$namespace" "$name" \
+    --template="{{ index .data \"$module_name\" }}"
+}
+
 function common::get_values_value() {
   echo "$(jq -r $1 $VALUES_PATH)"
 }
@@ -97,7 +106,6 @@ function helm::run_helm_dependency_update_hook() {
   fi
 }
 
-
 function kubectl::replace_or_create() {
   object=$(cat)
 
@@ -117,7 +125,7 @@ function vault::get_vault_token() {
 }
 
 function inline::get_computed_values() {
-  local -n computed_values_arr=$1   
+  local -n computed_values_arr=$1
   _jq() {
     echo ${row} | base64 --decode | jq -r ${1}
   }    

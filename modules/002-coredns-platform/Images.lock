@@ -1,0 +1,26 @@
+apiVersion: v0
+kind: ImagesLock
+metadata:
+  generatedAt: "2025-11-12T15:00:48.954962407Z"
+  generatedBy: Distribution Tooling for Helm
+chart:
+  name: coredns-platform
+  version: 0.0.1
+  appVersion: ""
+images:
+  - name: coredns
+    image: coredns/coredns:1.13.1
+    chart: coredns-platform
+    digests:
+      - digest: sha256:246e7333fde10251c693b68f13d21d6d64c7dbad866bbfa11bd49315e3f725a7
+        arch: linux/amd64
+      - digest: sha256:cbd225373d1800b8d9aa2cac02d5be4172ad301cf7a1ffb509ddf8ca1fe06d74
+        arch: linux/arm64
+  - name: coredns-autoscaler
+    image: registry.k8s.io/cpa/cluster-proportional-autoscaler:v1.9.0
+    chart: coredns-platform
+    digests:
+      - digest: sha256:c3d60d61309fa51c98d2adace01d865222133baa85711ee23586f08deff1ff06
+        arch: linux/amd64
+      - digest: sha256:168d7852f064073c6793876f6b888f42dc18d20f6e549c9abb32aec56c4102c5
+        arch: linux/arm64

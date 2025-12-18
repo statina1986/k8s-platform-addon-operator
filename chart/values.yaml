@@ -61,6 +61,7 @@ modulesConfig:
   certPlatformEnabled: "false"
   cnpgPostgresPlatformEnabled: "false"
   consulPlatformEnabled: "false"
+  corednsPlatformEnabled: "false"
   elasticsearchPlatformEnabled: "false"
   opensearchPlatformEnabled: "false"
   externalDnsEnabled: "false"

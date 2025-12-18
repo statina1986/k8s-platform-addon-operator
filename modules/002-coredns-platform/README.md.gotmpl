@@ -1,0 +1,14 @@
+{{ template "chart.header" . }}
+<!-- BRIEF -->
+This module is responsible for deployment of [coredns-platform](https://coredns.io/manual/toc/) in the cluster.
+This module exposes a new customizable Corefile and doesn't remove any original coredns resources.
+
+Depends on modules:
+- no dependencies
+
+Used helm-charts:
+- coredns : 1.45.0
+
+**Note:** This deployment does not modify any existing coredns deployments. The coredns shipped with the cluster has to be disabled manually.
+
+{{ template "chart.valuesSectionHtml" . }}

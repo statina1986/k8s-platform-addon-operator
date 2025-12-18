@@ -47,6 +47,11 @@ data:
   consulPlatform: {{ print "|\n" (.Values.modulesConfig.consulPlatform | toYaml | indent 4) }}
   {{- end }}
 
+  corednsPlatformEnabled: "{{ .Values.modulesConfig.corednsPlatformEnabled }}"
+  {{- if .Values.modulesConfig.corednsPlatform }}
+  corednsPlatform: {{ print "|\n" (.Values.modulesConfig.corednsPlatform | toYaml | indent 4) }}
+  {{- end }}
+
   elasticsearchPlatformEnabled: "{{ .Values.modulesConfig.elasticsearchPlatformEnabled }}"
   {{- if .Values.modulesConfig.elasticsearchPlatform }}
   elasticsearchPlatform: {{ print "|\n" (.Values.modulesConfig.elasticsearchPlatform | toYaml | indent 4) }}

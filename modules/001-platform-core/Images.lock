@@ -1,42 +1,26 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-11-05T22:16:53.649146858Z"
+  generatedAt: "2025-11-12T15:00:48.954962407Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: platform-core
   version: 0.0.1
   appVersion: ""
 images:
-  - name: coredns
-    image: coredns/coredns:1.11.1
-    chart: platform-core
-    digests:
-      - digest: sha256:2169b3b96af988cf69d7dd69efbcc59433eb027320eb185c6110e0850b997870
-        arch: linux/amd64
-      - digest: sha256:ba9e70dbdf0ff8a77ea63451bb1241d08819471730fe7a35a218a8db2ef7890c
-        arch: linux/arm64
-  - name: coredns-autoscaler
-    image: registry.k8s.io/cpa/cluster-proportional-autoscaler:1.8.5
-    chart: platform-core
-    digests:
-      - digest: sha256:8ac5e2d7650f3767dac4925581ef14de51eaf27ad554bc7fb8af2be77b9e9b15
-        arch: linux/amd64
-      - digest: sha256:260ba0a774e8419e006f2a5fde05d2b7ec3da8dec59b5caad578813848c09e31
-        arch: linux/arm64
   - name: local-volume-node-cleanup-controller
     image: gcr.io/k8s-staging-sig-storage/local-volume-node-cleanup:canary
     chart: platform-core
     digests:
-      - digest: sha256:fdab9cee2ee16cec785676c27053b5ead83b104baa75bb607e60bb4ea8479fee
+      - digest: sha256:5066c22ffdf79994058fdd64f53abc1633ae224d9c224262a39cb6ee6bdb01e1
         arch: linux/amd64
-      - digest: sha256:5d43cb7d4f7a632d2b8c5221edfc0d6f3bf6ac55c5c877a615dc047a86b60b4e
+      - digest: sha256:e5dd114299de3ef6e9fcb921526d3b16a1dba13eb03e793f2c7e561635446be3
         arch: linux/arm64
   - name: local-static-provisioner
-    image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.6.0
+    image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.7.0
     chart: platform-core
     digests:
-      - digest: sha256:a854dffa0a63a2f7ed15c955a117c8fd94fbcbfc6df2a6db7f737b04603b2a13
+      - digest: sha256:401de05a1096272333d2a073f8e4706ca3fe58d2f21a5295479e7c9ef3bdc018
         arch: linux/amd64
-      - digest: sha256:6124b5c17a188c753c7d6eaf2c48bc91b513e0ec6489a744d2521458fe31c3e0
+      - digest: sha256:9fbc67f9c5b184e1c172429accc2129ded65e2818c77386a092f558736a8e33d
         arch: linux/arm64

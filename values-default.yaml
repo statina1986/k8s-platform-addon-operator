@@ -30,6 +30,8 @@ certPlatformEnabled: "true"
 cnpgPostgresPlatform: {}
 cnpgPostgresPlatformEnabled: "true"
 consulPlatformEnabled: "true"
+corednsPlatform: {}
+corednsPlatformEnabled: "true"
 elasticsearchPlatform: {}
 elasticsearchPlatformEnabled: "true"
 opensearchPlatform: {}

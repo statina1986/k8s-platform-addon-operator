@@ -2,11 +2,7 @@ apiVersion: v2
 name: platformCore
 version: 0.0.1
 dependencies:
-  - name: coredns
-    version: "1.29.0"
-    repository: https://coredns.github.io/helm
-    condition: corednsEnabled
   - name: local-static-provisioner
-    version: 2.0.0
+    version: "2.8.0"
     repository: https://kubernetes-sigs.github.io/sig-storage-local-static-provisioner
     condition: localStorageEnabled
