@@ -1489,6 +1489,12 @@
                       "required": [],
                       "title": "repository",
                       "type": "string"
+                    },
+                    "tag": {
+                      "default": "12.2.2",
+                      "required": [],
+                      "title": "tag",
+                      "type": "string"
                     }
                   },
                   "required": [],

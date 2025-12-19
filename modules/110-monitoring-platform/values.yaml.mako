@@ -603,6 +603,7 @@ monitoringPlatform:
         registry: ${values['global']['containerRegistryBase']}
         % endif
         repository: grafana/grafana-enterprise
+        tag: 12.2.2
       testFramework:
         image: 
           % if 'containerRegistryBase' in values['global']:
