@@ -14,7 +14,7 @@ k8s_crd = get_k8s_crd_client()
 args = {
     'group': "platform.qvantel.com",
     'version': "v1",
-    'namespace': ADDON_OPERATOR_NAMESPACE,
+    'namespace': SHUTDOWN_OPERATOR_NAMESPACE,
     'plural': "clusterturndowns"
 }
 
@@ -43,7 +43,7 @@ def scale_strategy(clusterName, crdName, strategy):
 
 class ClusterScaledownHook(Hook):
     def __init__(self):
-        cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")
+        cm = get_config_map(SHUTDOWN_OPERATOR_NAMESPACE, "addon-operator")
         super().__init__(
             """
 configVersion: v1
@@ -62,7 +62,7 @@ kubernetes:
         match (binding):
             case EventHook(eventName, event, values, config_values):
                 try:
-                    cm = get_config_map(ADDON_OPERATOR_NAMESPACE, "addon-operator")
+                    cm = get_config_map(SHUTDOWN_OPERATOR_NAMESPACE, "addon-operator")
                     platform_shutdown = yaml.safe_load(cm.data["shutdownOperator"])
                     if platform_shutdown.get("turndown", {}).get("enabled", "false") != "true":
                         logger.info("Turndown is disabled. Skipping operation.")

@@ -11,14 +11,14 @@ args = {
     'group': "platform.qvantel.com",
     'version': "v1",
     'name': "cluster-turndown",
-    'namespace': ADDON_OPERATOR_NAMESPACE,
+    'namespace': SHUTDOWN_OPERATOR_NAMESPACE,
     'plural': "clusterturndowns"
 }
 
 
 class ClusterScaleupScheduleHook(Hook):
     def __init__(self):
-        cm = get_config_map(ADDON_OPERATOR_NAMESPACE, ADDON_OPERATOR_CONFIG_MAP)
+        cm = get_config_map(SHUTDOWN_OPERATOR_NAMESPACE, ADDON_OPERATOR_CONFIG_MAP)
         try: 
             platform_shutdown = yaml.safe_load(cm.data["shutdownOperator"])
         except:

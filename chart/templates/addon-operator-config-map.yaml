@@ -12,11 +12,6 @@ data:
   platformCore: {{ print "|\n" (.Values.modulesConfig.platformCore | toYaml | indent 4) }}
   {{- end }}
 
-  shutdownOperatorEnabled: "{{ .Values.modulesConfig.shutdownOperatorEnabled }}"
-  {{- if .Values.modulesConfig.shutdownOperator }}
-  shutdownOperator: {{ print "|\n" (.Values.modulesConfig.shutdownOperator | toYaml | indent 4) }}
-  {{- end }}
-
   apisixPlatformEnabled: "{{ .Values.modulesConfig.apisixPlatformEnabled }}"
   {{- if .Values.modulesConfig.apisixPlatform }}
   apisixPlatform: {{ print "|\n" (.Values.modulesConfig.apisixPlatform | toYaml | indent 4) }}
