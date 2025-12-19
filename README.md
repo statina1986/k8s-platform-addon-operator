@@ -8,6 +8,7 @@ This repo contains implementation of **K8S Platform Services** based on the [add
 > 
 
 ## Available modules
+<!-- Content between the TABLEMARKER tags is automatically generated - do not modify the tags or anything between them. -->
 <!-- TABLEMARKER -->
 | module | brief description |
 |:-|:-|

@@ -42,25 +42,25 @@ kubeRBACProxy:
 manager:
     autoInstrumentationImage:
         apacheHttpd:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-apache-httpd
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-apache-httpd
             tag: 1.0.4
         dotnet:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-dotnet
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-dotnet
             tag: 1.12.0
         java:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-java
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-java
             tag: 2.18.1
         nodejs:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-nodejs
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-nodejs
             tag: 0.62.0
         python:
-            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-python
+            repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-python
             tag: 0.57b0
     collectorImage:
-        repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
+        repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-collector-releases/opentelemetry-collector-k8s
         tag: 0.131.1
     image:
-        repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/open-telemetry/opentelemetry-operator/opentelemetry-operator
+        repository: platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/opentelemetry-operator
         tag: v0.93.0
     serviceMonitor:
         enabled: true

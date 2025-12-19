@@ -57,7 +57,7 @@
                     "apacheHttpd": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-apache-httpd",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-apache-httpd",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -76,7 +76,7 @@
                     "dotnet": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-dotnet",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-dotnet",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -95,7 +95,7 @@
                     "java": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-java",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-java",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -114,7 +114,7 @@
                     "nodejs": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-nodejs",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-nodejs",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -133,7 +133,7 @@
                     "python": {
                       "properties": {
                         "repository": {
-                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/autoinstrumentation-python",
+                          "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/autoinstrumentation-python",
                           "required": [],
                           "title": "repository",
                           "type": "string"
@@ -157,7 +157,7 @@
                 "collectorImage": {
                   "properties": {
                     "repository": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s",
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-collector-releases/opentelemetry-collector-k8s",
                       "required": [],
                       "title": "repository",
                       "type": "string"
@@ -176,7 +176,7 @@
                 "image": {
                   "properties": {
                     "repository": {
-                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/otel-operator/open-telemetry/opentelemetry-operator/opentelemetry-operator",
+                      "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/opentelemetry-operator/opentelemetry-operator",
                       "required": [],
                       "title": "repository",
                       "type": "string"
