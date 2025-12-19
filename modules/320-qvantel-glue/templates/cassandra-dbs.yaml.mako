@@ -321,7 +321,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbClusterName }}-{{ $db_name }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
+  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
 spec:
   db-name: {{ $dbClusterName }}
   creation-statements: >-

@@ -335,7 +335,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
+  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
 spec:
   creation-statements: >-
     {{ printf "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';  GRANT db_%s TO \"{{name}}\"; ALTER ROLE \"{{name}}\" SET role db_%s;" $dbNameUnderscored $dbNameUnderscored }}

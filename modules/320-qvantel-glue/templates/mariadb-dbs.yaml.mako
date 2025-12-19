@@ -512,7 +512,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbClusterName }}-{{ $dbName }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
+  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $dbName }}-{{ $dbClusterName }}
 spec:
   creation-statements: >-
     {{ printf "CREATE USER '{{name}}'@'%%' IDENTIFIED BY '{{password}}'; GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REFERENCES, CREATE VIEW, CREATE ROUTINE, SHOW VIEW ON %s.* TO '{{name}}'@'%%';" $dbNameUnderscored }}
