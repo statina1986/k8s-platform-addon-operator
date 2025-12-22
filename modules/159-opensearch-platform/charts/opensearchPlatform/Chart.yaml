@@ -6,11 +6,11 @@ dependencies:
     version: 3.3.0
     repository: https://opensearch-project.github.io/helm-charts
     condition: opensearchEnabled
-  - name: opensearchDashboards
+  - name: opensearch-dashboards
     version: 3.3.0
     repository: https://opensearch-project.github.io/helm-charts
     condition: opensearchDashboardsEnabled
-  - name: dataPrepper
+  - name: data-prepper
     version: 0.3.1
     repository: https://opensearch-project.github.io/helm-charts
     condition: dataPrepperEnabled

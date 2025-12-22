@@ -8,5 +8,5 @@ dependencies:
 - name: data-prepper
   repository: https://opensearch-project.github.io/helm-charts
   version: 0.3.1
-digest: sha256:c8a09a1b82b02011f93911a32340151a3728871167dcf5fd3627932affff86bc
-generated: "2025-10-20T14:55:10.283546575+03:00"
+digest: sha256:3ac0a516322d1407a20d681e667ad791cff26d7104cfaddecac172b78ffe3b18
+generated: "2025-12-22T13:11:33.598383151+02:00"
