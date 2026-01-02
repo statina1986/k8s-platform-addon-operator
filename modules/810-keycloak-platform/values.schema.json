@@ -386,7 +386,7 @@
               "type": "object"
             },
             "image": {
-              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/keycloak-configurator-standalone:1.20.3.20250721061444_develop_e1ae757a",
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-3-0/keycloak-configurator-standalone:1.20.7.20251230135611_develop_58aee552",
               "required": [],
               "title": "image",
               "type": "string"
@@ -935,7 +935,7 @@
               "type": "integer"
             },
             "image": {
-              "default": "platform.artifactory.qvantel.net/k8s-platform-1-2-0/qvaa-keycloak-qrp-postgres-quarkus:26.3.5.1.20250925074649_master_cfc4de77",
+              "default": "platform.artifactory.qvantel.net/k8s-platform-1-3-0/qvaa-keycloak-qrp-postgres-quarkus:26.4.7.1.20251202140222_master_a55cfc30",
               "required": [],
               "title": "image",
               "type": "string"

@@ -113,7 +113,7 @@ keycloakPlatform:
     name: qvt-postgredb
   # -- Keycloak configurator settings
   configurator:
-    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.20.3.20250721061444_develop_e1ae757a
+    image: ${keycloakRegistry}/keycloak-configurator-standalone:1.20.7.20251230135611_develop_58aee552
     spec:
       backoffLimit: 5
       template:
@@ -270,7 +270,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     healthPort: 9000
-    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.3.5.1.20250925074649_master_cfc4de77
+    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.4.7.1.20251202140222_master_a55cfc30
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:
