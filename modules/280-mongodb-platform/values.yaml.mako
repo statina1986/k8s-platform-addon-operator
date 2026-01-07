@@ -8,14 +8,9 @@ mongodbPlatform:
     # and secondary, which may swap.
     architecture: replicaset
     image:
-      # In case the registry is pointing towards Platform artifactory,
-      # this is a multiarch manifest where amd64 is the official
-      # Bitnami image and arm64 is the 7.0.15 release of
-      # https://hub.docker.com/r/dlavrenuek/bitnami-mongodb-arm
-      #
-      # If pointed towards docker.io, only amd64 image will be available
+      # Uses custom multiarch image built from https://hub.docker.com/r/dlavrenuek/bitnami-mongodb-arm, see: https://qvantel.atlassian.net/browse/QOPS-54054?focusedCommentId=2569996
       repository: platform/bitnami-mongodb
-      tag: "7.0.15"
+      tag: "7.0.28"
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}
       % else:

@@ -119,13 +119,13 @@
                 },
                 "repository": {
                   "default": "platform/bitnami-mongodb",
-                  "description": "In case the registry is pointing towards Platform artifactory,\nthis is a multiarch manifest where amd64 is the official\nBitnami image and arm64 is the 7.0.15 release of\nhttps://hub.docker.com/r/dlavrenuek/bitnami-mongodb-arm\n\nIf pointed towards docker.io, only amd64 image will be available",
+                  "description": "Uses custom multiarch image built from https://hub.docker.com/r/dlavrenuek/bitnami-mongodb-arm, see: https://qvantel.atlassian.net/browse/QOPS-54054?focusedCommentId=2569996",
                   "required": [],
                   "title": "repository",
                   "type": "string"
                 },
                 "tag": {
-                  "default": "7.0.15",
+                  "default": "7.0.28",
                   "required": [],
                   "title": "tag",
                   "type": "string"

@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-12-11T07:21:55.630010689Z"
+  generatedAt: "2026-01-07T12:52:56.782331443Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: mongodb-platform
@@ -9,12 +9,12 @@ chart:
   appVersion: ""
 images:
   - name: mongodb-qvantel
-    image: platform.artifactory.qvantel.net/platform/bitnami-mongodb:7.0.15
+    image: platform.artifactory.qvantel.net/platform/bitnami-mongodb:7.0.28
     chart: mongodb-platform
     digests:
-      - digest: sha256:988a21d8d0b713fe81d060fdc4050c3cab1a8685d5d8956b88916d1724965626
+      - digest: sha256:22ac3a194ef7f94e09b119359822fc5b7ab3bbe51de006d4515115e035436593
         arch: linux/amd64
-      - digest: sha256:f28468a375c50d0661bf5bb4ada1e85a9bad342559ac749a6c5f5e7018160ff3
+      - digest: sha256:3e9469fade544e7960100c86beac4e7c38f41fdf846feae50479cbaeb96dcd19
         arch: linux/arm64
   - name: kubectl
     image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc

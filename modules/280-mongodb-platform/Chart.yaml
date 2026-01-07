@@ -11,7 +11,7 @@ dependencies:
 annotations:
   images-key: platform-images
   platform-images: |
-    - image: platform.artifactory.qvantel.net/platform/bitnami-mongodb:7.0.15
+    - image: platform.artifactory.qvantel.net/platform/bitnami-mongodb:7.0.28
       name: mongodb-qvantel
     - name: kubectl
       image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
