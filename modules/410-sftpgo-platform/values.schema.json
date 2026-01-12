@@ -53,6 +53,19 @@
                   "title": "common",
                   "type": "object"
                 },
+                "data_provider": {
+                  "properties": {
+                    "create_default_admin": {
+                      "default": true,
+                      "required": [],
+                      "title": "create_default_admin",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [],
+                  "title": "data_provider",
+                  "type": "object"
+                },
                 "httpd": {
                   "properties": {
                     "bindings": {
@@ -251,6 +264,82 @@
                         "required": [],
                         "title": "value",
                         "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "SFTPGO_DEFAULT_ADMIN_USERNAME",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "valueFrom": {
+                        "properties": {
+                          "secretKeyRef": {
+                            "properties": {
+                              "key": {
+                                "default": "username",
+                                "required": [],
+                                "title": "key",
+                                "type": "string"
+                              },
+                              "name": {
+                                "default": "sftpgo-admin-secret",
+                                "required": [],
+                                "title": "name",
+                                "type": "string"
+                              }
+                            },
+                            "required": [],
+                            "title": "secretKeyRef",
+                            "type": "object"
+                          }
+                        },
+                        "required": [],
+                        "title": "valueFrom",
+                        "type": "object"
+                      }
+                    },
+                    "required": [],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "default": "SFTPGO_DEFAULT_ADMIN_PASSWORD",
+                        "required": [],
+                        "title": "name",
+                        "type": "string"
+                      },
+                      "valueFrom": {
+                        "properties": {
+                          "secretKeyRef": {
+                            "properties": {
+                              "key": {
+                                "default": "password",
+                                "required": [],
+                                "title": "key",
+                                "type": "string"
+                              },
+                              "name": {
+                                "default": "sftpgo-admin-secret",
+                                "required": [],
+                                "title": "name",
+                                "type": "string"
+                              }
+                            },
+                            "required": [],
+                            "title": "secretKeyRef",
+                            "type": "object"
+                          }
+                        },
+                        "required": [],
+                        "title": "valueFrom",
+                        "type": "object"
                       }
                     },
                     "required": [],

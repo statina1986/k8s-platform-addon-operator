@@ -34,6 +34,16 @@ sftpgoPlatform:
         value: "info"
       - name: SFTPGO_LOG_UTC_TIME
         value: "1"
+      - name: SFTPGO_DEFAULT_ADMIN_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: sftpgo-admin-secret
+            key: username
+      - name: SFTPGO_DEFAULT_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: sftpgo-admin-secret
+            key: password
     # -- Keycloak-platform used client-secret
     envFrom:
       - secretRef:
@@ -68,6 +78,8 @@ sftpgoPlatform:
       runAsGroup: 0
       fsGroup: 0
     config:
+      data_provider:
+        create_default_admin: true
       common:
         max_per_host_connections: 0 # remove limit, as our MEF publisher do not support it.
       httpd:
