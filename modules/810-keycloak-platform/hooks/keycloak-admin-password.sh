@@ -15,11 +15,20 @@ hook::trigger() {
     qlog "Vault is not enabled, skipping admin credentials hook"
     exit 0
   fi
-  
-  qlog "Inserting limited keycloak admin username and password to vault for system-spec qinstaller"
+ 
   token="$(vault::get_vault_token)"
-  password="$(kubectl::get_secret_opaque_kv keycloak-limited-admin-secret KEYCLOAK_LIMITED_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
-  username="$(kubectl::get_secret_opaque_kv keycloak-limited-admin-secret KEYCLOAK_LIMITED_ADMIN $VAULT_SECRET_NAMESPACE)"
+ 
+  limitedAdminEnabled="$(common::get_values_value '.keycloakPlatform.limitedAdminEnabled')"
+  if [[ $limitedAdminEnabled == "true" ]] ; then
+    qlog "Inserting limited keycloak admin username and password to vault for system-spec qinstaller"
+    password="$(kubectl::get_secret_opaque_kv keycloak-limited-admin-secret KEYCLOAK_LIMITED_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
+    username="$(kubectl::get_secret_opaque_kv keycloak-limited-admin-secret KEYCLOAK_LIMITED_ADMIN $VAULT_SECRET_NAMESPACE)"
+  else
+    qlog "Inserting full keycloak admin username and password to vault for system-spec qinstaller"
+    password="$(kubectl::get_secret_opaque_kv keycloak-admin-secret KEYCLOAK_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
+    username="$(kubectl::get_secret_opaque_kv keycloak-admin-secret KEYCLOAK_ADMIN $VAULT_SECRET_NAMESPACE)"
+  fi
+
   OLD=`mktemp`
   ADD=`mktemp`
   NEW=`mktemp`
