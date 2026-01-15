@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# push keycloak admin password to the location where system-spec qinstaller picks it up
+# push keycloak limited admin password to the location where system-spec qinstaller picks it up
 
 source "${0%/*}/../../../common/shell/functions.sh"
 source "${0%/*}/../../../common/shell/variables.sh"
@@ -16,16 +16,17 @@ hook::trigger() {
     exit 0
   fi
   
-  qlog "Inserting keycloak admin password to vault for system-spec qinstaller"
+  qlog "Inserting limited keycloak admin username and password to vault for system-spec qinstaller"
   token="$(vault::get_vault_token)"
-  password="$(kubectl::get_secret_opaque_kv keycloak-admin-secret KEYCLOAK_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
+  password="$(kubectl::get_secret_opaque_kv keycloak-limited-admin-secret KEYCLOAK_LIMITED_ADMIN_PASSWORD $VAULT_SECRET_NAMESPACE)"
+  username="$(kubectl::get_secret_opaque_kv keycloak-limited-admin-secret KEYCLOAK_LIMITED_ADMIN $VAULT_SECRET_NAMESPACE)"
   OLD=`mktemp`
   ADD=`mktemp`
   NEW=`mktemp`
   # read old data from vault, accept also not found
   curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/installer/qvaa/keycloak'" '200|404'
   jq -r .data $CURL_RESULT > $OLD
-  echo '{"keycloak-password":"'"$password"'"}' > $ADD
+  echo '{"keycloak-password":"'"$password"'", "keycloak-username": "'"$username"'"}' > $ADD
   # combine old data (possibly null) with new
   jq -s add $OLD $ADD > $NEW
   # put new data to vault
