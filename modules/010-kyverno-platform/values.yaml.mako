@@ -24,10 +24,9 @@ kyvernoPlatform:
           value: "${values['global']['platformMastersValue']}"
           operator: "Equal"
           effect: "NoSchedule"
-      % if values['global']['platformMasters']:
-      nodeSelector:
-        ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
-      % endif
+        - key: CriticalAddonsOnly
+          effect: "NoSchedule"
+          operator: "Exists"
     crds:
       # -- We deploy all CRDs under /resources folder.
       install: false

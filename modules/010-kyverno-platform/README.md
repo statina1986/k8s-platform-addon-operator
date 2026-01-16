@@ -45,6 +45,9 @@ global:
           key: dedicated-nodes
           operator: Equal
           value: platform-masters
+        - effect: NoSchedule
+          key: CriticalAddonsOnly
+          operator: Exists
 policyExceptions:
     enabled: false
     namespace: ""

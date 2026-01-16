@@ -36,78 +36,114 @@ def scaledown_deployment(name, namespace):
     except ApiException as e:
         logger.info("Failed to patch deployment " + deployment.metadata.name + " : " + e)
 
-def scaledown_namespace_deployments(namespace, exclude=None):
+def scaledown_namespace_deployments(namespace, exclude=None, batch_size=None, poll_interval=10):
     """
     Scale down all deployments in the specified namespace to 0 replicas,
-    except those in 'exclude'. Waits for all non-excluded deployments to
-    scale down and terminate.
+    except those in 'exclude'.
+    Allows to perform the operation in batches and waits for each batch to become ready
+    before proceeding to the next batch.
 
     Args:
         namespace (str): The Kubernetes namespace to act on.
         exclude (list[str] or None): Deployment names to skip.
             Example: ['deployment-a', 'deployment-b', 'deployment-c']
+        batch_size (int): Maximum number of deployments to scale down concurrently.
+        poll_interval (int): Seconds to wait between status checks while waiting for a batch.
     """
-
     k8s_apps = get_k8s_apps_client()
 
     exclude = exclude or []
+    excluded_display = ", ".join(sorted(exclude)) if exclude else "none"
 
     try:
         deployments = k8s_apps.list_namespaced_deployment(namespace)
     except ApiException as e:
-        logger.info("Failed to list deployments in namespace " + namespace + ": " + str(e))
+        logger.info("Failed to list deployments in namespace %s: %s", namespace, str(e))
         return
-    
-    if exclude:
+
+    # Build the list of eligible deployments for scaling
+    all_deployments = [d.metadata.name for d in deployments.items]
+    eligible = [
+        name for name in all_deployments
+        if name not in exclude and name != "shutdown-addon-operator"
+    ]
+
+    if not eligible:
         logger.info(
-            "Scaling down deployments in namespace %s (excluding: %s)",
-            namespace,
-            ", ".join(sorted(exclude))
+            "No eligible deployments to scale down in namespace %s (exclude: %s)",
+            namespace, excluded_display
         )
-    else:
-        logger.info("Scaling down deployments in namespace %s", namespace)
+        return
 
-    for deployment in deployments.items:
-        name = deployment.metadata.name
-        if name in exclude:
-            logger.info(
-                "Skipping scale-down for deployment %s in namespace %s (excluded)",
-                name, namespace
-            )
-            continue
-        scaledown_deployment(name, namespace)
+    # Resolve batch size: None or <=0 => no throttling (single batch with all)
+    eff_batch_size = (len(eligible) if not batch_size or batch_size <= 0 else batch_size)
+    
+    logger.info(
+        "Scaling down deployments in namespace %s in batches of %d (exclude: %s)",
+        namespace, eff_batch_size, excluded_display
+    )
 
-    while True:
-        all_scaled_down = True
-        try:
-            current_deployments = k8s_apps.list_namespaced_deployment(namespace)
-        except ApiException as e:
-            logger.info("Error fetching deployment status: " + str(e))
-            break
+    # Process in batches
+    for i in range(0, len(eligible), eff_batch_size):
+        batch = eligible[i:i + eff_batch_size]
+        logger.info(
+            "Starting scale-down for batch %d/%d: %s",
+            (i // eff_batch_size) + 1,
+            (len(eligible) + eff_batch_size - 1) // eff_batch_size,
+            ", ".join(sorted(batch))
+        )
 
-        for deploy in current_deployments.items:
-            name = deploy.metadata.name
-            if name == "shutdown-addon-operator":
-                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it controls the shutdown operations")
-                continue
-            if name in exclude:
+        # Initiate scale-down for this batch
+        for name in batch:
+            try:
+                scaledown_deployment(name, namespace)
+            except ApiException as e:
+                logger.info("Failed to initiate scale-down for %s/%s: %s", namespace, name, str(e))
+
+        # Wait for this batch to fully scale down
+        while True:
+            all_scaled_down = True
+            try:
+                current_deployments = k8s_apps.list_namespaced_deployment(namespace)
+                current_map = {d.metadata.name: d for d in current_deployments.items}
+            except ApiException as e:
+                logger.info("Error fetching deployment status: %s", str(e))
+                # If we cannot fetch status, bail out (or you could continue after a delay)
+                break
+
+            for name in batch:
+                deploy = current_map.get(name)
+                if deploy is None:
+                    # If it disappeared, treat as scaled down
+                    logger.info("Deployment %s in namespace %s no longer present; treating as scaled down", name, namespace)
+                    continue
+
+                desired = deploy.spec.replicas or 0
+                ready = deploy.status.ready_replicas or 0
+
+                if ready > 0:
+                    logger.info(
+                        "Deployment %s in namespace %s not yet scaled down: %d/%d",
+                        name, namespace, ready, desired
+                    )
+                    all_scaled_down = False
+                else:
+                    logger.debug(
+                        "Deployment %s in namespace %s scaled down: %d/%d",
+                        name, namespace, ready, desired
+                    )
+
+            if all_scaled_down:
                 logger.info(
-                    "Skipping checking deployment %s in namespace %s (excluded)",
-                    name, namespace
+                    "Batch scaled down successfully in namespace %s: %s",
+                    namespace, ", ".join(sorted(batch))
                 )
-                continue
-            desired = deploy.spec.replicas or 0
-            ready = deploy.status.ready_replicas or 0
-            if ready > 0:
-                logger.info("Deployment " + name +  " in namespace " + namespace + " not yet scaled down: " + str(ready) + "/" + str(desired))
-                all_scaled_down = False
-            else:
-                logger.debug("Deployment " + name + " in namespace " + namespace + " scaled down: " + str(ready) + "/" + str(desired))
+                break
 
-        if all_scaled_down:
-            logger.info("All non-excluded deployments scaled down successfully in namespace " + namespace)
-            break
-        sleep(10)
+            sleep(poll_interval)
+
+    logger.info("All non-excluded deployments scaled down successfully in namespace %s", namespace)
+
 
 def scaledown_statefulset(name, namespace):
     """
@@ -380,7 +416,7 @@ def trigger_strimzi_shutdown(namespace, shutdown_command):
                 kind="Job",
                 metadata=client.V1ObjectMeta(name=job_name),
                 spec=client.V1JobSpec(
-                    ttl_seconds_after_finished=30, ## Time after job gets deleted once finished
+                    ttl_seconds_after_finished=1, ## Time after job gets deleted once finished
                     backoff_limit=3, ## Retry limit
                     template=client.V1PodTemplateSpec(
                         spec=client.V1PodSpec(
@@ -429,79 +465,126 @@ def scaleup_deployment(name, namespace):
         except ApiException as e:
             logger.info("Failed to patch deployment " + deployment.metadata.name + " in namespace " + deployment.metadata.namespace + " : " + e)
 
-def scaleup_namespace_deployments(namespace, exclude=None):
+def scaleup_namespace_deployments(namespace, exclude=None, batch_size=None, poll_interval=10):
     """
     Scale up all deployments in the specified namespace using previously
-    stored replica counts from annotations, except those in 'exclude'. 
-    Waits for all non-excluded deployments to become ready.
+    stored replica counts from annotations, except those in 'exclude'.
+    Allows to perform the operation in batches and waits for each batch to become ready
+    before proceeding to the next batch.
 
     Args:
         namespace (str): The Kubernetes namespace to act on.
         exclude (list[str] or None): Deployment names to skip.
             Example: ['deployment-a', 'deployment-b', 'deployment-c']
+        batch_size (int): Maximum number of deployments to scale up concurrently.
+        poll_interval (int): Seconds to wait between status checks while waiting for a batch.
     """
 
     k8s_apps = get_k8s_apps_client()
 
     exclude = exclude or []
+    excluded_display = ", ".join(sorted(exclude)) if exclude else "none"
 
     try:
         deployments = k8s_apps.list_namespaced_deployment(namespace)
     except ApiException as e:
-        logger.info("Failed to list deployments in namespace " + namespace + " : " + e)
+        logger.info("Failed to list deployments in namespace %s: %s", namespace, str(e))
         return
 
-    if exclude:
+    # Build the list of eligible deployments for scaling
+    all_deployments = [d.metadata.name for d in deployments.items]
+    eligible = [
+        name for name in all_deployments
+        if name not in exclude and name != "shutdown-addon-operator"
+    ]
+
+    if not eligible:
         logger.info(
-            "Scaling up deployments in namespace %s (excluding: %s)",
-            namespace,
-            ", ".join(sorted(exclude))
+            "No eligible deployments to scale up in namespace %s (exclude: %s)",
+            namespace, excluded_display
         )
-    else:
-        logger.info("Scaling up deployments in namespace %s", namespace)
+        return
 
-    # Start scaling up
-    for deployment in deployments.items:
-        name = deployment.metadata.name
-        if name in exclude:
-            logger.info(
-                "Skipping scale-up for deployment %s in namespace %s (excluded)",
-                name, namespace
-            )
-            continue
-        scaleup_deployment(name, namespace)
+    # Resolve batch size: None or <=0 => no throttling (single batch with all)
+    eff_batch_size = (len(eligible) if not batch_size or batch_size <= 0 else batch_size)
 
-    while True:
-        all_ready = True
-        try:
-            current_deployments = k8s_apps.list_namespaced_deployment(namespace)
-        except ApiException as e:
-            logger.info("Error fetching deployment status in namespace " + namespace + " : " + e)
-            break
 
-        for deploy in current_deployments.items:
-            name = deploy.metadata.name
-            desired = deploy.spec.replicas
-            ready = deploy.status.ready_replicas or 0
-            if name == "shutdown-addon-operator":
-                logger.info("Skipping checking deployment " + name + " in namespace " + namespace + " as it controls the shutdown operations")
-                continue
-            if name in exclude:
+    logger.info(
+        "Scaling up deployments in namespace %s in batches of %d (exclude: %s)",
+        namespace, eff_batch_size, excluded_display
+    )
+
+    # Process in batches
+    for i in range(0, len(eligible), eff_batch_size):
+        batch = eligible[i:i + eff_batch_size]
+        logger.info(
+            "Starting scale-up for batch %d/%d: %s",
+            (i // eff_batch_size) + 1,
+            (len(eligible) + eff_batch_size - 1) // eff_batch_size,
+            ", ".join(sorted(batch))
+        )
+
+        # Initiate scale-up for this batch
+        for name in batch:
+            try:
+                scaleup_deployment(name, namespace)
+            except ApiException as e:
+                logger.info("Failed to initiate scale-up for %s/%s: %s", namespace, name, str(e))
+
+        # Wait for this batch to become fully ready
+        while True:
+            all_ready = True
+            try:
+                current_deployments = k8s_apps.list_namespaced_deployment(namespace)
+                current_map = {d.metadata.name: d for d in current_deployments.items}
+            except ApiException as e:
+                logger.info("Error fetching deployment status in namespace %s: %s", namespace, str(e))
+                break
+
+            for name in batch:
+                deploy = current_map.get(name)
+                if deploy is None:
+                    # If it disappeared (e.g., deleted), log and continue—treated as not blocking the batch.
+                    logger.info("Deployment %s in namespace %s not found during readiness check; continuing", name, namespace)
+                    continue
+
+                # Preserve your existing special cases (though batch excludes already filter them out)
+                if name == "shutdown-addon-operator":
+                    logger.info(
+                        "Skipping checking deployment %s in namespace %s as it controls the shutdown operations",
+                        name, namespace
+                    )
+                    continue
+                if name in exclude:
+                    logger.info("Skipping checking deployment %s in namespace %s (excluded)", name, namespace)
+                    continue
+
+                desired = deploy.spec.replicas or 0
+                ready = deploy.status.ready_replicas or 0
+
+                if ready < desired:
+                    logger.info(
+                        "Deployment %s in namespace %s not yet ready: %d/%d",
+                        name, namespace, ready, desired
+                    )
+                    all_ready = False
+                else:
+                    logger.debug(
+                        "Deployment %s in namespace %s is ready: %d/%d",
+                        name, namespace, ready, desired
+                    )
+
+            if all_ready:
                 logger.info(
-                    "Skipping checking deployment %s in namespace %s (excluded)",
-                    name, namespace
+                    "Batch scaled up successfully in namespace %s: %s",
+                    namespace, ", ".join(sorted(batch))
                 )
-                continue
-            if ready < desired:
-                logger.info("Deployment " + name + " in namespace " + namespace + " not yet ready: " + str(ready) + "/" + str(desired))
-                all_ready = False
-            else:
-                logger.debug("Deployment " + name + " in namespace " + namespace + " is ready: " + str(ready) + "/" + str(desired))
+                break
 
-        if all_ready:
-            logger.info("All deployments are ready in namespace " + namespace)
-            break
-        sleep(10)
+            sleep(poll_interval)
+
+    logger.info("All non-excluded deployments are ready in namespace %s", namespace)
+
 
 def scaleup_statefulset(name, namespace):
     """

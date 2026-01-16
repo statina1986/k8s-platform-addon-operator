@@ -30,6 +30,648 @@
               "properties": {
                 "realms": {
                   "properties": {
+                    "consumers": {
+                      "description": "create bss realms here, as limited admin does not have permission to create new realms",
+                      "properties": {
+                        "config": {
+                          "properties": {
+                            "events": {
+                              "properties": {
+                                "admin_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "admin_event_days",
+                                  "type": "integer"
+                                },
+                                "admin_events_details": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_details",
+                                  "type": "boolean"
+                                },
+                                "admin_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_enabled",
+                                  "type": "boolean"
+                                },
+                                "user_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "user_event_days",
+                                  "type": "integer"
+                                },
+                                "user_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "user_events_enabled",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [],
+                              "title": "events",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "config",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "consumers",
+                      "type": "object"
+                    },
+                    "master": {
+                      "properties": {
+                        "config": {
+                          "properties": {
+                            "events": {
+                              "properties": {
+                                "admin_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "admin_event_days",
+                                  "type": "integer"
+                                },
+                                "admin_events_details": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_details",
+                                  "type": "boolean"
+                                },
+                                "admin_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_enabled",
+                                  "type": "boolean"
+                                },
+                                "user_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "user_event_days",
+                                  "type": "integer"
+                                },
+                                "user_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "user_events_enabled",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [],
+                              "title": "events",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "config",
+                          "type": "object"
+                        },
+                        "roles": {
+                          "properties": {
+                            "limited": {
+                              "properties": {
+                                "client_composite": {
+                                  "description": "admin to other realms than master. Exclude event config so limited admin can't remove/change event configuration.",
+                                  "properties": {
+                                    "consumers-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "consumers-realm",
+                                      "type": "array"
+                                    },
+                                    "master-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "master-realm",
+                                      "type": "array"
+                                    },
+                                    "partners-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "partners-realm",
+                                      "type": "array"
+                                    },
+                                    "qvantel-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "qvantel-realm",
+                                      "type": "array"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "client_composite",
+                                  "type": "object"
+                                },
+                                "description": {
+                                  "default": "Limited admin role excluding master realm",
+                                  "required": [],
+                                  "title": "description",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "limited",
+                              "type": "object"
+                            },
+                            "minimal": {
+                              "properties": {
+                                "client_composite": {
+                                  "description": "this role exists to keep keycloak admin console working. without any permissions, the admin console gives an error.",
+                                  "properties": {
+                                    "master-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "master-realm",
+                                      "type": "array"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "client_composite",
+                                  "type": "object"
+                                }
+                              },
+                              "required": [],
+                              "title": "minimal",
+                              "type": "object"
+                            },
+                            "partners-useradmin": {
+                              "properties": {
+                                "client_composite": {
+                                  "properties": {
+                                    "master-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "master-realm",
+                                      "type": "array"
+                                    },
+                                    "partners-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "partners-realm",
+                                      "type": "array"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "client_composite",
+                                  "type": "object"
+                                },
+                                "description": {
+                                  "default": "Allow managing users in partners realm",
+                                  "required": [],
+                                  "title": "description",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "partners-useradmin",
+                              "type": "object"
+                            },
+                            "readonly": {
+                              "properties": {
+                                "client_composite": {
+                                  "properties": {
+                                    "consumers-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "consumers-realm",
+                                      "type": "array"
+                                    },
+                                    "master-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "master-realm",
+                                      "type": "array"
+                                    },
+                                    "partners-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "partners-realm",
+                                      "type": "array"
+                                    },
+                                    "qvantel-realm": {
+                                      "items": {
+                                        "anyOf": [
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "required": [],
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "required": []
+                                      },
+                                      "required": [],
+                                      "title": "qvantel-realm",
+                                      "type": "array"
+                                    }
+                                  },
+                                  "required": [],
+                                  "title": "client_composite",
+                                  "type": "object"
+                                },
+                                "description": {
+                                  "default": "Read-only admin role",
+                                  "required": [],
+                                  "title": "description",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [],
+                              "title": "readonly",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "roles",
+                          "type": "object"
+                        },
+                        "users": {
+                          "description": "limited admin user for system-spec-side configuration",
+                          "properties": {
+                            "limitedadmin": {
+                              "properties": {
+                                "password": {
+                                  "default": "$KEYCLOAK_LIMITED_ADMIN_PASSWORD",
+                                  "required": [],
+                                  "title": "password",
+                                  "type": "string"
+                                },
+                                "roles": {
+                                  "items": {
+                                    "anyOf": [
+                                      {
+                                        "required": [],
+                                        "type": "string"
+                                      }
+                                    ],
+                                    "required": []
+                                  },
+                                  "required": [],
+                                  "title": "roles",
+                                  "type": "array"
+                                }
+                              },
+                              "required": [],
+                              "title": "limitedadmin",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "users",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "master",
+                      "type": "object"
+                    },
+                    "partners": {
+                      "properties": {
+                        "config": {
+                          "properties": {
+                            "events": {
+                              "properties": {
+                                "admin_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "admin_event_days",
+                                  "type": "integer"
+                                },
+                                "admin_events_details": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_details",
+                                  "type": "boolean"
+                                },
+                                "admin_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_enabled",
+                                  "type": "boolean"
+                                },
+                                "user_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "user_event_days",
+                                  "type": "integer"
+                                },
+                                "user_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "user_events_enabled",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [],
+                              "title": "events",
+                              "type": "object"
+                            }
+                          },
+                          "required": [],
+                          "title": "config",
+                          "type": "object"
+                        }
+                      },
+                      "required": [],
+                      "title": "partners",
+                      "type": "object"
+                    },
                     "qvantel": {
                       "properties": {
                         "clients": {
@@ -239,6 +881,43 @@
                         },
                         "config": {
                           "properties": {
+                            "events": {
+                              "properties": {
+                                "admin_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "admin_event_days",
+                                  "type": "integer"
+                                },
+                                "admin_events_details": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_details",
+                                  "type": "boolean"
+                                },
+                                "admin_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "admin_events_enabled",
+                                  "type": "boolean"
+                                },
+                                "user_event_days": {
+                                  "default": 180,
+                                  "required": [],
+                                  "title": "user_event_days",
+                                  "type": "integer"
+                                },
+                                "user_events_enabled": {
+                                  "default": true,
+                                  "required": [],
+                                  "title": "user_events_enabled",
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [],
+                              "title": "events",
+                              "type": "object"
+                            },
                             "ssl_required": {
                               "default": "none",
                               "description": "when k8s cluster uses 100.* addresses which keycloak considers \"external\", application logins fail without this",
@@ -671,6 +1350,25 @@
                                               "properties": {
                                                 "name": {
                                                   "default": "keycloak-admin-secret",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "secretRef",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "secretRef": {
+                                              "properties": {
+                                                "name": {
+                                                  "default": "keycloak-limited-admin-secret",
                                                   "required": [],
                                                   "title": "name",
                                                   "type": "string"
@@ -1563,6 +2261,27 @@
           "required": [],
           "title": "externalEndpointsAvailable",
           "type": "boolean"
+        },
+        "limitedAdminEnabled": {
+          "default": false,
+          "description": "use limited admin for qinstaller. Requires QRP 2026.04 or later.",
+          "required": [],
+          "title": "limitedAdminEnabled",
+          "type": "boolean"
+        },
+        "limitedAdminPassword": {
+          "default": "",
+          "description": "Set keycloak limited admin password or leave empty to be autogenerated",
+          "required": [],
+          "title": "limitedAdminPassword",
+          "type": "string"
+        },
+        "limitedAdminUsername": {
+          "default": "limitedadmin",
+          "description": "limited admin username, used in system-spec side qinstaller",
+          "required": [],
+          "title": "limitedAdminUsername",
+          "type": "string"
         },
         "pomeriumSecretName": {
           "default": "pomerium-platform-shared",
