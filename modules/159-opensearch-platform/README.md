@@ -6,7 +6,7 @@
 <!-- BRIEF -->
 Basic [OpenSearch](https://opensearch.org/) module.
 
-Adds a grafana data source with [datasource.yaml](./templates/datasource.yaml). Optionally creates indices with [logging-setup.sh](./hooks/logging-setup.sh)
+Adds a Grafana data source with [datasource.yaml](./templates/datasource.yaml). Optionally creates indices with [logging-setup.sh](./hooks/logging-setup.sh)
 
 Known issues:
 * OpenSearch Dashboards Discover will spam you with errors until indices actually have data in them
