@@ -50,7 +50,7 @@ lokiPlatform:
         label: loki_rule
         labelValue: 'true'
         folder: /rules/fake
-        searchNamespace: { $.Release.Namespace }
+        searchNamespace: ALL
         resource: configmap
     % if values['global']['configurationProfile'] == 'dev':      
     deploymentMode: SingleBinary
