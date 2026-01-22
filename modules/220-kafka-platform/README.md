@@ -272,6 +272,19 @@ By default OAuth2 is configured ( https://ui.docs.kafbat.io/configuration/authen
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;" id="kafkaPlatform--kafka-ui--enabled">kafkaPlatform.kafka-ui.enabled</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+			<td><div>
+
+Toggle to enable Kafka UI chart deployment
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="kafkaPlatform--kafka-ui--rolesConfig">kafkaPlatform.kafka-ui.rolesConfig</td>
 			<td>tpl</td>
 			<td>
@@ -353,6 +366,7 @@ Role based access control for kafbat ui ( https://ui.docs.kafbat.io/configuratio
 			<td>object</td>
 			<td>
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>defaultImageRegistry: platform.artifactory.qvantel.net/k8s-platform-1-2-0
+enabled: true
 resources:
     limits:
         cpu: "1"
@@ -371,6 +385,19 @@ tolerations:
 			<td><div>
 
 configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="kafkaPlatform--strimzi-kafka-operator--enabled">kafkaPlatform.strimzi-kafka-operator.enabled</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+			<td><div>
+
+Toggle to enable Strimzi Cluster Operator chart deployment
 
 </div>
 </td>

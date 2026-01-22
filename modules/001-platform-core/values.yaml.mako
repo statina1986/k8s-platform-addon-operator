@@ -1,4 +1,6 @@
 platformCore:
+  appTenantRbacEnabled: false
+  appTenantNamespaces: []
   localStorageEnabled: false
   cleanUpControllerEnabled: false
   snapshotControllerEnabled: false

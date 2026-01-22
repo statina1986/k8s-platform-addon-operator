@@ -11,10 +11,10 @@ spec:
   plugin-name: redis-database-plugin
   allowed-roles: '*'
   additional-params:
-    host: "redis-platform-master.platform.svc"
+    host: "{{ .Values.global.helmReleaseNamePrefix }}redis-platform-master.{{ $.Release.Namespace }}.svc"
     port: 6379    
   computed-values:
-  - expression: k8s_get_secret_value('redis-platform','{{ $.Release.Namespace }}','redis-password')
+  - expression: k8s_get_secret_value('{{ .Values.global.helmReleaseNamePrefix }}redis-platform','{{ $.Release.Namespace }}','redis-password')
     name: secret-password
   db-username: 'default'
   db-password: '{secret-password}'

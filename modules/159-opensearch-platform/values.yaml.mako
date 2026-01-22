@@ -16,12 +16,12 @@ opensearchPlatform:
     longtermRetentionPeriod: "45d"
 
   opensearch:
-    clusterName: "opensearch-cluster"
+    clusterName: "${values['global']['helmReleaseNamePrefix']}opensearch-cluster"
     nodeGroup: "master"
     % if values['global']['configurationProfile'] == 'dev':
     singleNode: true
     % endif
-    masterService: "opensearch-cluster-master"
+    masterService: "${values['global']['helmReleaseNamePrefix']}opensearch-cluster-master"
     roles:
       - master
       - ingest
@@ -99,7 +99,7 @@ opensearchPlatform:
       imageTag: 1.3.3_202509080945_master_90384dcc
 
   opensearchDashboards:
-    opensearchHosts: "https://opensearch-cluster-master.${values['global']['platformNamespace']}.svc:9200"
+    opensearchHosts: "https://${values['global']['helmReleaseNamePrefix']}opensearch-cluster-master.${values['global']['platformNamespace']}.svc:9200"
     replicaCount: 1
     % if 'containerRegistryBase' in values['global']:
     image:
