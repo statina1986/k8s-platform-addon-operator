@@ -1,0 +1,128 @@
+## This is to allow all tenant namespaces to have access to needed platform / apps services.
+{{- $root := . -}}
+{{- $tenants := $root.Values.platformCore.appTenantNamespaces | default (list) -}}
+{{- $hasTenants := gt (len $tenants) 0 -}}
+
+{{- if $root.Values.platformCore.appTenantRbacEnabled }}
+{{- if and (eq $root.Values.global.deployOperators "true" ) $hasTenants }}
+# ClusterRole: list namespaces (cluster-scoped
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: qvantel-default-apps-namespaces-rbac
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "watch", "list"]
+---
+# ClusterRoleBinding: bind ALL tenant SA groups to the above ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: qvantel-default-apps-namespaces-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: qvantel-default-apps-namespaces-rbac
+subjects:
+{{- range $ns := $tenants }}
+{{- if $ns }}
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:serviceaccounts:{{ $ns }}
+{{- end }}
+{{- end }}
+---
+# Shared platform namespace: discovery Role (only once)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $root.Values.global.platformNamespace }}-default-apps-discovery-rbac
+  namespace: {{ $root.Values.global.platformNamespace }}
+rules:
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["services", "pods", "configmaps", "endpoints"]
+    verbs: ["get", "watch", "list"]
+---
+# One RoleBinding in the platform namespace with ALL tenant SA groups as subjects
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $root.Values.global.platformNamespace }}-default-apps-discovery-rbac
+  namespace: {{ $root.Values.global.platformNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $root.Values.global.platformNamespace }}-default-apps-discovery-rbac
+subjects:
+{{- range $ns := $tenants }}
+{{- if $ns }}
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:serviceaccounts:{{ $ns }}
+{{- end }}
+{{- end }}
+
+{{- else }}
+# 
+# Non-operator mode (fallback when no tenants OR deployOperators=false)
+#
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $root.Values.global.platformNamespace }}-default-apps-discovery-rbac
+  namespace: {{ $root.Values.global.platformNamespace }}
+rules:
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["services", "pods", "configmaps", "endpoints"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $root.Values.global.platformNamespace }}-default-apps-discovery-rbac
+  namespace: {{ $root.Values.global.platformNamespace }}
+subjects:
+  - kind: Group
+    name: system:serviceaccounts:{{ $root.Values.global.appsNamespace }}
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $root.Values.global.platformNamespace }}-default-apps-discovery-rbac
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $root.Values.global.appsNamespace }}-default-apps-discovery-rbac
+  namespace: {{ $root.Values.global.appsNamespace }}
+rules:
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["services", "pods", "configmaps", "endpoints"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $root.Values.global.appsNamespace }}-default-apps-discovery-rbac
+  namespace: {{ $root.Values.global.appsNamespace }}
+subjects:
+  - kind: Group
+    name: system:serviceaccounts:{{ $root.Values.global.appsNamespace }}
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $root.Values.global.appsNamespace }}-default-apps-discovery-rbac
+
+{{- end }}
+{{- end }}
