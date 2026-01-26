@@ -99,7 +99,7 @@ class RabbitMqConnectionHook(Hook):
         match(binding):
             case EventHook(eventName, event, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqConnections', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault RabbitMQC connections sync as it is disabled in configuration")
+                    print("Skipping Vault RabbitMQ connections sync as it is disabled in configuration")
                     return
                 
                 vault_client = get_vault_client()

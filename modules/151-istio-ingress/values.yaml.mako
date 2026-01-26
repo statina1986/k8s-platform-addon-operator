@@ -1276,7 +1276,7 @@ istioIngress:
       flex-testing-bpmn-executor:
         enabled: false
         gateways:
-          - private-ingress
+          - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:
           - retries:
               attempts: 0

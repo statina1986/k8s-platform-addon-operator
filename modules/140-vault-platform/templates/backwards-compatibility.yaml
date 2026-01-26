@@ -1,4 +1,4 @@
-{{- if .Values.vaultPlatform.useBackwardsCompatibilityService }}
+{{- if and ( .Values.vaultPlatform.vault.global.enabled ) ( .Values.vaultPlatform.useBackwardsCompatibilityService )  }}
 apiVersion: v1
 kind: Service
 metadata:

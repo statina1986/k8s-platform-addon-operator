@@ -45,6 +45,7 @@ spec:
     app.kubernetes.io/managed-by: k8ssandra-operator
     app.kubernetes.io/name: k8ssandra-operator
     app.kubernetes.io/part-of: k8ssandra
+    k8ssandra.io/cluster-name: {{ $dbClusterName }}
   sessionAffinity: None
   type: ClusterIP
 

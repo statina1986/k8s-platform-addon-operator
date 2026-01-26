@@ -5,9 +5,9 @@ kind: DbConnection
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: redis-platform-vault-connection
+  name: {{ .Values.global.helmReleaseNamePrefix }}redis-platform-vault-connection
 spec:
-  connection-name: redis-platform
+  connection-name: {{ .Values.global.helmReleaseNamePrefix }}redis-platform
   plugin-name: redis-database-plugin
   allowed-roles: '*'
   additional-params:
@@ -23,25 +23,25 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: admin-role-redis-platform
+  name: admin-role-{{ .Values.global.helmReleaseNamePrefix }}redis-platform
 spec:
-  db-name: redis-platform
+  db-name: {{ .Values.global.helmReleaseNamePrefix }}redis-platform
   creation-statements: '["~*", "&*", "+@all"]'
 
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-redis-platform
+  name: readonly-role-{{ .Values.global.helmReleaseNamePrefix }}redis-platform
 spec:
-  db-name: redis-platform
+  db-name: {{ .Values.global.helmReleaseNamePrefix }}redis-platform
   creation-statements: '["%R~*", "&*", "+@read"]'
 
 ---
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readwrite-role-redis-platform
+  name: readwrite-role-{{ .Values.global.helmReleaseNamePrefix }}redis-platform
 spec:
-  db-name: redis-platform
+  db-name: {{ .Values.global.helmReleaseNamePrefix }}redis-platform
   creation-statements: '["~*", "&*", "+@all", "-@admin"]'

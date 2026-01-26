@@ -1,6 +1,8 @@
 import json
 import yaml
 import time
+import random
+import string
 from time import sleep
 import boto3
 from common.python.vault import *
@@ -410,13 +412,15 @@ def trigger_strimzi_shutdown(namespace, shutdown_command):
             registry_base = yaml.safe_load(cm.data["global"]).get("containerRegistryBase", "ghcr.io")
             image = f"{registry_base}/scholzj/strimzi-shutdown:0.1.0"
 
-            job_name = f"strimzi-shutdown-{cluster_name}"
+
+            suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+            job_name = f"strimzi-shutdown-{cluster_name}-{suffix}"
             job = client.V1Job(
                 api_version="batch/v1",
                 kind="Job",
                 metadata=client.V1ObjectMeta(name=job_name),
                 spec=client.V1JobSpec(
-                    ttl_seconds_after_finished=1, ## Time after job gets deleted once finished
+                    ttl_seconds_after_finished=30, ## Time after job gets deleted once finished
                     backoff_limit=3, ## Retry limit
                     template=client.V1PodTemplateSpec(
                         spec=client.V1PodSpec(

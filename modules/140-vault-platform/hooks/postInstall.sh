@@ -8,6 +8,11 @@ hook::config() {
 }
 
 hook::trigger() {
+  enabled="$(common::get_values_value '.vaultPlatform.vault.global.enabled')"
+  if [[ $enabled == "false" ]] ; then
+    qlog "Vault deployment not enabled in $ADDON_OPERATOR_NAMESPACE"
+    exit 0
+  fi
   
   qlog "Waiting for $VAULT_RELEASE_NAME-0 to become ready"
   kubectl wait --for=condition=ready --timeout=300s pods/$VAULT_RELEASE_NAME-0 -n $ADDON_OPERATOR_NAMESPACE

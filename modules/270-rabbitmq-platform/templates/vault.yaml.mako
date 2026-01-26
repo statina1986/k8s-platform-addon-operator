@@ -6,11 +6,11 @@ kind: RabbitMqConnection
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: rabbitmq-platform-vault-connection
+  name: {{ $.Values.global.helmReleaseNamePrefix }}rabbitmq-platform-vault-connection
 spec:
-  connection-url: "http://rabbitmq-platform.{{ $.Release.Namespace }}.svc:15672"
+  connection-url: "http://{{ $.Values.global.helmReleaseNamePrefix }}rabbitmq-platform.{{ $.Release.Namespace }}.svc:15672"
   computed-values:
-  - expression: k8s_get_secret_value('rabbitmq-platform','{{ $.Release.Namespace }}','rabbitmq-password')
+  - expression: k8s_get_secret_value('{{ $.Values.global.helmReleaseNamePrefix }}rabbitmq-platform','{{ $.Release.Namespace }}','rabbitmq-password')
     name: secret-password
   username: '{{ $.Values.rabbitmqPlatform.rabbitmq.auth.username }}'
   password: '{secret-password}'

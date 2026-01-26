@@ -28,6 +28,11 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: strimzi-shutdown
+{{- if eq .Values.global.deployOperators "false" }}
+  - kind: ServiceAccount
+    name: strimzi-shutdown
+    namespace: {{ .Values.global.operatorNamespace }}
+{{- end }}
 roleRef:
   kind: Role
   name: strimzi-shutdown

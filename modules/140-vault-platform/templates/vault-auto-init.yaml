@@ -1,3 +1,4 @@
+{{- if and ( .Values.vaultPlatform.vault.global.enabled ) ( .Values.vaultPlatform.vaultWebhooksEnabled )  }}
 apiVersion: v1
 data:
   init.sh: |
@@ -117,3 +118,4 @@ kind: ConfigMap
 metadata:
   name: vault-auto-init-config
   namespace: {{.Release.Namespace}}
+{{- end }}
