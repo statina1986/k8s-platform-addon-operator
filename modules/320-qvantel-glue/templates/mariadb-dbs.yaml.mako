@@ -101,6 +101,11 @@ spec:
   serviceAccountName: platform
   maxRetention: {{ $cluster.spec.backup.retention | default "48h" }}
   timeout: {{ $cluster.spec.backup.timeout | default "2h" }}
+  tolerations:
+  - effect: NoSchedule
+    key: {{ $root.Values.global.platformMastersKey }}
+    operator: Equal
+    value: {{ $root.Values.global.platformMastersValue }}
   storage:
     s3:
       bucket: {{ $cluster.spec.backup.bucket }}
@@ -143,6 +148,11 @@ spec:
     name: {{ $dbClusterName }}
   serviceAccountName: platform
   maxRetention: {{ $cluster.spec.backup.retention | default "48h" }}
+  tolerations:
+  - effect: NoSchedule
+    key: {{ $root.Values.global.platformMastersKey }}
+    operator: Equal
+    value: {{ $root.Values.global.platformMastersValue }}
   storage:
     s3:
       bucket: {{ $cluster.spec.backup.bucket }}
