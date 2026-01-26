@@ -932,6 +932,7 @@ monitoringPlatform:
                   version: "v1alpha1"
                 labelsFromPath:
                   name: [metadata, name]
+                  namespace: [metadata, namespace]
                 metrics:
                   - name: "finishedMedusaBackups"
                     help: "finished backups"
