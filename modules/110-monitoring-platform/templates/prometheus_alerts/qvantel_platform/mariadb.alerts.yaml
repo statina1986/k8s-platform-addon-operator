@@ -244,4 +244,25 @@ spec:
       annotations:
         brief: "MariaDB metrics are not being scrapped."
         procedure: "Create a ticket to Platform Team to be reviewed during business hours"
+    - alert: MariaDBBackupJobFailed
+      annotations:
+        brief: MariaDB backup job failed
+        procedure: Contact Platform team during business hours over a ticket
+      expr: 'sum by (name, namespace, status) (kube_customresource_finishedMariaDBBackups{type="Complete", status="False"} and on(name, namespace) (kube_customresource_MariaDBBackupsFinishTime == scalar(max(kube_customresource_MariaDBBackupsFinishTime))))'
+      labels:
+        severity: critical
+    - alert: MariaDBBackupTooOld
+      annotations:
+        brief: "The latest finished backup is older than 28 hours."
+        procedure: "Contact Platform team during business hours over a ticket"
+      expr: 'time() - max(kube_customresource_MariaDBBackupsFinishTime) > 100000'
+      labels:
+        severity: critical
+    - alert: MariaDBBackupMissingMetrics
+      annotations:
+        brief: "There are no monitoring metrics for finished MariaDB backups."
+        procedure: "Contact Platform team during business hours over a ticket"
+      expr: 'absent(kube_customresource_MariaDBBackupsFinishTime) == 1'
+      labels:
+        severity: critical
 {{- end }}

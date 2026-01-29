@@ -88,9 +88,9 @@ spec:
         procedure: "Contact NoSQL urgently and create a ticket to them"
     - alert: K8ssandraBackupJobFailed
       annotations:
-        brief: K8ssandra Medusa backup job failed (instance {{` {{ $labels.instance }} `}})
+        brief: K8ssandra Medusa backup job failed in instance  {{` {{ $labels.ref }} `}}
         procedure: Contact NoSQL team during business hours over a ticket
-      expr: 'increase(kube_customresource_failedMedusaBackups[24h]) > 0'
+      expr: 'sum by (name, namespace, ref) (kube_customresource_failedMedusaBackups and on(name, namespace) (kube_customresource_medusaBackupsFinishTime ==scalar(max(kube_customresource_medusaBackupsFinishTime)))) > 0'
       labels:
         severity: critical
     - alert: K8ssandraBackupTooOld
