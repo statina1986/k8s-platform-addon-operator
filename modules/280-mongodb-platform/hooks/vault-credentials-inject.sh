@@ -19,15 +19,15 @@ hook::trigger() {
   qlog "Inserting MongoDB credentials to legacy kv1 Vault"
   token="$(vault::get_vault_token)"
   FULL_RELEASE_NAME="${HELM_RELEASE_NAME_PREFIX}mongodb-platform"
-  password="$(kubectl::get_secret_opaque_kv $FULL_RELEASE_NAME mongodb-root-password $VAULT_SECRET_NAMESPACE)"
+  password="$(kubectl::get_secret_opaque_kv $FULL_RELEASE_NAME mongodb-root-password $ADDON_OPERATOR_NAMESPACE)"
   credentials_old=`mktemp`
   credentials_add=`mktemp`
   credentials_new=`mktemp`
-  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/platform/admin/mongodb'" '200|404'
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/platform/admin/${HELM_RELEASE_NAME_PREFIX}mongodb'" '200|404'
   jq -r .data $CURL_RESULT > $credentials_old
-  echo '{"mongodb-password":"'"$password"'"}' > $credentials_add
+  printf '{"%smongodb-password":"%s"}' "$HELM_RELEASE_NAME_PREFIX" "$password" > "$credentials_add"
   jq -s add $credentials_old $credentials_add > $credentials_new
-  curl::execute "-d @$credentials_new --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/platform/admin/mongodb'" 204
+  curl::execute "-d @$credentials_new --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/secret/data/platform/admin/${HELM_RELEASE_NAME_PREFIX}mongodb'" 204
   rm -f $credentials_old $credentials_add $credentials_new
 
 
@@ -35,11 +35,11 @@ hook::trigger() {
   credentials_old=`mktemp`
   credentials_add=`mktemp`
   credentials_new=`mktemp`
-  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/platform-secret/data/mongodb'" '200|404'
+  curl::execute "--header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/platform-secret/data/${HELM_RELEASE_NAME_PREFIX}mongodb'" '200|404'
   jq -r .data $CURL_RESULT > $credentials_old
-  echo '{"data": {"mongodb-password":"'"$password"'"}}' > $credentials_add
+  printf '{"data": {"%smongodb-password":"%s"}}' "$HELM_RELEASE_NAME_PREFIX" "$password" > "$credentials_add"
   jq -s add $credentials_old $credentials_add > $credentials_new
-  curl::execute "-d @$credentials_new --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/platform-secret/data/mongodb'" 200 ## Needs to be 200 on kv2
+  curl::execute "-d @$credentials_new --header 'X-Vault-Token: $token' '$VAULT_ADDR/v1/platform-secret/data/${HELM_RELEASE_NAME_PREFIX}mongodb'" 200 ## Needs to be 200 on kv2
   rm -f $credentials_old $credentials_add $credentials_new
 }
 

@@ -40,7 +40,7 @@ hook::trigger() {
   readarray -t LONGTERM_INDICES < <(jq -r '.opensearchPlatform.loggingSetup.longtermIndices // [] | .[]' "$VALUES_PATH")
 
   ## Ensure Opensearch is up and ready
-  if kubectl -n ${ADDON_OPERATOR_NAMESPACE} rollout status statefulset/opensearch-cluster-master --timeout=5m; then
+  if kubectl -n ${ADDON_OPERATOR_NAMESPACE} rollout status statefulset/${HELM_RELEASE_NAME_PREFIX}opensearch-cluster-master --timeout=5m; then
     qlog "Opensearch is up, proceeding"
     # Adding sleep because sometimes Security engine wasn't initialised for user creation
     sleep 1

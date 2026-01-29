@@ -1121,6 +1121,13 @@
               "title": "authConfig",
               "type": "object"
             },
+            "enabled": {
+              "default": true,
+              "description": "Toggle to enable Kafka UI chart deployment",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            },
             "env": {
               "items": {
                 "anyOf": [
@@ -1304,6 +1311,13 @@
               "required": [],
               "title": "defaultImageRegistry",
               "type": "string"
+            },
+            "enabled": {
+              "default": true,
+              "description": "Toggle to enable Strimzi Cluster Operator chart deployment",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
             },
             "resources": {
               "properties": {

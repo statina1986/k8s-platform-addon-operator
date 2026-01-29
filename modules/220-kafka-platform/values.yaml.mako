@@ -1,5 +1,7 @@
 kafkaPlatform:  
   kafka-ui:
+    # -- Toggle to enable Kafka UI chart deployment
+    enabled: true
     image:
       % if 'containerRegistryBase' in values['global']:
       registry: ${values['global']['containerRegistryBase']}      
@@ -120,6 +122,12 @@ kafkaPlatform:
 
   # -- configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml
   strimzi-kafka-operator:
+    # -- Toggle to enable Strimzi Cluster Operator chart deployment
+    % if values['global']['deployOperators'] == "false":
+    enabled: false
+    % else:
+    enabled: true
+    % endif
     % if values['global']['clusterwideResources'] == "false":
     rbac:
       create: false

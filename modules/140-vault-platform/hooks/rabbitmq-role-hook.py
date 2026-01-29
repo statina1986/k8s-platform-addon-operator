@@ -102,7 +102,7 @@ class RabbitMqRoleHook(Hook):
         match(binding):
             case EventHook(eventName, event, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqRoles', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
+                    print("Skipping RabbitMQ DB roles sync as it is disabled in configuration")
                     return
 
                 name = event['object']['metadata']['name']
@@ -121,7 +121,7 @@ class RabbitMqRoleHook(Hook):
                     
             case ScheduleHook(binding, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqRoles', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
+                    print("Skipping RabbitMQ DB roles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()
@@ -136,7 +136,7 @@ class RabbitMqRoleHook(Hook):
 
             case SynchronizationHook(binding, values):
                 if values['vaultPlatform'].get('vaultCrdSync', {}).get('syncRabbitMqRoles', {}).get('enabled') in ('false', False):
-                    print("Skipping Vault DB Roles sync as it is disabled in configuration")
+                    print("Skipping RabbitMQ DB roles sync as it is disabled in configuration")
                     return
 
                 vault_client = get_vault_client()

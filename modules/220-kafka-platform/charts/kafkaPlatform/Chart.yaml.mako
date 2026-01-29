@@ -5,6 +5,8 @@ dependencies:
   - name: strimzi-kafka-operator    
     version: ${values['kafkaPlatform']['strimziHelmVersion'] or '0.45.1'}
     repository: https://strimzi.io/charts/
+    condition: strimzi-kafka-operator.enabled
   - name: kafka-ui
     version: 1.5.1
     repository: https://kafbat.github.io/helm-charts/
+    condition: kafka-ui.enabled

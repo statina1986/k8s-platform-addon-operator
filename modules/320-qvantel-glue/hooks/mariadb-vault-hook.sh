@@ -42,7 +42,7 @@ hook::trigger() {
     local secret_name="${cluster}-root"
     qlog "Fetching password from secret: ${secret_name}"
     local password
-    if ! password="$(kubectl::get_secret_opaque_kv "$secret_name" password $VAULT_SECRET_NAMESPACE 2>/dev/null)"; then
+    if ! password="$(kubectl::get_secret_opaque_kv "$secret_name" password $ADDON_OPERATOR_NAMESPACE 2>/dev/null)"; then
       qlog "Secret ${secret_name} not found or missing password; skipping"
       continue
     fi

@@ -4,7 +4,6 @@ metadata:
   labels:
     app.kubernetes.io/name: mongodb
   name: mongodb
-  namespace: platform
 spec:
   ports:
   - name: default

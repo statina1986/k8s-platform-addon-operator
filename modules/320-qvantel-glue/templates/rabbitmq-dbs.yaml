@@ -16,14 +16,14 @@ spec:
   env:
     "RABBITMQADMIN_USERNAME": 'admin'
     "RABBITMQADMIN_PASSWORD": '{password}'
-    "RABBITMQADMIN_TARGET_HOST": 'rabbitmq-platform.{{ $.Release.Namespace }}.svc'
+    "RABBITMQADMIN_TARGET_HOST": '{{ $.Values.global.helmReleaseNamePrefix }}rabbitmq-platform.{{ $.Release.Namespace }}.svc'
   provision-commands:
   - rabbitmqadmin vhosts declare --name {{ $db_name }}
-  connection-url: rabbitmq-platform.{{ $.Release.Namespace }}.svc
+  connection-url: {{ $.Values.global.helmReleaseNamePrefix }}rabbitmq-platform.{{ $.Release.Namespace }}.svc
   username: admin
   computed-values:
     - name: "password"
-      expression: "k8s_get_secret_value('rabbitmq-platform', '{{ $.Release.Namespace }}', 'rabbitmq-password')"
+      expression: "k8s_get_secret_value('{{ $.Values.global.helmReleaseNamePrefix }}rabbitmq-platform', '{{ $.Release.Namespace }}', 'rabbitmq-password')"
 
 ---
 apiVersion: platform-vault.qvantel.com/v1

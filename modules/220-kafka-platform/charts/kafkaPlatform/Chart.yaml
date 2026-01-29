@@ -11,10 +11,12 @@ dependencies:
     version: 0.43.0
     alias: strimzi-kafka-operator-043
     repository: https://strimzi.io/charts/
+    condition: strimzi-kafka-operator.enabled
   - name: strimzi-kafka-operator
     version: 0.45.1
     alias: strimzi-kafka-operator-0451
     repository: https://strimzi.io/charts/
+    condition: strimzi-kafka-operator.enabled
   - name: kafka-ui
     version: 1.5.1
     repository: https://kafbat.github.io/helm-charts/
