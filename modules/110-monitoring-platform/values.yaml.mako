@@ -974,8 +974,8 @@ monitoringPlatform:
                   name: [metadata, name]
                   namespace: [metadata, namespace]
                 metrics:
-                  - name: "finishedMariaDBBackups"
-                    help: "Status of the MariaDB backup completion"
+                  - name: "finishedMariaDBPhysicalBackups"
+                    help: "Status of the MariaDB Physical backup completion"
                     each:
                       type: Info
                       info:                          
@@ -983,12 +983,38 @@ monitoringPlatform:
                         labelsFromPath:
                           status: [status]
                           type: [type]
-                  - name: "MariaDBBackupsFinishTime"
-                    help: "The timestamp when the MariaDB backup was last scheduled"
+                  - name: "MariaDBPhysicalBackupsFinishTime"
+                    help: "The timestamp when the MariaDB Physical backup was last scheduled"
                     each:
                       type: Gauge
                       gauge:
                         path: [status, lastScheduleTime]
+              - groupVersionKind:
+                  group: "k8s.mariadb.com"
+                  kind: "Backup"
+                  version: "v1alpha1"
+                labelsFromPath:
+                  name: [metadata, name]
+                  namespace: [metadata, namespace]
+                metrics:
+                  - name: "finishedMariaDBLogicalBackups"
+                    help: "Status of the MariaDB Logical backup completion"
+                    each:
+                      type: Info
+                      info:                          
+                        path: [status, conditions]
+                        labelsFromPath:
+                          status: [status]
+                          type: [type]
+                  - name: "MariaDBLogicalBackupsFinishTime"
+                    help: "The timestamp when the MariaDB Logical backup was last scheduled"
+                    each:
+                      type: Gauge
+                      gauge:
+                        path:  [status, conditions, 0, lastTransitionTime]
+                        labelsFromPath:
+                          condition_type: [status, conditions, 0, type]
+                          condition_status: [status, conditions, 0, status]
               % endif
     thanosRuler:
       thanosRulerSpec:

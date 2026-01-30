@@ -244,25 +244,46 @@ spec:
       annotations:
         brief: "MariaDB metrics are not being scrapped."
         procedure: "Create a ticket to Platform Team to be reviewed during business hours"
-    - alert: MariaDBBackupJobFailed
+    - alert: MariaDBPhysicalBackupJobFailed
       annotations:
         brief: MariaDB backup job failed
         procedure: Contact Platform team during business hours over a ticket
-      expr: 'sum by (name, namespace, status) (kube_customresource_finishedMariaDBBackups{type="Complete", status="False"} and on(name, namespace) (kube_customresource_MariaDBBackupsFinishTime == scalar(max(kube_customresource_MariaDBBackupsFinishTime))))'
+      expr: 'sum by (name, namespace, status) (kube_customresource_finishedMariaDBPhysicalBackups{type="Complete", status="False"} and on(name, namespace) (kube_customresource_MariaDBPhysicalBackupsFinishTime == scalar(max(kube_customresource_MariaDBPhysicalBackupsFinishTime))))'
       labels:
         severity: critical
-    - alert: MariaDBBackupTooOld
+    - alert: MariaDBPhysicalBackupTooOld
       annotations:
         brief: "The latest finished backup is older than 28 hours."
         procedure: "Contact Platform team during business hours over a ticket"
-      expr: 'time() - max(kube_customresource_MariaDBBackupsFinishTime) > 100000'
+      expr: 'time() - max(kube_customresource_MariaDBPhysicalBackupsFinishTime) > 100000'
       labels:
         severity: critical
-    - alert: MariaDBBackupMissingMetrics
+    - alert: MariaDBPhysicalBackupMissingMetrics
       annotations:
-        brief: "There are no monitoring metrics for finished MariaDB backups."
+        brief: "There are no monitoring metrics for finished MariaDB Physical backups."
+        procedure: "Contact NoSQL team during business hours over a ticket"
+      expr: 'absent(kube_customresource_MariaDBPhysicalBackupsFinishTime) == 1'
+      labels:
+        severity: critical
+    - alert: MariaDBLogicalBackupJobFailed
+      annotations:
+        brief: MariaDB backup job failed
+        procedure: Contact Platform team during business hours over a ticket
+      expr: 'sum by (name, namespace, status) (kube_customresource_finishedMariaDBLogicalBackups{type="Complete", status="False"} and on(name, namespace) (kube_customresource_MariaDBLogicalBackupsFinishTime == scalar(max(kube_customresource_MariaDBLogicalBackupsFinishTime))))'
+      labels:
+        severity: critical
+    - alert: MariaDBLogicalBackupTooOld
+      annotations:
+        brief: "The latest finished backup is older than 28 hours."
         procedure: "Contact Platform team during business hours over a ticket"
-      expr: 'absent(kube_customresource_MariaDBBackupsFinishTime) == 1'
+      expr: 'time() - max(kube_customresource_MariaDBLogicalBackupsFinishTime) > 100000'
+      labels:
+        severity: critical
+    - alert: MariaDBLogicalBackupMissingMetrics
+      annotations:
+        brief: "There are no monitoring metrics for finished MariaDB Logical backups."
+        procedure: "Contact NoSQL team during business hours over a ticket"
+      expr: 'absent(kube_customresource_MariaDBLogicalBackupsFinishTime) == 1'
       labels:
         severity: critical
 {{- end }}
