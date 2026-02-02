@@ -19,7 +19,7 @@ spec:
         severity: warning
       annotations:
         brief: "{{` {{ $labels.node }} `}} of service {{` {{$labels.job }} `}} has had {{` {{ $value }} `}} pending compaction task(s) in average for more than 5 minutes."
-        procedure: "Contact NoSQL team during business hours over a ticket"
+        procedure: "Contact Platform Team during business hours over a ticket"
     - alert: CassandraExcessivePendingCompactionTasks
       expr: 'avg_over_time(corg_apache_cassandra_metrics_compaction_pending_tasks[5m]) >= 30'
       for: 5m
@@ -27,7 +27,7 @@ spec:
         severity: critical
       annotations:
         brief: "{{` {{ $labels.node }} `}} of service {{` {{$labels.job }} `}} has had {{` {{ $value }} `}} pending compaction task(s) in average for more than 5 minutes."
-        procedure: "Contact NoSQL urgently to verify the potential risk and create a ticket to them"
+        procedure: "Contact Platform Team urgently to verify the potential risk and create a ticket to them"
     - alert: CassandraFailingInstance
       expr: '1 <= sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{container="cassandra"}[15m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1))'
       for: 1m
@@ -35,7 +35,7 @@ spec:
         severity: critical
       annotations:
         brief: 'Instance service {{` {{ $labels.service_name }} `}} {{` {{ $labels.service_id}} `}} has been down for more than 1 minute'
-        procedure: "Contact NoSQL urgently if Cassandra node keeps down and create a ticket to them"
+        procedure: "Contact Platform Team urgently if Cassandra node keeps down and create a ticket to them"
     - alert: CassandraManyTombstones
       expr: 'max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) > 80000 and max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) < 90000'
       for: 5m
@@ -43,7 +43,7 @@ spec:
         severity: warning
       annotations:
         brief: "Tombstones have a high value {{` {{ $value }} `}} at {{` {{ $labels.table }} `}} which could cause failures."
-        procedure: "Contact NoSQL team during business hours over a ticket"
+        procedure: "Contact Platform Team during business hours over a ticket"
     - alert: CassandraExcessiveTombstones
       expr: 'max(org_apache_cassandra_metrics_table_tombstone_scanned_histogram)by(table) >= 90000'
       for: 5m
@@ -51,7 +51,7 @@ spec:
         severity: critical
       annotations:
         brief: "Tombstones have a high value {{` {{ $value }} `}} at {{` {{ $labels.table }} `}} which could cause failures."
-        procedure: "Contact NoSQL urgently and create a ticket to them"
+        procedure: "Contact Platform Team urgently and create a ticket to them"
     - alert: CassandraHighWriteLatency
       expr: 'rate(org_apache_cassandra_metrics_table_write_total_latency[5m]) / rate(org_apache_cassandra_metrics_table_write_total_latency[5m]) >= 10000'
       for: 5m
@@ -59,7 +59,7 @@ spec:
         severity: critical
       annotations:
         brief: "WRITE Latency for {{` {{ $labels.table }} `}} in {{` {{ $labels.keyspace }} `}} is currently {{` {{ $value }} `}} us for more than 5 minutes."
-        procedure: "Contact NoSQL urgently and create a ticket to them"
+        procedure: "Contact Platform Team urgently and create a ticket to them"
     - alert: CassandraHighReadLatency
       expr: 'rate(org_apache_cassandra_metrics_table_read_total_latency[5m]) / rate(org_apache_cassandra_metrics_table_read_total_latency[5m]) >= 10000'
       for: 5m
@@ -67,7 +67,7 @@ spec:
         severity: critical
       annotations:
         brief: "READ Latency for {{` {{ $labels.table }} `}} in {{` {{ $labels.keyspace }} `}} is currently {{` {{ $value }} `}} us for more than 5 minutes."
-        procedure: "Contact NoSQL urgently and create a ticket to them"
+        procedure: "Contact Platform Team urgently and create a ticket to them"
     - alert: CassandraClientRequestFailures
       expr: 'irate(org_apache_cassandra_metrics_client_request_failures_total[5m]) > 0'
       for: 5m
@@ -75,7 +75,7 @@ spec:
         severity: warning
       annotations:
         brief: "{{` {{ $value }} `}} failing Cassandra client request have been detected at {{` {{ $labels.instance }} `}}"
-        procedure: "Contact NoSQL team during business hours over a ticket"
+        procedure: "Contact Platform Team during business hours over a ticket"
     - alert: CassandraSevereClientRequestFailures
       expr: 'irate(org_apache_cassandra_metrics_client_request_failures_total[5m]) > 0'
       for: 10m
@@ -85,25 +85,25 @@ spec:
         package: base
       annotations:
         brief: '{{` {{ $value }} `}} failing Cassandra client request have been detected at {{` {{ $labels.instance }} `}} for 10 minutes'
-        procedure: "Contact NoSQL urgently and create a ticket to them"
+        procedure: "Contact Platform Team urgently and create a ticket to them"
     - alert: K8ssandraBackupJobFailed
       annotations:
         brief: K8ssandra Medusa backup job failed in instance  {{` {{ $labels.ref }} `}}
-        procedure: Contact NoSQL team during business hours over a ticket
+        procedure: Contact Platform Team during business hours over a ticket
       expr: 'sum by (name, namespace, ref) (kube_customresource_failedMedusaBackups and on(name, namespace) (kube_customresource_medusaBackupsFinishTime ==scalar(max(kube_customresource_medusaBackupsFinishTime)))) > 0'
       labels:
         severity: critical
     - alert: K8ssandraBackupTooOld
       annotations:
         brief: "The latest finished backup is older than 28 hours."
-        procedure: "Contact NoSQL team during business hours over a ticket"
+        procedure: "Contact Platform Team during business hours over a ticket"
       expr: 'time() - max(kube_customresource_medusaBackupsFinishTime) > 100000'
       labels:
         severity: critical
     - alert: K8ssandraBackupMissingMetrics
       annotations:
         brief: "There are no monitoring metrics for finished K8ssandra backups."
-        procedure: "Contact NoSQL team during business hours over a ticket"
+        procedure: "Contact Platform Team during business hours over a ticket"
       expr: 'absent(kube_customresource_medusaBackupsFinishTime) == 1'
       labels:
         severity: critical
