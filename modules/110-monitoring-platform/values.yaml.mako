@@ -912,7 +912,12 @@ monitoringPlatform:
         - apiGroups: ["medusa.k8ssandra.io"]
           resources: ["medusabackupjobs"]
           verbs: ["list", "watch"]
-        % endif       
+        % endif
+        % if addon_operator['mariadbOperatorPlatformEnabled'] == 'true':
+        - apiGroups: ["k8s.mariadb.com"]
+          resources: ["*"]
+          verbs: ["list", "watch"]
+        % endif
       kubeRBACProxy:
         enabled: false
         % if 'containerRegistryBase' in values['global']:
@@ -925,6 +930,9 @@ monitoringPlatform:
           kind: CustomResourceStateMetrics
           spec:
             resources:
+              % if (addon_operator['kasopePlatformEnabled'] != 'true') and (addon_operator['mariadbOperatorPlatformEnabled'] != 'true'):
+              []
+              % endif
               % if addon_operator['kasopePlatformEnabled'] == 'true':
               - groupVersionKind:
                   group: "medusa.k8ssandra.io"
@@ -956,9 +964,58 @@ monitoringPlatform:
                         path: [status, failed]
                         labelsFromPath:
                           ref: []
-              % else:
-              []   
-              % endif              
+              % endif
+              % if addon_operator['mariadbOperatorPlatformEnabled'] == 'true':
+              - groupVersionKind:
+                  group: "k8s.mariadb.com"
+                  kind: "PhysicalBackup"
+                  version: "v1alpha1"
+                labelsFromPath:
+                  name: [metadata, name]
+                  namespace: [metadata, namespace]
+                metrics:
+                  - name: "finishedMariaDBPhysicalBackups"
+                    help: "Status of the MariaDB Physical backup completion"
+                    each:
+                      type: Info
+                      info:                          
+                        path: [status, conditions]
+                        labelsFromPath:
+                          status: [status]
+                          type: [type]
+                  - name: "MariaDBPhysicalBackupsFinishTime"
+                    help: "The timestamp when the MariaDB Physical backup was last scheduled"
+                    each:
+                      type: Gauge
+                      gauge:
+                        path: [status, lastScheduleTime]
+              - groupVersionKind:
+                  group: "k8s.mariadb.com"
+                  kind: "Backup"
+                  version: "v1alpha1"
+                labelsFromPath:
+                  name: [metadata, name]
+                  namespace: [metadata, namespace]
+                metrics:
+                  - name: "finishedMariaDBLogicalBackups"
+                    help: "Status of the MariaDB Logical backup completion"
+                    each:
+                      type: Info
+                      info:                          
+                        path: [status, conditions]
+                        labelsFromPath:
+                          status: [status]
+                          type: [type]
+                  - name: "MariaDBLogicalBackupsFinishTime"
+                    help: "The timestamp when the MariaDB Logical backup was last scheduled"
+                    each:
+                      type: Gauge
+                      gauge:
+                        path:  [status, conditions, 0, lastTransitionTime]
+                        labelsFromPath:
+                          condition_type: [status, conditions, 0, type]
+                          condition_status: [status, conditions, 0, status]
+              % endif
     thanosRuler:
       thanosRulerSpec:
         % if 'containerRegistryBase' in values['global']:

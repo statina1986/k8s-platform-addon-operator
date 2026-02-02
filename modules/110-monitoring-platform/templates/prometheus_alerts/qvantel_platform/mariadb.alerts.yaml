@@ -19,7 +19,7 @@ spec:
         severity: warning
       annotations:
         brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to Platform Team to be reviewed during business hours"
     - alert: mariadbQLRamRequestedCritical
       expr: 'round(100 * sum by (pod) (container_memory_working_set_bytes{container="mariadb"}) / sum by (pod) (kube_pod_container_resource_requests{container="mariadb",resource="memory"} > 0)) > 90'
       for: 10m
@@ -27,7 +27,7 @@ spec:
         severity: critical
       annotations:
         brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to Platform Team to be reviewed during business hours"
     - alert: mariadbQLCpuRequestedHigh
       expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="mariadb"}[5m])) by (pod) / sum(kube_pod_container_resource_requests{container="mariadb", resource="cpu"}) by (pod)) > 75'
       for: 10m
@@ -35,7 +35,7 @@ spec:
         severity: warning
       annotations:
         brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of CPU requested."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to Platform Team to be reviewed during business hours"
     - alert: mariadbQLCpuRequestedCritical
       expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="mariadb"}[5m])) by (pod) / sum(kube_pod_container_resource_requests{container="mariadb", resource="cpu"}) by (pod)) > 90'
       for: 10m
@@ -43,7 +43,7 @@ spec:
         severity: critical
       annotations:
         brief: "{{` {{ $labels.pod }} `}} is consuming {{` {{ $value }} `}} of RAM requested."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to Platform Team to be reviewed during business hours"
     - alert: NodeMariaDBRamRequestedHigh
       expr: 'round(100 * sum by (instance) (container_memory_working_set_bytes{container="mariadb"}) /  sum(machine_memory_bytes) by(instance)) > 75'
       for: 10m
@@ -51,7 +51,7 @@ spec:
         severity: warning
       annotations:
         brief: "MariaDB service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node RAM assigned."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL to be reviewed during business hours"
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to Platform Team to be reviewed during business hours"
     - alert: NodeMariaDBRamRequestedCritical
       expr: 'round(100 * sum by (instance) (container_memory_working_set_bytes{container="mariadb"}) /  sum(machine_memory_bytes) by(instance)) > 90'
       for: 10m
@@ -59,7 +59,7 @@ spec:
         severity: critical
       annotations:
         brief: "MariaDB service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node RAM assigned."
-        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to SQL and raise the on call roster"
+        procedure: "Check pod RAM consumption comparing to the total node RAM. Create a ticket to Platform Team and raise the on call roster"
     - alert: NodeMariaDBCpuRequestedHigh
       expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="mariadb"}[10m])) by(instance) / sum(machine_cpu_cores) by(instance)) > 75'
       for: 10m
@@ -67,7 +67,7 @@ spec:
         severity: warning
       annotations:
         brief: "MariaDB service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node CPU assigned."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL to be reviewed during business hours"
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to Platform Team to be reviewed during business hours"
     - alert: NodeMariaDBCpuRequestedCritical
       expr: 'round(100 * sum(rate(container_cpu_usage_seconds_total{container="mariadb"}[10m])) by(instance) / sum(machine_cpu_cores) by(instance)) > 90'
       for: 10m
@@ -75,7 +75,7 @@ spec:
         severity: critical
       annotations:
         brief: "MariaDB service in instance {{` {{ $labels.instance }} `}} is consuming {{` {{ $value }} `}} of total Node CPU assigned."
-        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to SQL and raise the on call roster"
+        procedure: "Check pod CPU consumption comparing to the total node CPU. Create a ticket to Platform Team and raise the on call roster"
     - alert: TotalIOPSHigh
       expr: 'max by (pod)(rate(container_fs_reads_total{container="mariadb"}[5m])) + max by (pod)(rate(container_fs_writes_total{container="mariadb"}[5m])) > 2400'
       for: 10m
@@ -83,7 +83,7 @@ spec:
         severity: warning
       annotations:
         brief: "mariaDB service {{` {{ $labels.pod }} `}} is reading/writing {{` {{ $value }} `}} of total IOPS."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: TotalIOPSCritical
       expr: 'max by (pod)(rate(container_fs_reads_total{container="mariadb"}[5m])) + max by (pod)(rate(container_fs_writes_total{container="mariadb"}[5m])) > 2700'
       for: 10m
@@ -91,7 +91,7 @@ spec:
         severity: critical
       annotations:
         brief: "mariaDB service {{` {{ $labels.pod }} `}} is reading/writing {{` {{ $value }} `}} of total IOPS."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: ReadIOPSHigh
       expr: 'max by (pod)(rate(container_fs_reads_total{container="mariadb"}[5m])) > 2400'
       for: 10m
@@ -99,7 +99,7 @@ spec:
         severity: warning
       annotations:
         brief: "mariaDB service {{` {{ $labels.pod }} `}} is reading {{` {{ $value }} `}} of total IOPS."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: ReadIOPSCritical
       expr: 'max by (pod)(rate(container_fs_reads_total{container="mariadb"}[5m])) > 2700'
       for: 10m
@@ -107,7 +107,7 @@ spec:
         severity: critical
       annotations:
         brief: "mariaDB service {{` {{ $labels.pod }} `}} is reading {{` {{ $value }} `}} of total IOPS."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: WriteIOPSHigh
       expr: 'max by (pod)(rate(container_fs_writes_total{container="mariadb"}[5m])) > 2400'
       for: 10m
@@ -115,7 +115,7 @@ spec:
         severity: warning
       annotations:
         brief: "mariaDB service {{` {{ $labels.pod }} `}} is writing {{` {{ $value }} `}} of total IOPS."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: WriteIOPSCritical
       expr: 'max by (pod)(rate(container_fs_writes_total{container="mariadb"}[5m])) > 2700'
       for: 10m
@@ -123,7 +123,7 @@ spec:
         severity: critical
       annotations:
         brief: "mariaDB service {{` {{ $labels.pod }} `}} is writing {{` {{ $value }} `}} of total IOPS."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: MariaDBQPSHigh
       expr: 'sum(rate(mysql_global_status_queries[10m])) by(target) > 2000 '
       for: 10m
@@ -131,7 +131,7 @@ spec:
         severity: warning
       annotations:
         brief: "MariaDB service {{` {{ $labels.instance }} `}} is receiving {{` {{ $value }} `}} request for information per second."
-        procedure: "Create a ticket to SQL team to be reviewed during business hours"
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
     - alert: MariaDBQPSCritical
       expr: 'sum(rate(mysql_global_status_queries[10m])) by(target) > 2500 '
       for: 10m
@@ -139,7 +139,7 @@ spec:
         severity: critical
       annotations:
         brief: "MariaDB service {{` {{ $labels.instance }} `}} is receiving {{` {{ $value }} `}} request for information per second."
-        procedure: "Create a ticket to SQL team and raise the on call to review the case"
+        procedure: "Create a ticket to Platform Team and raise the on call to review the case"
     - alert: MariaDBLockTablesHigh
       expr: '(rate(mysql_global_status_table_locks_immediate[10m])) > 5'
       for: 5m
@@ -147,7 +147,7 @@ spec:
         severity: warning
       annotations:
         brief: "There are over 5 Lock tables in {{` {{ $labels.pod }} `}} in the last 10 minutes."
-        procedure: "Create a ticket to SQL team to be reviewed during business hours"
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
     - alert: MariaDBLockTablesCritical
       expr: '(rate(mysql_global_status_table_locks_immediate[10m])) > 10'
       for: 5m
@@ -155,7 +155,7 @@ spec:
         severity: critical
       annotations:
         brief: "There are over 10 Lock tables in {{` {{ $labels.pod }} `}} in the last 10 minutes."
-        procedure: "Create a ticket to SQL team and raise the on call to review the case"
+        procedure: "Create a ticket to Platform Team and raise the on call to review the case"
     - alert: MariaDBDeadLockHigh
       expr: '(rate(mysql_global_status_innodb_deadlocks[10m])) > 5'
       for: 5m
@@ -163,7 +163,7 @@ spec:
         severity: warning
       annotations:
         brief: "There are over 5 Dead locks in {{` {{ $labels.pod }} `}} in the last 10 minutes."
-        procedure: "Create a ticket to SQL team to be reviewed during business hours"
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
     - alert: MariaDBDeadLockritical
       expr: '(rate(mysql_global_status_innodb_deadlocks[10m])) > 10'
       for: 5m
@@ -171,7 +171,7 @@ spec:
         severity: critical
       annotations:
         brief: "There are over 10 Dead locks in {{` {{ $labels.pod }} `}} in the last 10 minutes."
-        procedure: "Create a ticket for SQL to be checked during business hours"        
+        procedure: "Create a ticket for Platform Team to be checked during business hours"        
     - alert: MariaDBConnectionsHigh
       expr: '100 * sum by (pod) (mysql_global_status_max_used_connections) / sum by (pod) (mysql_global_variables_max_connections) > 75'
       for: 5m
@@ -179,7 +179,7 @@ spec:
         severity: warning
       annotations:
         brief: "Connections in {{` {{ $labels.pod }} `}} are over {{` {{ $value }} `}} percentage."
-        procedure: "Create a ticket to SQL team to be reviewed during business hours"
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
     - alert: MariaDBConnectionsCritical
       expr: '100 * sum by (pod) (mysql_global_status_max_used_connections) / sum by (pod) (mysql_global_variables_max_connections) > 90'
       for: 5m
@@ -187,7 +187,7 @@ spec:
         severity: critical
       annotations:
         brief: "Connections in {{` {{ $labels.pod }} `}} are over {{` {{ $value }} `}} percentage."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: MariaDBSlowQueriesHigh
       expr: 'increase(mysql_global_status_slow_queries[1m]) > 5'
       for: 2m
@@ -195,7 +195,7 @@ spec:
         severity: warning
       annotations:
         brief: "MariaDB slow queries {{` {{ $value }} `}} in instance {{` {{ $labels.pod }} `}}."
-        procedure: "Create a ticket to SQL team to be reviewed during business hours"
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"
     - alert: MariaDBSlowQueriesCritical
       expr: 'increase(mysql_global_status_slow_queries[1m]) > 10'
       for: 2m
@@ -203,7 +203,7 @@ spec:
         severity: critical
       annotations:
         brief: "MariaDB slow queries {{` {{ $value }} `}} in instance {{` {{ $labels.pod }} `}}."
-        procedure: "Create a ticket to SQL team to be reviewed during business hours"       
+        procedure: "Create a ticket to Platform Team to be reviewed during business hours"       
     - alert: MariaDBReplicationLagHigh
       expr: 'mysql_slave_status_seconds_behind_master > 180'
       for: 5m
@@ -211,7 +211,7 @@ spec:
         severity: warning
       annotations:
         brief: "Standby is lagging behind by over 3 minutes in Pod {{` {{ $labels.pod }} `}}."
-        procedure: "Create a ticket for SQL to be checked during business hours"
+        procedure: "Create a ticket for Platform Team to be checked during business hours"
     - alert: MariaDBRestartBusinessHours
       expr: '1 <= (sum by (container, pod, namespace) (clamp_max(label_replace(time() - max_over_time(container_last_seen{container="mariadb"}[15m]) > 120, "container", "$1", "container", "([^\\.]+).*"), 1)) AND ON() hour() > 8 < 20) < 3'
       for: 5m
@@ -235,7 +235,7 @@ spec:
         severity: critical
       annotations:
         brief: "Instance service {{` {{ $labels.service_name }} `}} {{` {{ $labels.service_id}} `}} has been down for more than 1 minute"
-        procedure: "Create a ticket to SQL and raise the on call roster"
+        procedure: "Create a ticket to Platform Team and raise the on call roster"
     - alert: MariaDBMetricsAbsent
       expr: 'absent(mysql_global_status_max_used_connections) == 1'
       for: 5m
@@ -244,4 +244,46 @@ spec:
       annotations:
         brief: "MariaDB metrics are not being scrapped."
         procedure: "Create a ticket to Platform Team to be reviewed during business hours"
+    - alert: MariaDBPhysicalBackupJobFailed
+      annotations:
+        brief: MariaDB backup job failed
+        procedure: Contact Platform Team during business hours over a ticket
+      expr: 'sum by (name, namespace, status) (kube_customresource_finishedMariaDBPhysicalBackups{type="Complete", status="False"} and on(name, namespace) (kube_customresource_MariaDBPhysicalBackupsFinishTime == scalar(max(kube_customresource_MariaDBPhysicalBackupsFinishTime))))'
+      labels:
+        severity: critical
+    - alert: MariaDBPhysicalBackupTooOld
+      annotations:
+        brief: "The latest finished backup is older than 28 hours."
+        procedure: "Contact Platform Team during business hours over a ticket"
+      expr: 'time() - max(kube_customresource_MariaDBPhysicalBackupsFinishTime) > 100000'
+      labels:
+        severity: critical
+    - alert: MariaDBPhysicalBackupMissingMetrics
+      annotations:
+        brief: "There are no monitoring metrics for finished MariaDB Physical backups."
+        procedure: "Contact Platform Team during business hours over a ticket"
+      expr: 'absent(kube_customresource_MariaDBPhysicalBackupsFinishTime) == 1'
+      labels:
+        severity: critical
+    - alert: MariaDBLogicalBackupJobFailed
+      annotations:
+        brief: MariaDB backup job failed
+        procedure: Contact Platform Team during business hours over a ticket
+      expr: 'sum by (name, namespace, status) (kube_customresource_finishedMariaDBLogicalBackups{type="Complete", status="False"} and on(name, namespace) (kube_customresource_MariaDBLogicalBackupsFinishTime == scalar(max(kube_customresource_MariaDBLogicalBackupsFinishTime))))'
+      labels:
+        severity: critical
+    - alert: MariaDBLogicalBackupTooOld
+      annotations:
+        brief: "The latest finished backup is older than 28 hours."
+        procedure: "Contact Platform Team during business hours over a ticket"
+      expr: 'time() - max(kube_customresource_MariaDBLogicalBackupsFinishTime) > 100000'
+      labels:
+        severity: critical
+    - alert: MariaDBLogicalBackupMissingMetrics
+      annotations:
+        brief: "There are no monitoring metrics for finished MariaDB Logical backups."
+        procedure: "Contact Platform Team during business hours over a ticket"
+      expr: 'absent(kube_customresource_MariaDBLogicalBackupsFinishTime) == 1'
+      labels:
+        severity: critical
 {{- end }}
