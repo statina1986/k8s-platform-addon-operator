@@ -915,7 +915,7 @@ monitoringPlatform:
         % endif
         % if addon_operator['mariadbOperatorPlatformEnabled'] == 'true':
         - apiGroups: ["k8s.mariadb.com"]
-          resources: ["physicalbackup"]
+          resources: ["*"]
           verbs: ["list", "watch"]
         % endif
       kubeRBACProxy:
