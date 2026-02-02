@@ -1899,6 +1899,24 @@
                                             "required": [],
                                             "title": "name",
                                             "type": "array"
+                                          },
+                                          "namespace": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "namespace",
+                                            "type": "array"
                                           }
                                         },
                                         "required": [],

@@ -240,7 +240,7 @@ awsPlatform:
   awsKubeProxyEnabled: false
   # -- Configuration for EKS kube-proxy. 
   awsKubeProxy:
-    # -- Mako templating to match kube-proxy image to recommended as of 16th of Dec 2025
+    # -- Mako templating to match kube-proxy image to recommended as of 2nd of Feb 2026
     # https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html#managing-kube-proxy-images
     % if values['global']['kubernetesVersion'] in {'1.28'}:
     image: "v1.28.15-minimal-eksbuild.31"
@@ -256,6 +256,8 @@ awsPlatform:
     image: "v1.33.5-minimal-eksbuild.2"
     % elif values['global']['kubernetesVersion'] in {'1.34'}:
     image: "v1.34.1-eksbuild.2"
+    % elif values['global']['kubernetesVersion'] in {'1.35'}:
+    image: "v1.35.0-eksbuild.2"
     % else:
     image: "v1.28.15-minimal-eksbuild.31"
     % endif
