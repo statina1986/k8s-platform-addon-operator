@@ -3,6 +3,7 @@
 {{- if .Values.istioIngress.virtualServices.instances }}
 {{- $root := . }}
 {{- range keys .Values.istioIngress.virtualServices.instances  }}
+{{- $name := . }}
 {{- $current := get $.Values.istioIngress.virtualServices.instances . }}
 {{- if $current.enabled }}
 ---
@@ -31,15 +32,26 @@ spec:
   {{- end }}
   {{- with $current.http }}
   http:
+    {{- if $current.acmeResolver }}
+    - match:
+        - uri:
+            prefix: /.well-known/acme-challenge/
+      route:
+        - destination:
+            host: {{ default (printf "%s-acme-solver.%s.svc.cluster.local" $name $.Release.Namespace) $current.acmeSolverHost }}
+            port:
+              number: {{ default 8089 $current.acmeSolverPort }}
+    {{- end }}
+
     {{- if and $root.Values.istioIngress.pomeriumEnabled $current.pomeriumProtected }}
     - route:
-      - destination:
-          host: {{ $.Values.global.helmReleaseNamePrefix }}pomerium-platform-proxy.{{ $.Release.Namespace }}.svc.cluster.local
-          port:
-            number: 80
+        - destination:
+            host: {{ $.Values.global.helmReleaseNamePrefix }}pomerium-platform-proxy.{{ $.Release.Namespace }}.svc.cluster.local
+            port:
+              number: 80
     {{- else }}
-    {{- tpl (toYaml .) $root | nindent 2 }}
-    {{ end }}
+    {{- tpl (toYaml .) $root | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- with $current.tcp }}
   tcp: 

@@ -886,6 +886,58 @@ List of  `VirtualService` resources to be provisioned. It is a map, so it can be
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;" id="istioIngress--virtualServices--instances--address-manager--acmeResolver">istioIngress.virtualServices.instances.address-manager.acmeResolver</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>false</code></pre>
+</td>
+			<td><div>
+
+To enable path in VS to resolver service and deploy the service, see [acme-solver-service](templates/acme-solver-service.yaml)
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--virtualServices--instances--address-manager--acmeSolverHost">istioIngress.virtualServices.instances.address-manager.acmeSolverHost</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>""</code></pre>
+</td>
+			<td><div>
+
+Override servicename of ACME solver service, by default it is {{ virtualservice-name }}-acme-solver
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--virtualServices--instances--address-manager--acmeSolverPort">istioIngress.virtualServices.instances.address-manager.acmeSolverPort</td>
+			<td>int</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>8089</code></pre>
+</td>
+			<td><div>
+
+Override port of ACME solver service, by default it is 8089
+
+</div>
+</td>
+		</tr>
+		<tr>
+			<td style="width: 300px;" id="istioIngress--virtualServices--instances--address-manager--acmeSolverSelector">istioIngress.virtualServices.instances.address-manager.acmeSolverSelector</td>
+			<td>string</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>""</code></pre>
+</td>
+			<td><div>
+
+What selector to add to the ACME solver service, should match what is configured under cert issuer, see: https://cert-manager.io/v1.1-docs/configuration/acme/http01/#podtemplate
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="istioIngress--virtualServices--platformNamespace">istioIngress.virtualServices.platformNamespace</td>
 			<td>string</td>
 			<td>

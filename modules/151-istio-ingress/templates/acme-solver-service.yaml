@@ -1,0 +1,27 @@
+{{- if .Values.istioIngress }}
+{{- if .Values.istioIngress.virtualServices }}
+{{- if .Values.istioIngress.virtualServices.instances }}
+{{- $root := . }}
+{{- range $name, $current := .Values.istioIngress.virtualServices.instances }}
+
+{{- if and $current.enabled $current.acmeResolver }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}-acme-solver
+spec:
+  selector:
+    acme-solver: {{ quote $current.acmeSolverSelector }}
+  ports:
+    - name: http
+      port: {{ default 8089 $current.acmeSolverPort }}
+      targetPort: {{ default 8089 $current.acmeSolverPort }}
+  type: ClusterIP
+
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

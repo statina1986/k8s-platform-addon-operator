@@ -3383,6 +3383,34 @@
                 "address-manager": {
                   "description": "Product managed services    ",
                   "properties": {
+                    "acmeResolver": {
+                      "default": false,
+                      "description": "Example of ACME Resolver settings, can be set under any VirtualService\nTo enable path in VS to resolver service and deploy the service, see [acme-solver-service](templates/acme-solver-service.yaml)",
+                      "required": [],
+                      "title": "acmeResolver",
+                      "type": "boolean"
+                    },
+                    "acmeSolverHost": {
+                      "default": "",
+                      "description": "Override servicename of ACME solver service, by default it is {{ virtualservice-name }}-acme-solver",
+                      "required": [],
+                      "title": "acmeSolverHost",
+                      "type": "string"
+                    },
+                    "acmeSolverPort": {
+                      "default": 8089,
+                      "description": "Override port of ACME solver service, by default it is 8089",
+                      "required": [],
+                      "title": "acmeSolverPort",
+                      "type": "integer"
+                    },
+                    "acmeSolverSelector": {
+                      "default": "",
+                      "description": "What selector to add to the ACME solver service, should match what is configured under cert issuer, see: https://cert-manager.io/v1.1-docs/configuration/acme/http01/#podtemplate",
+                      "required": [],
+                      "title": "acmeSolverSelector",
+                      "type": "string"
+                    },
                     "enabled": {
                       "default": false,
                       "required": [],
