@@ -402,7 +402,7 @@ keycloakPlatform:
   deployment:
     additionalLabels: null
     healthPort: 9000
-    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.4.7.1.20251202140222_master_a55cfc30
+    image: ${keycloakRegistry}/qvaa-keycloak-qrp-postgres-quarkus:26.5.4.1.20260223090358_master_5d24b362
     # command: [ "some-command" ]
     # args: [ "--some-option" ]
     % if values['global']['configurationProfile'] in {'perf', 'prod'}:

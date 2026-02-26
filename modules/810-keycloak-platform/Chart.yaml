@@ -4,6 +4,6 @@ version: 0.0.1
 annotations:
   images: |
     - name: keycloak
-      image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:26.4.7.1.20251202140222_master_a55cfc30
+      image: artifactory.qvantel.net/qvaa-keycloak-qrp-postgres-quarkus:26.5.4.1.20260223090358_master_5d24b362
     - name: keycloak-configurator
       image: artifactory.qvantel.net/keycloak-configurator-standalone:1.20.7.20251230135611_develop_58aee552

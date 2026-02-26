@@ -297,7 +297,7 @@ Keycloak configurator settings
 <pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>additionalLabels: null
 cpu: 100m
 healthPort: 9000
-image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/qvaa-keycloak-qrp-postgres-quarkus:26.4.7.1.20251202140222_master_a55cfc30
+image: platform.artifactory.qvantel.net/k8s-platform-1-2-0/qvaa-keycloak-qrp-postgres-quarkus:26.5.4.1.20260223090358_master_5d24b362
 maxMetaspace: 256m
 memory: 1G
 metaspace: 256m
