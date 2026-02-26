@@ -7,7 +7,7 @@ ARG TARGETARCH
 
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
-RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-mysqlclient py3-psycopg2 py3-kubernetes py3-gevent
+RUN apk --update --no-cache add python3 py3-pip curl aws-cli py3-setuptools py3-mysqlclient py3-psycopg2 py3-kubernetes py3-gevent
 
 RUN pip3 install "hvac[parser]"
 RUN pip3 install boto3
@@ -15,7 +15,7 @@ RUN pip3 install python-json-logger
 RUN pip3 install pyyaml
 RUN pip3 install mako
 RUN pip3 install py-consul
-RUN pip3 install cassandra-driver
+RUN pip3 install --no-build-isolation cassandra-driver
 
 # Copy rabbitmqadmin
 COPY --from=rabbitmqadmin /out/bin/rabbitmqadmin /bin/rabbitmqadmin
