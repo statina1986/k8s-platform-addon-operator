@@ -1031,6 +1031,15 @@ istioIngress:
       # Product managed services    
       address-manager:
         enabled: false
+        # -- Example of ACME Resolver settings, can be set under any VirtualService
+        # -- To enable path in VS to resolver service and deploy the service, see [acme-solver-service](templates/acme-solver-service.yaml)
+        acmeResolver: false
+        # -- What selector to add to the ACME solver service, should match what is configured under cert issuer, see: https://cert-manager.io/v1.1-docs/configuration/acme/http01/#podtemplate
+        acmeSolverSelector: ""
+        # -- Override servicename of ACME solver service, by default it is {{ virtualservice-name }}-acme-solver
+        acmeSolverHost: ""
+        # -- Override port of ACME solver service, by default it is 8089
+        acmeSolverPort: 8089
         gateways:
         - ${values['global']['helmReleaseNamePrefix']}private-ingress
         http:

@@ -2134,6 +2134,535 @@
                                     },
                                     "required": [],
                                     "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "groupVersionKind": {
+                                        "properties": {
+                                          "group": {
+                                            "default": "k8s.mariadb.com",
+                                            "required": [],
+                                            "title": "group",
+                                            "type": "string"
+                                          },
+                                          "kind": {
+                                            "default": "PhysicalBackup",
+                                            "required": [],
+                                            "title": "kind",
+                                            "type": "string"
+                                          },
+                                          "version": {
+                                            "default": "v1alpha1",
+                                            "required": [],
+                                            "title": "version",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "groupVersionKind",
+                                        "type": "object"
+                                      },
+                                      "labelsFromPath": {
+                                        "properties": {
+                                          "name": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "name",
+                                            "type": "array"
+                                          },
+                                          "namespace": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "namespace",
+                                            "type": "array"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "labelsFromPath",
+                                        "type": "object"
+                                      },
+                                      "metrics": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "info": {
+                                                      "properties": {
+                                                        "labelsFromPath": {
+                                                          "properties": {
+                                                            "status": {
+                                                              "items": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  }
+                                                                ],
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "status",
+                                                              "type": "array"
+                                                            },
+                                                            "type": {
+                                                              "items": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  }
+                                                                ],
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "type",
+                                                              "type": "array"
+                                                            }
+                                                          },
+                                                          "required": [],
+                                                          "title": "labelsFromPath",
+                                                          "type": "object"
+                                                        },
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "info",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Info",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "Status of the MariaDB Physical backup completion",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "finishedMariaDBPhysicalBackups",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "gauge": {
+                                                      "properties": {
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "gauge",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Gauge",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "The timestamp when the MariaDB Physical backup was last scheduled",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "MariaDBPhysicalBackupsFinishTime",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "metrics",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "properties": {
+                                      "groupVersionKind": {
+                                        "properties": {
+                                          "group": {
+                                            "default": "k8s.mariadb.com",
+                                            "required": [],
+                                            "title": "group",
+                                            "type": "string"
+                                          },
+                                          "kind": {
+                                            "default": "Backup",
+                                            "required": [],
+                                            "title": "kind",
+                                            "type": "string"
+                                          },
+                                          "version": {
+                                            "default": "v1alpha1",
+                                            "required": [],
+                                            "title": "version",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "groupVersionKind",
+                                        "type": "object"
+                                      },
+                                      "labelsFromPath": {
+                                        "properties": {
+                                          "name": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "name",
+                                            "type": "array"
+                                          },
+                                          "namespace": {
+                                            "items": {
+                                              "anyOf": [
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "required": [],
+                                                  "type": "string"
+                                                }
+                                              ],
+                                              "required": []
+                                            },
+                                            "required": [],
+                                            "title": "namespace",
+                                            "type": "array"
+                                          }
+                                        },
+                                        "required": [],
+                                        "title": "labelsFromPath",
+                                        "type": "object"
+                                      },
+                                      "metrics": {
+                                        "items": {
+                                          "anyOf": [
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "info": {
+                                                      "properties": {
+                                                        "labelsFromPath": {
+                                                          "properties": {
+                                                            "status": {
+                                                              "items": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  }
+                                                                ],
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "status",
+                                                              "type": "array"
+                                                            },
+                                                            "type": {
+                                                              "items": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  }
+                                                                ],
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "type",
+                                                              "type": "array"
+                                                            }
+                                                          },
+                                                          "required": [],
+                                                          "title": "labelsFromPath",
+                                                          "type": "object"
+                                                        },
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "info",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Info",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "Status of the MariaDB Logical backup completion",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "finishedMariaDBLogicalBackups",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "properties": {
+                                                "each": {
+                                                  "properties": {
+                                                    "gauge": {
+                                                      "properties": {
+                                                        "labelsFromPath": {
+                                                          "properties": {
+                                                            "condition_status": {
+                                                              "items": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "integer"
+                                                                  },
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  }
+                                                                ],
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "condition_status",
+                                                              "type": "array"
+                                                            },
+                                                            "condition_type": {
+                                                              "items": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "integer"
+                                                                  },
+                                                                  {
+                                                                    "required": [],
+                                                                    "type": "string"
+                                                                  }
+                                                                ],
+                                                                "required": []
+                                                              },
+                                                              "required": [],
+                                                              "title": "condition_type",
+                                                              "type": "array"
+                                                            }
+                                                          },
+                                                          "required": [],
+                                                          "title": "labelsFromPath",
+                                                          "type": "object"
+                                                        },
+                                                        "path": {
+                                                          "items": {
+                                                            "anyOf": [
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "integer"
+                                                              },
+                                                              {
+                                                                "required": [],
+                                                                "type": "string"
+                                                              }
+                                                            ],
+                                                            "required": []
+                                                          },
+                                                          "required": [],
+                                                          "title": "path",
+                                                          "type": "array"
+                                                        }
+                                                      },
+                                                      "required": [],
+                                                      "title": "gauge",
+                                                      "type": "object"
+                                                    },
+                                                    "type": {
+                                                      "default": "Gauge",
+                                                      "required": [],
+                                                      "title": "type",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [],
+                                                  "title": "each",
+                                                  "type": "object"
+                                                },
+                                                "help": {
+                                                  "default": "The timestamp when the MariaDB Logical backup was last scheduled",
+                                                  "required": [],
+                                                  "title": "help",
+                                                  "type": "string"
+                                                },
+                                                "name": {
+                                                  "default": "MariaDBLogicalBackupsFinishTime",
+                                                  "required": [],
+                                                  "title": "name",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [],
+                                              "type": "object"
+                                            }
+                                          ],
+                                          "required": []
+                                        },
+                                        "required": [],
+                                        "title": "metrics",
+                                        "type": "array"
+                                      }
+                                    },
+                                    "required": [],
+                                    "type": "object"
                                   }
                                 ],
                                 "required": []
@@ -2207,6 +2736,58 @@
                     "extraRules": {
                       "items": {
                         "anyOf": [
+                          {
+                            "properties": {
+                              "apiGroups": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "apiGroups",
+                                "type": "array"
+                              },
+                              "resources": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "resources",
+                                "type": "array"
+                              },
+                              "verbs": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    },
+                                    {
+                                      "required": [],
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "verbs",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
                           {
                             "properties": {
                               "apiGroups": {
