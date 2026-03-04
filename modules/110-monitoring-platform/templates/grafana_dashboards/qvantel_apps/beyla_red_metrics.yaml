@@ -1,5 +1,5 @@
 ---
-{{- if $.Values.monitoringPlatform.beyla }}
+{{- if (index .Values.monitoringPlatform "beyla").enabled }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
