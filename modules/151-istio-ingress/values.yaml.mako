@@ -2112,15 +2112,7 @@ istioIngress:
                 number: 80
         - match:
           - uri:
-              prefix: /auth/realms/qvantel/
-          route:
-          - destination:
-              host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
-              port:
-                number: 80
-        - match:
-          - uri:
-              prefix: /auth/realms/consumers/
+              regex: ^/auth/realms/(bss|consumers|partners|platform|qvantel)
           route:
           - destination:
               host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
