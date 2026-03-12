@@ -132,6 +132,7 @@ spec:
 ---
 {{- if $cluster.mainCassandraCluster }}
 {{- $main := $cluster.mainCassandraCluster }}
+{{- $clusterNameOrDefault := nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
 
 apiVersion: v1
 kind: Service
@@ -169,7 +170,7 @@ spec:
       protocol: TCP
       targetPort: 9160
   selector:
-    cassandra.datastax.com/cluster: {{ $dbClusterName }}
+    cassandra.datastax.com/cluster: {{ $clusterNameOrDefault }}
     cassandra.datastax.com/datacenter: {{ $dataCenter.metadata.name  }}
   sessionAffinity: None
   type: ClusterIP
