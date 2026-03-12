@@ -423,13 +423,65 @@ monitoringPlatform:
   kube-prometheus-stack:
     enabled: true
     fullnameOverride: ${values['global']['helmReleaseNamePrefix']}monitoring-platform
-    % if values['global']['namespaceRestricted'] == "true":
     kubelet:
       serviceMonitor:
+        % if values['global']['namespaceRestricted'] == "true":    
         cAdvisorMetricRelabelings:
           - sourceLabels: [ namespace ]
             regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
             action: keep
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total)'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_memory_(mapped_file|swap)'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_(file_descriptors|tasks_state|threads_max)'
+          - sourceLabels: [__name__, scope]
+            action: drop
+            regex: 'container_memory_failures_total;hierarchy'
+          - sourceLabels: [__name__, interface]
+            action: drop
+            regex: 'container_network_.*;(cali|cilium|cni|lxc|nodelocaldns|tunl).*'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_spec.*'
+          - sourceLabels: [id, pod]
+            action: drop
+            regex: '.+;'
+        % else:
+        cAdvisorMetricRelabelings:
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_cpu_(cfs_throttled_seconds_total|load_average_10s|system_seconds_total)'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_memory_(mapped_file|swap)'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_(file_descriptors|tasks_state|threads_max)'
+          - sourceLabels: [__name__, scope]
+            action: drop
+            regex: 'container_memory_failures_total;hierarchy'
+          - sourceLabels: [__name__, interface]
+            action: drop
+            regex: 'container_network_.*;(cali|cilium|cni|lxc|nodelocaldns|tunl).*'
+          - sourceLabels: [__name__]
+            action: drop
+            regex: 'container_spec.*'
+          - sourceLabels: [id, pod]
+            action: drop
+            regex: '.+;'
+        % endif
+        % if values['global']['namespaceRestricted'] == "true":
         cAdvisorRelabelings:
           - sourceLabels: [__meta_kubernetes_namespace]
             separator: ;
@@ -444,6 +496,9 @@ monitoringPlatform:
           - sourceLabels: [ namespace ]
             regex: (${values['global']['platformNamespace']}|${values['global']['appsNamespace']})
             action: keep
+          - action: drop
+            sourceLabels: [__name__, le]
+            regex: (csi_operations|storage_operation_duration)_seconds_bucket;(0.25|2.5|15|25|120|600)(\.0)?
         relabelings:
           - sourceLabels: [__meta_kubernetes_namespace]
             separator: ;
@@ -454,7 +509,7 @@ monitoringPlatform:
           - sourceLabels: [__metrics_path__]
             targetLabel: metrics_path
             action: replace
-    % endif
+        % endif
     % if values['global']['clusterwideResources'] == "false":
     crds:
       enabled: false
