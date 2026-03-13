@@ -14,6 +14,7 @@ import base64
 {{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) ($dbCluster.cluster | default (dict) | deepCopy) }}
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.cassandra.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) $cluster }}
+{{- $clusterNameOrDefault := nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
 
 ### Cassandra cluster resource
 ---
@@ -132,7 +133,7 @@ spec:
 ---
 {{- if $cluster.mainCassandraCluster }}
 {{- $main := $cluster.mainCassandraCluster }}
-{{- $clusterNameOrDefault := nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
+
 
 apiVersion: v1
 kind: Service
@@ -195,12 +196,12 @@ spec:
     protocol: TCP
     targetPort: 9142
   selector:
-    cassandra.datastax.com/cluster: {{ $dbClusterName }}
+    cassandra.datastax.com/cluster: {{ $clusterNameOrDefault }}
     cassandra.datastax.com/datacenter: {{ $dataCenter.metadata.name }}
 {{- if $dataCenter.racks }}
-    statefulset.kubernetes.io/pod-name: {{ lower $dbClusterName }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
+    statefulset.kubernetes.io/pod-name: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
 {{- else }}    
-    statefulset.kubernetes.io/pod-name: {{ lower $dbClusterName }}-{{ $dataCenter.metadata.name  }}-default-sts-0
+    statefulset.kubernetes.io/pod-name: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name  }}-default-sts-0
 {{- end }}
 {{- end }}
 ---
@@ -217,14 +218,14 @@ spec:
   plugin-name: cassandra-database-plugin
   allowed-roles: '*'  
   additional-params:
-    hosts: {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+    hosts: {{ $lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
     protocol_version: "4"
     username_template: >-
       {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
   computed-values:
-  - expression: k8s_get_secret_value('{{ $dbClusterName }}-superuser','{{ $.Release.Namespace }}','username')
+  - expression: k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser','{{ $.Release.Namespace }}','username')
     name: secret-username
-  - expression: k8s_get_secret_value('{{ $dbClusterName }}-superuser','{{ $.Release.Namespace }}','password')
+  - expression: k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-username: '{secret-username}'
   db-password: '{secret-password}'
@@ -294,12 +295,12 @@ spec:
   {{ end }}
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  db-url: {{ $lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
 ### If additional roles defined for cluster
 {{- if $cluster.roles }}
@@ -348,12 +349,12 @@ spec:
     {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  db-url: {{ $lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 {{- end }}
 {{- end }}
 
