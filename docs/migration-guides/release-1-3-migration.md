@@ -209,7 +209,7 @@ Default cluster definitions were updated to be Galera cluster with max-scale. Ex
        mariadb-dump -uroot -p --single-transaction --routines --triggers --events  --databases address b2b_sales_tool catalog_designer cdt cdt_backend cdt_lists crm_orchestration keycloak marketing_bpmn_executor marketingstorage message_manager_wui mnpservice mockoss sales_and_care_bpmn_executor tug_wui webdb | gzip > mmlyle-devint-all-mar11.sql.gz
        ```
   2. Remove the cluster, old PVCs and MaxScale resources. Make sure that no old resources are left.
-  3. Deploy new empty cluster from the qvantel-glue module. Cluster must be empty as you will have to restore the cluster from the backup. Check the healhiness of MacScale and check that Vault DB connection is successful.
+  3. Deploy new empty cluster from the qvantel-glue module. Cluster must be empty as you will have to restore the cluster from the backup. Check the healthiness of Maxscale and check that Vault DB connection is successful.
   4. Restore: By bootstrapping into the empty cluster from the backups.
       - example from mmlyle-devint: 
      ```yaml
