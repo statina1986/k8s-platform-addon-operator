@@ -4745,87 +4745,10 @@
                                       "properties": {
                                         "uri": {
                                           "properties": {
-                                            "prefix": {
-                                              "default": "/auth/realms/qvantel/",
+                                            "regex": {
+                                              "default": "^/auth/realms/(bss|consumers|partners|platform|qvantel)(/.*)?$",
                                               "required": [],
-                                              "title": "prefix",
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "uri",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "qvaa-proxy-80.platform.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 80,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "uri": {
-                                          "properties": {
-                                            "prefix": {
-                                              "default": "/auth/realms/consumers/",
-                                              "required": [],
-                                              "title": "prefix",
+                                              "title": "regex",
                                               "type": "string"
                                             }
                                           },

@@ -2112,7 +2112,7 @@ istioIngress:
                 number: 80
         - match:
           - uri:
-              regex: ^/auth/realms/(bss|consumers|partners|platform|qvantel)
+              regex: "^/auth/realms/(bss|consumers|partners|platform|qvantel)(/.*)?$"
           route:
           - destination:
               host: qvaa-proxy-80.${values['global']['platformNamespace']}.svc.cluster.local
