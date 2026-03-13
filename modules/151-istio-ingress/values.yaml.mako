@@ -410,9 +410,6 @@ istioIngress:
       - name: bss-integrator-mobile-id-api-v1
         port: 2050
         targetPort: 2050
-      - name: bss-integrator-mobile-id-api-v2
-        port: 2055
-        targetPort: 2055
       - name: bss-integrator-pyprov-network-listener-api
         port: 2065
         targetPort: 2065
@@ -509,15 +506,6 @@ istioIngress:
         port:
           name: public-bss-integrator-mobile-id-api-v1
           number: 2050
-          protocol: HTTPS
-        tls:
-          credentialName: ingress-cert-dna
-          mode: SIMPLE
-      - hosts:
-          - '*'
-        port:
-          name: public-bss-integrator-mobile-id-api-v2
-          number: 2055
           protocol: HTTPS
         tls:
           credentialName: ingress-cert-dna
@@ -814,7 +802,6 @@ istioIngress:
           - 2035
           - 2045
           - 2050
-          - 2055
           - 2065
           - 2075
           - 2085
@@ -1897,13 +1884,6 @@ istioIngress:
           route:
             - destination:
                 host: dnapy-api-mobile-id.qvantel.svc.cluster.local
-                port:
-                  number: 8080
-        - match:
-          - port: 2055
-          route:
-            - destination:
-                host: mobile-id-app-api.qvantel.svc.cluster.local
                 port:
                   number: 8080
         - match:

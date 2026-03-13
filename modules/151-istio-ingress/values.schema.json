@@ -1377,10 +1377,6 @@
                               {
                                 "required": [],
                                 "type": "integer"
-                              },
-                              {
-                                "required": [],
-                                "type": "integer"
                               }
                             ],
                             "required": []
@@ -5767,76 +5763,6 @@
                                           "properties": {
                                             "host": {
                                               "default": "dnapy-api-mobile-id.qvantel.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 8080,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 2055,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "mobile-id-app-api.qvantel.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
