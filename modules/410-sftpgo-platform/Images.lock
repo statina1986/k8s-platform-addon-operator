@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-12-08T12:39:23.6021923Z"
+  generatedAt: "2026-03-13T08:07:47.665227021Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: sftpgo-platform
@@ -23,4 +23,12 @@ images:
       - digest: sha256:4a5bf79ce50a7815842c126a7026d7980adc503792facb2f6899a29eeabf552b
         arch: linux/amd64
       - digest: sha256:94bf858a3a97344f909841e81c577068cf76f6d370ecd28bcc208d91517cb4c6
+        arch: linux/arm64
+  - name: sftpgo
+    image: ghcr.io/drakkan/sftpgo:v2.5.4
+    chart: sftpgo-platform
+    digests:
+      - digest: sha256:432700195d5b163f149af47d86be4e294e032e5cf57a88df3f51e2ab0a08258e
+        arch: linux/amd64
+      - digest: sha256:f3ddf08c355335dedbd189a618a1f219eecca635781bc44a6f4fc95e35979e23
         arch: linux/arm64

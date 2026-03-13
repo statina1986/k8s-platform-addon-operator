@@ -2,11 +2,13 @@ apiVersion: v2
 name: sftpgo-platform
 version: 0.0.1
 dependencies:
-  - name: sftpgoPlatform
-    version: 0.0.1
+- name: sftpgoPlatform
+  version: 0.0.1
 annotations:
   images: |
     - name: sftpgo
       image: ghcr.io/drakkan/sftpgo:v2.7.0
     - name: sftpgo-alpine
       image: ghcr.io/drakkan/sftpgo:v2.7.0-alpine
+    - name: sftpgo
+      image: ghcr.io/drakkan/sftpgo:v2.5.4
