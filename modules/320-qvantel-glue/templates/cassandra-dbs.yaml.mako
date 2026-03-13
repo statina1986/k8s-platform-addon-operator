@@ -218,7 +218,7 @@ spec:
   plugin-name: cassandra-database-plugin
   allowed-roles: '*'  
   additional-params:
-    hosts: {{ $lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+    hosts: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
     protocol_version: "4"
     username_template: >-
       {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
@@ -295,12 +295,12 @@ spec:
   {{ end }}
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: {{ $lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  db-url: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
 ### If additional roles defined for cluster
 {{- if $cluster.roles }}
@@ -349,12 +349,12 @@ spec:
     {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: {{ $lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  db-url: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 {{- end }}
 {{- end }}
 
