@@ -25,6 +25,8 @@ hook::trigger() {
     exit 0
   fi
   qlog "Discovered clusters: ${clusters[*]}"
+  local cassandra_dbs
+  cassandra_dbs="$(common::get_values_value '.qvantelGlue.dbs.cassandra')"
 
   # Prepare Vault payload
   credentials_old="$(mktemp)"
@@ -39,7 +41,9 @@ hook::trigger() {
   echo '{"data":{}}' > "$credentials_add"
 
   for cluster in "${clusters[@]}"; do
-    local secret_name="${cluster}-superuser"
+    local effective_cluster_name
+    effective_cluster_name="$(jq -r --arg cluster "$cluster" '(.[$cluster].cluster.spec.cassandra.clusterName // $cluster) | gsub("\\s+"; "")' <<< "$cassandra_dbs")"
+    local secret_name="${effective_cluster_name}-superuser"
     qlog "Fetching password from secret: ${secret_name}"
     local password
     if ! password="$(kubectl::get_secret_opaque_kv "$secret_name" password $ADDON_OPERATOR_NAMESPACE 2>/dev/null)"; then
@@ -48,7 +52,7 @@ hook::trigger() {
     fi
 
     # Add per-cluster key
-    jq --arg key "${cluster}-superuser-password" --arg val "$password" \
+    jq --arg key "${effective_cluster_name}-superuser-password" --arg val "$password" \
        '.data[$key]=$val' "$credentials_add" > "$tmp_file" && mv "$tmp_file" "$credentials_add"
   done
 

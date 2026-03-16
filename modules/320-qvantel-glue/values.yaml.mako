@@ -414,7 +414,10 @@ qvantelGlue:
               config:
                 cassandraYaml:
                   num_tokens: 16
+                  {{- $serverVersion := default "4.1.8" $.cluster.spec.cassandra.serverVersion }}
+                  {{- if not (hasPrefix "3." $serverVersion) }}
                   materialized_views_enabled: true
+                  {{- end }}
                 jvmOptions:
                   {{- if eq $.root.Values.global.configurationProfile "dev" }}  
                   heapSize: 500Mi

@@ -24,6 +24,8 @@ annotations:
       image: docker.io/k8ssandra/k8ssandra-operator:v1.27.0
     - name: reaper
       image: thelastpickle/cassandra-reaper:4.0.0
+    - name: reaper
+      image: thelastpickle/cassandra-reaper:3.6.1
     - name: medusa
       image: docker.io/k8ssandra/medusa:0.25.1
     - name: kubectl

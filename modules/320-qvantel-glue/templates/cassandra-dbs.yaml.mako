@@ -8,20 +8,21 @@ import base64
 {{- range keys .Values.qvantelGlue.dbs.cassandra  }}
 {{- $dbCluster := get $.Values.qvantelGlue.dbs.cassandra . }}
 {{- $dbClusterName := . }}
+{{- $clusterNameOrDefault := $dbClusterName }}
 
 {{- if ne $dbCluster.cluster nil }}
 
 {{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) ($dbCluster.cluster | default (dict) | deepCopy) }}
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.cassandra.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) $cluster }}
-{{- $clusterNameOrDefault := nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
+{{- $clusterNameOrDefault = nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
 
 ### Cassandra cluster resource
 ---
 apiVersion: k8ssandra.io/v1alpha1
 kind: K8ssandraCluster
 metadata:
-  name: {{ $dbClusterName }}
+  name: {{ $clusterNameOrDefault }}
 spec:
   {{- toYaml $cluster.spec | nindent 2 }}
 
@@ -46,7 +47,7 @@ spec:
     app.kubernetes.io/managed-by: k8ssandra-operator
     app.kubernetes.io/name: k8ssandra-operator
     app.kubernetes.io/part-of: k8ssandra
-    k8ssandra.io/cluster-name: {{ $dbClusterName }}
+    k8ssandra.io/cluster-name: {{ $clusterNameOrDefault }}
   sessionAffinity: None
   type: ClusterIP
 
@@ -58,7 +59,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: patch-{{ $dbClusterName }}-reaper-dc-availability
+  name: patch-{{ $clusterNameOrDefault }}-reaper-dc-availability
   annotations:
     "helm.sh/hook": post-install,post-upgrade
 spec:
@@ -75,9 +76,9 @@ spec:
         - -c
         - |
           echo "Waiting for Reaper CR to be created..."
-          until kubectl get reaper {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-reaper -n {{ $.Release.Namespace }}; do sleep 5; done
+          until kubectl get reaper {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-reaper -n {{ $.Release.Namespace }}; do sleep 5; done
           echo "Patching Reaper..."
-          kubectl patch reaper {{ $dbClusterName }}-{{ $dataCenter.metadata.name }}-reaper -n {{ $.Release.Namespace }} --type merge -p '{"spec":{"datacenterAvailability":"{{$availability}}"}}'
+          kubectl patch reaper {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-reaper -n {{ $.Release.Namespace }} --type merge -p '{"spec":{"datacenterAvailability":"{{$availability}}"}}'
       restartPolicy: OnFailure
 {{- end }}
 
@@ -86,7 +87,7 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ $dbClusterName }}-snapshot-cleaner
+  name: {{ $clusterNameOrDefault }}-snapshot-cleaner
 spec:
   schedule: {{ $cluster.snaphotCleanerSchedule }}
   jobTemplate:
@@ -104,13 +105,13 @@ spec:
               - -c
               - |
                 # Construct the username
-                USER="{{ $dbClusterName }}-superuser"
+                USER="{{ $clusterNameOrDefault }}-superuser"
 
                 # Extract the password from the secret
                 PASSWORD=$(kubectl get secret "$USER" -n {{ $.Release.Namespace }} -o jsonpath="{.data.password}" | base64 --decode)
 
                 # Clear snapshots
-                for pod in $(kubectl get pods -n {{ $.Release.Namespace }} -l app.kubernetes.io/name=cassandra -l cassandra.datastax.com/cluster={{ $dbClusterName }} -o jsonpath='{.items[*].metadata.name}'); do
+                for pod in $(kubectl get pods -n {{ $.Release.Namespace }} -l app.kubernetes.io/name=cassandra -l cassandra.datastax.com/cluster={{ $clusterNameOrDefault }} -o jsonpath='{.items[*].metadata.name}'); do
                   kubectl exec -it -n {{ $.Release.Namespace }} $pod -c cassandra -- nodetool -u $USER -pw $PASSWORD clearsnapshot --all;
                 done
           restartPolicy: OnFailure # Retry the job if it fails
@@ -120,7 +121,7 @@ spec:
 apiVersion: medusa.k8ssandra.io/v1alpha1
 kind: MedusaBackupSchedule
 metadata:
-  name: {{ $dbClusterName }}-medusa-backup-schedule
+  name: {{ $clusterNameOrDefault }}-medusa-backup-schedule
 spec:
   backupSpec:
     backupType: {{ $cluster.medusaBackupType }}
@@ -212,9 +213,9 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbConnection
 metadata:
-  name: {{ $dbClusterName }}
+  name: {{ $clusterNameOrDefault }}
 spec:
-  connection-name: {{ $dbClusterName }}
+  connection-name: {{ $clusterNameOrDefault }}
   plugin-name: cassandra-database-plugin
   allowed-roles: '*'  
   additional-params:
@@ -235,9 +236,9 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: admin-role-{{ $dbClusterName }}
+  name: admin-role-{{ $clusterNameOrDefault }}
 spec:
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
     {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON ALL KEYSPACES TO {{username}};" }}
 
@@ -246,9 +247,9 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-{{ $dbClusterName }}
+  name: readonly-role-{{ $clusterNameOrDefault }}
 spec:
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
     {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}};" }}
 
@@ -257,9 +258,9 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readwrite-role-{{ $dbClusterName }}
+  name: readwrite-role-{{ $clusterNameOrDefault }}
 spec:
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
     {{ printf "CREATE ROLE {{username}} WITH PASSWORD = '{{password}}' AND LOGIN = true AND SUPERUSER = false; GRANT SELECT ON ALL KEYSPACES TO {{username}}; GRANT MODIFY ON ALL KEYSPACES TO {{username}};" }}
 {{- end }}
@@ -279,7 +280,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $dbClusterName }}-{{ $db_name }}-installer
+  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-installer
 spec:  
   {{- if and $db.cql $db.cql.provision }}
   db-provision-cql:
@@ -314,7 +315,7 @@ metadata:
   name: {{ $dbRoleName }}
 spec:
   creation-statements: {{ $dbRole.cql }}
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   default-ttl: "0"
   max-ttl: "0"
   role-name: {{ $dbRoleName }}
@@ -324,12 +325,12 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
+  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $clusterNameOrDefault }}
 spec:
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
     {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE %s TO {{username}};" $db_name_underscore }}
-  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
+  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $clusterNameOrDefault }}
 {{- end }}
 
 ## Additional global CQL installer resources per Cluster
@@ -343,7 +344,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $dbClusterName }}-{{ $cql_name }}-installer
+  name: {{ $clusterNameOrDefault }}-{{ $cql_name }}-installer
 spec:    
   db-provision-cql:
     {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
@@ -379,7 +380,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $dbClusterName }}-{{ $db_name }}-installer
+  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-installer
 spec:  
   {{- if and $db.cql $db.cql.provision }}
   db-provision-cql:
@@ -398,9 +399,9 @@ spec:
   db-url: "main-cassandra-service-0-headless.{{ $.Release.Namespace }}.svc"
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
 ### If additional roles defined for cluster
 {{- if $db.roles }}
@@ -413,7 +414,7 @@ metadata:
   name: {{ $dbrole }}
 spec:
   creation-statements: {{ $dbrole.cql }}
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   default-ttl: "0"
   max-ttl: "0"
   role-name: {{ $dbrole }}
@@ -423,12 +424,12 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $dbClusterName }}-{{ $db_name }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
+  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
 spec:
-  db-name: {{ $dbClusterName }}
+  db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
     {{ printf "CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT ALL PERMISSIONS ON KEYSPACE %s TO {{username}};" $db_name_underscore }}
-  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
+  role-name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $clusterNameOrDefault }}
 {{- end }}
 
 ## Additional global CQL installer resources
@@ -441,7 +442,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $dbClusterName }}-{{ $db_name }}-installer
+  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-installer
 spec:    
   db-provision-cql:
     {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
@@ -450,9 +451,9 @@ spec:
   db-url: "main-cassandra-service-0-headless.{{ $.Release.Namespace }}.svc"
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ $dbClusterName }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 {{- end }}
 {{- end }}
 

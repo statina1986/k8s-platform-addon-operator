@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-12-03T08:06:11.426564466Z"
+  generatedAt: "2026-03-16T12:21:02.364714796Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kasope-platform
@@ -79,6 +79,14 @@ images:
       - digest: sha256:09e7bf4d97509a70f60b813442dd325436785f1f65d858e9c1e4683e636f7d7c
         arch: linux/amd64
       - digest: sha256:f95bec73311ee3a52adb2c2a6e102c8b558f619be569ecb0ecb6aa8712dd5703
+        arch: linux/arm64
+  - name: reaper
+    image: thelastpickle/cassandra-reaper:3.6.1
+    chart: kasope-platform
+    digests:
+      - digest: sha256:524f03675179843ba9678e6d308de866bb88dd8b73e0d18920da1862a70c227e
+        arch: linux/amd64
+      - digest: sha256:751bb941d2f7d3588d7b84b917faba8a2d1f436971690e19b3ea7b67c40e6c83
         arch: linux/arm64
   - name: medusa
     image: docker.io/k8ssandra/medusa:0.25.1
