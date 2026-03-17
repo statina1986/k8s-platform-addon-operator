@@ -176,6 +176,7 @@ Default cluster definitions were updated to be Galera cluster with max-scale. Ex
          name: mariadb-logical-tmp
          namespace: platform
        spec:
+         serviceAccountName: platform
          mariaDbRef:
            name: mariadb
          databases: ### CHECK WHAT DBS ARE ACTUALLY NEEDED
