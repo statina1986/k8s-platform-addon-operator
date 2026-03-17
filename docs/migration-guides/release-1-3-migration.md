@@ -165,12 +165,81 @@ In this version all cluster definitions were removed from `cnpg-platform` module
 6. After `qvantel-glue` has succesfully taken control fully of migrated cluster, remove `helm.sh/resource-policy: keep` to allow helm to remove it again. You can check if `qvantel-glue` has control of cluster resource via `helm get manifest -n platform qvantel-glue`. **Testing this procedure in lower environments/local cluster first is highly recommended.**
 
 ## MariaDB
-* Default cluster definitions were updated to be Galera cluster with max-scale. Existing cluster will require logical backup/restore migration procedure.
+Default cluster definitions were updated to be Galera cluster with max-scale. Existing cluster will require logical backup/restore migration procedure.
 
-* In this version all cluster definitions were removed from `mariadb-operator-platform` module and `qvantel-glue` should be used instead. All cluster definitions should be migrated to `qvantel-glue`. There are steps to avoid data loss:
-  1. Manually change ownership of the cluster resources from `mariadb-operator-platform` to `qvantel-glue` with helm annotations. Otherwise cluster resources will be deleted by new `mariadb-operator-platform` module.
-  2. Migrate cluster definitions from `mariadb-operator-platform` to `qvantel-glue` in the values files. Check documentation of `qvantel-glue` module for current up-to-date configuration options and defaults.
-  3. Deploy new platform configuration. Testing this procedure in lower environments first is highly recommended. 
+  1. Take a logical backup of the user databases. There's couple different ways which you can backup user databases. You can do both if unsure.
+     - CRD based backup, either back up into S3 or local PVC. S3 backup for example:
+       ```yaml
+       apiVersion: k8s.mariadb.com/v1alpha1
+       kind: Backup
+       metadata:
+         name: mariadb-logical-tmp
+         namespace: platform
+       spec:
+         serviceAccountName: platform
+         mariaDbRef:
+           name: mariadb
+         databases: ### CHECK WHAT DBS ARE ACTUALLY NEEDED
+           - address
+           - b2b_sales_tool
+           - catalog_designer
+           - cdt
+           - cdt_backend
+           - cdt_lists
+           - crm_orchestration
+           - keycloak
+           - marketing_bpmn_executor
+           - marketingstorage
+           - message_manager_wui
+           - mockoss
+           - sales_and_care_bpmn_executor
+           - tug_wui
+         compression: gzip
+         maxRetention: 500h
+         storage:
+           s3:
+             bucket: mmlyle-devint-mum-mariadb
+             endpoint: s3.ap-south-1.amazonaws.com
+             prefix: mariadb
+             region: ap-south-1
+             tls:
+               enabled: false
+       ```
+     - SQL dump:
+       ```bash
+       mariadb-dump -uroot -p --single-transaction --routines --triggers --events  --databases address b2b_sales_tool catalog_designer cdt cdt_backend cdt_lists crm_orchestration keycloak marketing_bpmn_executor marketingstorage message_manager_wui mnpservice mockoss sales_and_care_bpmn_executor tug_wui webdb | gzip > mmlyle-devint-all-mar11.sql.gz
+       ```
+  2. Remove the cluster, old PVCs and MaxScale resources. Make sure that no old resources are left.
+  3. Deploy new empty cluster from the qvantel-glue module. Cluster must be empty as you will have to restore the cluster from the backup. Check the healthiness of Maxscale and check that Vault DB connection is successful.
+  4. Restore: By bootstrapping into the empty cluster from the backups.
+      - example from mmlyle-devint: 
+     ```yaml
+     mariadb:
+       mariadb:
+         cluster:
+           spec:
+             serviceAccountName: platform
+             bootstrapFrom:
+               restoreJob:
+                 args:
+                   - "--verbose"
+                 resources:
+                   requests:
+                     cpu: 100m
+                     memory: 128Mi
+                   limits:
+                     memory: 1Gi
+               s3:
+                 bucket: mmlyle-devint-mum-mariadb
+                 prefix: mariadb
+                 endpoint: s3.ap-south-1.amazonaws.com
+                 region: ap-south-1
+     ```
+        - or restore the manual dump:
+     ```bash
+     gunzip < mmlyle-devint-all-mar11.sql.gz | mariadb -uroot -p
+     ```
+  5. Enable the sql installers by adding the db annotations in qvantel-glue module.
 
 ## SFTPGo
 If environment has prior installation of SFTPGo, migration between release-branches is needed: https://docs.sftpgo.com/latest/data-provider/.
