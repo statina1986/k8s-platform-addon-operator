@@ -396,6 +396,7 @@ qvantelGlue:
           medusaBackupSchedule: "05 02 * * *"
           medusaBackupType: differential
           snaphotCleanerSchedule: "0 0 1 * *"
+          {{- $serverVersion := dig "spec" "cassandra" "serverVersion" "4.1.8" $.cluster }}
           spec:
             cassandra:
               serviceAccount: platform
@@ -414,8 +415,7 @@ qvantelGlue:
               config:
                 cassandraYaml:
                   num_tokens: 16
-                  {{- $serverVersion := default "4.1.8" $.cluster.spec.cassandra.serverVersion }}
-                  {{- if not (hasPrefix "3." $serverVersion) }}
+                  {{- if semverCompare ">=4.0.0-0" $serverVersion }}
                   materialized_views_enabled: true
                   {{- end }}
                 jvmOptions:

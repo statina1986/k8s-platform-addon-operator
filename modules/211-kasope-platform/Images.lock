@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2026-03-16T12:21:02.364714796Z"
+  generatedAt: "2026-03-18T14:38:51.956059742Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: kasope-platform
