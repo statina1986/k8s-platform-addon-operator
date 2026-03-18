@@ -154,6 +154,11 @@ kafkaPlatform:
     nodeSelector:
       ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
     % endif
+
+  main-kafka-service:
+    # -- Toggle to enable main Kafka service
+    enabled: true
+    cluster-name: kafka-cluster
   # -- List of clusters to provision. Spec for each cluster is configured according to "kafka.strimzi.io/v1beta2" resource. ( https://strimzi.io/docs/operators/0.43.0/configuring.html#type-KafkaClusterSpec-reference )
   clusters:
     kafka-cluster:        
