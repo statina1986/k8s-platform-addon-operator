@@ -15,14 +15,17 @@ import base64
 {{- $cluster := mergeOverwrite ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) ($dbCluster.cluster | default (dict) | deepCopy) }}
 {{- $defaultTemplate := tpl $root.Values.qvantelGlue.dbs.common.cassandra.defaultClusterTemplate (dict "cluster" $cluster "root" $root "addonOperator" $addonOperator "clusterName" .) | fromYaml }}
 {{- $cluster := mergeOverwrite ($defaultTemplate | deepCopy) ($root.Values.qvantelGlue.dbs.common.cassandra.defaultCluster | default (dict) | deepCopy) $cluster }}
-{{- $clusterNameOrDefault = nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
+{{- $clusterNameForLabel := nospace (default $dbClusterName $cluster.spec.cassandra.clusterName) }}
+{{- $preferredClusterName := (regexReplaceAll "[^a-z0-9-]" (lower (default "" $cluster.spec.cassandra.clusterName)) "" | trimPrefix "-" | trimSuffix "-") }}
+{{- $fallbackClusterName := (regexReplaceAll "[^a-z0-9-]" (lower $dbClusterName) "" | trimPrefix "-" | trimSuffix "-") }}
+{{- $clusterNameOrDefault = (default $fallbackClusterName $preferredClusterName) }}
 
 ### Cassandra cluster resource
 ---
 apiVersion: k8ssandra.io/v1alpha1
 kind: K8ssandraCluster
 metadata:
-  name: {{ $clusterNameOrDefault }}
+  name: {{ $dbClusterName }}
 spec:
   {{- toYaml $cluster.spec | nindent 2 }}
 
@@ -47,7 +50,7 @@ spec:
     app.kubernetes.io/managed-by: k8ssandra-operator
     app.kubernetes.io/name: k8ssandra-operator
     app.kubernetes.io/part-of: k8ssandra
-    k8ssandra.io/cluster-name: {{ $clusterNameOrDefault }}
+    k8ssandra.io/cluster-name: {{ $dbClusterName }}
   sessionAffinity: None
   type: ClusterIP
 
@@ -59,7 +62,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: patch-{{ $clusterNameOrDefault }}-reaper-dc-availability
+  name: patch-{{ $dbClusterName }}-reaper-dc-availability
   annotations:
     "helm.sh/hook": post-install,post-upgrade
 spec:
@@ -87,7 +90,7 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ $clusterNameOrDefault }}-snapshot-cleaner
+  name: {{ $dbClusterName }}-snapshot-cleaner
 spec:
   schedule: {{ $cluster.snaphotCleanerSchedule }}
   jobTemplate:
@@ -111,7 +114,7 @@ spec:
                 PASSWORD=$(kubectl get secret "$USER" -n {{ $.Release.Namespace }} -o jsonpath="{.data.password}" | base64 --decode)
 
                 # Clear snapshots
-                for pod in $(kubectl get pods -n {{ $.Release.Namespace }} -l app.kubernetes.io/name=cassandra -l cassandra.datastax.com/cluster={{ $clusterNameOrDefault }} -o jsonpath='{.items[*].metadata.name}'); do
+                for pod in $(kubectl get pods -n {{ $.Release.Namespace }} -l app.kubernetes.io/name=cassandra -l cassandra.datastax.com/cluster={{ $clusterNameForLabel }} -o jsonpath='{.items[*].metadata.name}'); do
                   kubectl exec -it -n {{ $.Release.Namespace }} $pod -c cassandra -- nodetool -u $USER -pw $PASSWORD clearsnapshot --all;
                 done
           restartPolicy: OnFailure # Retry the job if it fails
@@ -121,7 +124,7 @@ spec:
 apiVersion: medusa.k8ssandra.io/v1alpha1
 kind: MedusaBackupSchedule
 metadata:
-  name: {{ $clusterNameOrDefault }}-medusa-backup-schedule
+  name: {{ $dbClusterName }}-medusa-backup-schedule
 spec:
   backupSpec:
     backupType: {{ $cluster.medusaBackupType }}
@@ -172,7 +175,7 @@ spec:
       protocol: TCP
       targetPort: 9160
   selector:
-    cassandra.datastax.com/cluster: {{ $clusterNameOrDefault }}
+    cassandra.datastax.com/cluster: {{ $clusterNameForLabel }}
     cassandra.datastax.com/datacenter: {{ $dataCenter.metadata.name  }}
   sessionAffinity: None
   type: ClusterIP
@@ -197,12 +200,12 @@ spec:
     protocol: TCP
     targetPort: 9142
   selector:
-    cassandra.datastax.com/cluster: {{ $clusterNameOrDefault }}
+    cassandra.datastax.com/cluster: {{ $clusterNameForLabel }}
     cassandra.datastax.com/datacenter: {{ $dataCenter.metadata.name }}
 {{- if $dataCenter.racks }}
-    statefulset.kubernetes.io/pod-name: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
+    statefulset.kubernetes.io/pod-name: {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-{{ (first $dataCenter.racks).name }}-sts-0
 {{- else }}    
-    statefulset.kubernetes.io/pod-name: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name  }}-default-sts-0
+    statefulset.kubernetes.io/pod-name: {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name  }}-default-sts-0
 {{- end }}
 {{- end }}
 ---
@@ -213,20 +216,20 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbConnection
 metadata:
-  name: {{ $clusterNameOrDefault }}
+  name: {{ $dbClusterName }}
 spec:
   connection-name: {{ $clusterNameOrDefault }}
   plugin-name: cassandra-database-plugin
   allowed-roles: '*'  
   additional-params:
-    hosts: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+    hosts: {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
     protocol_version: "4"
     username_template: >-
       {{ printf "{{ printf \"v_%%s_%%s_%%s_%%s\" (.DisplayName | truncate 15) (.RoleName | truncate 15) (random 20) (unix_time) | truncate 100 | replace \"-\" \"_\" |replace \".\" \"_\" | lowercase }}" }}
   computed-values:
-  - expression: k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser','{{ $.Release.Namespace }}','username')
+  - expression: k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser','{{ $.Release.Namespace }}','username')
     name: secret-username
-  - expression: k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser','{{ $.Release.Namespace }}','password')
+  - expression: k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser','{{ $.Release.Namespace }}','password')
     name: secret-password
   db-username: '{secret-username}'
   db-password: '{secret-password}'
@@ -236,7 +239,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: admin-role-{{ $clusterNameOrDefault }}
+  name: admin-role-{{ $dbClusterName }}
 spec:
   db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
@@ -247,7 +250,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readonly-role-{{ $clusterNameOrDefault }}
+  name: readonly-role-{{ $dbClusterName }}
 spec:
   db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
@@ -258,7 +261,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: readwrite-role-{{ $clusterNameOrDefault }}
+  name: readwrite-role-{{ $dbClusterName }}
 spec:
   db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
@@ -280,7 +283,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-installer
+  name: {{ $dbClusterName }}-{{ $db_name }}-installer
 spec:  
   {{- if and $db.cql $db.cql.provision }}
   db-provision-cql:
@@ -296,12 +299,12 @@ spec:
   {{ end }}
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  db-url: {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 
 ### If additional roles defined for cluster
 {{- if $cluster.roles }}
@@ -325,7 +328,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $clusterNameOrDefault }}
+  name: {{ $db.namespace | default $root.Values.global.appsNamespace }}-{{ $db_name }}-{{ $dbClusterName }}
 spec:
   db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
@@ -344,18 +347,18 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $clusterNameOrDefault }}-{{ $cql_name }}-installer
+  name: {{ $dbClusterName}}-{{ $cql_name }}-installer
 spec:    
   db-provision-cql:
     {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
   db-username: "{cass-user}"
   db-password: "{cass-password}"
-  db-url: {{ lower $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
+  db-url: {{ $clusterNameOrDefault }}-{{ $dataCenter.metadata.name }}-service.{{ $.Release.Namespace }}.svc
   computed-values:
     - name: "cass-password"
-      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'password')"
     - name: "cass-user"
-      expression: "k8s_get_secret_value('{{ lower $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
+      expression: "k8s_get_secret_value('{{ $clusterNameOrDefault }}-superuser', '{{ $.Release.Namespace }}', 'username')"
 {{- end }}
 {{- end }}
 
@@ -380,7 +383,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-installer
+  name: {{ $dbClusterName }}-{{ $db_name }}-installer
 spec:  
   {{- if and $db.cql $db.cql.provision }}
   db-provision-cql:
@@ -424,7 +427,7 @@ spec:
 apiVersion: platform-vault.qvantel.com/v1
 kind: DbRole
 metadata:
-  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
+  name: {{ $dbClusterName }}-{{ $db_name }}-{{ $db.namespace | default $root.Values.global.appsNamespace }}
 spec:
   db-name: {{ $clusterNameOrDefault }}
   creation-statements: >-
@@ -442,7 +445,7 @@ kind: CqlInstaller
 metadata:
   annotations:
     platform.qvantel.com/retry-count: "100"
-  name: {{ $clusterNameOrDefault }}-{{ $db_name }}-installer
+  name: {{ $dbClusterName }}-{{ $db_name }}-installer
 spec:    
   db-provision-cql:
     {{- tpl (toYaml $cql.cql) $root | nindent 2 }}   
