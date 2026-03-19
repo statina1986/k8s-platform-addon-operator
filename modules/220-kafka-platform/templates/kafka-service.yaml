@@ -1,4 +1,4 @@
-{{ if .Values.kafkaPlatform.main-kafka-service.enabled }}
+{{ if .Values.kafkaPlatform.mainKafkaService.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -15,7 +15,7 @@ spec:
       targetPort: 9092
   selector:
     strimzi.io/broker-role: 'true'
-    strimzi.io/cluster: {{ .Values.kafkaPlatform.main-kafka-service.cluster-name }}
+    strimzi.io/cluster: {{ .Values.kafkaPlatform.mainKafkaService.clusterName }}
     strimzi.io/kind: Kafka
-    strimzi.io/name: {{ .Values.kafkaPlatform.main-kafka-service.cluster-name }}-kafka
+    strimzi.io/name: {{ .Values.kafkaPlatform.mainKafkaService.clusterName }}-kafka
 {{- end }}

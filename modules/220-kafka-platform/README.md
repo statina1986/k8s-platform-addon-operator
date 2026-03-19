@@ -362,6 +362,19 @@ Role based access control for kafbat ui ( https://ui.docs.kafbat.io/configuratio
 </td>
 		</tr>
 		<tr>
+			<td style="width: 300px;" id="kafkaPlatform--mainKafkaService--enabled">kafkaPlatform.mainKafkaService.enabled</td>
+			<td>bool</td>
+			<td>
+<pre style="width:500px; overflow-x:auto; white-space: pre;" lang="yaml"><code>true</code></pre>
+</td>
+			<td><div>
+
+Toggle to enable main Kafka service
+
+</div>
+</td>
+		</tr>
+		<tr>
 			<td style="width: 300px;" id="kafkaPlatform--strimzi-kafka-operator">kafkaPlatform.strimzi-kafka-operator</td>
 			<td>object</td>
 			<td>
