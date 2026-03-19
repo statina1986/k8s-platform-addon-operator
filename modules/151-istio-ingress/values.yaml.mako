@@ -1941,14 +1941,6 @@ istioIngress:
               host: bssapi-aggregator.qrp.svc.cluster.local
               port:
                 number: 8080
-        - name: "bss-integrator-orders-event-receiver-route"
-          match:
-          - port: 3010
-          route:
-          - destination:
-              host: orders-event-receiver.qrp.svc.cluster.local
-              port:
-                number: 21060
         - name: "bss-integrator-orders-event-receiver-health-route"
           match:
           - port: 3010
@@ -1959,14 +1951,14 @@ istioIngress:
               host: orders-event-receiver-management.qrp.svc.cluster.local
               port:
                 number: 21061
-        - name: "bss-integrator-orders-bpmn-executor-route"
+        - name: "bss-integrator-orders-event-receiver-route"
           match:
-          - port: 3020
+          - port: 3010
           route:
           - destination:
-              host: orders-bpmn-executor.qrp.svc.cluster.local
+              host: orders-event-receiver.qrp.svc.cluster.local
               port:
-                number: 21010
+                number: 21060
         - name: "bss-integrator-orders-bpmn-executor-health-route"
           match:
           - port: 3020
@@ -1977,6 +1969,14 @@ istioIngress:
               host: orders-bpmn-executor-management.qrp.svc.cluster.local
               port:
                 number: 21011
+        - name: "bss-integrator-orders-bpmn-executor-route"
+          match:
+          - port: 3020
+          route:
+          - destination:
+              host: orders-bpmn-executor.qrp.svc.cluster.local
+              port:
+                number: 21010
         - match:
           - port: 10000
           route:

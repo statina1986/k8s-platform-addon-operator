@@ -6236,82 +6236,6 @@
                                           "required": [],
                                           "title": "port",
                                           "type": "integer"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "match",
-                                "type": "array"
-                              },
-                              "name": {
-                                "default": "bss-integrator-orders-event-receiver-route",
-                                "required": [],
-                                "title": "name",
-                                "type": "string"
-                              },
-                              "route": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "destination": {
-                                          "properties": {
-                                            "host": {
-                                              "default": "orders-event-receiver.qrp.svc.cluster.local",
-                                              "required": [],
-                                              "title": "host",
-                                              "type": "string"
-                                            },
-                                            "port": {
-                                              "properties": {
-                                                "number": {
-                                                  "default": 21060,
-                                                  "required": [],
-                                                  "title": "number",
-                                                  "type": "integer"
-                                                }
-                                              },
-                                              "required": [],
-                                              "title": "port",
-                                              "type": "object"
-                                            }
-                                          },
-                                          "required": [],
-                                          "title": "destination",
-                                          "type": "object"
-                                        }
-                                      },
-                                      "required": [],
-                                      "type": "object"
-                                    }
-                                  ],
-                                  "required": []
-                                },
-                                "required": [],
-                                "title": "route",
-                                "type": "array"
-                              }
-                            },
-                            "required": [],
-                            "type": "object"
-                          },
-                          {
-                            "properties": {
-                              "match": {
-                                "items": {
-                                  "anyOf": [
-                                    {
-                                      "properties": {
-                                        "port": {
-                                          "default": 3010,
-                                          "required": [],
-                                          "title": "port",
-                                          "type": "integer"
                                         },
                                         "uri": {
                                           "properties": {
@@ -6397,7 +6321,7 @@
                                     {
                                       "properties": {
                                         "port": {
-                                          "default": 3020,
+                                          "default": 3010,
                                           "required": [],
                                           "title": "port",
                                           "type": "integer"
@@ -6414,7 +6338,7 @@
                                 "type": "array"
                               },
                               "name": {
-                                "default": "bss-integrator-orders-bpmn-executor-route",
+                                "default": "bss-integrator-orders-event-receiver-route",
                                 "required": [],
                                 "title": "name",
                                 "type": "string"
@@ -6427,7 +6351,7 @@
                                         "destination": {
                                           "properties": {
                                             "host": {
-                                              "default": "orders-bpmn-executor.qrp.svc.cluster.local",
+                                              "default": "orders-event-receiver.qrp.svc.cluster.local",
                                               "required": [],
                                               "title": "host",
                                               "type": "string"
@@ -6435,7 +6359,7 @@
                                             "port": {
                                               "properties": {
                                                 "number": {
-                                                  "default": 21010,
+                                                  "default": 21060,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
@@ -6525,6 +6449,82 @@
                                               "properties": {
                                                 "number": {
                                                   "default": 21011,
+                                                  "required": [],
+                                                  "title": "number",
+                                                  "type": "integer"
+                                                }
+                                              },
+                                              "required": [],
+                                              "title": "port",
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [],
+                                          "title": "destination",
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "route",
+                                "type": "array"
+                              }
+                            },
+                            "required": [],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "match": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "port": {
+                                          "default": 3020,
+                                          "required": [],
+                                          "title": "port",
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "required": []
+                                },
+                                "required": [],
+                                "title": "match",
+                                "type": "array"
+                              },
+                              "name": {
+                                "default": "bss-integrator-orders-bpmn-executor-route",
+                                "required": [],
+                                "title": "name",
+                                "type": "string"
+                              },
+                              "route": {
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "properties": {
+                                        "destination": {
+                                          "properties": {
+                                            "host": {
+                                              "default": "orders-bpmn-executor.qrp.svc.cluster.local",
+                                              "required": [],
+                                              "title": "host",
+                                              "type": "string"
+                                            },
+                                            "port": {
+                                              "properties": {
+                                                "number": {
+                                                  "default": 21010,
                                                   "required": [],
                                                   "title": "number",
                                                   "type": "integer"
