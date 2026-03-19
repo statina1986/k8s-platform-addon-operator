@@ -431,6 +431,9 @@ istioIngress:
       - name: bss-integrator-orders-event-receiver
         port: 3010
         targetPort: 3010
+      - name: bss-integrator-orders-bpmn-executor
+        port: 3020
+        targetPort: 3020
       - name: bss-integrator-kafka-bootstrap
         port: 9093
         targetPort: 9093
@@ -569,6 +572,15 @@ istioIngress:
         port:
           name: public-bss-integrator-orders-event-receiver
           number: 3010
+          protocol: HTTPS
+        tls:
+          credentialName: ingress-cert-dna
+          mode: SIMPLE
+      - hosts:
+          - '*'
+        port:
+          name: public-bss-integrator-orders-bpmn-executor
+          number: 3020
           protocol: HTTPS
         tls:
           credentialName: ingress-cert-dna
@@ -809,6 +821,7 @@ istioIngress:
           - 2095
           - 3000
           - 3010
+          - 3020
           - 9093
           - 9094
           - 9095
@@ -1946,6 +1959,24 @@ istioIngress:
               host: orders-event-receiver-management.qrp.svc.cluster.local
               port:
                 number: 21061
+        - name: "bss-integrator-orders-bpmn-executor-route"
+          match:
+          - port: 3020
+          route:
+          - destination:
+              host: orders-bpmn-executor.qrp.svc.cluster.local
+              port:
+                number: 21010
+        - name: "bss-integrator-orders-bpmn-executor-health-route"
+          match:
+          - port: 3020
+            uri:
+              prefix: "/health"
+          route:
+          - destination:
+              host: orders-bpmn-executor-management.qrp.svc.cluster.local
+              port:
+                number: 21011
         - match:
           - port: 10000
           route:
