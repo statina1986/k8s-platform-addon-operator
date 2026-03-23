@@ -1303,6 +1303,26 @@
           "title": "kafka-ui",
           "type": "object"
         },
+        "mainKafkaService": {
+          "properties": {
+            "clusterName": {
+              "default": "kafka-cluster",
+              "required": [],
+              "title": "clusterName",
+              "type": "string"
+            },
+            "enabled": {
+              "default": true,
+              "description": "Toggle to enable main Kafka service",
+              "required": [],
+              "title": "enabled",
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "title": "mainKafkaService",
+          "type": "object"
+        },
         "strimzi-kafka-operator": {
           "description": "configuration of Strimzi Operator. Values specification: https://github.com/strimzi/strimzi-kafka-operator/blob/main/helm-charts/helm3/strimzi-kafka-operator/values.yaml",
           "properties": {
