@@ -1,11 +1,6 @@
 # istioPlatformNamespace: istio-system
 pomeriumPlatform:
   pomerium:
-    tolerations:
-    - effect: NoSchedule
-      key: dedicated-nodes
-      operator: Equal
-      value: platform-masters
     baseUrl: ${values['global']['ingressBaseUrl']}
     % if 'containerRegistryBase' in values['global']:
     image:
