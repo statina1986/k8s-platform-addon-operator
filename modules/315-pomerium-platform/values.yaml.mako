@@ -1,6 +1,11 @@
 # istioPlatformNamespace: istio-system
 pomeriumPlatform:
   pomerium:
+    tolerations:
+    - effect: NoSchedule
+      key: dedicated-nodes
+      operator: Equal
+      value: platform-masters
     baseUrl: ${values['global']['ingressBaseUrl']}
     % if 'containerRegistryBase' in values['global']:
     image:
@@ -55,3 +60,19 @@ pomeriumPlatform:
         provider: oidc
         url: https://auth${values['global']['ingressBaseUrlSeparator']}${values['global']['ingressBaseUrl']}/auth/realms/qvantel
         clientID: "pomerium"
+    tolerations:
+        - key: "${values['global']['platformMastersKey']}"
+          value: "${values['global']['platformMastersValue']}"
+          operator: "Equal"
+          effect: "NoSchedule"
+    % if values['global']['platformMasters']:
+    nodeSelector:
+      ${values['global']['platformMastersKey']}: ${values['global']['platformMastersValue']}
+    % endif
+    resources:
+      limits:
+        cpu: 500m
+        memory: 600Mi
+      requests:
+        cpu: 25m
+        memory: 100Mi
