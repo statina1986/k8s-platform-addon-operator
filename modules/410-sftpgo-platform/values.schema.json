@@ -564,15 +564,23 @@
             },
             "volumeMounts": {
               "default": "",
+              "items": {
+                "required": [],
+                "type": "object"
+              },
               "required": [],
               "title": "volumeMounts",
-              "type": "null"
+              "type": "array"
             },
             "volumes": {
               "default": "",
+              "items": {
+                "required": [],
+                "type": "object"
+              },
               "required": [],
               "title": "volumes",
-              "type": "null"
+              "type": "array"
             }
           },
           "required": [],

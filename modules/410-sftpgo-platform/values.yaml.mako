@@ -60,6 +60,11 @@ sftpgoPlatform:
         storageClassName: gp3
     # -- Enables qvantel-root-ca pre-configured mounting.
     qvantelCaVolumes: false
+    # @schema
+    # type: array
+    # items:
+    #   type: object
+    # @schema
     volumes:
       % if values.get("sftpgoPlatform", {}).get("sftpgo", {}).get("qvantelCaVolumes", False):
       - name: trusted-ca-tls
@@ -68,6 +73,11 @@ sftpgoPlatform:
           optional: true
           secretName: qvantel-root-ca
       % endif
+    # @schema
+    # type: array
+    # items:
+    #   type: object
+    # @schema
     volumeMounts:
       % if values.get("sftpgoPlatform", {}).get("sftpgo", {}).get("qvantelCaVolumes", False):
       - name: trusted-ca-tls
