@@ -31,7 +31,7 @@ annotations:
     - name: thanos-rules
       image: quay.io/thanos/thanos:v0.39.2
     - name: grafana
-      image: docker.io/grafana/grafana-enterprise:12.2.2
+      image: docker.io/grafana/grafana-enterprise:12.2.8-security-01
     - name: initChownData
       image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
     - name: grafana-sidecar

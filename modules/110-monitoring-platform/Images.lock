@@ -1,7 +1,7 @@
 apiVersion: v0
 kind: ImagesLock
 metadata:
-  generatedAt: "2025-12-16T09:47:41.129140086Z"
+  generatedAt: "2026-04-09T09:18:44.678664342Z"
   generatedBy: Distribution Tooling for Helm
 chart:
   name: monitoring-platform
@@ -105,12 +105,12 @@ images:
       - digest: sha256:2110475f7ee9f8e8775f4b17e241a7d86854dc9bc4c6d3d8b6ee5b704e07fe6c
         arch: linux/arm64
   - name: grafana
-    image: docker.io/grafana/grafana-enterprise:12.2.2
+    image: docker.io/grafana/grafana-enterprise:12.2.8-security-01
     chart: monitoring-platform
     digests:
-      - digest: sha256:b679b078a17257de781081357522df5433bdd8f280e1f54f25d3db473b639600
+      - digest: sha256:88e9c9e5716a52ee93bad498844808b234e89c151aa420424b5d2e3d91f003c8
         arch: linux/amd64
-      - digest: sha256:e5aa8560bc81d37b537859f013e80932711b8375e7099d79aa3b2d82d7cd86f6
+      - digest: sha256:db046eaf39107fabbb5e18ff64d002efbc8f942b8ff81b24be11f1de7825bcac
         arch: linux/arm64
   - name: initChownData
     image: platform.artifactory.qvantel.net/platform/platform-k8s-tools-minimal:1.3.3_202509080945_master_90384dcc
