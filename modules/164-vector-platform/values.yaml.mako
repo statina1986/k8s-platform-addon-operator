@@ -130,6 +130,9 @@ vectorPlatform:
       requests:
         cpu: 1
         memory: 2Gi
+      limits:
+        cpu: 4
+        memory: 4Gi
     storage:
       mode: managedPersistentVolumeClaim
       managedPersistentVolumeClaim:
